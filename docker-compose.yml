@@ -1,0 +1,8 @@
+services:
+  web:
+    build: .
+    command: python hds/manage.py runserver 0.0.0.0:8010
+    volumes: 
+      - ./hds/:/opt/app/hds
+    ports:
+      - 127.0.0.1:8010:8010

@@ -1,0 +1,6 @@
+services:
+  web:
+    build: .
+    command: /opt/app/start-server.sh
+    ports:
+      - 127.0.0.1:8010:8010
