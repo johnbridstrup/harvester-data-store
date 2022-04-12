@@ -1,6 +1,24 @@
 services:
+  db:
+    image: postgres
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
   web:
     build: .
     command: python hds/manage.py runserver 0.0.0.0:8010
     ports:
       - 127.0.0.1:8010:8010
+    environment:
+      - POSTGRES_NAME=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - DEBUG=1
+      - SECRET_KEY=dummy_key
+      - DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 [::1]
+      - SQL_ENGINE=django.db.backends.postgresql
+      - SQL_HOST=db
+      - SQL_PORT=5432
+    depends_on:
+      - db
