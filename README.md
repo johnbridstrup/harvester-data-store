@@ -14,4 +14,8 @@ operating systems or linux distributions, you may have to install the dependenci
 ## Development
 The top level `hds` directory (notice the lower case) is a shared volume with the development container. So changes
 can be made in your usual IDE and they will be applied in real time to the server.
+
+Two users are initially populated if you use `runserver`:
+- User: aft; Password: aft (admin)
+- User: notaft; Password: dummypwd (not admin)
  

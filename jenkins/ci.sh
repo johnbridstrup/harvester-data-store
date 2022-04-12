@@ -6,8 +6,11 @@ source ./setup-venv.sh
 echo "Unit tests"
 # Test scripts called here
 
-echo "Spinning up dev server"
+echo "Spinning up test server"
 sudo docker compose -f docker-compose.test.yml up -d --build
+sudo docker compose exec web python hds/manage.py makemigrations
+sudo docker compose exec web python hds/manage.py migrate
+sudo docker compose exec web python hds/manage.py loaddata fixtures/users.json
 sleep 1 # Ensure spin-up before curl
 
 echo "Confirm hosted on localhost:8010"

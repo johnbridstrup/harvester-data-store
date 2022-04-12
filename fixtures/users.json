@@ -1,0 +1,39 @@
+[
+    {
+        "model": "auth.user",
+        "pk": 1,
+        "fields": {
+            "password": "pbkdf2_sha256$320000$3HcTdW2DlO2JqspekxTkZT$Eejo9ofFwfY7bX0DYAxgmDmq4+3f+OA2Bs9EETOpBng=",
+            "last_login": "2022-04-12T22:06:44.761Z",
+            "is_superuser": true,
+            "username": "aft",
+            "first_name": "",
+            "last_name": "",
+            "email": "aft@aft.aft",
+            "is_staff": true,
+            "is_active": true,
+            "date_joined": "2022-04-12T22:03:13.909Z",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "auth.user",
+        "pk": 2,
+        "fields": {
+            "password": "pbkdf2_sha256$320000$3gNqdz6YNBvQ6dqmFz6QKa$miZHfBDyTyEAbmKrY3TTnod0ztMIo9aySVwyBb+R4YY=",
+            "last_login": null,
+            "is_superuser": false,
+            "username": "not_aft",
+            "first_name": "",
+            "last_name": "",
+            "email": "",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2022-04-12T22:08:11.153Z",
+            "groups": [],
+            "user_permissions": []
+        }
+    }
+    ]
+    
