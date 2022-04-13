@@ -1,13 +1,44 @@
 pipeline {
-    agent none
+    agent { label 'aft-nuc' }
     
     stages {
+        stage('Initialization') {
+			steps {
+				script { env.totalExitCode = 0 }
+			}
+		}
+        stage('Run tests') {
+            when {
+				branch 'PR-*'
+			}
+            steps {
+                catchError(stageResult: 'FAILURE') {
+                    script {
+                        def exitCode = sh script:'./jenkins/ErrorReportTests.sh', returnStatus:true
+                        env.totalExitCode = (env.totalExitCode).toInteger() + exitCode
+                        sh "exit ${exitCode}"
+                    }
+                }
+            }
+        }
         stage('Check build') {
-            agent {label 'aft-nuc'}
             when {branch 'PR-*'}
             steps {
-                sh './jenkins/ci.sh'
+                catchError(stageResult: 'FAILURE') {
+                    script {
+                        def exitCode = sh script:'./jenkins/ci.sh', returnStatus:true
+                        env.totalExitCode = (env.totalExitCode).toInteger() + exitCode
+                        sh "exit ${exitCode}"
+                    }
+                }
             }
         }
     }
+    post {
+		always {
+            script {
+                currentBuild.result = ((env.totalExitCode).toInteger() == 0) ? "SUCCESS" : "FAILURE"
+            }
+		}
+	}
 }
