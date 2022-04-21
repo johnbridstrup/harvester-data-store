@@ -1,0 +1,16 @@
+[
+  {
+    "model": "location.distributor",
+    "pk": 1,
+    "fields": {
+      "name": "Distributor A"
+    }
+  },
+  {
+    "model": "location.distributor",
+    "pk": 2,
+    "fields": {
+      "name": "Distributor B"
+    }
+  }
+]

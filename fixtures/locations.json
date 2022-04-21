@@ -1,0 +1,22 @@
+[
+  {
+    "model": "location.location",
+    "pk": 1,
+    "fields": {
+      "distributor": 1,
+      "ranch": "Ranch A",
+      "country": "USA",
+      "region": "California"
+    }
+  },
+  {
+    "model": "location.location",
+    "pk": 2,
+    "fields": {
+      "distributor": 2,
+      "ranch": "Ranch B",
+      "country": "USA",
+      "region": "Iowa"
+    }
+  }
+]
