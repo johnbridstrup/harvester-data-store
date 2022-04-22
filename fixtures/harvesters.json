@@ -1,0 +1,22 @@
+[
+  {
+    "model": "harvester.harvester",
+    "pk": 1,
+    "fields": {
+      "harv_id": 1100,
+      "fruit": 2,
+      "location": 1,
+      "name": "Harvester Alpha"
+    }
+  },
+  {
+    "model": "harvester.harvester",
+    "pk": 2,
+    "fields": {
+      "harv_id": 2200,
+      "fruit": 1,
+      "location": 2,
+      "name": "Harvester Beta"
+    }
+  }
+]
