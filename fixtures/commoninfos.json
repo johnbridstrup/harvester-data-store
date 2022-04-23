@@ -1,0 +1,11 @@
+[
+  {
+    "model": "common.commoninfo",
+    "pk": 1,
+    "fields": {
+      "creator": 1,
+      "modifiedBy": 2,
+      "lastModified": "2022-04-23T20:15:55.181Z"
+    }
+  }
+]
