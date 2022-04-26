@@ -1,0 +1,30 @@
+[
+  {
+    "model": "harvester.harvester",
+    "pk": 1,
+    "fields": {
+      "creator": 2,
+      "modifiedBy": null,
+      "created": "2022-04-26T10:07:03.355Z",
+      "lastModified": "2022-04-26T10:07:03.355Z",
+      "harv_id": 100,
+      "fruit": 1,
+      "location": 1,
+      "name": "Harvester Alpha"
+    }
+  },
+  {
+    "model": "harvester.harvester",
+    "pk": 2,
+    "fields": {
+      "creator": 2,
+      "modifiedBy": null,
+      "created": "2022-04-26T10:07:18.334Z",
+      "lastModified": "2022-04-26T10:07:18.334Z",
+      "harv_id": 200,
+      "fruit": 2,
+      "location": 2,
+      "name": "Harvester Beta"
+    }
+  }
+]

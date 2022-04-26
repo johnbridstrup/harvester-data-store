@@ -1,0 +1,30 @@
+[
+  {
+    "model": "location.location",
+    "pk": 1,
+    "fields": {
+      "creator": 1,
+      "modifiedBy": null,
+      "created": "2022-04-26T10:05:28.580Z",
+      "lastModified": "2022-04-26T10:05:28.580Z",
+      "distributor": 1,
+      "ranch": "Ranch A",
+      "country": "United States",
+      "region": "California"
+    }
+  },
+  {
+    "model": "location.location",
+    "pk": 2,
+    "fields": {
+      "creator": 2,
+      "modifiedBy": 2,
+      "created": "2022-04-26T10:05:49.037Z",
+      "lastModified": "2022-04-26T10:06:02.486Z",
+      "distributor": 1,
+      "ranch": "Ranch B",
+      "country": "United States",
+      "region": "Texas"
+    }
+  }
+]

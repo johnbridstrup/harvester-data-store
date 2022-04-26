@@ -3,14 +3,11 @@
     "model": "location.distributor",
     "pk": 1,
     "fields": {
-      "name": "Distributor A"
-    }
-  },
-  {
-    "model": "location.distributor",
-    "pk": 2,
-    "fields": {
-      "name": "Distributor B"
+      "creator": 1,
+      "modifiedBy": null,
+      "created": "2022-04-26T10:05:04.151Z",
+      "lastModified": "2022-04-26T10:05:04.151Z",
+      "name": "Distributor 1"
     }
   }
 ]

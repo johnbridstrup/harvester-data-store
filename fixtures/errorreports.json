@@ -1,0 +1,30 @@
+[
+  {
+    "model": "errorreport.errorreport",
+    "pk": 1,
+    "fields": {
+      "creator": 1,
+      "modifiedBy": null,
+      "created": "2022-04-26T10:09:47.243Z",
+      "lastModified": "2022-04-26T10:09:47.243Z",
+      "reportTime": "2022-04-26T10:07:28Z",
+      "report": {
+        "error": {
+          "code": 401,
+          "errors": [
+            {
+              "domain": "global",
+              "reason": "required",
+              "message": "Login Required",
+              "location": "Authorization",
+              "locationType": "header"
+            }
+          ],
+          "message": "Login Required"
+        }
+      },
+      "location": 1,
+      "harvester": 1
+    }
+  }
+]
