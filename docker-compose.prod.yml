@@ -1,6 +1,6 @@
 services:
   web:
     build: .
-    command: /opt/app/start-server.sh
+    command: /opt/app/start-server.sh ${HDS_PORT}
     ports:
-      - 127.0.0.1:8010:8010
+      - 127.0.0.1:${HDS_PORT}:${HDS_PORT}

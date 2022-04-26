@@ -12,6 +12,10 @@ alias dcexec="docker compose exec web"
 alias dbexec="docker compose exec db"
 alias HELP="./scripts/help.sh"
 
+export HDS_PORT=8085
+touch .env
+echo "HDS_PORT=$HDS_PORT" > .env
+
 echo ""
 echo "You are in the Harvester Data Store development environment"
 echo "  - Start the server with runserver"
