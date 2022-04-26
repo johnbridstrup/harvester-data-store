@@ -1,4 +1,5 @@
 from django.test import TestCase
+from django.contrib.auth.models import User
 from .models import Fruit, Harvester
 from location.models import Location, Distributor
 
@@ -8,7 +9,8 @@ class FruitTestCase(TestCase):
     @classmethod
     def setUpTestData(cls):
         """ create a fruit """
-        Fruit.objects.create(name='Apple')
+        creator = User.objects.create(id=1, username='test_user')
+        Fruit.objects.create(creator=creator, name='Apple')
 
     def test_fruit_str(self):
         """ check if created fruit exits """
@@ -19,14 +21,15 @@ class FruitTestCase(TestCase):
 class HarvesterTestCase(TestCase):
     @classmethod
     def setUpTestData(cls):
-        cls.fruit = Fruit.objects.create(name='Apple')
-        cls.distributor = Distributor.objects.create(name='Distributor 1')
+        cls.creator = User.objects.create(id=1, username='test_user')
+        cls.fruit = Fruit.objects.create(creator=cls.creator, name='Apple')
+        cls.distributor = Distributor.objects.create(creator=cls.creator, name='Distributor 1')
         cls.location = Location.objects.create(
-                      distributor=cls.distributor, ranch="Ranch A", country="USA", region="California")
+                      creator=cls.creator, distributor=cls.distributor, ranch="Ranch A", country="USA", region="California")
 
     def test_create_harvester(self):
         """ create harvester and assert it exists """
-        harvester = Harvester.objects.create(fruit=self.fruit, harv_id=1001,
+        harvester = Harvester.objects.create(creator=self.creator, fruit=self.fruit, harv_id=1001,
                                              location=self.location, name="Harvester 1")
 
         self.assertEqual(str(harvester), "Harvester 1")
