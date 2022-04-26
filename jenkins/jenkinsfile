@@ -1,5 +1,5 @@
 pipeline {
-    agent { label 'aft-nuc' }
+    agent { label 'aft-nuc || aft-gpu || aft-swemu' }
     
     stages {
         stage('Initialization') {
