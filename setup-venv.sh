@@ -56,4 +56,4 @@ echo "" && echo "Checking if docker is installed properly"
 docker run hello-world
 
 echo "" && echo "Start the development environment with"
-echo "  source start.sh"
+echo "  source start.sh <optional port>"

@@ -11,13 +11,18 @@ alias manage="docker compose exec web python hds/manage.py"
 alias dcexec="docker compose exec web"
 alias dbexec="docker compose exec db"
 alias HELP="./scripts/help.sh"
+alias setport="source ./scripts/set_port.sh"
 
-export HDS_PORT=8085
-touch .env
-echo "HDS_PORT=$HDS_PORT" > .env
+PORT=$1
+if [ -z $PORT ]
+then
+    PORT=8085
+fi
+source scripts/set_port.sh $PORT
 
 echo ""
 echo "You are in the Harvester Data Store development environment"
 echo "  - Start the server with runserver"
 echo "  - Run HELP for useful information and aliases"
+echo "  - Server will run on localhost:$HDS_PORT"
 echo ""
