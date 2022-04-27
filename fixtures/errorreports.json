@@ -9,22 +9,341 @@
       "lastModified": "2022-04-26T10:09:47.243Z",
       "reportTime": "2022-04-26T10:07:28Z",
       "report": {
-        "error": {
-          "code": 401,
-          "errors": [
-            {
-              "domain": "global",
-              "reason": "required",
-              "message": "Login Required",
-              "location": "Authorization",
-              "locationType": "header"
+          "data": {
+            "sysmon_report": {
+              "sysmon.0": {
+                "chrony_info": {
+                  "frequency": -4.698,
+                  "last_offset": -0.001114857,
+                  "leap_status": "Normal",
+                  "ref_addr": "23.131.160.7",
+                  "ref_id": "1783A007",
+                  "ref_time": 1645816071.6369753,
+                  "residual_freq": -16.104,
+                  "rms_offset": 0.001114857,
+                  "root_delay": 0.05681929,
+                  "root_dispersion": 0.005197439,
+                  "skew": 1.118,
+                  "stratum": 3,
+                  "sys_time": 0.000190831,
+                  "update_interval": 64
+                },
+                "index": 0,
+                "robot_index": 0,
+                "services": {
+                  "autodrive.0": {
+                    "PID": 5555,
+                    "cpu": 3.473650017500016,
+                    "created": 1645816079,
+                    "fsm": {
+                      "components": [
+                        "idle"
+                      ],
+                      "service": "autodrive.0",
+                      "state": "idle",
+                      "ts": 1645816108.1478975
+                    },
+                    "mem": 0.6332545,
+                    "state": "S"
+                  },
+                  "furrow.0": {
+                    "PID": 5613,
+                    "cpu": 2.1415560184556512,
+                    "created": 1645816079,
+                    "fsm": {
+                      "components": [
+                        "idle"
+                      ],
+                      "service": "furrow.0",
+                      "state": "idle",
+                      "ts": 1645816108.2113082
+                    },
+                    "mem": 0.61919445,
+                    "state": "S"
+                  },
+                  "logrec.0": {
+                    "PID": 5462,
+                    "cpu": 2.458799904633324,
+                    "created": 1645816079,
+                    "fsm": {
+                      "components": [
+                        "idle"
+                      ],
+                      "service": "logrec.0",
+                      "state": "idle",
+                      "ts": 1645816108.1498733
+                    },
+                    "mem": 0.6245303,
+                    "state": "S"
+                  },
+                  "rcoop.0": {
+                    "PID": 5569,
+                    "cpu": 5.342578234562643,
+                    "created": 1645816079,
+                    "fsm": {
+                      "components": [
+                        "idle"
+                      ],
+                      "service": "rcoop.0",
+                      "state": "idle",
+                      "ts": 1645816108.151117
+                    },
+                    "mem": 0.63531196,
+                    "state": "S"
+                  },
+                  "robotpathstore.0": {
+                    "PID": 5526,
+                    "cpu": 2.3494580923484922,
+                    "created": 1645816079,
+                    "fsm": {
+                      "components": [
+                        "run",
+                        "run"
+                      ],
+                      "service": "robotpathstore.0",
+                      "state": "run",
+                      "ts": 1645816108.3770173
+                    },
+                    "mem": 0.62062305,
+                    "state": "S"
+                  }
+                },
+                "version": "UNKNOWN"
+              },
+              "sysmon.1": {
+                "chrony_info": {
+                  "frequency": -4.698,
+                  "last_offset": -0.001114857,
+                  "leap_status": "Normal",
+                  "ref_addr": "23.131.160.7",
+                  "ref_id": "1783A007",
+                  "ref_time": 1645816071.6369753,
+                  "residual_freq": -16.104,
+                  "rms_offset": 0.001114857,
+                  "root_delay": 0.05681929,
+                  "root_dispersion": 0.00519802,
+                  "skew": 1.118,
+                  "stratum": 3,
+                  "sys_time": 0.000190002,
+                  "update_interval": 64
+                },
+                "errors": {
+                  "picker.1": {
+                    "code": 0,
+                    "operator_err_type": "software",
+                    "traceback": "Traceback (most recent call last):\n  File \"/home/roshanbal/strawberry/venv/lib/python3.8/site-packages/aft_core/asm/AsyncStateMachine.py\", line 887, in _process_curr_state\n    self._stateTransDefer = defer.maybeDeferred(self._curr, evt)\n  File \"/home/roshanbal/strawberry/venv/lib/python3.8/site-packages/twisted/internet/defer.py\", line 167, in maybeDeferred\n    result = f(*args, **kw)\n  File \"/home/roshanbal/strawberry/venv/lib/python3.8/site-packages/aft_core/twisted/twistutils.py\", line 65, in unwindGenerator\n    return _cancellableInlineCallbacks(gen)\n  File \"/home/roshanbal/strawberry/venv/lib/python3.8/site-packages/aft_core/twisted/twistutils.py\", line 76, in _cancellableInlineCallbacks\n    _inlineCallbacks(None, g, status)\n--- <exception caught here> ---\n  File \"/home/roshanbal/strawberry/venv/lib/python3.8/site-packages/aft_core/asm/AsyncStateMachine.py\", line 889, in _process_curr_state\n    result = yield self._stateTransDefer\n  File \"/home/roshanbal/strawberry/venv/lib/python3.8/site-packages/twisted/internet/defer.py\", line 662, in _runCallbacks\n    current.result = callback(current.result, *args, **kw)\n  File \"/home/roshanbal/strawberry/venv/lib/python3.8/site-packages/aft_core/twisted/twistutils.py\", line 179, in trap_cancel\n    failType = fail.trap(defer.CancelledError, DeferredListError)\n  File \"/home/roshanbal/strawberry/venv/lib/python3.8/site-packages/twisted/python/failure.py\", line 450, in trap\n    self.raiseException()\n  File \"/home/roshanbal/strawberry/venv/lib/python3.8/site-packages/twisted/python/failure.py\", line 475, in raiseException\n    raise self.value.with_traceback(self.tb)\n  File \"/home/roshanbal/strawberry/venv/lib/python3.8/site-packages/twisted/internet/defer.py\", line 1445, in _inlineCallbacks\n    result = current_context.run(g.send, result)\n  File \"/home/roshanbal/strawberry/src/strawberry/harvester/picker/pickerrunbehavior.py\", line 405, in state_acquire\n    defer.returnValue(SBPickerBehaviorBase.state_acquire(self, evt))\n  File \"/home/roshanbal/strawberry/src/strawberry/harvester/picker/pickerbehaviorbase.py\", line 214, in state_acquire\n    next_state = self._handle_picking_child_terminate(evt, self.state_acquire)\n  File \"/home/roshanbal/strawberry/src/strawberry/harvester/picker/pickerbehaviorbase.py\", line 376, in _handle_picking_child_terminate\n    if child.finished_result.result == ResultCode.ERROR:\nbuiltins.AttributeError: 'NoneType' object has no attribute 'result'\n",
+                    "ts": 1645816107.49401,
+                    "value": "'NoneType' object has no attribute 'result'"
+                  }
+                },
+                "index": 1,
+                "robot_index": 1,
+                "services": {
+                  "gripper.1": {
+                    "PID": 5493,
+                    "cpu": 2.6643535815547903,
+                    "created": 1645816079,
+                    "fsm": {
+                      "components": [
+                        "wait_behavior_stopped",
+                        "run"
+                      ],
+                      "service": "gripper.1",
+                      "state": "wait_behavior_stopped",
+                      "ts": 1645816108.2127228
+                    },
+                    "mem": 0.6229552,
+                    "state": "S"
+                  },
+                  "gripperhwemu.1": {
+                    "PID": 5496,
+                    "cpu": 4.462493698355407,
+                    "created": 1645816079,
+                    "fsm": {
+                      "components": [
+                        "run"
+                      ],
+                      "service": "gripperhwemu.1",
+                      "state": "run",
+                      "ts": 1645816108.5084455
+                    },
+                    "mem": 0.6210382,
+                    "state": "R"
+                  },
+                  "logrec.1": {
+                    "PID": 5460,
+                    "cpu": 4.103873700880092,
+                    "created": 1645816079,
+                    "fsm": {
+                      "components": [
+                        "idle"
+                      ],
+                      "service": "logrec.1",
+                      "state": "idle",
+                      "ts": 1645816108.138815
+                    },
+                    "mem": 0.62634355,
+                    "state": "S"
+                  },
+                  "obscore.1": {
+                    "PID": 5627,
+                    "cpu": 18.88257114197621,
+                    "created": 1645816080,
+                    "fsm": {
+                      "components": [
+                        "run",
+                        "stream"
+                      ],
+                      "service": "obscore.1",
+                      "state": "run",
+                      "ts": 1645816108.4053638
+                    },
+                    "mem": 2.6400044,
+                    "state": "S"
+                  },
+                  "picker.1": {
+                    "PID": 5585,
+                    "cpu": 8.423716222471253,
+                    "created": 1645816079,
+                    "fsm": {
+                      "components": [
+                        "error",
+                        "terminated"
+                      ],
+                      "service": "picker.1",
+                      "state": "error",
+                      "ts": 1645816108.5012374
+                    },
+                    "mem": 0.6354829,
+                    "state": "R"
+                  },
+                  "robot.1": {
+                    "PID": 5599,
+                    "cpu": 12.50138610610892,
+                    "created": 1645816079,
+                    "fsm": {
+                      "components": [
+                        "run",
+                        "parking"
+                      ],
+                      "service": "robot.1",
+                      "state": "run",
+                      "ts": 1645816108.5379164
+                    },
+                    "mem": 0.637345,
+                    "state": "S"
+                  },
+                  "tracker.1": {
+                    "PID": 5523,
+                    "cpu": 24.9399495299741,
+                    "created": 1645816079,
+                    "fsm": {
+                      "components": [
+                        "idle"
+                      ],
+                      "service": "tracker.1",
+                      "state": "idle",
+                      "ts": 1645816108.2761962
+                    },
+                    "mem": 0.6370214,
+                    "state": "R"
+                  }
+                },
+                "version": "UNKNOWN"
+              },
+              "sysmon.5": {
+                "chrony_info": {
+                  "frequency": -4.698,
+                  "last_offset": -0.001114857,
+                  "leap_status": "Normal",
+                  "ref_addr": "23.131.160.7",
+                  "ref_id": "1783A007",
+                  "ref_time": 1645816071.6369753,
+                  "residual_freq": -16.104,
+                  "rms_offset": 0.001114857,
+                  "root_delay": 0.05681929,
+                  "root_dispersion": 0.00519602,
+                  "skew": 1.118,
+                  "stratum": 3,
+                  "sys_time": 0.000192857,
+                  "update_interval": 64
+                },
+                "index": 5,
+                "robot_index": 5,
+                "services": {
+                  "drivesys.0": {
+                    "PID": 4258,
+                    "cpu": 16.814040213897144,
+                    "created": 1645816062,
+                    "fsm": {
+                      "components": [
+                        "run",
+                        "armed"
+                      ],
+                      "service": "drivesys.0",
+                      "state": "run",
+                      "ts": 1645816108.1991756
+                    },
+                    "mem": 0.6236207,
+                    "state": "S"
+                  },
+                  "emu_ui.0": {
+                    "PID": 4210,
+                    "cpu": 4.6216009231698365,
+                    "created": 1645816062,
+                    "fsm": {
+                      "components": [
+                        "run"
+                      ],
+                      "service": "emu_ui.0",
+                      "state": "run",
+                      "ts": 1645816108.3018796
+                    },
+                    "mem": 0.62218595,
+                    "state": "S"
+                  },
+                  "emuscene.0": {
+                    "PID": 4236,
+                    "cpu": 6.580447379866511,
+                    "created": 1645816062,
+                    "fsm": {
+                      "components": [
+                        "run",
+                        "run"
+                      ],
+                      "service": "emuscene.0",
+                      "state": "run",
+                      "ts": 1645816108.454785
+                    },
+                    "mem": 0.62765,
+                    "state": "S"
+                  },
+                  "harvester.0": {
+                    "PID": 4244,
+                    "cpu": 7.746590276333655,
+                    "created": 1645816062,
+                    "fsm": {
+                      "components": [
+                        "run",
+                        "error"
+                      ],
+                      "service": "harvester.0",
+                      "state": "run",
+                      "ts": 1645816108.5537412
+                    },
+                    "mem": 0.6309041,
+                    "state": "S"
+                  }
+                },
+                "version": "UNKNOWN"
+              }
             }
-          ],
-          "message": "Login Required"
-        }
-      },
-      "location": 1,
-      "harvester": 1
+          },
+          "timestamp": 1645816108.5620463,
+          "type": "error"
+        },
+    "location": 1,
+    "harvester": 1
     }
   }
 ]
