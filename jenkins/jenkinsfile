@@ -14,7 +14,7 @@ pipeline {
             steps {
                 catchError(stageResult: 'FAILURE') {
                     script {
-                        def exitCode = sh script:'./jenkins/ErrorReportTests.sh', returnStatus:true
+                        def exitCode = sh script:'./jenkins/run_tests.sh', returnStatus:true
                         env.totalExitCode = (env.totalExitCode).toInteger() + exitCode
                         sh "exit ${exitCode}"
                     }
@@ -38,6 +38,7 @@ pipeline {
 		always {
             script {
                 currentBuild.result = ((env.totalExitCode).toInteger() == 0) ? "SUCCESS" : "FAILURE"
+                sh "sudo docker compose down"
             }
 		}
 	}
