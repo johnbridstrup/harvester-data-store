@@ -5,6 +5,8 @@ services:
       - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+    networks:
+      - "hds-network"
   web:
     build: .
     command: python hds/manage.py runserver 0.0.0.0:${HDS_PORT}
@@ -24,3 +26,12 @@ services:
       - SQL_PORT=5432
     depends_on:
       - db
+    networks:
+      - "hds-network"
+networks:
+  hds-network:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+      - subnet:  10.103.0.1/16

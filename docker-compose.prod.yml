@@ -4,3 +4,12 @@ services:
     command: /opt/app/start-server.sh ${HDS_PORT}
     ports:
       - 127.0.0.1:${HDS_PORT}:${HDS_PORT}
+    networks:
+      - "hds-network"
+networks:
+  hds-network:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+      - subnet:  10.103.0.1/16
