@@ -24,5 +24,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path(f'{version}/fruits/', include('harvester.urls.fruiturls')),
     path(f'{version}/users/', include('common.urls.userurls')),
-] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) \
-  + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]
+
+# removed till we decide how to deal with these settings
+# + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) \
+#   + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
