@@ -1,0 +1,1225 @@
+{
+	"info": {
+		"_postman_id": "ad286a5a-534b-4494-9b74-a199f50fef5e",
+		"name": "hds",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "harvester",
+			"item": []
+		},
+		{
+			"name": "fruit",
+			"item": [
+				{
+					"name": "Add Fruit",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token 5f146d01d5d429733603e9372b8e84dddcee1a29",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Strawberries\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{domain}}/fruits/",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"fruits",
+								""
+							]
+						},
+						"description": "## Add Fruits\n\n**Mandatory Fields**\n\n```\n{\n    \"name\": [\n        \"This field is required.\"\n    ]\n}\n\n```\n\nSince this is an authenticated call, creator will be the signed in user."
+					},
+					"response": [
+						{
+							"name": "Add Fruit - Error",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Token 5f146d01d5d429733603e9372b8e84dddcee1a29",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{domain}}/fruits/",
+									"host": [
+										"{{domain}}"
+									],
+									"path": [
+										"fruits",
+										""
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Wed, 18 May 2022 12:06:53 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "WSGIServer/0.2 CPython/3.8.7"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept"
+								},
+								{
+									"key": "Allow",
+									"value": "GET, POST, HEAD, OPTIONS"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Length",
+									"value": "79"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"error\",\n    \"erors\": {\n        \"detail\": {\n            \"name\": [\n                \"This field may not be blank.\"\n            ]\n        }\n    }\n}"
+						},
+						{
+							"name": "Add Fruit - Success",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Token 5f146d01d5d429733603e9372b8e84dddcee1a29",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Strawberries\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{domain}}/fruits/",
+									"host": [
+										"{{domain}}"
+									],
+									"path": [
+										"fruits",
+										""
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Wed, 18 May 2022 12:07:27 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "WSGIServer/0.2 CPython/3.8.7"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept"
+								},
+								{
+									"key": "Allow",
+									"value": "GET, POST, HEAD, OPTIONS"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Length",
+									"value": "213"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"success\",\n    \"message\": \"Fruit created successfully\",\n    \"data\": {\n        \"id\": 14,\n        \"created\": \"2022-05-18T12:07:27.076996Z\",\n        \"lastModified\": \"2022-05-18T12:07:27.077075Z\",\n        \"name\": \"Strawberries\",\n        \"creator\": 1,\n        \"modifiedBy\": null\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Delete Fruit",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token 435b18abedef452f64e7f4ed2e68e98ac8babf5e",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Strawberries\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{domain}}/fruits/11/",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"fruits",
+								"11",
+								""
+							]
+						},
+						"description": "## Add Fruits\n\n**Mandatory Fields**\n\n```\n{\n    \"name\": [\n        \"This field is required.\"\n    ]\n}\n\n```\n\nSince this is an authenticated call, creator will be the signed in user."
+					},
+					"response": [
+						{
+							"name": "Delete Fruit - Success",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Token 435b18abedef452f64e7f4ed2e68e98ac8babf5e",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Strawberries\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{domain}}/fruits/11/",
+									"host": [
+										"{{domain}}"
+									],
+									"path": [
+										"fruits",
+										"11",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Wed, 18 May 2022 13:10:40 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "WSGIServer/0.2 CPython/3.8.7"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept"
+								},
+								{
+									"key": "Allow",
+									"value": "GET, PUT, PATCH, DELETE, HEAD, OPTIONS"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Length",
+									"value": "71"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"success\",\n    \"message\": \"Fruit deleted successfully\",\n    \"data\": null\n}"
+						},
+						{
+							"name": "Delete Fruit - Error",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Token 435b18abedef452f64e7f4ed2e68e98ac8babf5e",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Strawberries\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{domain}}/fruits/11/",
+									"host": [
+										"{{domain}}"
+									],
+									"path": [
+										"fruits",
+										"11",
+										""
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Wed, 18 May 2022 13:11:29 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "WSGIServer/0.2 CPython/3.8.7"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept"
+								},
+								{
+									"key": "Allow",
+									"value": "GET, PUT, PATCH, DELETE, HEAD, OPTIONS"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Length",
+									"value": "76"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"error\",\n    \"erors\": {\n        \"exception\": \"No Fruit matches the given query.\"\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Update Fruit",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token 435b18abedef452f64e7f4ed2e68e98ac8babf5e",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Pineapple\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{domain}}/fruits/10/",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"fruits",
+								"10",
+								""
+							]
+						},
+						"description": "## Add Fruits\n\n**Mandatory Fields**\n\n```\n{\n    \"name\": [\n        \"This field is required.\"\n    ]\n}\n\n```\n\nSince this is an authenticated call, creator will be the signed in user."
+					},
+					"response": [
+						{
+							"name": "Update Fruit - Error",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Token 435b18abedef452f64e7f4ed2e68e98ac8babf5e",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Strawberries\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{domain}}/fruits/11/",
+									"host": [
+										"{{domain}}"
+									],
+									"path": [
+										"fruits",
+										"11",
+										""
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Wed, 18 May 2022 13:13:13 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "WSGIServer/0.2 CPython/3.8.7"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept"
+								},
+								{
+									"key": "Allow",
+									"value": "GET, PUT, PATCH, DELETE, HEAD, OPTIONS"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Length",
+									"value": "76"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"error\",\n    \"erors\": {\n        \"exception\": \"No Fruit matches the given query.\"\n    }\n}"
+						},
+						{
+							"name": "Update Fruit - Success",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Token 435b18abedef452f64e7f4ed2e68e98ac8babf5e",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Pineapple\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{domain}}/fruits/10/",
+									"host": [
+										"{{domain}}"
+									],
+									"path": [
+										"fruits",
+										"10",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Wed, 18 May 2022 13:14:07 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "WSGIServer/0.2 CPython/3.8.7"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept"
+								},
+								{
+									"key": "Allow",
+									"value": "GET, PUT, PATCH, DELETE, HEAD, OPTIONS"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Length",
+									"value": "210"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"success\",\n    \"message\": \"Fruit updated successfully\",\n    \"data\": {\n        \"id\": 10,\n        \"created\": \"2022-05-18T10:38:25.752197Z\",\n        \"lastModified\": \"2022-05-18T13:14:07.195978Z\",\n        \"name\": \"Pineapple\",\n        \"creator\": 1,\n        \"modifiedBy\": null\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Get All Fruits",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token 435b18abedef452f64e7f4ed2e68e98ac8babf5e",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{domain}}/fruits/",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"fruits",
+								""
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Get Fruits - Success",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Token 5f146d01d5d429733603e9372b8e84dddcee1a29",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{domain}}/fruits/",
+									"host": [
+										"{{domain}}"
+									],
+									"path": [
+										"fruits",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Wed, 18 May 2022 12:05:54 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "WSGIServer/0.2 CPython/3.8.7"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept"
+								},
+								{
+									"key": "Allow",
+									"value": "GET, POST, HEAD, OPTIONS"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Length",
+									"value": "1914"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"success\",\n    \"message\": \"Fruits retrieved successfully\",\n    \"data\": [\n        {\n            \"id\": 1,\n            \"created\": \"2022-04-26T10:06:33.175000Z\",\n            \"lastModified\": \"2022-04-26T10:06:33.176000Z\",\n            \"name\": \"Strawberry\",\n            \"creator\": 1,\n            \"modifiedBy\": null\n        },\n        {\n            \"id\": 2,\n            \"created\": \"2022-04-26T10:06:41.304000Z\",\n            \"lastModified\": \"2022-04-26T10:06:41.304000Z\",\n            \"name\": \"Apple\",\n            \"creator\": 2,\n            \"modifiedBy\": null\n        },\n        {\n            \"id\": 3,\n            \"created\": \"2022-05-17T13:54:53.066926Z\",\n            \"lastModified\": \"2022-05-17T13:54:53.066954Z\",\n            \"name\": \"Guava\",\n            \"creator\": 1,\n            \"modifiedBy\": null\n        },\n        {\n            \"id\": 4,\n            \"created\": \"2022-05-17T13:57:20.422891Z\",\n            \"lastModified\": \"2022-05-17T13:57:20.423015Z\",\n            \"name\": \"Peach\",\n            \"creator\": 1,\n            \"modifiedBy\": null\n        },\n        {\n            \"id\": 5,\n            \"created\": \"2022-05-18T09:35:59.153741Z\",\n            \"lastModified\": \"2022-05-18T09:35:59.153838Z\",\n            \"name\": \"Grapes 1\",\n            \"creator\": 1,\n            \"modifiedBy\": null\n        },\n        {\n            \"id\": 6,\n            \"created\": \"2022-05-18T09:35:59.162807Z\",\n            \"lastModified\": \"2022-05-18T09:35:59.162844Z\",\n            \"name\": \"Grapes 1\",\n            \"creator\": 1,\n            \"modifiedBy\": null\n        },\n        {\n            \"id\": 7,\n            \"created\": \"2022-05-18T10:13:06.460889Z\",\n            \"lastModified\": \"2022-05-18T10:13:06.460920Z\",\n            \"name\": \"Grapes 3\",\n            \"creator\": 1,\n            \"modifiedBy\": null\n        },\n        {\n            \"id\": 8,\n            \"created\": \"2022-05-18T10:15:12.661034Z\",\n            \"lastModified\": \"2022-05-18T10:15:12.661090Z\",\n            \"name\": \"Grapes 3\",\n            \"creator\": 1,\n            \"modifiedBy\": null\n        },\n        {\n            \"id\": 9,\n            \"created\": \"2022-05-18T10:15:12.663583Z\",\n            \"lastModified\": \"2022-05-18T10:15:12.663609Z\",\n            \"name\": \"Grapes 3\",\n            \"creator\": 1,\n            \"modifiedBy\": null\n        },\n        {\n            \"id\": 10,\n            \"created\": \"2022-05-18T10:38:25.752197Z\",\n            \"lastModified\": \"2022-05-18T10:38:25.752311Z\",\n            \"name\": \"Grapes 4\",\n            \"creator\": 1,\n            \"modifiedBy\": null\n        },\n        {\n            \"id\": 11,\n            \"created\": \"2022-05-18T10:38:54.454168Z\",\n            \"lastModified\": \"2022-05-18T10:38:54.454207Z\",\n            \"name\": \"Grapes 5\",\n            \"creator\": 1,\n            \"modifiedBy\": null\n        },\n        {\n            \"id\": 12,\n            \"created\": \"2022-05-18T10:39:32.577866Z\",\n            \"lastModified\": \"2022-05-18T10:39:32.577917Z\",\n            \"name\": \"Grapes 6\",\n            \"creator\": 1,\n            \"modifiedBy\": null\n        },\n        {\n            \"id\": 13,\n            \"created\": \"2022-05-18T10:51:44.639525Z\",\n            \"lastModified\": \"2022-05-18T10:51:44.639557Z\",\n            \"name\": \"Grapes 6\",\n            \"creator\": 1,\n            \"modifiedBy\": null\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "Get All Fruit by ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token 435b18abedef452f64e7f4ed2e68e98ac8babf5e",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{domain}}/fruits/1/",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"fruits",
+								"1",
+								""
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Get All Fruit by ID - Succes",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Token 435b18abedef452f64e7f4ed2e68e98ac8babf5e",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{domain}}/fruits/1/",
+									"host": [
+										"{{domain}}"
+									],
+									"path": [
+										"fruits",
+										"1",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Wed, 18 May 2022 12:20:14 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "WSGIServer/0.2 CPython/3.8.7"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept"
+								},
+								{
+									"key": "Allow",
+									"value": "GET, PUT, PATCH, DELETE, HEAD, OPTIONS"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Length",
+									"value": "212"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"success\",\n    \"message\": \"Fruit retrieved successfully\",\n    \"data\": {\n        \"id\": 1,\n        \"created\": \"2022-04-26T10:06:33.175000Z\",\n        \"lastModified\": \"2022-04-26T10:06:33.176000Z\",\n        \"name\": \"Strawberry\",\n        \"creator\": 1,\n        \"modifiedBy\": null\n    }\n}"
+						},
+						{
+							"name": "Get All Fruit by ID - Error",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Token 435b18abedef452f64e7f4ed2e68e98ac8babf5e",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{domain}}/fruits/55/",
+									"host": [
+										"{{domain}}"
+									],
+									"path": [
+										"fruits",
+										"55",
+										""
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Wed, 18 May 2022 12:20:49 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "WSGIServer/0.2 CPython/3.8.7"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept"
+								},
+								{
+									"key": "Allow",
+									"value": "GET, PUT, PATCH, DELETE, HEAD, OPTIONS"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Length",
+									"value": "76"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"error\",\n    \"erors\": {\n        \"exception\": \"No Fruit matches the given query.\"\n    }\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "user",
+			"item": [
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"aft\",\n    \"password\": \"aft\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{domain}}/users/login/",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"users",
+								"login",
+								""
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Login - Error",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"username\": \"aft\",\n    \"password\": \"\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{domain}}/users/login/",
+									"host": [
+										"{{domain}}"
+									],
+									"path": [
+										"users",
+										"login",
+										""
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Wed, 18 May 2022 12:08:09 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "WSGIServer/0.2 CPython/3.8.7"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept"
+								},
+								{
+									"key": "Allow",
+									"value": "POST, OPTIONS"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Length",
+									"value": "71"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"error\",\n    \"erors\": {\n        \"exception\": \"invalid username or password\"\n    }\n}"
+						},
+						{
+							"name": "Login - Success",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"username\": \"aft\",\n    \"password\": \"aft\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{domain}}/users/login/",
+									"host": [
+										"{{domain}}"
+									],
+									"path": [
+										"users",
+										"login",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Wed, 18 May 2022 12:08:26 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "WSGIServer/0.2 CPython/3.8.7"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept"
+								},
+								{
+									"key": "Allow",
+									"value": "POST, OPTIONS"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Length",
+									"value": "109"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"success\",\n    \"message\": \"Login successful\",\n    \"data\": {\n        \"token\": \"5f146d01d5d429733603e9372b8e84dddcee1a29\"\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"token\": \"5f146d01d5d429733603e9372b8e84dddcee1a29\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{domain}}/users/logout/",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"users",
+								"logout",
+								""
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Logout - Success",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"token\": \"5f146d01d5d429733603e9372b8e84dddcee1a29\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{domain}}/users/logout/",
+									"host": [
+										"{{domain}}"
+									],
+									"path": [
+										"users",
+										"logout",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Wed, 18 May 2022 12:09:08 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "WSGIServer/0.2 CPython/3.8.7"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept"
+								},
+								{
+									"key": "Allow",
+									"value": "POST, OPTIONS"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Length",
+									"value": "60"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"success\",\n    \"message\": \"Logout successful\",\n    \"data\": {}\n}"
+						},
+						{
+							"name": "Logout - Error",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"token\": \"5f146d01d5d429733603e9372b8e84dddcee1a29\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{domain}}/users/logout/",
+									"host": [
+										"{{domain}}"
+									],
+									"path": [
+										"users",
+										"logout",
+										""
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Wed, 18 May 2022 12:09:22 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "WSGIServer/0.2 CPython/3.8.7"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept"
+								},
+								{
+									"key": "Allow",
+									"value": "POST, OPTIONS"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Length",
+									"value": "56"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"error\",\n    \"erors\": {\n        \"exception\": \"invalid token\"\n    }\n}"
+						}
+					]
+				}
+			]
+		}
+	]
+}
