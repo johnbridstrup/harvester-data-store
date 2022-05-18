@@ -1,10 +1,9 @@
 from rest_framework import routers
 from ..views.fruitview import FruitView
-from django.urls import path
 
 
 router = routers.SimpleRouter()
+router.register(r'', FruitView)
 
 urlpatterns = [
-  path('', FruitView.as_view(), name="fruits"),
-]
+] + router.urls

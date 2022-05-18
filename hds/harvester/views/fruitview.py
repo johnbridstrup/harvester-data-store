@@ -1,42 +1,39 @@
 from ..models import Fruit
 from ..serializers.fruitserializer import FruitSerializer
-from rest_framework.generics import CreateAPIView
+from rest_framework.viewsets import ModelViewSet
+
 from rest_framework.permissions import IsAuthenticated
-from common.utils import sendresponse
+from common.utils import make_ok
 
 
-class FruitView(CreateAPIView):
+class FruitView(ModelViewSet):
     queryset = Fruit.objects.all()
     serializer_class = FruitSerializer
     permission_classes = (IsAuthenticated,)
 
-    def post(self, request):
-        try:
-            message = {}
-            if "name" not in request.data.keys():
-                message = {**message, **{"missing_parameter": "fruit name is required"}}
-                raise Exception("fruit name is required")
+    def perform_create(self, serializer):
+        serializer.save(creator=self.request.user)
 
-            user = request.user
-            fruit = Fruit.objects.create(name=request.data['name'], creator=user)
-            return sendresponse(
-                response_status="success",
-                response_message="Fruit created successfully",
-                response_data=FruitSerializer(fruit).data,
-                status_code=200)
-        except Exception as e:
-            return sendresponse(
-                response_status='error',
-                response_message={**message, "exception": str(e)},
-                response_data={},
-                status_code=400)
+    def create(self, request, *args, **kwargs):
+        response = super().create(request, *args, **kwargs)
+        return make_ok("Fruit created successfully", response.data, 201)
 
-    def get(self, request):
-        fruits = Fruit.objects.all()
-        serializer = FruitSerializer(fruits, many=True)
-        return sendresponse(
-            response_status="success",
-            response_message="Fruits retrieved successfully",
-            response_data=serializer.data,
-            status_code=200)
-        
+    # update fruit
+    def update(self, request, *args, **kwargs):
+        response = super().update(request, *args, **kwargs)
+        return make_ok("Fruit updated successfully", response.data)
+
+    # get all fruits
+    def list(self, request, *args, **kwargs):
+        response = super().list(request, *args, **kwargs)
+        return make_ok("Fruits retrieved successfully", response.data)
+
+    # get fruit by id
+    def retrieve(self, request, *args, **kwargs):
+        response = super().retrieve(request, *args, **kwargs)
+        return make_ok("Fruit retrieved successfully", response.data)
+
+    # delete fruit
+    def destroy(self, request, *args, **kwargs):
+        response = super().destroy(request, *args, **kwargs)
+        return make_ok("Fruit deleted successfully", response.data)

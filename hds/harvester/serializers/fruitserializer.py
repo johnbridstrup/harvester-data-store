@@ -6,5 +6,7 @@ from ..models import Fruit
 class FruitSerializer(serializers.ModelSerializer):
     class Meta:
         model = Fruit
-        fields = '__all__'
-        
+        fields = ('__all__')
+        read_only_fields = ('creator',)
+
+
