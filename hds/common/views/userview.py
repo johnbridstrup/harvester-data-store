@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from django.contrib.auth.models import update_last_login
 from django.contrib.auth import authenticate
 from rest_framework.authtoken.models import Token
-from common.utils import sendresponse
+from common.utils import make_ok
 
 
 class LoginAPIView(APIView):
@@ -19,20 +19,12 @@ class LoginAPIView(APIView):
             if user is not None:
                 update_last_login(None, user)
                 token, created = Token.objects.get_or_create(user=user)
-                return sendresponse(
-                    response_status="success",
-                    response_message="Login Successful",
-                    response_data={"token": token.key},
-                    status_code=200)
+                return make_ok("Login successful", {"token": token.key})
             else:
                 message = {**message, **{"invalid_credentials": "invalid username or password"}}
                 raise Exception("invalid username or password")
         except Exception as e:
-            return sendresponse(
-                response_status='error',
-                response_message={**message, "exception": str(e)},
-                response_data={},
-                status_code=400)
+            raise Exception(str(e))
 
 
 class LogoutAPIView(APIView):
@@ -48,17 +40,9 @@ class LogoutAPIView(APIView):
                 token = Token.objects.filter(key=request.data['token'])
                 if token.exists():
                     token.delete()
-                    return sendresponse(
-                        response_status="success",
-                        response_message="Logout Successful",
-                        response_data={},
-                        status_code=200)
+                    return make_ok("Logout successful", {})
                 else:
                     message = {**message, **{"invalid_token": "invalid token"}}
                     raise Exception("invalid token")
         except Exception as e:
-            return sendresponse(
-                response_status='error',
-                response_message={**message, "exception": str(e)},
-                response_data={},
-                status_code=400)
+            raise Exception(str(e))
