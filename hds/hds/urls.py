@@ -26,6 +26,6 @@ urlpatterns = [
     path(f'{version}/users/', include('common.urls.userurls')),
 ]
 
-# removed till we decide how to deal with these settings
-# + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) \
-#   + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+if settings.DEBUG is True:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
