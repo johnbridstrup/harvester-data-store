@@ -2,7 +2,8 @@
 	"info": {
 		"_postman_id": "ad286a5a-534b-4494-9b74-a199f50fef5e",
 		"name": "hds",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "8784836"
 	},
 	"item": [
 		{
@@ -19,7 +20,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Token 5f146d01d5d429733603e9372b8e84dddcee1a29",
+								"value": "{{admin_token}}",
 								"type": "text"
 							}
 						],
@@ -212,7 +213,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Token 435b18abedef452f64e7f4ed2e68e98ac8babf5e",
+								"value": "{{admin_token}}",
 								"type": "text"
 							}
 						],
@@ -408,7 +409,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Token 435b18abedef452f64e7f4ed2e68e98ac8babf5e",
+								"value": "{{admin_token}}",
 								"type": "text"
 							}
 						],
@@ -604,7 +605,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Token 435b18abedef452f64e7f4ed2e68e98ac8babf5e",
+								"value": "{{admin_token}}",
 								"type": "text"
 							}
 						],
@@ -699,7 +700,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Token 435b18abedef452f64e7f4ed2e68e98ac8babf5e",
+								"value": "{{admin_token}}",
 								"type": "text"
 							}
 						],
