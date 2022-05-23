@@ -23,4 +23,25 @@ can be made in your usual IDE and they will be applied in real time to the serve
 Two users are initially populated if you use `runserver`:
 - User: aft; Password: aft (admin)
 - User: notaft; Password: dummypwd (not admin)
+
+## Setting up Postman
+[Postman](https://www.postman.com/) is a software tool for testing API endpoints and workflows. We currently use it primarily
+for testing new endpoints as we develop. Included in this repo in the `postman` directory are JSON configs for the Postman 
+environment variables and HTTP collections. To get set up with postman:
+1. Install postman
+    - snap: `$ snap install postman` (easiest, you may also need to install snap)
+    - [Manual](https://learning.postman.com/docs/getting-started/installation-and-updates/#installing-postman-on-linux)
+2. Run postman
+    - `$ postman`
+3. Import collection and environment
+    - File -> import -> upload -> select both jsons
+
+You will now see `hds` in the collections tab and `hds local` in the environments tab. Set `hds local` as the active environment.
+Each endpoint is organized into it's own folder, with `GET`/`POST`/etc.. methods defined. If changes are made to the environment 
+or the collection, they should be exported and stored in the `postman` directory.
+
+You can now run the HDS server and execute requests from Postman. By default, the port is set to `8085`. If HDS is running on a 
+different port, it must be changed to match in postman.  
+
+
  
