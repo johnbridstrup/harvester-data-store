@@ -24,6 +24,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path(f'{version}/fruits/', include('harvester.urls.fruiturls')),
     path(f'{version}/harvesters/', include('harvester.urls.harvesterurls')),
+    path(f'{version}/locations/', include('location.urls.locationurls')),
     path(f'{version}/users/', include('common.urls.userurls')),
 ]
 
