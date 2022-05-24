@@ -23,6 +23,7 @@ version = 'api/v1'
 urlpatterns = [
     path('admin/', admin.site.urls),
     path(f'{version}/fruits/', include('harvester.urls.fruiturls')),
+    path(f'{version}/harvesters/', include('harvester.urls.harvesterurls')),
     path(f'{version}/users/', include('common.urls.userurls')),
 ]
 
