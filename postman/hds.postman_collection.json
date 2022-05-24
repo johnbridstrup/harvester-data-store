@@ -7,10 +7,6 @@
 	},
 	"item": [
 		{
-			"name": "harvester",
-			"item": []
-		},
-		{
 			"name": "fruit",
 			"item": [
 				{
@@ -219,7 +215,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"Strawberries\"\n}",
+							"raw": "",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -227,13 +223,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{domain}}/fruits/11/",
+							"raw": "{{domain}}/fruits/15/",
 							"host": [
 								"{{domain}}"
 							],
 							"path": [
 								"fruits",
-								"11",
+								"15",
 								""
 							]
 						},
@@ -694,7 +690,7 @@
 					]
 				},
 				{
-					"name": "Get All Fruit by ID",
+					"name": "Get Fruit by ID",
 					"request": {
 						"method": "GET",
 						"header": [
@@ -718,7 +714,7 @@
 					},
 					"response": [
 						{
-							"name": "Get All Fruit by ID - Succes",
+							"name": "Get Fruit by ID - Succes",
 							"originalRequest": {
 								"method": "GET",
 								"header": [
@@ -789,7 +785,7 @@
 							"body": "{\n    \"status\": \"success\",\n    \"message\": \"Fruit retrieved successfully\",\n    \"data\": {\n        \"id\": 1,\n        \"created\": \"2022-04-26T10:06:33.175000Z\",\n        \"lastModified\": \"2022-04-26T10:06:33.176000Z\",\n        \"name\": \"Strawberry\",\n        \"creator\": 1,\n        \"modifiedBy\": null\n    }\n}"
 						},
 						{
-							"name": "Get All Fruit by ID - Error",
+							"name": "Get Fruit by ID - Error",
 							"originalRequest": {
 								"method": "GET",
 								"header": [
@@ -858,6 +854,2805 @@
 							],
 							"cookie": [],
 							"body": "{\n    \"status\": \"error\",\n    \"erors\": {\n        \"exception\": \"No Fruit matches the given query.\"\n    }\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "distributor",
+			"item": [
+				{
+					"name": "Add Distributor",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{admin_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"New Distributor\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{domain}}/distributors/",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"distributors",
+								""
+							]
+						},
+						"description": "## Add Fruits\n\n**Mandatory Fields**\n\n```\n{\n    \"name\": [\n        \"This field is required.\"\n    ]\n}\n\n```\n\nSince this is an authenticated call, creator will be the signed in user."
+					},
+					"response": [
+						{
+							"name": "Add Distributor - Success",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{admin_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"New Distributor\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{domain}}/distributors/",
+									"host": [
+										"{{domain}}"
+									],
+									"path": [
+										"distributors",
+										""
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Tue, 24 May 2022 11:24:59 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "WSGIServer/0.2 CPython/3.8.7"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept"
+								},
+								{
+									"key": "Allow",
+									"value": "GET, POST, HEAD, OPTIONS"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Length",
+									"value": "221"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"success\",\n    \"message\": \"Distributor created successfully\",\n    \"data\": {\n        \"id\": 2,\n        \"created\": \"2022-05-24T11:24:59.020354Z\",\n        \"lastModified\": \"2022-05-24T11:24:59.020402Z\",\n        \"name\": \"New Distributor\",\n        \"creator\": 1,\n        \"modifiedBy\": null\n    }\n}"
+						},
+						{
+							"name": "Add Distributor - Error",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{admin_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{domain}}/distributors/",
+									"host": [
+										"{{domain}}"
+									],
+									"path": [
+										"distributors",
+										""
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Tue, 24 May 2022 11:25:25 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "WSGIServer/0.2 CPython/3.8.7"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept"
+								},
+								{
+									"key": "Allow",
+									"value": "GET, POST, HEAD, OPTIONS"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Length",
+									"value": "80"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"error\",\n    \"errors\": {\n        \"detail\": {\n            \"name\": [\n                \"This field may not be blank.\"\n            ]\n        }\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Delete Distributor",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{admin_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{domain}}/distributors/1/",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"distributors",
+								"1",
+								""
+							]
+						},
+						"description": "## Add Fruits\n\n**Mandatory Fields**\n\n```\n{\n    \"name\": [\n        \"This field is required.\"\n    ]\n}\n\n```\n\nSince this is an authenticated call, creator will be the signed in user."
+					},
+					"response": [
+						{
+							"name": "Delete Distributor - Error",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{admin_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{domain}}/distributors/15/",
+									"host": [
+										"{{domain}}"
+									],
+									"path": [
+										"distributors",
+										"15",
+										""
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Tue, 24 May 2022 11:28:19 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "WSGIServer/0.2 CPython/3.8.7"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept"
+								},
+								{
+									"key": "Allow",
+									"value": "GET, PUT, PATCH, DELETE, HEAD, OPTIONS"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Length",
+									"value": "83"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"error\",\n    \"errors\": {\n        \"exception\": \"No Distributor matches the given query.\"\n    }\n}"
+						},
+						{
+							"name": "Delete Distributor - Succes",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{admin_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{domain}}/distributors/1/",
+									"host": [
+										"{{domain}}"
+									],
+									"path": [
+										"distributors",
+										"1",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Tue, 24 May 2022 11:28:46 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "WSGIServer/0.2 CPython/3.8.7"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept"
+								},
+								{
+									"key": "Allow",
+									"value": "GET, PUT, PATCH, DELETE, HEAD, OPTIONS"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Length",
+									"value": "77"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"success\",\n    \"message\": \"Distributor deleted successfully\",\n    \"data\": null\n}"
+						}
+					]
+				},
+				{
+					"name": "Update Distributor",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{admin_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Updated Distributor\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{domain}}/distributors/1/",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"distributors",
+								"1",
+								""
+							]
+						},
+						"description": "## Add Fruits\n\n**Mandatory Fields**\n\n```\n{\n    \"name\": [\n        \"This field is required.\"\n    ]\n}\n\n```\n\nSince this is an authenticated call, creator will be the signed in user."
+					},
+					"response": [
+						{
+							"name": "Update Distributor - Error",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{admin_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Updated Distributor\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{domain}}/distributors/10/",
+									"host": [
+										"{{domain}}"
+									],
+									"path": [
+										"distributors",
+										"10",
+										""
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Tue, 24 May 2022 11:27:27 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "WSGIServer/0.2 CPython/3.8.7"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept"
+								},
+								{
+									"key": "Allow",
+									"value": "GET, PUT, PATCH, DELETE, HEAD, OPTIONS"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Length",
+									"value": "83"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"error\",\n    \"errors\": {\n        \"exception\": \"No Distributor matches the given query.\"\n    }\n}"
+						},
+						{
+							"name": "Update Distributor - Success",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{admin_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Updated Distributor\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{domain}}/distributors/1/",
+									"host": [
+										"{{domain}}"
+									],
+									"path": [
+										"distributors",
+										"1",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Tue, 24 May 2022 11:27:42 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "WSGIServer/0.2 CPython/3.8.7"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept"
+								},
+								{
+									"key": "Allow",
+									"value": "GET, PUT, PATCH, DELETE, HEAD, OPTIONS"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Length",
+									"value": "225"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"success\",\n    \"message\": \"Distributor updated successfully\",\n    \"data\": {\n        \"id\": 1,\n        \"created\": \"2022-04-26T10:05:04.151000Z\",\n        \"lastModified\": \"2022-05-24T11:27:42.896708Z\",\n        \"name\": \"Updated Distributor\",\n        \"creator\": 1,\n        \"modifiedBy\": null\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Get All Distributors",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{admin_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{domain}}/distributors/",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"distributors",
+								""
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Get All Distributors - Success",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{admin_token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{domain}}/distributors/",
+									"host": [
+										"{{domain}}"
+									],
+									"path": [
+										"distributors",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Tue, 24 May 2022 11:26:00 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "WSGIServer/0.2 CPython/3.8.7"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept"
+								},
+								{
+									"key": "Allow",
+									"value": "GET, POST, HEAD, OPTIONS"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Length",
+									"value": "373"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"success\",\n    \"message\": \"Distributors retrieved successfully\",\n    \"data\": [\n        {\n            \"id\": 1,\n            \"created\": \"2022-04-26T10:05:04.151000Z\",\n            \"lastModified\": \"2022-04-26T10:05:04.151000Z\",\n            \"name\": \"Distributor 1\",\n            \"creator\": 1,\n            \"modifiedBy\": null\n        },\n        {\n            \"id\": 2,\n            \"created\": \"2022-05-24T11:24:59.020354Z\",\n            \"lastModified\": \"2022-05-24T11:24:59.020402Z\",\n            \"name\": \"New Distributor\",\n            \"creator\": 1,\n            \"modifiedBy\": null\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Distributor by ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{admin_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{domain}}/distributors/1/",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"distributors",
+								"1",
+								""
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Get Distributor by ID - Success",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{admin_token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{domain}}/distributors/1/",
+									"host": [
+										"{{domain}}"
+									],
+									"path": [
+										"distributors",
+										"1",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Tue, 24 May 2022 11:26:25 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "WSGIServer/0.2 CPython/3.8.7"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept"
+								},
+								{
+									"key": "Allow",
+									"value": "GET, PUT, PATCH, DELETE, HEAD, OPTIONS"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Length",
+									"value": "221"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"success\",\n    \"message\": \"Distributor retrieved successfully\",\n    \"data\": {\n        \"id\": 1,\n        \"created\": \"2022-04-26T10:05:04.151000Z\",\n        \"lastModified\": \"2022-04-26T10:05:04.151000Z\",\n        \"name\": \"Distributor 1\",\n        \"creator\": 1,\n        \"modifiedBy\": null\n    }\n}"
+						},
+						{
+							"name": "Get Distributor by ID - Error",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{admin_token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{domain}}/distributors/11/",
+									"host": [
+										"{{domain}}"
+									],
+									"path": [
+										"distributors",
+										"11",
+										""
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Tue, 24 May 2022 11:26:42 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "WSGIServer/0.2 CPython/3.8.7"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept"
+								},
+								{
+									"key": "Allow",
+									"value": "GET, PUT, PATCH, DELETE, HEAD, OPTIONS"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Length",
+									"value": "83"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"error\",\n    \"errors\": {\n        \"exception\": \"No Distributor matches the given query.\"\n    }\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "harvester",
+			"item": [
+				{
+					"name": "Add Harvester",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{admin_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"harv_id\": 900,\n    \"fruit\": 1,\n    \"location\": 1,\n    \"name\": \"Harvester A\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{domain}}/harvesters/",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"harvesters",
+								""
+							]
+						},
+						"description": "## Add Fruits\n\n**Mandatory Fields**\n\n```\n{\n    \"name\": [\n        \"This field is required.\"\n    ]\n}\n\n```\n\nSince this is an authenticated call, creator will be the signed in user."
+					},
+					"response": [
+						{
+							"name": "Add Harvester - Success",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{admin_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"harv_id\": 900,\n    \"fruit\": 1,\n    \"location\": 1,\n    \"name\": \"Harvester A\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{domain}}/harvesters/",
+									"host": [
+										"{{domain}}"
+									],
+									"path": [
+										"harvesters",
+										""
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Tue, 24 May 2022 05:52:35 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "WSGIServer/0.2 CPython/3.8.7"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept"
+								},
+								{
+									"key": "Allow",
+									"value": "GET, POST, HEAD, OPTIONS"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Length",
+									"value": "252"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"success\",\n    \"message\": \"Harvester created successfully\",\n    \"data\": {\n        \"id\": 4,\n        \"created\": \"2022-05-24T05:52:35.016568Z\",\n        \"lastModified\": \"2022-05-24T05:52:35.016676Z\",\n        \"harv_id\": 900,\n        \"name\": \"Harvester A\",\n        \"creator\": 1,\n        \"modifiedBy\": null,\n        \"fruit\": 1,\n        \"location\": 1\n    }\n}"
+						},
+						{
+							"name": "Add Harvester - Error",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{admin_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"harv_id\": 900,\n    \"fruit\": 99,\n    \"location\": 1,\n    \"name\": \"Harvester A\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{domain}}/harvesters/",
+									"host": [
+										"{{domain}}"
+									],
+									"path": [
+										"harvesters",
+										""
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Tue, 24 May 2022 05:53:12 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "WSGIServer/0.2 CPython/3.8.7"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept"
+								},
+								{
+									"key": "Allow",
+									"value": "GET, POST, HEAD, OPTIONS"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Length",
+									"value": "95"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"error\",\n    \"errors\": {\n        \"detail\": {\n            \"fruit\": [\n                \"Invalid pk \\\"99\\\" - object does not exist.\"\n            ]\n        }\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Delete Harvester",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{admin_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{domain}}/harvesters/2/",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"harvesters",
+								"2",
+								""
+							]
+						},
+						"description": "## Add Fruits\n\n**Mandatory Fields**\n\n```\n{\n    \"name\": [\n        \"This field is required.\"\n    ]\n}\n\n```\n\nSince this is an authenticated call, creator will be the signed in user."
+					},
+					"response": [
+						{
+							"name": "Delete Harvester - Error",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{admin_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Strawberries\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{domain}}/harvesters/11/",
+									"host": [
+										"{{domain}}"
+									],
+									"path": [
+										"harvesters",
+										"11",
+										""
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Tue, 24 May 2022 05:59:58 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "WSGIServer/0.2 CPython/3.8.7"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept"
+								},
+								{
+									"key": "Allow",
+									"value": "GET, PUT, PATCH, DELETE, HEAD, OPTIONS"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Length",
+									"value": "81"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"error\",\n    \"errors\": {\n        \"exception\": \"No Harvester matches the given query.\"\n    }\n}"
+						},
+						{
+							"name": "Delete Harvester - Success",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{admin_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Strawberries\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{domain}}/harvesters/4/",
+									"host": [
+										"{{domain}}"
+									],
+									"path": [
+										"harvesters",
+										"4",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Tue, 24 May 2022 06:00:16 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "WSGIServer/0.2 CPython/3.8.7"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept"
+								},
+								{
+									"key": "Allow",
+									"value": "GET, PUT, PATCH, DELETE, HEAD, OPTIONS"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Length",
+									"value": "75"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"success\",\n    \"message\": \"Harvester deleted successfully\",\n    \"data\": null\n}"
+						}
+					]
+				},
+				{
+					"name": "Update Harvester",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{admin_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"harv_id\": 999,\n    \"fruit\": 2,\n    \"location\": 2,\n    \"name\": \"Harvester 999\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{domain}}/harvesters/3/",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"harvesters",
+								"3",
+								""
+							]
+						},
+						"description": "## Add Fruits\n\n**Mandatory Fields**\n\n```\n{\n    \"name\": [\n        \"This field is required.\"\n    ]\n}\n\n```\n\nSince this is an authenticated call, creator will be the signed in user."
+					},
+					"response": [
+						{
+							"name": "Update Harvester (Name)- Success",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{admin_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Harvester Gamma\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{domain}}/harvesters/3/",
+									"host": [
+										"{{domain}}"
+									],
+									"path": [
+										"harvesters",
+										"3",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Tue, 24 May 2022 06:01:20 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "WSGIServer/0.2 CPython/3.8.7"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept"
+								},
+								{
+									"key": "Allow",
+									"value": "GET, PUT, PATCH, DELETE, HEAD, OPTIONS"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Length",
+									"value": "255"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"success\",\n    \"message\": \"Harvester updated successfully\",\n    \"data\": {\n        \"id\": 3,\n        \"created\": \"2022-04-26T10:07:18.334000Z\",\n        \"lastModified\": \"2022-05-24T06:01:20.977769Z\",\n        \"harv_id\": 11,\n        \"name\": \"Harvester Gamma\",\n        \"creator\": 2,\n        \"modifiedBy\": null,\n        \"fruit\": 2,\n        \"location\": 2\n    }\n}"
+						},
+						{
+							"name": "Update Harvester (harv_id) - Success",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{admin_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"harv_id\": 121\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{domain}}/harvesters/3/",
+									"host": [
+										"{{domain}}"
+									],
+									"path": [
+										"harvesters",
+										"3",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Tue, 24 May 2022 06:02:26 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "WSGIServer/0.2 CPython/3.8.7"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept"
+								},
+								{
+									"key": "Allow",
+									"value": "GET, PUT, PATCH, DELETE, HEAD, OPTIONS"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Length",
+									"value": "256"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"success\",\n    \"message\": \"Harvester updated successfully\",\n    \"data\": {\n        \"id\": 3,\n        \"created\": \"2022-04-26T10:07:18.334000Z\",\n        \"lastModified\": \"2022-05-24T06:02:26.068614Z\",\n        \"harv_id\": 121,\n        \"name\": \"Harvester Gamma\",\n        \"creator\": 2,\n        \"modifiedBy\": null,\n        \"fruit\": 2,\n        \"location\": 2\n    }\n}"
+						},
+						{
+							"name": "Update Harvester - Error",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{admin_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"harv_id\": 121\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{domain}}/harvesters/33/",
+									"host": [
+										"{{domain}}"
+									],
+									"path": [
+										"harvesters",
+										"33",
+										""
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Tue, 24 May 2022 06:03:19 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "WSGIServer/0.2 CPython/3.8.7"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept"
+								},
+								{
+									"key": "Allow",
+									"value": "GET, PUT, PATCH, DELETE, HEAD, OPTIONS"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Length",
+									"value": "81"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"error\",\n    \"errors\": {\n        \"exception\": \"No Harvester matches the given query.\"\n    }\n}"
+						},
+						{
+							"name": "Update Harvester (all data) - Success",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{admin_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"harv_id\": 999,\n    \"fruit\": 2,\n    \"location\": 2,\n    \"name\": \"Harvester 999\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{domain}}/harvesters/3/",
+									"host": [
+										"{{domain}}"
+									],
+									"path": [
+										"harvesters",
+										"3",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Tue, 24 May 2022 06:04:09 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "WSGIServer/0.2 CPython/3.8.7"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept"
+								},
+								{
+									"key": "Allow",
+									"value": "GET, PUT, PATCH, DELETE, HEAD, OPTIONS"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Length",
+									"value": "254"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"success\",\n    \"message\": \"Harvester updated successfully\",\n    \"data\": {\n        \"id\": 3,\n        \"created\": \"2022-04-26T10:07:18.334000Z\",\n        \"lastModified\": \"2022-05-24T06:04:09.621605Z\",\n        \"harv_id\": 999,\n        \"name\": \"Harvester 999\",\n        \"creator\": 2,\n        \"modifiedBy\": null,\n        \"fruit\": 2,\n        \"location\": 2\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Get All Harvesters",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{admin_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{domain}}/harvesters/",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"harvesters",
+								""
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Get All Harvesters - Success",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{admin_token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{domain}}/harvesters/",
+									"host": [
+										"{{domain}}"
+									],
+									"path": [
+										"harvesters",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Tue, 24 May 2022 05:58:44 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "WSGIServer/0.2 CPython/3.8.7"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept"
+								},
+								{
+									"key": "Allow",
+									"value": "GET, POST, HEAD, OPTIONS"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Length",
+									"value": "809"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"success\",\n    \"message\": \"Harvesters retrieved successfully\",\n    \"data\": [\n        {\n            \"id\": 1,\n            \"created\": \"2022-04-26T10:07:03.355000Z\",\n            \"lastModified\": \"2022-04-26T10:07:03.355000Z\",\n            \"harv_id\": 100,\n            \"name\": \"Harvester Alpha\",\n            \"creator\": 2,\n            \"modifiedBy\": null,\n            \"fruit\": 1,\n            \"location\": 1\n        },\n        {\n            \"id\": 2,\n            \"created\": \"2022-04-26T10:07:18.334000Z\",\n            \"lastModified\": \"2022-04-26T10:07:18.334000Z\",\n            \"harv_id\": 200,\n            \"name\": \"Harvester Beta\",\n            \"creator\": 2,\n            \"modifiedBy\": null,\n            \"fruit\": 2,\n            \"location\": 2\n        },\n        {\n            \"id\": 3,\n            \"created\": \"2022-04-26T10:07:18.334000Z\",\n            \"lastModified\": \"2022-04-26T10:07:18.334000Z\",\n            \"harv_id\": 11,\n            \"name\": \"aft-harv011\",\n            \"creator\": 2,\n            \"modifiedBy\": null,\n            \"fruit\": 2,\n            \"location\": 2\n        },\n        {\n            \"id\": 4,\n            \"created\": \"2022-05-24T05:52:35.016568Z\",\n            \"lastModified\": \"2022-05-24T05:52:35.016676Z\",\n            \"harv_id\": 900,\n            \"name\": \"Harvester A\",\n            \"creator\": 1,\n            \"modifiedBy\": null,\n            \"fruit\": 1,\n            \"location\": 1\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Harvester by ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{admin_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{domain}}/harvesters/1/",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"harvesters",
+								"1",
+								""
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Get Harvester by ID - Success",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{admin_token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{domain}}/harvesters/1/",
+									"host": [
+										"{{domain}}"
+									],
+									"path": [
+										"harvesters",
+										"1",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Tue, 24 May 2022 05:57:32 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "WSGIServer/0.2 CPython/3.8.7"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept"
+								},
+								{
+									"key": "Allow",
+									"value": "GET, PUT, PATCH, DELETE, HEAD, OPTIONS"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Length",
+									"value": "258"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"success\",\n    \"message\": \"Harvester retrieved successfully\",\n    \"data\": {\n        \"id\": 1,\n        \"created\": \"2022-04-26T10:07:03.355000Z\",\n        \"lastModified\": \"2022-04-26T10:07:03.355000Z\",\n        \"harv_id\": 100,\n        \"name\": \"Harvester Alpha\",\n        \"creator\": 2,\n        \"modifiedBy\": null,\n        \"fruit\": 1,\n        \"location\": 1\n    }\n}"
+						},
+						{
+							"name": "Get Harvester by ID - Error",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{admin_token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{domain}}/harvesters/99/",
+									"host": [
+										"{{domain}}"
+									],
+									"path": [
+										"harvesters",
+										"99",
+										""
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Tue, 24 May 2022 05:58:05 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "WSGIServer/0.2 CPython/3.8.7"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept"
+								},
+								{
+									"key": "Allow",
+									"value": "GET, PUT, PATCH, DELETE, HEAD, OPTIONS"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Length",
+									"value": "81"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"error\",\n    \"errors\": {\n        \"exception\": \"No Harvester matches the given query.\"\n    }\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "location",
+			"item": [
+				{
+					"name": "Add Location",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{admin_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"distributor\": 1,\n    \"ranch\": \"Ranch A\",\n    \"country\": \"US\",\n    \"region\": \"California\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{domain}}/locations/",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"locations",
+								""
+							]
+						},
+						"description": "## Add Fruits\n\n**Mandatory Fields**\n\n```\n{\n    \"name\": [\n        \"This field is required.\"\n    ]\n}\n\n```\n\nSince this is an authenticated call, creator will be the signed in user."
+					},
+					"response": [
+						{
+							"name": "Add Location - Success",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{admin_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"distributor\": 1,\n    \"ranch\": \"Ranch A\",\n    \"country\": \"US\",\n    \"region\": \"California\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{domain}}/locations/",
+									"host": [
+										"{{domain}}"
+									],
+									"path": [
+										"locations",
+										""
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Tue, 24 May 2022 09:22:12 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "WSGIServer/0.2 CPython/3.8.7"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept"
+								},
+								{
+									"key": "Allow",
+									"value": "GET, POST, HEAD, OPTIONS"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Length",
+									"value": "264"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"success\",\n    \"message\": \"Location created successfully\",\n    \"data\": {\n        \"id\": 3,\n        \"created\": \"2022-05-24T09:22:12.688084Z\",\n        \"lastModified\": \"2022-05-24T09:22:12.688222Z\",\n        \"ranch\": \"Ranch A\",\n        \"country\": \"US\",\n        \"region\": \"California\",\n        \"creator\": 1,\n        \"modifiedBy\": null,\n        \"distributor\": 1\n    }\n}"
+						},
+						{
+							"name": "Add Location - Error",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{admin_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"ranch\": \"Ranch A\",\n    \"country\": \"US\",\n    \"region\": \"California\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{domain}}/locations/",
+									"host": [
+										"{{domain}}"
+									],
+									"path": [
+										"locations",
+										""
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Tue, 24 May 2022 09:22:42 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "WSGIServer/0.2 CPython/3.8.7"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept"
+								},
+								{
+									"key": "Allow",
+									"value": "GET, POST, HEAD, OPTIONS"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Length",
+									"value": "82"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"error\",\n    \"errors\": {\n        \"detail\": {\n            \"distributor\": [\n                \"This field is required.\"\n            ]\n        }\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Delete Location",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{admin_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{domain}}/locations/2/",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"locations",
+								"2",
+								""
+							]
+						},
+						"description": "## Add Fruits\n\n**Mandatory Fields**\n\n```\n{\n    \"name\": [\n        \"This field is required.\"\n    ]\n}\n\n```\n\nSince this is an authenticated call, creator will be the signed in user."
+					},
+					"response": [
+						{
+							"name": "Delete Location - Error",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{admin_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{domain}}/locations/4/",
+									"host": [
+										"{{domain}}"
+									],
+									"path": [
+										"locations",
+										"4",
+										""
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Tue, 24 May 2022 09:28:13 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "WSGIServer/0.2 CPython/3.8.7"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept"
+								},
+								{
+									"key": "Allow",
+									"value": "GET, PUT, PATCH, DELETE, HEAD, OPTIONS"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Length",
+									"value": "80"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"error\",\n    \"errors\": {\n        \"exception\": \"No Location matches the given query.\"\n    }\n}"
+						},
+						{
+							"name": "Delete Location - Success",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{admin_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{domain}}/locations/3/",
+									"host": [
+										"{{domain}}"
+									],
+									"path": [
+										"locations",
+										"3",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Tue, 24 May 2022 09:28:34 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "WSGIServer/0.2 CPython/3.8.7"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept"
+								},
+								{
+									"key": "Allow",
+									"value": "GET, PUT, PATCH, DELETE, HEAD, OPTIONS"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Length",
+									"value": "74"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"success\",\n    \"message\": \"Location deleted successfully\",\n    \"data\": null\n}"
+						}
+					]
+				},
+				{
+					"name": "Update Location",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{admin_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"distributor\": 1,\n    \"ranch\": \"Ranch 1\",\n    \"country\": \"US\",\n    \"region\": \"Texas\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{domain}}/locations/1/",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"locations",
+								"1",
+								""
+							]
+						},
+						"description": "## Add Fruits\n\n**Mandatory Fields**\n\n```\n{\n    \"name\": [\n        \"This field is required.\"\n    ]\n}\n\n```\n\nSince this is an authenticated call, creator will be the signed in user."
+					},
+					"response": [
+						{
+							"name": "Update Location - Success",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{admin_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"distributor\": 1,\n    \"ranch\": \"Ranch 1\",\n    \"country\": \"US\",\n    \"region\": \"Texas\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{domain}}/locations/1/",
+									"host": [
+										"{{domain}}"
+									],
+									"path": [
+										"locations",
+										"1",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Tue, 24 May 2022 09:24:02 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "WSGIServer/0.2 CPython/3.8.7"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept"
+								},
+								{
+									"key": "Allow",
+									"value": "GET, PUT, PATCH, DELETE, HEAD, OPTIONS"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Length",
+									"value": "259"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"success\",\n    \"message\": \"Location updated successfully\",\n    \"data\": {\n        \"id\": 1,\n        \"created\": \"2022-04-26T10:05:28.580000Z\",\n        \"lastModified\": \"2022-05-24T09:24:02.128987Z\",\n        \"ranch\": \"Ranch 1\",\n        \"country\": \"US\",\n        \"region\": \"Texas\",\n        \"creator\": 1,\n        \"modifiedBy\": null,\n        \"distributor\": 1\n    }\n}"
+						},
+						{
+							"name": "Update Location (ranch) - Success",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{admin_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"ranch\": \"Ranch Z\"\n\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{domain}}/locations/1/",
+									"host": [
+										"{{domain}}"
+									],
+									"path": [
+										"locations",
+										"1",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Tue, 24 May 2022 09:24:59 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "WSGIServer/0.2 CPython/3.8.7"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept"
+								},
+								{
+									"key": "Allow",
+									"value": "GET, PUT, PATCH, DELETE, HEAD, OPTIONS"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Length",
+									"value": "259"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"success\",\n    \"message\": \"Location updated successfully\",\n    \"data\": {\n        \"id\": 1,\n        \"created\": \"2022-04-26T10:05:28.580000Z\",\n        \"lastModified\": \"2022-05-24T09:24:59.451952Z\",\n        \"ranch\": \"Ranch Z\",\n        \"country\": \"US\",\n        \"region\": \"Texas\",\n        \"creator\": 1,\n        \"modifiedBy\": null,\n        \"distributor\": 1\n    }\n}"
+						},
+						{
+							"name": "Update Location - Error",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{admin_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"distributor\": 11,\n    \"ranch\": \"Ranch 1\",\n    \"country\": \"US\",\n    \"region\": \"Texas\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{domain}}/locations/1/",
+									"host": [
+										"{{domain}}"
+									],
+									"path": [
+										"locations",
+										"1",
+										""
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Tue, 24 May 2022 09:26:52 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "WSGIServer/0.2 CPython/3.8.7"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept"
+								},
+								{
+									"key": "Allow",
+									"value": "GET, PUT, PATCH, DELETE, HEAD, OPTIONS"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Length",
+									"value": "101"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"error\",\n    \"errors\": {\n        \"detail\": {\n            \"distributor\": [\n                \"Invalid pk \\\"11\\\" - object does not exist.\"\n            ]\n        }\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Get All Locations",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{admin_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{domain}}/locations/",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"locations",
+								""
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Get All Locations - Success",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{admin_token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{domain}}/locations/",
+									"host": [
+										"{{domain}}"
+									],
+									"path": [
+										"locations",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Tue, 24 May 2022 09:18:04 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "WSGIServer/0.2 CPython/3.8.7"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept"
+								},
+								{
+									"key": "Allow",
+									"value": "GET, POST, HEAD, OPTIONS"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Length",
+									"value": "477"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"success\",\n    \"message\": \"Location retrieved successfully\",\n    \"data\": [\n        {\n            \"id\": 1,\n            \"created\": \"2022-04-26T10:05:28.580000Z\",\n            \"lastModified\": \"2022-04-26T10:05:28.580000Z\",\n            \"ranch\": \"Ranch A\",\n            \"country\": \"United States\",\n            \"region\": \"California\",\n            \"creator\": 1,\n            \"modifiedBy\": null,\n            \"distributor\": 1\n        },\n        {\n            \"id\": 2,\n            \"created\": \"2022-04-26T10:05:49.037000Z\",\n            \"lastModified\": \"2022-04-26T10:06:02.486000Z\",\n            \"ranch\": \"Ranch B\",\n            \"country\": \"United States\",\n            \"region\": \"Texas\",\n            \"creator\": 2,\n            \"modifiedBy\": 2,\n            \"distributor\": 1\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Location by ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{admin_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{domain}}/locations/1/",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"locations",
+								"1",
+								""
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Get Location by ID - Success",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{admin_token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{domain}}/locations/1/",
+									"host": [
+										"{{domain}}"
+									],
+									"path": [
+										"locations",
+										"1",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Tue, 24 May 2022 09:13:38 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "WSGIServer/0.2 CPython/3.8.7"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept"
+								},
+								{
+									"key": "Allow",
+									"value": "GET, PUT, PATCH, DELETE, HEAD, OPTIONS"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Length",
+									"value": "277"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"success\",\n    \"message\": \"Location retrieved successfully\",\n    \"data\": {\n        \"id\": 1,\n        \"created\": \"2022-04-26T10:05:28.580000Z\",\n        \"lastModified\": \"2022-04-26T10:05:28.580000Z\",\n        \"ranch\": \"Ranch A\",\n        \"country\": \"United States\",\n        \"region\": \"California\",\n        \"creator\": 1,\n        \"modifiedBy\": null,\n        \"distributor\": 1\n    }\n}"
+						},
+						{
+							"name": "Get Location by ID - Error",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{admin_token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{domain}}/locations/11/",
+									"host": [
+										"{{domain}}"
+									],
+									"path": [
+										"locations",
+										"11",
+										""
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Tue, 24 May 2022 09:17:30 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "WSGIServer/0.2 CPython/3.8.7"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept"
+								},
+								{
+									"key": "Allow",
+									"value": "GET, PUT, PATCH, DELETE, HEAD, OPTIONS"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Length",
+									"value": "80"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"error\",\n    \"errors\": {\n        \"exception\": \"No Location matches the given query.\"\n    }\n}"
 						}
 					]
 				}
