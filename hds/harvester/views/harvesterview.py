@@ -1,18 +1,15 @@
 from ..models import Harvester
 from ..serializers.harvesterserializer import HarvesterSerializer
-from rest_framework.viewsets import ModelViewSet
 
 from rest_framework.permissions import IsAuthenticated
 from common.utils import make_ok
+from common.viewsets import CreateModelViewSet
 
 
-class HarvesterView(ModelViewSet):
+class HarvesterView(CreateModelViewSet):
     queryset = Harvester.objects.all()
     serializer_class = HarvesterSerializer
     permission_classes = (IsAuthenticated,)
-
-    def perform_create(self, serializer):
-        serializer.save(creator=self.request.user)
 
     def create(self, request, *args, **kwargs):
         response = super().create(request, *args, **kwargs)

@@ -1,18 +1,15 @@
 from ..models import Location
 from ..serializers.locationserializer import LocationSerializer
-from rest_framework.viewsets import ModelViewSet
 
 from rest_framework.permissions import IsAuthenticated
 from common.utils import make_ok
+from common.viewsets import CreateModelViewSet
 
 
-class LocationView(ModelViewSet):
+class LocationView(CreateModelViewSet):
     queryset = Location.objects.all()
     serializer_class = LocationSerializer
     permission_classes = (IsAuthenticated,)
-
-    def perform_create(self, serializer):
-        serializer.save(creator=self.request.user)
 
     def create(self, request, *args, **kwargs):
         response = super().create(request, *args, **kwargs)
