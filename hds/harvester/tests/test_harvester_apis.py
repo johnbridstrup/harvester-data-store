@@ -49,6 +49,15 @@ class HarvesterAPITest(APITestCase):
         self.assertEqual(Harvester.objects.count(), 1)
         self.assertEqual(Harvester.objects.get().name, 'Harvester 1')
 
+    def test_create_harvester_with_creator_field_in_post(self):
+        """ create harvester with creator different than authenticated user"""
+        data = self.data
+        data["creator"] = 2
+        self.client.post(f'{self.api_base_url}/harvesters/', data)
+        self.assertEqual(Harvester.objects.count(), 1)
+        self.assertEqual(Harvester.objects.get().name, 'Harvester 1')
+        self.assertNotEqual(Harvester.objects.get().creator, 2)
+
     def test_create_harvester_with_invalid_fruit(self):
         """ create harvester with invalid fruit """
         data = self.data
