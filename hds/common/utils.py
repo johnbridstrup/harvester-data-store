@@ -16,7 +16,7 @@ def make_error(errors, response_status=400):
     """ generate error response """
     return Response({
         'status': 'error',
-        'erors': errors,
+        'errors': errors,
     }, status=response_status)
 
 
