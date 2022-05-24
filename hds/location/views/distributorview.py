@@ -18,22 +18,22 @@ class DistributorView(ModelViewSet):
         response = super().create(request, *args, **kwargs)
         return make_ok("Distributor created successfully", response.data, 201)
 
-    # update fruit
+    # update distributor
     def update(self, request, *args, **kwargs):
         response = super().update(request, *args, **kwargs)
         return make_ok("Distributor updated successfully", response.data)
 
-    # get all fruits
+    # get all distributors
     def list(self, request, *args, **kwargs):
         response = super().list(request, *args, **kwargs)
         return make_ok("Distributors retrieved successfully", response.data)
 
-    # get fruit by id
+    # get distributor by id
     def retrieve(self, request, *args, **kwargs):
         response = super().retrieve(request, *args, **kwargs)
         return make_ok("Distributor retrieved successfully", response.data)
 
-    # delete fruit
+    # delete distributor
     def destroy(self, request, *args, **kwargs):
         response = super().destroy(request, *args, **kwargs)
         return make_ok("Distributor deleted successfully", response.data)
