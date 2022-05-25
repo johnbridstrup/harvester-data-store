@@ -53,7 +53,8 @@ docker compose version
 
 
 echo "" && echo "Checking if docker is installed properly"
-docker run hello-world
+docker run --name hello-world-container hello-world
+docker rm hello-world-container
 
 echo "" && echo "Start the development environment with"
 echo "  source start.sh <optional port>"
