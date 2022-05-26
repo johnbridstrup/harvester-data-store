@@ -10,3 +10,4 @@ pycodestyle==2.8.0
 pyflakes==2.4.0
 pytz==2022.1
 sqlparse==0.4.2
+psutil==5.9.1
