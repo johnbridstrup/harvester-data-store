@@ -28,7 +28,7 @@ urlpatterns = [
     path(f'{version}/locations/', include('location.urls.locationurls')),
     path(f'{version}/distributors/', include('location.urls.distributorurls')),
     path(f'{version}/users/', include('common.urls.userurls')),
-    path(f'{version}/', include('healthcheck.urls')),
+    path(f'{version}/healthcheck/', include('healthcheck.urls')),
     path(
         f'{version}/openapi', 
         get_schema_view(

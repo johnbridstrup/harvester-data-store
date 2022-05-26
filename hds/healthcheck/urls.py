@@ -5,5 +5,5 @@ from .views import HealthCheckView
 router = routers.SimpleRouter()
 
 urlpatterns = [
-  path('healthcheck/', HealthCheckView.as_view(), name="health check"),
+  path('', HealthCheckView.as_view(), name="health check"),
 ]
