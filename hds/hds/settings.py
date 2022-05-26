@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'location',
     'errorreport',
     'harvester',
+    'healthcheck'
 ]
 
 MIDDLEWARE = [
