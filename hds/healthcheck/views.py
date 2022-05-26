@@ -3,6 +3,7 @@ from collections import OrderedDict
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.conf import settings
+from rest_framework.renderers import JSONRenderer
 
 from .checks.db import check as db_check
 from .checks.host import check as host_check
