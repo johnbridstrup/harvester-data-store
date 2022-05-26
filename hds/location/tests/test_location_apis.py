@@ -78,13 +78,13 @@ class LocationAPITest(APITestCase):
         Location.objects.create(**self.data2)
         response = self.client.get(f'{self.api_base_url}/locations/')
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.data["data"]), 2)
+        self.assertEqual(len(response.data), 2)
 
     def test_get_location_by_id(self):
         """ get location by id """
         Location.objects.create(**self.data1)
         response = self.client.get(f'{self.api_base_url}/locations/1/')
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data["data"]['ranch'], 'Ranch A')
+        self.assertEqual(response.data['ranch'], 'Ranch A')
 
 

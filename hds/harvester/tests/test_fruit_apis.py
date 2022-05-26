@@ -45,13 +45,13 @@ class FruitAPITest(APITestCase):
         Fruit.objects.create(name='Orange', creator=self.user)
         response = self.client.get(f'{self.api_base_url}/fruits/')
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.data["data"]), 2)
+        self.assertEqual(len(response.data), 2)
 
     def test_get_fruit_by_id(self):
         """ get fruit by id """
         Fruit.objects.create(name='Apple', creator=self.user)
         response = self.client.get(f'{self.api_base_url}/fruits/1/')
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data["data"]['name'], 'Apple')
+        self.assertEqual(response.data['name'], 'Apple')
 
 

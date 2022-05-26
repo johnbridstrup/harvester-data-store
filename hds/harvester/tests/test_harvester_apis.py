@@ -99,13 +99,13 @@ class HarvesterAPITest(APITestCase):
         Harvester.objects.create(**self.data2)
         response = self.client.get(f'{self.api_base_url}/harvesters/')
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.data["data"]), 2)
+        self.assertEqual(len(response.data), 2)
 
     def test_get_harvester_by_id(self):
         """ get harvester by id """
         Harvester.objects.create(**self.data1)
         response = self.client.get(f'{self.api_base_url}/harvesters/1/')
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data["data"]['name'], 'Harvester 1')
+        self.assertEqual(response.data['name'], 'Harvester 1')
 
 

@@ -45,13 +45,13 @@ class DistributorAPITest(APITestCase):
         Distributor.objects.create(name='Orange', creator=self.user)
         response = self.client.get(f'{self.api_base_url}/distributors/')
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.data["data"]), 2)
+        self.assertEqual(len(response.data), 2)
 
     def test_get_distributor_by_id(self):
         """ get fruit by id """
         Distributor.objects.create(name='Apple', creator=self.user)
         response = self.client.get(f'{self.api_base_url}/distributors/1/')
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data["data"]['name'], 'Apple')
+        self.assertEqual(response.data['name'], 'Apple')
 
 
