@@ -24,7 +24,7 @@ class ReportModelViewSet(CreateModelViewSet):
     def prepare_data(self, request):
         """ prepare data from request to add or update in the model"""
         try:
-            report = request.data['report']        
+            report = request.data['report']
             # get reportTime from report json
             request.data['reportTime'] = self.extract_timestamp(report['timestamp'])
 
@@ -38,3 +38,19 @@ class ReportModelViewSet(CreateModelViewSet):
             return request
         except Exception as e:
             raise Exception(f"Error in preparing data. {str(e)}")
+
+    def create(self, request, *args, **kwargs):
+        try:
+            request = self.prepare_data(request)
+            response = super().create(request, *args, **kwargs)
+            return response
+        except Exception as e:
+            raise Exception(str(e))
+
+    def update(self, request, *args, **kwargs):
+        try:
+            request = self.prepare_data(request)
+            response = super().update(request, *args, **kwargs)
+            return response
+        except Exception as e:
+            raise Exception(str(e))        
