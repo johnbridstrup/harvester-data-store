@@ -1,0 +1,740 @@
+{
+  "type": "error",
+  "timestamp": 1651526862.789323,
+  "data": {
+    "sysmon_report": {
+      "serial_number": "011",
+      "sysmon.0": {
+        "index": 0,
+        "robot_index": 0,
+        "services": {
+          "drivesys.0": {
+            "fsm": {
+              "service": "drivesys.0",
+              "state": "run",
+              "components": [
+                "run",
+                "armed"
+              ],
+              "ts": 1651526862.3780782
+            },
+            "PID": 20241,
+            "state": "S",
+            "created": 1651525105,
+            "cpu": 24.124207190518508,
+            "mem": 0.99913466
+          },
+          "harvester.0": {
+            "fsm": {
+              "service": "harvester.0",
+              "state": "run",
+              "components": [
+                "run",
+                "error"
+              ],
+              "ts": 1651526861.7799714
+            },
+            "PID": 20250,
+            "state": "S",
+            "created": 1651525105,
+            "cpu": 24.96301030425531,
+            "mem": 1.0295105
+          },
+          "master_ui.0": {
+            "fsm": {
+              "service": "master_ui.0",
+              "state": "run",
+              "components": [
+                "run",
+                "estop_disengaged"
+              ],
+              "ts": 1651526862.5589492
+            },
+            "PID": 20229,
+            "state": "S",
+            "created": 1651525105,
+            "cpu": 6.677345866044339,
+            "mem": 0.945043
+          },
+          "traychg.0": {
+            "fsm": {
+              "service": "traychg.0",
+              "state": "error",
+              "components": [
+                "error",
+                "terminated"
+              ],
+              "ts": 1651526862.3099246
+            },
+            "PID": 20230,
+            "state": "R",
+            "created": 1651525105,
+            "cpu": 11.63961802691681,
+            "mem": 0.9826442
+          },
+          "autodrive.0": {
+            "fsm": {
+              "service": "autodrive.0",
+              "state": "idle",
+              "components": [
+                "idle"
+              ],
+              "ts": 1651526862.647353
+            },
+            "PID": 23619,
+            "state": "S",
+            "created": 1651526838,
+            "cpu": 0.45363484624483486,
+            "mem": 0.94799215
+          },
+          "furrow.0": {
+            "fsm": {
+              "service": "furrow.0",
+              "state": "idle",
+              "components": [
+                "idle"
+              ],
+              "ts": 1651526862.7239504
+            },
+            "PID": 23623,
+            "state": "S",
+            "created": 1651526838,
+            "cpu": 0.4989585604701848,
+            "mem": 0.94268376
+          },
+          "logrec.0": {
+            "fsm": {
+              "service": "logrec.0",
+              "state": "idle",
+              "components": [
+                "idle"
+              ],
+              "ts": 1651526862.6613626
+            },
+            "PID": 23611,
+            "state": "S",
+            "created": 1651526838,
+            "cpu": 0.5896342628509535,
+            "mem": 0.9460261
+          },
+          "rcoop.0": {
+            "fsm": {
+              "service": "rcoop.0",
+              "state": "idle",
+              "components": [
+                "idle"
+              ],
+              "ts": 1651526862.47056
+            },
+            "PID": 23607,
+            "state": "S",
+            "created": 1651526837,
+            "cpu": 0.47723708407665255,
+            "mem": 0.94661593
+          },
+          "robotpathstore.0": {
+            "fsm": {
+              "service": "robotpathstore.0",
+              "state": "idle",
+              "components": [
+                "idle",
+                "run"
+              ],
+              "ts": 1651526862.7092986
+            },
+            "PID": 23600,
+            "state": "S",
+            "created": 1651526837,
+            "cpu": 0.5639414025547399,
+            "mem": 0.9455837
+          }
+        },
+        "version": "+5763793c96",
+        "chrony_info": {
+          "ref_id": "7F7F0101",
+          "ref_addr": "",
+          "stratum": 10,
+          "ref_time": 1651526859.0543234,
+          "sys_time": 3.3e-08,
+          "last_offset": -0.006872488,
+          "rms_offset": 0.006872488,
+          "frequency": 55.441,
+          "residual_freq": 0,
+          "skew": 0,
+          "root_delay": 0,
+          "root_dispersion": 0,
+          "update_interval": 1.9,
+          "leap_status": "Normal"
+        },
+        "errors": {
+          "traychg.0": {
+            "ts": 1651526861.7674465,
+            "value": "traychgunit.1 Error: No tray detected in collection",
+            "traceback": "",
+            "code": 9,
+            "operator_err_type": "traychg"
+          }
+        }
+      },
+      "sysmon.1": {
+        "index": 1,
+        "robot_index": 1,
+        "services": {
+          "gripper.1": {
+            "fsm": {
+              "service": "gripper.1",
+              "state": "wait_behavior_stopped",
+              "components": [
+                "wait_behavior_stopped",
+                "run"
+              ],
+              "ts": 1651526862.296359
+            },
+            "PID": 11451,
+            "state": "S",
+            "created": 1651526837,
+            "cpu": 13.80272978766389,
+            "mem": 1.9595047
+          },
+          "logrec.1": {
+            "fsm": {
+              "service": "logrec.1",
+              "state": "idle",
+              "components": [
+                "idle"
+              ],
+              "ts": 1651526862.6078136
+            },
+            "PID": 11438,
+            "state": "S",
+            "created": 1651526837,
+            "cpu": 0.6357326487655672,
+            "mem": 1.9224341
+          },
+          "picker.1": {
+            "fsm": {
+              "service": "picker.1",
+              "state": "idle",
+              "components": [
+                "idle",
+                "idle"
+              ],
+              "ts": 1651526862.674985
+            },
+            "PID": 11426,
+            "state": "S",
+            "created": 1651526836,
+            "cpu": 6.3867938135386195,
+            "mem": 1.9300178
+          },
+          "robot.1": {
+            "fsm": {
+              "service": "robot.1",
+              "state": "idle",
+              "components": [
+                "idle",
+                "parked"
+              ],
+              "ts": 1651526862.691043
+            },
+            "PID": 11442,
+            "state": "S",
+            "created": 1651526837,
+            "cpu": 1.226517249011379,
+            "mem": 1.9290699
+          },
+          "tracker.1": {
+            "fsm": {
+              "service": "tracker.1",
+              "state": "idle",
+              "components": [
+                "idle"
+              ],
+              "ts": 1651526862.7657125
+            },
+            "PID": 11430,
+            "state": "S",
+            "created": 1651526837,
+            "cpu": 0.5903954424998226,
+            "mem": 1.9202387
+          }
+        },
+        "version": "+5763793c96",
+        "chrony_info": {
+          "ref_id": "C0A80102",
+          "ref_addr": "192.168.1.2",
+          "stratum": 11,
+          "ref_time": 1651526813.7666936,
+          "sys_time": 1.222e-06,
+          "last_offset": -3.1957e-05,
+          "rms_offset": 3.0055e-05,
+          "frequency": 59.928,
+          "residual_freq": -0.012,
+          "skew": 0.126,
+          "root_delay": 0.000103711,
+          "root_dispersion": 6.8944e-05,
+          "update_interval": 65.1,
+          "leap_status": "Normal"
+        }
+      },
+      "sysmon.5": {
+        "index": 5,
+        "robot_index": 1,
+        "services": {
+          "obscore.1": {
+            "fsm": {
+              "service": "obscore.1",
+              "state": "idle",
+              "components": [
+                "idle"
+              ],
+              "ts": 1651526862.5829494
+            },
+            "PID": 13900,
+            "state": "S",
+            "created": 1651526840,
+            "cpu": 19.110977212730305,
+            "mem": 13.33334
+          }
+        },
+        "version": "+5763793c96",
+        "chrony_info": {
+          "ref_id": "C0A80102",
+          "ref_addr": "192.168.1.2",
+          "stratum": 11,
+          "ref_time": 1651526811.5236132,
+          "sys_time": 5.601e-06,
+          "last_offset": -6.057e-06,
+          "rms_offset": 0.00536857,
+          "frequency": 54.702,
+          "residual_freq": 0.004,
+          "skew": 0.576,
+          "root_delay": 0.001906298,
+          "root_dispersion": 7.9546e-05,
+          "update_interval": 128.6,
+          "leap_status": "Normal"
+        }
+      },
+      "sysmon.2": {
+        "index": 2,
+        "robot_index": 2,
+        "services": {
+          "gripper.2": {
+            "fsm": {
+              "service": "gripper.2",
+              "state": "wait_behavior_stopped",
+              "components": [
+                "wait_behavior_stopped",
+                "run"
+              ],
+              "ts": 1651526862.297273
+            },
+            "PID": 11192,
+            "state": "S",
+            "created": 1651526836,
+            "cpu": 11.044345898498676,
+            "mem": 1.9578164
+          },
+          "logrec.2": {
+            "fsm": {
+              "service": "logrec.2",
+              "state": "idle",
+              "components": [
+                "idle"
+              ],
+              "ts": 1651526862.6790764
+            },
+            "PID": 11222,
+            "state": "S",
+            "created": 1651526837,
+            "cpu": 0.6241243550002277,
+            "mem": 1.9167074
+          },
+          "picker.2": {
+            "fsm": {
+              "service": "picker.2",
+              "state": "idle",
+              "components": [
+                "idle",
+                "idle"
+              ],
+              "ts": 1651526862.5792768
+            },
+            "PID": 11226,
+            "state": "S",
+            "created": 1651526837,
+            "cpu": 6.8208803842233525,
+            "mem": 1.918653
+          },
+          "robot.2": {
+            "fsm": {
+              "service": "robot.2",
+              "state": "idle",
+              "components": [
+                "idle",
+                "parked"
+              ],
+              "ts": 1651526862.3758438
+            },
+            "PID": 11210,
+            "state": "S",
+            "created": 1651526836,
+            "cpu": 1.1455400589977114,
+            "mem": 1.9264858
+          },
+          "tracker.2": {
+            "fsm": {
+              "service": "tracker.2",
+              "state": "idle",
+              "components": [
+                "idle"
+              ],
+              "ts": 1651526862.7015448
+            },
+            "PID": 11206,
+            "state": "S",
+            "created": 1651526836,
+            "cpu": 0.5497915072857358,
+            "mem": 1.9194512
+          }
+        },
+        "version": "+5763793c96",
+        "chrony_info": {
+          "ref_id": "C0A80102",
+          "ref_addr": "192.168.1.2",
+          "stratum": 11,
+          "ref_time": 1651526811.6820233,
+          "sys_time": 1.4881e-05,
+          "last_offset": -4.3196e-05,
+          "rms_offset": 0.00011021,
+          "frequency": 58.745,
+          "residual_freq": -0.036,
+          "skew": 1.441,
+          "root_delay": 0.000271029,
+          "root_dispersion": 0.000145498,
+          "update_interval": 64.9,
+          "leap_status": "Normal"
+        }
+      },
+      "sysmon.6": {
+        "index": 6,
+        "robot_index": 2,
+        "services": {
+          "obscore.2": {
+            "fsm": {
+              "service": "obscore.2",
+              "state": "idle",
+              "components": [
+                "idle"
+              ],
+              "ts": 1651526862.5971646
+            },
+            "PID": 13370,
+            "state": "S",
+            "created": 1651526840,
+            "cpu": 19.240779506557296,
+            "mem": 13.317834
+          }
+        },
+        "version": "+5763793c96",
+        "chrony_info": {
+          "ref_id": "C0A80102",
+          "ref_addr": "192.168.1.2",
+          "stratum": 11,
+          "ref_time": 1651526742.3862045,
+          "sys_time": -3.54e-06,
+          "last_offset": 5.3436e-05,
+          "rms_offset": 0.000204461,
+          "frequency": 43.865,
+          "residual_freq": 0.015,
+          "skew": 0.667,
+          "root_delay": 0.001760268,
+          "root_dispersion": 0.000274569,
+          "update_interval": 130.1,
+          "leap_status": "Normal"
+        }
+      },
+      "sysmon.3": {
+        "index": 3,
+        "robot_index": 3,
+        "services": {
+          "gripper.3": {
+            "fsm": {
+              "service": "gripper.3",
+              "state": "wait_behavior_stopped",
+              "components": [
+                "wait_behavior_stopped",
+                "run"
+              ],
+              "ts": 1651526862.2979255
+            },
+            "PID": 11906,
+            "state": "R",
+            "created": 1651526835,
+            "cpu": 13.165941559857036,
+            "mem": 2.038577
+          },
+          "logrec.3": {
+            "fsm": {
+              "service": "logrec.3",
+              "state": "idle",
+              "components": [
+                "idle"
+              ],
+              "ts": 1651526862.5653963
+            },
+            "PID": 11890,
+            "state": "S",
+            "created": 1651526835,
+            "cpu": 0.8454237889261249,
+            "mem": 2.005299
+          },
+          "picker.3": {
+            "fsm": {
+              "service": "picker.3",
+              "state": "idle",
+              "components": [
+                "idle",
+                "idle"
+              ],
+              "ts": 1651526862.6044993
+            },
+            "PID": 11895,
+            "state": "S",
+            "created": 1651526835,
+            "cpu": 7.526716187379116,
+            "mem": 2.0026999
+          },
+          "robot.3": {
+            "fsm": {
+              "service": "robot.3",
+              "state": "idle",
+              "components": [
+                "idle",
+                "parked"
+              ],
+              "ts": 1651526862.6030343
+            },
+            "PID": 11896,
+            "state": "S",
+            "created": 1651526835,
+            "cpu": 1.4491497553385977,
+            "mem": 2.0123827
+          },
+          "tracker.3": {
+            "fsm": {
+              "service": "tracker.3",
+              "state": "idle",
+              "components": [
+                "idle"
+              ],
+              "ts": 1651526862.5846052
+            },
+            "PID": 11902,
+            "state": "S",
+            "created": 1651526835,
+            "cpu": 0.7248383535621931,
+            "mem": 2.001324
+          }
+        },
+        "version": "+5763793c96",
+        "chrony_info": {
+          "ref_id": "C0A80102",
+          "ref_addr": "192.168.1.2",
+          "stratum": 11,
+          "ref_time": 1651526822.9255896,
+          "sys_time": 1.1031e-05,
+          "last_offset": -3.336e-06,
+          "rms_offset": 7.4107e-05,
+          "frequency": 35.94,
+          "residual_freq": -0.016,
+          "skew": 1.483,
+          "root_delay": 9.549e-05,
+          "root_dispersion": 0.000308387,
+          "update_interval": 64.4,
+          "leap_status": "Normal"
+        }
+      },
+      "sysmon.7": {
+        "index": 7,
+        "robot_index": 3,
+        "services": {
+          "obscore.3": {
+            "fsm": {
+              "service": "obscore.3",
+              "state": "idle",
+              "components": [
+                "idle"
+              ],
+              "ts": 1651526862.522183
+            },
+            "PID": 13059,
+            "state": "S",
+            "created": 1651526840,
+            "cpu": 21.15503126790077,
+            "mem": 13.363508
+          }
+        },
+        "version": "+5763793c96",
+        "chrony_info": {
+          "ref_id": "C0A80102",
+          "ref_addr": "192.168.1.2",
+          "stratum": 11,
+          "ref_time": 1651526755.073624,
+          "sys_time": 0.000187082,
+          "last_offset": -0.000226177,
+          "rms_offset": 0.033924531,
+          "frequency": 49.01,
+          "residual_freq": -0.092,
+          "skew": 0.19,
+          "root_delay": 0.001715322,
+          "root_dispersion": 0.000292228,
+          "update_interval": 1024.4,
+          "leap_status": "Normal"
+        }
+      },
+      "sysmon.4": {
+        "index": 4,
+        "robot_index": 4,
+        "services": {
+          "gripper.4": {
+            "fsm": {
+              "service": "gripper.4",
+              "state": "wait_behavior_stopped",
+              "components": [
+                "wait_behavior_stopped",
+                "run"
+              ],
+              "ts": 1651526862.2972531
+            },
+            "PID": 11024,
+            "state": "S",
+            "created": 1651526836,
+            "cpu": 11.430601317603687,
+            "mem": 1.9610513
+          },
+          "logrec.4": {
+            "fsm": {
+              "service": "logrec.4",
+              "state": "idle",
+              "components": [
+                "idle"
+              ],
+              "ts": 1651526862.5584984
+            },
+            "PID": 11011,
+            "state": "S",
+            "created": 1651526836,
+            "cpu": 0.6484704297219998,
+            "mem": 1.9203385
+          },
+          "picker.4": {
+            "fsm": {
+              "service": "picker.4",
+              "state": "idle",
+              "components": [
+                "idle",
+                "idle"
+              ],
+              "ts": 1651526862.6692395
+            },
+            "PID": 11036,
+            "state": "S",
+            "created": 1651526836,
+            "cpu": 6.44268040225339,
+            "mem": 1.9236814
+          },
+          "robot.4": {
+            "fsm": {
+              "service": "robot.4",
+              "state": "idle",
+              "components": [
+                "idle",
+                "parked"
+              ],
+              "ts": 1651526862.676731
+            },
+            "PID": 11042,
+            "state": "S",
+            "created": 1651526837,
+            "cpu": 1.0981312035699224,
+            "mem": 1.9290199
+          },
+          "tracker.4": {
+            "fsm": {
+              "service": "tracker.4",
+              "state": "idle",
+              "components": [
+                "idle"
+              ],
+              "ts": 1651526862.7772038
+            },
+            "PID": 11018,
+            "state": "S",
+            "created": 1651526836,
+            "cpu": 0.4864631258960937,
+            "mem": 1.9213364
+          }
+        },
+        "version": "+5763793c96",
+        "chrony_info": {
+          "ref_id": "C0A80102",
+          "ref_addr": "192.168.1.2",
+          "stratum": 11,
+          "ref_time": 1651526800.6424916,
+          "sys_time": -3e-09,
+          "last_offset": -5.3154e-05,
+          "rms_offset": 5.1391e-05,
+          "frequency": 59.308,
+          "residual_freq": -0.033,
+          "skew": 0.236,
+          "root_delay": 0.000145052,
+          "root_dispersion": 0.000100044,
+          "update_interval": 65.3,
+          "leap_status": "Normal"
+        }
+      },
+      "sysmon.8": {
+        "index": 8,
+        "robot_index": 4,
+        "services": {
+          "obscore.4": {
+            "fsm": {
+              "service": "obscore.4",
+              "state": "idle",
+              "components": [
+                "idle"
+              ],
+              "ts": 1651526862.570425
+            },
+            "PID": 13451,
+            "state": "S",
+            "created": 1651526840,
+            "cpu": 22.27336398941905,
+            "mem": 13.380356
+          }
+        },
+        "version": "+5763793c96",
+        "chrony_info": {
+          "ref_id": "C0A80102",
+          "ref_addr": "192.168.1.2",
+          "stratum": 11,
+          "ref_time": 1651526832.268646,
+          "sys_time": -1.4604e-05,
+          "last_offset": -5.187e-06,
+          "rms_offset": 0.003197025,
+          "frequency": 51.235,
+          "residual_freq": 0.048,
+          "skew": 3.167,
+          "root_delay": 0.001814319,
+          "root_dispersion": 0.000111616,
+          "update_interval": 65.1,
+          "leap_status": "Normal"
+        }
+      }
+    },
+    "serial_number": "011",
+    "githash": "5763793c96",
+    "branch_name": null
+  }
+}
