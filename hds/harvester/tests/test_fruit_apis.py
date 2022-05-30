@@ -23,7 +23,8 @@ class FruitAPITest(APITestCase):
 
     def test_create_fruit_with_invalid_name(self):
         """ create fruit with invalid name """
-        self.client.post(f'{self.api_base_url}/fruits/', {'name': ''})
+        resp = self.client.post(f'{self.api_base_url}/fruits/', {'name': ''})
+        self.assertEqual(resp.data['status'], 'error')
         self.assertEqual(Fruit.objects.count(), 0)
 
     def test_update_fruit(self):

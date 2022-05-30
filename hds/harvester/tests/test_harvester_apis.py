@@ -64,6 +64,7 @@ class HarvesterAPITest(APITestCase):
         data["fruit"] = 99
         response = self.client.post(f'{self.api_base_url}/harvesters/', data)
         self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.data['status'], 'error')
         self.assertEqual(Harvester.objects.count(), 0)
 
     def test_create_harvester_with_invalid_location(self):
@@ -72,6 +73,7 @@ class HarvesterAPITest(APITestCase):
         data["location"] = 99
         response = self.client.post(f'{self.api_base_url}/harvesters/', data)
         self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.data['status'], 'error')
         self.assertEqual(Harvester.objects.count(), 0)
 
     def test_update_harvester(self):
@@ -85,6 +87,7 @@ class HarvesterAPITest(APITestCase):
         """ update harvester with invalid data """
         Harvester.objects.create(**self.data1)
         response = self.client.patch(f'{self.api_base_url}/harvesters/1/', {'fruit': 11})
+        self.assertEqual(response.data['status'], 'error')
         self.assertEqual(response.status_code, 400)
 
     def test_delete_harvester(self):

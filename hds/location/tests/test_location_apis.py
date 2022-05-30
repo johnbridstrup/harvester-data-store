@@ -51,6 +51,7 @@ class LocationAPITest(APITestCase):
         data["distributor"] = 99
         response = self.client.post(f'{self.api_base_url}/locations/', data)
         self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.data['status'], 'error')
         self.assertEqual(Location.objects.count(), 0)
 
     def test_update_location(self):
@@ -64,6 +65,7 @@ class LocationAPITest(APITestCase):
         """ update location with invalid data """
         Location.objects.create(**self.data1)
         response = self.client.patch(f'{self.api_base_url}/locations/1/', {'distributor': 11})
+        self.assertEqual(response.data['status'], 'error')
         self.assertEqual(response.status_code, 400)
 
     def test_delete_location(self):

@@ -23,7 +23,8 @@ class DistributorAPITest(APITestCase):
 
     def test_create_distributor_with_invalid_name(self):
         """ create fruit with invalid name """
-        self.client.post(f'{self.api_base_url}/distributors/', {'name': ''})
+        response = self.client.post(f'{self.api_base_url}/distributors/', {'name': ''})
+        self.assertEqual(response.data['status'], 'error')
         self.assertEqual(Distributor.objects.count(), 0)
 
     def test_update_distributor(self):
