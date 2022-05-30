@@ -17,7 +17,7 @@ class ReportModelViewSet(CreateModelViewSet):
     def extract_timestamp(self, timestamp):
         """get POSIX timestamp and return in date format"""
         try:
-            return datetime.fromtimestamp(timestamp).strftime('%Y-%m-%d %H:%M:%S')
+            return datetime.datetime.fromtimestamp(timestamp).strftime('%Y-%m-%d %H:%M:%S')
         except:
             return None
 
