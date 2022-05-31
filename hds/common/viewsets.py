@@ -1,7 +1,6 @@
 from rest_framework.viewsets import ModelViewSet
 from harvester.models import Harvester
 from .renderers import HDSJSONRenderer
-from abc import abstractmethod
 import datetime
 
 
@@ -22,7 +21,6 @@ class ReportModelViewSet(CreateModelViewSet):
         except:
             return None
 
-    @abstractmethod
     def prepare_data(self, request):
         """ prepare data from request to add or update in the model
             request data contains only the report data
