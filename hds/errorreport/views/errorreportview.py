@@ -26,11 +26,6 @@ class ErrorReportView(ReportModelViewSet):
             request.data['reportTime'] = self.extract_timestamp(report['timestamp'])
             request.data['report'] = report
 
-            # remove original data
-            request.data.pop('data')
-            request.data.pop('timestamp')
-            request.data.pop('type')
-
             return request
         except Exception as e:
             raise Exception(f"Error in preparing data. {str(e)}")
