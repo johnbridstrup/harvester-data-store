@@ -29,26 +29,7 @@ class ErrorReportAPITest(APITestCase):
         # open report.json
         report_json_path = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'report.json')
         with open(report_json_path) as f:
-            report = json.load(f)
-        # to create via objects.create()            
-        self.data = {
-            "report": report
-        }
-        # to create via APIs
-        self.data1 = {
-            'harv_id': 1,
-            'fruit': self.fruit,
-            'location': self.location,
-            'name': 'Harvester 1',
-            'creator': self.user
-        }
-        self.data2 = {
-            'harv_id': 2,
-            'fruit': self.fruit,
-            'location': self.location,
-            'name': 'Harvester 2',
-            'creator': self.user
-        }        
+            self.data = json.load(f)
 
     def test_create_errorreport(self):
         """ create error report and assert it exists """
@@ -57,16 +38,16 @@ class ErrorReportAPITest(APITestCase):
 
     def test_create_errorreport_with_invalid_harvester(self):
         """ create error report with invalid harvester """
-        data = self.data
-        data['report']["data"]["sysmon_report"]["serial_number"] = 99
+        data = self.data.copy()
+        data["data"]["sysmon_report"]["serial_number"] = 99
         response = self.client.post(f'{self.api_base_url}/errorreports/', data, format='json')
         self.assertEqual(response.status_code, 400)
         self.assertEqual(ErrorReport.objects.count(), 0)
 
     def test_update_errorreport(self):
         """ update error report and assert it exists """
-        data = self.data
-        report_time = make_aware(datetime.datetime.fromtimestamp(data["report"]["timestamp"]))
+        data = self.data.copy()
+        report_time = make_aware(datetime.datetime.fromtimestamp(data["timestamp"]))
 
         ErrorReport.objects.create(
             creator=self.user, location=self.location,
@@ -75,15 +56,15 @@ class ErrorReportAPITest(APITestCase):
         # updating reportTime
         current_time = make_aware(datetime.datetime.now().replace(microsecond=0))
         new_timestamp = current_time.timestamp()
-        data["report"]["timestamp"] = new_timestamp
+        data["timestamp"] = new_timestamp
 
-        self.client.patch(f'{self.api_base_url}/errorreports/1/', data, format='json')    
+        self.client.patch(f'{self.api_base_url}/errorreports/1/', data, format='json')
         self.assertEqual(ErrorReport.objects.get().reportTime, current_time)
 
     def test_update_errorreport_with_invalid_data(self):
         """ update error report with invalid data """
-        data = self.data
-        report_time = make_aware(datetime.datetime.fromtimestamp(data["report"]["timestamp"]))
+        data = self.data.copy()
+        report_time = make_aware(datetime.datetime.fromtimestamp(data["timestamp"]))
 
         ErrorReport.objects.create(
             creator=self.user, location=self.location,
@@ -92,13 +73,13 @@ class ErrorReportAPITest(APITestCase):
         # updating harv_id
         response = self.client.patch(
             f'{self.api_base_url}/errorreports/1/',
-            {data['report']["data"]["sysmon_report"]["serial_number"]: "99"})
+            {data["data"]["sysmon_report"]["serial_number"]: "99"})
         self.assertEqual(response.status_code, 400)
 
     def test_delete_errorreport(self):
         """ delete error report and assert it does not exist """
-        data = self.data
-        report_time = make_aware(datetime.datetime.fromtimestamp(data["report"]["timestamp"]))
+        data = self.data.copy()
+        report_time = make_aware(datetime.datetime.fromtimestamp(data["timestamp"]))
 
         ErrorReport.objects.create(
             creator=self.user, location=self.location,
@@ -110,7 +91,7 @@ class ErrorReportAPITest(APITestCase):
     def test_get_all_errorreports(self):
         """ get all error reports """
         data = self.data
-        report_time = make_aware(datetime.datetime.fromtimestamp(data["report"]["timestamp"]))
+        report_time = make_aware(datetime.datetime.fromtimestamp(data["timestamp"]))
 
         ErrorReport.objects.create(
             creator=self.user, location=self.location,
@@ -118,7 +99,7 @@ class ErrorReportAPITest(APITestCase):
 
         current_time = make_aware(datetime.datetime.now().replace(microsecond=0))
         new_timestamp = current_time.timestamp()
-        data["report"]["timestamp"] = new_timestamp
+        data["timestamp"] = new_timestamp
         ErrorReport.objects.create(
             creator=self.user, location=self.location,
             harvester=self.harvester, reportTime=report_time, report=data)
@@ -130,7 +111,7 @@ class ErrorReportAPITest(APITestCase):
     def test_get_errorreport_by_id(self):
         """ get error report by id """
         data = self.data
-        report_time = make_aware(datetime.datetime.fromtimestamp(data["report"]["timestamp"]))
+        report_time = make_aware(datetime.datetime.fromtimestamp(data["timestamp"]))
 
         ErrorReport.objects.create(
             creator=self.user, location=self.location,

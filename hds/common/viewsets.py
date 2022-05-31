@@ -1,6 +1,7 @@
 from rest_framework.viewsets import ModelViewSet
 from harvester.models import Harvester
 from .renderers import HDSJSONRenderer
+from abc import abstractmethod
 import datetime
 
 
@@ -21,23 +22,13 @@ class ReportModelViewSet(CreateModelViewSet):
         except:
             return None
 
+    @abstractmethod
     def prepare_data(self, request):
-        """ prepare data from request to add or update in the model"""
-        try:
-            report = request.data['report']
-            # get reportTime from report json
-            request.data['reportTime'] = self.extract_timestamp(report['timestamp'])
-
-            # get harv_id from report json
-            harv_id = int(report['data']['sysmon_report']['serial_number'])
-            harvester = Harvester.objects.get(harv_id=harv_id)
-
-            # get harvester and location based on harv_id
-            request.data['harvester'] = harvester.id
-            request.data['location'] = harvester.location.id
-            return request
-        except Exception as e:
-            raise Exception(f"Error in preparing data. {str(e)}")
+        """ prepare data from request to add or update in the model
+            request data contains only the report data
+            it will be updated to add harvester, location and report fields with corresponding values
+        """
+        raise NotImplementedError("Must implement prepare_data()")
 
     def create(self, request, *args, **kwargs):
         try:
@@ -53,4 +44,4 @@ class ReportModelViewSet(CreateModelViewSet):
             response = super().update(request, *args, **kwargs)
             return response
         except Exception as e:
-            raise Exception(str(e))        
+            raise Exception(str(e))
