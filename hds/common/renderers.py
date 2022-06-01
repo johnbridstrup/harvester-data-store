@@ -41,7 +41,7 @@ class HDSJSONRenderer(JSONRenderer):
 
             msg = "{} {} successfully".format(
                 model, 
-                self.METHODS.get(method, f'Unexpected Op {method}')
+                self.METHODS.get(method, f'{method} completed')
             )
 
         response = {
