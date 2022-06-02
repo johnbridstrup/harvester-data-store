@@ -1,7 +1,7 @@
 #!/bin/bash
 # Set the port used by HDS
 
-if [ -z $(docker compose ps -q web) ] || [ -z $(docker ps -q --no-trunc | grep $(docker compose ps -q web)) ]; then
+if [ -z $(sudo docker compose ps -q web) ] || [ -z $(sudo docker ps -q --no-trunc | grep $(sudo docker compose ps -q web)) ]; then
     echo "Setting port"
     DEFAULT_PORT=8085
     nc -zv localhost $DEFAULT_PORT > /dev/null 2>&1
@@ -36,7 +36,7 @@ if [ -z $(docker compose ps -q web) ] || [ -z $(docker ps -q --no-trunc | grep $
         fi
     fi
 else
-    p=`docker port hds-web-1`
+    p=`sudo docker port hds-web-1`
     HDS_PORT=${p%%/*}
     echo "HDS already running on ${HDS_PORT}"
 fi
