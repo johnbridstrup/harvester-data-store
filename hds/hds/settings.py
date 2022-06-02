@@ -58,6 +58,28 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'default'
+        },
+    },
+    'loggers': {
+        '': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+        },
+    },
+    'formatters': {
+        'default': {
+            "format": "%(asctime)s [%(levelname)s] %(message)s",
+        }
+    }
+}
+
 ROOT_URLCONF = 'hds.urls'
 
 TEMPLATES = [

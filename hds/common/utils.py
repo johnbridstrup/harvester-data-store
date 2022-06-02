@@ -2,6 +2,9 @@
 from rest_framework.response import Response
 from rest_framework.views import exception_handler
 
+import logging
+import traceback
+
 
 def make_ok(response_message, response_data, response_status=200):
     """ generate success response """
@@ -22,8 +25,20 @@ def make_error(errors, response_status=400):
 
 def custom_exception_handler(exc, context):
     """ custom exception handler """
-    # Call REST framework's default exception handler first,
+    # Log exception information
+    logging.error(
+        "An exception occurred during {} request to {}".format(
+            context['request']._request.method,
+            context['view'].basename
+        )
+    )
+    logging.error(exc)
+    for tb in traceback.format_tb(exc.__traceback__):
+        logging.debug(tb)
+
+    # Call REST framework's default exception handler
     # to get the standard error response.
+        
     response = exception_handler(exc, context)
     errors = {}
     error_status_code = 400
