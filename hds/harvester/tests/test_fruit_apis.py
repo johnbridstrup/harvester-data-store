@@ -1,20 +1,10 @@
 """ Test Fruits APIs """
-from rest_framework.test import APITestCase
-from rest_framework.test import APIClient
-from rest_framework.authtoken.models import Token
 from ..models import Fruit
-from django.contrib.auth.models import User
+from common.tests import HDSAPITestBase
 
 
-class FruitAPITest(APITestCase):
+class FruitAPITest(HDSAPITestBase):
     """ Test Fruits APIs """
-    def setUp(self):
-        self.client = APIClient()
-        self.user = User.objects.create(username='test_user')
-        self.token = Token.objects.create(user=self.user)
-        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
-        self.api_base_url = '/api/v1'
-
     def test_create_fruit(self):
         """ create fruit and assert it exists """
         self.client.post(f'{self.api_base_url}/fruits/', {'name': 'Apple'})

@@ -1,20 +1,12 @@
 """ Test Location APIs """
-from rest_framework.test import APITestCase
-from rest_framework.test import APIClient
-from rest_framework.authtoken.models import Token
 from location.models import Location, Distributor
-from django.contrib.auth.models import User
+from common.tests import HDSAPITestBase
 
-
-class LocationAPITest(APITestCase):
+class LocationAPITest(HDSAPITestBase):
     """ Test Location APIs """
     def setUp(self):
-        self.client = APIClient()
-        self.user = User.objects.create(username='test_user')
+        super().setUp()
         self.distributor = Distributor.objects.create(name='Distributor 1', creator=self.user)
-        self.token = Token.objects.create(user=self.user)
-        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
-        self.api_base_url = '/api/v1'
         # initialize data
         # to create via objects.create()
         self.data = {
