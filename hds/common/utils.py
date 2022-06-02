@@ -49,8 +49,8 @@ def custom_exception_handler(exc, context):
             #     errors['status_code'] = str(value)
             # elif key == 'status':
             #     errors['status'] = str(value)            
-    else:
-        errors['exception'] = str(exc)
+   
+    errors['exception'] = str(exc)
 
     # Now add the HTTP status code to the response.
     if response is not None:

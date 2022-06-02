@@ -29,17 +29,11 @@ class ReportModelViewSet(CreateModelViewSet):
         raise NotImplementedError("Must implement prepare_data()")
 
     def create(self, request, *args, **kwargs):
-        try:
-            request = self.prepare_data(request)
-            response = super().create(request, *args, **kwargs)
-            return response
-        except Exception as e:
-            raise Exception(str(e))
+        request = self.prepare_data(request)
+        response = super().create(request, *args, **kwargs)
+        return response
 
     def update(self, request, *args, **kwargs):
-        try:
-            request = self.prepare_data(request)
-            response = super().update(request, *args, **kwargs)
-            return response
-        except Exception as e:
-            raise Exception(str(e))
+        request = self.prepare_data(request)
+        response = super().update(request, *args, **kwargs)
+        return response

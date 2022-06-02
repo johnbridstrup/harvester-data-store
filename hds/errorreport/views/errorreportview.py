@@ -15,18 +15,16 @@ class ErrorReportView(ReportModelViewSet):
             request data contains only the report data
             it will be updated to add harvester, location and report fields with corresponding values
         """
-        try:
-            report = request.data.copy()
-            harv_id = int(report['data']['sysmon_report']['serial_number'])
-            harvester = Harvester.objects.get(harv_id=harv_id)
 
-            # update report data
-            request.data['harvester'] = harvester.id
-            request.data['location'] = harvester.location.id
-            request.data['reportTime'] = self.extract_timestamp(report['timestamp'])
-            request.data['report'] = report
+        report = request.data.copy()
+        harv_id = int(report['data']['sysmon_report']['serial_number'])
+        harvester = Harvester.objects.get(harv_id=harv_id)
 
-            return request
-        except Exception as e:
-            raise Exception(f"Error in preparing data. {str(e)}")
+        # update report data
+        request.data['harvester'] = harvester.id
+        request.data['location'] = harvester.location.id
+        request.data['reportTime'] = self.extract_timestamp(report['timestamp'])
+        request.data['report'] = report
+
+        return request
 
