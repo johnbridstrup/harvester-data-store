@@ -1,17 +1,18 @@
 from ..models import ErrorReport
-from harvester.models import Harvester, Location
+from harvester.models import Harvester
 from ..serializers.errorreportserializer import ErrorReportSerializer
 from common.viewsets import ReportModelViewSet
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.filters import SearchFilter, OrderingFilter
 from django.utils.timezone import make_aware
+from django.utils import timezone
 
 
 class ErrorReportView(ReportModelViewSet):
     queryset = ErrorReport.objects.all()
     serializer_class = ErrorReportSerializer
     permission_classes = (IsAuthenticated,)
-    filter_backends = (SearchFilter,)   #  OrderingFilter    
+    filter_backends = (SearchFilter, OrderingFilter)
     search_fields = ['harvester']
     ordering_fields = ('harvester', 'location', 'reportTime')
 
@@ -36,32 +37,26 @@ class ErrorReportView(ReportModelViewSet):
     def get_queryset(self):
         listfilter = {}
         # get harv_ids from request and filter queryset for harvester ids
-        try:
+        if 'harv_ids' in self.request.query_params:
             harv_ids = [int(h) for h in self.request.query_params["harv_ids"].split(',')]
-            harvesters = Harvester.objects.filter(harv_id__in=harv_ids).values_list('id', flat=True)
-            listfilter['harvester__in'] = harvesters
-        except Exception:
-            pass
+            listfilter['harvester__harv_id__in'] = harv_ids
 
         # get location names from request and filter queryset for location ids
-        try:
+        if 'locations' in self.request.query_params:
             location_names = self.request.query_params["locations"].split(',')
-            locations = Location.objects.filter(ranch__in=location_names).values_list('id', flat=True)
-            listfilter['location__in'] = locations
-        except Exception:
-            pass
+            listfilter['location__ranch__in'] = location_names
 
         # get reportTime range from request and filter queryset for reportTime
-        try:
-            timestamp_range = self.request.query_params["timestamps"].split(',')
-            if len(timestamp_range) != 2:
-                raise Exception("timestamp range must be a list of two dates")
+        # check if start_time exists in query_params
+        if 'start_time' in self.request.query_params:
+            start_time = self.extract_timestamp(float(self.request.query_params["start_time"]))
+            start_time = make_aware(timezone.datetime.strptime(start_time, '%Y-%m-%d %H:%M:%S.%f'))
+            listfilter['reportTime__gte'] = start_time
 
-            start_time = self.extract_timestamp(float(timestamp_range[0]))
-            end_time = self.extract_timestamp(float(timestamp_range[1]))
-            listfilter['reportTime__range'] = (start_time, end_time)
-        except Exception:
-            pass
+        # check if end_time exists in query_params
+        if 'end_time' in self.request.query_params:
+            end_time = self.extract_timestamp(float(self.request.query_params["end_time"]))
+            end_time = make_aware(timezone.datetime.strptime(end_time, '%Y-%m-%d %H:%M:%S.%f'))
+            listfilter['reportTime__lte'] = end_time
 
-        return ErrorReport.objects.filter(**listfilter).order_by('id')
-
+        return ErrorReport.objects.filter(**listfilter).order_by('-reportTime')
