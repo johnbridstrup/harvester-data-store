@@ -106,7 +106,7 @@ class ErrorReportAPITest(APITestCase):
 
         response = self.client.get(f'{self.api_base_url}/errorreports/')
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.data), 2)
+        self.assertEqual(response.data["count"], 2)
 
     def test_get_errorreport_by_id(self):
         """ get error report by id """

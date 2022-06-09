@@ -36,7 +36,7 @@ class FruitAPITest(HDSAPITestBase):
         Fruit.objects.create(name='Orange', creator=self.user)
         response = self.client.get(f'{self.api_base_url}/fruits/')
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.data), 2)
+        self.assertEqual(response.data["count"], 2)
 
     def test_get_fruit_by_id(self):
         """ get fruit by id """
