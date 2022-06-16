@@ -1,7 +1,8 @@
 from rest_framework.viewsets import ModelViewSet
-from harvester.models import Harvester
+from uritemplate import partial
+from errorreport.models import ErrorReport
 from .renderers import HDSJSONRenderer
-import datetime
+from rest_framework.response import Response
 
 
 class CreateModelViewSet(ModelViewSet):
@@ -11,29 +12,16 @@ class CreateModelViewSet(ModelViewSet):
         serializer.save(creator=self.request.user)
 
 
-class ReportModelViewSet(CreateModelViewSet):
-    """prepare data from request to add or update in the errorreport model"""
-
-    def extract_timestamp(self, timestamp):
-        """get POSIX timestamp and return in date format"""
-        try:
-            return datetime.datetime.fromtimestamp(timestamp).strftime('%Y-%m-%d %H:%M:%S.%f')
-        except:
-            return None
-
-    def prepare_data(self, request):
-        """ prepare data from request to add or update in the model
-            request data contains only the report data
-            it will be updated to add harvester, location and report fields with corresponding values
-        """
-        raise NotImplementedError("Must implement prepare_data()")
+class ReportModelViewSet(ModelViewSet):
 
     def create(self, request, *args, **kwargs):
-        request = self.prepare_data(request)
-        response = super().create(request, *args, **kwargs)
-        return response
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save(creator=self.request.user)
+        return Response(serializer.data)
 
     def update(self, request, *args, **kwargs):
-        request = self.prepare_data(request)
-        response = super().update(request, *args, **kwargs)
-        return response
+        serializer = self.get_serializer(self.get_object(), data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.update(serializer.instance, serializer.validated_data)
+        return Response(serializer.data)
