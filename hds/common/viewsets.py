@@ -1,6 +1,5 @@
 from rest_framework.viewsets import ModelViewSet
-from uritemplate import partial
-from errorreport.models import ErrorReport
+from errorreport.serializers.errorreportserializer import ErrorReportSerializer, ErrorReportListSerializer
 from .renderers import HDSJSONRenderer
 from rest_framework.response import Response
 
@@ -13,6 +12,11 @@ class CreateModelViewSet(ModelViewSet):
 
 
 class ReportModelViewSet(ModelViewSet):
+
+    serializers = {
+        'default': ErrorReportSerializer,
+        'list': ErrorReportListSerializer,
+    }
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)

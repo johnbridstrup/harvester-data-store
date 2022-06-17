@@ -1,5 +1,5 @@
 from ..models import ErrorReport
-from ..serializers.errorreportserializer import ErrorReportListSerializer, ErrorReportSerializer
+# from ..serializers.errorreportserializer import ErrorReportListSerializer, ErrorReportSerializer
 from common.viewsets import ReportModelViewSet
 from common.renderers import HDSJSONRenderer
 from rest_framework.permissions import IsAuthenticated
@@ -17,9 +17,7 @@ class ErrorReportView(ReportModelViewSet):
     ordering_fields = ('harvester', 'location', 'reportTime')
 
     def get_serializer_class(self):
-        if self.request.method == 'GET':
-            return ErrorReportListSerializer
-        return ErrorReportSerializer
+        return self.serializers.get(self.action, self.serializers['default'])
 
     def get_queryset(self):
         listfilter = {}
