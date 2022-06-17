@@ -1,20 +1,9 @@
-import datetime
-from rest_framework import serializers
+from common.serializers.reportserializer import ReportSerializerBase
 from ..models import ErrorReport
 from harvester.models import Harvester
 
 
-class ErrorReportSerializerBase(serializers.ModelSerializer):
-    """ ErrorReport Serializer Base """
-    def extract_timestamp(self, timestamp):
-        """get POSIX timestamp and return in date format"""
-        try:
-            return datetime.datetime.fromtimestamp(timestamp).strftime('%Y-%m-%d %H:%M:%S.%f')
-        except:
-            return None
-
-
-class ErrorReportSerializer(ErrorReportSerializerBase):
+class ErrorReportSerializer(ReportSerializerBase):
     """Serializer for the ErrorReport model"""
 
     def __init__(self, *args, **kwargs):
@@ -45,7 +34,7 @@ class ErrorReportSerializer(ErrorReportSerializerBase):
         read_only_fields = ('creator',)
 
 
-class ErrorReportListSerializer(ErrorReportSerializerBase):
+class ErrorReportListSerializer(ReportSerializerBase):
     """Serializer for the ErrorReport search and list"""
     class Meta:
         model = ErrorReport
