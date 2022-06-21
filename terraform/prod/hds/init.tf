@@ -50,6 +50,10 @@ data "aws_secretsmanager_secret_version" "hds_rds_pwd" {
   secret_id = "hds_db_pwd"
 }
 
+data "aws_secretsmanager_secret_version" "django_secret_key" {
+  secret_id = "hds_django_secret"
+}
+
 data "aws_security_group" "lambda_sg" {
   tags = {
     Name = "errorreport"

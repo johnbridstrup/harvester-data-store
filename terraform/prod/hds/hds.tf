@@ -12,7 +12,8 @@ locals {
     { "name" : "DJANGO_ALLOWED_HOSTS", "value" : "localhost 127.0.0.1" },
     { "name" : "SQL_ENGINE", "value" : "django.db.backends.postgresql" },
     { "name" : "SQL_PORT", "value" : data.aws_db_instance.postgres.port },
-    { "name" : "SQL_HOST", "value" : data.aws_db_instance.postgres.address }
+    { "name" : "SQL_HOST", "value" : data.aws_db_instance.postgres.address },
+    { "name" : "DJANGO_SECRET_KEY", "value" : data.aws_secretsmanager_secret_version.django_secret_key.secret_string }
   ]
 
   healthcheck_path = "/api/v1/healthcheck/"
