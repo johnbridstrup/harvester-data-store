@@ -48,7 +48,9 @@ module "hds" {
   service_iam_policy_document    = data.aws_iam_policy_document.execute_task.json
   service_alb_ingress_sg_rules = [
     "80,tcp,${data.aws_security_group.lambda_sg.id},web traffic from lambda",
-    "443,tcp,${data.aws_security_group.lambda_sg.id},ssl traffic from lambda"
+    "443,tcp,${data.aws_security_group.lambda_sg.id},ssl traffic from lambda",
+    "80,tcp,${data.aws_security_group.pritunl_sg.id},web traffic from pritunl",
+    "443,tcp,${data.aws_security_group.pritunl_sg.id},ssl traffic from pritunl"
   ]
 }
 

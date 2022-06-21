@@ -61,3 +61,9 @@ data "aws_security_group" "hdsdb_sg" {
     Name = "hdsdb"
   }
 }
+
+data "aws_security_group" "pritunl_sg" {
+  tags = {
+    Name = "pritunl-vpn"
+  }
+}
