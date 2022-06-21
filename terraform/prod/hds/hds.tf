@@ -1,6 +1,6 @@
 locals {
-  env                  = "dev"
-  dns_name             = "hds.devcloud.advanced.farm"
+  env                  = "prod"
+  dns_name             = "hds.cloud.advanced.farm"
   service_port         = "8000"
   service_name         = "hds"
   service_docker_image = "082346306812.dkr.ecr.us-west-1.amazonaws.com/hds:hds-staging-b9f3ac2"

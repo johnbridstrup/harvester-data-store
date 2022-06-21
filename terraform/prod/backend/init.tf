@@ -1,15 +1,15 @@
 terraform {
   backend "s3" {
-    profile        = "aft-dev"
+    profile        = "aft-prod"
     region         = "us-west-1"
-    bucket         = "aft-tf-state-us-west-1-dev"
+    bucket         = "aft-tf-state-us-west-1"
     key            = "us-west-1/hds.tfstate"
     dynamodb_table = "aft-tf-state-lock-us-west-1"
   }
 }
 
 provider "aws" {
-  profile = "aft-dev"
+  profile = "aft-prod"
   region  = "us-west-1"
 }
 

@@ -1,5 +1,5 @@
 locals {
-  env          = "dev"
+  env          = "prod"
   db_pwd_id    = "hds_db_pwd"
   db_name      = "hdsdb"
   db_root_user = "aft"

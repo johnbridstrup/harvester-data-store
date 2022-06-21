@@ -1,15 +1,15 @@
 terraform {
   backend "s3" {
-    profile        = "aft-dev"
+    profile        = "aft-prod"
     region         = "us-west-1"
-    bucket         = "aft-tf-state-us-west-1-dev"
+    bucket         = "aft-tf-state-us-west-1"
     key            = "us-west-1/hds_ecs.tfstate"
     dynamodb_table = "aft-tf-state-lock-us-west-1"
   }
 }
 
 provider "aws" {
-  profile = "aft-dev"
+  profile = "aft-prod"
   region  = "us-west-1"
 }
 
@@ -37,12 +37,12 @@ data "aws_ecs_cluster" "hds-cluster" {
 }
 
 data "aws_route53_zone" "cloud_zone" {
-  name         = "devcloud.advanced.farm"
+  name         = "cloud.advanced.farm"
   private_zone = false
 }
 
 data "aws_route53_zone" "private_cloud_zone" {
-  name         = "devcloud.advanced.farm"
+  name         = "cloud.advanced.farm"
   private_zone = true
 }
 
