@@ -28,6 +28,7 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY','django-insecure-rzr+x&83_l1%9sc
 DEBUG = os.environ.get('DEBUG', 'true').lower() not in ['false', '0']
 
 ALLOWED_HOSTS = ['*']
+CSRF_TRUSTED_ORIGINS = ['https://*.cloud.advanced.farm', 'https://*.devcloud.advanced.farm']
 
 
 # Application definition
