@@ -5,7 +5,4 @@ import datetime
 class ReportSerializerBase(serializers.ModelSerializer):
     def extract_timestamp(self, timestamp):
         """get POSIX timestamp and return in date format"""
-        try:
-            return datetime.datetime.fromtimestamp(timestamp).strftime('%Y-%m-%d %H:%M:%S.%f')
-        except:
-            return None
+        return datetime.datetime.fromtimestamp(timestamp).strftime('%Y-%m-%d %H:%M:%S.%f')

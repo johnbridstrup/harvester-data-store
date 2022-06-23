@@ -1,6 +1,6 @@
 from ..models import ErrorReport
-# from ..serializers.errorreportserializer import ErrorReportListSerializer, ErrorReportSerializer
-from common.viewsets import ReportModelViewSet
+from ..serializers.errorreportserializer import ErrorReportSerializer
+from common.viewsets import CreateModelViewSet
 from common.renderers import HDSJSONRenderer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.filters import SearchFilter, OrderingFilter
@@ -8,16 +8,14 @@ from django.utils.timezone import make_aware
 from django.utils import timezone
 
 
-class ErrorReportView(ReportModelViewSet):
+class ErrorReportView(CreateModelViewSet):
     queryset = ErrorReport.objects.all()
+    serializer_class = ErrorReportSerializer
     permission_classes = (IsAuthenticated,)
     renderer_classes = (HDSJSONRenderer,)
     filter_backends = (SearchFilter, OrderingFilter)
     search_fields = ['harvester']
     ordering_fields = ('harvester', 'location', 'reportTime')
-
-    def get_serializer_class(self):
-        return self.serializers.get(self.action, self.serializers['default'])
 
     def get_queryset(self):
         listfilter = {}
