@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block content %}
+<html>
+<body>
+<div>
+    <div style="float:left">
+        <h1>HDS Prototype: Error Report {{report_number}} Detail View</h1>
+    </div>
+    <div style="float:right">
+        <a href="../">Back to Error Reports list</a>
+    </div>
+</div>
+
+
+<div>
+    <table class="table">
+        <tr>
+            <th scope="col">Time</th>
+            <th scope="col">Harvester</th>
+            <th scope="col">Location</th>
+            <th scope="col">Code</th>
+            <th scope="col">Service In Error</th>
+            <th scope="col">Branch</th>
+            <th scope="col">Githash</th>
+        </tr>
+        <tr>
+            <td>{{time}}</td>
+            <td>{{harvester.harv_id}}</td>
+            <td>{{location.ranch}}</td>
+            <td>{{code}}</td>
+            <td>{{service}}</td>
+            <td>{{branch}}</td>
+            <td>{{githash}}</td>
+        </tr>
+    </table>
+
+    <div style="float:left;height:100%;width:49%;border:1px solid #ccc;font:16px/26px Georgia, Garamond, Serif;overflow:auto;">
+        <div class="tab">
+            <ul class="nav nav-tabs" id="reportTab" role="tablist">
+                {% for key, value in error.items %}
+                <li class="nav-item">
+                    <a class="nav-link" id="{{key|cut:'.'}}-tab" data-toggle="tab" href="#{{key|cut:'.'}}" role="tab" aria-controls="{{key|cut:'.'}}" aria-selected="false">{{key}}</a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="tab-content" id="reportTabContent">
+            {% for key, value in error.items %}
+            <div class="tab-pane fade" id="{{key|cut:'.'}}" role="tabpanel" aria-labelledby="{{key|cut:'.'}}-tab">
+                <pre>{{value|pprint}}</pre>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div style="float:right;height:100%;width:49%;border:1px solid #ccc;font:16px/26px Georgia, Garamond, Serif;overflow:auto;">
+        <ul class="nav nav-tabs" id="reportTab" role="tablist">
+            {% for key, value in report.items %}
+            <li class="nav-item">
+                <a class="nav-link" id="{{key|cut:'.'}}-tab" data-toggle="tab" href="#{{key|cut:'.'}}" role="tab" aria-controls="{{key|cut:'.'}}" aria-selected="false">{{key}}</a>
+            </li>
+            {% endfor %}
+        </ul>
+        <div class="tab-content" id="reportTabContent">
+            {% for key, value in report.items %}
+            <div class="tab-pane fade" id="{{key|cut:'.'}}" role="tabpanel" aria-labelledby="{{key|cut:'.'}}-tab">
+                <pre>{{value|pprint}}</pre>
+            </div>
+            {% endfor %}
+        </div>
+        
+    </div>
+        
+</div>
+<!-- Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+</body>
+</html>
+
+{% endblock content %}
