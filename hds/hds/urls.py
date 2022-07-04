@@ -22,6 +22,7 @@ from rest_framework.schemas import get_schema_view
 version = 'api/v1'
 
 urlpatterns = [
+    path('', include('common.urls.landingurls')),
     path('admin/', admin.site.urls),
     path(f'{version}/fruits/', include('harvester.urls.fruiturls')),
     path(f'{version}/harvesters/', include('harvester.urls.harvesterurls')),
@@ -38,7 +39,7 @@ urlpatterns = [
             version='1.0'
         ),
         name='openapi-schema'
-    )
+    ),
 ]
 
 if settings.DEBUG is True:

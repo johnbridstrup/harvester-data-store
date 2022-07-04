@@ -25,11 +25,17 @@ def make_error(errors, response_status=400):
 
 def custom_exception_handler(exc, context):
     """ custom exception handler """
+    # to check if view does not have basename
+    try:
+        basename = context['view'].basename
+    except AttributeError:
+        basename = context['view']
+
     # Log exception information
     logging.error(
         "An exception occurred during {} request to {}".format(
             context['request']._request.method,
-            context['view'].basename
+            basename
         )
     )
     logging.error(exc)
