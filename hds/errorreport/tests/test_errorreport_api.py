@@ -33,7 +33,7 @@ class ErrorReportAPITest(APITestCase):
 
     def test_create_errorreport(self):
         """ create error report and assert it exists """
-        self.client.post(f'{self.api_base_url}/errorreports/', self.data, format='json')
+        self.client.post(f'{self.api_base_url}/errorreports/', self.data, format='json', HTTP_ACCEPT='application/json')
         self.assertEqual(ErrorReport.objects.count(), 1)
 
     def test_create_errorreport_with_invalid_harvester(self):
@@ -58,7 +58,7 @@ class ErrorReportAPITest(APITestCase):
         new_timestamp = current_time.timestamp()
         data["timestamp"] = new_timestamp
 
-        self.client.patch(f'{self.api_base_url}/errorreports/1/', data, format='json')
+        self.client.patch(f'{self.api_base_url}/errorreports/1/', data, format='json', HTTP_ACCEPT='application/json')
         self.assertEqual(ErrorReport.objects.get().reportTime, current_time)
 
     def test_update_errorreport_with_invalid_data(self):
@@ -85,7 +85,7 @@ class ErrorReportAPITest(APITestCase):
             creator=self.user, location=self.location,
             harvester=self.harvester, reportTime=report_time, report=data)
 
-        self.client.delete(f'{self.api_base_url}/errorreports/1/')
+        self.client.delete(f'{self.api_base_url}/errorreports/1/', HTTP_ACCEPT='application/json')
         self.assertEqual(ErrorReport.objects.count(), 0)
 
     def test_get_all_errorreports(self):
@@ -104,7 +104,7 @@ class ErrorReportAPITest(APITestCase):
             creator=self.user, location=self.location,
             harvester=self.harvester, reportTime=report_time, report=data)
 
-        response = self.client.get(f'{self.api_base_url}/errorreports/')
+        response = self.client.get(f'{self.api_base_url}/errorreports/', HTTP_ACCEPT='application/json')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data["count"], 2)
 
