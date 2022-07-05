@@ -8,6 +8,7 @@ from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.negotiation import DefaultContentNegotiation
 from rest_framework.response import Response
+from harvester.models import Harvester, Location
 
 from django.utils.timezone import make_aware
 from django.utils import timezone
@@ -28,28 +29,43 @@ class ErrorReportView(CreateModelViewSet):
         listfilter = {}
         # get harv_ids from request and filter queryset for harvester ids
         if 'harv_ids' in self.request.query_params:
-            harv_ids = [int(h) for h in self.request.query_params["harv_ids"].split(',')]
-            listfilter['harvester__harv_id__in'] = harv_ids
+            qp = self.request.query_params["harv_ids"]
+            if len(qp) > 0:
+                harv_ids = [int(h) for h in qp.split(',')]
+                listfilter['harvester__harv_id__in'] = harv_ids
 
         # get location names from request and filter queryset for location ids
         if 'locations' in self.request.query_params:
-            location_names = self.request.query_params["locations"].split(',')
-            listfilter['location__ranch__in'] = location_names
+            qp = self.request.query_params["locations"]
+            if len(qp) > 0:
+                location_names = self.request.query_params["locations"].split(',')
+                listfilter['location__ranch__in'] = location_names
 
         # get reportTime range from request and filter queryset for reportTime
         # check if start_time exists in query_params
         if 'start_time' in self.request.query_params:
-            start_time = self.get_serializer().extract_timestamp(float(self.request.query_params["start_time"]))
-            start_time = make_aware(timezone.datetime.strptime(start_time, '%Y-%m-%d %H:%M:%S.%f'))
-            listfilter['reportTime__gte'] = start_time
+            qp = self.request.query_params["start_time"]
+            if len(qp) > 0:
+                t_str = ErrorReportView.fill_dt_with_zeros(qp)
+                start_time = make_aware(timezone.datetime.strptime(t_str, '%Y%m%d%H%M%S'))
+                listfilter['reportTime__gte'] = start_time
 
         # check if end_time exists in query_params
         if 'end_time' in self.request.query_params:
-            end_time = self.get_serializer().extract_timestamp(float(self.request.query_params["end_time"]))
-            end_time = make_aware(timezone.datetime.strptime(end_time, '%Y-%m-%d %H:%M:%S.%f'))
-            listfilter['reportTime__lte'] = end_time
+            qp = self.request.query_params["end_time"]
+            if len(qp) > 0:
+                t_str = ErrorReportView.fill_dt_with_zeros(qp)
+                end_time = make_aware(timezone.datetime.strptime(t_str, '%Y%m%d%H%M%S'))
+                listfilter['reportTime__lte'] = end_time
 
         return ErrorReport.objects.filter(**listfilter).order_by('-reportTime')
+
+    @classmethod
+    def fill_dt_with_zeros(cls, time_str):
+        """Fill with zeros if not all YYYYMMDDHHmmss are present"""
+        if len(time_str) < 14:
+            time_str += '0' * (14 - len(time_str))
+        return time_str
 
     def get_template_names(self):
         if self.action == 'list':            
@@ -80,14 +96,23 @@ class ErrorReportView(CreateModelViewSet):
                     data["report"].pop("serial_number")
                     return data
 
-    def tablify_error_report(self, obj):
-        data = self._extract_error_traceback(obj.report)
-        data.update({
-            "harvester": obj.harvester,
-            "location": obj.location,
-            "time": obj.reportTime,
-            "report_number": obj.pk
-        })
+    def tablify_error_report(self, obj, json=False):
+        if json:
+            data = self._extract_error_traceback(obj['report'])
+            data.update({
+                "harvester": Harvester.objects.get(pk=obj['harvester']),
+                "location": Location.objects.get(pk=obj["location"]),
+                "time": obj['reportTime'],
+                "report_number": obj['id']
+            })
+        else:
+            data = self._extract_error_traceback(obj.report)
+            data.update({
+                "harvester": obj.harvester,
+                "location": obj.location,
+                "time": obj.reportTime,
+                "report_number": obj.pk
+            })
         return data
 
     def retrieve(self, request, *args, **kwargs):
@@ -96,3 +121,16 @@ class ErrorReportView(CreateModelViewSet):
             data = self.tablify_error_report(obj)
             return Response(data)
         return super().retrieve(request, *args, **kwargs)
+    
+    def list(self, request, *args, **kwargs):
+        q = super().list(request, *args, **kwargs)
+        if request.accepted_renderer.format == 'html':
+            results = []
+            for rep in q.data['results']:
+                res = self.tablify_error_report(rep, json=True)
+                res.pop("report")
+                results.append(res)
+            q.data['results'] = results
+            return Response({"data": q.data})
+        
+        return super().list(request, *args, **kwargs)
