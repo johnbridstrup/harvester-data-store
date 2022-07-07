@@ -1,17 +1,15 @@
 from django.contrib.auth import authenticate
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
 from forms.loginform import LoginForm
 from django.shortcuts import render
 from django.shortcuts import redirect
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
 from rest_framework.views import APIView
 
 
 class LandingView(APIView):
     """view for the Home Page"""
-    permission_classes = (IsAuthenticated,)
     renderer_classes = (TemplateHTMLRenderer,)
 
     def get(self, request, *args, **kwargs):
@@ -47,3 +45,10 @@ class UserLoginView(APIView):
             message = 'invalid username or password'
             return render(request, self.template_name, context={'form': form, 'message': message})        
 
+
+class UserLogoutView(APIView):
+    renderer_classes = (TemplateHTMLRenderer,)
+
+    def get(self, request, *args, **kwargs):
+        logout(request)
+        return redirect('/')        

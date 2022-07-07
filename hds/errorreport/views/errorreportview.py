@@ -6,16 +6,18 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.filters import SearchFilter, OrderingFilter
 from django.utils.timezone import make_aware
 from django.utils import timezone
+from rest_framework.renderers import TemplateHTMLRenderer
 
 
 class ErrorReportView(CreateModelViewSet):
     queryset = ErrorReport.objects.all()
     serializer_class = ErrorReportSerializer
     permission_classes = (IsAuthenticated,)
-    renderer_classes = (HDSJSONRenderer,)
+    renderer_classes = (HDSJSONRenderer, TemplateHTMLRenderer)
     filter_backends = (SearchFilter, OrderingFilter)
     search_fields = ['harvester']
     ordering_fields = ('harvester', 'location', 'reportTime')
+    template_name = 'errorreport.html'
 
     def get_queryset(self):
         listfilter = {}

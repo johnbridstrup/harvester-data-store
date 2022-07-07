@@ -2,11 +2,14 @@ from rest_framework.views import APIView
 from django.contrib.auth.models import update_last_login
 from django.contrib.auth import authenticate
 from rest_framework.authtoken.models import Token
+from common.renderers import HDSJSONRenderer
 from common.utils import make_ok
 
 
-class LoginAPIView(APIView):
+class LoginAPIView(APIView):        
     """Login and generate auth token"""
+    renderer_classes = (HDSJSONRenderer,)
+
     def post(self, request, *args, **kwargs):
         try:
             # username and password are required
@@ -26,6 +29,8 @@ class LoginAPIView(APIView):
 
 class LogoutAPIView(APIView):
     """Logout and invalidate auth token"""
+    renderer_classes = (HDSJSONRenderer,)
+    
     def post(self, request, *args, **kwargs):
         try:
             if "token" not in request.data.keys():

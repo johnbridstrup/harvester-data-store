@@ -28,7 +28,13 @@ class HDSJSONRenderer(JSONRenderer):
             msg = "No context provided to the renderer"
 
         else:
-            model = context['view'].basename
+            try:
+                """ some endpoints may not have context['view']
+                    resulting in Attribute Error
+                """
+                model = context['view'].basename
+            except AttributeError:
+                model = ""
             method = context['request']._request.method
 
             if isinstance(data, dict):
