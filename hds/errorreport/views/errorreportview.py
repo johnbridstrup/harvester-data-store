@@ -13,11 +13,10 @@ class ErrorReportView(CreateModelViewSet):
     queryset = ErrorReport.objects.all()
     serializer_class = ErrorReportSerializer
     permission_classes = (IsAuthenticated,)
-    renderer_classes = (HDSJSONRenderer, TemplateHTMLRenderer)
+    renderer_classes = (HDSJSONRenderer,)
     filter_backends = (SearchFilter, OrderingFilter)
     search_fields = ['harvester']
     ordering_fields = ('harvester', 'location', 'reportTime')
-    template_name = 'errorreport.html'
 
     def get_queryset(self):
         listfilter = {}
