@@ -7,13 +7,19 @@ from django.shortcuts import redirect
 from django.contrib.auth import login, logout
 from rest_framework.views import APIView
 
+from hds.urls import version
+
 
 class LandingView(APIView):
     """view for the Home Page"""
     renderer_classes = (TemplateHTMLRenderer,)
 
+    links = {
+        "Error Reports": f"{version}/errorreports",
+    }
+
     def get(self, request, *args, **kwargs):
-        return Response(template_name='./home.html')
+        return Response(template_name='./home.html', data={'links': LandingView.links})
 
 
 class UserLoginView(APIView):
