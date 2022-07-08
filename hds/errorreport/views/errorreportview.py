@@ -88,6 +88,10 @@ class ErrorReportView(CreateModelViewSet):
         data = {}
         data["branch"] = report['data'].pop("branch_name", None)
         data["githash"] = report['data'].pop("githash", None)
+        data["report"] = rep['sysmon_report']
+
+        data["report"].pop("serial_number", None)
+
         rep.pop("serial_number")
         for key, sysdict in rep['sysmon_report'].items():
             if 'sysmon' in key:
@@ -95,12 +99,7 @@ class ErrorReportView(CreateModelViewSet):
                     err = report['data']['sysmon_report'][key].pop("errors", {})
                     data.update(self._serv_in_err(err))
                     data["code"] = data["error"].pop("code", 0)
-                    data["report"] = rep['sysmon_report']
-                    data["report"].pop("serial_number", None)
                     return data
-        
-        logging.debug("There was no error in sysmon report")
-        logging.debug(data)
         return data
 
     def tablify_error_report(self, obj, json=False):
@@ -135,7 +134,7 @@ class ErrorReportView(CreateModelViewSet):
             results = []
             for rep in q.data['results']:
                 res = self.tablify_error_report(rep, json=True)
-                res.pop("report")
+                res.pop("report", None)
                 results.append(res)
             q.data['results'] = results
             return Response({"data": q.data})
