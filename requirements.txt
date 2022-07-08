@@ -1,11 +1,14 @@
 asgiref==3.5.0
 backports.zoneinfo==0.2.1
 Django==4.0.4
+django-prometheus==2.2.0
 djangorestframework==3.13.1
 django-cors-headers==3.13.0
 flake8==4.0.1
 gunicorn==20.1.0
 mccabe==0.6.1
+prometheus-client==0.14.1
+psutil==5.9.1
 psycopg2-binary==2.9.3
 pycodestyle==2.8.0
 pyflakes==2.4.0
