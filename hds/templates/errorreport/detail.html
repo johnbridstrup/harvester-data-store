@@ -41,7 +41,7 @@
         <div class="tab-content" id="reportTabContent">
             {% for key, value in error.items %}
             <div class="tab-pane fade" id="{{key|cut:'.'}}" role="tabpanel" aria-labelledby="{{key|cut:'.'}}-tab">
-                <pre>{{value|pprint}}</pre>
+                <pre>{{value}}</pre>
             </div>
             {% endfor %}
         </div>
