@@ -3,6 +3,7 @@ from ..models import ErrorReport
 from ..serializers.errorreportserializer import ErrorReportSerializer
 from common.viewsets import CreateModelViewSet
 from common.renderers import HDSJSONRenderer
+from common.reports import ErrorReportExtractor
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.renderers import TemplateHTMLRenderer
@@ -73,61 +74,17 @@ class ErrorReportView(CreateModelViewSet):
         elif self.action == 'retrieve':            
             return ['errorreport/detail.html']
 
-    def _serv_in_err(self, errdict):
-        data = {}
-        try:
-            data["service"] = list(errdict.keys())[0]
-        except IndexError:
-            data["service"] = "unknown"
-        data["error"] = errdict.get(data["service"], {})
-        data["error"].pop("ts", None)
-        return data
-
-    def _extract_error_traceback(self, report):
-        rep = report['data']
-        data = {}
-        data["branch"] = report['data'].pop("branch_name", None)
-        data["githash"] = report['data'].pop("githash", None)
-        data["report"] = rep['sysmon_report']
-
-        data["report"].pop("serial_number", None)
-
-        rep.pop("serial_number")
-        for key, sysdict in rep['sysmon_report'].items():
-            if 'sysmon' in key:
-                if "errors" in sysdict:
-                    err = report['data']['sysmon_report'][key].pop("errors", {})
-                    data.update(self._serv_in_err(err))
-                    data["code"] = data["error"].pop("code", 0)
-                    return data
-        return data
-
-    def tablify_error_report(self, obj):
-        data = self._extract_error_traceback(obj['report'])
-        data.update({
-            "harvester": Harvester.objects.get(pk=obj['harvester']),
-            "location": Location.objects.get(pk=obj["location"]),
-            "time": obj['reportTime'],
-            "report_number": obj['id']
-        })
-        return data
-
     def retrieve(self, request, *args, **kwargs):
         if request.accepted_renderer.format == 'html':
             q = super().retrieve(request, *args, **kwargs)
-            data = self.tablify_error_report(q.data)
-            return Response(data)
+            extractor = ErrorReportExtractor(q.data,'retrieve')
+            return Response(extractor.tablify())
         return super().retrieve(request, *args, **kwargs)
     
     def list(self, request, *args, **kwargs):
         q = super().list(request, *args, **kwargs)
         if request.accepted_renderer.format == 'html':
-            results = []
-            for rep in q.data['results']:
-                res = self.tablify_error_report(rep)
-                res.pop("report", None)
-                results.append(res)
-            q.data['results'] = results
-            return Response({"data": q.data})
+            extractor = ErrorReportExtractor(q.data,'list')
+            return Response({"data": extractor.tablify()})
         
-        return super().list(request, *args, **kwargs)
+        return q
