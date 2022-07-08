@@ -22,7 +22,6 @@ from rest_framework.schemas import get_schema_view
 version = 'api/v1'
 
 urlpatterns = [
-    path('prometheus/', include('django_prometheus.urls')),    
     path('', include('common.urls.landingurls')),
     path('admin/', admin.site.urls),
     path(f'{version}/fruits/', include('harvester.urls.fruiturls')),
@@ -43,6 +42,7 @@ urlpatterns = [
         ),
         name='openapi-schema'
     ),
+    path('', include('django_prometheus.urls')), #/metrics, etc...        
 ]
 
 if settings.DEBUG is True:

@@ -15,7 +15,7 @@ def get_endpoint(urlpattern):
     return urlpattern.pattern._route
 
 def compare_patterns(keys, urls):
-    ignore = ['admin/', 'api/v1/openapi', 'api/v1/users/']
+    ignore = ['admin/', 'api/v1/openapi', 'api/v1/users/', 'prometheus/']
     return all(['/' + u in keys if u not in ignore else True for u in urls])
 
 
