@@ -96,8 +96,12 @@ class ErrorReportView(CreateModelViewSet):
                     data.update(self._serv_in_err(err))
                     data["code"] = data["error"].pop("code", 0)
                     data["report"] = rep['sysmon_report']
-                    data["report"].pop("serial_number")
+                    data["report"].pop("serial_number", None)
                     return data
+        
+        logging.debug("There was no error in sysmon report")
+        logging.debug(data)
+        return data
 
     def tablify_error_report(self, obj, json=False):
         if json:
