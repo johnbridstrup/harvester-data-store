@@ -27,7 +27,7 @@ services:
       - DJANGO_SUPERUSER_email=aft@aft.aft
       - DJANGO_SUPERUSER_PASSWORD=aft
       - SQS_USER_PASSWORD=aft
-      - SQL_ENGINE=django.db.backends.postgresql
+      - SQL_ENGINE=django_prometheus.db.backends.postgresql
       - SQL_HOST=db
       - SQL_PORT=5432
       - HDS_ROOT=/opt/app/hds
