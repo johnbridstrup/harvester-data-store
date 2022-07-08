@@ -75,9 +75,12 @@ class ErrorReportView(CreateModelViewSet):
 
     def _serv_in_err(self, errdict):
         data = {}
-        data["service"] = list(errdict.keys())[0]
-        data["error"] = errdict[data["service"]]
-        data["error"].pop("ts")
+        try:
+            data["service"] = list(errdict.keys())[0]
+        except IndexError:
+            data["service"] = "unknown"
+        data["error"] = errdict.get(data["service"], {})
+        data["error"].pop("ts", None)
         return data
 
     def _extract_error_traceback(self, report):
@@ -89,9 +92,9 @@ class ErrorReportView(CreateModelViewSet):
         for key, sysdict in rep['sysmon_report'].items():
             if 'sysmon' in key:
                 if "errors" in sysdict:
-                    err = report['data']['sysmon_report'][key].pop("errors")
+                    err = report['data']['sysmon_report'][key].pop("errors", {})
                     data.update(self._serv_in_err(err))
-                    data["code"] = data["error"].pop("code")
+                    data["code"] = data["error"].pop("code", 0)
                     data["report"] = rep['sysmon_report']
                     data["report"].pop("serial_number")
                     return data
