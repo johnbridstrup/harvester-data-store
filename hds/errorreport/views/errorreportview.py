@@ -102,29 +102,20 @@ class ErrorReportView(CreateModelViewSet):
                     return data
         return data
 
-    def tablify_error_report(self, obj, json=False):
-        if json:
-            data = self._extract_error_traceback(obj['report'])
-            data.update({
-                "harvester": Harvester.objects.get(pk=obj['harvester']),
-                "location": Location.objects.get(pk=obj["location"]),
-                "time": obj['reportTime'],
-                "report_number": obj['id']
-            })
-        else:
-            data = self._extract_error_traceback(obj.report)
-            data.update({
-                "harvester": obj.harvester,
-                "location": obj.location,
-                "time": obj.reportTime,
-                "report_number": obj.pk
-            })
+    def tablify_error_report(self, obj):
+        data = self._extract_error_traceback(obj['report'])
+        data.update({
+            "harvester": Harvester.objects.get(pk=obj['harvester']),
+            "location": Location.objects.get(pk=obj["location"]),
+            "time": obj['reportTime'],
+            "report_number": obj['id']
+        })
         return data
 
     def retrieve(self, request, *args, **kwargs):
         if request.accepted_renderer.format == 'html':
-            obj = self.get_object()
-            data = self.tablify_error_report(obj)
+            q = super().retrieve(request, *args, **kwargs)
+            data = self.tablify_error_report(q.data)
             return Response(data)
         return super().retrieve(request, *args, **kwargs)
     
@@ -133,7 +124,7 @@ class ErrorReportView(CreateModelViewSet):
         if request.accepted_renderer.format == 'html':
             results = []
             for rep in q.data['results']:
-                res = self.tablify_error_report(rep, json=True)
+                res = self.tablify_error_report(rep)
                 res.pop("report", None)
                 results.append(res)
             q.data['results'] = results
