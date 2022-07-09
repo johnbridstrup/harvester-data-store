@@ -42,3 +42,11 @@ class OpenApiTest(HDSAPITestBase):
         
         assert data['info']['title'] == "Harvester Data Store"
 
+
+class PrometheusTest(HDSAPITestBase):
+    """ Test Prometheus Endpoint """
+
+    def test_get_prometheus(self):
+        """ create fruit and assert it exists """
+        resp = self.client.get('/metrics')
+        assert resp.status_code == 200
