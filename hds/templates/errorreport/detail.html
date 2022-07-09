@@ -32,14 +32,14 @@
             <ul class="nav nav-tabs" id="reportTab" role="tablist">
                 {% for key, value in error.items %}
                 <li class="nav-item">
-                    <a class="nav-link" id="{{key|cut:'.'}}-tab" data-toggle="tab" href="#{{key|cut:'.'}}" role="tab" aria-controls="{{key|cut:'.'}}" aria-selected="false">{{key}}</a>
+                    <a class="nav-link{% if key == 'Master' %} active{%endif%}" id="{{key|cut:'.'}}-tab" data-toggle="tab" href="#{{key|cut:'.'}}" role="tab" aria-controls="{{key|cut:'.'}}" aria-selected="false">{{key}}</a>
                 </li>
                 {% endfor %}
             </ul>
         </div>
         <div class="tab-content" id="reportTabContent">
             {% for key, value in error.items %}
-            <div class="tab-pane fade" id="{{key|cut:'.'}}" role="tabpanel" aria-labelledby="{{key|cut:'.'}}-tab">
+            <div class="tab-pane fade{% if key == 'value' %} show active{%endif%}" id="{{key|cut:'.'}}" role="tabpanel" aria-labelledby="{{key|cut:'.'}}-tab">
                 <pre><code class="language-python">{{value}}</code></pre>
             </div>
             {% endfor %}
@@ -49,13 +49,13 @@
         <ul class="nav nav-tabs" id="reportTab" role="tablist">
             {% for key, value in report.items %}
             <li class="nav-item">
-                <a class="nav-link" id="{{key|cut:' '}}-tab" data-toggle="tab" href="#{{key|cut:' '}}" role="tab" aria-controls="{{key|cut:' '}}" aria-selected="false">{{key}}</a>
+                <a class="nav-link{% if key == 'Master' %} active{%endif%}" id="{{key|cut:' '}}-tab" data-toggle="tab" href="#{{key|cut:' '}}" role="tab" aria-controls="{{key|cut:' '}}">{{key}}</a>
             </li>
             {% endfor %}
         </ul>
         <div class="tab-content" id="reportTabContent">
             {% for key, value in report.items %}
-            <div class="tab-pane fade" id="{{key|cut:' '}}" role="tabpanel" aria-labelledby="{{key|cut:' '}}-tab">
+            <div class="tab-pane fade{% if key == 'Master' %} show active{%endif%}" id="{{key|cut:' '}}" role="tabpanel" aria-labelledby="{{key|cut:' '}}-tab">
                 <pre>{{value|pprint}}</pre>
             </div>
             {% endfor %}
