@@ -27,7 +27,6 @@
             <td>{{githash}}</td>
         </tr>
     </table>
-
     <div style="float:left;height:100%;width:49%;border:1px solid #ccc;font:16px/26px Georgia, Garamond, Serif;overflow:auto;">
         <div class="tab">
             <ul class="nav nav-tabs" id="reportTab" role="tablist">
@@ -50,20 +49,18 @@
         <ul class="nav nav-tabs" id="reportTab" role="tablist">
             {% for key, value in report.items %}
             <li class="nav-item">
-                <a class="nav-link" id="{{key|cut:'.'}}-tab" data-toggle="tab" href="#{{key|cut:'.'}}" role="tab" aria-controls="{{key|cut:'.'}}" aria-selected="false">{{key}}</a>
+                <a class="nav-link" id="{{key|cut:' '}}-tab" data-toggle="tab" href="#{{key|cut:' '}}" role="tab" aria-controls="{{key|cut:' '}}" aria-selected="false">{{key}}</a>
             </li>
             {% endfor %}
         </ul>
         <div class="tab-content" id="reportTabContent">
             {% for key, value in report.items %}
-            <div class="tab-pane fade" id="{{key|cut:'.'}}" role="tabpanel" aria-labelledby="{{key|cut:'.'}}-tab">
+            <div class="tab-pane fade" id="{{key|cut:' '}}" role="tabpanel" aria-labelledby="{{key|cut:' '}}-tab">
                 <pre>{{value|pprint}}</pre>
             </div>
             {% endfor %}
-        </div>
-        
-    </div>
-        
+        </div>   
+    </div>     
 </div>
 </body>
 </html>

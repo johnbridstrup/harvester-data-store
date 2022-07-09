@@ -1,4 +1,5 @@
 import logging
+from collections import defaultdict
 from harvester.models import Harvester, Location
 
 
@@ -13,6 +14,7 @@ class ReportExtractor:
 class ErrorReportExtractor(ReportExtractor):
     LIST = 'list'
     RETRIEVE = 'retrieve'
+    MASTER_INDEX = 0
 
     def __init__(self, data, action):
         super().__init__(data)
@@ -29,7 +31,7 @@ class ErrorReportExtractor(ReportExtractor):
         return data
 
     def _extract_error_traceback(self, report):
-        rep = report['data']
+        rep = report['report']['data']
 
         data = {}
         data["branch"] = rep.pop("branch_name", None)
@@ -57,9 +59,24 @@ class ErrorReportExtractor(ReportExtractor):
             "report_number": report['id'] 
         }
 
+    def _sysmon_to_robot(self, data):
+        sysmon_report = data['report']
+        d = defaultdict(dict)
+        for key, sysm in sysmon_report.items():
+            s_index = int(key.split('.')[1])
+            r_index = int(sysm.get('robot_index', s_index))
+            if s_index == self.MASTER_INDEX:
+                d['Master'] = sysm
+            elif r_index == s_index:
+                d[f"Robot {r_index}"].update({'NUC': sysm})
+            else:
+                d[f"Robot {r_index}"].update({'JETSON': sysm})
+        return dict(d)
+
     def _perform_extraction(self, report):
-        outdata = self._extract_error_traceback(report['report'])
+        outdata = self._extract_error_traceback(report)
         outdata.update(self._get_additional_data(report))
+        outdata['report'] = self._sysmon_to_robot(outdata)
         return outdata
 
 
