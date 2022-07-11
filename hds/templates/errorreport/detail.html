@@ -29,7 +29,7 @@
     </table>
     <div style="float:left;height:100%;width:49%;border:1px solid #ccc;font:16px/26px Georgia, Garamond, Serif;overflow:auto;">
         <div class="tab">
-            <ul class="nav nav-tabs" id="reportTab" role="tablist">
+            <ul class="nav nav-tabs" id="errorTab" role="tablist">
                 {% for key, value in error.items %}
                 <li class="nav-item">
                     <a class="nav-link{% if key == 'Master' %} active{%endif%}" id="{{key|cut:'.'}}-tab" data-toggle="tab" href="#{{key|cut:'.'}}" role="tab" aria-controls="{{key|cut:'.'}}" aria-selected="false">{{key}}</a>
@@ -37,7 +37,7 @@
                 {% endfor %}
             </ul>
         </div>
-        <div class="tab-content" id="reportTabContent">
+        <div class="tab-content" id="errorTabContent">
             {% for key, value in error.items %}
             <div class="tab-pane fade{% if key == 'value' %} show active{%endif%}" id="{{key|cut:'.'}}" role="tabpanel" aria-labelledby="{{key|cut:'.'}}-tab">
                 <pre><code class="language-python">{{value}}</code></pre>
@@ -53,15 +53,226 @@
             </li>
             {% endfor %}
         </ul>
+        <!-- Sysmon report info -->
         <div class="tab-content" id="reportTabContent">
             {% for key, value in report.items %}
             <div class="tab-pane fade{% if key == 'Master' %} show active{%endif%}" id="{{key|cut:' '}}" role="tabpanel" aria-labelledby="{{key|cut:' '}}-tab">
-                <pre>{{value|pprint}}</pre>
+                {% if key == 'Master' %}
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md">
+                            <div id="chronyChartMaster"></div>
+                        </div>
+                        <div class="col-md d-flex justify-content-center">
+                            <table class="table table-bordered">
+                                <tr>
+                                    <th scope="col">System Time</th>
+                                    <th scope="col">{{value.chrony_info.sys_time}}</th>
+                                </tr>
+                                <tr>
+                                    <th scope="col">Reference Time</th>
+                                    <th scope="col">{{value.chrony_info.ref_time}}</th>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xl">
+                            <table class="table">
+                                {% for serv, serv_vals in value.services.items %}
+                                {% if forloop.first %}
+                                <tr>  
+                                    <th scope="col">Service</th>
+                                    <th scope="col">cpu</th>
+                                    <th scope="col">mem</th>
+                                    <th scope="col">FSM Components</th>
+                                </tr>
+                                {% endif %}
+                                <tr>
+                                    <th scope="col">{{serv}}</th>
+                                    <th scope="col">{{serv_vals.cpu}}</th>
+                                    <th scope="col">{{serv_vals.mem}}</th>
+                                    <th scope="col">{{serv_vals.fsm.components}}</th>
+                                </tr>
+                                {% endfor %}
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                {% else %} <!-- If key is not Master -->
+                <ul class="nav nav-tabs" id="{{key|cut:' '}}Tab" role="tablist">
+                    {% for rkey, rsys in value.items %}
+                    <li class="nav-item">
+                        <a class="nav-link{% if rkey == 'NUC' %} active{%endif%}" id="{{key|cut:' '}}{{rkey}}-tab" data-toggle="tab" href="#{{key|cut:' '}}{{rkey}}" role="tab" aria-controls="{{key|cut:' '}}{{rkey}}" aria-selected="false">{{rkey}}</a>
+                    </li>
+                    {% endfor %}
+                </ul>
+                <div class="tab-content" id="{{key|cut:' '}}-tabs">
+                    {% for rkey, rsys in value.items %}
+                    <div class="tab-pane fade{% if rkey == 'NUC' %} show active{%endif%}" id="{{key|cut:' '}}{{rkey}}" role="tabpanel" aria-labelledby="{{key|cut:' '}}{{rkey}}-tab">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md">
+                                    <div id="chronyChart{{key|cut:' '}}{{rkey}}"></div>
+                                </div>
+                                <div class="col-md d-flex justify-content-center">
+                                    <table class="table table-bordered">
+                                        <tr>
+                                            <th scope="col">System Time</th>
+                                            <th scope="col">{{rsys.chrony_info.sys_time}}</th>
+                                        </tr>
+                                        <tr>
+                                            <th scope="col">Reference Time</th>
+                                            <th scope="col">{{rsys.chrony_info.ref_time}}</th>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xl">
+                                    <table class="table">
+                                        {% for serv, serv_vals in rsys.services.items %}
+                                        {% if forloop.first %}
+                                        <tr>  
+                                            <th scope="col">Service</th>
+                                            <th scope="col">cpu</th>
+                                            <th scope="col">mem</th>
+                                            <th scope="col">FSM Components</th>
+                                        </tr>
+                                        {% endif %}
+                                        <tr>
+                                            <th scope="col">{{serv}}</th>
+                                            <th scope="col">{{serv_vals.cpu}}</th>
+                                            <th scope="col">{{serv_vals.mem}}</th>
+                                            <th scope="col">{{serv_vals.fsm.components}}</th>
+                                        </tr>
+                                        {% endfor %}
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
             </div>
             {% endfor %}
         </div>   
     </div>     
 </div>
+<script src="https://cdn.plot.ly/plotly-2.12.1.min.js"></script>
+
+<script>
+    const r = 'rgb(230, 2, 2)';
+    const y = 'rgb(227, 220, 5)';
+    const g = 'rgb(72, 191, 8)';
+
+    const labels = [
+        "Last Offset",
+        "RMS Offset"
+    ];
+
+    function masterColor(offset_seconds) {
+        if (Math.abs(offset_seconds) < 1) {
+            return g;
+        } else if ((Math.abs(offset_seconds)) < 10) {
+            return y;
+        } else {
+            return r;
+        }
+    };
+
+    function robotColor(offset_seconds) {
+        if (Math.abs(offset_seconds) < 0.1) {
+            return g;
+        } else if (Math.abs(offset_seconds) < 1) {
+            return y;
+        } else {
+            return r;
+        }
+    }
+</script>
+
+<script>
+	chrony = document.getElementById("chronyChartMaster");
+     
+    var data = [{
+        type: 'bar',
+        x: [Math.abs({{report.Master.chrony_info.last_offset}}), {{report.Master.chrony_info.rms_offset}}],
+        y: ['Last Offset', 'RMS Offset'],
+        orientation: 'h',
+        marker: {
+            color: [
+                masterColor(Math.abs({{report.Master.chrony_info.last_offset}})),
+                masterColor({{report.Master.chrony_info.rms_offset}})
+            ]
+        }
+    }];
+
+    var layout = {
+        autosize: false,
+        width: 500,
+        height: 300,
+        margin: {
+            l: 100,
+            r: 0,
+            b: 50,
+            t: 30,
+            pad: 0
+        },
+        xaxis: {
+            type: 'log',
+            range: [-4, 1.5],
+            title: "seconds"
+        },
+    };
+	Plotly.newPlot( chrony, data, layout);
+</script>
+
+{% for key, value in report.items %}
+{% if key != 'Master' %}
+{% for rkey, rsys in value.items %}
+<script>
+	chrony{{key|cut:' '}}{{rkey}} = document.getElementById("chronyChart{{key|cut:' '}}{{rkey}}");
+     
+    var data{{key|cut:' '}}{{rkey}} = [{
+        type: 'bar',
+        x: [Math.abs({{rsys.chrony_info.last_offset}}), {{rsys.chrony_info.rms_offset}}],
+        y: ['Last Offset', 'RMS Offset'],
+        orientation: 'h',
+        marker: {
+            color: [
+                robotColor(Math.abs({{rsys.chrony_info.last_offset}})),
+                robotColor({{rsys.chrony_info.rms_offset}})
+            ]
+        }
+    }];
+
+    var layout{{key|cut:' '}}{{rkey}} = {
+        autosize: false,
+        width: 500,
+        height: 300,
+        margin: {
+            l: 100,
+            r: 0,
+            b: 50,
+            t: 30,
+            pad: 0
+        },
+        xaxis: {
+            type: 'log',
+            range: [-4, 1.5],
+            title: "seconds"
+        },
+    };
+	Plotly.newPlot( chrony{{key|cut:' '}}{{rkey}}, data{{key|cut:' '}}{{rkey}}, layout{{key|cut:' '}}{{rkey}});
+</script>
+
+{% endfor %}
+{% endif %}
+{% endfor %}
+
+
 </body>
 </html>
 
