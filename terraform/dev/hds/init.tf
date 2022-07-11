@@ -56,4 +56,8 @@ data "aws_security_group" "lambda_sg" {
   }
 }
 
-
+data "aws_security_group" "hdsdb_sg" {
+  tags = {
+    Name = "hdsdb"
+  }
+}

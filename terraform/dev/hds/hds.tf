@@ -3,7 +3,7 @@ locals {
   dns_name             = "hds.devcloud.advanced.farm"
   service_port         = "8000"
   service_name         = "hds"
-  service_docker_image = "082346306812.dkr.ecr.us-west-1.amazonaws.com/hds:hds-staging-b9f3ac2"
+  service_docker_image = "082346306812.dkr.ecr.us-west-1.amazonaws.com/hds:hds-staging-4565438"
   environment_variables = [
     { "name" : "POSTGRES_NAME", "value" : data.aws_db_instance.postgres.db_name },
     { "name" : "POSTGRES_PASSWORD", "value" : data.aws_secretsmanager_secret_version.hds_rds_pwd.secret_string },
