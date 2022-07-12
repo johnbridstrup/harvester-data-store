@@ -88,7 +88,7 @@
                                     <th scope="col">FSM Components</th>
                                 </tr>
                                 {% endif %}
-                                <tr>
+                                <tr{% if serv_vals.fsm.state == 'error' %} class="table-danger"{% endif %}>
                                     <th scope="col">{{serv}}</th>
                                     <th scope="col">{{serv_vals.cpu}}</th>
                                     <th scope="col">{{serv_vals.mem}}</th>
@@ -140,7 +140,7 @@
                                             <th scope="col">FSM Components</th>
                                         </tr>
                                         {% endif %}
-                                        <tr>
+                                        <tr{% if serv_vals.fsm.state == 'error' %} class="table-danger"{% endif %}>
                                             <th scope="col">{{serv}}</th>
                                             <th scope="col">{{serv_vals.cpu}}</th>
                                             <th scope="col">{{serv_vals.mem}}</th>
