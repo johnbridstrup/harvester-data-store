@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 <html>
+{% include "js.html" %}
 <body>
 <div style="float:left">
     <h1>HDS Prototype: Error Report {{report_number}}</h1>
@@ -160,117 +161,25 @@
         </div>   
     </div>     
 </div>
-<script src="https://cdn.plot.ly/plotly-2.12.1.min.js"></script>
+
 <script>
     var dt = new Date("{{time}}")
     document.getElementById("error-time").textContent = formatDate(dt);
 </script>
 <script>
-    const r = 'rgb(230, 2, 2)';
-    const y = 'rgb(227, 220, 5)';
-    const g = 'rgb(72, 191, 8)';
-
-    const labels = [
-        "Last Offset",
-        "RMS Offset"
-    ];
-
-    function masterColor(offset_seconds) {
-        if (Math.abs(offset_seconds) < 1) {
-            return g;
-        } else if ((Math.abs(offset_seconds)) < 10) {
-            return y;
-        } else {
-            return r;
-        }
-    };
-
-    function robotColor(offset_seconds) {
-        if (Math.abs(offset_seconds) < 0.1) {
-            return g;
-        } else if (Math.abs(offset_seconds) < 1) {
-            return y;
-        } else {
-            return r;
-        }
-    }
-</script>
-
-<script>
 	chrony = document.getElementById("chronyChartMaster");
-     
-    var data = [{
-        type: 'bar',
-        x: [Math.abs({{report.Master.chrony_info.last_offset}}), {{report.Master.chrony_info.rms_offset}}],
-        y: ['Last Offset', 'RMS Offset'],
-        orientation: 'h',
-        marker: {
-            color: [
-                masterColor(Math.abs({{report.Master.chrony_info.last_offset}})),
-                masterColor({{report.Master.chrony_info.rms_offset}})
-            ]
-        }
-    }];
-
-    var layout = {
-        autosize: false,
-        width: 500,
-        height: 300,
-        margin: {
-            l: 100,
-            r: 0,
-            b: 50,
-            t: 30,
-            pad: 0
-        },
-        xaxis: {
-            type: 'log',
-            range: [-4, 1.5],
-            title: "seconds"
-        },
-    };
-	Plotly.newPlot( chrony, data, layout);
+    var data = makeChronyData({{report.Master.chrony_info.last_offset}}, {{report.Master.chrony_info.rms_offset}})  
+	Plotly.newPlot( chrony, data, chronyLayout);
 </script>
 
 {% for key, value in report.items %}
 {% if key != 'Master' %}
 {% for rkey, rsys in value.items %}
 <script>
-	chrony{{key|cut:' '}}{{rkey}} = document.getElementById("chronyChart{{key|cut:' '}}{{rkey}}");
-     
-    var data{{key|cut:' '}}{{rkey}} = [{
-        type: 'bar',
-        x: [Math.abs({{rsys.chrony_info.last_offset}}), {{rsys.chrony_info.rms_offset}}],
-        y: ['Last Offset', 'RMS Offset'],
-        orientation: 'h',
-        marker: {
-            color: [
-                robotColor(Math.abs({{rsys.chrony_info.last_offset}})),
-                robotColor({{rsys.chrony_info.rms_offset}})
-            ]
-        }
-    }];
-
-    var layout{{key|cut:' '}}{{rkey}} = {
-        autosize: false,
-        width: 500,
-        height: 300,
-        margin: {
-            l: 100,
-            r: 0,
-            b: 50,
-            t: 30,
-            pad: 0
-        },
-        xaxis: {
-            type: 'log',
-            range: [-4, 1.5],
-            title: "seconds"
-        },
-    };
-	Plotly.newPlot( chrony{{key|cut:' '}}{{rkey}}, data{{key|cut:' '}}{{rkey}}, layout{{key|cut:' '}}{{rkey}});
+	chrony{{key|cut:' '}}{{rkey}} = document.getElementById("chronyChart{{key|cut:' '}}{{rkey}}");    
+    var data{{key|cut:' '}}{{rkey}} = makeChronyData({{rsys.chrony_info.last_offset}}, {{rsys.chrony_info.rms_offset}})
+	Plotly.newPlot( chrony{{key|cut:' '}}{{rkey}}, data{{key|cut:' '}}{{rkey}}, chronyLayout);
 </script>
-
 {% endfor %}
 {% endif %}
 {% endfor %}

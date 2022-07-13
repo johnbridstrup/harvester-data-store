@@ -2,6 +2,7 @@
 {% block title %} HDS: Error report list view {% endblock %}
 {% block content %}
 <html>
+{% include "js.html" %}
     <head>
         <style>
         table {
@@ -102,6 +103,7 @@
         </ul>
     </nav>
 </body>
+
 {% for res in data.results %}
 <script>
     var dt{{forloop.counter}} = new Date("{{res.time}}")
