@@ -18,7 +18,7 @@
             <th scope="col">Githash</th>
         </tr>
         <tr>
-            <td>{{time}}</td>
+            <td id="error-time">{{time}}</td>
             <td>{{harvester.harv_id}}</td>
             <td>{{location.ranch}}</td>
             <td>{{code}}</td>
@@ -161,7 +161,10 @@
     </div>     
 </div>
 <script src="https://cdn.plot.ly/plotly-2.12.1.min.js"></script>
-
+<script>
+    var dt = new Date("{{time}}")
+    document.getElementById("error-time").textContent = formatDate(dt);
+</script>
 <script>
     const r = 'rgb(230, 2, 2)';
     const y = 'rgb(227, 220, 5)';
