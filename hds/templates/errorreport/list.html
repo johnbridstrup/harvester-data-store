@@ -77,7 +77,7 @@
             {% for res in data.results %}
             <tr>
                 <td>
-                    <a href="/api/v1/errorreports/{{res.report_number}}">
+                    <a id="t{{forloop.counter}}" href="/api/v1/errorreports/{{res.report_number}}">
                         {{res.time}}
                     </a>
                 </td>
@@ -102,5 +102,11 @@
         </ul>
     </nav>
 </body>
+{% for res in data.results %}
+<script>
+    var dt{{forloop.counter}} = new Date("{{res.time}}")
+    document.getElementById("t{{forloop.counter}}").textContent = formatDate(dt{{forloop.counter}});
+</script>
+{% endfor %}
 </html>
 {% endblock content %}

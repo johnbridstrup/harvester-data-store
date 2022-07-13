@@ -9,6 +9,22 @@
   <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}">
   <!-- highlight.js -->
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/styles/default.min.css">
+  <script>
+    function padZeros(str_to_pad, digits) {
+        return str_to_pad.toString().padStart(digits, '0')
+    }
+
+    function formatDate(date) {
+        var y = date.getFullYear().toString()
+        var M = padZeros(date.getMonth() + 1, 2)
+        var d = padZeros(date.getDate(), 2)
+        var h = padZeros(date.getHours(), 2)
+        var m = padZeros(date.getMinutes(), 2)
+        var s = padZeros(date.getSeconds(), 2)
+        var ms = padZeros(date.getMilliseconds(), 2)
+        return y + M + d + h + m + s + '.' + ms
+    }
+  </script>
 </head>
 <body>
   {% if 'login' not in request.path %}
