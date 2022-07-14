@@ -1,6 +1,8 @@
 import logging
 from collections import defaultdict
 from harvester.models import Harvester, Location
+from django.utils.timezone import make_aware
+from django.utils import timezone
 
 
 class ReportExtractor:
@@ -92,3 +94,23 @@ class ErrorReportExtractor(ReportExtractor):
                 results.append(self._perform_extraction(rep))
             outdata['results'] = results
         return outdata
+
+
+class DTimeFormatter:
+    @classmethod
+    def fill_dt_with_zeros(cls, dt_str):
+        """Fill with zeros if not all YYYYMMDDHHmmss are present"""
+        if len(dt_str) < 14:
+            dt_str += '0' * (14 - len(dt_str))
+        return dt_str
+
+    @classmethod
+    def convert_to_datetime(cls, dt_str):
+        return make_aware(timezone.datetime.strptime(dt_str, '%Y%m%d%H%M%S'))
+
+    @classmethod
+    def format_datetime(cls, dt_str):
+        t = cls.fill_dt_with_zeros(dt_str)
+        return cls.convert_to_datetime(t)
+
+

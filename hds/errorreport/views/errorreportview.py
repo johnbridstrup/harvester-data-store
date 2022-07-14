@@ -3,7 +3,7 @@ from ..models import ErrorReport
 from ..serializers.errorreportserializer import ErrorReportSerializer
 from common.viewsets import CreateModelViewSet
 from common.renderers import HDSJSONRenderer
-from common.reports import ErrorReportExtractor
+from common.reports import ErrorReportExtractor, DTimeFormatter
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.renderers import TemplateHTMLRenderer
@@ -47,16 +47,14 @@ class ErrorReportView(CreateModelViewSet):
         if 'start_time' in self.request.query_params:
             qp = self.request.query_params["start_time"]
             if len(qp) > 0:
-                t_str = ErrorReportView.fill_dt_with_zeros(qp)
-                start_time = make_aware(timezone.datetime.strptime(t_str, '%Y%m%d%H%M%S'))
+                start_time = DTimeFormatter.format_datetime(qp)
                 listfilter['reportTime__gte'] = start_time
 
         # check if end_time exists in query_params
         if 'end_time' in self.request.query_params:
             qp = self.request.query_params["end_time"]
             if len(qp) > 0:
-                t_str = ErrorReportView.fill_dt_with_zeros(qp)
-                end_time = make_aware(timezone.datetime.strptime(t_str, '%Y%m%d%H%M%S'))
+                end_time = DTimeFormatter.format_datetime(qp)
                 listfilter['reportTime__lte'] = end_time
 
         return ErrorReport.objects.filter(**listfilter).order_by('-reportTime')
