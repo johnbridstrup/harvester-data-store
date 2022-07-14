@@ -1,8 +1,8 @@
 import logging
 from collections import defaultdict
+from datetime import datetime
 from harvester.models import Harvester, Location
-from django.utils.timezone import make_aware
-from django.utils import timezone
+import pytz
 
 
 class ReportExtractor:
@@ -105,12 +105,15 @@ class DTimeFormatter:
         return dt_str
 
     @classmethod
-    def convert_to_datetime(cls, dt_str):
-        return make_aware(timezone.datetime.strptime(dt_str, '%Y%m%d%H%M%S'))
+    def convert_to_datetime(cls, dt_str, tz_str):
+        tz = pytz.timezone(tz_str)
+        dt = tz.localize(datetime.strptime(dt_str, '%Y%m%d%H%M%S'))
+
+        return dt
 
     @classmethod
-    def format_datetime(cls, dt_str):
+    def format_datetime(cls, dt_str, tz_str):
         t = cls.fill_dt_with_zeros(dt_str)
-        return cls.convert_to_datetime(t)
+        return cls.convert_to_datetime(t, tz_str)
 
 

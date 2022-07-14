@@ -28,6 +28,9 @@ class ErrorReportView(CreateModelViewSet):
 
     def get_queryset(self):
         listfilter = {}
+        # get query timezone
+        tz = self.request.query_params.get('tz', 'US/Pacific')
+
         # get harv_ids from request and filter queryset for harvester ids
         if 'harv_ids' in self.request.query_params:
             qp = self.request.query_params["harv_ids"]
@@ -47,14 +50,14 @@ class ErrorReportView(CreateModelViewSet):
         if 'start_time' in self.request.query_params:
             qp = self.request.query_params["start_time"]
             if len(qp) > 0:
-                start_time = DTimeFormatter.format_datetime(qp)
+                start_time = DTimeFormatter.format_datetime(qp, tz)
                 listfilter['reportTime__gte'] = start_time
 
         # check if end_time exists in query_params
         if 'end_time' in self.request.query_params:
             qp = self.request.query_params["end_time"]
             if len(qp) > 0:
-                end_time = DTimeFormatter.format_datetime(qp)
+                end_time = DTimeFormatter.format_datetime(qp, tz)
                 listfilter['reportTime__lte'] = end_time
 
         return ErrorReport.objects.filter(**listfilter).order_by('-reportTime')
