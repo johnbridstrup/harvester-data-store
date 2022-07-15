@@ -20,3 +20,14 @@ class AFTExceptionCode(CommonInfo):
 
     def __str__(self):
         return f"Code {self.code}: {self.name}"
+
+
+class AFTException(CommonInfo):
+    code = models.ForeignKey(AFTExceptionCode, on_delete=models.SET_NULL, null=True)
+    service = models.TextField(max_length=20, blank=True, null=True)
+    node = models.IntegerField(blank=True, null=True)
+    traceback = models.TextField(blank=True, null=True)
+    timestamp = models.DateTimeField(blank=True, null=True)
+
+    def __str__(self):
+        return f"Exception code {self.code.code} on {self.service}.{self.node}"
