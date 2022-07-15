@@ -15,21 +15,26 @@ locals {
     { "name" : "SQL_HOST", "value" : data.aws_db_instance.postgres.address }
   ]
 
-  healthcheck_path = "/api/v1/healthcheck/"
+  healthcheck_path       = "/api/v1/healthcheck/"
+  errorreport_queue_name = "errorreport-queue"
 }
 
-data "aws_iam_policy_document" "execute_task" {
+data "aws_sqs_queue" "errorreport_queue" {
+  name = local.errorreport_queue_name
+}
+
+data "aws_iam_policy_document" "poll_errorreport_queue" {
   statement {
     actions = [
-      "ssmmessages:CreateControlChannel",
-      "ssmmessages:CreateDataChannel",
-      "ssmmessages:OpenControlChannel",
-      "ssmmessages:OpenDataChannel"
+      "sqs:ReceiveMessage",
+      "sqs:DeleteMessage"
     ]
-    resources = ["*"]
+    resources = [data.aws_sqs_queue.errorreport_queue.arn]
     effect    = "Allow"
   }
 }
+
+
 module "hds" {
   source                         = "../../module/hds"
   env                            = local.env
@@ -45,7 +50,7 @@ module "hds" {
   route53_pub_zone_id            = data.aws_route53_zone.cloud_zone.id
   service_environments_variables = local.environment_variables
   service_health_check_path      = local.healthcheck_path
-  service_iam_policy_document    = data.aws_iam_policy_document.execute_task.json
+  service_iam_policy_document    = data.aws_iam_policy_document.poll_errorreport_queue.json
   service_alb_ingress_sg_rules = [
     "80,tcp,${data.aws_security_group.lambda_sg.id},web traffic from lambda",
     "443,tcp,${data.aws_security_group.lambda_sg.id},ssl traffic from lambda"
