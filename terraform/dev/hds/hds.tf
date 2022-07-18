@@ -23,6 +23,10 @@ data "aws_sqs_queue" "errorreport_queue" {
   name = local.errorreport_queue_name
 }
 
+data "aws_s3_bucket" "data-lake" {
+  bucket = "dev-aft-hv-data-lake-prod"
+}
+
 data "aws_iam_policy_document" "poll_errorreport_queue" {
   statement {
     actions = [
@@ -31,6 +35,18 @@ data "aws_iam_policy_document" "poll_errorreport_queue" {
     ]
     resources = [data.aws_sqs_queue.errorreport_queue.arn]
     effect    = "Allow"
+  }
+
+  statement {
+    actions = [
+      "s3:GetObject",
+      "s3:DeleteObject"
+    ]
+
+    resources = [
+      data.aws_s3_bucket.data-lake.arn,
+      "${data.aws_s3_bucket.data-lake.arn}/errorreport/*",
+    ]
   }
 }
 
