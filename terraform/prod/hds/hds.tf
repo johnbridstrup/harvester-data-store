@@ -56,10 +56,10 @@ module "hds" {
 }
 
 resource "aws_security_group_rule" "hds_db_rule" {
-  type = "ingress"
-  from_port = data.aws_db_instance.postgres.port
-  to_port = data.aws_db_instance.postgres.port
-  protocol = "tcp"
+  type                     = "ingress"
+  from_port                = data.aws_db_instance.postgres.port
+  to_port                  = data.aws_db_instance.postgres.port
+  protocol                 = "tcp"
   source_security_group_id = module.hds.service_security_group_id
-  security_group_id = data.aws_security_group.hdsdb_sg.id
+  security_group_id        = data.aws_security_group.hdsdb_sg.id
 }
