@@ -9,7 +9,7 @@ services:
       - "hds-network"
   web:
     build: .
-    command: python hds/manage.py runserver 0.0.0.0:${HDS_PORT}
+    command: supervisord
     volumes: 
       - ./hds/:/opt/app/hds
       - ./fixtures:/opt/app/fixtures
@@ -25,6 +25,8 @@ services:
       - SQL_ENGINE=django.db.backends.postgresql
       - SQL_HOST=db
       - SQL_PORT=5432
+      - HDS_ROOT=/opt/app/hds
+      - HDS_PORT=${HDS_PORT}
     depends_on:
       - db
     networks:

@@ -9,7 +9,7 @@ services:
       - "hds-network"
   web:
     build: .
-    command: ["/opt/app/wait-for-it.sh", "db:5432", "--", "/opt/app/start-server.sh", "${HDS_PORT}"]
+    command: ["/opt/app/scripts/wait-for-it.sh", "db:5432", "--", "supervisord"]
     volumes:
       - ./fixtures:/opt/app/fixtures
     ports:
@@ -24,6 +24,8 @@ services:
       - SQL_ENGINE=django.db.backends.postgresql
       - SQL_HOST=db
       - SQL_PORT=5432
+      - HDS_ROOT=/opt/app/hds
+      - HDS_PORT=${HDS_PORT}
     depends_on:
       - db
     networks:
