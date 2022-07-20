@@ -9,7 +9,7 @@ services:
       - "hds-network"
   web:
     build: .
-    command: python hds/manage.py runserver 0.0.0.0:${HDS_PORT}
+    command: ["/opt/app/wait-for-it.sh", "db:5432", "--", "/opt/app/start-server.sh", "${HDS_PORT}"]
     volumes:
       - ./fixtures:/opt/app/fixtures
     ports:

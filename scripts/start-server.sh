@@ -1,4 +1,9 @@
 #!/usr/bin/env bash
 # start-server.sh
 
-cd hds; gunicorn hds.wsgi --user www-data --bind 0.0.0.0:$1 --workers 3
+set -e
+cd hds
+echo "Migrating"
+python manage.py migrate
+echo "starting"
+gunicorn hds.wsgi --user www-data --bind 0.0.0.0:$1 --workers 3

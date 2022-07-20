@@ -37,7 +37,7 @@ then
 fi
 
 sudo apt install -y docker-ce docker-ce-cli containerd.io
-sudo groupadd docker
+sudo groupadd docker || true
 sudo usermod -aG docker $USER
 
 echo "" && echo "Checking for Docker Desktop install"

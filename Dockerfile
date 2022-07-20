@@ -14,6 +14,7 @@ RUN apt update && apt install -y\
 # copy source and install dependencies
 RUN mkdir -p /opt/app/hds
 COPY requirements.txt scripts/start-server.sh /opt/app/
+COPY requirements.txt scripts/wait-for-it.sh /opt/app/
 COPY hds /opt/app/hds/
 WORKDIR /opt/app
 RUN pip install -r requirements.txt --no-cache-dir
