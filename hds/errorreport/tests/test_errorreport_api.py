@@ -5,6 +5,7 @@ from rest_framework.authtoken.models import Token
 from harvester.models import Harvester, Fruit
 from location.models import Location, Distributor
 from ..models import ErrorReport
+from ..serializers.errorreportserializer import ErrorReportSerializer
 from django.contrib.auth.models import User
 from django.utils.timezone import make_aware
 import datetime
@@ -120,4 +121,18 @@ class ErrorReportAPITest(APITestCase):
         response = self.client.get(f'{self.api_base_url}/errorreports/1/')
         self.assertEqual(response.status_code, 200)
 
+    def test_extract_errors(self):
+        errs = ErrorReportSerializer._extract_exception_data(self.data['data']['sysmon_report'])
+        
+        errdict = self.data['data']['sysmon_report']['sysmon.0']['errors']
+        serv = 'traychg.0'
+
+        compare = {
+            'code': errdict[serv]['code'],
+            'service': serv.split('.')[0],
+            'node': int(serv.split('.')[1]),
+            'traceback': errdict[serv]['traceback'],
+            'timestamp': ErrorReportSerializer.extract_timestamp(errdict[serv]['ts'])
+        }
+        self.assertDictEqual(errs[0], compare)
 
