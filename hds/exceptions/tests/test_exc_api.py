@@ -5,13 +5,13 @@ import pytz
 
 
 class AFTExceptionTest(ExceptionTestBase):
-    def _send_exception(self, code_pk=1, service='testservice', node=1):
+    def _send_exception(self, code=0, service='testservice', node=1):
         ts = datetime.now().replace(tzinfo=pytz.utc)
 
         resp = self.client.post(
             f'{self.api_base_url}/exceptions/', 
             {
-                'code': code_pk,
+                'code': code,
                 'service': service,
                 'node': node,
                 'traceback': 'Test traceback',
@@ -22,9 +22,9 @@ class AFTExceptionTest(ExceptionTestBase):
         return resp
 
     def test_create_exception(self):
-        self._send_code()
+        resp=self._send_code()
         resp = self._send_exception()
-
+    
         self.assertEqual(resp.status_code, 201)
         self.assertEqual(AFTException.objects.count(), 1)
         self.assertEqual(AFTException.objects.get().code.code, self.CODE)
@@ -54,14 +54,3 @@ class AFTExceptionTest(ExceptionTestBase):
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(resp.data['code'], 1) # code is 0, pk is 1
 
-    def test_update_code(self):
-        self._send_code()
-        self._send_exception()
-        self.assertEqual(AFTException.objects.get().node, 1)
-        self.client.patch(
-            f'{self.api_base_url}/exceptions/1/', 
-            {'node': 2}, 
-            HTTP_ACCEPT='application/json'
-        )
-        self.assertEqual(AFTException.objects.count(), 1)
-        self.assertEqual(AFTException.objects.get().node, 2)
