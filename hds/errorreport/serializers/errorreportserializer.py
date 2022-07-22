@@ -52,9 +52,12 @@ class ErrorReportSerializer(ReportSerializerBase):
         return errors
 
     @classmethod
-    def create_exceptions(cls, report):
+    def create_exceptions(cls, report, user=None):
         errors = cls._extract_exception_data(report.report['data']['sysmon_report'])
-        creator = report.creator
+        if user:
+            creator = user
+        else:
+            creator = report.creator
         if errors is not None:
             for error in errors:
                 error['report'] = report
