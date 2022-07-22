@@ -16,6 +16,7 @@ from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+PROJECT_DIR = Path(__file__).resolve().parent.parent.parent
 
 
 # Quick-start development settings - unsuitable for production
@@ -87,7 +88,7 @@ ROOT_URLCONF = 'hds.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates/')],
+        'DIRS': [ PROJECT_DIR / 'frontend/build' ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -165,8 +166,9 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
- os.path.join(BASE_DIR, 'hds/static')
- ]
+    os.path.join(BASE_DIR, 'hds/static'),
+    PROJECT_DIR / 'frontend/build/static'
+]
 
 STATIC_ROOT = os.environ.get('STATIC_ROOT', os.path.join(BASE_DIR, 'static/'))
 
