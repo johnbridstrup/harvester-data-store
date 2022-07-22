@@ -4,6 +4,7 @@ from rest_framework.test import APIClient
 from rest_framework.authtoken.models import Token
 from harvester.models import Harvester, Fruit
 from location.models import Location, Distributor
+from exceptions.models import AFTExceptionCode, AFTException
 from ..models import ErrorReport
 from ..serializers.errorreportserializer import ErrorReportSerializer
 from django.contrib.auth.models import User
@@ -22,6 +23,7 @@ class ErrorReportAPITest(APITestCase):
             distributor=self.distributor, ranch='Ranch 1', country='USA', region='Region 1', creator=self.user)
         self.fruit = Fruit.objects.create(name='Strawberry', creator=self.user)
         self.harvester = Harvester.objects.create(harv_id=11, fruit=self.fruit, location=self.location, name='Harvester 1', creator=self.user)
+        self.code = AFTExceptionCode.objects.create(code=9, name='test', team='test', cycle=False, creator=self.user)
         self.token = Token.objects.create(user=self.user)
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
         self.api_base_url = '/api/v1'
@@ -36,6 +38,7 @@ class ErrorReportAPITest(APITestCase):
         """ create error report and assert it exists """
         self.client.post(f'{self.api_base_url}/errorreports/', self.data, format='json', HTTP_ACCEPT='application/json')
         self.assertEqual(ErrorReport.objects.count(), 1)
+        self.assertEqual(AFTException.objects.count(), 1)
 
     def test_create_errorreport_with_invalid_harvester(self):
         """ create error report with invalid harvester """

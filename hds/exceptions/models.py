@@ -1,5 +1,6 @@
 from django.db import models
 from common.models import CommonInfo
+from errorreport.models import ErrorReport
 
 
 class AFTExceptionCode(CommonInfo):
@@ -28,6 +29,7 @@ class AFTException(CommonInfo):
     node = models.IntegerField(blank=True, null=True)
     traceback = models.TextField(blank=True, null=True)
     timestamp = models.DateTimeField(blank=True, null=True)
+    report = models.ForeignKey(ErrorReport, on_delete=models.SET_NULL, null=True, related_name="exceptions")
 
     def __str__(self):
         return f"Exception code {self.code.code} on {self.service}.{self.node}"
