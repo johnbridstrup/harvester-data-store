@@ -27,9 +27,10 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY','django-insecure-rzr+x&83_l1%9sc
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', 'true').lower() not in ['false', '0']
+FRONTEND_PORT = os.environ.get('FRONTEND_PORT', '3000')
 
 ALLOWED_HOSTS = ['*']
-CSRF_TRUSTED_ORIGINS = ['https://*.cloud.advanced.farm', 'https://*.devcloud.advanced.farm', 'http://localhost:3000']
+CSRF_TRUSTED_ORIGINS = ['https://*.cloud.advanced.farm', 'https://*.devcloud.advanced.farm', f'http://localhost:{FRONTEND_PORT}']
 
 
 # Application definition

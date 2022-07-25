@@ -1,9 +1,10 @@
 import axios from 'axios';
-import { Oval } from  'react-loader-spinner'
+import { Oval } from  'react-loader-spinner';
 
 
 export async function getCsrfToken() {
-  const CSRF_URL = "http://localhost:8085/api/v1/users/csrf/"
+  const HDS_PORT = process.env.REACT_APP_HDS_PORT || 8085;
+  const CSRF_URL = `http://localhost:${HDS_PORT}/api/v1/users/csrf/`
   const config = {
     credentials: 'include'
   }

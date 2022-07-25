@@ -23,7 +23,7 @@ echo "==> Installing node version manager (NVM). Version $INSTALL_NVM_VER"
 # Removed if already installed
 rm -rf ~/.nvm
 # Unset exported variable
-export NVM_DIR=
+unset NVM_DIR=
 
 # Install nvm 
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v$INSTALL_NVM_VER/install.sh | bash
