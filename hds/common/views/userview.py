@@ -1,6 +1,7 @@
 from rest_framework.views import APIView
 from django.contrib.auth.models import update_last_login
 from django.contrib.auth import authenticate
+from django.middleware.csrf import get_token
 from rest_framework.authtoken.models import Token
 from common.renderers import HDSJSONRenderer
 from common.utils import make_ok
@@ -20,7 +21,7 @@ class LoginAPIView(APIView):
             if user is not None:
                 update_last_login(None, user)
                 token, created = Token.objects.get_or_create(user=user)
-                return make_ok("Login successful", {"token": token.key})
+                return make_ok("Login successful", {"token": token.key, "user": {"username": user.username, "email": user.email, "user_id": user.pk}})
             else:
                 raise Exception("invalid username or password")
         except Exception as e:
@@ -45,3 +46,14 @@ class LogoutAPIView(APIView):
                     raise Exception("invalid token")
         except Exception as e:
             raise Exception(str(e))
+
+
+class CSRFAPIView(APIView):
+    """get csrf token for every post request"""
+    renderer_classes = (HDSJSONRenderer,)
+
+    def get(self, request, *args, **kwargs):
+        return make_ok("CSRF successful", {'csrftoken': get_token(request)})
+
+    def post(self, request, *args, **kwargs):
+        return make_ok("result successful", {"result": "ok"})

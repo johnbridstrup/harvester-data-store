@@ -16,14 +16,13 @@ Including another URLconf
 from django.conf import settings
 from django.contrib import admin
 from django.conf.urls.static import static
-from django.urls import path, include, re_path
+from django.urls import path, include
 from rest_framework.schemas import get_schema_view
-from django.views.generic import TemplateView
 
 version = 'api/v1'
 
 urlpatterns = [
-    path('land/', include('common.urls.landingurls')),
+    path('', include('common.urls.landingurls')),
     path('admin/', admin.site.urls),
     path(f'{version}/fruits/', include('harvester.urls.fruiturls')),
     path(f'{version}/harvesters/', include('harvester.urls.harvesterurls')),
@@ -43,7 +42,6 @@ urlpatterns = [
         ),
         name='openapi-schema'
     ),
-    re_path('.*', TemplateView.as_view(template_name='index.html')),
 ]
 
 if settings.DEBUG is True:

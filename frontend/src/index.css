@@ -3,3 +3,14 @@
   margin: 0;
   box-sizing: border-box;
 }
+
+.admin-route {
+  margin-left: 1rem;
+  text-decoration: none;
+  color: rgba(0,0,0,.5);;
+}
+
+
+.username {
+  margin-right: 1rem;
+}

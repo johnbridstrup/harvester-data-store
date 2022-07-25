@@ -1,14 +1,19 @@
-import LogoFull from '../../assets/images/logo_full.png';
+import { Link } from 'react-router-dom';
+import MainLayout from '../../components/layout/main';
 import './styles.css';
 
 function Home(props) {
   return (
-    <div className='container home'>
-      <div className="logo-container">
-        <img src={LogoFull} alt="logo_full" className="logo-full" />
+    <MainLayout>
+      <div className='container'>
+        <div className='welcome-brand'>
+          <h2>Welcome to HDS</h2>
+        </div>
+        <div>
+          <Link to={"/errorreports"} className="btn btn-md btn-primary">Error Reports</Link>
+        </div>
       </div>
-      <div>Example Home Page</div>
-    </div>
+    </MainLayout>
   )
 }
 
