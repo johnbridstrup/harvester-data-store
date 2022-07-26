@@ -3,7 +3,7 @@ locals {
   dns_name               = "hds.devcloud.advanced.farm"
   service_port           = "8000"
   service_name           = "hds"
-  service_docker_image   = "082346306812.dkr.ecr.us-west-1.amazonaws.com/hds:hds-staging-83c925b"
+  service_docker_image   = "082346306812.dkr.ecr.us-west-1.amazonaws.com/hds:hds-staging-dbaab2d9"
   healthcheck_path       = "/api/v1/healthcheck/"
   errorreport_queue_name = "errorreport-queue"
   hds_superuser_pwd_id   = "hds_superuser_pwd"
