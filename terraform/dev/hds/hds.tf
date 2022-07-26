@@ -1,4 +1,3 @@
-
 locals {
   env                    = "dev"
   dns_name               = "hds.devcloud.advanced.farm"
@@ -11,6 +10,11 @@ locals {
 }
 
 resource "random_password" "hds_superuser_pwd" {
+  length  = 16
+  special = false
+}
+
+resource "random_password" "sqs_pwd" {
   length  = 16
   special = false
 }
@@ -39,7 +43,8 @@ locals {
     { "name" : "SQL_HOST", "value" : data.aws_db_instance.postgres.address },
     { "name" : "DJANGO_SUPERUSER_PASSWORD", "value" : aws_secretsmanager_secret_version.hds_superuser_pwd.secret_string },
     { "name" : "DJANGO_SUPERUSER_USERNAME", "value" : "aft" },
-    { "name" : "DJANGO_SUPERUSER_EMAIL", "value" : "john@advanced.farm" }
+    { "name" : "DJANGO_SUPERUSER_EMAIL", "value" : "john@advanced.farm" },
+    { "name" : "SQS_USER_PASSWORD", "value" : random_password.sqs_pwd.result }
   ]
 }
 

@@ -7,5 +7,7 @@ echo "Migrating"
 python manage.py migrate
 echo "Creating Superuser"
 python manage.py initsuperuser
+echo "Creating SQS Token"
+python manage.py create_sqs_user
 echo "Starting"
 gunicorn hds.wsgi --user www-data --bind 0.0.0.0:$1 --workers 3

@@ -21,6 +21,10 @@ services:
       - DEBUG=1
       - SECRET_KEY=dummy_key
       - DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 [::1]
+      - DJANGO_SUPERUSER_USERNAME=afttest
+      - DJANGO_SUPERUSER_email=aft@aft.aft
+      - DJANGO_SUPERUSER_PASSWORD=aft
+      - SQS_USER_PASSWORD=aft
       - SQL_ENGINE=django.db.backends.postgresql
       - SQL_HOST=db
       - SQL_PORT=5432
