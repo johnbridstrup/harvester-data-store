@@ -24,4 +24,4 @@ RUN chown -R www-data:www-data /opt/app
 RUN mkdir -p /var/log/supervisor
 RUN python hds/manage.py collectstatic --no-input
 
-CMD ["/opt/app/scripts/start-server.sh", "8000"]
+CMD ["supervisord"]

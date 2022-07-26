@@ -14,7 +14,7 @@ services:
       - ./hds/:/opt/app/hds
       - ./fixtures:/opt/app/fixtures
     ports:
-      - 127.0.0.1:${HDS_PORT}:${HDS_PORT}
+      - 127.0.0.1:${HDS_PORT}:8000
     environment:
       - POSTGRES_NAME=postgres
       - POSTGRES_USER=postgres
