@@ -27,16 +27,6 @@ variable "db_root_user" {
   type        = string
 }
 
-variable "db_root_pwd" {
-  description = "Postgres Root password."
-  type        = string
-
-  validation {
-    condition     = length(var.db_root_pwd) >= 8
-    error_message = "Password must be longer at least 8 characters."
-  }
-}
-
 variable "vpc_id" {
   description = "The VPC to deploy the DB into."
   type        = string
