@@ -47,7 +47,7 @@ data "aws_route53_zone" "private_cloud_zone" {
 }
 
 data "aws_secretsmanager_secret_version" "hds_rds_pwd" {
-  secret_id = "hds_db_pwd"
+  secret_id = "hds_rds_pwd"
 }
 
 data "aws_security_group" "lambda_sg" {

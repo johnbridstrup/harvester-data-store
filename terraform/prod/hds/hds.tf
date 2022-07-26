@@ -4,19 +4,39 @@ locals {
   service_port         = "8000"
   service_name         = "hds"
   service_docker_image = "838860823423.dkr.ecr.us-west-1.amazonaws.com/hds:hds-staging-f4686e5"
+  healthcheck_path     = "/api/v1/healthcheck/"
+  hds_superuser_pwd_id = "hds_superuser_pwd"
+}
+
+resource "random_password" "hds_superuser_pwd" {
+  length  = 16
+  special = false
+}
+
+resource "aws_secretsmanager_secret" "hds_superuser_pwd" {
+  name = local.hds_superuser_pwd_id
+}
+
+resource "aws_secretsmanager_secret_version" "hds_superuser_pwd" {
+  secret_id     = local.superuser_pwd_id
+  secret_string = random_password.hds_superuser_pwd.result
+  depends_on = [
+    aws_secretsmanager_secret.hds_superuser_pwd
+  ]
+}
+
+locals {
   environment_variables = [
     { "name" : "POSTGRES_NAME", "value" : data.aws_db_instance.postgres.db_name },
-    { "name" : "POSTGRES_PASSWORD", "value" : data.aws_secretsmanager_secret_version.hds_rds_pwd.secret_string },
+    { "name" : "POSTGRES_PASSWORD", "value" : data.aws_secretsmanager_secret_version.hds_superuser_pwd.secret_string },
     { "name" : "POSTGRES_USER", "value" : data.aws_db_instance.postgres.master_username },
     { "name" : "DEBUG", "value" : "true" },
     { "name" : "DJANGO_ALLOWED_HOSTS", "value" : "localhost 127.0.0.1" },
     { "name" : "SQL_ENGINE", "value" : "django.db.backends.postgresql" },
     { "name" : "SQL_PORT", "value" : data.aws_db_instance.postgres.port },
     { "name" : "SQL_HOST", "value" : data.aws_db_instance.postgres.address },
-    { "name" : "DJANGO_SECRET_KEY", "value" : data.aws_secretsmanager_secret_version.django_secret_key.secret_string }
+    { "name" : "SUPERUSER_PWD", "value" : aws_secretsmanager_secret_version.hds_superuser_pwd.secret_string }
   ]
-
-  healthcheck_path = "/api/v1/healthcheck/"
 }
 
 data "aws_iam_policy_document" "execute_task" {

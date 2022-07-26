@@ -1,9 +1,33 @@
+
 locals {
-  env                  = "dev"
-  dns_name             = "hds.devcloud.advanced.farm"
-  service_port         = "8000"
-  service_name         = "hds"
-  service_docker_image = "082346306812.dkr.ecr.us-west-1.amazonaws.com/hds:hds-staging-83c925b"
+  env                    = "dev"
+  dns_name               = "hds.devcloud.advanced.farm"
+  service_port           = "8000"
+  service_name           = "hds"
+  service_docker_image   = "082346306812.dkr.ecr.us-west-1.amazonaws.com/hds:hds-staging-83c925b"
+  healthcheck_path       = "/api/v1/healthcheck/"
+  errorreport_queue_name = "errorreport-queue"
+  hds_superuser_pwd_id   = "hds_superuser_pwd"
+}
+
+resource "random_password" "hds_superuser_pwd" {
+  length  = 16
+  special = false
+}
+
+resource "aws_secretsmanager_secret" "hds_superuser_pwd" {
+  name = local.hds_superuser_pwd_id
+}
+
+resource "aws_secretsmanager_secret_version" "hds_superuser_pwd" {
+  secret_id     = local.hds_superuser_pwd_id
+  secret_string = random_password.hds_superuser_pwd.result
+  depends_on = [
+    aws_secretsmanager_secret.hds_superuser_pwd
+  ]
+}
+
+locals {
   environment_variables = [
     { "name" : "POSTGRES_NAME", "value" : data.aws_db_instance.postgres.db_name },
     { "name" : "POSTGRES_PASSWORD", "value" : data.aws_secretsmanager_secret_version.hds_rds_pwd.secret_string },
@@ -12,11 +36,11 @@ locals {
     { "name" : "DJANGO_ALLOWED_HOSTS", "value" : "localhost 127.0.0.1" },
     { "name" : "SQL_ENGINE", "value" : "django.db.backends.postgresql" },
     { "name" : "SQL_PORT", "value" : data.aws_db_instance.postgres.port },
-    { "name" : "SQL_HOST", "value" : data.aws_db_instance.postgres.address }
+    { "name" : "SQL_HOST", "value" : data.aws_db_instance.postgres.address },
+    { "name" : "DJANGO_SUPERUSER_PASSWORD", "value" : aws_secretsmanager_secret_version.hds_superuser_pwd.secret_string },
+    { "name" : "DJANGO_SUPERUSER_USERNAME", "value" : "aft" },
+    { "name" : "DJANGO_SUPERUSER_EMAIL", "value" : "john@advanced.farm" }
   ]
-
-  healthcheck_path       = "/api/v1/healthcheck/"
-  errorreport_queue_name = "errorreport-queue"
 }
 
 data "aws_sqs_queue" "errorreport_queue" {
