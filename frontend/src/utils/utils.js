@@ -16,3 +16,64 @@ export async function getCsrfToken() {
 export const Loader = ({size}) => {
   return <Oval color="#00BFFF" height={size} width={size} />
 }
+
+
+export const transformHarvOptions = (harvesters = []) => {
+  return harvesters.map((harvester, index) => {
+    return {value: harvester.harv_id, label: harvester.harv_id}
+  })
+}
+
+export const transformLocOptions = (locations = []) => {
+  return locations.map((loc, index) => {
+    return {value: loc.ranch, label: loc.ranch}
+  })
+}
+
+export const transformErrorReport = (reports = []) => {
+  return reports.map((report, index) => {
+    const reportObj = {reportId: report.id, created: report.created, lastModified: report.lastModified, reportTime: report.reportTime, creator: report.creator, modifiedBy: report.modifiedBy, location: report.location, harvester: report.harvester, timestamp: report.report.timestamp, serial_number: report.report.data.serial_number, githash: report.report.data.githash, branch_name: report.report.data.branch_name}
+    const resultObj = Object.assign({}, reportObj, ...report.exceptions)
+    return resultObj
+  })
+}
+
+
+export const transformTableErrorReport = (errorreport=[], harvesters=[], locations=[]) => {
+  return errorreport.map((report, index) => {
+    const harvester = harvesters.find(x => x.id === report.harvester) || {};
+    const location = locations.find(x => x.id === report.location) || {};
+
+    return {...report, harvester, location};
+  })
+}
+
+
+export const translateHarvOptions = (harv_ids = []) => {
+  return harv_ids.map((harv_id, index) => {
+    return harv_id.value
+  })
+}
+
+export const translateLocOptions = (loc_names = []) => {
+  return loc_names.map((loc, index) => {
+    return loc.value
+  })
+}
+
+
+// Datetime formatting
+function padZeros(str_to_pad, digits) {
+  return str_to_pad.toString().padStart(digits, '0')
+}
+
+export function timeStampFormat(dateString) {
+  let date = new Date(dateString);
+  var y = date.getFullYear().toString()
+  var M = padZeros(date.getMonth() + 1, 2)
+  var d = padZeros(date.getDate(), 2)
+  var h = padZeros(date.getHours(), 2)
+  var m = padZeros(date.getMinutes(), 2)
+  var s = padZeros(date.getSeconds(), 2)
+  return y + M + d + h + m + s
+}
