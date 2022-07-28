@@ -30,8 +30,10 @@ function ErrorReportQuery(props) {
   const handleFormQuerySubmit = async e => {
     e.preventDefault();
     let queryObj = {}
-    if (datesQuery.start_time && datesQuery.end_time) {
+    if (datesQuery.start_time) {
       queryObj['start_time'] = timeStampFormat(datesQuery.start_time)
+    }
+    if (datesQuery.end_time) {
       queryObj['end_time'] = timeStampFormat(datesQuery.end_time)
     }
     if (selectedHarvId && selectedHarvId.length > 0) {
@@ -40,7 +42,6 @@ function ErrorReportQuery(props) {
     if (selectedLocation && selectedLocation.length > 0) {
       queryObj['locations'] = translateLocOptions(selectedLocation)
     }
-    console.log(queryObj);
     await dispatch(queryErrorReport(queryObj));
   }
 
@@ -73,13 +74,13 @@ function ErrorReportQuery(props) {
               <div className='col-md-6'>
                 <div className='form-group'>
                   <label htmlFor='start_time'>Start Time</label>
-                  <InputFormControl type="date" name='start_time' value={datesQuery.start_time} onChange={handleDateChange} />
+                  <InputFormControl type="text" name='start_time' value={datesQuery.start_time} onChange={handleDateChange} placeholder="YYYYMMDDHHmmSS" maxLength={14} />
                 </div>
               </div>
               <div className='col-md-6'>
                 <div className='form-group'>
                   <label htmlFor='end_time'>End Time</label>
-                  <InputFormControl type="date" name='end_time' value={datesQuery.end_time} onChange={handleDateChange} />
+                  <InputFormControl type="text" name='end_time' value={datesQuery.end_time} onChange={handleDateChange} placeholder="YYYYMMDDHHmmSS" maxLength={14} />
                 </div>
               </div>
             </div>
