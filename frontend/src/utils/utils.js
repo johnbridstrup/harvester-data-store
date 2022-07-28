@@ -30,10 +30,23 @@ export const transformLocOptions = (locations = []) => {
   })
 }
 
+const extractServiceCodes = (exceptions=[]) => {
+  let services = []
+  let codes = []
+  exceptions.forEach(exec => {
+    services.push(`${exec.service}.${exec.node}`)
+    codes.push(exec.code)
+  });
+  return {services, codes}
+}
+
 export const transformErrorReport = (reports = []) => {
   return reports.map((report, index) => {
     const reportObj = {reportId: report.id, created: report.created, lastModified: report.lastModified, reportTime: report.reportTime, creator: report.creator, modifiedBy: report.modifiedBy, location: report.location, harvester: report.harvester, timestamp: report.report.timestamp, serial_number: report.report.data.serial_number, githash: report.report.data.githash, branch_name: report.report.data.branch_name}
     const resultObj = Object.assign({}, reportObj, ...report.exceptions)
+    const { services, codes } = extractServiceCodes(report.exceptions);
+    resultObj['service'] = services.join(", ")
+    resultObj['code'] = codes.join(", ")
     return resultObj
   })
 }
