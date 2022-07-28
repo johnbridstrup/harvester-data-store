@@ -32,9 +32,24 @@ const queryErrorReport = async (paramsObj, token) => {
 }
 
 
+const paginateErrorReport = async (url, token) => {
+  const config = {
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Token ${token}`,
+    },
+    credentials: 'include',
+  }
+  const response = await axios.get(url, config);
+  return response.data.data;
+}
+
+
 const errorreportService = {
   errorListView,
-  queryErrorReport
+  queryErrorReport,
+  paginateErrorReport
 }
 
 export default errorreportService;

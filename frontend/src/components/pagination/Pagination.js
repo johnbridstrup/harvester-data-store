@@ -1,27 +1,47 @@
 import { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { paginateErrorReport } from '../../features/errorreport/errorreportSlice';
 import { InputLimit, PageItem, SpanLimit } from '../styled';
 
 function Pagination(props) {
-  const [limit, setLimit] = useState(20);
-  const handleLimitChange = e => setLimit(e.target.value);
+  const [pageLimit, setPageLimit] = useState(10);
+  const { next, previous } = useSelector(state => state.errorreport);
+  const dispatch = useDispatch();
+
+  const handlePagination = async (navigation) => {
+    if (navigation === "next") {
+      if (next) {
+        const url = new URL(next);
+        url.searchParams.set("limit", pageLimit);
+        await dispatch(paginateErrorReport(url));
+      }
+    } else {
+      if (previous) {
+        const url = new URL(previous);
+        url.searchParams.set("limit", pageLimit);
+        await dispatch(paginateErrorReport(url));
+      }
+    }
+  };
+
   return (
     <div>
-      <section className="d-flex justify-content-center align-items-center">
+      <section className="d-flex justify-content-center align-items-center mb-5">
         <nav aria-label="Page navigation example">
           <ul className="pagination mb-0">
-            <li className="page-item">
-              <a className="page-link disabled" href="#!" aria-label="Previous">
+            <li className="page-item cursor">
+              <span onClick={() => handlePagination("previous")} className={`page-link ${!previous && 'disabled'}`} aria-label="Previous">
                 <span aria-hidden="true">Previous</span>
-              </a>
+              </span>
             </li>
-            <li className="page-item">
-              <a className="page-link" href="#!" aria-label="Next">
+            <li className="page-item cursor">
+              <span onClick={() => handlePagination("next")} className={`page-link ${!next && 'disabled'}`} aria-label="Next">
                 <span aria-hidden="true">Next</span>
-              </a>
+              </span>
             </li>
             <PageItem>
               <SpanLimit>Limit</SpanLimit>
-              <InputLimit type="number" value={limit} onChange={handleLimitChange} />
+              <InputLimit type="number" value={pageLimit} onChange={e => setPageLimit(e.target.value)} />
             </PageItem>
           </ul>
         </nav>
@@ -29,8 +49,6 @@ function Pagination(props) {
     </div>
   )
 }
-
-
 
 
 Pagination.propTypes = {};
