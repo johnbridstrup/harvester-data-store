@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import styled from 'styled-components';
 import Select from 'react-select';
 import { timeStampFormat, transformHarvOptions, transformLocOptions, translateHarvOptions, translateLocOptions } from '../../utils/utils';
 import { queryErrorReport } from '../../features/errorreport/errorreportSlice';
+import { DivTotalReport, InputFormControl } from '../styled';
 
 function ErrorReportQuery(props) {
   const [selectedHarvId, setSelectedHarvId] = useState(null);
@@ -98,42 +98,6 @@ function ErrorReportQuery(props) {
     </div>
   )
 }
-
-
-const DivTotalReport = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  & span {
-    font-size: 1.6rem;
-    margin-right: .5rem;
-  }
-`;
-
-
-const InputFormControl = styled.input`
-  display: block;
-  width: 90%;
-  padding: 0.375rem 0.75rem;
-  font-size: 1rem;
-  font-weight: 400;
-  line-height: 1.5;
-  color: #212529;
-  background-color: #fff;
-  background-clip: padding-box;
-  border: 1px solid #ced4da;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  border-radius: 0.375rem;
-  transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
-
-  @media (max-width: 768px) {
-    width: 100%;
-  }
-
-`;
 
 ErrorReportQuery.propTypes = {};
 

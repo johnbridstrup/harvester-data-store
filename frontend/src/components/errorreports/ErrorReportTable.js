@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
-import styled from "styled-components";
 import { Loader, timeStampFormat, transformTableErrorReport } from '../../utils/utils';
+import { Container, LoaderDiv, Table } from '../styled';
 
 
 function ErrorReportTable(props) {
@@ -41,20 +41,6 @@ function ErrorReportTable(props) {
     </Container>
   )
 }
-
-const Container = styled.div`
-  margin-top: 3rem;
-  margin-bottom: 1rem
-`;
-
-const LoaderDiv = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 25vh
-`;
-
-const Table = styled.table``;
 
 ErrorReportTable.propTypes = {}
 
