@@ -121,7 +121,7 @@ class ErrorReportAPITest(APITestCase):
             creator=self.user, location=self.location,
             harvester=self.harvester, reportTime=report_time, report=data)
 
-        response = self.client.get(f'{self.api_base_url}/errorreports/1/')
+        response = self.client.get(f'{self.api_base_url}/errorreports/1/', HTTP_ACCEPT='application/json')
         self.assertEqual(response.status_code, 200)
 
     def test_extract_errors(self):
