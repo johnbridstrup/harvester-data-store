@@ -6,6 +6,7 @@ import ErrorReportTable from '../../../components/errorreports/ErrorReportTable'
 import { listHarvesters } from '../../../features/harvester/harvesterSlice';
 import { listLocations } from '../../../features/location/locationSlice';
 import { errorreportListView } from '../../../features/errorreport/errorreportSlice';
+import Pagination from '../../../components/pagination/Pagination';
 import './styles.css';
 
 
@@ -33,6 +34,7 @@ function ErrorsReportList(props) {
         </div>
         <ErrorReportQuery />
         <ErrorReportTable />
+        <Pagination />
       </div>
     </MainLayout>
   )
