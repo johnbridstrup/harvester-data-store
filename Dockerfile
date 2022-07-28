@@ -25,7 +25,7 @@ RUN apt update && apt install -y\
 
 # copy source and install dependencies
 COPY requirements.txt /opt/app/
-COPY scripts/wait-for-it.sh scripts/start-server.sh /opt/app/scripts/
+COPY scripts/wait-for-it.sh scripts/start-server.sh scripts/start_s3_client.sh /opt/app/scripts/
 COPY supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY hds /opt/app/hds/
 WORKDIR /opt/app

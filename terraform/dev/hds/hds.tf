@@ -31,6 +31,10 @@ resource "aws_secretsmanager_secret_version" "hds_superuser_pwd" {
   ]
 }
 
+data "aws_sqs_queue" "errorreport_queue" {
+  name = local.errorreport_queue_name
+}
+
 locals {
   environment_variables = [
     { "name" : "POSTGRES_NAME", "value" : data.aws_db_instance.postgres.db_name },
@@ -44,12 +48,10 @@ locals {
     { "name" : "DJANGO_SUPERUSER_PASSWORD", "value" : aws_secretsmanager_secret_version.hds_superuser_pwd.secret_string },
     { "name" : "DJANGO_SUPERUSER_USERNAME", "value" : "aft" },
     { "name" : "DJANGO_SUPERUSER_EMAIL", "value" : "john@advanced.farm" },
-    { "name" : "SQS_USER_PASSWORD", "value" : random_password.sqs_pwd.result }
+    { "name" : "SQS_USER_PASSWORD", "value" : random_password.sqs_pwd.result },
+    { "name" : "HDS_PORT", "value" : 8000},
+    { "name" : "ERRORREPORTS_QUEUE_URL", "value" : data.aws_sqs_queue.errorreport_queue.url}
   ]
-}
-
-data "aws_sqs_queue" "errorreport_queue" {
-  name = local.errorreport_queue_name
 }
 
 data "aws_s3_bucket" "data-lake" {
