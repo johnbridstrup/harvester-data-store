@@ -1,43 +1,26 @@
-import axios from "axios";
-import { getCsrfToken } from "../../utils/utils";
-import { LOGIN_URL, LOGOUT_URL } from './constants';
+import { LOGIN_URL, LOGOUT_URL } from "../base/constants";
+import { axiosService } from "../base/service";
 
 
 const login = async (userData) => {
-  const config = {
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      'X-CSRFToken': await getCsrfToken()
-    },
-    credentials: 'include',
-  }
-  const response = await axios.post(LOGIN_URL, userData, config)
-  if (response.data.data.data) {
-    sessionStorage.setItem('user', JSON.stringify(response.data.data.data.user))
-    sessionStorage.setItem('token', JSON.stringify(response.data.data.data.token))
+  const res = await axiosService.post(LOGIN_URL, undefined, userData);
+  if (res.data.data) {
+    sessionStorage.setItem('user', JSON.stringify(res.data.data.user))
+    sessionStorage.setItem('token', JSON.stringify(res.data.data.token))
     sessionStorage.setItem('isAuthenticated', JSON.stringify(true))
   }
-  return response.data.data
+  return res;
 }
 
 
 const logout = async (tokenData) => {
-  const config = {
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      'X-CSRFToken': await getCsrfToken()
-    },
-    credentials: 'include',
-  }
-  const response = await axios.post(LOGOUT_URL, tokenData, config)
-  if (response.data.status === "success") {
+  const response = await axiosService.post(LOGOUT_URL, undefined, tokenData);
+  if (response.status === "success") {
     sessionStorage.removeItem("user")
     sessionStorage.removeItem("token")
     sessionStorage.removeItem("isAuthenticated")
   }
-  return response.data
+  return response
 }
 
 const authService = {

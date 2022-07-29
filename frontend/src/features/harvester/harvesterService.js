@@ -1,32 +1,16 @@
-import axios from "axios";
-import { HARVESTERS_URL } from './constants';
+import { HARVESTERS_URL } from "../base/constants";
+import { axiosService } from "../base/service";
 
 
 const listHarvesters = async (token) => {
-  const config = {
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      'Authorization': `Token ${token}`,
-    },
-    credentials: 'include',
-  }
-  const response = await axios.get(HARVESTERS_URL, config);
-  return response.data.data.results;
+  let response = await axiosService.get(HARVESTERS_URL, token);
+  return response.results;
 }
 
 
 const getHarvesterById = async (harvId, token) => {
-  const config = {
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      'Authorization': `Token ${token}`
-    },
-    credentials: 'include',
-  }
-  const response = await axios.get(`${HARVESTERS_URL}${harvId}/`, config);
-  return response.data.data;
+  let response = await axiosService.get(`${HARVESTERS_URL}${harvId}/`, token)
+  return response;
 }
 
 

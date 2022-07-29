@@ -11,8 +11,7 @@ function Navbar(props) {
   const handleLogout = async () => {
     const res = await dispatch(logout({token}))
     if (res.type === "auth/logout/fulfilled") {
-      // window.location.reload()
-      console.log("user logged out")
+      window.location.reload();
     }
   }
   return (

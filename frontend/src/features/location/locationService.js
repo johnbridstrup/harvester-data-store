@@ -1,32 +1,16 @@
-import axios from "axios";
-import { LOCATION_URL } from './constants';
+import { LOCATION_URL } from "../base/constants";
+import { axiosService } from "../base/service";
 
 
 const listLocations = async (token) => {
-  const config = {
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      'Authorization': `Token ${token}`
-    },
-    credentials: 'include',
-  }
-  const response = await axios.get(LOCATION_URL, config);
-  return response.data.data.results;
+  let response = await axiosService.get(LOCATION_URL, token);
+  return response.results;
 }
 
 
 const getLocationById = async (locId, token) => {
-  const config = {
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      'Authorization': `Token ${token}`
-    },
-    credentials: 'include',
-  }
-  const response = await axios.get(`${LOCATION_URL}${locId}/`, config);
-  return response.data.data;
+  const response = await axiosService.get(`${LOCATION_URL}${locId}/`, token);
+  return response;
 }
 
 

@@ -1,48 +1,23 @@
-import axios from 'axios';
-import { ERROR_REPORT_URL } from './constants';
+import { ERROR_REPORT_URL } from "../base/constants";
+import { axiosService } from "../base/service";
 
 
 const errorListView = async (token) => {
-  const config = {
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      'Authorization': `Token ${token}`,
-    },
-    credentials: 'include',
-  }
-
-  const response = await axios.get(`${ERROR_REPORT_URL}`, config);
-  return response.data.data;
+  let response = await axiosService.get(ERROR_REPORT_URL, token);
+  return response;
 }
 
 
 const queryErrorReport = async (paramsObj, token) => {
-  const config = {
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      'Authorization': `Token ${token}`,
-    },
-    credentials: 'include',
-  }
   const searchParams = new URLSearchParams(paramsObj)
-  const response = await axios.get(`${ERROR_REPORT_URL}?${searchParams.toString()}`, config);
-  return response.data.data;
+  const response = await axiosService.get(`${ERROR_REPORT_URL}?${searchParams.toString()}`, token)
+  return response;
 }
 
 
 const paginateErrorReport = async (url, token) => {
-  const config = {
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      'Authorization': `Token ${token}`,
-    },
-    credentials: 'include',
-  }
-  const response = await axios.get(url, config);
-  return response.data.data;
+  const response = await axiosService.get(url, token);
+  return response;
 }
 
 
