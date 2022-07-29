@@ -8,7 +8,9 @@ services:
     networks:
       - "hds-network"
   web:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile.local
     command: supervisord
     volumes: 
       - ./hds/:/opt/app/hds

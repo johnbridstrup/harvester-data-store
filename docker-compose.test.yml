@@ -8,7 +8,9 @@ services:
     networks:
       - "hds-network"
   web:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile.local
     command: ["/opt/app/scripts/wait-for-it.sh", "db:5432", "--", "supervisord"]
     volumes:
       - ./fixtures:/opt/app/fixtures
