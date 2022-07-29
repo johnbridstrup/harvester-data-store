@@ -31,10 +31,10 @@ function ErrorReportQuery(props) {
     e.preventDefault();
     let queryObj = {}
     if (datesQuery.start_time) {
-      queryObj['start_time'] = timeStampFormat(datesQuery.start_time)
+      queryObj['start_time'] = timeStampFormat(Number(datesQuery.start_time))
     }
     if (datesQuery.end_time) {
-      queryObj['end_time'] = timeStampFormat(datesQuery.end_time)
+      queryObj['end_time'] = timeStampFormat(Number(datesQuery.end_time))
     }
     if (selectedHarvId && selectedHarvId.length > 0) {
       queryObj['harv_ids'] = translateHarvOptions(selectedHarvId)
