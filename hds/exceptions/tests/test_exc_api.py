@@ -16,8 +16,7 @@ class AFTExceptionTest(ExceptionTestBase):
                 'node': node,
                 'traceback': 'Test traceback',
                 'timestamp': str(ts)
-            },
-            HTTP_ACCEPT='application/json'
+            }
         )
 
         return resp
@@ -25,7 +24,7 @@ class AFTExceptionTest(ExceptionTestBase):
     def test_create_exception(self):
         resp=self._send_code()
         resp = self._send_exception()
-
+    
         self.assertEqual(resp.status_code, 201)
         self.assertEqual(AFTException.objects.count(), 1)
         self.assertEqual(AFTException.objects.get().code.code, self.CODE)
@@ -53,5 +52,5 @@ class AFTExceptionTest(ExceptionTestBase):
         self._send_exception()
         resp = self.client.get(f'{self.api_base_url}/exceptions/1/')
         self.assertEqual(resp.status_code, 200)
-        self.assertEqual(resp.data['code']['code'], self.CODE)
+        self.assertEqual(resp.data['code'], 1) # code is 0, pk is 1
 
