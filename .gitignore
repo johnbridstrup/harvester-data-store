@@ -150,3 +150,6 @@ artifacts
 *.tfplan
 *.coverage
 *.terraform.lock.hcl
+
+# HDS
+.sqstoken

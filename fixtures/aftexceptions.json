@@ -1,0 +1,66 @@
+[
+  {
+    "model": "exceptions.aftexception",
+    "pk": 1,
+    "fields": {
+      "creator": 1,
+      "modifiedBy": null,
+      "created": "2022-07-29T22:28:36.997Z",
+      "lastModified": "2022-07-29T22:28:36.997Z",
+      "code": 1,
+      "service": "traychg",
+      "node": 0,
+      "traceback": "",
+      "timestamp": "2022-05-02T21:27:41.767Z",
+      "report": 3
+    }
+  },
+  {
+    "model": "exceptions.aftexception",
+    "pk": 2,
+    "fields": {
+      "creator": 1,
+      "modifiedBy": null,
+      "created": "2022-07-29T22:28:37.001Z",
+      "lastModified": "2022-07-29T22:28:37.001Z",
+      "code": 2,
+      "service": "harvester",
+      "node": 0,
+      "traceback": "",
+      "timestamp": "2022-05-02T21:27:41.767Z",
+      "report": 3
+    }
+  },
+  {
+    "model": "exceptions.aftexception",
+    "pk": 3,
+    "fields": {
+      "creator": 1,
+      "modifiedBy": null,
+      "created": "2022-07-29T22:31:51.063Z",
+      "lastModified": "2022-07-29T22:31:51.063Z",
+      "code": 1,
+      "service": "traychg",
+      "node": 0,
+      "traceback": "",
+      "timestamp": "2022-05-02T21:27:41.767Z",
+      "report": 4
+    }
+  },
+  {
+    "model": "exceptions.aftexception",
+    "pk": 4,
+    "fields": {
+      "creator": 1,
+      "modifiedBy": null,
+      "created": "2022-07-29T22:31:51.066Z",
+      "lastModified": "2022-07-29T22:31:51.066Z",
+      "code": 2,
+      "service": "picker",
+      "node": 1,
+      "traceback": "",
+      "timestamp": "2022-05-02T21:27:41.767Z",
+      "report": 4
+    }
+  }
+]
