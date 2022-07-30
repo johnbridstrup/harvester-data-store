@@ -51,7 +51,8 @@ INSTALLED_APPS = [
     'errorreport',
     "exceptions",
     'harvester',
-    'healthcheck'
+    'healthcheck',
+    'notifications'
 ]
 
 MIDDLEWARE = [
