@@ -1,7 +1,6 @@
 # import serializers
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from django.contrib.contenttypes.models import ContentType
 from .models import Notification
 
 
@@ -22,6 +21,7 @@ class NotificationSerializer(serializers.ModelSerializer):
         notification['recipients'] = recipients
 
         return notification
+
     class Meta:
         model = Notification
         fields = ('__all__')

@@ -5,6 +5,9 @@ from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
 
 from hds.urls import urlpatterns
+from exceptions.models import AFTExceptionCode
+from harvester.models import Fruit, Harvester
+from location.models import Distributor, Location
 
 import logging
 # Disable logging in unit tests
@@ -20,12 +23,42 @@ def compare_patterns(keys, urls):
 
 
 class HDSAPITestBase(APITestCase):
+
     def setUp(self):
         self.client = APIClient()
         self.user = User.objects.create(username='test_user')
         self.token = Token.objects.create(user=self.user)
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
         self.api_base_url = '/api/v1'
+
+    def _setup_basic(self):
+        test_objects = {}
+        test_objects["fruit"] = Fruit.objects.create(name='strawberry', creator=self.user)
+        test_objects["distributor"] = Distributor.objects.create(name='test_distrib', creator=self.user)
+        test_objects["location"] = Location.objects.create(**{
+            "distributor": test_objects["distributor"],
+            "ranch": "Ranch A",
+            "country": "US",
+            "region": "California",
+            'creator': self.user
+        })
+        test_objects["harvester"] = Harvester.objects.create(**{
+            'harv_id': 11,
+            'fruit': test_objects["fruit"],
+            'location': test_objects["location"],
+            'name': 'Harvester 1',
+            'creator': self.user
+        })
+        test_objects["code"] = AFTExceptionCode.objects.create(**{
+            'code': 0,
+            'name': 'AFTBaseException',
+            'msg': 'test message',
+            'team': 'aft',
+            'cycle': False,
+            'creator': self.user
+        })
+
+        return test_objects
 
 
 class OpenApiTest(HDSAPITestBase):

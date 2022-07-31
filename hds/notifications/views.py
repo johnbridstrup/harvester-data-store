@@ -9,3 +9,4 @@ class NotificationView(CreateModelViewSet):
     queryset = Notification.objects.all()
     serializer_class = NotificationSerializer
     permission_classes = (IsAuthenticated,)
+    http_method_names = ['post', 'get', 'put', 'delete']
