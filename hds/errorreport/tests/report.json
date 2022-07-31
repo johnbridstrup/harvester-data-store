@@ -171,7 +171,7 @@
             "ts": 1651526861.7674465,
             "value": "traychgunit.1 Error: No tray detected in collection",
             "traceback": "",
-            "code": 9,
+            "code": 0,
             "operator_err_type": "traychg"
           }
         }
