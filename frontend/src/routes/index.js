@@ -13,6 +13,7 @@ const BaseRouter = () => {
         <Route path='/' element={<RequireUser><Home /></RequireUser>} />
         <Route path='/login' element={<UserAuth><Login /></UserAuth>} />
         <Route path='/errorreports' element={<RequireUser><ErrorsReportList /></RequireUser>} />
+        <Route path='/api/:apiVersion/errorreports' element={<RequireUser><ErrorsReportList /></RequireUser>} />
         <Route path='*' element={<NotFound />} />
       </Routes>
     </BrowserRouter>

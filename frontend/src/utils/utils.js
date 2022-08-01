@@ -126,4 +126,14 @@ export const transformTzOptions = (timezones=[]) => {
   return timezones.map((zone, index) => {
     return {value: zone, label: zone}
   })
+} 
+
+
+export const paramsToObject = (params) => {
+  const urlparams = new URLSearchParams(params);
+  const result = {}
+  for(const [key, value] of urlparams.entries()) {
+    result[key] = value;
+  }
+  return result;
 }
