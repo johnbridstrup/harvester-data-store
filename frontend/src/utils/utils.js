@@ -97,6 +97,31 @@ export function timeStampFormat(dateString, timezone="US/Pacific") {
 }
 
 
+const getDateValues = dateString => {
+  let year = Number(dateString.slice(0, 3+1))
+  let month = Number(dateString.slice(4, 5+1)) - 1
+  let day = Number(dateString.slice(6, 7+1))
+  let hours = Number(dateString.slice(8, 9+1))
+  let minutes = Number(dateString.slice(10, 11+1))
+  let second = Number(dateString.slice(12, dateString.length))
+  return {year, month, day, hours, minutes, second}
+}
+
+
+export const extractDateFromString = (dateString) => {
+  if (typeof dateString === "string" && dateString.length === 14) {
+    let { year, month, day, hours, minutes, second } = getDateValues(dateString);
+    return new Date(year, month, day, hours, minutes, second);
+  } else if (typeof dateString === "string") {
+    let paddedDateString = dateString.padEnd(14, "0");
+    let { year, month, day, hours, minutes, second } = getDateValues(paddedDateString);
+    return new Date(year, month, day, hours, minutes, second);
+  } else {
+    return new Date();
+  }
+}
+
+
 export const transformTzOptions = (timezones=[]) => {
   return timezones.map((zone, index) => {
     return {value: zone, label: zone}

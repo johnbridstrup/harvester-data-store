@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import Select from 'react-select';
-import { timeStampFormat, transformHarvOptions, transformLocOptions, transformTzOptions, translateHarvOptions, translateLocOptions } from '../../utils/utils';
+import { extractDateFromString, timeStampFormat, transformHarvOptions, transformLocOptions, transformTzOptions, translateHarvOptions, translateLocOptions } from '../../utils/utils';
 import { queryErrorReport, timezoneUpdate } from '../../features/errorreport/errorreportSlice';
 import { DivTotalReport, InputFormControl } from '../styled';
 import timezones from '../../utils/timezones';
@@ -39,10 +39,10 @@ function ErrorReportQuery(props) {
     e.preventDefault();
     let queryObj = {}
     if (datesQuery.start_time) {
-      queryObj['start_time'] = timeStampFormat(Number(datesQuery.start_time))
+      queryObj['start_time'] = timeStampFormat(extractDateFromString(datesQuery.start_time))
     }
     if (datesQuery.end_time) {
-      queryObj['end_time'] = timeStampFormat(Number(datesQuery.end_time))
+      queryObj['end_time'] = timeStampFormat(extractDateFromString(datesQuery.end_time))
     }
     if (selectedHarvId && selectedHarvId.length > 0) {
       queryObj['harv_ids'] = translateHarvOptions(selectedHarvId)
