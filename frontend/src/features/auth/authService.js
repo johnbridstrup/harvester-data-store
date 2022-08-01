@@ -5,9 +5,9 @@ import { axiosService } from "../base/service";
 const login = async (userData) => {
   const res = await axiosService.post(LOGIN_URL, undefined, userData);
   if (res.data.data) {
-    sessionStorage.setItem('user', JSON.stringify(res.data.data.user))
-    sessionStorage.setItem('token', JSON.stringify(res.data.data.token))
-    sessionStorage.setItem('isAuthenticated', JSON.stringify(true))
+    localStorage.setItem('user', JSON.stringify(res.data.data.user))
+    localStorage.setItem('token', JSON.stringify(res.data.data.token))
+    localStorage.setItem('isAuthenticated', JSON.stringify(true))
   }
   return res;
 }
@@ -16,9 +16,9 @@ const login = async (userData) => {
 const logout = async (tokenData) => {
   const response = await axiosService.post(LOGOUT_URL, undefined, tokenData);
   if (response.status === "success") {
-    sessionStorage.removeItem("user")
-    sessionStorage.removeItem("token")
-    sessionStorage.removeItem("isAuthenticated")
+    localStorage.removeItem("user")
+    localStorage.removeItem("token")
+    localStorage.removeItem("isAuthenticated")
   }
   return response
 }

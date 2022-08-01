@@ -11,7 +11,7 @@ export const axiosService =  {
     credentials: 'include',
   },
   post: async function(url, token, data={}) {
-    let csrftoken = sessionStorage.getItem('csrftoken')
+    let csrftoken = localStorage.getItem('csrftoken')
     if (typeof token === "string" && token.length > 0) {
       this.config['headers']['Authorization'] = `Token ${token}`
     }
@@ -33,6 +33,6 @@ export const persistCSRFToken = async () => {
   const res = await axiosService.get(CSRF_URL, undefined);
   let csrftoken = res.data.csrftoken;
   if (typeof csrftoken === "string" && csrftoken.length > 0) {
-    sessionStorage.setItem("csrftoken", csrftoken);
+    localStorage.setItem("csrftoken", csrftoken);
   }
 }

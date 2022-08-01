@@ -1,9 +1,9 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import authService from './authService';
 
-const isAuthenticated = JSON.parse(sessionStorage.getItem('isAuthenticated')) || false;
-const user = JSON.parse(sessionStorage.getItem('user')) || null;
-const token = JSON.parse(sessionStorage.getItem('token')) || null;
+const isAuthenticated = JSON.parse(localStorage.getItem('isAuthenticated')) || false;
+const user = JSON.parse(localStorage.getItem('user')) || null;
+const token = JSON.parse(localStorage.getItem('token')) || null;
 
 const initialState = {
   token,
@@ -20,9 +20,9 @@ export const login = createAsyncThunk('auth/login',async (user, thunkAPI) => {
   } catch (error) {
     console.log(error)
     const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
-    sessionStorage.removeItem('token');
-    sessionStorage.removeItem('user');
-    sessionStorage.removeItem('isAuthenticated');
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    localStorage.removeItem('isAuthenticated');
     return thunkAPI.rejectWithValue(message);
   }
 });
