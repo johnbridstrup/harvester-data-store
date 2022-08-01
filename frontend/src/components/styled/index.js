@@ -70,3 +70,11 @@ export const InputFormControl = styled.input`
   }
 
 `;
+
+
+export const ClipboardDiv = styled(Container)`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: .5rem;
+`;

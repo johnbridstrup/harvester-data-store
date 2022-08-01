@@ -137,3 +137,11 @@ export const paramsToObject = (params) => {
   }
   return result;
 }
+
+
+export const copiedUrl = (paramsObj) => {
+  const port = process.env.REACT_APP_FRONTEND_PORT || 3000
+  const public_url = process.env.REACT_APP_HOSTED_URL || `http://localhost:${port}`;
+  const searchParams = new URLSearchParams(paramsObj);
+  return`${public_url}/errorreports/?${searchParams.toString()}`;
+}

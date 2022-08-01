@@ -1,20 +1,20 @@
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { useParams, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import MainLayout from '../../../components/layout/main';
 import ErrorReportQuery from '../../../components/errorreports/ErrorReportQuery';
 import ErrorReportTable from '../../../components/errorreports/ErrorReportTable';
 import { listHarvesters } from '../../../features/harvester/harvesterSlice';
 import { listLocations } from '../../../features/location/locationSlice';
-import { errorreportListView, queryErrorReport } from '../../../features/errorreport/errorreportSlice';
+import { copyQueryUrl, errorreportListView, queryErrorReport } from '../../../features/errorreport/errorreportSlice';
 import Pagination from '../../../components/pagination/Pagination';
 import './styles.css';
-import { paramsToObject } from '../../../utils/utils';
+import { copiedUrl, paramsToObject } from '../../../utils/utils';
+import CopyToClipboard from '../../../components/copytoclipboard/CopyToClipboard';
 
 
 function ErrorsReportList(props) {
   const dispatch = useDispatch();
-  const params = useParams();
   const { search } = useLocation();
 
 
@@ -25,10 +25,11 @@ function ErrorsReportList(props) {
         dispatch(listLocations()),
       ])
     })();
-    if (search && params.hasOwnProperty("apiVersion")) {
+    if (search) {
       const paramsObj = paramsToObject(search);
       (async() => {
-        await dispatch(queryErrorReport(paramsObj))
+        await dispatch(queryErrorReport(paramsObj));
+        dispatch(copyQueryUrl(copiedUrl(paramsObj)));
       })()
     } else {
       (async() => {
@@ -36,7 +37,7 @@ function ErrorsReportList(props) {
       })();
     }
     return () => {}
-  }, [dispatch, params, search]);
+  }, [dispatch, search]);
   
   return (
     <MainLayout>
@@ -49,6 +50,7 @@ function ErrorsReportList(props) {
         <ErrorReportQuery />
         <ErrorReportTable />
         <Pagination />
+        <CopyToClipboard />
       </div>
     </MainLayout>
   )

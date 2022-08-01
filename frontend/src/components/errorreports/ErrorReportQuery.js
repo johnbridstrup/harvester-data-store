@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import Select from 'react-select';
-import { extractDateFromString, timeStampFormat, transformHarvOptions, transformLocOptions, transformTzOptions, translateHarvOptions, translateLocOptions } from '../../utils/utils';
-import { queryErrorReport, timezoneUpdate } from '../../features/errorreport/errorreportSlice';
+import { copiedUrl, extractDateFromString, timeStampFormat, transformHarvOptions, transformLocOptions, transformTzOptions, translateHarvOptions, translateLocOptions } from '../../utils/utils';
+import { copyQueryUrl, queryErrorReport, timezoneUpdate } from '../../features/errorreport/errorreportSlice';
 import { DivTotalReport, InputFormControl } from '../styled';
 import timezones from '../../utils/timezones';
 
@@ -54,6 +54,7 @@ function ErrorReportQuery(props) {
       queryObj['tz'] = selectedTimezone.value
     }
     await dispatch(queryErrorReport(queryObj));
+    dispatch(copyQueryUrl(copiedUrl(queryObj)));
   }
 
   const handleDateChange = e => {

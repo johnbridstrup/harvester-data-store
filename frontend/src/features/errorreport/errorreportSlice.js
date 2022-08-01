@@ -14,6 +14,7 @@ const initialState = {
   report: {},
   timezone: null,
   errorMsg: null,
+  queryUrl: null,
 }
 
 
@@ -58,6 +59,9 @@ const errorreportSlice = createSlice({
   reducers: {
     timezoneUpdate: (state, action) => {
       state.timezone = action.payload
+    },
+    copyQueryUrl: (state, action) => {
+      state.queryUrl = action.payload
     }
   },
   extraReducers: (builder) => {
@@ -108,5 +112,5 @@ const errorreportSlice = createSlice({
 });
 
 
-export const { timezoneUpdate } = errorreportSlice.actions;
+export const { timezoneUpdate, copyQueryUrl } = errorreportSlice.actions;
 export default errorreportSlice.reducer;
