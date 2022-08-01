@@ -4,7 +4,7 @@ import { Container, LoaderDiv, Table } from '../styled';
 
 
 function ErrorReportTable(props) {
-  const { reports, loading } = useSelector(state => state.errorreport);
+  const { reports, loading, timezone } = useSelector(state => state.errorreport);
   const harvesters = useSelector(state => state.harvester.harvesters);
   const locations = useSelector(state => state.location.locations);
   const errorreports = transformTableErrorReport(reports, harvesters, locations);
@@ -27,7 +27,7 @@ function ErrorReportTable(props) {
         <tbody>
           {errorreports.map((report, index) => (
             <tr key={index}>
-              <td>{timeStampFormat(report.reportTime)}</td>
+              <td>{timeStampFormat(report.reportTime, timezone)}</td>
               <td>{report.harvester.harv_id}</td>
               <td>{report.location.ranch}</td>
               <td>{report.code}</td>

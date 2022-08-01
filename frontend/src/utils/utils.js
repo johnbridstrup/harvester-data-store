@@ -80,13 +80,25 @@ function padZeros(str_to_pad, digits) {
   return str_to_pad.toString().padStart(digits, '0')
 }
 
-export function timeStampFormat(dateString) {
-  let date = new Date(dateString);
-  var y = date.getFullYear().toString()
-  var M = padZeros(date.getMonth() + 1, 2)
-  var d = padZeros(date.getDate(), 2)
-  var h = padZeros(date.getHours(), 2)
-  var m = padZeros(date.getMinutes(), 2)
-  var s = padZeros(date.getSeconds(), 2)
+export function timeStampFormat(dateString, timezone="US/Pacific") {
+  let date;
+  if (typeof timezone === "string") {
+    date = new Date(new Date(dateString).toLocaleString('en-US', {timeZone: timezone}));
+  } else {
+    date = new Date(dateString);
+  }
+  let y = date.getFullYear().toString()
+  let M = padZeros(date.getMonth() + 1, 2)
+  let d = padZeros(date.getDate(), 2)
+  let h = padZeros(date.getHours(), 2)
+  let m = padZeros(date.getMinutes(), 2)
+  let s = padZeros(date.getSeconds(), 2)
   return y + M + d + h + m + s
+}
+
+
+export const transformTzOptions = (timezones=[]) => {
+  return timezones.map((zone, index) => {
+    return {value: zone, label: zone}
+  })
 }

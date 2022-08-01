@@ -12,6 +12,7 @@ const initialState = {
   previous: null,
   reports: [],
   report: {},
+  timezone: null,
   errorMsg: null,
 }
 
@@ -54,7 +55,11 @@ export const paginateErrorReport = createAsyncThunk('errorreport/paginateErrorRe
 const errorreportSlice = createSlice({
   name: 'errorreport',
   initialState,
-  reducers: {},
+  reducers: {
+    timezoneUpdate: (state, action) => {
+      state.timezone = action.payload
+    }
+  },
   extraReducers: (builder) => {
     builder
       .addCase(errorreportListView.pending, (state) => {
@@ -103,4 +108,5 @@ const errorreportSlice = createSlice({
 });
 
 
+export const { timezoneUpdate } = errorreportSlice.actions;
 export default errorreportSlice.reducer;

@@ -1,13 +1,15 @@
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import Select from 'react-select';
-import { timeStampFormat, transformHarvOptions, transformLocOptions, translateHarvOptions, translateLocOptions } from '../../utils/utils';
-import { queryErrorReport } from '../../features/errorreport/errorreportSlice';
+import { timeStampFormat, transformHarvOptions, transformLocOptions, transformTzOptions, translateHarvOptions, translateLocOptions } from '../../utils/utils';
+import { queryErrorReport, timezoneUpdate } from '../../features/errorreport/errorreportSlice';
 import { DivTotalReport, InputFormControl } from '../styled';
+import timezones from '../../utils/timezones';
 
 function ErrorReportQuery(props) {
   const [selectedHarvId, setSelectedHarvId] = useState(null);
   const [selectedLocation, setSelectedLocation] = useState(null);
+  const [selectedTimezone, setSelectedTimezone] = useState(null);
   const [datesQuery, setDatesQuery] = useState({
     start_time: '',
     end_time: ''
@@ -17,6 +19,7 @@ function ErrorReportQuery(props) {
   const { locations } = useSelector(state => state.location);
   const harvesterOptions = transformHarvOptions(harvesters);
   const locationOptions = transformLocOptions(locations);
+  const timezoneOptions = transformTzOptions(timezones)
   const dispatch = useDispatch()
 
   const handleHarvestSelect = (newValue, actionMeta) => {
@@ -25,6 +28,11 @@ function ErrorReportQuery(props) {
 
   const handleLocationSelect = (newValue, actionMeta) => {
     setSelectedLocation(current => newValue)
+  }
+
+  const handleTimezoneSelect = (newValue, actionMeta) => {
+    setSelectedTimezone(current => newValue);
+    dispatch(timezoneUpdate(newValue.value));
   }
 
   const handleFormQuerySubmit = async e => {
@@ -41,6 +49,9 @@ function ErrorReportQuery(props) {
     }
     if (selectedLocation && selectedLocation.length > 0) {
       queryObj['locations'] = translateLocOptions(selectedLocation)
+    }
+    if (selectedTimezone && selectedTimezone.hasOwnProperty("value")) {
+      queryObj['tz'] = selectedTimezone.value
     }
     await dispatch(queryErrorReport(queryObj));
   }
@@ -71,16 +82,22 @@ function ErrorReportQuery(props) {
               </div>
             </div>
             <div className='row mb-4'>
-              <div className='col-md-6'>
+              <div className='col-md-4'>
                 <div className='form-group'>
                   <label htmlFor='start_time'>Start Time</label>
                   <InputFormControl type="text" name='start_time' value={datesQuery.start_time} onChange={handleDateChange} placeholder="YYYYMMDDHHmmSS" maxLength={14} />
                 </div>
               </div>
-              <div className='col-md-6'>
+              <div className='col-md-4'>
                 <div className='form-group'>
                   <label htmlFor='end_time'>End Time</label>
                   <InputFormControl type="text" name='end_time' value={datesQuery.end_time} onChange={handleDateChange} placeholder="YYYYMMDDHHmmSS" maxLength={14} />
+                </div>
+              </div>
+              <div className='col-md-4'>
+                <div className='form-group'>
+                  <label htmlFor='tz'>Timezone</label>
+                  <Select isSearchable placeholder="US/Pacific" options={timezoneOptions} name="tz" onChange={handleTimezoneSelect} defaultValue={selectedLocation} className="multi-select-container" classNamePrefix="select" />
                 </div>
               </div>
             </div>
