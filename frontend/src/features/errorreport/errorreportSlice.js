@@ -53,6 +53,18 @@ export const paginateErrorReport = createAsyncThunk('errorreport/paginateErrorRe
 })
 
 
+export const detailErrorReport = createAsyncThunk('errorreport/detailErrorReport', async (reportId, thunkAPI) => {
+  try {
+    const { auth: { token } } = thunkAPI.getState();
+    return await errorreportService.detailErrorReport(reportId, token);
+  } catch (error) {
+    console.log(error);
+    const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+    return thunkAPI.rejectWithValue(message);
+  }
+})
+
+
 const errorreportSlice = createSlice({
   name: 'errorreport',
   initialState,
@@ -105,6 +117,17 @@ const errorreportSlice = createSlice({
         state.reports = transformErrorReport(action.payload.results)
       })
       .addCase(paginateErrorReport.rejected, (state, action) => {
+        state.loading = false
+        state.errorMsg = action.payload
+      })
+      .addCase(detailErrorReport.pending, (state) => {
+        state.loading = true
+      })
+      .addCase(detailErrorReport.fulfilled, (state, action) => {
+        state.loading = false
+        state.report = action.payload
+      })
+      .addCase(detailErrorReport.rejected, (state, action) => {
         state.loading = false
         state.errorMsg = action.payload
       })

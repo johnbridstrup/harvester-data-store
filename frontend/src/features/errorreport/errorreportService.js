@@ -23,10 +23,17 @@ const paginateErrorReport = async (url, token) => {
 }
 
 
+const detailErrorReport = async (reportId, token) => {
+  const response = await axiosService.get(`${ERROR_REPORT_URL}${reportId}`, token);
+  return response;
+}
+
+
 const errorreportService = {
   errorListView,
   queryErrorReport,
-  paginateErrorReport
+  paginateErrorReport,
+  detailErrorReport
 }
 
 export default errorreportService;
