@@ -104,13 +104,19 @@ export const NavTabLink = styled(Link)`
   padding: 0.5rem 1rem;
   text-decoration: none;
 
-  color: ${props => props.activeTab === props.navTo ? '#495057': 'rgba(0,0,0,.5)'};
-  background-color: ${props => props.activeTab === props.navTo ? '#fff': ''};
-  border-color: ${props => props.activeTab === props.navTo ? '#dee2e6 #dee2e6 #fff': ''};
+  color: ${props => props.activetab === props.navto ? '#495057': 'rgba(0,0,0,.5)'};
+  background-color: ${props => props.activetab === props.navto ? '#fff': ''};
+  border-color: ${props => props.activetab === props.navto ? '#dee2e6 #dee2e6 #fff': ''};
 
   &:hover {
     color: #495057;
     background-color: #fff;
     border-color: #dee2e6 #dee2e6 #fff;
   }
+`;
+
+
+export const TabContent = styled.div`
+  display: flex;
+  flex-direction: column;
 `;

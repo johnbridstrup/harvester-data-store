@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { timeStampFormat, transformReportDetail } from '../../utils/utils';
-import { Container, NavTabItem, NavTabLink, NavTabs } from "../styled";
+import { timeStampFormat, transformExceptionObj, transformReportDetail } from '../../utils/utils';
+import { Container, NavTabItem, NavTabLink, NavTabs, TabContent } from "../styled";
 
 
 function ErrorReportDetail(props) {
@@ -11,6 +11,10 @@ function ErrorReportDetail(props) {
   const { harvesters } = useSelector(state => state.harvester);
   const { locations } = useSelector(state => state.location);
   const reportObj = transformReportDetail(report, harvesters, locations);
+  const exceptions = transformExceptionObj(report.exceptions);
+  const exceptionsKeys = Object.keys(exceptions);
+  
+  
   let reportData;
   if (report.report) {
     reportData = JSON.stringify(report.report, undefined, 2)
@@ -23,11 +27,14 @@ function ErrorReportDetail(props) {
 
   useEffect(() => {
     if (hash) {
-      handleTabChange(hash);
+      handleTabChange(hash.replace("%20", " "));
     }
-  }, [hash])
+  }, [hash]);
 
-  console.log(activeTab)
+  let exceptObj;
+  if (typeof activeTab === "string") {
+    exceptObj = exceptions[activeTab.replace("#", "")]
+  }
 
   return (
     <>
@@ -65,28 +72,18 @@ function ErrorReportDetail(props) {
       <div className='col-md-5'>
         <Container>	
           <NavTabs>
-            <NavTabItem><NavTabLink to={"#1"} activeTab={activeTab} navTo={"#1"}>traychg.0: 1</NavTabLink>
-            </NavTabItem>
-            <NavTabItem><NavTabLink to={"#2"} activeTab={activeTab} navTo={"#2"}>harvester.0: 1</NavTabLink>
-            </NavTabItem>
-            <NavTabItem><NavTabLink to={"#3"} activeTab={activeTab} navTo={"#3"}>drivesys.0: 1</NavTabLink>
-            </NavTabItem>
+            { exceptionsKeys.map((key, index) => (
+              <NavTabItem key={index}><NavTabLink to={`#${key}`} activetab={activeTab} navto={`#${key}`}>{key}</NavTabLink>
+              </NavTabItem>
+            )) }
           </NavTabs>
-
-          <div className="tab-content ">
-            <div className="tab-pane active" id="1">
-              <p>Timestamp 20221208230439</p>
-              <pre><code>traceback</code></pre>
-            </div>
-            <div className="tab-pane" id="2">
-            <p>Timestamp 20221208230439</p>
-              <pre><code>traceback</code></pre>
-            </div>
-            <div className="tab-pane" id="3">
-              <p>Timestamp 20221208230439</p>
-              <pre><code>traceback</code></pre>
-            </div>
-          </div>
+          
+          {exceptObj && (
+            <TabContent>
+              <span>timestamp {timeStampFormat(exceptObj.timestamp, timezone)}</span>
+              <pre><code>{exceptObj.traceback}</code></pre>
+          </TabContent>
+          )}
         </Container>
       </div>
       <div className='col-md-7'>
