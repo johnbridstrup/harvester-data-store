@@ -1,12 +1,13 @@
 locals {
-  env                    = "prod"
-  dns_name               = "hdsapi.cloud.advanced.farm"
-  service_port           = "8000"
-  service_name           = "hds"
-  service_docker_image   = "838860823423.dkr.ecr.us-west-1.amazonaws.com/hds:hds-staging-779d884"
-  healthcheck_path       = "/api/v1/healthcheck/"
-  hds_superuser_pwd_id   = "hds_superuser_pwd"
-  errorreport_queue_name = "errorreport-queue"
+  env                      = "prod"
+  dns_name                 = "hds.cloud.advanced.farm"
+  service_port             = "8000"
+  service_name             = "hds"
+  service_docker_image     = "082346306812.dkr.ecr.us-west-1.amazonaws.com/hds:hds-staging-779d884"
+  healthcheck_path         = "/api/v1/healthcheck/"
+  hds_superuser_pwd_id     = "hds_superuser_pwd"
+  errorreport_queue_name   = "errorreport-queue"
+  enable_prometheus_scrape = true
 }
 
 resource "random_password" "hds_superuser_pwd" {
@@ -93,6 +94,7 @@ module "hds" {
   service_subnets                = data.aws_subnet_ids.priv_subnets.ids
   load_balancer_subnets          = data.aws_subnet_ids.priv_subnets.ids
   ecs_cluster_arn                = data.aws_ecs_cluster.hds-cluster.arn
+  enable_prometheus_scrape       = local.enable_prometheus_scrape
   route53_priv_zone_id           = data.aws_route53_zone.private_cloud_zone.id
   route53_pub_zone_id            = data.aws_route53_zone.cloud_zone.id
   service_environments_variables = local.environment_variables
@@ -103,6 +105,9 @@ module "hds" {
     "443,tcp,${data.aws_security_group.lambda_sg.id},ssl traffic from lambda",
     "80,tcp,${data.aws_security_group.pritunl_sg.id},web traffic from pritunl",
     "443,tcp,${data.aws_security_group.pritunl_sg.id},ssl traffic from pritunl"
+  ]
+  service_ingress_sg_rules = [
+    "${local.service_port},tcp,${data.aws_security_group.prom_scrape_sg.id},prometheus scraping"
   ]
 }
 

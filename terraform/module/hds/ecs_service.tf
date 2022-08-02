@@ -8,6 +8,7 @@ module "hds_ecs" {
   service_port                   = var.service_port
   vpc_id                         = var.vpc_id
   ecs_cluster_arn                = var.ecs_cluster_arn
+  enable_prometheus_scrape       = var.enable_prometheus_scrape
   service_docker_image           = var.service_docker_image
   service_health_check_path      = var.service_health_check_path
   service_environments_variables = var.service_environments_variables
@@ -15,4 +16,5 @@ module "hds_ecs" {
   route53_pub_zone_id            = var.route53_pub_zone_id
   service_iam_policy_document    = var.service_iam_policy_document
   service_alb_ingress_sg_rules   = var.service_alb_ingress_sg_rules
+  service_ingress_sg_rules       = var.service_ingress_sg_rules
 }

@@ -152,3 +152,9 @@ variable "service_port" {
   description = "Port of the service to use for forward traffic to."
   type        = string
 }
+
+variable "enable_prometheus_scrape" {
+  description = "Enable scraping /metrics at the service port"
+  type        = bool
+  default     = false
+}
