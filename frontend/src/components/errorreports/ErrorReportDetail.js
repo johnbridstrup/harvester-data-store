@@ -81,7 +81,7 @@ function ErrorReportDetail(props) {
           {exceptObj && (
             <TabContent>
               <span>timestamp {timeStampFormat(exceptObj.timestamp, timezone)}</span>
-              <pre><code>{exceptObj.traceback}</code></pre>
+              <pre><code className='language-python'>{exceptObj.traceback}</code></pre>
           </TabContent>
           )}
         </Container>
