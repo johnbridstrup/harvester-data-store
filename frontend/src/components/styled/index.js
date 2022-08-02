@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { Link } from 'react-router-dom';
 
 
 export const SpanLimit = styled.span`
@@ -77,4 +78,39 @@ export const ClipboardDiv = styled(Container)`
   align-items: center;
   justify-content: center;
   margin-top: .5rem;
+`;
+
+
+export const NavTabs = styled.ul`
+  display: flex;
+  flex-wrap: wrap;
+  padding-left: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+  list-style: none;
+  border-bottom: 1px solid #dee2e6;
+`;
+
+export const NavTabItem = styled.li`
+  margin-bottom: -1px;
+`;
+
+
+export const NavTabLink = styled(Link)`
+  border: 1px solid transparent;
+  border-top-left-radius: 0.25rem;
+  border-top-right-radius: 0.25rem;
+  display: block;
+  padding: 0.5rem 1rem;
+  text-decoration: none;
+
+  color: ${props => props.activeTab === props.navTo ? '#495057': 'rgba(0,0,0,.5)'};
+  background-color: ${props => props.activeTab === props.navTo ? '#fff': ''};
+  border-color: ${props => props.activeTab === props.navTo ? '#dee2e6 #dee2e6 #fff': ''};
+
+  &:hover {
+    color: #495057;
+    background-color: #fff;
+    border-color: #dee2e6 #dee2e6 #fff;
+  }
 `;
