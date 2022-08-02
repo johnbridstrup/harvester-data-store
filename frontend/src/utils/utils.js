@@ -155,3 +155,12 @@ export const transformReportDetail = (report={}, harvesters=[], locations=[]) =>
   reportObj['location'] = reportLimitedObjs(harvesters, locations, reportObj.location, 'location')
   return reportObj;
 }
+
+
+export const transformExceptionObj = (exceptions=[]) => {
+  let exceptObj = {};
+  exceptions.forEach(obj => {
+    exceptObj[`${obj.service}.${obj.node}: ${obj.code}`] = obj
+  })
+  return exceptObj;
+}
