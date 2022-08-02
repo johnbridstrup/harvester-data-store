@@ -133,3 +133,25 @@ export const copiedUrl = (paramsObj) => {
   const searchParams = new URLSearchParams(paramsObj);
   return`${public_url}/errorreports/?${searchParams.toString()}`;
 }
+
+
+const reportLimitedObjs = (harvesters=[], locations=[], identity=null, identifier='harvester') => {
+  if (identifier === 'harvester') {
+    return harvesters.find(x => x.id === identity) || {}
+  } else if (identifier === 'location') {
+    return locations.find(x => x.id === identity) || {}
+  } else {
+    return {};
+  }
+}
+
+
+export const transformReportDetail = (report={}, harvesters=[], locations=[]) => {
+  const reportObj = {...report}
+  const { services, codes } = extractServiceCodes(reportObj.exceptions);
+  reportObj['service'] = services.join(", ")
+  reportObj['code'] = codes.join(", ")
+  reportObj['harvester'] = reportLimitedObjs(harvesters, locations, reportObj.harvester, 'harvester')
+  reportObj['location'] = reportLimitedObjs(harvesters, locations, reportObj.location, 'location')
+  return reportObj;
+}
