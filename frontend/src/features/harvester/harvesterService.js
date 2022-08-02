@@ -1,6 +1,8 @@
-import { HARVESTERS_URL } from "../base/constants";
+import { API_BASE_URL } from "../base/constants";
 import { axiosService } from "../base/service";
 
+
+const HARVESTERS_URL = `${API_BASE_URL}/harvesters/`;
 
 const listHarvesters = async (token) => {
   let response = await axiosService.get(HARVESTERS_URL, token);

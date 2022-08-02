@@ -1,5 +1,8 @@
-import { LOGIN_URL, LOGOUT_URL } from "../base/constants";
+import { API_BASE_URL } from "../base/constants";
 import { axiosService } from "../base/service";
+
+const LOGIN_URL = `${API_BASE_URL}/users/login/`;
+const LOGOUT_URL = `${API_BASE_URL}/users/logout/`;
 
 
 const login = async (userData) => {

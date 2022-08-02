@@ -1,5 +1,7 @@
-import { LOCATION_URL } from "../base/constants";
+import { API_BASE_URL } from "../base/constants";
 import { axiosService } from "../base/service";
+
+const LOCATION_URL = `${API_BASE_URL}/locations/`;
 
 
 const listLocations = async (token) => {

@@ -1,6 +1,8 @@
-import { ERROR_REPORT_URL } from "../base/constants";
+import { API_BASE_URL } from "../base/constants";
 import { axiosService } from "../base/service";
 
+
+const ERROR_REPORT_URL = `${API_BASE_URL}/errorreports/`;
 
 const errorListView = async (token) => {
   let response = await axiosService.get(ERROR_REPORT_URL, token);
