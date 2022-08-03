@@ -185,7 +185,7 @@ export const transformSysmonReport = (sysmonReport = {}) => {
       if (!sysReport[robot]) {
         sysReport[robot] = {}
       }
-      if (!'NUC' in sysReport[robot]) {
+      if (!('NUC' in sysReport[robot])) {
         sysReport[robot] = {'NUC': {}}
       }
       sysReport[robot]['NUC'] = value
@@ -194,7 +194,7 @@ export const transformSysmonReport = (sysmonReport = {}) => {
       if (!sysReport[robot]) {
         sysReport[robot] = {}
       }
-      if (!'JETSON' in sysReport[robot]) {
+      if (!('JETSON' in sysReport[robot])) {
         sysReport[robot] = {'NUC': {}}
       }
       sysReport[robot]['JETSON'] = value

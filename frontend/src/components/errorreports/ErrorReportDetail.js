@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { timeStampFormat, transformExceptionObj, transformReportDetail } from '../../utils/utils';
+import { timeStampFormat, transformExceptionObj, transformReportDetail, transformSysmonReport } from '../../utils/utils';
 import { Container, NavTabItem, NavTabLink, NavTabs, TabContent } from "../styled";
 
 
@@ -15,9 +15,12 @@ function ErrorReportDetail(props) {
   const exceptionsKeys = Object.keys(exceptions);
   
   
-  let reportData;
-  if (report.report) {
-    reportData = JSON.stringify(report.report, undefined, 2)
+  let sysmonKeys;
+  let sysmonReport;
+  if (report.report && report.report.data && report.report.data.sysmon_report) {
+    sysmonReport = transformSysmonReport(report.report.data.sysmon_report)
+    sysmonKeys = Object.keys(sysmonReport);
+    console.log(sysmonKeys);
   }
 
   const { hash } = useLocation();
@@ -88,9 +91,13 @@ function ErrorReportDetail(props) {
       </div>
       <div className='col-md-5'>
         <Container>
-          <div className="d-flex justify-content-center align-items-center">
-            <textarea style={{width: '100%', height: '400px'}} defaultValue={reportData}></textarea>
-          </div>
+          <NavTabs>
+              {sysmonKeys && sysmonKeys.map((key, index) => (
+                <NavTabItem key={index}><NavTabLink to={`#${key}`} activetab={activeTab} navto={`#${key}`}>{key}</NavTabLink>
+                </NavTabItem>
+              )) }
+          </NavTabs>
+          
         </Container>
       </div>
     </div>
