@@ -1,13 +1,20 @@
 import { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { timeStampFormat, transformExceptionObj, transformReportDetail, transformSysmonReport } from '../../utils/utils';
-import { Container, NavTabItem, NavTabLink, NavTabs, NavTabSpan, TabContent } from "../styled";
+import { Container, NavTabItem, NavTabs, NavTabSpan, TabContent } from "../styled";
 
 
 function ErrorReportDetail(props) {
-  const [activeTab, setActiveTab] = useState(null)
-  const [activeSubTab, setActiveSubTab] = useState(null);
+  const [activeTab, setActiveTab] = useState({
+    exception: "",
+    sysmon: "Master",
+    subtabs: "NUC"
+  });
+  const [sysmonObj, setSysmonObj] = useState({
+    sysmonKeys: [],
+    sysmonReport: {},
+    sysmonObj: {}
+  });
   const [subTabObj, setSubTabObj] = useState(null);
   const { report, timezone } = useSelector(state => state.errorreport);
   const { harvesters } = useSelector(state => state.harvester);
@@ -15,43 +22,54 @@ function ErrorReportDetail(props) {
   const reportObj = transformReportDetail(report, harvesters, locations);
   const exceptions = transformExceptionObj(report.exceptions);
   const exceptionsKeys = Object.keys(exceptions);
+  const exceptObj = exceptions[activeTab.exception];
   
   
-  let sysmonKeys;
-  let sysmonReport;
-  if (report.report && report.report.data && report.report.data.sysmon_report) {
-    sysmonReport = transformSysmonReport(report.report.data.sysmon_report)
-    sysmonKeys = Object.keys(sysmonReport);
-  }
-
-  const { hash } = useLocation();
-  const handleTabChange = (keyHref) => {
-    setActiveTab(keyHref)
-  }
+  // let sysmonKeys;
+  // let sysmonReport;
+  // // let sysmonObj;
+  // if (report.report && report.report.data && report.report.data.sysmon_report) {
+  //   sysmonReport = transformSysmonReport(report.report.data.sysmon_report)
+  //   sysmonKeys = Object.keys(sysmonReport);
+  //   sysmonObj= sysmonReport[activeTab.sysmon]
+  // }
 
   useEffect(() => {
-    if (hash) {
-      handleTabChange(hash.replace("%20", " "));
+    if (report.report && report.report.data && report.report.data.sysmon_report) {
+      const sysmonReport = transformSysmonReport(report.report.data.sysmon_report)
+      const sysmonKeys = Object.keys(sysmonReport);
+      const sysmonObj= sysmonReport[activeTab.sysmon]
+      setSysmonObj(current => {
+        return {...current, sysmonKeys, sysmonObj, sysmonReport}
+      })
     }
-  }, [hash]);
+  },[report.report, activeTab.sysmon])
 
-  let exceptObj;
-  let sysmonObj;
-  if (typeof activeTab === "string") {
-    exceptObj = exceptions[activeTab.replace("#", "")]
-    sysmonObj = sysmonReport[activeTab.replace("#", "")]
+  const handleTabChange = (tab, category, obj) => {
+    if (category === "exception") {
+      setActiveTab(current => {
+        return {...current, exception: tab}
+      })
+    } else if (category === "sysmon") {
+      setActiveTab(current => {
+        return {...current, sysmon: tab}
+      })
+      if (tab !== "Master") {
+        setSubTabObj(current => obj.NUC)
+      }
+    } else if (category === "subtabs") {
+      setActiveTab(current => {
+        return {...current, subtabs: tab}
+      })
+      if (tab === "NUC") {
+        setSubTabObj(current => obj.NUC)
+      } else {
+        setSubTabObj(current => obj.JETSON)
+      }
+    }
   }
 
-  const handleSubNavTabClick = (tab, obj) => {
-    setActiveSubTab(tab);
-    if (tab === "NUC") {
-      setSubTabObj(current => obj.NUC)
-    } else {
-      setSubTabObj(current => obj.JETSON)
-    }
-  }
-
-  console.log(subTabObj)
+  
 
   return (
     <>
@@ -90,7 +108,7 @@ function ErrorReportDetail(props) {
         <Container>	
           <NavTabs>
             { exceptionsKeys.map((key, index) => (
-              <NavTabItem key={index}><NavTabLink to={`#${key}`} activetab={activeTab} navto={`#${key}`}>{key}</NavTabLink>
+              <NavTabItem key={index}><NavTabSpan onClick={() => handleTabChange(key, "exception", undefined)} activetab={activeTab.exception} navto={key}>{key}</NavTabSpan>
               </NavTabItem>
             )) }
           </NavTabs>
@@ -106,25 +124,25 @@ function ErrorReportDetail(props) {
       <div className='col-md-5'>
         <Container>
           <NavTabs>
-              {sysmonKeys && sysmonKeys.map((key, index) => (
-                <NavTabItem key={index}><NavTabLink to={`#${key}`} activetab={activeTab} navto={`#${key}`}>{key}</NavTabLink>
+              {sysmonObj.sysmonKeys.map((key, index) => (
+                <NavTabItem key={index}><NavTabSpan onClick={() => handleTabChange(key, "sysmon", sysmonObj.sysmonObj)} activetab={activeTab.sysmon} navto={key}>{key}</NavTabSpan>
                 </NavTabItem>
               )) }
           </NavTabs>
 
-          {activeTab && activeTab.replace("#", "") !== "Master" && (
+          {activeTab.sysmon !== "Master" && (
             <NavTabs>
-              <NavTabItem><NavTabSpan onClick={() => handleSubNavTabClick("NUC", sysmonObj)}  activetab={activeSubTab} navto={`NUC`}>NUC</NavTabSpan>
+              <NavTabItem><NavTabSpan onClick={() => handleTabChange("NUC", "subtabs", sysmonObj.sysmonObj)}  activetab={activeTab.subtabs} navto={`NUC`}>NUC</NavTabSpan>
               </NavTabItem>
-              <NavTabItem><NavTabSpan onClick={() => handleSubNavTabClick("JETSON", sysmonObj)}  activetab={activeSubTab} navto={`JETSON`}>JETSON</NavTabSpan>
+              <NavTabItem><NavTabSpan onClick={() => handleTabChange("JETSON", "subtabs", sysmonObj.sysmonObj)}  activetab={activeTab.subtabs} navto={`JETSON`}>JETSON</NavTabSpan>
               </NavTabItem>
             </NavTabs>
           ) }
 
-          {activeTab && activeTab.replace("#", "") === "Master" ? sysmonObj && (
+          {activeTab.sysmon === "Master" ? sysmonObj && (
             <Container>
               <div className="d-flex justify-content-center align-items-center">
-                <textarea style={{width: '100%', height: '400px'}} value={JSON.stringify(sysmonObj, undefined, 2)}></textarea>
+                <textarea style={{width: '100%', height: '400px'}} value={JSON.stringify(sysmonObj.sysmonObj, undefined, 2)}></textarea>
               </div>
             </Container>
           ): subTabObj && (
