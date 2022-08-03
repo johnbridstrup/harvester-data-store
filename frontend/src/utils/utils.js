@@ -164,3 +164,41 @@ export const transformExceptionObj = (exceptions=[]) => {
   })
   return exceptObj;
 }
+
+
+export const transformSysmonReport = (sysmonReport = {}) => {
+  const sysReport = {}
+  let masterIndex = 0
+  for (const [key, value] of Object.entries(sysmonReport)) {
+    let sysIndex = key.split(".")[1]
+    let robotIndex;
+    if (sysIndex) {
+      sysIndex = Number(sysIndex);
+      robotIndex = Number(value['robot_index'] || sysIndex)
+    } else {
+      continue
+    }
+    if (sysIndex === masterIndex) {
+      sysReport['Master'] = value
+    } else if (robotIndex === sysIndex) {
+      let robot = `Robot ${robotIndex}`
+      if (!sysReport[robot]) {
+        sysReport[robot] = {}
+      }
+      if (!'NUC' in sysReport[robot]) {
+        sysReport[robot] = {'NUC': {}}
+      }
+      sysReport[robot]['NUC'] = value
+    } else {
+      let robot = `Robot ${robotIndex}`;
+      if (!sysReport[robot]) {
+        sysReport[robot] = {}
+      }
+      if (!'JETSON' in sysReport[robot]) {
+        sysReport[robot] = {'NUC': {}}
+      }
+      sysReport[robot]['JETSON'] = value
+    }
+  }
+  return sysReport
+}
