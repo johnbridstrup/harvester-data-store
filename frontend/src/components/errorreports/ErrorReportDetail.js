@@ -120,6 +120,20 @@ function ErrorReportDetail(props) {
               </NavTabItem>
             </NavTabs>
           ) }
+
+          {activeTab && activeTab.replace("#", "") === "Master" ? sysmonObj && (
+            <Container>
+              <div className="d-flex justify-content-center align-items-center">
+                <textarea style={{width: '100%', height: '400px'}} value={JSON.stringify(sysmonObj, undefined, 2)}></textarea>
+              </div>
+            </Container>
+          ): subTabObj && (
+            <Container>
+              <div className="d-flex justify-content-center align-items-center">
+                <textarea style={{width: '100%', height: '400px'}} value={JSON.stringify(subTabObj, undefined, 2)}></textarea>
+              </div>
+            </Container>
+          )}
           
         </Container>
       </div>
