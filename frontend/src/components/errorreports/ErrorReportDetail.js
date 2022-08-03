@@ -69,7 +69,7 @@ function ErrorReportDetail(props) {
       </div>
     </div>
     <div className='row'>
-      <div className='col-md-5'>
+      <div className='col-md-7'>
         <Container>	
           <NavTabs>
             { exceptionsKeys.map((key, index) => (
@@ -81,12 +81,12 @@ function ErrorReportDetail(props) {
           {exceptObj && (
             <TabContent>
               <span>timestamp {timeStampFormat(exceptObj.timestamp, timezone)}</span>
-              <pre><code className='language-python'>{exceptObj.traceback}</code></pre>
+              <pre style={{height: "400px", whiteSpace: "break-spaces"}}><code className='language-python'>{exceptObj.traceback}</code></pre>
           </TabContent>
           )}
         </Container>
       </div>
-      <div className='col-md-7'>
+      <div className='col-md-5'>
         <Container>
           <div className="d-flex justify-content-center align-items-center">
             <textarea style={{width: '100%', height: '400px'}} defaultValue={reportData}></textarea>
