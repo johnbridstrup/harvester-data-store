@@ -7,6 +7,7 @@ import { logout } from '../../../features/auth/authSlice';
 function Navbar(props) {
   const { user, isAuthenticated, token } = useSelector(state => state.auth);
   const dispatch = useDispatch();
+  const adminUrl = process.env.REACT_APP_BACKEND_URL || "http://localhost:8085/admin"
 
   const handleLogout = async () => {
     const res = await dispatch(logout({token}))
@@ -21,7 +22,7 @@ function Navbar(props) {
           <a className="" href="/">
             <img src={Logo} alt="logo" width="30" height="24" />
           </a>
-          <Link to="/admin" className="admin-route">Admin</Link>
+          <a href={adminUrl} target="_blank" rel='noreferrer' className="admin-route">Admin</a>
         </div>
         <div>
           { user && user.username && <span className='username'>{user.username}</span> }
