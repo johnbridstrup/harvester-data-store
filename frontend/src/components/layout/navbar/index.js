@@ -7,7 +7,7 @@ import { logout } from '../../../features/auth/authSlice';
 function Navbar(props) {
   const { user, isAuthenticated, token } = useSelector(state => state.auth);
   const dispatch = useDispatch();
-  const adminUrl = process.env.REACT_APP_BACKEND_URL || "http://localhost:8085/admin"
+  const adminUrl = process.env.REACT_APP_ADMIN_URL || "http://localhost:8085/admin"
 
   const handleLogout = async () => {
     const res = await dispatch(logout({token}))
