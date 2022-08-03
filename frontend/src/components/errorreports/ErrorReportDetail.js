@@ -2,11 +2,13 @@ import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { timeStampFormat, transformExceptionObj, transformReportDetail, transformSysmonReport } from '../../utils/utils';
-import { Container, NavTabItem, NavTabLink, NavTabs, TabContent } from "../styled";
+import { Container, NavTabItem, NavTabLink, NavTabs, NavTabSpan, TabContent } from "../styled";
 
 
 function ErrorReportDetail(props) {
   const [activeTab, setActiveTab] = useState(null)
+  const [activeSubTab, setActiveSubTab] = useState(null);
+  const [subTabObj, setSubTabObj] = useState(null);
   const { report, timezone } = useSelector(state => state.errorreport);
   const { harvesters } = useSelector(state => state.harvester);
   const { locations } = useSelector(state => state.location);
@@ -20,7 +22,6 @@ function ErrorReportDetail(props) {
   if (report.report && report.report.data && report.report.data.sysmon_report) {
     sysmonReport = transformSysmonReport(report.report.data.sysmon_report)
     sysmonKeys = Object.keys(sysmonReport);
-    console.log(sysmonKeys);
   }
 
   const { hash } = useLocation();
@@ -35,9 +36,22 @@ function ErrorReportDetail(props) {
   }, [hash]);
 
   let exceptObj;
+  let sysmonObj;
   if (typeof activeTab === "string") {
     exceptObj = exceptions[activeTab.replace("#", "")]
+    sysmonObj = sysmonReport[activeTab.replace("#", "")]
   }
+
+  const handleSubNavTabClick = (tab, obj) => {
+    setActiveSubTab(tab);
+    if (tab === "NUC") {
+      setSubTabObj(current => obj.NUC)
+    } else {
+      setSubTabObj(current => obj.JETSON)
+    }
+  }
+
+  console.log(subTabObj)
 
   return (
     <>
@@ -97,6 +111,15 @@ function ErrorReportDetail(props) {
                 </NavTabItem>
               )) }
           </NavTabs>
+
+          {activeTab && activeTab.replace("#", "") !== "Master" && (
+            <NavTabs>
+              <NavTabItem><NavTabSpan onClick={() => handleSubNavTabClick("NUC", sysmonObj)}  activetab={activeSubTab} navto={`NUC`}>NUC</NavTabSpan>
+              </NavTabItem>
+              <NavTabItem><NavTabSpan onClick={() => handleSubNavTabClick("JETSON", sysmonObj)}  activetab={activeSubTab} navto={`JETSON`}>JETSON</NavTabSpan>
+              </NavTabItem>
+            </NavTabs>
+          ) }
           
         </Container>
       </div>
