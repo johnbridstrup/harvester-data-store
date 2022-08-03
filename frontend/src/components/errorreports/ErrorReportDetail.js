@@ -24,15 +24,6 @@ function ErrorReportDetail(props) {
   const exceptionsKeys = Object.keys(exceptions);
   const exceptObj = exceptions[activeTab.exception];
   
-  
-  // let sysmonKeys;
-  // let sysmonReport;
-  // // let sysmonObj;
-  // if (report.report && report.report.data && report.report.data.sysmon_report) {
-  //   sysmonReport = transformSysmonReport(report.report.data.sysmon_report)
-  //   sysmonKeys = Object.keys(sysmonReport);
-  //   sysmonObj= sysmonReport[activeTab.sysmon]
-  // }
 
   useEffect(() => {
     if (report.report && report.report.data && report.report.data.sysmon_report) {
