@@ -1,19 +1,10 @@
-import logging
 from ..models import ErrorReport
 from ..serializers.errorreportserializer import ErrorReportSerializer
 from common.viewsets import CreateModelViewSet
-from common.renderers import HDSJSONRenderer
-from common.reports import ErrorReportExtractor, DTimeFormatter
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from common.reports import DTimeFormatter
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.filters import SearchFilter, OrderingFilter
-from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.negotiation import DefaultContentNegotiation
-from rest_framework.response import Response
-from harvester.models import Harvester, Location
-
-from django.utils.timezone import make_aware
-from django.utils import timezone
-from rest_framework.renderers import TemplateHTMLRenderer
 
 
 class ErrorReportView(CreateModelViewSet):
@@ -21,7 +12,6 @@ class ErrorReportView(CreateModelViewSet):
     content_negotiation_class = DefaultContentNegotiation
     serializer_class = ErrorReportSerializer
     permission_classes = (IsAuthenticated,)
-    renderer_classes = (TemplateHTMLRenderer, HDSJSONRenderer)
     filter_backends = (SearchFilter, OrderingFilter)
     search_fields = ['harvester']
     ordering_fields = ('harvester', 'location', 'reportTime')
@@ -62,30 +52,3 @@ class ErrorReportView(CreateModelViewSet):
 
         return ErrorReport.objects.filter(**listfilter).order_by('-reportTime')
 
-    @classmethod
-    def fill_dt_with_zeros(cls, time_str):
-        """Fill with zeros if not all YYYYMMDDHHmmss are present"""
-        if len(time_str) < 14:
-            time_str += '0' * (14 - len(time_str))
-        return time_str
-
-    def get_template_names(self):
-        if self.action == 'list':            
-            return ['errorreport/list.html']
-        elif self.action == 'retrieve':            
-            return ['errorreport/detail.html']
-
-    def retrieve(self, request, *args, **kwargs):
-        if request.accepted_renderer.format == 'html':
-            q = super().retrieve(request, *args, **kwargs)
-            extractor = ErrorReportExtractor(q.data,'retrieve')
-            return Response(extractor.tablify())
-        return super().retrieve(request, *args, **kwargs)
-    
-    def list(self, request, *args, **kwargs):
-        q = super().list(request, *args, **kwargs)
-        if request.accepted_renderer.format == 'html':
-            extractor = ErrorReportExtractor(q.data,'list')
-            return Response({"data": extractor.tablify()})
-        
-        return q
