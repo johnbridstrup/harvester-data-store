@@ -202,3 +202,17 @@ export const transformSysmonReport = (sysmonReport = {}) => {
   }
   return sysReport
 }
+
+
+export const transformSysmonServices = (sysmon={}) => {
+  const sysmonArr = [];
+  for (const [key, value] of Object.entries(sysmon)) {
+    let service = []
+    service.push(key)
+    service.push(value['cpu'])
+    service.push(value['mem'])
+    service.push(value['fsm']['components'].join(", "))
+    sysmonArr.push(service)
+  }
+  return sysmonArr
+}

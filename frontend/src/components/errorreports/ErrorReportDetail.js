@@ -133,12 +133,12 @@ function ErrorReportDetail(props) {
           {activeTab.sysmon === "Master" ? sysmonObj.sysmonObj && (
             <Container>
               <TimeTable sysmonObj={sysmonObj.sysmonObj} />
-              <ServiceTable />
+              <ServiceTable services={sysmonObj.sysmonObj?.services} />
             </Container>
           ): subTabObj && (
             <Container>
               <TimeTable sysmonObj={subTabObj} />
-              <ServiceTable />
+              <ServiceTable services={subTabObj?.services} />
             </Container>
           )}
           

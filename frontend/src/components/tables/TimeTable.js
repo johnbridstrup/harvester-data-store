@@ -6,12 +6,12 @@ function TimeTable(props) {
       <table className='table table-bordered'>
         <tbody>
           <tr>
-            <td>System Time</td>
-            <td>{props.sysmonObj.chrony_info && props.sysmonObj.chrony_info.sys_time}</td>
+            <th scope='col'>System Time</th>
+            <th scope='col'>{props.sysmonObj.chrony_info?.sys_time}</th>
           </tr>
           <tr>
-            <td>Reference Time</td>
-            <td>{props.sysmonObj.chrony_info && props.sysmonObj.chrony_info.ref_time}</td>
+            <th scope='col'>Reference Time</th>
+            <th scope='col'>{props.sysmonObj.chrony_info?.ref_time}</th>
           </tr>
         </tbody>
       </table>

@@ -1,6 +1,8 @@
 import PropTypes from 'prop-types'
+import { transformSysmonServices } from '../../utils/utils';
 
 function ServiceTable(props) {
+  const services = transformSysmonServices(props.services)
   return (
     <div className='table-responsive'>
       <table className='table'>
@@ -13,13 +15,21 @@ function ServiceTable(props) {
           </tr>
         </thead>
         <tbody>
-          <tr></tr>
+          {services.map((service, index) => (
+            <tr key={index}>
+              {service.map((obj, index) => (
+                <td key={index}>{obj}</td>
+              ))}
+            </tr>
+          ))}
         </tbody>
       </table>
     </div>
   )
 }
 
-ServiceTable.propTypes = {};
+ServiceTable.propTypes = {
+  services: PropTypes.object
+};
 
 export default ServiceTable;
