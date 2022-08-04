@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { timeStampFormat, transformExceptionObj, transformReportDetail, transformSysmonReport } from '../../utils/utils';
 import { Container, NavTabItem, NavTabs, NavTabSpan, TabContent } from "../styled";
+import ErrorReportDetailTable from '../tables/ErrorReportDetailTable';
 import ServiceTable from '../tables/ServiceTable';
 import TimeTable from '../tables/TimeTable';
 
@@ -28,7 +29,7 @@ function ErrorReportDetail(props) {
   
 
   useEffect(() => {
-    if (report.report && report.report.data && report.report.data.sysmon_report) {
+    if (report?.report?.data?.sysmon_report) {
       const sysmonReport = transformSysmonReport(report.report.data.sysmon_report)
       const sysmonKeys = Object.keys(sysmonReport);
       const sysmonObj= sysmonReport[activeTab.sysmon]
@@ -64,39 +65,10 @@ function ErrorReportDetail(props) {
 
   return (
     <>
-    <div className='row'>
-      <div className='col'>
-        <div className='table-responsive'>
-          <table className='table'>
-            <thead>
-              <tr>
-                <th>Time</th>
-                <th>Harvester</th>
-                <th>Location</th>
-                <th>Code</th>
-                <th>Services</th>
-                <th>Branch</th>
-                <th>Githash</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>{timeStampFormat(reportObj.reportTime, timezone)}</td>
-                <td>{reportObj.harvester && reportObj.harvester.harv_id}</td>
-                <td>{reportObj.location && reportObj.location.ranch}</td>
-                <td>{reportObj.code}</td>
-                <td>{reportObj.service}</td>
-                <td>{reportObj.report && reportObj.report.data && reportObj.report.data.branch_name }</td>
-                <td>{reportObj.report && reportObj.report.data && reportObj.report.data.githash}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
+    <ErrorReportDetailTable reportObj={reportObj} timezone={timezone} />
     <div className='row'>
       <div className='col-md-7'>
-        <Container>	
+        <Container>
           <NavTabs>
             { exceptionsKeys.map((key, index) => (
               <NavTabItem key={index}><NavTabSpan onClick={() => handleTabChange(key, "exception", undefined)} activetab={activeTab.exception} navto={key}>{key}</NavTabSpan>
