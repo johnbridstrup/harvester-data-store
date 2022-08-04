@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { timeStampFormat, transformExceptionObj, transformReportDetail, transformSysmonReport } from '../../utils/utils';
 import { Container, NavTabItem, NavTabs, NavTabSpan, TabContent } from "../styled";
+import ServiceTable from '../tables/ServiceTable';
+import TimeTable from '../tables/TimeTable';
 
 
 function ErrorReportDetail(props) {
@@ -59,8 +61,6 @@ function ErrorReportDetail(props) {
       }
     }
   }
-
-  
 
   return (
     <>
@@ -130,17 +130,15 @@ function ErrorReportDetail(props) {
             </NavTabs>
           ) }
 
-          {activeTab.sysmon === "Master" ? sysmonObj && (
+          {activeTab.sysmon === "Master" ? sysmonObj.sysmonObj && (
             <Container>
-              <div className="d-flex justify-content-center align-items-center">
-                <textarea style={{width: '100%', height: '400px'}} value={JSON.stringify(sysmonObj.sysmonObj, undefined, 2)}></textarea>
-              </div>
+              <TimeTable sysmonObj={sysmonObj.sysmonObj} />
+              <ServiceTable />
             </Container>
           ): subTabObj && (
             <Container>
-              <div className="d-flex justify-content-center align-items-center">
-                <textarea style={{width: '100%', height: '400px'}} value={JSON.stringify(subTabObj, undefined, 2)}></textarea>
-              </div>
+              <TimeTable sysmonObj={subTabObj} />
+              <ServiceTable />
             </Container>
           )}
           
