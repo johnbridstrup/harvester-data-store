@@ -30,9 +30,10 @@ function ChronyInfoPlot(props) {
   };
 
   function masterColor(offsetSeconds) {
-    if (Math.abs(offsetSeconds) < 1) {
+    let offset = Math.abs(offsetSeconds)
+    if (offset < 1) {
         return green;
-    } else if ((Math.abs(offsetSeconds)) < 10) {
+    } else if (offset < 10) {
         return yellow;
     } else {
         return red;
@@ -40,9 +41,10 @@ function ChronyInfoPlot(props) {
   };
 
   function robotColor(offsetSeconds) {
-    if (Math.abs(offsetSeconds) < 0.1) {
+    let offset = Math.abs(offsetSeconds)
+    if ( offset < 0.1) {
         return green;
-    } else if (Math.abs(offsetSeconds) < 1) {
+    } else if (offset < 1) {
         return yellow;
     } else {
         return red;
