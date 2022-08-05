@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { timeStampFormat, transformExceptionObj, transformReportDetail, transformSysmonReport } from '../../utils/utils';
+import ChronyInfoPlot from '../plotly/ChronyInfoPlot';
 import { Container, NavTabItem, NavTabs, NavTabSpan, TabContent } from "../styled";
 import ErrorReportDetailTable from '../tables/ErrorReportDetailTable';
 import ServiceTable from '../tables/ServiceTable';
@@ -104,12 +105,26 @@ function ErrorReportDetail(props) {
 
           {activeTab.sysmon === "Master" ? sysmonObj.sysmonObj && (
             <Container>
-              <TimeTable sysmonObj={sysmonObj.sysmonObj} />
+              <div className='row'>
+                <div className='col-xl-8 col-md-12 col-sm-12'>
+                  <ChronyInfoPlot robot="Master" chronyInfo={sysmonObj.sysmonObj?.chrony_info} />
+                </div>
+                <div className='col-xl-4 col-md-12 col-sm-12'>
+                  <TimeTable sysmonObj={sysmonObj.sysmonObj} />
+                </div>
+              </div>
               <ServiceTable services={sysmonObj.sysmonObj?.services} />
             </Container>
           ): subTabObj && (
             <Container>
-              <TimeTable sysmonObj={subTabObj} />
+              <div className='row'>
+                <div className='col-xl-8 col-md-12 col-sm-12'>
+                  <ChronyInfoPlot robot="Robot" chronyInfo={sysmonObj.sysmonObj?.chrony_info} />
+                </div>
+                <div className='col-xl-4 col-md-12 col-sm-12'>
+                  <TimeTable sysmonObj={subTabObj} />
+                </div>
+              </div>
               <ServiceTable services={subTabObj?.services} />
             </Container>
           )}
