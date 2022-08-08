@@ -51,8 +51,6 @@ function ChronyInfoPlot(props) {
     }
   }
 
-  console.log(props.chronyInfo)
-
   function makeChronyData(lastOffset, rmsOffset) {
     const data = [{
       type: 'bar',

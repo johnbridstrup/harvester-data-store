@@ -10,15 +10,15 @@ import TimeTable from '../tables/TimeTable';
 
 function ErrorReportDetail(props) {
   const [activeTab, setActiveTab] = useState({
-    exception: "",
+    exception: "traychg.0: 1",
     sysmon: "Master",
     subtabs: "NUC"
   });
   const [sysmonObj, setSysmonObj] = useState({
     sysmonKeys: [],
-    sysmonReport: {},
     sysmonObj: {}
   });
+  const [sysmonReport, setSysmonReport] = useState({});
   const [subTabObj, setSubTabObj] = useState(null);
   const { report, timezone } = useSelector(state => state.errorreport);
   const { harvesters } = useSelector(state => state.harvester);
@@ -33,9 +33,10 @@ function ErrorReportDetail(props) {
     if (report?.report?.data?.sysmon_report) {
       const sysmonReport = transformSysmonReport(report.report.data.sysmon_report)
       const sysmonKeys = Object.keys(sysmonReport);
+      setSysmonReport(current => sysmonReport)
       const sysmonObj= sysmonReport[activeTab.sysmon]
       setSysmonObj(current => {
-        return {...current, sysmonKeys, sysmonObj, sysmonReport}
+        return {...current, sysmonKeys, sysmonObj}
       })
     }
   },[report.report, activeTab.sysmon])
@@ -49,8 +50,14 @@ function ErrorReportDetail(props) {
       setActiveTab(current => {
         return {...current, sysmon: tab}
       })
+      setSysmonObj(current => {
+        return {...current, sysmonObj: sysmonReport[tab]}
+      })
       if (tab !== "Master") {
-        setSubTabObj(current => obj.NUC)
+        setActiveTab(current => {
+          return {...current, subtabs: "NUC"}
+        })
+        setSubTabObj(current => sysmonReport[tab]['NUC'])
       }
     } else if (category === "subtabs") {
       setActiveTab(current => {
