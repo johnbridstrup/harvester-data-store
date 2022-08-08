@@ -36,18 +36,11 @@ then
     sudo apt update -y
 fi
 
-sudo apt install -y docker-ce docker-ce-cli containerd.io
+sudo apt install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
 sudo groupadd docker || true
 sudo usermod -aG docker $USER
 
 echo "" && echo "Checking for Docker Desktop install"
-
-dpkg -l docker-desktop &> /dev/null
-if [ $? -ne 0 ]; then
-    echo "Installing Docker Desktop"
-    curl https://desktop-stage.docker.com/linux/main/amd64/77103/docker-desktop.deb --output docker-desktop.deb
-    sudo apt install -y ./docker-desktop.deb
-fi
 
 docker compose version
 
