@@ -106,10 +106,10 @@ function ErrorReportDetail(props) {
           {activeTab.sysmon === "Master" ? sysmonObj.sysmonObj && (
             <Container>
               <div className='row'>
-                <div className='col-xl-8 col-md-12 col-sm-12'>
+                <div className='col-xl-12 col-md-12 col-sm-12'>
                   <ChronyInfoPlot robot="Master" chronyInfo={sysmonObj.sysmonObj?.chrony_info} />
                 </div>
-                <div className='col-xl-4 col-md-12 col-sm-12'>
+                <div className='col-xl-12 col-md-12 col-sm-12'>
                   <TimeTable sysmonObj={sysmonObj.sysmonObj} />
                 </div>
               </div>
@@ -118,10 +118,10 @@ function ErrorReportDetail(props) {
           ): subTabObj && (
             <Container>
               <div className='row'>
-                <div className='col-xl-8 col-md-12 col-sm-12'>
+                <div className='col-xl-12 col-md-12 col-sm-12'>
                   <ChronyInfoPlot robot="Robot" chronyInfo={subTabObj?.chrony_info} />
                 </div>
-                <div className='col-xl-4 col-md-12 col-sm-12'>
+                <div className='col-xl-12 col-md-12 col-sm-12'>
                   <TimeTable sysmonObj={subTabObj} />
                 </div>
               </div>
