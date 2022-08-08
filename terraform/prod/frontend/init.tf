@@ -3,7 +3,7 @@ terraform {
     profile        = "aft-prod"
     region         = "us-west-1"
     bucket         = "aft-tf-state-us-west-1"
-    key            = "us-west-1/hds_ecs.tfstate"
+    key            = "us-west-1/hds_frontend.tfstate"
     dynamodb_table = "aft-tf-state-lock-us-west-1"
   }
 }
@@ -48,10 +48,6 @@ data "aws_route53_zone" "private_cloud_zone" {
 
 data "aws_secretsmanager_secret_version" "hds_rds_pwd" {
   secret_id = "hds_rds_pwd"
-}
-
-data "aws_secretsmanager_secret_version" "django_secret_key" {
-  secret_id = "hds_django_secret"
 }
 
 data "aws_security_group" "lambda_sg" {
