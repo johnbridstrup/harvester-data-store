@@ -35,7 +35,21 @@ export const logout = createAsyncThunk('auth/logout', async(tokenData, thunkAPI)
     const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
     return thunkAPI.rejectWithValue(message);
   }
-})
+});
+
+
+export const invalidateCache = (error, dispatch) => {
+  const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+    if (message === "Request failed with status code 401") {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      localStorage.removeItem('isAuthenticated');
+      localStorage.removeItem('csrftoken')
+      dispatch(reset())
+    }
+  return message
+}
+
 
 export const authSlice = createSlice({
   name: 'auth',

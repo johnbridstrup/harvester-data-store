@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { invalidateCache } from '../auth/authSlice';
 import harvesterService from './harvesterService';
 
 
@@ -15,7 +16,7 @@ export const listHarvesters = createAsyncThunk('harvester/listHarvesters', async
     return await harvesterService.listHarvesters(token);
   } catch (error) {
     console.log(error)
-    const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+    const message = invalidateCache(error, thunkAPI.dispatch)
     return thunkAPI.rejectWithValue(message);
   }
 });
@@ -25,7 +26,7 @@ export const getHarvesterById = createAsyncThunk('harvester/getHarvesterById', a
     return await harvesterService.getHarvesterById(harvId);
   } catch (error) {
     console.log(error)
-    const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+    const message = invalidateCache(error, thunkAPI.dispatch)
     return thunkAPI.rejectWithValue(message);
   }
 })

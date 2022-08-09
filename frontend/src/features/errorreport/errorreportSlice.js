@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { transformErrorReport } from '../../utils/utils';
+import { invalidateCache } from '../auth/authSlice';
 import errorreportService from './errorreportService';
 
 
@@ -24,7 +25,7 @@ export const errorreportListView = createAsyncThunk('errorreport/errorreportList
     return await errorreportService.errorListView(token);
   } catch (error) {
     console.log(error)
-    const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+    const message = invalidateCache(error, thunkAPI.dispatch)
     return thunkAPI.rejectWithValue(message);
   }
 });
@@ -36,7 +37,7 @@ export const queryErrorReport = createAsyncThunk('errorreport/queryErrorReport',
     return await errorreportService.queryErrorReport(queryObj, token)
   } catch (error) {
     console.log(error)
-    const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+    const message = invalidateCache(error, thunkAPI.dispatch)
     return thunkAPI.rejectWithValue(message);
   }
 })
@@ -47,7 +48,7 @@ export const paginateErrorReport = createAsyncThunk('errorreport/paginateErrorRe
     return await errorreportService.paginateErrorReport(url, token);
   } catch (error) {
     console.log(error);
-    const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+    const message = invalidateCache(error, thunkAPI.dispatch)
     return thunkAPI.rejectWithValue(message);
   }
 })
@@ -59,7 +60,7 @@ export const detailErrorReport = createAsyncThunk('errorreport/detailErrorReport
     return await errorreportService.detailErrorReport(reportId, token);
   } catch (error) {
     console.log(error);
-    const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+    const message = invalidateCache(error, thunkAPI.dispatch)
     return thunkAPI.rejectWithValue(message);
   }
 })

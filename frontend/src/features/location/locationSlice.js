@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { invalidateCache } from '../auth/authSlice';
 import locationService from './locationService';
 
 
@@ -16,7 +17,7 @@ export const listLocations = createAsyncThunk('location/listLocations', async (_
     return await locationService.listLocations(token);
   } catch (error) {
     console.log(error);
-    const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+    const message = invalidateCache(error, thunkAPI.dispatch)
     return thunkAPI.rejectWithValue(message);
   }
 });
@@ -28,7 +29,7 @@ export const getLocationById = createAsyncThunk('location/getLocationById', asyn
     return await locationService.getLocationById(locId, token);
   } catch (error) {
     console.log(error);
-    const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+    const message = invalidateCache(error, thunkAPI.dispatch)
     return thunkAPI.rejectWithValue(message);
   }
 })
