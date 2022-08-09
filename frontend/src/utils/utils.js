@@ -23,7 +23,7 @@ const extractServiceCodes = (exceptions=[]) => {
   let codes = []
   exceptions.forEach(exec => {
     services.push(`${exec.service}.${exec.node}`)
-    codes.push(exec.code)
+    codes.push(exec.code.code)
   });
   return {services, codes}
 }
