@@ -8,6 +8,7 @@ locals {
   hds_superuser_pwd_id     = "hds_superuser_pwd"
   errorreport_queue_name   = "errorreport-queue"
   enable_prometheus_scrape = true
+  sqs_client_metrics_port = 9104
 }
 
 resource "random_password" "hds_superuser_pwd" {
@@ -95,6 +96,7 @@ module "hds" {
   load_balancer_subnets          = data.aws_subnet_ids.priv_subnets.ids
   ecs_cluster_arn                = data.aws_ecs_cluster.hds-cluster.arn
   enable_prometheus_scrape       = local.enable_prometheus_scrape
+  additional_prometheus_ports = [ local.sqs_client_metrics_port ]
   route53_priv_zone_id           = data.aws_route53_zone.private_cloud_zone.id
   route53_pub_zone_id            = data.aws_route53_zone.cloud_zone.id
   service_environments_variables = local.environment_variables
@@ -107,7 +109,8 @@ module "hds" {
     "443,tcp,${data.aws_security_group.pritunl_sg.id},ssl traffic from pritunl"
   ]
   service_ingress_sg_rules = [
-    "${local.service_port},tcp,${data.aws_security_group.prom_scrape_sg.id},prometheus scraping"
+    "${local.service_port},tcp,${data.aws_security_group.prom_scrape_sg.id},django prometheus scraping",
+    "${local.sqs_client_metrics_port},tcp,${data.aws_security_group.prom_scrape_sg.id},sqs client prometheus scraping"
   ]
 }
 
