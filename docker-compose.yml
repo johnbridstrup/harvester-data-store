@@ -41,8 +41,6 @@ services:
     build:
      context: ./frontend
     command: ./entrypoint.sh
-    volumes: 
-      - ./frontend/build:/opt/app/build
     ports:
       - 127.0.0.1:3000:3000
     networks:
