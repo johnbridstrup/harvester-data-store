@@ -1,15 +1,12 @@
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { Loader, timeStampFormat, transformTableErrorReport } from '../../utils/utils';
+import { Loader, timeStampFormat } from '../../utils/utils';
 import { Container, LoaderDiv, Table } from '../styled';
 
 
 function ErrorReportTable(props) {
   const { reports, loading, timezone } = useSelector(state => state.errorreport);
-  const harvesters = useSelector(state => state.harvester.harvesters);
-  const locations = useSelector(state => state.location.locations);
   const navigate = useNavigate();
-  const errorreports = transformTableErrorReport(reports, harvesters, locations);
 
   const navigateToDetail = (reportId) => navigate(`/errorreports/${reportId}`);
 
@@ -29,7 +26,7 @@ function ErrorReportTable(props) {
           </tr>
         </thead>
         <tbody className='report-tbody'>
-          {errorreports.map((report, index) => (
+          {reports.map((report, index) => (
             <tr key={index} onClick={() => navigateToDetail(report.reportId)}>
               <td>{timeStampFormat(report.reportTime, timezone)}</td>
               <td>{report.harvester.harv_id}</td>
