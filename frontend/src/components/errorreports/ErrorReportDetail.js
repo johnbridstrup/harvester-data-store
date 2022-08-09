@@ -10,7 +10,7 @@ import TimeTable from '../tables/TimeTable';
 
 function ErrorReportDetail(props) {
   const [activeTab, setActiveTab] = useState({
-    exception: "traychg.0: 9",
+    exception: "",
     sysmon: "Master",
     subtabs: "NUC"
   });
