@@ -12,12 +12,14 @@ function Pagination(props) {
     if (navigation === "next") {
       if (next) {
         const url = new URL(next);
+        if (process.env.REACT_APP_NODE_ENV === "production") url.protocol = "https:"
         url.searchParams.set("limit", pageLimit);
         await dispatch(paginateErrorReport(url));
       }
     } else {
       if (previous) {
         const url = new URL(previous);
+        if (process.env.REACT_APP_NODE_ENV === "production") url.protocol = "https:"
         url.searchParams.set("limit", pageLimit);
         await dispatch(paginateErrorReport(url));
       }
