@@ -16,6 +16,12 @@ class AFTExceptionSerializer(serializers.ModelSerializer):
         data._mutable = False
         return super().to_internal_value(data)
 
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        code = AFTExceptionCodeSerializer(instance.code).data
+        data['code'] = code
+        return data
+
     class Meta:
         model = AFTException
         fields = ('__all__')

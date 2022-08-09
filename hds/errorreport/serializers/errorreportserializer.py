@@ -1,6 +1,8 @@
 from common.serializers.reportserializer import ReportSerializerBase
 from ..models import ErrorReport
-from harvester.models import Harvester
+from harvester.models import Harvester, Location
+from harvester.serializers.harvesterserializer import HarvesterSerializer
+from location.serializers.locationserializer import LocationSerializer
 from exceptions.models import AFTException, AFTExceptionCode
 from exceptions.serializers import AFTExceptionSerializer
 
@@ -13,6 +15,14 @@ class ErrorReportSerializer(ReportSerializerBase):
         report_inst = super().create(validated_data)
         self.create_exceptions(report_inst)      
         return report_inst
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        harv_data = HarvesterSerializer(instance.harvester).data
+        location_data = LocationSerializer(instance.location).data
+        data['location'] = location_data
+        data['harvester'] = harv_data
+        return data
 
     def to_internal_value(self, data):
         report = data.copy()
