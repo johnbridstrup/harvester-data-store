@@ -10,7 +10,7 @@ import TimeTable from '../tables/TimeTable';
 
 function ErrorReportDetail(props) {
   const [activeTab, setActiveTab] = useState({
-    exception: "traychg.0: 1",
+    exception: "traychg.0: 9",
     sysmon: "Master",
     subtabs: "NUC"
   });
@@ -21,9 +21,7 @@ function ErrorReportDetail(props) {
   const [sysmonReport, setSysmonReport] = useState({});
   const [subTabObj, setSubTabObj] = useState(null);
   const { report, timezone } = useSelector(state => state.errorreport);
-  const { harvesters } = useSelector(state => state.harvester);
-  const { locations } = useSelector(state => state.location);
-  const reportObj = transformReportDetail(report, harvesters, locations);
+  const reportObj = transformReportDetail(report)
   const exceptions = transformExceptionObj(report.exceptions);
   const exceptionsKeys = Object.keys(exceptions);
   const exceptObj = exceptions[activeTab.exception];

@@ -135,24 +135,11 @@ export const copiedUrl = (paramsObj) => {
 }
 
 
-const reportLimitedObjs = (harvesters=[], locations=[], identity=null, identifier='harvester') => {
-  if (identifier === 'harvester') {
-    return harvesters.find(x => x.id === identity) || {}
-  } else if (identifier === 'location') {
-    return locations.find(x => x.id === identity) || {}
-  } else {
-    return {};
-  }
-}
-
-
-export const transformReportDetail = (report={}, harvesters=[], locations=[]) => {
+export const transformReportDetail = (report={}) => {
   const reportObj = {...report}
   const { services, codes } = extractServiceCodes(reportObj.exceptions);
-  reportObj['service'] = services.join(", ")
-  reportObj['code'] = codes.join(", ")
-  reportObj['harvester'] = reportLimitedObjs(harvesters, locations, reportObj.harvester, 'harvester')
-  reportObj['location'] = reportLimitedObjs(harvesters, locations, reportObj.location, 'location')
+  reportObj['service'] = services.join(", ");
+  reportObj['code'] = codes.join(", ");
   return reportObj;
 }
 
@@ -160,7 +147,7 @@ export const transformReportDetail = (report={}, harvesters=[], locations=[]) =>
 export const transformExceptionObj = (exceptions=[]) => {
   let exceptObj = {};
   exceptions.forEach(obj => {
-    exceptObj[`${obj.service}.${obj.node}: ${obj.code}`] = obj
+    exceptObj[`${obj.service}.${obj.node}: ${obj.code.code}`] = obj
   })
   return exceptObj;
 }
