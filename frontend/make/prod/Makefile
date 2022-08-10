@@ -4,4 +4,4 @@ HDS_URL = "https://hdsapi.cloud.advanced.farm"
 FRONTEND_URL = "https://hds.cloud.advanced.farm"
 NODE_ENV = "production"
 
-include ../hds.mk
+include ../hdsfrontend.mk
