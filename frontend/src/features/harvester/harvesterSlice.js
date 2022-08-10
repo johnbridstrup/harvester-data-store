@@ -11,12 +11,12 @@ const initialState = {
 
 export const listHarvesters = createAsyncThunk(
   "harvester/listHarvesters",
-  async (_, thunkAPI) => {
+  async (limit, thunkAPI) => {
     try {
       const {
         auth: { token },
       } = thunkAPI.getState();
-      return await harvesterService.listHarvesters(token);
+      return await harvesterService.listHarvesters(token, limit);
     } catch (error) {
       console.log(error);
       const message = invalidateCache(error, thunkAPI.dispatch);

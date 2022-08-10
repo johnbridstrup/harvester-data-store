@@ -5,3 +5,5 @@ export const API_BASE_URL =
   process.env.REACT_APP_HDS_API_URL || `http://localhost:${API_PORT}`;
 export const API_URL = `${API_BASE_URL}/api/${API_VERSION}`;
 export const CSRF_URL = `${API_URL}/users/csrf/`;
+export const MAX_HARV_LIMIT = 10000;
+export const MAX_LOC_LIMIT = 10000;

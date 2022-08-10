@@ -15,6 +15,10 @@ import Pagination from "../../../components/pagination/Pagination";
 import "./styles.css";
 import { copiedUrl, paramsToObject } from "../../../utils/utils";
 import CopyToClipboard from "../../../components/copytoclipboard/CopyToClipboard";
+import {
+  MAX_HARV_LIMIT,
+  MAX_LOC_LIMIT,
+} from "../../../features/base/constants";
 
 function ErrorsReportList(props) {
   const dispatch = useDispatch();
@@ -23,8 +27,8 @@ function ErrorsReportList(props) {
   useEffect(() => {
     (async () => {
       await Promise.all([
-        dispatch(listHarvesters()),
-        dispatch(listLocations()),
+        dispatch(listHarvesters(MAX_HARV_LIMIT)),
+        dispatch(listLocations(MAX_LOC_LIMIT)),
       ]);
     })();
     if (search) {

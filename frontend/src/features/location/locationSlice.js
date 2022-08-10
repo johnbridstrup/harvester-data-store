@@ -11,12 +11,12 @@ const initialState = {
 
 export const listLocations = createAsyncThunk(
   "location/listLocations",
-  async (_, thunkAPI) => {
+  async (limit, thunkAPI) => {
     try {
       const {
         auth: { token },
       } = thunkAPI.getState();
-      return await locationService.listLocations(token);
+      return await locationService.listLocations(token, limit);
     } catch (error) {
       console.log(error);
       const message = invalidateCache(error, thunkAPI.dispatch);
