@@ -21,7 +21,7 @@ function ChronyInfoPlot(props) {
     },
     xaxis: {
       type: "log",
-      range: [-4, 1.5],
+      range: [-10, 1.5],
       title: "seconds",
     },
   };
