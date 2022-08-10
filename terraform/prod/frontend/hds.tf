@@ -3,7 +3,7 @@ locals {
   dns_name               = "hds.cloud.advanced.farm"
   service_port           = "3000"
   service_name           = "hds-frontend"
-  service_docker_image   = "082346306812.dkr.ecr.us-west-1.amazonaws.com/hds:hds-frontend-9f23f7a6"
+  service_docker_image   = "838860823423.dkr.ecr.us-west-1.amazonaws.com/hds:hds-frontend-2a4f9db"
   healthcheck_path       = "/"
 }
 
