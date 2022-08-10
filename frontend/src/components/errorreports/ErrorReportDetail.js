@@ -1,14 +1,15 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, lazy, Suspense } from "react";
 import { useSelector } from "react-redux";
 import {
+  Loader,
   timeStampFormat,
   transformExceptionObj,
   transformReportDetail,
   transformSysmonReport,
 } from "../../utils/utils";
-import ChronyInfoPlot from "../plotly/ChronyInfoPlot";
 import {
   Container,
+  LoaderDiv,
   NavTabItem,
   NavTabs,
   NavTabSpan,
@@ -17,6 +18,7 @@ import {
 import ErrorReportDetailTable from "../tables/ErrorReportDetailTable";
 import ServiceTable from "../tables/ServiceTable";
 import TimeTable from "../tables/TimeTable";
+const ChronyInfoPlot = lazy(() => import("../plotly/ChronyInfoPlot"));
 
 function ErrorReportDetail(props) {
   const [activeTab, setActiveTab] = useState({
@@ -162,10 +164,18 @@ function ErrorReportDetail(props) {
                   <Container>
                     <div className="row">
                       <div className="col-xl-12 col-md-12 col-sm-12">
-                        <ChronyInfoPlot
-                          robot="Master"
-                          chronyInfo={sysmonObj.sysmonObj?.chrony_info}
-                        />
+                        <Suspense
+                          fallback={
+                            <LoaderDiv>
+                              <Loader size={25} />
+                            </LoaderDiv>
+                          }
+                        >
+                          <ChronyInfoPlot
+                            robot="Master"
+                            chronyInfo={sysmonObj.sysmonObj?.chrony_info}
+                          />
+                        </Suspense>
                       </div>
                       <div className="col-xl-12 col-md-12 col-sm-12">
                         <TimeTable sysmonObj={sysmonObj.sysmonObj} />
@@ -178,10 +188,18 @@ function ErrorReportDetail(props) {
                   <Container>
                     <div className="row">
                       <div className="col-xl-12 col-md-12 col-sm-12">
-                        <ChronyInfoPlot
-                          robot="Robot"
-                          chronyInfo={subTabObj?.chrony_info}
-                        />
+                        <Suspense
+                          fallback={
+                            <LoaderDiv>
+                              <Loader size={25} />
+                            </LoaderDiv>
+                          }
+                        >
+                          <ChronyInfoPlot
+                            robot="Robot"
+                            chronyInfo={subTabObj?.chrony_info}
+                          />
+                        </Suspense>
                       </div>
                       <div className="col-xl-12 col-md-12 col-sm-12">
                         <TimeTable sysmonObj={subTabObj} />
