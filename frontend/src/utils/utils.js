@@ -206,7 +206,8 @@ export const transformSysmonServices = (sysmon = {}) => {
     service.push(key);
     service.push(value["cpu"]);
     service.push(value["mem"]);
-    service.push(value["fsm"]["components"].join(", "));
+    if (value?.fsm?.components)
+      service.push(value["fsm"]["components"].join(", "));
     sysmonArr.push(service);
   }
   return sysmonArr;
