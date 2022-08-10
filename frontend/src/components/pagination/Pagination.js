@@ -1,12 +1,35 @@
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { useLocation } from "react-router-dom";
+import { ERROR_REPORT_URL } from "../../features/errorreport/errorreportService";
 import { paginateErrorReport } from "../../features/errorreport/errorreportSlice";
 import { InputLimit, PageItem, SpanLimit } from "../styled";
 
 function Pagination(props) {
   const [pageLimit, setPageLimit] = useState(10);
+  const { queryUrl } = useSelector((state) => state.errorreport);
   const { next, previous } = useSelector((state) => state.errorreport);
   const dispatch = useDispatch();
+  const { search } = useLocation();
+
+  const handleOnLimitChange = async (limit) => {
+    setPageLimit(limit);
+    let url;
+    if (typeof queryUrl === "string" && queryUrl.length > 0) {
+      url = new URL(queryUrl);
+      url.searchParams.set("limit", limit);
+      await dispatch(
+        paginateErrorReport(
+          `${ERROR_REPORT_URL}?${url.searchParams.toString()}`
+        )
+      );
+    } else {
+      let urlStr = `${ERROR_REPORT_URL}?${search.toString()}`;
+      url = new URL(urlStr);
+      url.searchParams.set("limit", limit);
+      await dispatch(paginateErrorReport(url));
+    }
+  };
 
   const handlePagination = async (navigation) => {
     if (navigation === "next") {
@@ -56,7 +79,7 @@ function Pagination(props) {
               <InputLimit
                 type="number"
                 value={pageLimit}
-                onChange={(e) => setPageLimit(e.target.value)}
+                onChange={(e) => handleOnLimitChange(e.target.value)}
               />
             </PageItem>
           </ul>
