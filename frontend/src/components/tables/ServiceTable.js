@@ -1,11 +1,11 @@
-import PropTypes from 'prop-types'
-import { transformSysmonServices } from '../../utils/utils';
+import PropTypes from "prop-types";
+import { transformSysmonServices } from "../../utils/utils";
 
 function ServiceTable(props) {
-  const services = transformSysmonServices(props.services)
+  const services = transformSysmonServices(props.services);
   return (
-    <div className='table-responsive'>
-      <table className='table'>
+    <div className="table-responsive">
+      <table className="table">
         <thead>
           <tr>
             <th>Service</th>
@@ -25,11 +25,11 @@ function ServiceTable(props) {
         </tbody>
       </table>
     </div>
-  )
+  );
 }
 
 ServiceTable.propTypes = {
-  services: PropTypes.object
+  services: PropTypes.object,
 };
 
 export default ServiceTable;

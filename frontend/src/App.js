@@ -1,19 +1,19 @@
-import { useEffect } from 'react';
+import { useEffect } from "react";
 import BaseRouter from "./routes";
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { persistCSRFToken } from './features/base/service';
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { persistCSRFToken } from "./features/base/service";
 
 function App() {
   useEffect(() => {
-    (async() => {
+    (async () => {
       persistCSRFToken();
     })();
   });
   return (
     <>
-    <BaseRouter />
-    <ToastContainer />
+      <BaseRouter />
+      <ToastContainer />
     </>
   );
 }

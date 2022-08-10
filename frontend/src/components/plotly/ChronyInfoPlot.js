@@ -1,15 +1,12 @@
-import Plotly from 'react-plotly.js';
-import PropTypes from 'prop-types';
+import Plotly from "react-plotly.js";
+import PropTypes from "prop-types";
 
 function ChronyInfoPlot(props) {
-  const red = 'rgb(230, 2, 2)';
-  const yellow = 'rgb(227, 220, 5)';
-  const green = 'rgb(72, 191, 8)';
+  const red = "rgb(230, 2, 2)";
+  const yellow = "rgb(227, 220, 5)";
+  const green = "rgb(72, 191, 8)";
 
-  const labels = [
-    "Last Offset",
-    "RMS Offset"
-  ];
+  const labels = ["Last Offset", "RMS Offset"];
 
   const layout = {
     autosize: false,
@@ -20,61 +17,69 @@ function ChronyInfoPlot(props) {
       r: 0,
       b: 50,
       t: 30,
-      pad: 0
+      pad: 0,
     },
     xaxis: {
-      type: 'log',
+      type: "log",
       range: [-4, 1.5],
-      title: "seconds"
+      title: "seconds",
     },
   };
 
   function masterColor(offsetSeconds) {
-    let offset = Math.abs(offsetSeconds)
+    let offset = Math.abs(offsetSeconds);
     if (offset < 1) {
-        return green;
+      return green;
     } else if (offset < 10) {
-        return yellow;
+      return yellow;
     } else {
-        return red;
+      return red;
     }
-  };
+  }
 
   function robotColor(offsetSeconds) {
-    let offset = Math.abs(offsetSeconds)
-    if ( offset < 0.1) {
-        return green;
+    let offset = Math.abs(offsetSeconds);
+    if (offset < 0.1) {
+      return green;
     } else if (offset < 1) {
-        return yellow;
+      return yellow;
     } else {
-        return red;
+      return red;
     }
   }
 
   function makeChronyData(lastOffset, rmsOffset) {
-    const data = [{
-      type: 'bar',
-      x: [Math.abs(lastOffset), rmsOffset],
-      y: labels,
-      orientation: 'h',
-      marker: {
-        color: props.robot === "Master" ? [masterColor(lastOffset), masterColor(rmsOffset)] : [robotColor(lastOffset), robotColor(rmsOffset)]
-      }
-    }];
+    const data = [
+      {
+        type: "bar",
+        x: [Math.abs(lastOffset), rmsOffset],
+        y: labels,
+        orientation: "h",
+        marker: {
+          color:
+            props.robot === "Master"
+              ? [masterColor(lastOffset), masterColor(rmsOffset)]
+              : [robotColor(lastOffset), robotColor(rmsOffset)],
+        },
+      },
+    ];
     return data;
-  };
+  }
 
   return (
     <Plotly
-     data={makeChronyData(props.chronyInfo?.last_offset, props.chronyInfo?.rms_offset)} 
-     layout={layout}
+      data={makeChronyData(
+        props.chronyInfo?.last_offset,
+        props.chronyInfo?.rms_offset
+      )}
+      layout={layout}
     />
-  )
+  );
 }
 
 ChronyInfoPlot.propTypes = {
   chronyInfo: PropTypes.object,
-  robot: PropTypes.string
-}
+  robot: PropTypes.string,
+};
 
 export default ChronyInfoPlot;

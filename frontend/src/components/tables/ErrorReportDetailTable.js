@@ -1,13 +1,12 @@
-import PropTypes from 'prop-types';
-import { timeStampFormat } from '../../utils/utils';
+import PropTypes from "prop-types";
+import { timeStampFormat } from "../../utils/utils";
 
 function ErrorReportDetailTable(props) {
-
   return (
-    <div className='row'>
-      <div className='col'>
-        <div className='table-responsive'>
-          <table className='table'>
+    <div className="row">
+      <div className="col">
+        <div className="table-responsive">
+          <table className="table">
             <thead>
               <tr>
                 <th>Time</th>
@@ -21,12 +20,14 @@ function ErrorReportDetailTable(props) {
             </thead>
             <tbody>
               <tr>
-                <td>{timeStampFormat(props.reportObj?.reportTime, props.timezone)}</td>
+                <td>
+                  {timeStampFormat(props.reportObj?.reportTime, props.timezone)}
+                </td>
                 <td>{props.reportObj?.harvester?.harv_id}</td>
                 <td>{props.reportObj?.location?.ranch}</td>
                 <td>{props.reportObj?.code}</td>
                 <td>{props.reportObj?.service}</td>
-                <td>{props.reportObj?.report?.data?.branch_name }</td>
+                <td>{props.reportObj?.report?.data?.branch_name}</td>
                 <td>{props.reportObj?.report?.data?.githash}</td>
               </tr>
             </tbody>
@@ -34,12 +35,12 @@ function ErrorReportDetailTable(props) {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 ErrorReportDetailTable.propTypes = {
   reportObj: PropTypes.object,
-  timezone: PropTypes.string
-}
+  timezone: PropTypes.string,
+};
 
 export default ErrorReportDetailTable;
