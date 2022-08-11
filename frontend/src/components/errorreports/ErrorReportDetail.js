@@ -213,7 +213,13 @@ function ErrorReportDetail(props) {
         </div>
       </div>
       <Container>
-        <Suspense fallback={<LoaderDiv><Loader size={25} /></LoaderDiv>}>
+        <Suspense
+          fallback={
+            <LoaderDiv>
+              <Loader size={25} />
+            </LoaderDiv>
+          }
+        >
           <ErrorReportJson reportObj={reportObj} />
         </Suspense>
       </Container>

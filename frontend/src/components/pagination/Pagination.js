@@ -13,7 +13,7 @@ function Pagination(props) {
   const dispatch = useDispatch();
   const { search } = useLocation();
 
-  const handleOnLimitChange = debounce ( async (limit) => {
+  const handleOnLimitChange = debounce(async (limit) => {
     setPageLimit(limit);
     let url;
     if (typeof queryUrl === "string" && queryUrl.length > 0) {

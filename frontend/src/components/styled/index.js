@@ -139,7 +139,6 @@ export const NavTabSpan = styled.span`
   }
 `;
 
-
 export const JsonDiv = styled.div`
   width: 100%;
   height: 400px;
