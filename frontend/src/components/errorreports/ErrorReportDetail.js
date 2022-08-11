@@ -19,6 +19,7 @@ import ErrorReportDetailTable from "../tables/ErrorReportDetailTable";
 import ServiceTable from "../tables/ServiceTable";
 import TimeTable from "../tables/TimeTable";
 const ChronyInfoPlot = lazy(() => import("../plotly/ChronyInfoPlot"));
+const ErrorReportJson = lazy(() => import("./ErrorReportJson"));
 
 function ErrorReportDetail(props) {
   const [activeTab, setActiveTab] = useState({
@@ -211,6 +212,11 @@ function ErrorReportDetail(props) {
           </Container>
         </div>
       </div>
+      <Container>
+        <Suspense fallback={<LoaderDiv><Loader size={25} /></LoaderDiv>}>
+          <ErrorReportJson reportObj={reportObj} />
+        </Suspense>
+      </Container>
     </>
   );
 }

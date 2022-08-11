@@ -138,3 +138,12 @@ export const NavTabSpan = styled.span`
     border-color: #dee2e6 #dee2e6 #fff;
   }
 `;
+
+
+export const JsonDiv = styled.div`
+  width: 100%;
+  height: 400px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  overflow-y: scroll;
+`;
