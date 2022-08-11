@@ -1,6 +1,6 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
-import ReactJson from "react-json-view";
+import ReactJson from "@microlink/react-json-view";
 import { JsonDiv } from "../styled";
 
 function ErrorReportJson(props) {

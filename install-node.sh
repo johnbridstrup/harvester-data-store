@@ -5,7 +5,7 @@ set -e
 # Run this script like - bash script-name.sh
 
 # Define versions
-INSTALL_NODE_VER=18.6.0
+INSTALL_NODE_VER=16.16.0
 INSTALL_NVM_VER=0.39.1
 INSTALL_YARN_VER=1.22.19
 

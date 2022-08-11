@@ -1,4 +1,4 @@
-FROM node:18.7-slim as buildStage
+FROM node:16.16.0-alpine as buildStage
 
 # Copy and package installation
 RUN mkdir -p /react/app/
@@ -22,7 +22,7 @@ RUN echo "HOSTED URL: ${REACT_APP_HOSTED_URL}"
 RUN echo "NODE ENV: ${REACT_APP_NODE_ENV}"
 RUN npm run build
 
-FROM node:18.7-slim
+FROM node:16.16.0-alpine
 RUN mkdir -p /opt/app/
 WORKDIR /opt/app/
 COPY server.js /opt/app/
@@ -30,4 +30,4 @@ COPY entrypoint.sh /opt/app/entrypoint.sh
 COPY --from=buildStage /react/app/build/ /opt/app/build/
 RUN npm install express dotenv
 EXPOSE 3000
-CMD /opt/app/entrypoint.sh
+CMD ["/opt/app/entrypoint.sh"]
