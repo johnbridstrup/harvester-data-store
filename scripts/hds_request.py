@@ -3,7 +3,8 @@ import requests
 import argparse
 
 domains = {
-    'prod': 'https://hds.cloud.advanced.farm/'
+    'prod': 'https://hdsapi.cloud.advanced.farm/',
+    'dev': 'https://hdsapi.devcloud.advanced.farm/'
 }
 
 methods = {
@@ -67,10 +68,7 @@ if __name__ == '__main__':
         'headers': {"Accept": "application/json", "Authorization": f"Token {opts.token}"}
     }
 
-    if opts.env == 'dev':
-        domain = input("Input dev DNS name: ")
-    elif opts.env == 'prod':
-        domain = domains['prod']
+    domain = domains[opts.env]
 
     if opts.data:
         with open(opts.data, 'r') as f:
