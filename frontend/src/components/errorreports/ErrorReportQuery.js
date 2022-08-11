@@ -23,6 +23,8 @@ function ErrorReportQuery(props) {
   const [selectedHarvId, setSelectedHarvId] = useState(null);
   const [selectedLocation, setSelectedLocation] = useState(null);
   const [selectedTimezone, setSelectedTimezone] = useState(null);
+  const [selectedFruit, setSelectedFruit] = useState(null);
+  const [selectedCode, setSelectedCode] = useState(null);
   const [datesQuery, setDatesQuery] = useState({
     start_time: "",
     end_time: "",
@@ -33,6 +35,8 @@ function ErrorReportQuery(props) {
   const harvesterOptions = transformHarvOptions(harvesters);
   const locationOptions = transformLocOptions(locations);
   const timezoneOptions = transformTzOptions(timezones);
+  const fruitOptions = [{ value: "strawberry", label: "strawberry" }];
+  const codeOptions = [{ value: 1, label: 1 }];
   const dispatch = useDispatch();
 
   const handleHarvestSelect = (newValue, actionMeta) => {
@@ -46,6 +50,14 @@ function ErrorReportQuery(props) {
   const handleTimezoneSelect = (newValue, actionMeta) => {
     setSelectedTimezone((current) => newValue);
     dispatch(timezoneUpdate(newValue.value));
+  };
+
+  const handleFruitSelect = (newValue, actionMeta) => {
+    setSelectedFruit((current) => newValue);
+  };
+
+  const handleCodeSelect = (newValue, actionMeta) => {
+    setSelectedCode((current) => newValue);
   };
 
   const handleFormQuerySubmit = async (e) => {
@@ -120,6 +132,40 @@ function ErrorReportQuery(props) {
               </div>
             </div>
             <div className="row mb-4">
+              <div className="col-md-6">
+                <div className="form-group">
+                  <label htmlFor="fruit">Fruit</label>
+                  <Select
+                    isMulti
+                    isSearchable
+                    placeholder="strawberry"
+                    options={fruitOptions}
+                    name="fruit"
+                    onChange={handleFruitSelect}
+                    defaultValue={selectedFruit}
+                    className="multi-select-container"
+                    classNamePrefix="select"
+                  />
+                </div>
+              </div>
+              <div className="col-md-6">
+                <div className="form-group">
+                  <label htmlFor="code">Code</label>
+                  <Select
+                    isMulti
+                    isSearchable
+                    placeholder="1,2,3,..."
+                    options={codeOptions}
+                    name="code"
+                    onChange={handleCodeSelect}
+                    defaultValue={selectedCode}
+                    className="multi-select-container"
+                    classNamePrefix="select"
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="row mb-4">
               <div className="col-md-4">
                 <div className="form-group">
                   <label htmlFor="start_time">Start Time</label>
@@ -155,7 +201,7 @@ function ErrorReportQuery(props) {
                     options={timezoneOptions}
                     name="tz"
                     onChange={handleTimezoneSelect}
-                    defaultValue={selectedLocation}
+                    defaultValue={selectedTimezone}
                     className="multi-select-container"
                     classNamePrefix="select"
                   />
