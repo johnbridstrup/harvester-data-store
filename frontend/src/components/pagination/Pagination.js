@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useLocation } from "react-router-dom";
 import { ERROR_REPORT_URL } from "../../features/errorreport/errorreportService";
 import { paginateErrorReport } from "../../features/errorreport/errorreportSlice";
+import { debounce } from "../../utils/utils";
 import { InputLimit, PageItem, SpanLimit } from "../styled";
 
 function Pagination(props) {
@@ -12,7 +13,7 @@ function Pagination(props) {
   const dispatch = useDispatch();
   const { search } = useLocation();
 
-  const handleOnLimitChange = async (limit) => {
+  const handleOnLimitChange = debounce ( async (limit) => {
     setPageLimit(limit);
     let url;
     if (typeof queryUrl === "string" && queryUrl.length > 0) {
@@ -29,7 +30,7 @@ function Pagination(props) {
       url.searchParams.set("limit", limit);
       await dispatch(paginateErrorReport(url));
     }
-  };
+  }, 100);
 
   const handlePagination = async (navigation) => {
     if (navigation === "next") {

@@ -212,3 +212,14 @@ export const transformSysmonServices = (sysmon = {}) => {
   }
   return sysmonArr;
 };
+
+
+export const debounce = function(cb, timeout) {
+  let timer;
+  return function(...args) {
+    if (timer) clearTimeout(timer);
+    timer = setTimeout(function(){
+      cb(...args)
+    },timeout)
+  }
+}
