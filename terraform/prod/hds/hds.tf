@@ -1,11 +1,11 @@
 locals {
-  env                  = "prod"
-  dns_name             = "hdsapi.cloud.advanced.farm"
-  service_port         = "8000"
-  service_name         = "hds"
-  service_docker_image = "838860823423.dkr.ecr.us-west-1.amazonaws.com/hds:hds-staging-779d884"
-  healthcheck_path     = "/api/v1/healthcheck/"
-  hds_superuser_pwd_id = "hds_superuser_pwd"
+  env                    = "prod"
+  dns_name               = "hdsapi.cloud.advanced.farm"
+  service_port           = "8000"
+  service_name           = "hds"
+  service_docker_image   = "838860823423.dkr.ecr.us-west-1.amazonaws.com/hds:hds-staging-779d884"
+  healthcheck_path       = "/api/v1/healthcheck/"
+  hds_superuser_pwd_id   = "hds_superuser_pwd"
   errorreport_queue_name = "errorreport-queue"
 }
 
@@ -49,8 +49,8 @@ locals {
     { "name" : "DJANGO_SUPERUSER_USERNAME", "value" : "aft" },
     { "name" : "DJANGO_SUPERUSER_EMAIL", "value" : "john@advanced.farm" },
     { "name" : "SQS_USER_PASSWORD", "value" : random_password.sqs_pwd.result },
-    { "name" : "HDS_PORT", "value" : 8000},
-    { "name" : "ERRORREPORTS_QUEUE_URL", "value" : data.aws_sqs_queue.errorreport_queue.url}
+    { "name" : "HDS_PORT", "value" : 8000 },
+    { "name" : "ERRORREPORTS_QUEUE_URL", "value" : data.aws_sqs_queue.errorreport_queue.url }
   ]
 }
 

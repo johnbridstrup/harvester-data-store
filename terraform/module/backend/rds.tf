@@ -1,5 +1,5 @@
 locals {
-  db_pwd_id              = "hds_rds_pwd"
+  db_pwd_id = "hds_rds_pwd"
 }
 resource "random_password" "hds_rds_pwd" {
   length  = 16

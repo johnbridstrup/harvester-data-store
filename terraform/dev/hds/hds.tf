@@ -49,8 +49,8 @@ locals {
     { "name" : "DJANGO_SUPERUSER_USERNAME", "value" : "aft" },
     { "name" : "DJANGO_SUPERUSER_EMAIL", "value" : "john@advanced.farm" },
     { "name" : "SQS_USER_PASSWORD", "value" : random_password.sqs_pwd.result },
-    { "name" : "HDS_PORT", "value" : 8000},
-    { "name" : "ERRORREPORTS_QUEUE_URL", "value" : data.aws_sqs_queue.errorreport_queue.url}
+    { "name" : "HDS_PORT", "value" : 8000 },
+    { "name" : "ERRORREPORTS_QUEUE_URL", "value" : data.aws_sqs_queue.errorreport_queue.url }
   ]
 }
 
