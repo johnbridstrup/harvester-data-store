@@ -56,5 +56,11 @@ class ErrorReportView(CreateModelViewSet):
             if len(qp) > 0:
                 listfilter['harvester__fruit__name'] = qp
 
+        # get exception codes from request and filter queryset for exception code
+        if 'codes' in self.request.query_params:
+            codes = self.request.query_params["codes"].split(",")
+            if len(codes) > 0:
+                listfilter['exceptions__code__code__in'] = codes
+
         return ErrorReport.objects.filter(**listfilter).order_by('-reportTime')
 
