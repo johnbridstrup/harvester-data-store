@@ -48,7 +48,7 @@ export const DivTotalReport = styled.div`
 
 export const InputFormControl = styled.input`
   display: block;
-  width: 90%;
+  width: 100%;
   padding: 0.375rem 0.75rem;
   font-size: 1rem;
   font-weight: 400;

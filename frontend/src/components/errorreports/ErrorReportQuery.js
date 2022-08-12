@@ -32,6 +32,7 @@ function ErrorReportQuery(props) {
     start_time: "",
     end_time: "",
   });
+  const [traceback, setTraceback] = useState("");
   const count = useSelector((state) => state.errorreport.count);
   const { harvesters } = useSelector((state) => state.harvester);
   const { locations } = useSelector((state) => state.location);
@@ -65,6 +66,10 @@ function ErrorReportQuery(props) {
     setSelectedCode((current) => newValue);
   };
 
+  const handleTracebackChange = e => {
+    setTraceback(e.target.value);
+  }
+
   const handleFormQuerySubmit = async (e) => {
     e.preventDefault();
     let queryObj = {};
@@ -92,6 +97,9 @@ function ErrorReportQuery(props) {
     }
     if (selectedCode && selectedCode.length > 0) {
       queryObj['codes'] = translateCodeOptions(selectedCode)
+    }
+    if (traceback) {
+      queryObj['traceback'] = traceback
     }
     await dispatch(queryErrorReport(queryObj));
     dispatch(copyQueryUrl(copiedUrl(queryObj)));
@@ -171,6 +179,20 @@ function ErrorReportQuery(props) {
                     defaultValue={selectedCode}
                     className="multi-select-container"
                     classNamePrefix="select"
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="row mb-4">
+              <div className="col-md-6">
+                <div className="form-group">
+                  <label htmlFor="traceback">Traceback</label>
+                  <InputFormControl
+                    type="text"
+                    name="traceback"
+                    value={traceback}
+                    onChange={handleTracebackChange}
+                    placeholder="traceback string"
                   />
                 </div>
               </div>
