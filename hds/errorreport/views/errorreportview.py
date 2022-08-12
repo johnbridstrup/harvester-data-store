@@ -49,6 +49,12 @@ class ErrorReportView(CreateModelViewSet):
             if len(qp) > 0:
                 end_time = DTimeFormatter.format_datetime(qp, tz)
                 listfilter['reportTime__lte'] = end_time
+        
+        # get fruit from request and filter queryset for fruit
+        if 'fruit' in self.request.query_params:
+            qp = self.request.query_params["fruit"]
+            if len(qp) > 0:
+                listfilter['harvester__fruit__name'] = qp
 
         return ErrorReport.objects.filter(**listfilter).order_by('-reportTime')
 
