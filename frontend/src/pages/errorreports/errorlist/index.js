@@ -16,11 +16,13 @@ import "./styles.css";
 import { copiedUrl, paramsToObject } from "../../../utils/utils";
 import CopyToClipboard from "../../../components/copytoclipboard/CopyToClipboard";
 import {
+  MAX_CODE_LIMIT,
   MAX_FRUIT_LIMIT,
   MAX_HARV_LIMIT,
   MAX_LOC_LIMIT,
 } from "../../../features/base/constants";
 import { listFruits } from "../../../features/fruit/fruitSlice";
+import { listCodes } from "../../../features/excecode/codeSlice";
 
 function ErrorsReportList(props) {
   const dispatch = useDispatch();
@@ -32,6 +34,7 @@ function ErrorsReportList(props) {
         dispatch(listHarvesters(MAX_HARV_LIMIT)),
         dispatch(listLocations(MAX_LOC_LIMIT)),
         dispatch(listFruits(MAX_FRUIT_LIMIT)),
+        dispatch(listCodes(MAX_CODE_LIMIT))
       ]);
     })();
     if (search) {

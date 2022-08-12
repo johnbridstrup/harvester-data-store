@@ -228,3 +228,15 @@ export const transformFruitOptions = (fruits = []) => {
     return { value: fruit.name, label: fruit.name };
   });
 };
+
+export const transformCodeOptions = (codes = []) => {
+  return codes.map((code, index) => {
+    return { value: code.code, label: code.code };
+  });
+};
+
+export const translateCodeOptions = (codes = []) => {
+  return codes.map((code, index) => {
+    return code.value;
+  });
+};

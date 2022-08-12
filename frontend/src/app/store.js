@@ -1,6 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "../features/auth/authSlice";
 import errorreportReducer from "../features/errorreport/errorreportSlice";
+import codeReducer from "../features/excecode/codeSlice";
 import fruitReducer from "../features/fruit/fruitSlice";
 import harvesterReducer from "../features/harvester/harvesterSlice";
 import locationReducer from "../features/location/locationSlice";
@@ -12,6 +13,7 @@ const store = configureStore({
     location: locationReducer,
     errorreport: errorreportReducer,
     fruit: fruitReducer,
+    exceptioncode: codeReducer,
   },
 });
 

@@ -5,10 +5,12 @@ import {
   copiedUrl,
   extractDateFromString,
   timeStampFormat,
+  transformCodeOptions,
   transformFruitOptions,
   transformHarvOptions,
   transformLocOptions,
   transformTzOptions,
+  translateCodeOptions,
   translateHarvOptions,
   translateLocOptions,
 } from "../../utils/utils";
@@ -34,11 +36,12 @@ function ErrorReportQuery(props) {
   const { harvesters } = useSelector((state) => state.harvester);
   const { locations } = useSelector((state) => state.location);
   const { fruits } = useSelector((state) => state.fruit);
+  const { exceptioncodes } = useSelector((state) => state.exceptioncode);
   const harvesterOptions = transformHarvOptions(harvesters);
   const locationOptions = transformLocOptions(locations);
   const timezoneOptions = transformTzOptions(timezones);
   const fruitOptions = transformFruitOptions(fruits);
-  const codeOptions = [{ value: 1, label: 1 }];
+  const codeOptions = transformCodeOptions(exceptioncodes);
   const dispatch = useDispatch();
 
   const handleHarvestSelect = (newValue, actionMeta) => {
@@ -86,6 +89,9 @@ function ErrorReportQuery(props) {
     }
     if (selectedFruit && selectedFruit.hasOwnProperty("value")) {
       queryObj["fruit"] = selectedFruit.value;
+    }
+    if (selectedCode && selectedCode.length > 0) {
+      queryObj['codes'] = translateCodeOptions(selectedCode)
     }
     await dispatch(queryErrorReport(queryObj));
     dispatch(copyQueryUrl(copiedUrl(queryObj)));
