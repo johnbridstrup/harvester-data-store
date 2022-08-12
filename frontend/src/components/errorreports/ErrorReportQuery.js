@@ -5,6 +5,7 @@ import {
   copiedUrl,
   extractDateFromString,
   timeStampFormat,
+  transformFruitOptions,
   transformHarvOptions,
   transformLocOptions,
   transformTzOptions,
@@ -32,10 +33,11 @@ function ErrorReportQuery(props) {
   const count = useSelector((state) => state.errorreport.count);
   const { harvesters } = useSelector((state) => state.harvester);
   const { locations } = useSelector((state) => state.location);
+  const { fruits } = useSelector((state) => state.fruit);
   const harvesterOptions = transformHarvOptions(harvesters);
   const locationOptions = transformLocOptions(locations);
   const timezoneOptions = transformTzOptions(timezones);
-  const fruitOptions = [{ value: "strawberry", label: "strawberry" }];
+  const fruitOptions = transformFruitOptions(fruits);
   const codeOptions = [{ value: 1, label: 1 }];
   const dispatch = useDispatch();
 
@@ -81,6 +83,9 @@ function ErrorReportQuery(props) {
     }
     if (selectedTimezone && selectedTimezone.hasOwnProperty("value")) {
       queryObj["tz"] = selectedTimezone.value;
+    }
+    if (selectedFruit && selectedFruit.hasOwnProperty("value")) {
+      queryObj["fruit"] = selectedFruit.value;
     }
     await dispatch(queryErrorReport(queryObj));
     dispatch(copyQueryUrl(copiedUrl(queryObj)));
@@ -136,7 +141,6 @@ function ErrorReportQuery(props) {
                 <div className="form-group">
                   <label htmlFor="fruit">Fruit</label>
                   <Select
-                    isMulti
                     isSearchable
                     placeholder="strawberry"
                     options={fruitOptions}

@@ -7,3 +7,4 @@ export const API_URL = `${API_BASE_URL}/api/${API_VERSION}`;
 export const CSRF_URL = `${API_URL}/users/csrf/`;
 export const MAX_HARV_LIMIT = 10000;
 export const MAX_LOC_LIMIT = 10000;
+export const MAX_FRUIT_LIMIT = 10000;

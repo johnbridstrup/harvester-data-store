@@ -66,7 +66,7 @@ const fruitSlice = createSlice({
         state.loading = false;
         state.fruit = action.payload;
       })
-      .addCase(getFruitById.pending, (state, action) => {
+      .addCase(getFruitById.rejected, (state, action) => {
         state.loading = false;
         state.fruit = {};
         state.errorMsg = action.payload;

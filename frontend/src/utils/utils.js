@@ -222,3 +222,9 @@ export const debounce = function (cb, timeout) {
     }, timeout);
   };
 };
+
+export const transformFruitOptions = (fruits = []) => {
+  return fruits.map((fruit, index) => {
+    return { value: fruit.name, label: fruit.name };
+  });
+};

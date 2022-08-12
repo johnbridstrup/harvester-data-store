@@ -16,9 +16,11 @@ import "./styles.css";
 import { copiedUrl, paramsToObject } from "../../../utils/utils";
 import CopyToClipboard from "../../../components/copytoclipboard/CopyToClipboard";
 import {
+  MAX_FRUIT_LIMIT,
   MAX_HARV_LIMIT,
   MAX_LOC_LIMIT,
 } from "../../../features/base/constants";
+import { listFruits } from "../../../features/fruit/fruitSlice";
 
 function ErrorsReportList(props) {
   const dispatch = useDispatch();
@@ -29,6 +31,7 @@ function ErrorsReportList(props) {
       await Promise.all([
         dispatch(listHarvesters(MAX_HARV_LIMIT)),
         dispatch(listLocations(MAX_LOC_LIMIT)),
+        dispatch(listFruits(MAX_FRUIT_LIMIT)),
       ]);
     })();
     if (search) {
