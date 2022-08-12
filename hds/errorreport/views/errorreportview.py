@@ -62,5 +62,11 @@ class ErrorReportView(CreateModelViewSet):
             if len(codes) > 0:
                 listfilter['exceptions__code__code__in'] = codes
 
+        # get traceback from request and filter queryset for traceback
+        if 'traceback' in self.request.query_params:
+            traceback = self.request.query_params["traceback"]
+            if len(traceback) > 0:
+                listfilter['exceptions__traceback__icontains'] = traceback
+
         return ErrorReport.objects.filter(**listfilter).order_by('-reportTime')
 
