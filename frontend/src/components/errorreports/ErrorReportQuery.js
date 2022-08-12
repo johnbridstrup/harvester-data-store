@@ -66,9 +66,9 @@ function ErrorReportQuery(props) {
     setSelectedCode((current) => newValue);
   };
 
-  const handleTracebackChange = e => {
+  const handleTracebackChange = (e) => {
     setTraceback(e.target.value);
-  }
+  };
 
   const handleFormQuerySubmit = async (e) => {
     e.preventDefault();
@@ -96,10 +96,10 @@ function ErrorReportQuery(props) {
       queryObj["fruit"] = selectedFruit.value;
     }
     if (selectedCode && selectedCode.length > 0) {
-      queryObj['codes'] = translateCodeOptions(selectedCode)
+      queryObj["codes"] = translateCodeOptions(selectedCode);
     }
     if (traceback) {
-      queryObj['traceback'] = traceback
+      queryObj["traceback"] = traceback;
     }
     await dispatch(queryErrorReport(queryObj));
     dispatch(copyQueryUrl(copiedUrl(queryObj)));

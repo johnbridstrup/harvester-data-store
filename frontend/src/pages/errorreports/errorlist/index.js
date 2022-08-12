@@ -34,7 +34,7 @@ function ErrorsReportList(props) {
         dispatch(listHarvesters(MAX_HARV_LIMIT)),
         dispatch(listLocations(MAX_LOC_LIMIT)),
         dispatch(listFruits(MAX_FRUIT_LIMIT)),
-        dispatch(listCodes(MAX_CODE_LIMIT))
+        dispatch(listCodes(MAX_CODE_LIMIT)),
       ]);
     })();
     if (search) {
