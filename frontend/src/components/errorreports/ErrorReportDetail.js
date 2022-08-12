@@ -220,7 +220,7 @@ function ErrorReportDetail(props) {
             </LoaderDiv>
           }
         >
-          <ErrorReportJson reportObj={reportObj} />
+          <ErrorReportJson reportObj={reportObj.report} />
         </Suspense>
       </Container>
     </>

@@ -1,4 +1,4 @@
-FROM node:16.16.0-alpine as buildStage
+FROM node:16.16.0-slim as buildStage
 
 # Copy and package installation
 RUN mkdir -p /react/app/
@@ -22,7 +22,7 @@ RUN echo "HOSTED URL: ${REACT_APP_HOSTED_URL}"
 RUN echo "NODE ENV: ${REACT_APP_NODE_ENV}"
 RUN npm run build
 
-FROM node:16.16.0-alpine
+FROM node:16.16.0-slim
 RUN mkdir -p /opt/app/
 WORKDIR /opt/app/
 COPY server.js /opt/app/
