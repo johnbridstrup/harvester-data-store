@@ -49,7 +49,7 @@ class ErrorReportView(CreateModelViewSet):
             if len(qp) > 0:
                 end_time = DTimeFormatter.format_datetime(qp, tz)
                 listfilter['reportTime__lte'] = end_time
-        
+
         # get fruit from request and filter queryset for fruit
         if 'fruit' in self.request.query_params:
             qp = self.request.query_params["fruit"]
@@ -68,5 +68,5 @@ class ErrorReportView(CreateModelViewSet):
             if len(traceback) > 0:
                 listfilter['exceptions__traceback__icontains'] = traceback
 
-        return ErrorReport.objects.filter(**listfilter).order_by('-reportTime')
+        return ErrorReport.objects.filter(**listfilter).order_by('-reportTime').distinct()
 
