@@ -1,5 +1,6 @@
 import { CodeServiceDiv, HoverDiv, ToolBox } from "../styled";
 import PropTypes from "prop-types";
+import { getUniqueListBy } from "../../utils/utils";
 
 export const HarvesterHover = (props) => {
   return (
@@ -45,10 +46,11 @@ export const LocationHover = (props) => {
 };
 
 export const CodeHover = (props) => {
+  const exceptions = getUniqueListBy(props.exceptions, "code");
   return (
     <HoverDiv position={props.position}>
       <ToolBox position={props.position}>
-        {props.exceptions.map((excep, index) => (
+        {exceptions.map((excep, index) => (
           <CodeServiceDiv key={index}>
             <span>Code:{excep.code.code}</span>
             <span>Name: {excep.code.name}</span>

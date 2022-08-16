@@ -241,3 +241,7 @@ export const translateCodeOptions = (codes = []) => {
     return code.value;
   });
 };
+
+export const getUniqueListBy = (arr, key) => {
+  return [...new Map(arr.map((item) => [item[key]["code"], item])).values()];
+};
