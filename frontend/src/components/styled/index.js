@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { Link } from "react-router-dom";
 
 export const SpanLimit = styled.span`
@@ -149,33 +149,145 @@ export const JsonDiv = styled.div`
 
 export const HoverDiv = styled.div`
   position: absolute;
-  left: 50%;
-  top: -40px;
-  transform: translateX(-50%);
-  z-index: 10;
-  width: 300px;
-  height: 100px;
-  overflow-y: scroll;
-  padding: 0.5rem;
-
+  width: 200px;
+  margin-left: -100px;
   display: flex;
   flex-direction: column;
-  min-width: 0;
-  word-wrap: break-word;
-  background-color: #fff;
-  background-clip: border-box;
-  border: 1pxsolid rgba(0, 0, 0, 0.175);
-  border-radius: 0.375rem;
+  justify-content: center;
+  align-items: center;
+  left: 50%;
+  z-index: 100;
+  bottom: calc(100% + 1px);
 
-  box-shadow: 10px 10px 5px 0px rgba(209, 191, 191, 0.75);
-  -webkit-box-shadow: 10px 10px 5px 0px rgba(209, 191, 191, 0.75);
-  -moz-box-shadow: 10px 10px 5px 0px rgba(209, 191, 191, 0.75);
-
-  &::-webkit-scrollbar {
-    width: 10px;
-  }
+  ${({ position }) => {
+    switch (position) {
+      case "bottom":
+        return css`
+          bottom: unset !important;
+          top: calc(100% + 1px);
+        `;
+      case "left":
+        return css`
+          margin-right: 0;
+          width: 100%;
+          left: unset;
+          top: 50%;
+          right: calc(100% + 1px);
+          width: max-content;
+        `;
+      case "right":
+        return css`
+          margin-left: 0;
+          width: 100%;
+          top: 50%;
+          left: calc(100% + 1px);
+          width: max-content;
+        `;
+      default:
+        return css`
+          bottom: calc(100% + 1px);
+        `;
+    }
+  }}
 `;
 
 export const Td = styled.td`
   position: relative;
+`;
+
+export const SpanTarget = styled.span`
+  border: none;
+  background: inherit;
+  padding: 1px;
+  margin: -1px;
+  font-size: inherit;
+  color: inherit;
+  cursor: inherit;
+  display: flex;
+`;
+
+export const ToolBox = styled.div`
+  position: relative;
+  background-color: #fff;
+  color: #000;
+  text-align: center;
+  border-radius: 5px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15), 0 4px 8px rgba(0, 0, 0, 0.2);
+  background-clip: border-box;
+  border: 1px solid rgba(0, 0, 0, 0.175);
+  border: 1px solid rgba(0, 0, 0, 0.175);
+  ${({ position }) => {
+    switch (position) {
+      case "right":
+        return css`
+          color: #000;
+        `;
+      default:
+        return css``;
+    }
+  }}
+
+  &:after {
+    content: "";
+    position: absolute;
+    width: 5px;
+    height: 5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #$fff transparent transparent transparent;
+    left: calc(50% - 4.5px);
+    top: 100%;
+  }
+  ${({ position }) => {
+    switch (position) {
+      case "bottom":
+        return css`
+          &:after {
+            border-color: transparent transparent #fff transparent;
+            top: unset;
+            width: 1px;
+            bottom: 100%;
+            left: calc(50% - 5px);
+          }
+        `;
+      case "left":
+        return css`
+          &:after {
+            border-color: transparent transparent transparent #fff;
+            left: 100%;
+            top: calc(50% - 5px);
+          }
+        `;
+      case "right":
+        return css`
+          &:after {
+            border-color: transparent #fff transparent transparent;
+            right: 100%;
+            left: unset;
+            top: calc(50% - 5px);
+          }
+        `;
+      case "top":
+        return css`
+          &:after {
+            border-color: #fff transparent transparent transparent;
+            bottom: unset;
+            width: 1px;
+            top: 100%;
+            right: calc(50% - 5px);
+          }
+        `;
+      default:
+        return css``;
+    }
+  }}
+`;
+
+export const CodeServiceDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding: 0.2rem;
+  border-bottom: 1px solid #333;
 `;

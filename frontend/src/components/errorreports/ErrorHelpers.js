@@ -1,79 +1,77 @@
-import { HoverDiv } from "../styled";
+import { CodeServiceDiv, HoverDiv, ToolBox } from "../styled";
 import PropTypes from "prop-types";
 
 export const HarvesterHover = (props) => {
   return (
-    <HoverDiv>
-      <div>
-        <span>ID</span>: <span>{props.harvester.id}</span>
-      </div>
-      <div>
-        <span>Harv ID</span>: <span>{props.harvester.harv_id}</span>
-      </div>
-      <div>
-        <span>Name</span>: <span>{props.harvester.name}</span>
-      </div>
-      <div>
-        <span>Fruit</span>: <span>{props.harvester.fruit}</span>
-      </div>
-      <div>
-        <span>Location</span>: <span>{props.harvester.location}</span>
-      </div>
+    <HoverDiv position={props.position}>
+      <ToolBox position={props.position}>
+        <div>
+          <span>Harv ID</span>: <span>{props.harvester.harv_id}</span>
+        </div>
+        <div>
+          <span>Name</span>: <span>{props.harvester.name}</span>
+        </div>
+        <div>
+          <span>Fruit</span>: <span>{props.harvester.fruit}</span>
+        </div>
+        <div>
+          <span>Location</span>: <span>{props.harvester.location}</span>
+        </div>
+      </ToolBox>
     </HoverDiv>
   );
 };
 
 export const LocationHover = (props) => {
   return (
-    <HoverDiv>
-      <div>
-        <span>ID</span>: <span>{props.location.id}</span>
-      </div>
-      <div>
-        <span>Ranch</span>: <span>{props.location.ranch}</span>
-      </div>
-      <div>
-        <span>Country</span>: <span>{props.location.country}</span>
-      </div>
-      <div>
-        <span>Region</span>: <span>{props.location.region}</span>
-      </div>
-      <div>
-        <span>Distributer</span>: <span>{props.location.distributor}</span>
-      </div>
+    <HoverDiv position={props.position}>
+      <ToolBox position={props.position}>
+        <div>
+          <span>Ranch</span>: <span>{props.location.ranch}</span>
+        </div>
+        <div>
+          <span>Country</span>: <span>{props.location.country}</span>
+        </div>
+        <div>
+          <span>Region</span>: <span>{props.location.region}</span>
+        </div>
+        <div>
+          <span>Distributer</span>: <span>{props.location.distributor}</span>
+        </div>
+      </ToolBox>
     </HoverDiv>
   );
 };
 
 export const CodeHover = (props) => {
   return (
-    <HoverDiv>
-      {props.exceptions.map((excep, index) => (
-        <ul
-          key={index}
-          className="list-group"
-          style={{ borderBottom: "1px solid #333" }}
-        >
-          <li>ID: {excep.code.id}</li>
-          <li>Code: {excep.code.code}</li>
-          <li>Name: {excep.code.name}</li>
-          <li>Message: {excep.code.msg}</li>
-          <li>Team: {excep.code.team}</li>
-          <li>Cycle: {excep.code.cycle ? "True" : "False"}</li>
-        </ul>
-      ))}
+    <HoverDiv position={props.position}>
+      <ToolBox position={props.position}>
+        {props.exceptions.map((excep, index) => (
+          <CodeServiceDiv key={index}>
+            <span>Code:{excep.code.code}</span>
+            <span>Name: {excep.code.name}</span>
+            <span>Message: {excep.code.msg}</span>
+            <span>Team: {excep.code.team}</span>
+            <span>Cycle: {excep.code.cycle ? "True" : "False"}</span>
+          </CodeServiceDiv>
+        ))}
+      </ToolBox>
     </HoverDiv>
   );
 };
 
 HarvesterHover.propTypes = {
   harvester: PropTypes.object,
+  position: PropTypes.string,
 };
 
 LocationHover.propTypes = {
   location: PropTypes.object,
+  position: PropTypes.string,
 };
 
 CodeHover.propTypes = {
   exceptions: PropTypes.array,
+  position: PropTypes.string,
 };
