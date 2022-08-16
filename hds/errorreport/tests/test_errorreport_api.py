@@ -139,3 +139,24 @@ class ErrorReportAPITest(APITestCase):
         }
         self.assertDictEqual(errs[0], compare)
 
+    def test_generate_pareto(self):
+        pareto_groups = ["code__code", "code__name", "service", "report__harvester__harv_id"]
+        pareto_names = ["code", "exception", "service", "harvester"]
+        pareto_name_vals = ["9", "test", "traychg", "11"]
+        num = 5
+        for _ in range(num):
+            self.client.post(f'{self.api_base_url}/errorreports/', self.data, format='json', HTTP_ACCEPT='application/json')
+
+        def check_pareto(group, name, name_val, count):
+            resp = self.client.get(
+                f'{self.api_base_url}/errorreports/pareto/?aggregate_query={group}&aggregate_name={name}'
+            )
+            self.assertEqual(resp.status_code, 200)
+            rdata = resp.json()
+
+            self.assertEqual(rdata['message'], f'{name} pareto generated')
+            self.assertEqual(rdata['data'][0]['count'], count)
+            self.assertEqual(rdata['data'][0][name], name_val)
+        
+        for group, name, val in zip(pareto_groups, pareto_names, pareto_name_vals):
+            check_pareto(group, name, val, num)
