@@ -1,4 +1,5 @@
 from ..models import ErrorReport
+from ..metrics import ERRORREPORT_LIST_QUERY_TIMER
 from ..serializers.errorreportserializer import ErrorReportSerializer
 from common.viewsets import CreateModelViewSet
 from common.reports import DTimeFormatter
@@ -16,6 +17,7 @@ class ErrorReportView(CreateModelViewSet):
     search_fields = ['harvester']
     ordering_fields = ('harvester', 'location', 'reportTime')
 
+    @ERRORREPORT_LIST_QUERY_TIMER.time()
     def get_queryset(self):
         listfilter = {}
         # get query timezone
