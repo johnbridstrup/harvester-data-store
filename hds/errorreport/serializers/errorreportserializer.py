@@ -5,6 +5,7 @@ from harvester.serializers.harvesterserializer import HarvesterSerializer
 from location.serializers.locationserializer import LocationSerializer
 from exceptions.models import AFTException, AFTExceptionCode
 from exceptions.serializers import AFTExceptionSerializer
+from rest_framework import serializers
 
 
 class ErrorReportSerializer(ReportSerializerBase):
@@ -81,3 +82,22 @@ class ErrorReportSerializer(ReportSerializerBase):
         fields = ('__all__')
         read_only_fields = ('creator',)
 
+
+class ParetoSerializer(serializers.Serializer):
+    # Turns queryset into data with value and count
+    value = serializers.CharField() # Can be int or str
+    count = serializers.IntegerField()
+
+    def __init__(self, instance=None, data=..., new_name=None, **kwargs):
+        super().__init__(instance, data, **kwargs)
+        self.new_name=new_name
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+
+        if self.new_name is not None:
+            data[f"{self.new_name}"] = data.pop("value")
+
+        return data
+
+   
