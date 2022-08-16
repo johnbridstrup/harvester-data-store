@@ -1,13 +1,13 @@
 locals {
-  env                    = "dev"
-  dns_name               = "hdsapi.devcloud.advanced.farm"
-  service_port           = "8000"
-  service_name           = "hds"
-  service_docker_image   = "082346306812.dkr.ecr.us-west-1.amazonaws.com/hds:hds-staging-9edef3f4"
-  healthcheck_path       = "/api/v1/healthcheck/"
-  errorreport_queue_name = "errorreport-queue"
-  sqs_client_metrics_port = 9104
-  hds_superuser_pwd_id   = "hds_superuser_pwd"
+  env                      = "dev"
+  dns_name                 = "hdsapi.devcloud.advanced.farm"
+  service_port             = "8000"
+  service_name             = "hds"
+  service_docker_image     = "082346306812.dkr.ecr.us-west-1.amazonaws.com/hds:hds-staging-9edef3f4"
+  healthcheck_path         = "/api/v1/healthcheck/"
+  errorreport_queue_name   = "errorreport-queue"
+  sqs_client_metrics_port  = 9104
+  hds_superuser_pwd_id     = "hds_superuser_pwd"
   enable_prometheus_scrape = true
 }
 
@@ -95,7 +95,7 @@ module "hds" {
   load_balancer_subnets          = data.aws_subnet_ids.priv_subnets.ids
   ecs_cluster_arn                = data.aws_ecs_cluster.hds-cluster.arn
   enable_prometheus_scrape       = local.enable_prometheus_scrape
-  additional_prometheus_ports = [ local.sqs_client_metrics_port ]
+  additional_prometheus_ports    = [local.sqs_client_metrics_port]
   route53_priv_zone_id           = data.aws_route53_zone.private_cloud_zone.id
   route53_pub_zone_id            = data.aws_route53_zone.cloud_zone.id
   service_environments_variables = local.environment_variables

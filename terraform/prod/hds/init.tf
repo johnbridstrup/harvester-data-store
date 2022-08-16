@@ -72,8 +72,13 @@ data "aws_security_group" "pritunl_sg" {
   }
 }
 
-data "aws_security_group" "prom_scrape_sg" {
-  tags = {
-    Name = "ecs-prometheus-scraper"
+data "aws_security_group" "vm_metrics_security_group" {
+  filter {
+    name   = "tag:Name"
+    values = ["vm-collector-sg"]
+  }
+  filter {
+    name   = "tag:Environment"
+    values = ["prod"]
   }
 }

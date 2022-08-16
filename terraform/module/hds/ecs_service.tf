@@ -9,7 +9,7 @@ module "hds_ecs" {
   vpc_id                         = var.vpc_id
   ecs_cluster_arn                = var.ecs_cluster_arn
   enable_prometheus_scrape       = var.enable_prometheus_scrape
-  additional_prometheus_ports = var.additional_prometheus_ports
+  additional_prometheus_ports    = var.additional_prometheus_ports
   service_docker_image           = var.service_docker_image
   service_health_check_path      = var.service_health_check_path
   service_environments_variables = var.service_environments_variables

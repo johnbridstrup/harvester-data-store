@@ -159,7 +159,7 @@ variable "enable_prometheus_scrape" {
   default     = false
 }
 
-variable additional_prometheus_ports {
+variable "additional_prometheus_ports" {
   description = "Additional prometheus ports to scrape, by default only service_port get scraped."
   type        = list(number)
   default     = []
