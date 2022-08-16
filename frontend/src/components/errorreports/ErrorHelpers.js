@@ -12,10 +12,10 @@ export const HarvesterHover = (props) => {
           <span>Name</span>: <span>{props.harvester.name}</span>
         </div>
         <div>
-          <span>Fruit</span>: <span>{props.harvester.fruit}</span>
+          <span>Fruit</span>: <span>{props.harvester.fruit.name}</span>
         </div>
         <div>
-          <span>Location</span>: <span>{props.harvester.location}</span>
+          <span>Location</span>: <span>{props.harvester.location.ranch}</span>
         </div>
       </ToolBox>
     </HoverDiv>
@@ -36,7 +36,8 @@ export const LocationHover = (props) => {
           <span>Region</span>: <span>{props.location.region}</span>
         </div>
         <div>
-          <span>Distributer</span>: <span>{props.location.distributor}</span>
+          <span>Distributer</span>:{" "}
+          <span>{props.location.distributor.name}</span>
         </div>
       </ToolBox>
     </HoverDiv>
