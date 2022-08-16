@@ -147,7 +147,6 @@ export const JsonDiv = styled.div`
   overflow-y: scroll;
 `;
 
-
 export const HoverDiv = styled.div`
   position: absolute;
   left: 50%;
@@ -157,7 +156,7 @@ export const HoverDiv = styled.div`
   width: 300px;
   height: 100px;
   overflow-y: scroll;
-  padding: .5rem;
+  padding: 0.5rem;
 
   display: flex;
   flex-direction: column;
@@ -165,18 +164,18 @@ export const HoverDiv = styled.div`
   word-wrap: break-word;
   background-color: #fff;
   background-clip: border-box;
-  border: 1pxsolid rgba(0,0,0,0.175);
+  border: 1pxsolid rgba(0, 0, 0, 0.175);
   border-radius: 0.375rem;
 
-  box-shadow: 10px 10px 5px 0px rgba(209,191,191,0.75);
-  -webkit-box-shadow: 10px 10px 5px 0px rgba(209,191,191,0.75);
-  -moz-box-shadow: 10px 10px 5px 0px rgba(209,191,191,0.75);
+  box-shadow: 10px 10px 5px 0px rgba(209, 191, 191, 0.75);
+  -webkit-box-shadow: 10px 10px 5px 0px rgba(209, 191, 191, 0.75);
+  -moz-box-shadow: 10px 10px 5px 0px rgba(209, 191, 191, 0.75);
 
   &::-webkit-scrollbar {
     width: 10px;
   }
-`
+`;
 
 export const Td = styled.td`
-  position: relative
-`
+  position: relative;
+`;

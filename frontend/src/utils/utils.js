@@ -41,6 +41,7 @@ export const transformErrorReport = (reports = []) => {
       serial_number: report.report.data.serial_number,
       githash: report.report.data.githash,
       branch_name: report.report.data.branch_name,
+      exceptions: report.exceptions,
     };
     const resultObj = Object.assign({}, reportObj, ...report.exceptions);
     const { services, codes } = extractServiceCodes(report.exceptions);
