@@ -5,3 +5,8 @@
 .table-responsive .table .report-tbody tr:hover {
   background-color: #f4f4f4;
 }
+
+
+.table-responsive .table .report-tbody tr td {
+  padding: 1.5rem;
+}

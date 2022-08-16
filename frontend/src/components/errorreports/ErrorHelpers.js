@@ -1,4 +1,5 @@
-import { HoverDiv } from "../styled"
+import { HoverDiv } from "../styled";
+import PropTypes from 'prop-types'
 
 
 export const HarvesterHover = (props) => {
@@ -41,4 +42,16 @@ export const CodeHover = (props) => {
       ))}
     </HoverDiv>
   )
+}
+
+HarvesterHover.propTypes = {
+  harvester: PropTypes.object
+}
+
+LocationHover.propTypes = {
+  location: PropTypes.object
+}
+
+CodeHover.propTypes = {
+  exceptions: PropTypes.array
 }

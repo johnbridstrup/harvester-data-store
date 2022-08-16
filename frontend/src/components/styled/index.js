@@ -176,3 +176,7 @@ export const HoverDiv = styled.div`
     width: 10px;
   }
 `
+
+export const Td = styled.td`
+  position: relative
+`
