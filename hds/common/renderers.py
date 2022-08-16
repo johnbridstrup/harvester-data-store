@@ -19,7 +19,6 @@ class HDSJSONRenderer(JSONRenderer):
     SUCCESS = "success"
 
     def render(self, data, accepted_media_type=None, renderer_context=None):
-        logging.info(accepted_media_type)
         resp = self._create_response(data, renderer_context)
         return super().render(resp, accepted_media_type, renderer_context)
 
