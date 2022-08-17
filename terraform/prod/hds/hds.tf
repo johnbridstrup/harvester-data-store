@@ -44,7 +44,7 @@ locals {
     { "name" : "POSTGRES_USER", "value" : data.aws_db_instance.postgres.master_username },
     { "name" : "DEBUG", "value" : "true" },
     { "name" : "DJANGO_ALLOWED_HOSTS", "value" : "localhost 127.0.0.1" },
-    { "name" : "SQL_ENGINE", "value" : "django.db.backends.postgresql" },
+    { "name" : "SQL_ENGINE", "value" : "django_prometheus.db.backends.postgresql" },
     { "name" : "SQL_PORT", "value" : data.aws_db_instance.postgres.port },
     { "name" : "SQL_HOST", "value" : data.aws_db_instance.postgres.address },
     { "name" : "DJANGO_SUPERUSER_PASSWORD", "value" : aws_secretsmanager_secret_version.hds_superuser_pwd.secret_string },
