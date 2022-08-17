@@ -3,7 +3,7 @@ locals {
   dns_name                 = "hdsapi.devcloud.advanced.farm"
   service_port             = "8000"
   service_name             = "hds"
-  service_docker_image     = "082346306812.dkr.ecr.us-west-1.amazonaws.com/hds:hds-staging-eb6a35c8"
+  service_docker_image     = "082346306812.dkr.ecr.us-west-1.amazonaws.com/hds:hds-staging-8cec94d2"
   healthcheck_path         = "/api/v1/healthcheck/"
   errorreport_queue_name   = "errorreport-queue"
   sqs_client_metrics_port  = 9104
