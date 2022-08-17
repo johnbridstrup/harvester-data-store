@@ -245,3 +245,21 @@ export const translateCodeOptions = (codes = []) => {
 export const getUniqueListBy = (arr, key) => {
   return [...new Map(arr.map((item) => [item[key]["code"], item])).values()];
 };
+
+export const objNotEmpty = (obj) => {
+  return Object.keys(obj).length > 0;
+};
+
+export const transformFsmComponents = (sysmon = {}) => {
+  const sysmonArr = {};
+  for (const [key, value] of Object.entries(sysmon)) {
+    let service = [];
+    service.push(key);
+    service.push(value["cpu"]);
+    service.push(value["mem"]);
+    if (value?.fsm?.components)
+      service.push(value["fsm"]["components"].join(", "));
+    sysmonArr.push(service);
+  }
+  return sysmonArr;
+};

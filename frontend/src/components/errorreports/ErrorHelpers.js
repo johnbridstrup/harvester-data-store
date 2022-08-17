@@ -1,4 +1,4 @@
-import { CodeServiceDiv, HoverDiv, ToolBox } from "../styled";
+import { CodeServiceDiv, HoverDiv, HoverDivModal, ToolBox } from "../styled";
 import PropTypes from "prop-types";
 import { getUniqueListBy } from "../../utils/utils";
 
@@ -7,16 +7,28 @@ export const HarvesterHover = (props) => {
     <HoverDiv position={props.position}>
       <ToolBox position={props.position}>
         <div>
-          <span>Harv ID</span>: <span>{props.harvester.harv_id}</span>
+          <span>Harv ID</span>:{" "}
+          <span>
+            <strong>{props.harvester.harv_id}</strong>
+          </span>
         </div>
         <div>
-          <span>Name</span>: <span>{props.harvester.name}</span>
+          <span>Name</span>:{" "}
+          <span>
+            <strong>{props.harvester.name}</strong>
+          </span>
         </div>
         <div>
-          <span>Fruit</span>: <span>{props.harvester.fruit.name}</span>
+          <span>Fruit</span>:{" "}
+          <span>
+            <strong>{props.harvester.fruit.name}</strong>
+          </span>
         </div>
         <div>
-          <span>Location</span>: <span>{props.harvester.location.ranch}</span>
+          <span>Location</span>:{" "}
+          <span>
+            <strong>{props.harvester.location.ranch}</strong>
+          </span>
         </div>
       </ToolBox>
     </HoverDiv>
@@ -28,17 +40,28 @@ export const LocationHover = (props) => {
     <HoverDiv position={props.position}>
       <ToolBox position={props.position}>
         <div>
-          <span>Ranch</span>: <span>{props.location.ranch}</span>
+          <span>Ranch</span>:{" "}
+          <span>
+            <strong>{props.location.ranch}</strong>
+          </span>
         </div>
         <div>
-          <span>Country</span>: <span>{props.location.country}</span>
+          <span>Country</span>:{" "}
+          <span>
+            <strong>{props.location.country}</strong>
+          </span>
         </div>
         <div>
-          <span>Region</span>: <span>{props.location.region}</span>
+          <span>Region</span>:{" "}
+          <span>
+            <strong>{props.location.region}</strong>
+          </span>
         </div>
         <div>
           <span>Distributer</span>:{" "}
-          <span>{props.location.distributor.name}</span>
+          <span>
+            <strong>{props.location.distributor.name}</strong>
+          </span>
         </div>
       </ToolBox>
     </HoverDiv>
@@ -48,19 +71,29 @@ export const LocationHover = (props) => {
 export const CodeHover = (props) => {
   const exceptions = getUniqueListBy(props.exceptions, "code");
   return (
-    <HoverDiv position={props.position}>
+    <HoverDivModal position={props.position}>
       <ToolBox position={props.position}>
         {exceptions.map((excep, index) => (
           <CodeServiceDiv key={index}>
-            <span>Code:{excep.code.code}</span>
-            <span>Name: {excep.code.name}</span>
-            <span>Message: {excep.code.msg}</span>
-            <span>Team: {excep.code.team}</span>
-            <span>Cycle: {excep.code.cycle ? "True" : "False"}</span>
+            <span>
+              Code: <strong>{excep.code.code}</strong>
+            </span>
+            <span>
+              Name: <strong>{excep.code.name}</strong>
+            </span>
+            <span>
+              Message: <strong>{excep.code.msg}</strong>
+            </span>
+            <span>
+              Team: <strong>{excep.code.team}</strong>
+            </span>
+            <span>
+              Cycle: <strong>{excep.code.cycle ? "True" : "False"}</strong>
+            </span>
           </CodeServiceDiv>
         ))}
       </ToolBox>
-    </HoverDiv>
+    </HoverDivModal>
   );
 };
 

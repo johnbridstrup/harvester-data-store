@@ -107,15 +107,13 @@ function ErrorReportTable(props) {
                     />
                   )}
                 </Td>
-                <Td>
-                  <SpanTarget
-                    onMouseEnter={(e) =>
-                      handleOnMouseEnter(e, index, "code", report.exceptions)
-                    }
-                    onMouseLeave={handleOnMouseLeave}
-                  >
-                    {report.code}
-                  </SpanTarget>{" "}
+                <Td
+                  onMouseEnter={(e) =>
+                    handleOnMouseEnter(e, index, "code", report.exceptions)
+                  }
+                  onMouseLeave={handleOnMouseLeave}
+                >
+                  <SpanTarget>{report.code}</SpanTarget>{" "}
                   {hovering.code === index && (
                     <CodeHover
                       exceptions={report.exceptions}

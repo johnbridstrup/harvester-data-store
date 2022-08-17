@@ -156,7 +156,7 @@ export const HoverDiv = styled.div`
   justify-content: center;
   align-items: center;
   left: 50%;
-  z-index: 100;
+  z-index: 10;
   bottom: calc(100% + 1px);
 
   ${({ position }) => {
@@ -290,4 +290,20 @@ export const CodeServiceDiv = styled.div`
   align-items: flex-start;
   padding: 0.2rem;
   border-bottom: 1px solid #333;
+`;
+
+export const HoverDivModal = styled.div`
+  position: absolute;
+  left: 50%;
+  width: 200px;
+  height: 100px;
+  overflow-y: scroll;
+  transform: translateX(-50%);
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  word-wrap: break-word;
+  background-color: #fff;
+  z-index: 10;
 `;
