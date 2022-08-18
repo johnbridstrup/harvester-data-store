@@ -263,3 +263,147 @@ export const transformFsmComponents = (sysmon = {}) => {
   }
   return sysmonArr;
 };
+
+export const getServicesInError = (exceptionsKeys = [], sysmonReport = {}) => {
+  let errors = [];
+  for (let i = 0; i < exceptionsKeys.length; i++) {
+    if (exceptionsKeys[i].includes(".0")) {
+      if (sysmonReport["Master"]) {
+        errors.push(exceptionsKeys[i].split(":")[0]);
+      }
+    }
+    if (exceptionsKeys[i].includes(".1")) {
+      if (sysmonReport["Robot 1"]) {
+        errors.push(exceptionsKeys[i].split(":")[0]);
+      }
+    }
+    if (exceptionsKeys[i].includes(".2")) {
+      if (sysmonReport["Robot 2"]) {
+        errors.push(exceptionsKeys[i].split(":")[0]);
+      }
+    }
+    if (exceptionsKeys[i].includes(".3")) {
+      if (sysmonReport["Robot 3"]) {
+        errors.push(exceptionsKeys[i].split(":")[0]);
+      }
+    }
+    if (exceptionsKeys[i].includes(".4")) {
+      if (sysmonReport["Robot 4"]) {
+        errors.push(exceptionsKeys[i].split(":")[0]);
+      }
+    }
+  }
+  return errors;
+};
+
+export const getExceptionKeys = (exceptions) => {
+  return Object.keys(transformExceptionObj(exceptions));
+};
+
+export const masterInError = (exceptionsKeys = []) => {
+  for (let i = 0; i < exceptionsKeys.length; i++) {
+    if (exceptionsKeys[i].includes(".0")) {
+      return true;
+    }
+  }
+  return false;
+};
+
+export const robotInError = (exceptionsKey, sysmonReport) => {
+  let robot = {};
+  let dotAny = exceptionsKey.split(":")[0].split(".")[1];
+  if (dotAny === "0") {
+    robot["error"] = true;
+    robot["robot"] = "Master";
+    robot["arm"] = null;
+    return robot;
+  }
+  if (dotAny === "1") {
+    robot["error"] = true;
+    robot["robot"] = "Robot 1";
+    if (
+      sysmonReport["Robot 1"]["NUC"]["services"][exceptionsKey.split(":")[0]]
+    ) {
+      robot["arm"] = "NUC";
+    } else if (
+      sysmonReport["Robot 1"]["JETSON"]["services"][exceptionsKey.split(":")[0]]
+    ) {
+      robot["arm"] = "JETSON";
+    }
+    return robot;
+  }
+  if (dotAny === "2") {
+    robot["error"] = true;
+    robot["robot"] = "Robot 2";
+    if (
+      sysmonReport["Robot 2"]["NUC"]["services"][exceptionsKey.split(":")[0]]
+    ) {
+      robot["arm"] = "NUC";
+    } else if (
+      sysmonReport["Robot 2"]["JETSON"]["services"][exceptionsKey.split(":")[0]]
+    ) {
+      robot["arm"] = "JETSON";
+    }
+    return robot;
+  }
+  if (dotAny === "3") {
+    robot["error"] = true;
+    robot["robot"] = "Robot 3";
+    if (
+      sysmonReport["Robot 3"]["NUC"]["services"][exceptionsKey.split(":")[0]]
+    ) {
+      robot["arm"] = "NUC";
+    } else if (
+      sysmonReport["Robot 3"]["JETSON"]["services"][exceptionsKey.split(":")[0]]
+    ) {
+      robot["arm"] = "JETSON";
+    }
+    return robot;
+  }
+  if (dotAny === "4") {
+    robot["error"] = true;
+    robot["robot"] = "Robot 4";
+    if (
+      sysmonReport["Robot 4"]["NUC"]["services"][exceptionsKey.split(":")[0]]
+    ) {
+      robot["arm"] = "NUC";
+    } else if (
+      sysmonReport["Robot 4"]["JETSON"]["services"][exceptionsKey.split(":")[0]]
+    ) {
+      robot["arm"] = "JETSON";
+    }
+    return robot;
+  }
+  if (dotAny === "5") {
+    robot["error"] = true;
+    robot["robot"] = "Robot 5";
+    if (
+      sysmonReport["Robot 5"]["NUC"]["services"][exceptionsKey.split(":")[0]]
+    ) {
+      robot["arm"] = "NUC";
+    } else if (
+      sysmonReport["Robot 5"]["JETSON"]["services"][exceptionsKey.split(":")[0]]
+    ) {
+      robot["arm"] = "JETSON";
+    }
+    return robot;
+  }
+  if (dotAny === "6") {
+    robot["error"] = true;
+    robot["robot"] = "Robot 6";
+    if (
+      sysmonReport["Robot 6"]["NUC"]["services"][exceptionsKey.split(":")[0]]
+    ) {
+      robot["arm"] = "NUC";
+    } else if (
+      sysmonReport["Robot 6"]["JETSON"]["services"][exceptionsKey.split(":")[0]]
+    ) {
+      robot["arm"] = "JETSON";
+    }
+    return robot;
+  }
+  robot["error"] = false;
+  robot["robot"] = null;
+  robot["arm"] = null;
+  return robot;
+};
