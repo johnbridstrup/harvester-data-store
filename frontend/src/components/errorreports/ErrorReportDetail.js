@@ -1,7 +1,10 @@
 import { useState, useEffect, lazy, Suspense } from "react";
 import { useSelector } from "react-redux";
 import {
+  getExceptionKeys,
+  getServicesInError,
   Loader,
+  objNotEmpty,
   timeStampFormat,
   transformExceptionObj,
   transformReportDetail,
@@ -33,6 +36,7 @@ function ErrorReportDetail(props) {
   });
   const [sysmonReport, setSysmonReport] = useState({});
   const [subTabObj, setSubTabObj] = useState(null);
+  const [erroredServices, setErroredServices] = useState([]);
   const { report, timezone } = useSelector((state) => state.errorreport);
   const reportObj = transformReportDetail(report);
   const exceptions = transformExceptionObj(report.exceptions);
@@ -52,6 +56,14 @@ function ErrorReportDetail(props) {
       });
     }
   }, [report.report, activeTab.sysmon]);
+
+  useEffect(() => {
+    const exceptionsKeys = getExceptionKeys(report.exceptions);
+    if (objNotEmpty(exceptionsKeys)) {
+      let errors = getServicesInError(exceptionsKeys, sysmonReport);
+      setErroredServices((current) => errors);
+    }
+  }, [report.exceptions, sysmonReport]);
 
   const handleTabChange = (tab, category, obj) => {
     if (category === "exception") {
@@ -182,7 +194,10 @@ function ErrorReportDetail(props) {
                         <TimeTable sysmonObj={sysmonObj.sysmonObj} />
                       </div>
                     </div>
-                    <ServiceTable services={sysmonObj.sysmonObj?.services} />
+                    <ServiceTable
+                      services={sysmonObj.sysmonObj?.services}
+                      errors={erroredServices}
+                    />
                   </Container>
                 )
               : subTabObj && (
@@ -206,7 +221,10 @@ function ErrorReportDetail(props) {
                         <TimeTable sysmonObj={subTabObj} />
                       </div>
                     </div>
-                    <ServiceTable services={subTabObj?.services} />
+                    <ServiceTable
+                      services={subTabObj?.services}
+                      errors={erroredServices}
+                    />
                   </Container>
                 )}
           </Container>

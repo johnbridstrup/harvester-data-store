@@ -3,6 +3,14 @@ import { transformSysmonServices } from "../../utils/utils";
 
 function ServiceTable(props) {
   const services = transformSysmonServices(props.services);
+  const evaluateColor = (services = [], errors = []) => {
+    const found = services.some((service) => errors.includes(service));
+    if (found) {
+      return "bg-danger";
+    } else {
+      return "";
+    }
+  };
   return (
     <div className="table-responsive">
       <table className="table">
@@ -16,7 +24,7 @@ function ServiceTable(props) {
         </thead>
         <tbody>
           {services.map((service, index) => (
-            <tr key={index}>
+            <tr key={index} className={evaluateColor(service, props.errors)}>
               {service.map((obj, index) => (
                 <td key={index}>{obj}</td>
               ))}
@@ -30,6 +38,7 @@ function ServiceTable(props) {
 
 ServiceTable.propTypes = {
   services: PropTypes.object,
+  errors: PropTypes.array,
 };
 
 export default ServiceTable;
