@@ -4,7 +4,9 @@ import {
   getExceptionKeys,
   getServicesInError,
   Loader,
+  masterInError,
   objNotEmpty,
+  robotInError,
   timeStampFormat,
   transformExceptionObj,
   transformReportDetail,
@@ -37,6 +39,10 @@ function ErrorReportDetail(props) {
   const [sysmonReport, setSysmonReport] = useState({});
   const [subTabObj, setSubTabObj] = useState(null);
   const [erroredServices, setErroredServices] = useState([]);
+  const [robocolor, setRoboColor] = useState({
+    main: "",
+    arm: "",
+  });
   const { report, timezone } = useSelector((state) => state.errorreport);
   const reportObj = transformReportDetail(report);
   const exceptions = transformExceptionObj(report.exceptions);
@@ -70,6 +76,21 @@ function ErrorReportDetail(props) {
       setActiveTab((current) => {
         return { ...current, exception: tab };
       });
+      let robot = robotInError(tab, sysmonReport);
+      setTimeout(() => {
+        setActiveTab((current) => {
+          return { ...current, sysmon: robot.robot, subtabs: robot.arm };
+        });
+        setRoboColor((current) => {
+          return { ...current, main: robot.robot };
+        });
+        if (robot.arm) {
+          setRoboColor((current) => {
+            return { ...current, main: robot.robot, arm: robot.arm };
+          });
+          setSubTabObj((current) => sysmonReport[robot.robot][robot.arm]);
+        }
+      }, 500);
     } else if (category === "sysmon") {
       setActiveTab((current) => {
         return { ...current, sysmon: tab };
@@ -77,11 +98,20 @@ function ErrorReportDetail(props) {
       setSysmonObj((current) => {
         return { ...current, sysmonObj: sysmonReport[tab] };
       });
-      if (tab !== "Master") {
+      if (tab === "Master") {
+        if (masterInError(getExceptionKeys(report.exceptions))) {
+          setRoboColor((current) => {
+            return { ...current, main: tab };
+          });
+        }
+      } else {
         setActiveTab((current) => {
           return { ...current, subtabs: "NUC" };
         });
         setSubTabObj((current) => sysmonReport[tab]["NUC"]);
+        setRoboColor((current) => {
+          return { ...current, arm: "" };
+        });
       }
     } else if (category === "subtabs") {
       setActiveTab((current) => {
@@ -137,6 +167,7 @@ function ErrorReportDetail(props) {
                       handleTabChange(key, "sysmon", sysmonObj.sysmonObj)
                     }
                     activetab={activeTab.sysmon}
+                    robocolor={robocolor.main}
                     navto={key}
                   >
                     {key}
@@ -153,6 +184,7 @@ function ErrorReportDetail(props) {
                       handleTabChange("NUC", "subtabs", sysmonObj.sysmonObj)
                     }
                     activetab={activeTab.subtabs}
+                    robocolor={robocolor.arm}
                     navto={`NUC`}
                   >
                     NUC
@@ -164,6 +196,7 @@ function ErrorReportDetail(props) {
                       handleTabChange("JETSON", "subtabs", sysmonObj.sysmonObj)
                     }
                     activetab={activeTab.subtabs}
+                    robocolor={robocolor.arm}
                     navto={`JETSON`}
                   >
                     JETSON

@@ -128,7 +128,11 @@ export const NavTabSpan = styled.span`
   color: ${(props) =>
     props.activetab === props.navto ? "#495057" : "rgba(0,0,0,.5)"};
   background-color: ${(props) =>
-    props.activetab === props.navto ? "#fff" : ""};
+    props.activetab === props.navto
+      ? props.activetab === props.robocolor
+        ? "#FF7276"
+        : "#fff"
+      : ""};
   border-color: ${(props) =>
     props.activetab === props.navto ? "#dee2e6 #dee2e6 #fff" : ""};
 
