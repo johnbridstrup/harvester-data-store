@@ -1,13 +1,6 @@
 import { useState, useEffect, lazy, Suspense } from "react";
 import { useSelector } from "react-redux";
-import {
-  getExceptionKeys,
-  Loader,
-  masterInError,
-  robotInError,
-  timeStampFormat,
-  transformExceptionObj,
-} from "../../utils/utils";
+import { Loader, robotInError, timeStampFormat } from "../../utils/utils";
 import {
   Container,
   LoaderDiv,
@@ -40,7 +33,6 @@ function ErrorReportDetail(props) {
     arm: "",
   });
   const {
-    report,
     timezone,
     transformed: {
       sysmonreport,
@@ -91,13 +83,7 @@ function ErrorReportDetail(props) {
       setSysmonObj((current) => {
         return { ...current, sysmonObj: sysmonReport[tab] };
       });
-      if (tab === "Master") {
-        if (masterInError(getExceptionKeys(report.exceptions))) {
-          setRoboColor((current) => {
-            return { ...current, main: tab };
-          });
-        }
-      } else {
+      if (tab !== "Master") {
         setActiveTab((current) => {
           return { ...current, subtabs: "NUC" };
         });
