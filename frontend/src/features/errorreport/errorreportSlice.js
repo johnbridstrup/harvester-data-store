@@ -1,5 +1,13 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { transformErrorReport } from "../../utils/utils";
+import {
+  getExceptionKeys,
+  getServicesInError,
+  transformErrorReport,
+  transformExceptionObj,
+  transformReportDetail,
+  transformSysmonKeys,
+  transformSysmonReport,
+} from "../../utils/utils";
 import { invalidateCache } from "../auth/authSlice";
 import errorreportService from "./errorreportService";
 
@@ -15,6 +23,14 @@ const initialState = {
   timezone: null,
   errorMsg: null,
   queryUrl: null,
+  transformed: {
+    exceptionkeys: [],
+    sysmonkeys: [],
+    sysmonreport: {},
+    reportobj: {},
+    erroredservices: [],
+    exceptions: [],
+  },
 };
 
 export const errorreportListView = createAsyncThunk(
@@ -142,6 +158,22 @@ const errorreportSlice = createSlice({
       .addCase(detailErrorReport.fulfilled, (state, action) => {
         state.loading = false;
         state.report = action.payload;
+        let report = action.payload;
+        let sysreport = transformSysmonReport(
+          report.report?.data?.sysmon_report
+        );
+        let exceptionskeys = getExceptionKeys(report?.exceptions);
+        state.transformed.reportobj = transformReportDetail(report);
+        state.transformed.sysmonreport = sysreport;
+        state.transformed.exceptionkeys = exceptionskeys;
+        let services = getServicesInError(exceptionskeys, sysreport);
+        state.transformed.erroredservices = services;
+        state.transformed.sysmonkeys = transformSysmonKeys(
+          Object.keys(sysreport),
+          services,
+          sysreport
+        );
+        state.transformed.exceptions = transformExceptionObj(report.exceptions);
       })
       .addCase(detailErrorReport.rejected, (state, action) => {
         state.loading = false;

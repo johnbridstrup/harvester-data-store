@@ -2,19 +2,16 @@ import { useState, useEffect, lazy, Suspense } from "react";
 import { useSelector } from "react-redux";
 import {
   getExceptionKeys,
-  getServicesInError,
   Loader,
   masterInError,
-  objNotEmpty,
   robotInError,
   timeStampFormat,
   transformExceptionObj,
-  transformReportDetail,
-  transformSysmonReport,
 } from "../../utils/utils";
 import {
   Container,
   LoaderDiv,
+  NavMainTabSpan,
   NavTabItem,
   NavTabs,
   NavTabSpan,
@@ -38,38 +35,34 @@ function ErrorReportDetail(props) {
   });
   const [sysmonReport, setSysmonReport] = useState({});
   const [subTabObj, setSubTabObj] = useState(null);
-  const [erroredServices, setErroredServices] = useState([]);
   const [robocolor, setRoboColor] = useState({
     main: "",
     arm: "",
   });
-  const { report, timezone } = useSelector((state) => state.errorreport);
-  const reportObj = transformReportDetail(report);
-  const exceptions = transformExceptionObj(report.exceptions);
-  const exceptionsKeys = Object.keys(exceptions);
+  const {
+    report,
+    timezone,
+    transformed: {
+      sysmonreport,
+      sysmonkeys,
+      exceptionkeys,
+      reportobj,
+      erroredservices,
+      exceptions,
+    },
+  } = useSelector((state) => state.errorreport);
   const exceptObj = exceptions[activeTab.exception];
 
   useEffect(() => {
-    if (report?.report?.data?.sysmon_report) {
-      const sysmonReport = transformSysmonReport(
-        report.report.data.sysmon_report
-      );
-      const sysmonKeys = Object.keys(sysmonReport);
-      setSysmonReport((current) => sysmonReport);
-      const sysmonObj = sysmonReport[activeTab.sysmon];
-      setSysmonObj((current) => {
-        return { ...current, sysmonKeys, sysmonObj };
-      });
-    }
-  }, [report.report, activeTab.sysmon]);
-
-  useEffect(() => {
-    const exceptionsKeys = getExceptionKeys(report.exceptions);
-    if (objNotEmpty(exceptionsKeys)) {
-      let errors = getServicesInError(exceptionsKeys, sysmonReport);
-      setErroredServices((current) => errors);
-    }
-  }, [report.exceptions, sysmonReport]);
+    setSysmonReport((current) => sysmonreport);
+    setSysmonObj((current) => {
+      return {
+        ...current,
+        sysmonKeys: sysmonkeys,
+        sysmonObj: sysmonreport[activeTab.sysmon],
+      };
+    });
+  }, [activeTab.sysmon, sysmonkeys, sysmonreport]);
 
   const handleTabChange = (tab, category, obj) => {
     if (category === "exception") {
@@ -127,12 +120,12 @@ function ErrorReportDetail(props) {
 
   return (
     <>
-      <ErrorReportDetailTable reportObj={reportObj} timezone={timezone} />
+      <ErrorReportDetailTable reportObj={reportobj} timezone={timezone} />
       <div className="row">
         <div className="col-md-7">
           <Container>
             <NavTabs>
-              {exceptionsKeys.map((key, index) => (
+              {exceptionkeys.map((key, index) => (
                 <NavTabItem key={index}>
                   <NavTabSpan
                     onClick={() => handleTabChange(key, "exception", undefined)}
@@ -162,16 +155,17 @@ function ErrorReportDetail(props) {
             <NavTabs>
               {sysmonObj.sysmonKeys.map((key, index) => (
                 <NavTabItem key={index}>
-                  <NavTabSpan
+                  <NavMainTabSpan
                     onClick={() =>
-                      handleTabChange(key, "sysmon", sysmonObj.sysmonObj)
+                      handleTabChange(key.robot, "sysmon", sysmonObj.sysmonObj)
                     }
                     activetab={activeTab.sysmon}
                     robocolor={robocolor.main}
-                    navto={key}
+                    navto={key.robot}
+                    errored={key.error}
                   >
-                    {key}
-                  </NavTabSpan>
+                    {key.robot}
+                  </NavMainTabSpan>
                 </NavTabItem>
               ))}
             </NavTabs>
@@ -229,7 +223,7 @@ function ErrorReportDetail(props) {
                     </div>
                     <ServiceTable
                       services={sysmonObj.sysmonObj?.services}
-                      errors={erroredServices}
+                      errors={erroredservices}
                     />
                   </Container>
                 )
@@ -256,7 +250,7 @@ function ErrorReportDetail(props) {
                     </div>
                     <ServiceTable
                       services={subTabObj?.services}
-                      errors={erroredServices}
+                      errors={erroredservices}
                     />
                   </Container>
                 )}
@@ -271,7 +265,7 @@ function ErrorReportDetail(props) {
             </LoaderDiv>
           }
         >
-          <ErrorReportJson reportObj={reportObj.report} />
+          <ErrorReportJson reportObj={reportobj.report} />
         </Suspense>
       </Container>
     </>

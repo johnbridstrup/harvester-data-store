@@ -311,3 +311,17 @@ export const HoverDivModal = styled.div`
   background-color: #fff;
   z-index: 10;
 `;
+
+export const NavMainTabSpan = styled(NavTabSpan)`
+  color: ${(props) =>
+    props.activetab === props.navto ? "#495057" : "rgba(0,0,0,.5)"};
+  background-color: ${(props) => (props.errored === true ? "#FF7276" : "")};
+  border-color: ${(props) =>
+    props.activetab === props.navto ? "#dee2e6 #dee2e6 #fff" : ""};
+
+  &:hover {
+    color: #495057;
+    background-color: #fff;
+    border-color: #dee2e6 #dee2e6 #fff;
+  }
+`;
