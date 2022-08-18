@@ -292,6 +292,16 @@ export const getServicesInError = (exceptionsKeys = [], sysmonReport = {}) => {
         errors.push(exceptionsKeys[i].split(":")[0]);
       }
     }
+    if (exceptionsKeys[i].includes(".5")) {
+      if (sysmonReport["Robot 5"]) {
+        errors.push(exceptionsKeys[i].split(":")[0]);
+      }
+    }
+    if (exceptionsKeys[i].includes(".6")) {
+      if (sysmonReport["Robot 6"]) {
+        errors.push(exceptionsKeys[i].split(":")[0]);
+      }
+    }
   }
   return errors;
 };
