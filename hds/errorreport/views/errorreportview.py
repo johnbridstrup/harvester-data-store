@@ -1,3 +1,4 @@
+import logging
 from rest_framework.renderers import JSONRenderer
 from ..models import ErrorReport
 from ..metrics import (
@@ -95,7 +96,7 @@ class ErrorReportView(CreateModelViewSet):
         return listfilter
 
     @classmethod
-    def swap_foreign_key_relation_lookup(cls, listfilter, replace='exceptions__', _append='__report'):
+    def swap_foreign_key_relation_lookup(cls, listfilter, replace='exceptions__', _append='report__'):
         """Swap field lookup keys across foreign key relationship
 
         Args:
@@ -106,13 +107,15 @@ class ErrorReportView(CreateModelViewSet):
         Returns:
             dict: New field lookup dict
         """
-        for key in listfilter.keys():
+        
+        out_filter = {}
+        for key in list(listfilter.keys()):
             if replace in key:
                 new_key = key.replace(replace, '')
             else:
                 new_key = _append + key
-            listfilter[new_key] = listfilter.pop(key)
-        return listfilter
+            out_filter[new_key] = listfilter.pop(key)
+        return out_filter
 
     @ERRORREPORT_LIST_QUERY_TIMER.time()
     def get_queryset(self):
