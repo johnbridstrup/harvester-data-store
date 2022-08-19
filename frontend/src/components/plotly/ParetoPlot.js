@@ -3,7 +3,7 @@ import Plotly from "react-plotly.js";
 
 function ParetoPlot(props) {
   const layout = {
-    title: "Service Errors",
+    title: "Exceptions",
     showlegend: false,
     autosize: false,
     width: 400,
