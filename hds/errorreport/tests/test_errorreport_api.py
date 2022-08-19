@@ -154,7 +154,7 @@ class ErrorReportAPITest(APITestCase):
             self.assertEqual(resp.status_code, 200)
             rdata = resp.json()
 
-            self.assertEqual(rdata['message'], f'{name} pareto generated')
+            self.assertEqual(rdata['message'], f'Pareto generated: {name}')
             self.assertEqual(rdata['data'][0]['count'], count)
             self.assertEqual(rdata['data'][0][name], name_val)
         

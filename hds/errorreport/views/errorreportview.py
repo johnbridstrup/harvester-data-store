@@ -166,5 +166,8 @@ class ErrorReportView(CreateModelViewSet):
         pareto_name = request.query_params.get("aggregate_name", None)
 
         query_set = ErrorReportView.create_pareto(pareto_group, listfilter)
-        return make_ok(f"{pareto_name} pareto generated", ParetoSerializer(query_set, many=True, new_name=pareto_name).data)        
+        return make_ok(
+            f"Pareto generated: {pareto_name if pareto_name else 'Exceptions'}", 
+            ParetoSerializer(query_set, many=True, new_name=pareto_name).data
+        )        
 
