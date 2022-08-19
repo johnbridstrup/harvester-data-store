@@ -23,6 +23,7 @@ const initialState = {
   timezone: null,
   errorMsg: null,
   queryUrl: null,
+  paretos: [],
   transformed: {
     exceptionkeys: [],
     sysmonkeys: [],
@@ -89,6 +90,22 @@ export const detailErrorReport = createAsyncThunk(
         auth: { token },
       } = thunkAPI.getState();
       return await errorreportService.detailErrorReport(reportId, token);
+    } catch (error) {
+      console.log(error);
+      const message = invalidateCache(error, thunkAPI.dispatch);
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const generatePareto = createAsyncThunk(
+  "errorreport/generatePareto",
+  async (queryObj, thunkAPI) => {
+    try {
+      const {
+        auth: { token },
+      } = thunkAPI.getState();
+      return await errorreportService.generatePareto(queryObj, token);
     } catch (error) {
       console.log(error);
       const message = invalidateCache(error, thunkAPI.dispatch);
@@ -178,7 +195,18 @@ const errorreportSlice = createSlice({
       .addCase(detailErrorReport.rejected, (state, action) => {
         state.loading = false;
         state.errorMsg = action.payload;
-      });
+      })
+      .addCase(generatePareto.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(generatePareto.fulfilled, (state, action) => {
+        state.loading = false;
+        state.paretos = action.payload;
+      })
+      .addCase(generatePareto.rejected, (state, action) => {
+        state.loading = false;
+        state.errorMsg = action.payload;
+      })
   },
 });
 

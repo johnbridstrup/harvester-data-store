@@ -30,11 +30,21 @@ const detailErrorReport = async (reportId, token) => {
   return response;
 };
 
+const generatePareto = async (paramsObj, token) => {
+  const searchParams = new URLSearchParams(paramsObj);
+  const response = await axiosService.get(
+    `${ERROR_REPORT_URL}pareto/?${searchParams.toString()}`,
+    token
+  );
+  return response;
+}
+
 const errorreportService = {
   errorListView,
   queryErrorReport,
   paginateErrorReport,
   detailErrorReport,
+  generatePareto,
 };
 
 export default errorreportService;
