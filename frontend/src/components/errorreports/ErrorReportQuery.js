@@ -121,8 +121,7 @@ function ErrorReportQuery(props) {
   const handleGenPareto = async () => {
     let queryObj = buildQueryObj();
     let params = new URLSearchParams(queryObj);
-    console.log(params);
-    let routeto = `/errorreports/view/pareto/?aggregate_query=code__name`;
+    let routeto = `/errorreports/view/pareto/?aggregate_query=code__name&${params.toString()}`;
     navigate(routeto);
   };
 
