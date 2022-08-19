@@ -1,10 +1,10 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useLocation } from "react-router-dom";
+import ErrorParetos from "../../../components/errorreports/ErrorParetos";
 import MainLayout from "../../../components/layout/main";
 import { generatePareto } from "../../../features/errorreport/errorreportSlice";
 import { paramsToObject } from "../../../utils/utils";
-
 
 function ErrorReportPareto(props) {
   const dispatch = useDispatch();
@@ -12,10 +12,10 @@ function ErrorReportPareto(props) {
 
   useEffect(() => {
     const paramsObj = paramsToObject(search);
-    (async() => {
+    (async () => {
       dispatch(generatePareto(paramsObj));
-    })()
-  },[dispatch, search]);
+    })();
+  }, [dispatch, search]);
 
   return (
     <MainLayout>
@@ -25,10 +25,10 @@ function ErrorReportPareto(props) {
             HDS Prototype: Error Reports Pareto
           </div>
         </div>
-
+        <ErrorParetos />
       </div>
     </MainLayout>
-  )
+  );
 }
 
 ErrorReportPareto.propTypes = {};

@@ -37,7 +37,7 @@ const generatePareto = async (paramsObj, token) => {
     token
   );
   return response;
-}
+};
 
 const errorreportService = {
   errorListView,

@@ -206,7 +206,7 @@ const errorreportSlice = createSlice({
       .addCase(generatePareto.rejected, (state, action) => {
         state.loading = false;
         state.errorMsg = action.payload;
-      })
+      });
   },
 });
 
