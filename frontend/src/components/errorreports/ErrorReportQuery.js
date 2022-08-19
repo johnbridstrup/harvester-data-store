@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import Select from "react-select";
 import {
   copiedUrl,
@@ -44,6 +45,7 @@ function ErrorReportQuery(props) {
   const fruitOptions = transformFruitOptions(fruits);
   const codeOptions = transformCodeOptions(exceptioncodes);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleHarvestSelect = (newValue, actionMeta) => {
     setSelectedHarvId((current) => newValue);
@@ -70,8 +72,7 @@ function ErrorReportQuery(props) {
     setTraceback(e.target.value);
   };
 
-  const handleFormQuerySubmit = async (e) => {
-    e.preventDefault();
+  const buildQueryObj = () => {
     let queryObj = {};
     if (datesQuery.start_time) {
       queryObj["start_time"] = timeStampFormat(
@@ -101,6 +102,12 @@ function ErrorReportQuery(props) {
     if (traceback) {
       queryObj["traceback"] = traceback;
     }
+    return queryObj
+  }
+
+  const handleFormQuerySubmit = async (e) => {
+    e.preventDefault();
+    let queryObj = buildQueryObj();
     await dispatch(queryErrorReport(queryObj));
     dispatch(copyQueryUrl(copiedUrl(queryObj)));
   };
@@ -110,6 +117,13 @@ function ErrorReportQuery(props) {
       return { ...current, [e.target.name]: e.target.value };
     });
   };
+
+  const handleGenPareto = async () => {
+    let queryObj = buildQueryObj();
+    let params = new URLSearchParams(queryObj);
+    let routeto = `/errorreports/view/pareto/?${params.toString()}`;
+    navigate(routeto);
+  }
 
   return (
     <div className="row">
@@ -244,6 +258,7 @@ function ErrorReportQuery(props) {
               <button type="submit" className="btn btn-primary btn-md">
                 Submit
               </button>
+              <button type="button" onClick={handleGenPareto} className="btn btn-primary btn-md mx-2">Generate Pareto</button>
             </div>
           </form>
         </div>

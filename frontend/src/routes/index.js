@@ -3,6 +3,7 @@ import NotFound from "../pages/404";
 import Login from "../pages/auth/login";
 import ErrorsReportDetail from "../pages/errorreports/errordetail";
 import ErrorsReportList from "../pages/errorreports/errorlist";
+import ErrorReportPareto from "../pages/errorreports/errorpareto";
 import Home from "../pages/home";
 import { RequireUser, UserAuth } from "../utils/guards";
 
@@ -31,6 +32,14 @@ const BaseRouter = () => {
           element={
             <RequireUser>
               <ErrorsReportList />
+            </RequireUser>
+          }
+        />
+        <Route
+          path="/errorreports/view/pareto"
+          element={
+            <RequireUser>
+              <ErrorReportPareto />
             </RequireUser>
           }
         />
