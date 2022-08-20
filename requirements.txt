@@ -17,3 +17,6 @@ sqlparse==0.4.2
 psutil==5.9.1
 pyyaml==6.0.0
 uritemplate==4.1.1
+celery==5.2.7
+django-celery-results==2.4.0
+redis==4.3.4

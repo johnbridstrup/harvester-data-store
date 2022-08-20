@@ -33,8 +33,10 @@ services:
       - SQL_PORT=5432
       - HDS_ROOT=/opt/app/hds
       - HDS_PORT=${HDS_PORT}
+      - BROKER_URL=redis://redis:6379/0
     depends_on:
       - db
+      - cache
     networks:
       - "hds-network"
   frontend:
@@ -43,6 +45,11 @@ services:
     command: ./entrypoint.sh
     ports:
       - 127.0.0.1:3000:3000
+    networks:
+      - "hds-network"
+  redis:
+    image: redis:6.2-alpine
+    restart: always
     networks:
       - "hds-network"
     

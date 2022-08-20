@@ -46,10 +46,11 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'corsheaders',
     'django_prometheus',
+    'django_celery_results',
     'common',
     'location',
     'errorreport',
-    "exceptions",
+    'exceptions',
     'harvester',
     'healthcheck',
     'notifications'
@@ -191,3 +192,8 @@ PROMETHEUS_EXPORT_MIGRATIONS = os.environ.get(
     'PROMETHEUS_EXPORT_MIGRATIONS',
     'false'
 ) in ['true', 'True', '1']
+
+# Celery
+CELERY_RESULT_BACKEND = 'django-db'
+CELERY_CACHE_BACKEND = 'redis'
+CELERY_BROKER_URL = os.environ.get('BROKER_URL', 'redis://localhost:6379')
