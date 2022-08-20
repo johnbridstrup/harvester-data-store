@@ -10,7 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
-import os
+import os, sys
 
 from pathlib import Path
 
@@ -194,6 +194,11 @@ PROMETHEUS_EXPORT_MIGRATIONS = os.environ.get(
 ) in ['true', 'True', '1']
 
 # Celery
-CELERY_RESULT_BACKEND = 'django-db'
-CELERY_CACHE_BACKEND = 'redis'
-CELERY_BROKER_URL = os.environ.get('BROKER_URL', 'redis://localhost:6379')
+if 'test' in sys.argv[1:]:
+    BROKER_BACKEND = 'memory'
+    CELERY_TASK_ALWAYS_EAGER = True
+    CELERY_TASK_EAGER_PROPAGATES = True
+else:
+    CELERY_RESULT_BACKEND = 'django-db'
+    CELERY_CACHE_BACKEND = 'redis'
+    CELERY_BROKER_URL = os.environ.get('BROKER_URL', 'redis://localhost:6379')

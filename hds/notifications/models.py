@@ -13,3 +13,6 @@ class Notification(CommonInfo):
             f"Notify {', '.join([u.username for u in self.recipients.all()])} " 
             f"when {self.trigger_on} has {self.criteria}"
         )
+
+    def notify(self, message):
+        pass

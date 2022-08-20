@@ -13,6 +13,7 @@ from exceptions.models import AFTException
 from common.viewsets import CreateModelViewSet
 from common.reports import DTimeFormatter
 from common.utils import make_ok
+from notifications.signals import error_report_created
 from django.db.models import Count, F
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
@@ -28,6 +29,12 @@ class ErrorReportView(CreateModelViewSet):
     filter_backends = (SearchFilter, OrderingFilter)
     search_fields = ['harvester']
     ordering_fields = ('harvester', 'location', 'reportTime')
+
+    def perform_create(self, serializer):
+        super().perform_create(serializer)
+        report_id = serializer.data['id']
+        url = self.request.build_absolute_uri(report_id)
+        error_report_created.send(sender=ErrorReport, instance_id=report_id, url=url) 
 
     @classmethod
     def build_list_filter(cls, request):
