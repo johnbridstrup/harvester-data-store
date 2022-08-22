@@ -1,5 +1,6 @@
 from celery import shared_task
 from .models import Notification
+from .slack import post_to_slack
 from django.apps import apps
 
 
@@ -19,3 +20,8 @@ def check_notifications(app_label, model_name, instance_id, url):
             pass
 
     return f"{num_notifications} notifications sent"
+
+@shared_task
+def post_to_slack_task(message, channel='hds-test'):
+    r = post_to_slack(message, channel)
+    return r
