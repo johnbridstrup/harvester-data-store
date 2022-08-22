@@ -26,6 +26,15 @@ then
 fi
 source $HDS_ROOT/scripts/set_port.sh $PORT
 
+if [ -d "${HDS_ROOT}/multiproc-tmp" ]
+then
+    rm ${HDS_ROOT}/multiproc-tmp/*
+else
+    mkdir $HDS_ROOT/multiproc-tmp
+fi
+
+export PROMETHEUS_MULTIPROC_DIR=$HDS_ROOT/multiproc-tmp
+
 echo ""
 echo "You are in the Harvester Data Store development environment"
 echo "  - Start the server with runserver"

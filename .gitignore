@@ -156,3 +156,4 @@ artifacts
 
 # Celery
 dump.rdb
+multiproc-tmp
