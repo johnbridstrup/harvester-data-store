@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import Select from "react-select";
 import {
   copiedUrl,
   extractDateFromString,
+  paramsToObject,
   pushState,
   timeStampFormat,
   transformCodeOptions,
@@ -47,6 +48,60 @@ function ErrorReportQuery(props) {
   const codeOptions = transformCodeOptions(exceptioncodes);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { search } = useLocation();
+
+  useEffect(() => {
+    const paramsObj = paramsToObject(search);
+    if (paramsObj.harv_ids) {
+      let harv_ids = paramsObj.harv_ids.split(",").map((harv_id, index) => {
+        return { value: Number(harv_id), label: Number(harv_id) };
+      });
+      setSelectedHarvId((current) => harv_ids);
+    }
+    if (paramsObj.locations) {
+      let locations = paramsObj.locations.split(",").map((loc, index) => {
+        return { value: loc, label: loc };
+      });
+      setSelectedLocation((current) => locations);
+    }
+    if (paramsObj.fruit) {
+      let fruitObj = { value: paramsObj.fruit, label: paramsObj.fruit };
+      setSelectedFruit((current) => fruitObj);
+    }
+    if (paramsObj.codes) {
+      let codes = paramsObj.codes.split(",").map((code, index) => {
+        return { value: code, label: code };
+      });
+      setSelectedCode((current) => codes);
+    }
+    if (paramsObj.traceback) {
+      setTraceback((current) => paramsObj.traceback);
+    }
+    if (paramsObj.start_time) {
+      setDatesQuery((current) => {
+        return {
+          ...current,
+          start_time: timeStampFormat(
+            extractDateFromString(paramsObj.start_time, true)
+          ),
+        };
+      });
+    }
+    if (paramsObj.end_time) {
+      setDatesQuery((current) => {
+        return {
+          ...current,
+          end_time: timeStampFormat(
+            extractDateFromString(paramsObj.end_time, true)
+          ),
+        };
+      });
+    }
+    if (paramsObj.tz) {
+      let tzObj = { value: paramsObj.tz, label: paramsObj.tz };
+      setSelectedTimezone((current) => tzObj);
+    }
+  }, [search]);
 
   const handleHarvestSelect = (newValue, actionMeta) => {
     setSelectedHarvId((current) => newValue);
@@ -144,6 +199,7 @@ function ErrorReportQuery(props) {
                     options={harvesterOptions}
                     name="harv_ids"
                     onChange={handleHarvestSelect}
+                    value={selectedHarvId}
                     defaultValue={selectedHarvId}
                     className="multi-select-container"
                     classNamePrefix="select"
@@ -161,6 +217,7 @@ function ErrorReportQuery(props) {
                     name="locations"
                     onChange={handleLocationSelect}
                     defaultValue={selectedLocation}
+                    value={selectedLocation}
                     className="multi-select-container"
                     classNamePrefix="select"
                   />
@@ -178,6 +235,7 @@ function ErrorReportQuery(props) {
                     name="fruit"
                     onChange={handleFruitSelect}
                     defaultValue={selectedFruit}
+                    value={selectedFruit}
                     className="multi-select-container"
                     classNamePrefix="select"
                   />
@@ -194,6 +252,7 @@ function ErrorReportQuery(props) {
                     name="code"
                     onChange={handleCodeSelect}
                     defaultValue={selectedCode}
+                    value={selectedCode}
                     className="multi-select-container"
                     classNamePrefix="select"
                   />
@@ -251,6 +310,7 @@ function ErrorReportQuery(props) {
                     name="tz"
                     onChange={handleTimezoneSelect}
                     defaultValue={selectedTimezone}
+                    value={selectedTimezone}
                     className="multi-select-container"
                     classNamePrefix="select"
                   />
