@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
+import { BackButton } from "../../../components/errorreports/ErrorHelpers";
 import ErrorReportDetail from "../../../components/errorreports/ErrorReportDetail";
 import Header from "../../../components/layout/header";
 import MainLayout from "../../../components/layout/main";
@@ -30,9 +31,12 @@ function ErrorsReportDetail(props) {
     <MainLayout>
       <div className="container">
         <div>
-          <div className="mt-4 mb-4"><span className="btn btn-default"><i className="las la-arrow-left"></i> Back</span>
-          </div>
-          <Header title={"HDS Prototype: Error Reports"} className={"display-6 mb-4"} reportId={params.reportId} />
+          <BackButton />
+          <Header
+            title={"HDS Prototype: Error Reports"}
+            className={"display-6 mb-4"}
+            reportId={params.reportId}
+          />
         </div>
 
         {loading ? (

@@ -342,3 +342,18 @@ export const transformSysmonKeys = (
   });
   return resultKeys;
 };
+
+export const pushState = (queryObj, pareto = false) => {
+  let newurl;
+  let params = new URLSearchParams(queryObj);
+  if (pareto) {
+    newurl = `${window.location.protocol}//${
+      window.location.host
+    }/errorreports/?aggregate_query=code__name&${params.toString()}`;
+  } else {
+    newurl = `${window.location.protocol}//${
+      window.location.host
+    }/errorreports/?${params.toString()}`;
+  }
+  window.history.pushState({ path: newurl }, "", newurl);
+};

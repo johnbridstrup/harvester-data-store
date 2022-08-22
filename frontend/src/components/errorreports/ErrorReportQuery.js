@@ -5,6 +5,7 @@ import Select from "react-select";
 import {
   copiedUrl,
   extractDateFromString,
+  pushState,
   timeStampFormat,
   transformCodeOptions,
   transformFruitOptions,
@@ -110,6 +111,7 @@ function ErrorReportQuery(props) {
     let queryObj = buildQueryObj();
     await dispatch(queryErrorReport(queryObj));
     dispatch(copyQueryUrl(copiedUrl(queryObj)));
+    pushState(queryObj, false);
   };
 
   const handleDateChange = (e) => {
@@ -121,6 +123,7 @@ function ErrorReportQuery(props) {
   const handleGenPareto = async () => {
     let queryObj = buildQueryObj();
     let params = new URLSearchParams(queryObj);
+    pushState(queryObj, true);
     let routeto = `/errorreports/view/pareto/?aggregate_query=code__name&${params.toString()}`;
     navigate(routeto);
   };

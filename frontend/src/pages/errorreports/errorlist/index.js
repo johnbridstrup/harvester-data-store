@@ -51,7 +51,10 @@ function ErrorsReportList(props) {
     <MainLayout>
       <div className="container">
         <div>
-          <Header title={"HDS Prototype: Error Reports"} className={"display-6 mt-4 mb-4"} />
+          <Header
+            title={"HDS Prototype: Error Reports"}
+            className={"display-6 mt-4 mb-4"}
+          />
         </div>
         <ErrorReportQuery />
         <ErrorReportTable />

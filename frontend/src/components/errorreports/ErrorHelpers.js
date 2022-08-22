@@ -2,6 +2,17 @@ import { CodeServiceDiv, HoverDiv, HoverDivModal, ToolBox } from "../styled";
 import PropTypes from "prop-types";
 import { getUniqueListBy } from "../../utils/utils";
 
+export const BackButton = () => {
+  const goBack = () => window.history.back();
+  return (
+    <div className="mt-4 mb-4">
+      <span className="btn btn-default" onClick={goBack}>
+        <i className="las la-arrow-left"></i> Back
+      </span>
+    </div>
+  );
+};
+
 export const HarvesterHover = (props) => {
   return (
     <HoverDiv position={props.position}>
