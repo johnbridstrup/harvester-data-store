@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import ErrorReportDetail from "../../../components/errorreports/ErrorReportDetail";
+import Header from "../../../components/layout/header";
 import MainLayout from "../../../components/layout/main";
 import { LoaderDiv } from "../../../components/styled";
 import { detailErrorReport } from "../../../features/errorreport/errorreportSlice";
@@ -29,9 +30,9 @@ function ErrorsReportDetail(props) {
     <MainLayout>
       <div className="container">
         <div>
-          <div className="display-6 mt-4 mb-4">
-            HDS Prototype: Error Reports {params.reportId}
+          <div className="mt-4 mb-4"><span className="btn btn-default"><i className="las la-arrow-left"></i> Back</span>
           </div>
+          <Header title={"HDS Prototype: Error Reports"} className={"display-6 mb-4"} reportId={params.reportId} />
         </div>
 
         {loading ? (

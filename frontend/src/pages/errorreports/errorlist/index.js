@@ -18,6 +18,7 @@ import CopyToClipboard from "../../../components/copytoclipboard/CopyToClipboard
 import { MAX_LIMIT } from "../../../features/base/constants";
 import { listFruits } from "../../../features/fruit/fruitSlice";
 import { listCodes } from "../../../features/excecode/codeSlice";
+import Header from "../../../components/layout/header";
 
 function ErrorsReportList(props) {
   const dispatch = useDispatch();
@@ -50,9 +51,7 @@ function ErrorsReportList(props) {
     <MainLayout>
       <div className="container">
         <div>
-          <div className="display-6 mt-4 mb-4">
-            HDS Prototype: Error Reports
-          </div>
+          <Header title={"HDS Prototype: Error Reports"} className={"display-6 mt-4 mb-4"} />
         </div>
         <ErrorReportQuery />
         <ErrorReportTable />
