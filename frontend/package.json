@@ -31,7 +31,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "check": "npx prettier --check .",
-    "format": "npx prettier --write ."
+    "format": "npx prettier --write .",
+    "prepare": "cd .. && husky install frontend/.husky"
   },
   "eslintConfig": {
     "extends": [
@@ -52,6 +53,7 @@
     ]
   },
   "devDependencies": {
+    "husky": "^8.0.1",
     "prettier": "2.7.1"
   }
 }

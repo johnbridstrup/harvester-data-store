@@ -21,9 +21,7 @@ function ErrorReportPareto(props) {
     <MainLayout>
       <div className="container">
         <div>
-          <div className="display-6 mt-4 mb-4">
-            Error Pareto
-          </div>
+          <div className="display-6 mt-4 mb-4">Error Pareto</div>
         </div>
         <ErrorParetos />
       </div>
