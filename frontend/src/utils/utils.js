@@ -76,6 +76,12 @@ export const translateLocOptions = (loc_names = []) => {
   });
 };
 
+export const translateFruitOptions = (fruits = []) => {
+  return fruits.map((fruit, index) => {
+    return fruit.value;
+  });
+};
+
 // Datetime formatting
 function padZeros(str_to_pad, digits) {
   return str_to_pad.toString().padStart(digits, "0");

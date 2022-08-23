@@ -14,6 +14,7 @@ import {
   transformLocOptions,
   transformTzOptions,
   translateCodeOptions,
+  translateFruitOptions,
   translateHarvOptions,
   translateLocOptions,
 } from "../../utils/utils";
@@ -64,9 +65,11 @@ function ErrorReportQuery(props) {
       });
       setSelectedLocation((current) => locations);
     }
-    if (paramsObj.fruit) {
-      let fruitObj = { value: paramsObj.fruit, label: paramsObj.fruit };
-      setSelectedFruit((current) => fruitObj);
+    if (paramsObj.fruits) {
+      let fruits = paramsObj.fruits.split(",").map((fruit, index) => {
+        return { value: fruit, label: fruit };
+      });
+      setSelectedFruit((current) => fruits);
     }
     if (paramsObj.codes) {
       let codes = paramsObj.codes.split(",").map((code, index) => {
@@ -145,8 +148,8 @@ function ErrorReportQuery(props) {
     if (selectedTimezone && selectedTimezone.hasOwnProperty("value")) {
       queryObj["tz"] = selectedTimezone.value;
     }
-    if (selectedFruit && selectedFruit.hasOwnProperty("value")) {
-      queryObj["fruit"] = selectedFruit.value;
+    if (selectedFruit && selectedFruit.length > 0) {
+      queryObj["fruits"] = translateFruitOptions(selectedFruit);
     }
     if (selectedCode && selectedCode.length > 0) {
       queryObj["codes"] = translateCodeOptions(selectedCode);
@@ -225,6 +228,7 @@ function ErrorReportQuery(props) {
                 <div className="form-group">
                   <label htmlFor="fruit">Fruit</label>
                   <Select
+                    isMulti
                     isSearchable
                     placeholder="strawberry"
                     options={fruitOptions}

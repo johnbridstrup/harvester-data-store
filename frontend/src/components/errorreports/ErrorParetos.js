@@ -21,7 +21,7 @@ function ErrorParetos(props) {
 
   return (
     <div className="row mt-4">
-      <div className="col-md-4">
+      <div className="col-md-4 mt-4">
         <ParetoTabular paramsObj={paramsObj} />
       </div>
       <div className="col-md-8">
