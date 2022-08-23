@@ -2,6 +2,59 @@ import { CodeServiceDiv, HoverDiv, HoverDivModal, ToolBox } from "../styled";
 import PropTypes from "prop-types";
 import { getUniqueListBy } from "../../utils/utils";
 
+export const ParetoTabular = (props) => {
+  return (
+    <div>
+      <div className="d-flex">
+        <div className="tabular bg-gray">Property</div>
+        <div className="tabular bg-gray">Value</div>
+      </div>
+      {props.paramsObj?.harv_ids && (
+        <div className="d-flex">
+          <div className="tabular">harv_ids</div>
+          <div className="tabular">{props.paramsObj.harv_ids}</div>
+        </div>
+      )}
+      {props.paramsObj?.locations && (
+        <div className="d-flex">
+          <div className="tabular">locations</div>
+          <div className="tabular">{props.paramsObj.locations}</div>
+        </div>
+      )}
+      {props.paramsObj?.fruit && (
+        <div className="d-flex">
+          <div className="tabular">fruit</div>
+          <div className="tabular">{props.paramsObj.fruit}</div>
+        </div>
+      )}
+      {props.paramsObj?.codes && (
+        <div className="d-flex">
+          <div className="tabular">codes</div>
+          <div className="tabular">{props.paramsObj.codes}</div>
+        </div>
+      )}
+      {props.paramsObj?.traceback && (
+        <div className="d-flex">
+          <div className="tabular">traceback</div>
+          <div className="tabular">{props.paramsObj.traceback}</div>
+        </div>
+      )}
+      {props.paramsObj?.start_time && (
+        <div className="d-flex">
+          <div className="tabular">start_time</div>
+          <div className="tabular">{props.paramsObj.start_time}</div>
+        </div>
+      )}
+      {props.paramsObj?.end_time && (
+        <div className="d-flex">
+          <div className="tabular">end_time</div>
+          <div className="tabular">{props.paramsObj.end_time}</div>
+        </div>
+      )}
+    </div>
+  );
+};
+
 export const BackButton = () => {
   const goBack = () => window.history.back();
   return (
@@ -106,6 +159,10 @@ export const CodeHover = (props) => {
       </ToolBox>
     </HoverDivModal>
   );
+};
+
+ParetoTabular.propTypes = {
+  paramsObj: PropTypes.object,
 };
 
 HarvesterHover.propTypes = {

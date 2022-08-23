@@ -7,6 +7,7 @@ import Header from "../../../components/layout/header";
 import MainLayout from "../../../components/layout/main";
 import { generatePareto } from "../../../features/errorreport/errorreportSlice";
 import { paramsToObject } from "../../../utils/utils";
+import "./styles.css";
 
 function ErrorReportPareto(props) {
   const dispatch = useDispatch();

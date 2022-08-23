@@ -1,0 +1,9 @@
+.tabular {
+  flex: 0.5;
+  border: 1px solid #ccc;
+  padding: 5px;
+}
+
+.bg-gray {
+  background: #f0f0f0;
+}
