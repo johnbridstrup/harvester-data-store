@@ -1,3 +1,4 @@
+import json, os
 from rest_framework.test import APITestCase
 from rest_framework.test import APIClient
 from rest_framework.authtoken.models import Token
@@ -58,6 +59,12 @@ class HDSAPITestBase(APITestCase):
 
         return test_objects
 
+    def _post_error_report(self):
+        report_path = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'test_data/report.json')
+        with open(report_path, 'rb') as f:
+            data = json.load(f)
+        resp = self.client.post(f'{self.api_base_url}/errorreports/', data, format='json')
+        return resp.json()
 
 class OpenApiTest(HDSAPITestBase):
     """ Test OpenAPI Schema Generation """
