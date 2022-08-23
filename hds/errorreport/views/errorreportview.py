@@ -33,7 +33,7 @@ class ErrorReportView(CreateModelViewSet):
     def build_list_filter(cls, request):
         """Builds the filter dictionary for the query.
 
-        Django's filter function takes a set of kwargs using the django field 
+        Django's filter function takes a set of kwargs using the django field
         lookup syntax. E.g. fieldname__lookup_value.
 
         Args:
@@ -76,10 +76,10 @@ class ErrorReportView(CreateModelViewSet):
                 listfilter['reportTime__lte'] = end_time
 
         # get fruit fromrequest and filter queryset for fruit
-        if 'fruit' in request.query_params:
-            qp = request.query_params["fruit"]
-            if len(qp) > 0:
-                listfilter['harvester__fruit__name'] = qp
+        if 'fruits' in request.query_params:
+            fruits = request.query_params["fruits"].split(",")
+            if len(fruits) > 0:
+                listfilter['harvester__fruit__name__in'] = fruits
 
         # get exception codes fromrequest and filter queryset for exception code
         if 'codes' in request.query_params:
@@ -107,7 +107,7 @@ class ErrorReportView(CreateModelViewSet):
         Returns:
             dict: New field lookup dict
         """
-        
+
         out_filter = {}
         for key in list(listfilter.keys()):
             if replace in key:
@@ -139,7 +139,7 @@ class ErrorReportView(CreateModelViewSet):
         """
         if listfilter is None:
             listfilter = {}
-            
+
         value_dict = {"value": F(field_lookup)}
         count_dict = {"count": Count(field_lookup)}
         qs = AFTException.objects.filter(
@@ -151,7 +151,7 @@ class ErrorReportView(CreateModelViewSet):
         )
 
         return qs
-    
+
     @action(
         methods=['get'],
         url_path='pareto',
@@ -161,13 +161,13 @@ class ErrorReportView(CreateModelViewSet):
     def pareto(self, request):
         listfilter = self.build_list_filter(request)
         listfilter = self.swap_foreign_key_relation_lookup(listfilter)
-        
+
         pareto_group = request.query_params.get("aggregate_query", "code__code")
         pareto_name = request.query_params.get("aggregate_name", None)
 
         query_set = ErrorReportView.create_pareto(pareto_group, listfilter)
         return make_ok(
-            f"Pareto generated: {pareto_name if pareto_name else 'Exceptions'}", 
+            f"Pareto generated: {pareto_name if pareto_name else 'Exceptions'}",
             ParetoSerializer(query_set, many=True, new_name=pareto_name).data
-        )        
+        )
 
