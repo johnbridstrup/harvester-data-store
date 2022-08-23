@@ -1,13 +1,8 @@
 """ Test ErrorReport APIs """
 from common.tests import HDSAPITestBase
-from rest_framework.test import APIClient
-from rest_framework.authtoken.models import Token
-from harvester.models import Harvester, Fruit
-from location.models import Location, Distributor
-from exceptions.models import AFTExceptionCode, AFTException
+from exceptions.models import AFTException
 from ..models import ErrorReport
 from ..serializers.errorreportserializer import ErrorReportSerializer
-from django.contrib.auth.models import User
 from django.utils.timezone import make_aware
 import datetime
 import json

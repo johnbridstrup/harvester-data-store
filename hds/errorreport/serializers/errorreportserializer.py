@@ -1,6 +1,6 @@
 from common.serializers.reportserializer import ReportSerializerBase
 from ..models import ErrorReport
-from harvester.models import Harvester, Location
+from harvester.models import Harvester
 from harvester.serializers.harvesterserializer import HarvesterSerializer
 from location.serializers.locationserializer import LocationSerializer
 from exceptions.models import AFTException, AFTExceptionCode

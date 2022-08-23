@@ -1,9 +1,7 @@
 from rest_framework.test import APITestCase
 from rest_framework.test import APIClient
 from rest_framework.authtoken.models import Token
-
 from django.contrib.auth.models import User
-
 from hds.urls import urlpatterns
 from exceptions.models import AFTExceptionCode
 from harvester.models import Fruit, Harvester
