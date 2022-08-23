@@ -81,9 +81,7 @@ function ErrorReportQuery(props) {
       setDatesQuery((current) => {
         return {
           ...current,
-          start_time: timeStampFormat(
-            extractDateFromString(paramsObj.start_time, true)
-          ),
+          start_time: paramsObj.start_time,
         };
       });
     }
@@ -91,9 +89,7 @@ function ErrorReportQuery(props) {
       setDatesQuery((current) => {
         return {
           ...current,
-          end_time: timeStampFormat(
-            extractDateFromString(paramsObj.end_time, true)
-          ),
+          end_time: paramsObj.end_time,
         };
       });
     }
