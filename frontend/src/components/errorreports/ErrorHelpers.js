@@ -21,10 +21,10 @@ export const ParetoTabular = (props) => {
           <div className="tabular">{props.paramsObj.locations}</div>
         </div>
       )}
-      {props.paramsObj?.fruit && (
+      {props.paramsObj?.fruits && (
         <div className="d-flex">
-          <div className="tabular">fruit</div>
-          <div className="tabular">{props.paramsObj.fruit}</div>
+          <div className="tabular">fruits</div>
+          <div className="tabular">{props.paramsObj.fruits}</div>
         </div>
       )}
       {props.paramsObj?.codes && (

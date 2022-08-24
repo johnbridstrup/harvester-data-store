@@ -32,4 +32,13 @@
     top: 0;
     left: 0;
   }
+  .mainchart {
+    margin-left: 380px;
+    transition: 0.5s;
+  }
+
+  .minus-side {
+    transition: 0.5s;
+    margin-left: 0;
+  }
 }

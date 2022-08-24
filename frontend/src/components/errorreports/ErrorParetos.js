@@ -26,9 +26,9 @@ function ErrorParetos(props) {
 
   return (
     <div>
-      <div>
-        <span onClick={handleSideClick} className="cursor">
-          <i className="las la-bars la-2x"></i>
+      <div className="mb-2">
+        <span onClick={handleSideClick} className="btn cursor">
+          {open ? "Hide" : "Show"} Parameters
         </span>
       </div>
       <div className="sidenav">
@@ -38,8 +38,8 @@ function ErrorParetos(props) {
           </div>
         </SidePane>
       </div>
-      <div className="row">
-        <div className="col-md-6 mx-auto">
+      <div className={`row ${open ? "mainchart" : "minus-side"}`}>
+        <div className="col-md-6">
           {loading ? (
             <LoaderDiv>
               <Loader size={50}></Loader>
