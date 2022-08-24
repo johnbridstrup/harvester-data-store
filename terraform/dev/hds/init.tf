@@ -50,6 +50,10 @@ data "aws_secretsmanager_secret_version" "hds_rds_pwd" {
   secret_id = "hds_rds_pwd"
 }
 
+data "aws_secretsmanager_secret_version" "slack_token" {
+  secret_id = "dev_slack_token"
+}
+
 data "aws_security_group" "lambda_sg" {
   tags = {
     Name = "errorreport"
@@ -70,5 +74,15 @@ data "aws_security_group" "pritunl_sg" {
 data "aws_security_group" "prom_scrape_sg" {
   tags = {
     Name = "ecs-prometheus-scraper"
+  }
+}
+
+data "aws_elasticache_replication_group" "hds_cache" {
+  replication_group_id = "hds-cache"
+}
+
+data "aws_security_group" "redis_sg" {
+  tags = {
+    Name = "hds-redis"
   }
 }

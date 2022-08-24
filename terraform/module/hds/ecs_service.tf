@@ -18,4 +18,6 @@ module "hds_ecs" {
   service_iam_policy_document    = var.service_iam_policy_document
   service_alb_ingress_sg_rules   = var.service_alb_ingress_sg_rules
   service_ingress_sg_rules       = var.service_ingress_sg_rules
+  service_container_memory       = var.service_container_memory
+  service_container_cpu          = var.service_container_cpu
 }

@@ -3,7 +3,7 @@ locals {
   dns_name                 = "hdsapi.devcloud.advanced.farm"
   service_port             = "8000"
   service_name             = "hds"
-  service_docker_image     = "082346306812.dkr.ecr.us-west-1.amazonaws.com/hds:hds-staging-8cec94d2"
+  service_docker_image     = "082346306812.dkr.ecr.us-west-1.amazonaws.com/hds:hds-staging-1351ee22"
   healthcheck_path         = "/api/v1/healthcheck/"
   errorreport_queue_name   = "errorreport-queue"
   sqs_client_metrics_port  = 9104
@@ -52,7 +52,9 @@ locals {
     { "name" : "DJANGO_SUPERUSER_EMAIL", "value" : "john@advanced.farm" },
     { "name" : "SQS_USER_PASSWORD", "value" : random_password.sqs_pwd.result },
     { "name" : "HDS_PORT", "value" : 8000 },
-    { "name" : "ERRORREPORTS_QUEUE_URL", "value" : data.aws_sqs_queue.errorreport_queue.url }
+    { "name" : "ERRORREPORTS_QUEUE_URL", "value" : data.aws_sqs_queue.errorreport_queue.url },
+    { "name" : "BROKER_URL", "value" : "redis://${data.aws_elasticache_replication_group.hds_cache.primary_endpoint_address}:6379" },
+    { "name" : "SLACK_TOKEN", "value" : data.aws_secretsmanager_secret_version.slack_token.secret_string }
   ]
 }
 
@@ -120,4 +122,17 @@ resource "aws_security_group_rule" "hds_db_rule" {
   protocol                 = "tcp"
   source_security_group_id = module.hds.service_security_group_id
   security_group_id        = data.aws_security_group.hdsdb_sg.id
+}
+
+resource "aws_security_group_rule" "hds_redis_rule" {
+  type                     = "ingress"
+  from_port                = data.aws_elasticache_replication_group.hds_cache.port
+  to_port                  = data.aws_elasticache_replication_group.hds_cache.port
+  protocol                 = "tcp"
+  source_security_group_id = module.hds.service_security_group_id
+  security_group_id        = data.aws_security_group.redis_sg.id
+}
+
+output "broker" {
+  value = data.aws_elasticache_replication_group.hds_cache.primary_endpoint_address
 }
