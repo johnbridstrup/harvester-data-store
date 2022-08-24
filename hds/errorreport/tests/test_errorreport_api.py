@@ -144,3 +144,17 @@ class ErrorReportAPITest(HDSAPITestBase):
         
         for group, name, val in zip(pareto_groups, pareto_names, pareto_name_vals):
             check_pareto(group, name, val, num)
+
+    def test_create_notification(self):
+        params = "?harv_ids=100"
+        data = {
+            "trigger_on": "ErrorReport",
+            "recipients": [1]
+        }
+        resp = self.client.post(
+            f'{self.api_base_url}/errorreports/createnotification/{params}', 
+            data, 
+            format='json', 
+            HTTP_ACCEPT='application/json'
+        )
+        self.assertEqual(resp.status_code, 200)

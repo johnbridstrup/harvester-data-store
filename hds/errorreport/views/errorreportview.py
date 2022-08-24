@@ -14,6 +14,7 @@ from common.viewsets import CreateModelViewSet
 from common.reports import DTimeFormatter
 from common.utils import make_ok
 from notifications.signals import error_report_created
+from notifications.serializers import NotificationSerializer
 from django.db.models import Count, F
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
@@ -177,4 +178,25 @@ class ErrorReportView(CreateModelViewSet):
             f"Pareto generated: {pareto_name if pareto_name else 'Exceptions'}",
             ParetoSerializer(query_set, many=True, new_name=pareto_name).data
         )
+
+    @action(
+        methods=['Post'],
+        url_path='createnotification',
+        detail=False,
+        renderer_classes=[JSONRenderer]
+    )
+    def create_notification(self, request):
+        criteria = self.build_list_filter(request)
+        trigger_on = ErrorReport.__name__
+        recipients = request.data.get("recipients")
+        notification = {
+            "criteria": criteria,
+            "trigger_on": trigger_on,
+            "recipients": recipients
+        }
+        
+        serializer = NotificationSerializer(data=notification)
+        serializer.is_valid()
+        serializer.save(creator=request.user)
+        return make_ok("Notification created", serializer.data)
 

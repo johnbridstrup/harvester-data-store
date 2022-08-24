@@ -5,16 +5,6 @@ from .models import Notification
 
 
 class NotificationSerializer(serializers.ModelSerializer):
-    def to_internal_value(self, data):
-        trigger_on = data["trigger_on"]
-        recipients = data["recipients"]
-        data = {
-            "trigger_on": trigger_on,
-            "recipients": recipients,
-            "criteria": self.context["request"].query_params.dict()
-        }
-        return super().to_internal_value(data)
-
     def to_representation(self, instance):
         notification = super().to_representation(instance)
         recipients = [User.objects.get(id=user).username for user in notification['recipients']]

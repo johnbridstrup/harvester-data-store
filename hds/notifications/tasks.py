@@ -2,6 +2,8 @@ from celery import shared_task
 from .models import Notification
 from .slack import post_to_slack
 from django.apps import apps
+from django.core.exceptions import FieldError
+from common.async_metrics import ASYNC_ERROR_COUNTER
 
 
 @shared_task
@@ -18,6 +20,10 @@ def check_notifications(app_label, model_name, instance_id, url):
 
         except model.DoesNotExist:
             pass
+        except FieldError:
+            err = f"Bad parameters in notification {notification.id}"
+            ASYNC_ERROR_COUNTER.labels("check_notification", "FieldError", err)
+
 
     return f"{num_notifications} notifications sent"
 

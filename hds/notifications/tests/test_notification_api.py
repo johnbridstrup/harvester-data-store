@@ -11,59 +11,41 @@ class NotificationAPITest(HDSAPITestBase):
         self.test_objects = self._setup_basic()
         self.notification = {
             "trigger_on": "ErrorReport",
-            "recipients": [1]
+            "criteria": {
+                "test_param": '1234'
+            },
         }
+        self.notifcation_inst = Notification.objects.create(
+            **self.notification, creator = self.user
+        )
+        self.notifcation_inst.recipients.set([1])
 
-    def test_create_notification(self):
+    def test_create_notification_disallowed(self):
         """ create notifications and assert it exists """
         resp = self.client.post(
-            f"{self.api_base_url}/notifications/?test_param=1234", 
+            f"{self.api_base_url}/notifications/", 
             data=self.notification, 
             format="json"
         )
 
-        data = resp.json()["data"]
+        self.assertEqual(resp.status_code, 405)
         self.assertEqual(Notification.objects.count(), 1)
-        self.assertDictEqual(data["criteria"], {"test_param": "1234"})
 
     def test_delete_notification(self):
-        self.client.post(
-            f"{self.api_base_url}/notifications/?test_param=1234", 
-            data=self.notification, 
-            format="json"
-        )
         self.assertEqual(Notification.objects.count(), 1)
         self.client.delete(f"{self.api_base_url}/notifications/1/")
         self.assertEqual(Notification.objects.count(), 0)
 
-    def test_update_notification(self):
+    def test_update_notification_disallowed(self):
         """ update notifications and assert it exists """
-        self.client.post(
-            f"{self.api_base_url}/notifications/?test_param=1234", 
-            data=self.notification, 
-            format="json"
-        )     
 
-        User.objects.create(username="test_user_2")
-        new_notification = self.notification.copy()
-        new_notification["recipients"] = [1, 2]
-
+        # PUT not allowed
         resp = self.client.put(
             f"{self.api_base_url}/notifications/1/", 
-            new_notification,
+            self.notification,
             format="json"
         )
 
-        self.assertEqual(resp.status_code, 200)
-        
-        notification = Notification.objects.get(id=1)
-        recipients = [user.username for user in notification.recipients.all()]
-
-        self.assertTrue("test_user" in recipients)
-        self.assertTrue("test_user_2" in recipients)
-
-        # PATCH not allowed
-        resp = self.client.patch(f"{self.api_base_url}/notifications/1/", new_notification)
         self.assertEqual(resp.status_code, 405)
 
     @patch("notifications.tasks.check_notifications.delay")
