@@ -325,3 +325,12 @@ export const NavMainTabSpan = styled(NavTabSpan)`
     border-color: #dee2e6 #dee2e6 #fff;
   }
 `;
+
+export const SidePane = styled.div`
+  position: relative;
+  width: ${(props) => (props.open === true ? "380px" : "0")};
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  transition: 0.5s;
+`;

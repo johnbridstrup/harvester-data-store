@@ -23,10 +23,8 @@ function ErrorReportPareto(props) {
   return (
     <MainLayout>
       <div className="container">
-        <div>
-          <BackButton />
-          <Header title={"Error Pareto"} className={"display-6 mb-4"} />
-        </div>
+        <BackButton />
+        <Header title={"Error Pareto"} className={"display-6 mb-4"} />
         <ErrorParetos />
       </div>
     </MainLayout>
