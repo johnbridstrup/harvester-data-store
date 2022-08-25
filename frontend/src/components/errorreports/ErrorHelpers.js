@@ -1,6 +1,40 @@
 import { CodeServiceDiv, HoverDiv, HoverDivModal, ToolBox } from "../styled";
 import PropTypes from "prop-types";
-import { getUniqueListBy } from "../../utils/utils";
+import Select from "react-select";
+import { aggregateOptions, getUniqueListBy } from "../../utils/utils";
+
+export const ParetoForm = (props) => {
+  return (
+    <div className="mb-4">
+      <form onSubmit={props.handleSubmit}>
+        <div className="row mb-3">
+          <div className="col">
+            <div className="form-group">
+              <label htmlFor="aggregate_query">Group By</label>
+              <Select
+                isSearchable
+                isClearable
+                placeholder="code__name"
+                options={aggregateOptions}
+                name="aggregate_query"
+                onChange={props.handleChange}
+                defaultValue={props.selectedAggregate}
+                value={props.selectedAggregate}
+                className="multi-select-container"
+                classNamePrefix="select"
+              />
+            </div>
+          </div>
+        </div>
+        <div className="text-center ">
+          <button type="submit" className="btn btn-primary">
+            Build Chart
+          </button>
+        </div>
+      </form>
+    </div>
+  );
+};
 
 export const ParetoTabular = (props) => {
   return (
@@ -165,6 +199,12 @@ export const CodeHover = (props) => {
       </ToolBox>
     </HoverDivModal>
   );
+};
+
+ParetoForm.propTypes = {
+  handleChange: PropTypes.func,
+  handleSubmit: PropTypes.func,
+  selectedAggregate: PropTypes.object,
 };
 
 ParetoTabular.propTypes = {

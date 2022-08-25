@@ -1,14 +1,20 @@
 import { lazy, Suspense, useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useLocation } from "react-router-dom";
-import { Loader, paramsToObject } from "../../utils/utils";
+import { generatePareto } from "../../features/errorreport/errorreportSlice";
+import { aggregateOptions, Loader, paramsToObject } from "../../utils/utils";
 import { LoaderDiv, SidePane } from "../styled";
-import { ParetoTabular } from "./ErrorHelpers";
+import { ParetoForm, ParetoTabular } from "./ErrorHelpers";
 const ParetoPlot = lazy(() => import("../plotly/ParetoPlot"));
 
 function ErrorParetos(props) {
   const [open, setOpen] = useState(false);
+  const [selectedAggregate, setSelectedAggregate] = useState(null);
+  const [chartOptions, setChartOptions] = useState({
+    chart_title: "",
+  });
   const { paretos, loading } = useSelector((state) => state.errorreport);
+  const dispatch = useDispatch();
   const { search } = useLocation();
   const paramsObj = paramsToObject(search);
   const dataArr = paretos.slice();
@@ -24,8 +30,33 @@ function ErrorParetos(props) {
     setOpen(!open);
   };
 
+  const handleChange = (newValue, actionMeta) => {
+    setSelectedAggregate((current) => newValue);
+  };
+
+  const handleBuildPareto = async (e) => {
+    e.preventDefault();
+    let aggregate_query;
+    if (selectedAggregate && selectedAggregate.hasOwnProperty("value")) {
+      aggregate_query = selectedAggregate.value;
+      const option = aggregateOptions.find(
+        (x, i) => x.value === aggregate_query
+      );
+      setChartOptions((current) => {
+        return { ...current, chart_title: option?.label };
+      });
+    }
+    paramsObj["aggregate_query"] = aggregate_query;
+    await dispatch(generatePareto(paramsObj));
+  };
+
   return (
     <div>
+      <ParetoForm
+        handleChange={handleChange}
+        handleSubmit={handleBuildPareto}
+        selectedAggregate={selectedAggregate}
+      />
       <div className="mb-2">
         <span onClick={handleSideClick} className="btn cursor">
           {open ? "Hide" : "Show"} Parameters
@@ -55,7 +86,7 @@ function ErrorParetos(props) {
               <ParetoPlot
                 xlabels={xlabels}
                 ydata={ydata}
-                chart_title={paramsObj.chart_title}
+                chart_title={chartOptions.chart_title}
               />
             </Suspense>
           )}
