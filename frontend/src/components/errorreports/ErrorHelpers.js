@@ -39,6 +39,12 @@ export const ParetoTabular = (props) => {
           <div className="tabular">{props.paramsObj.traceback}</div>
         </div>
       )}
+      {props.paramsObj?.tz && (
+        <div className="d-flex">
+          <div className="tabular">Timezone</div>
+          <div className="tabular">{props.paramsObj.tz}</div>
+        </div>
+      )}
       {props.paramsObj?.start_time && (
         <div className="d-flex">
           <div className="tabular">start_time</div>

@@ -3,7 +3,7 @@ import Plotly from "react-plotly.js";
 
 function ParetoPlot(props) {
   const layout = {
-    title: "Exceptions",
+    title: props.chart_title,
     showlegend: false,
     autosize: false,
     width: 400,
@@ -27,6 +27,7 @@ function ParetoPlot(props) {
 ParetoPlot.propTypes = {
   xlabels: PropTypes.array,
   ydata: PropTypes.array,
+  chart_title: PropTypes.string,
 };
 
 export default ParetoPlot;

@@ -363,3 +363,18 @@ export const pushState = (queryObj, pareto = false) => {
   }
   window.history.pushState({ path: newurl }, "", newurl);
 };
+
+export const aggregateOptions = [
+  { label: "service", value: "service" },
+  { label: "harvester", value: "report__harvester__harv_id" },
+  { label: "exception", value: "code__name" },
+  { label: "team", value: "code__team" },
+  { label: "robot", value: "node" },
+  { label: "location", value: "report__location__ranch" },
+];
+
+export const translateAggregateOptions = (aggregates = []) => {
+  return aggregates.map((aggregate, index) => {
+    return aggregate.value;
+  });
+};

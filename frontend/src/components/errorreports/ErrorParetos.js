@@ -52,7 +52,11 @@ function ErrorParetos(props) {
                 </LoaderDiv>
               }
             >
-              <ParetoPlot xlabels={xlabels} ydata={ydata} />
+              <ParetoPlot
+                xlabels={xlabels}
+                ydata={ydata}
+                chart_title={paramsObj.chart_title}
+              />
             </Suspense>
           )}
         </div>
