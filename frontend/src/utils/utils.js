@@ -366,7 +366,7 @@ export const pushState = (queryObj, pareto = false) => {
 
 export const aggregateOptions = [
   { label: "service", value: "service" },
-  { label: "harvester", value: "report__harvester__harv_id" },
+  { label: "harvester", value: "report__harvester__name" },
   { label: "exception", value: "code__name" },
   { label: "team", value: "code__team" },
   { label: "robot", value: "node" },

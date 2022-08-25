@@ -8,6 +8,9 @@ function ParetoPlot(props) {
     autosize: false,
     width: 400,
     height: 400,
+    xaxis: {
+      type: "category",
+    },
   };
   const data = [
     {

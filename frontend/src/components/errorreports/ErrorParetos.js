@@ -45,6 +45,8 @@ function ErrorParetos(props) {
       setChartOptions((current) => {
         return { ...current, chart_title: option?.label };
       });
+    } else {
+      aggregate_query = "code__name";
     }
     paramsObj["aggregate_query"] = aggregate_query;
     await dispatch(generatePareto(paramsObj));
