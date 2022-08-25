@@ -9,6 +9,8 @@ locals {
   errorreport_queue_name   = "errorreport-queue"
   enable_prometheus_scrape = true
   sqs_client_metrics_port  = 9104
+  service_container_memory = 1024
+  service_container_cpu    = 512
 }
 
 resource "random_password" "hds_superuser_pwd" {
@@ -52,7 +54,9 @@ locals {
     { "name" : "DJANGO_SUPERUSER_EMAIL", "value" : "john@advanced.farm" },
     { "name" : "SQS_USER_PASSWORD", "value" : random_password.sqs_pwd.result },
     { "name" : "HDS_PORT", "value" : 8000 },
-    { "name" : "ERRORREPORTS_QUEUE_URL", "value" : data.aws_sqs_queue.errorreport_queue.url }
+    { "name" : "ERRORREPORTS_QUEUE_URL", "value" : data.aws_sqs_queue.errorreport_queue.url },
+    { "name" : "BROKER_URL", "value" : "redis://${data.aws_elasticache_replication_group.hds_cache.primary_endpoint_address}:6379" },
+    { "name" : "SLACK_TOKEN", "value" : data.aws_secretsmanager_secret_version.slack_token.secret_string }
   ]
 }
 
@@ -112,6 +116,8 @@ module "hds" {
     "${local.service_port},tcp,${data.aws_security_group.vm_metrics_security_group.id},django prometheus scraping",
     "${local.sqs_client_metrics_port},tcp,${data.aws_security_group.vm_metrics_security_group.id},sqs client prometheus scraping"
   ]
+  service_container_cpu    = local.service_container_cpu
+  service_container_memory = local.service_container_memory
 }
 
 resource "aws_security_group_rule" "hds_db_rule" {
@@ -121,4 +127,13 @@ resource "aws_security_group_rule" "hds_db_rule" {
   protocol                 = "tcp"
   source_security_group_id = module.hds.service_security_group_id
   security_group_id        = data.aws_security_group.hdsdb_sg.id
+}
+
+resource "aws_security_group_rule" "hds_redis_rule" {
+  type                     = "ingress"
+  from_port                = data.aws_elasticache_replication_group.hds_cache.port
+  to_port                  = data.aws_elasticache_replication_group.hds_cache.port
+  protocol                 = "tcp"
+  source_security_group_id = module.hds.service_security_group_id
+  security_group_id        = data.aws_security_group.redis_sg.id
 }

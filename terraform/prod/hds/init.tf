@@ -50,6 +50,10 @@ data "aws_secretsmanager_secret_version" "hds_rds_pwd" {
   secret_id = "hds_rds_pwd"
 }
 
+data "aws_secretsmanager_secret_version" "slack_token" {
+  secret_id = "hds-slack-token"
+}
+
 data "aws_secretsmanager_secret_version" "django_secret_key" {
   secret_id = "hds_django_secret"
 }
@@ -80,5 +84,15 @@ data "aws_security_group" "vm_metrics_security_group" {
   filter {
     name   = "tag:Environment"
     values = ["prod"]
+  }
+}
+
+data "aws_elasticache_replication_group" "hds_cache" {
+  replication_group_id = "hds-cache"
+}
+
+data "aws_security_group" "redis_sg" {
+  tags = {
+    Name = "hds-redis"
   }
 }
