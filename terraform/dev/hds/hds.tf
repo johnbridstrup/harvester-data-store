@@ -3,12 +3,14 @@ locals {
   dns_name                 = "hdsapi.devcloud.advanced.farm"
   service_port             = "8000"
   service_name             = "hds"
-  service_docker_image     = "082346306812.dkr.ecr.us-west-1.amazonaws.com/hds:hds-staging-1351ee22"
+  service_docker_image     = "082346306812.dkr.ecr.us-west-1.amazonaws.com/hds:hds-staging-4fd1ded0"
   healthcheck_path         = "/api/v1/healthcheck/"
   errorreport_queue_name   = "errorreport-queue"
   sqs_client_metrics_port  = 9104
   hds_superuser_pwd_id     = "hds_superuser_pwd"
   enable_prometheus_scrape = true
+  service_container_memory = 1024
+  service_container_cpu    = 512
 }
 
 resource "random_password" "hds_superuser_pwd" {
@@ -113,6 +115,8 @@ module "hds" {
     "${local.service_port},tcp,${data.aws_security_group.prom_scrape_sg.id},django prometheus scraping",
     "${local.sqs_client_metrics_port},tcp,${data.aws_security_group.prom_scrape_sg.id},sqs client prometheus scraping"
   ]
+  service_container_cpu    = local.service_container_cpu
+  service_container_memory = local.service_container_memory
 }
 
 resource "aws_security_group_rule" "hds_db_rule" {
