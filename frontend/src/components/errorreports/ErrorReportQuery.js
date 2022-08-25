@@ -2,9 +2,7 @@ import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
 import Select from "react-select";
-import { toast } from "react-toastify";
 import {
-  aggregateOptions,
   copiedUrl,
   extractDateFromString,
   paramsToObject,
@@ -34,13 +32,11 @@ function ErrorReportQuery(props) {
   const [selectedTimezone, setSelectedTimezone] = useState(null);
   const [selectedFruit, setSelectedFruit] = useState(null);
   const [selectedCode, setSelectedCode] = useState(null);
-  const [selectedAggregate, setSelectedAggregate] = useState(null);
   const [datesQuery, setDatesQuery] = useState({
     start_time: "",
     end_time: "",
   });
   const [traceback, setTraceback] = useState("");
-  const [title, setTitle] = useState("");
   const count = useSelector((state) => state.errorreport.count);
   const { harvesters } = useSelector((state) => state.harvester);
   const { locations } = useSelector((state) => state.location);
@@ -104,15 +100,6 @@ function ErrorReportQuery(props) {
       let tzObj = { value: paramsObj.tz, label: paramsObj.tz };
       setSelectedTimezone((current) => tzObj);
     }
-    if (paramsObj.aggregate_query) {
-      const argsObj = aggregateOptions.find(
-        (x, i) => x.value === paramsObj.aggregate_query
-      );
-      setSelectedAggregate((current) => argsObj);
-    }
-    if (paramsObj.chart_title) {
-      setTitle(paramsObj.chart_title);
-    }
   }, [search]);
 
   const handleHarvestSelect = (newValue, actionMeta) => {
@@ -136,16 +123,8 @@ function ErrorReportQuery(props) {
     setSelectedCode((current) => newValue);
   };
 
-  const handleAggregateSelect = (newValue, actionMeta) => {
-    setSelectedAggregate((current) => newValue);
-  };
-
   const handleTracebackChange = (e) => {
     setTraceback(e.target.value);
-  };
-
-  const handleTitleChange = (e) => {
-    setTitle(e.target.value);
   };
 
   const buildQueryObj = () => {
@@ -178,12 +157,6 @@ function ErrorReportQuery(props) {
     if (traceback) {
       queryObj["traceback"] = traceback;
     }
-    if (title) {
-      queryObj["chart_title"] = title;
-    }
-    if (selectedAggregate && selectedAggregate.hasOwnProperty("value")) {
-      queryObj["aggregate_query"] = selectedAggregate.value;
-    }
     return queryObj;
   };
 
@@ -203,16 +176,10 @@ function ErrorReportQuery(props) {
 
   const handleGenPareto = async () => {
     let queryObj = buildQueryObj();
-    if (!queryObj.aggregate_query) {
-      toast.error("aggregate query is required!");
-    } else if (!queryObj.chart_title) {
-      toast.error("chart title is required!");
-    } else {
-      let params = new URLSearchParams(queryObj);
-      pushState(queryObj, true);
-      let routeto = `/errorreports/view/pareto/?${params.toString()}`;
-      navigate(routeto);
-    }
+    let params = new URLSearchParams(queryObj);
+    pushState(queryObj, true);
+    let routeto = `/errorreports/view/pareto/?aggregate_query=code__name&${params.toString()}`;
+    navigate(routeto);
   };
 
   return (
@@ -304,35 +271,6 @@ function ErrorReportQuery(props) {
                     placeholder="traceback string"
                   />
                 </div>
-              </div>
-              <div className="col-md-6">
-                <div className="form-group">
-                  <label htmlFor="aggregate_query">Aggregate Query</label>
-                  <Select
-                    isSearchable
-                    isClearable
-                    placeholder="code__name"
-                    options={aggregateOptions}
-                    name="aggregate_query"
-                    onChange={handleAggregateSelect}
-                    defaultValue={selectedAggregate}
-                    value={selectedAggregate}
-                    className="multi-select-container"
-                    classNamePrefix="select"
-                  />
-                </div>
-              </div>
-            </div>
-            <div className="row mb-4">
-              <div className="col-md-6">
-                <label>Chart Title</label>
-                <InputFormControl
-                  type="text"
-                  name="chart_title"
-                  value={title}
-                  onChange={handleTitleChange}
-                  placeholder="chart title e.g Exceptions"
-                />
               </div>
             </div>
             <div className="row mb-4">
