@@ -1,4 +1,5 @@
 import logging
+import os
 from rest_framework.renderers import JSONRenderer
 from ..models import ErrorReport
 from ..metrics import (
@@ -12,7 +13,7 @@ from ..serializers.errorreportserializer import (
 from exceptions.models import AFTException
 from common.viewsets import CreateModelViewSet
 from common.reports import DTimeFormatter
-from common.utils import make_ok
+from common.utils import make_ok, build_frontend_url
 from notifications.signals import error_report_created
 from notifications.serializers import NotificationSerializer
 from django.db.models import Count, F
@@ -34,7 +35,7 @@ class ErrorReportView(CreateModelViewSet):
     def perform_create(self, serializer):
         super().perform_create(serializer)
         report_id = serializer.data['id']
-        url = self.request.build_absolute_uri(report_id)
+        url = build_frontend_url(endpoint="errorreports", _id=report_id)
         error_report_created.send(sender=ErrorReport, instance_id=report_id, url=url) 
 
     @classmethod

@@ -3,8 +3,16 @@ from rest_framework.response import Response
 from rest_framework.views import exception_handler
 
 import logging
+import os
 import traceback
 
+
+def build_frontend_url(endpoint, _id=None):
+    frontend_url = os.environ.get("FRONTEND_URL", "http://localhost:3000")
+    frontend_url = frontend_url + f"/{endpoint}/"
+    if _id:
+        frontend_url = frontend_url + f"{_id}/"
+    return frontend_url
 
 def make_ok(response_message, response_data, response_status=200):
     """ generate success response """

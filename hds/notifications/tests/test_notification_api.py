@@ -90,6 +90,7 @@ class NotificationAPITest(HDSAPITestBase):
 
         notify_args = notify.call_args.args
         self.assertIn("Error on Harvester", notify_args[0])
-        self.assertIn("/api/v1/errorreports/2", notify_args[1])
+        self.assertIn("errorreports/2", notify_args[1])
+        self.assertNotIn("api/v1", notify_args[1])
         
         

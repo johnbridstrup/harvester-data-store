@@ -1,6 +1,7 @@
 locals {
   env                      = "dev"
   dns_name                 = "hdsapi.devcloud.advanced.farm"
+  frontend_url             = "https://hds.devcloud.advanced.farm"
   service_port             = "8000"
   service_name             = "hds"
   service_docker_image     = "082346306812.dkr.ecr.us-west-1.amazonaws.com/hds:hds-staging-4fd1ded0"
@@ -56,7 +57,8 @@ locals {
     { "name" : "HDS_PORT", "value" : 8000 },
     { "name" : "ERRORREPORTS_QUEUE_URL", "value" : data.aws_sqs_queue.errorreport_queue.url },
     { "name" : "BROKER_URL", "value" : "redis://${data.aws_elasticache_replication_group.hds_cache.primary_endpoint_address}:6379" },
-    { "name" : "SLACK_TOKEN", "value" : data.aws_secretsmanager_secret_version.slack_token.secret_string }
+    { "name" : "SLACK_TOKEN", "value" : data.aws_secretsmanager_secret_version.slack_token.secret_string },
+    { "name" : "FRONTEND_URL", "value" : local.frontend_url }
   ]
 }
 

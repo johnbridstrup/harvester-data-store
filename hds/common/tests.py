@@ -7,6 +7,7 @@ from hds.urls import urlpatterns
 from exceptions.models import AFTExceptionCode
 from harvester.models import Fruit, Harvester
 from location.models import Distributor, Location
+from .utils import build_frontend_url
 
 import logging
 # Disable logging in unit tests
@@ -65,6 +66,11 @@ class HDSAPITestBase(APITestCase):
             data = json.load(f)
         resp = self.client.post(f'{self.api_base_url}/errorreports/', data, format='json')
         return resp.json()
+
+    def test_frontend_url(self):
+        url = build_frontend_url('test_endpoint', 1)
+
+        self.assertEqual(url, "http://localhost:3000/test_endpoint/1/")
 
 class OpenApiTest(HDSAPITestBase):
     """ Test OpenAPI Schema Generation """
