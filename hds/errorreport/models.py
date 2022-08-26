@@ -10,7 +10,7 @@ class ErrorReport(ReportBase):
     harvester = models.ForeignKey(Harvester, on_delete=models.CASCADE, related_name='errorharvester')
 
     def __str__(self):
-        excs = [f"\n\t{exc.code.name}" for exc in self.exceptions.all()]
+        excs = [f"\n\t{str(exc)}" for exc in self.exceptions.all()]
         return (
             f"*Error on Harvester {self.harvester.harv_id}*\n"
             f"ts: {self.reportTime}\n"

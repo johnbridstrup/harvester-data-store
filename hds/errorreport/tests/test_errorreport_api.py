@@ -158,3 +158,10 @@ class ErrorReportAPITest(HDSAPITestBase):
             HTTP_ACCEPT='application/json'
         )
         self.assertEqual(resp.status_code, 200)
+
+    def test_err_report_str(self):
+        self._post_error_report()
+        inst = ErrorReport.objects.get()
+        self.assertIn("*Error on Harvester", str(inst))
+        self.assertIn("AFTBaseException", str(inst))
+        self.assertIn("traychg.0", str(inst))

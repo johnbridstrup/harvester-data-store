@@ -32,4 +32,4 @@ class AFTException(CommonInfo):
     report = models.ForeignKey(ErrorReport, on_delete=models.SET_NULL, null=True, related_name="exceptions")
 
     def __str__(self):
-        return f"Exception code {self.code.code} on {self.service}.{self.node}"
+        return f"{self.service}.{self.node}: {self.code.name}"
