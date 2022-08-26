@@ -54,7 +54,8 @@ INSTALLED_APPS = [
     'exceptions',
     'harvester',
     'healthcheck',
-    'notifications'
+    'notifications',
+    's3file',
 ]
 
 MIDDLEWARE = [

@@ -1,0 +1,14 @@
+{  
+    "Records":[  
+       {  
+          "s3":{
+             "bucket":{  
+                "name":"test-bucket"  
+             },
+             "object":{  
+                "key":"test-object_6f616e44-1f46-11ed-8d4c-0d9457c6a74a.file"
+             }
+          }
+       }
+    ]
+} 

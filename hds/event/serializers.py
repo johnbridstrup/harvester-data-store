@@ -22,6 +22,12 @@ class EventSerializer(serializers.ModelSerializer):
             *error_reports,
         ]
 
+        # Connect related files here
+        s3files = [{'url': f'/s3files/{f.id}/', 'filetype': f.filetype} for f in instance.s3file_set.all()]
+        data['related_files'] = [
+            *s3files,
+        ]
+
         return data
 
 

@@ -60,11 +60,14 @@ class HDSAPITestBase(APITestCase):
 
         return test_objects
 
-    def _post_error_report(self):
+    def _load_report_data(self):
         report_path = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'test_data/report.json')
         with open(report_path, 'rb') as f:
-            data = json.load(f)
-        resp = self.client.post(f'{self.api_base_url}/errorreports/', data, format='json')
+            self.data = json.load(f)
+    def _post_error_report(self, load=True):
+        if load:
+            self._load_report_data()
+        resp = self.client.post(f'{self.api_base_url}/errorreports/', self.data, format='json')
         return resp.json()
 
     def test_frontend_url(self):
