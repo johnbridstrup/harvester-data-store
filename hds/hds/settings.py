@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'common',
     'location',
     'errorreport',
+    'event',
     'exceptions',
     'harvester',
     'healthcheck',

@@ -1,5 +1,6 @@
 """ Test ErrorReport APIs """
 from common.tests import HDSAPITestBase
+from event.models import Event
 from exceptions.models import AFTException
 from ..models import ErrorReport
 from ..serializers.errorreportserializer import ErrorReportSerializer
@@ -18,11 +19,30 @@ class ErrorReportAPITest(HDSAPITestBase):
         with open(report_json_path) as f:
             self.data = json.load(f)
 
-    def test_create_errorreport(self):
+    def test_create_errorreport_no_uuid(self):
         """ create error report and assert it exists """
-        r= self.client.post(f'{self.api_base_url}/errorreports/', self.data, format='json', HTTP_ACCEPT='application/json')
+        r = self.client.post(f'{self.api_base_url}/errorreports/', self.data, format='json', HTTP_ACCEPT='application/json')
+
+        # Assert report created
         self.assertEqual(ErrorReport.objects.count(), 1)
+
+        # Assert exception created
         self.assertEqual(AFTException.objects.count(), 1)
+
+        # Assert event created
+        self.assertEqual(Event.objects.count(), 1)
+
+        # Assert representation correct
+        self.assertIn("event_uuid", r.json()['data'])
+
+    def test_create_errorreport_with_uuid(self):
+        """ create error report with uuid in data """
+        UUID = "a-test-uuid-string"
+        self.data['uuid'] = UUID
+
+        r = self.client.post(f'{self.api_base_url}/errorreports/', self.data, format='json', HTTP_ACCEPT='application/json')
+
+        self.assertEqual(UUID, r.json()['data']['event_uuid'])
 
     def test_create_errorreport_with_invalid_harvester(self):
         """ create error report with invalid harvester """
@@ -34,34 +54,24 @@ class ErrorReportAPITest(HDSAPITestBase):
 
     def test_update_errorreport(self):
         """ update error report and assert it exists """
-        data = self.data.copy()
-        report_time = make_aware(datetime.datetime.fromtimestamp(data["timestamp"]))
-
-        ErrorReport.objects.create(
-            creator=self.user, location=self.test_objects['location'],
-            harvester=self.test_objects["harvester"], reportTime=report_time, report=data)
+        self._post_error_report()
 
         # updating reportTime
         current_time = make_aware(datetime.datetime.now().replace(microsecond=0))
         new_timestamp = current_time.timestamp()
-        data["timestamp"] = new_timestamp
+        self.data["timestamp"] = new_timestamp
 
-        self.client.patch(f'{self.api_base_url}/errorreports/1/', data, format='json', HTTP_ACCEPT='application/json')
+        self.client.patch(f'{self.api_base_url}/errorreports/1/', self.data, format='json', HTTP_ACCEPT='application/json')
         self.assertEqual(ErrorReport.objects.get().reportTime, current_time)
 
     def test_update_errorreport_with_invalid_data(self):
         """ update error report with invalid data """
-        data = self.data.copy()
-        report_time = make_aware(datetime.datetime.fromtimestamp(data["timestamp"]))
-
-        ErrorReport.objects.create(
-            creator=self.user, location=self.test_objects["location"],
-            harvester=self.test_objects["harvester"], reportTime=report_time, report=data)
+        self._post_error_report()
 
         # updating harv_id
         response = self.client.patch(
             f'{self.api_base_url}/errorreports/1/',
-            {data["data"]["sysmon_report"]["serial_number"]: "99"})
+            {self.data["data"]["sysmon_report"]["serial_number"]: "99"})
         self.assertEqual(response.status_code, 400)
 
     def test_delete_errorreport(self):
@@ -69,9 +79,7 @@ class ErrorReportAPITest(HDSAPITestBase):
         data = self.data.copy()
         report_time = make_aware(datetime.datetime.fromtimestamp(data["timestamp"]))
 
-        ErrorReport.objects.create(
-            creator=self.user, location=self.test_objects["location"],
-            harvester=self.test_objects["harvester"], reportTime=report_time, report=data)
+        self._post_error_report()
 
         self.client.delete(f'{self.api_base_url}/errorreports/1/', HTTP_ACCEPT='application/json')
         self.assertEqual(ErrorReport.objects.count(), 0)
@@ -81,16 +89,8 @@ class ErrorReportAPITest(HDSAPITestBase):
         data = self.data
         report_time = make_aware(datetime.datetime.fromtimestamp(data["timestamp"]))
 
-        ErrorReport.objects.create(
-            creator=self.user, location=self.test_objects["location"],
-            harvester=self.test_objects["harvester"], reportTime=report_time, report=data)
-
-        current_time = make_aware(datetime.datetime.now().replace(microsecond=0))
-        new_timestamp = current_time.timestamp()
-        data["timestamp"] = new_timestamp
-        ErrorReport.objects.create(
-            creator=self.user, location=self.test_objects["location"],
-            harvester=self.test_objects["harvester"], reportTime=report_time, report=data)
+        self._post_error_report()
+        self._post_error_report()
 
         response = self.client.get(f'{self.api_base_url}/errorreports/', HTTP_ACCEPT='application/json')
         self.assertEqual(response.status_code, 200)
@@ -98,12 +98,7 @@ class ErrorReportAPITest(HDSAPITestBase):
 
     def test_get_errorreport_by_id(self):
         """ get error report by id """
-        data = self.data
-        report_time = make_aware(datetime.datetime.fromtimestamp(data["timestamp"]))
-
-        ErrorReport.objects.create(
-            creator=self.user, location=self.test_objects["location"],
-            harvester=self.test_objects["harvester"], reportTime=report_time, report=data)
+        self._post_error_report()
 
         response = self.client.get(f'{self.api_base_url}/errorreports/1/')
         self.assertEqual(response.status_code, 200)

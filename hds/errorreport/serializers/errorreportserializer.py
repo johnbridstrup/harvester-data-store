@@ -3,12 +3,14 @@ from ..models import ErrorReport
 from harvester.models import Harvester
 from harvester.serializers.harvesterserializer import HarvesterSerializer
 from location.serializers.locationserializer import LocationSerializer
+from event.models import Event
+from event.serializers import EventSerializerMixin
 from exceptions.models import AFTException, AFTExceptionCode
 from exceptions.serializers import AFTExceptionSerializer
 from rest_framework import serializers
 
 
-class ErrorReportSerializer(ReportSerializerBase):
+class ErrorReportSerializer(EventSerializerMixin, ReportSerializerBase):
     """Serializer for the ErrorReport model"""
     exceptions = AFTExceptionSerializer(many=True, required=False)
 
@@ -30,13 +32,14 @@ class ErrorReportSerializer(ReportSerializerBase):
         harv_id = int(report['data']['sysmon_report']['serial_number'])
         harvester = Harvester.objects.get(harv_id=harv_id)
         reportTime = self.extract_timestamp(report['timestamp'])
+        UUID = report.get("uuid", Event.generate_uuid())
         
-
         data = {
             'harvester': harvester.id,
             'location': harvester.location.id,
             'reportTime': reportTime,
-            'report': report
+            'report': report,
+            'UUID': UUID,
         }
         return super().to_internal_value(data)
 
@@ -57,7 +60,7 @@ class ErrorReportSerializer(ReportSerializerBase):
                             "service": service,
                             "node": node,
                             "traceback": traceback,
-                            "timestamp": timestamp
+                            "timestamp": timestamp,
                         }
                     )
         return errors
