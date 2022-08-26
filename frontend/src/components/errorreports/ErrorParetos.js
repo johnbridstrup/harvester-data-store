@@ -95,6 +95,13 @@ function ErrorParetos(props) {
     }
   };
 
+  const handleDeletePareto = (chart) => {
+    let arr = paretoArr.slice();
+    let index = arr.findIndex((x, i) => x.id === chart.id);
+    arr.splice(index, 1);
+    setParetoArr((current) => arr);
+  };
+
   return (
     <div>
       <ParetoForm
@@ -121,7 +128,7 @@ function ErrorParetos(props) {
       ) : (
         <div className={`row ${open ? "mainchart" : "minus-side"}`}>
           {paretoArr.map((obj, index) => (
-            <div key={obj.id} className="col-md-6">
+            <div key={obj.id} className="col-md-6 plot-div">
               <Suspense
                 fallback={
                   <LoaderDiv>
@@ -135,6 +142,12 @@ function ErrorParetos(props) {
                   chart_title={obj.chart_title}
                 />
               </Suspense>
+              <span
+                onClick={() => handleDeletePareto(obj)}
+                className="delete-icon"
+              >
+                <i className="las la-times"></i>
+              </span>
             </div>
           ))}
         </div>

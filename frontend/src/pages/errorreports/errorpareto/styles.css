@@ -25,6 +25,26 @@
   width: 100%;
 }
 
+.plot-div {
+  position: relative;
+}
+
+.delete-icon {
+  position: absolute;
+  top: 0;
+  left: 50px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #f5f5f5;
+  border: 1px solid #f0f0f0;
+  padding: 0.5rem;
+  cursor: pointer;
+}
+
 @media (min-width: 892px) {
   .sidecontent {
     position: absolute;
