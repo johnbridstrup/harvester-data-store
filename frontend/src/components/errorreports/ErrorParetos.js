@@ -1,8 +1,13 @@
-import { lazy, Suspense, useState } from "react";
+import { lazy, Suspense, useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useLocation } from "react-router-dom";
 import { generatePareto } from "../../features/errorreport/errorreportSlice";
-import { aggregateOptions, Loader, paramsToObject } from "../../utils/utils";
+import {
+  aggregateOptions,
+  Loader,
+  paramsToObject,
+  uuid,
+} from "../../utils/utils";
 import { LoaderDiv, SidePane } from "../styled";
 import { ParetoForm, ParetoTabular } from "./ErrorHelpers";
 const ParetoPlot = lazy(() => import("../plotly/ParetoPlot"));
@@ -10,21 +15,35 @@ const ParetoPlot = lazy(() => import("../plotly/ParetoPlot"));
 function ErrorParetos(props) {
   const [open, setOpen] = useState(false);
   const [selectedAggregate, setSelectedAggregate] = useState(null);
-  const [chartOptions, setChartOptions] = useState({
-    chart_title: "",
-  });
+  const [paretoArr, setParetoArr] = useState([]);
   const { paretos, loading } = useSelector((state) => state.errorreport);
   const dispatch = useDispatch();
   const { search } = useLocation();
   const paramsObj = paramsToObject(search);
-  const dataArr = paretos.slice();
-  dataArr.sort((a, b) => (a.count > b.count ? -1 : b.count > a.count ? 1 : 0));
-  const xlabels = dataArr.map((pareto, index) => {
-    return pareto.value;
-  });
-  const ydata = dataArr.map((pareto, index) => {
-    return pareto.count;
-  });
+
+  useEffect(() => {
+    const dataArr = paretos.slice();
+    dataArr.sort((a, b) =>
+      a.count > b.count ? -1 : b.count > a.count ? 1 : 0
+    );
+    const xlabels = dataArr.map((pareto, index) => {
+      return pareto.value;
+    });
+    const ydata = dataArr.map((pareto, index) => {
+      return pareto.count;
+    });
+    const option = aggregateOptions.find(
+      (x, i) => x.value === paramsObj.aggregate_query
+    );
+    let paretoObj = {
+      id: uuid(),
+      paretos: { xlabels, ydata },
+      aggregate_query: paramsObj.aggregate_query,
+      chart_title: option?.label,
+    };
+    let arr = [paretoObj];
+    setParetoArr((current) => arr);
+  }, [paramsObj.aggregate_query, paretos]);
 
   const handleSideClick = () => {
     setOpen(!open);
@@ -37,19 +56,43 @@ function ErrorParetos(props) {
   const handleBuildPareto = async (e) => {
     e.preventDefault();
     let aggregate_query;
+    let chart_title;
     if (selectedAggregate && selectedAggregate.hasOwnProperty("value")) {
       aggregate_query = selectedAggregate.value;
       const option = aggregateOptions.find(
         (x, i) => x.value === aggregate_query
       );
-      setChartOptions((current) => {
-        return { ...current, chart_title: option?.label };
-      });
+      chart_title = option?.label;
     } else {
       aggregate_query = "code__name";
     }
     paramsObj["aggregate_query"] = aggregate_query;
-    await dispatch(generatePareto(paramsObj));
+    const res = await dispatch(generatePareto(paramsObj));
+    if (res.type === "errorreport/generatePareto/fulfilled") {
+      const dataArr = res?.payload.slice();
+      dataArr.sort((a, b) =>
+        a.count > b.count ? -1 : b.count > a.count ? 1 : 0
+      );
+      const xlabels = dataArr.map((pareto, index) => {
+        return pareto.value;
+      });
+      const ydata = dataArr.map((pareto, index) => {
+        return pareto.count;
+      });
+      let paretoObj = {
+        id: uuid(),
+        paretos: { xlabels, ydata },
+        aggregate_query,
+        chart_title,
+      };
+      let arr = paretoArr.slice();
+      let exist = arr.find((x, i) => x.chart_title === chart_title);
+      console.log(exist);
+      if (!exist) {
+        arr.push(paretoObj);
+      }
+      setParetoArr((current) => arr);
+    }
   };
 
   return (
@@ -71,29 +114,31 @@ function ErrorParetos(props) {
           </div>
         </SidePane>
       </div>
-      <div className={`row ${open ? "mainchart" : "minus-side"}`}>
-        <div className="col-md-6">
-          {loading ? (
-            <LoaderDiv>
-              <Loader size={50}></Loader>
-            </LoaderDiv>
-          ) : (
-            <Suspense
-              fallback={
-                <LoaderDiv>
-                  <Loader size={25} />
-                </LoaderDiv>
-              }
-            >
-              <ParetoPlot
-                xlabels={xlabels}
-                ydata={ydata}
-                chart_title={chartOptions.chart_title}
-              />
-            </Suspense>
-          )}
+      {loading ? (
+        <LoaderDiv>
+          <Loader size={50}></Loader>
+        </LoaderDiv>
+      ) : (
+        <div className={`row ${open ? "mainchart" : "minus-side"}`}>
+          {paretoArr.map((obj, index) => (
+            <div key={obj.id} className="col-md-6">
+              <Suspense
+                fallback={
+                  <LoaderDiv>
+                    <Loader size={25} />
+                  </LoaderDiv>
+                }
+              >
+                <ParetoPlot
+                  xlabels={obj.paretos.xlabels}
+                  ydata={obj.paretos.ydata}
+                  chart_title={obj.chart_title}
+                />
+              </Suspense>
+            </div>
+          ))}
         </div>
-      </div>
+      )}
     </div>
   );
 }
