@@ -1,0 +1,26 @@
+[
+{
+    "model": "notifications.notification",
+    "pk": 1,
+    "fields": {
+        "creator": 1,
+        "modifiedBy": null,
+        "created": "2022-08-26T16:58:21.779Z",
+        "lastModified": "2022-08-26T16:58:21.779Z",
+        "trigger_on": "ErrorReport",
+        "criteria": {
+            "harvester__harv_id__in": [
+                11,
+                100
+            ],
+            "exceptions__code__code__in": [
+                "1",
+                "2"
+            ]
+        },
+        "recipients": [
+            1
+        ]
+    }
+}
+]
