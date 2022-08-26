@@ -1,6 +1,7 @@
 import { lazy, Suspense, useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useLocation } from "react-router-dom";
+import { useMediaQuery } from "react-responsive";
 import { generatePareto } from "../../features/errorreport/errorreportSlice";
 import {
   aggregateOptions,
@@ -20,6 +21,8 @@ function ErrorParetos(props) {
   const dispatch = useDispatch();
   const { search } = useLocation();
   const paramsObj = paramsToObject(search);
+  const lg = useMediaQuery({ query: "(min-width: 1170px)" });
+  const md = useMediaQuery({ query: "(min-width: 850px)" });
 
   useEffect(() => {
     const dataArr = paretos.slice();
@@ -102,6 +105,17 @@ function ErrorParetos(props) {
     setParetoArr((current) => arr);
   };
 
+  const className =
+    open && lg
+      ? "col-md-6"
+      : !open && lg
+      ? "col-md-4"
+      : open && md
+      ? "col-md-12"
+      : !open && md
+      ? "col-md-6"
+      : "col-md-12";
+
   return (
     <div>
       <ParetoForm
@@ -128,7 +142,7 @@ function ErrorParetos(props) {
       ) : (
         <div className={`row ${open ? "mainchart" : "minus-side"}`}>
           {paretoArr.map((obj, index) => (
-            <div key={obj.id} className="col-md-6 plot-div">
+            <div key={obj.id} className={`${className} plot-div`}>
               <Suspense
                 fallback={
                   <LoaderDiv>
