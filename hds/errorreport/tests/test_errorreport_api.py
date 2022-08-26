@@ -33,7 +33,11 @@ class ErrorReportAPITest(HDSAPITestBase):
         self.assertEqual(Event.objects.count(), 1)
 
         # Assert representation correct
-        self.assertIn("event_uuid", r.json()['data'])
+        self.assertIn("event", r.json()['data'])
+        self.assertEqual(
+            f'/errorreports/{r.json()["data"]["id"]}/',
+            r.json()['data']['event']['related_objects'][0]['url']
+        )
 
     def test_create_errorreport_with_uuid(self):
         """ create error report with uuid in data """
@@ -42,7 +46,7 @@ class ErrorReportAPITest(HDSAPITestBase):
 
         r = self.client.post(f'{self.api_base_url}/errorreports/', self.data, format='json', HTTP_ACCEPT='application/json')
 
-        self.assertEqual(UUID, r.json()['data']['event_uuid'])
+        self.assertEqual(UUID, r.json()['data']['event']['UUID'])
 
     def test_create_errorreport_with_invalid_harvester(self):
         """ create error report with invalid harvester """
