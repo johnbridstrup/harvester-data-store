@@ -11,6 +11,7 @@ import {
 } from "../../utils/utils";
 import { LoaderDiv, SidePane } from "../styled";
 import { ParetoForm, ParetoTabular } from "./ErrorHelpers";
+import { CopyBuildConfig } from "../copytoclipboard/CopyToClipboard";
 const ParetoPlot = lazy(() => import("../plotly/ParetoPlot"));
 
 function ErrorParetos(props) {
@@ -56,19 +57,9 @@ function ErrorParetos(props) {
     setSelectedAggregate((current) => newValue);
   };
 
-  const handleBuildPareto = async (e) => {
-    e.preventDefault();
-    let aggregate_query;
-    let chart_title;
-    if (selectedAggregate && selectedAggregate.hasOwnProperty("value")) {
-      aggregate_query = selectedAggregate.value;
-      const option = aggregateOptions.find(
-        (x, i) => x.value === aggregate_query
-      );
-      chart_title = option?.label;
-    } else {
-      aggregate_query = "code__name";
-    }
+  const paretoApiReq = async (aggregate_query) => {
+    const option = aggregateOptions.find((x, i) => x.value === aggregate_query);
+    let chart_title = option?.label;
     paramsObj["aggregate_query"] = aggregate_query;
     const res = await dispatch(generatePareto(paramsObj));
     if (res.type === "errorreport/generatePareto/fulfilled") {
@@ -90,12 +81,22 @@ function ErrorParetos(props) {
       };
       let arr = paretoArr.slice();
       let exist = arr.find((x, i) => x.chart_title === chart_title);
-      console.log(exist);
       if (!exist) {
         arr.push(paretoObj);
       }
       setParetoArr((current) => arr);
     }
+  };
+
+  const handleBuildPareto = async (e) => {
+    e.preventDefault();
+    let aggregate_query;
+    if (selectedAggregate && selectedAggregate.hasOwnProperty("value")) {
+      aggregate_query = selectedAggregate.value;
+    } else {
+      aggregate_query = "code__name";
+    }
+    await paretoApiReq(aggregate_query);
   };
 
   const handleDeletePareto = (chart) => {
@@ -127,6 +128,7 @@ function ErrorParetos(props) {
         <span onClick={handleSideClick} className="btn cursor">
           {open ? "Hide" : "Show"} Parameters
         </span>
+        <CopyBuildConfig paramsObj={paramsObj} paretoArr={paretoArr} />
       </div>
       <div className="sidenav">
         <SidePane open={open}>
