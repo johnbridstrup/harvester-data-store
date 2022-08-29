@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { CodeServiceDiv, HoverDiv, HoverDivModal, ToolBox } from "../styled";
 import PropTypes from "prop-types";
 import Select from "react-select";
@@ -95,8 +96,12 @@ export const ParetoTabular = (props) => {
   );
 };
 
-export const BackButton = () => {
-  const goBack = () => window.history.back();
+export const BackButton = (props) => {
+  const navigate = useNavigate();
+  const goBack = () => {
+    let params = new URLSearchParams(props.paramsObj);
+    navigate(`/errorreports/?${params.toString()}`);
+  };
   return (
     <div className="mt-4 mb-4">
       <span className="btn btn-default" onClick={goBack}>
@@ -208,6 +213,10 @@ ParetoForm.propTypes = {
 };
 
 ParetoTabular.propTypes = {
+  paramsObj: PropTypes.object,
+};
+
+BackButton.propTypes = {
   paramsObj: PropTypes.object,
 };
 

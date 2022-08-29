@@ -12,18 +12,18 @@ import "./styles.css";
 function ErrorReportPareto(props) {
   const dispatch = useDispatch();
   const { search } = useLocation();
+  const paramsObj = paramsToObject(search);
 
   useEffect(() => {
-    const paramsObj = paramsToObject(search);
     (async () => {
       dispatch(generatePareto(paramsObj));
     })();
-  }, [dispatch, search]);
+  }, [dispatch, paramsObj]);
 
   return (
     <MainLayout>
       <div className="container">
-        <BackButton />
+        <BackButton paramsObj={paramsObj} />
         <Header title={"Error Pareto"} className={"display-6 mb-4"} />
         <ErrorParetos />
       </div>
