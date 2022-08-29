@@ -26,6 +26,28 @@ a {
   margin-right: 1rem;
 }
 
+.d-flex-relative {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+}
+
+.size-2x {
+  font-size: 18px;
+}
+
+.profile-modal {
+  position: absolute;
+  top: 50px;
+  left: -50px;
+  width: 120px;
+  border: 1px solid #f5f5f5;
+  background: #fff;
+  padding: 5px;
+}
+
 .multi-select-container {
   width: 100% !important;
 }

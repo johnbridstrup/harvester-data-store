@@ -5,6 +5,7 @@ import ErrorsReportDetail from "../pages/errorreports/errordetail";
 import ErrorsReportList from "../pages/errorreports/errorlist";
 import ErrorReportPareto from "../pages/errorreports/errorpareto";
 import Home from "../pages/home";
+import UserProfileView from "../pages/profile/profiledetail";
 import { RequireUser, UserAuth } from "../utils/guards";
 
 const BaseRouter = () => {
@@ -48,6 +49,14 @@ const BaseRouter = () => {
           element={
             <RequireUser>
               <ErrorsReportDetail />
+            </RequireUser>
+          }
+        />
+        <Route
+          path="/users/profile/me"
+          element={
+            <RequireUser>
+              <UserProfileView />
             </RequireUser>
           }
         />

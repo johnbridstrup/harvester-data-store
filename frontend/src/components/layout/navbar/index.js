@@ -31,10 +31,25 @@ function Navbar(props) {
             Admin
           </a>
         </div>
-        <div>
-          {user && user.username && (
-            <span className="username">{user.username}</span>
-          )}
+        <div className="d-flex-relative">
+          <div>
+            {user && user.username && (
+              <div style={{ display: "flex", alignItems: "center" }}>
+                <span>
+                  <i className="las la-user-circle size-2x"></i>
+                </span>
+                <span className="mx-2">{user.username}</span>
+              </div>
+            )}
+          </div>
+          <div className="profile-modal">
+            <div>
+              <i class="las la-user size-2x"></i>My Profile
+            </div>
+            <div>
+              <i class="las la-bell size-2x"></i>Notification
+            </div>
+          </div>
           {isAuthenticated ? (
             <button onClick={handleLogout} className="btn btn-sm btn-warning">
               Logout
