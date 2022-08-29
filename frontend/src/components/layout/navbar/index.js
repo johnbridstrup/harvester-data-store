@@ -1,3 +1,4 @@
+import { useState, useRef, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import Logo from "../../../assets/images/advanced_farm_logo_alpha.png";
@@ -5,9 +6,27 @@ import { logout } from "../../../features/auth/authSlice";
 import { API_BASE_URL } from "../../../features/base/constants";
 
 function Navbar(props) {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { user, isAuthenticated, token } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
+  const menuRef = useRef();
   const adminUrl = process.env.REACT_APP_ADMIN_URL || `${API_BASE_URL}/admin`;
+
+  useEffect(() => {
+    const checkIfClickedOutside = (e) => {
+      if (
+        isMenuOpen &&
+        menuRef.current &&
+        !menuRef.current.contains(e.target)
+      ) {
+        setIsMenuOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", checkIfClickedOutside);
+    return () => {
+      document.removeEventListener("mousedown", checkIfClickedOutside);
+    };
+  }, [isMenuOpen]);
 
   const handleLogout = async () => {
     const res = await dispatch(logout({ token }));
@@ -15,6 +34,9 @@ function Navbar(props) {
       window.location.reload();
     }
   };
+
+  const toggleMenuModal = () => setIsMenuOpen(!isMenuOpen);
+
   return (
     <nav className="navbar bg-light">
       <div className="container">
@@ -32,9 +54,9 @@ function Navbar(props) {
           </a>
         </div>
         <div className="d-flex-relative">
-          <div>
+          <div onClick={toggleMenuModal}>
             {user && user.username && (
-              <div style={{ display: "flex", alignItems: "center" }}>
+              <div className="flex-align-center">
                 <span>
                   <i className="las la-user-circle size-2x"></i>
                 </span>
@@ -42,14 +64,20 @@ function Navbar(props) {
               </div>
             )}
           </div>
-          <div className="profile-modal">
-            <div>
-              <i class="las la-user size-2x"></i>My Profile
+          {isMenuOpen && (
+            <div className="profile-menu" ref={menuRef}>
+              <div className="py-2">
+                <Link to="/" className="link-item">
+                  <i className="las la-user size-2x"></i> My Profile
+                </Link>
+              </div>
+              <div className="py-2">
+                <Link to="/" className="link-item">
+                  <i className="las la-bell size-2x"></i> Notifications
+                </Link>
+              </div>
             </div>
-            <div>
-              <i class="las la-bell size-2x"></i>Notification
-            </div>
-          </div>
+          )}
           {isAuthenticated ? (
             <button onClick={handleLogout} className="btn btn-sm btn-warning">
               Logout
