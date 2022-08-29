@@ -13,6 +13,7 @@ import {
 import ErrorReportDetailTable from "../tables/ErrorReportDetailTable";
 import ServiceTable from "../tables/ServiceTable";
 import TimeTable from "../tables/TimeTable";
+import { ExceptTabular } from "./ErrorHelpers";
 const ChronyInfoPlot = lazy(() => import("../plotly/ChronyInfoPlot"));
 const ErrorReportJson = lazy(() => import("./ErrorReportJson"));
 
@@ -126,9 +127,10 @@ function ErrorReportDetail(props) {
 
             {exceptObj && (
               <TabContent>
-                <span>
-                  timestamp {timeStampFormat(exceptObj.timestamp, timezone)}
-                </span>
+                <ExceptTabular
+                  exceptName={exceptObj.code.name}
+                  timestamp={timeStampFormat(exceptObj.timestamp, timezone)}
+                />
                 <pre style={{ height: "400px", whiteSpace: "break-spaces" }}>
                   <code className="language-python">{exceptObj.traceback}</code>
                 </pre>

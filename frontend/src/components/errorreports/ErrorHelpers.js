@@ -4,6 +4,23 @@ import PropTypes from "prop-types";
 import Select from "react-select";
 import { aggregateOptions, getUniqueListBy } from "../../utils/utils";
 
+export const ExceptTabular = (props) => {
+  return (
+    <div>
+      <div className="d-flex">
+        <div className="tabular bg-gray">Exception</div>
+        <div className="tabular bg-gray">Timestamp</div>
+      </div>
+      {
+        <div className="d-flex">
+          <div className="tabular">{props.exceptName}</div>
+          <div className="tabular">{props.timestamp}</div>
+        </div>
+      }
+    </div>
+  );
+};
+
 export const ParetoForm = (props) => {
   return (
     <div className="mb-4">
@@ -204,6 +221,11 @@ export const CodeHover = (props) => {
       </ToolBox>
     </HoverDivModal>
   );
+};
+
+ExceptTabular.propTypes = {
+  exceptName: PropTypes.string,
+  timestamp: PropTypes.string,
 };
 
 ParetoForm.propTypes = {
