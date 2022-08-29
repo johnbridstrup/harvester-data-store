@@ -1,4 +1,11 @@
-#!/bin/bash
+#!/usr/bin/env bash
+# start-celery.sh
+
+set -e
+cd hds
+
+echo "Migrating"
+python manage.py migrate
 
 until [ -d /opt/app/multiproc-tmp ]
 do

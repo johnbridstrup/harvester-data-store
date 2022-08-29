@@ -30,9 +30,4 @@ class Migration(migrations.Migration):
             field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='event.event'),
         ),
         migrations.RunPython(create_events),
-        migrations.AlterField(
-            model_name='errorreport',
-            name='event',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='event.event')
-        )
     ]

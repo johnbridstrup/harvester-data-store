@@ -4,9 +4,6 @@
 set -e
 cd hds
 
-echo "Migrating"
-python manage.py migrate
-
 echo "Creating Superuser"
 python manage.py initsuperuser
 
