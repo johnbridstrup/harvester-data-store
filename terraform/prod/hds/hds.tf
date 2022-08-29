@@ -2,6 +2,7 @@ locals {
   env                      = "prod"
   dns_name                 = "hdsapi.cloud.advanced.farm"
   frontend_url             = "https://hds.cloud.advanced.farm"
+  file_queue_name          = "hds-file-queue"
   service_port             = "8000"
   service_name             = "hds"
   service_docker_image     = "838860823423.dkr.ecr.us-west-1.amazonaws.com/hds:hds-staging-c89b13a"
@@ -9,7 +10,7 @@ locals {
   hds_superuser_pwd_id     = "hds_superuser_pwd"
   errorreport_queue_name   = "errorreport-queue"
   enable_prometheus_scrape = true
-  sqs_client_metrics_port  = 9104
+  sqs_client_metrics_ports  = [9104, 9111]
   service_container_memory = 1024
   service_container_cpu    = 512
 }
@@ -40,6 +41,10 @@ data "aws_sqs_queue" "errorreport_queue" {
   name = local.errorreport_queue_name
 }
 
+data "aws_sqs_queue" "file_queue" {
+  name = local.file_queue_name
+}
+
 locals {
   environment_variables = [
     { "name" : "POSTGRES_NAME", "value" : data.aws_db_instance.postgres.db_name },
@@ -56,9 +61,11 @@ locals {
     { "name" : "SQS_USER_PASSWORD", "value" : random_password.sqs_pwd.result },
     { "name" : "HDS_PORT", "value" : 8000 },
     { "name" : "ERRORREPORTS_QUEUE_URL", "value" : data.aws_sqs_queue.errorreport_queue.url },
+    { "name" : "S3FILES_QUEUE_URL", "value" : data.aws_sqs_queue.file_queue.url },
     { "name" : "BROKER_URL", "value" : "redis://${data.aws_elasticache_replication_group.hds_cache.primary_endpoint_address}:6379" },
     { "name" : "SLACK_TOKEN", "value" : data.aws_secretsmanager_secret_version.slack_token.secret_string },
-    { "name" : "FRONTEND_URL", "value" : local.frontend_url }
+    { "name" : "FRONTEND_URL", "value" : local.frontend_url },
+    { "name" : "S3_DOWNLOAD", "value" : "true" }
   ]
 }
 
@@ -66,13 +73,13 @@ data "aws_s3_bucket" "data-lake" {
   bucket = "aft-hv-data-lake-prod"
 }
 
-data "aws_iam_policy_document" "poll_errorreport_queue" {
+data "aws_iam_policy_document" "poll_queues" {
   statement {
     actions = [
       "sqs:ReceiveMessage",
       "sqs:DeleteMessage"
     ]
-    resources = [data.aws_sqs_queue.errorreport_queue.arn]
+    resources = [data.aws_sqs_queue.errorreport_queue.arn, data.aws_sqs_queue.file_queue.arn]
     effect    = "Allow"
   }
 
@@ -84,7 +91,7 @@ data "aws_iam_policy_document" "poll_errorreport_queue" {
 
     resources = [
       data.aws_s3_bucket.data-lake.arn,
-      "${data.aws_s3_bucket.data-lake.arn}/errorreport/*",
+      "${data.aws_s3_bucket.data-lake.arn}/*",
     ]
   }
 }
@@ -102,22 +109,22 @@ module "hds" {
   load_balancer_subnets          = data.aws_subnet_ids.priv_subnets.ids
   ecs_cluster_arn                = data.aws_ecs_cluster.hds-cluster.arn
   enable_prometheus_scrape       = local.enable_prometheus_scrape
-  additional_prometheus_ports    = [local.sqs_client_metrics_port]
+  additional_prometheus_ports    = local.sqs_client_metrics_ports
   route53_priv_zone_id           = data.aws_route53_zone.private_cloud_zone.id
   route53_pub_zone_id            = data.aws_route53_zone.cloud_zone.id
   service_environments_variables = local.environment_variables
   service_health_check_path      = local.healthcheck_path
-  service_iam_policy_document    = data.aws_iam_policy_document.poll_errorreport_queue.json
+  service_iam_policy_document    = data.aws_iam_policy_document.poll_queues.json
   service_alb_ingress_sg_rules = [
     "80,tcp,${data.aws_security_group.lambda_sg.id},web traffic from lambda",
     "443,tcp,${data.aws_security_group.lambda_sg.id},ssl traffic from lambda",
     "80,tcp,${data.aws_security_group.pritunl_sg.id},web traffic from pritunl",
     "443,tcp,${data.aws_security_group.pritunl_sg.id},ssl traffic from pritunl"
   ]
-  service_ingress_sg_rules = [
-    "${local.service_port},tcp,${data.aws_security_group.vm_metrics_security_group.id},django prometheus scraping",
-    "${local.sqs_client_metrics_port},tcp,${data.aws_security_group.vm_metrics_security_group.id},sqs client prometheus scraping"
-  ]
+  service_ingress_sg_rules = concat(
+    ["${local.service_port},tcp,${data.aws_security_group.vm_metrics_security_group.id},django prometheus scraping"],
+    [for port in local.sqs_client_metrics_ports : "${port},tcp,${data.aws_security_group.vm_metrics_security_group.id},sqs client prometheus scraping"]
+  )
   service_container_cpu    = local.service_container_cpu
   service_container_memory = local.service_container_memory
 }

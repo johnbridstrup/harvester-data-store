@@ -67,9 +67,10 @@ variable "db_ingress_sg_rules" {
 }
 
 # https://github.com/AdvancedFarm/infrastructure/tree/master/terraform/modules/sqs-queue/variables.tf
-variable "errorreport_queue_name" {
-  description = "SQS queue name."
-  type        = string
+variable "queue_names" {
+  description = "SQS queue names."
+  type        = set(string)
+  default     = []
 }
 
 variable "fifo_queue" {
