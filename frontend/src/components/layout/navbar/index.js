@@ -67,13 +67,18 @@ function Navbar(props) {
           {isMenuOpen && (
             <div className="profile-menu" ref={menuRef}>
               <div className="py-2">
-                <Link to="/" className="link-item">
+                <Link to="/users/profile/me" className="link-item">
                   <i className="las la-user size-2x"></i> My Profile
                 </Link>
               </div>
               <div className="py-2">
-                <Link to="/" className="link-item">
+                <Link to="/accounts/notifications" className="link-item">
                   <i className="las la-bell size-2x"></i> Notifications
+                </Link>
+              </div>
+              <div className="py-2">
+                <Link to="/accounts/settings" className="link-item">
+                  <i className="las la-cog size-2x"></i> Settings
                 </Link>
               </div>
             </div>
