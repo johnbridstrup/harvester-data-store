@@ -3,6 +3,7 @@ import { axiosService } from "../base/service";
 
 const LOGIN_URL = `${API_URL}/users/login/`;
 const LOGOUT_URL = `${API_URL}/users/logout/`;
+const USER_PROFILE_URL = `${API_URL}/users/profiles/`;
 
 const login = async (userData) => {
   const res = await axiosService.post(LOGIN_URL, undefined, userData);
@@ -24,8 +25,21 @@ const logout = async (tokenData) => {
   return response;
 };
 
+const update = async (userId, token, userData) => {
+  const response = await axiosService.patch(
+    `${USER_PROFILE_URL}${userId}/`,
+    token,
+    userData
+  );
+  if (response.data) {
+    localStorage.setItem("user", JSON.stringify(response.data));
+  }
+  return response;
+};
+
 const authService = {
   login,
   logout,
+  update,
 };
 export default authService;

@@ -1,5 +1,7 @@
 import { useState, useRef, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { toast } from "react-toastify";
+import { updateProfile } from "../../features/auth/authSlice";
 import { uuid } from "../../utils/utils";
 import ProfileUpdateModal from "../modals/ProfileUpdateModal";
 import {
@@ -63,13 +65,13 @@ function UserProfileDetail(props) {
     is_staff: "",
     is_superuser: "",
     last_login: "",
-    current_password: "",
     new_password: "",
     confirm_password: "",
   });
   const [assigned] = useState(notifications);
   const [created] = useState(notifications);
   const { user } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
   const profileRef = useRef();
   const profileModalPopUp = () => {
     profileRef.current.click();
@@ -97,14 +99,39 @@ function UserProfileDetail(props) {
       return { ...current, [e.target.name]: e.target.value };
     });
   };
-  const handleProfileSubmit = (e) => {
+
+  const handleProfileSubmit = async (e) => {
     e.preventDefault();
-    console.log(fieldData);
+    const data = {
+      ...fieldData,
+      userId: user.id,
+      profile: { slack_id: fieldData.slack_id },
+    };
+    const res = await dispatch(updateProfile(data));
+    if (res.type === "auth/updateProfile/fulfilled") {
+      toast.success("profile information updated successfully");
+    } else if (res === "auth/updateProfile/rejected") {
+      toast.error(res?.payload);
+    } else {
+      toast.error("something went wrong. please try again");
+    }
   };
 
-  const handlePasswordSubmit = (e) => {
+  const handlePasswordSubmit = async (e) => {
     e.preventDefault();
-    console.log(fieldData);
+    if (fieldData.new_password !== fieldData.confirm_password) {
+      toast.error("passwords do not match!");
+    } else {
+      const data = { userId: user.id, password: fieldData.new_password };
+      const res = await dispatch(updateProfile(data));
+      if (res.type === "auth/updateProfile/fulfilled") {
+        toast.success("password updated successfully");
+      } else if (res.type === "auth/updateProfile/rejected") {
+        toast.error(res?.payload + " minimum password length 5 characters");
+      } else {
+        toast.error("something went wrong try again later");
+      }
+    }
   };
 
   return (

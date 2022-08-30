@@ -10,6 +10,7 @@ const initialState = {
   token,
   isAuthenticated,
   loading: false,
+  editting: false,
   user,
   errorCode: null,
   errorMsg: null,
@@ -64,6 +65,27 @@ export const invalidateCache = (error, dispatch) => {
   return message;
 };
 
+export const updateProfile = createAsyncThunk(
+  "auth/updateProfile",
+  async (userData, thunkAPI) => {
+    try {
+      const {
+        auth: { token },
+      } = thunkAPI.getState();
+      return await authService.update(userData.userId, token, userData);
+    } catch (error) {
+      console.log(error);
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 export const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -105,6 +127,17 @@ export const authSlice = createSlice({
       })
       .addCase(logout.rejected, (state, action) => {
         state.loading = false;
+        state.errorMsg = action.payload;
+      })
+      .addCase(updateProfile.pending, (state) => {
+        state.editting = true;
+      })
+      .addCase(updateProfile.fulfilled, (state, action) => {
+        state.editting = false;
+        state.user = action.payload.data;
+      })
+      .addCase(updateProfile.rejected, (state, action) => {
+        state.editting = false;
         state.errorMsg = action.payload;
       });
   },

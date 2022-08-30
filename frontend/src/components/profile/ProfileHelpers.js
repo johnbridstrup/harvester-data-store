@@ -1,6 +1,7 @@
 import PropTypes from "prop-types";
 import moment from "moment";
 import { Link } from "react-router-dom";
+import { Loader } from "../../utils/utils";
 
 export const ProfileColLeft = (props) => {
   return (
@@ -111,21 +112,12 @@ export const ChangePassword = (props) => {
             </h6>
           </div>
           <div className="form-group">
-            <label htmlFor="current_password">Current Password</label>
-            <input
-              type="password"
-              name="current_password"
-              className="form-control"
-              value={current_password}
-              onChange={props.handleChange}
-            />
-          </div>
-          <div className="form-group">
             <label htmlFor="new_password">New Password</label>
             <input
               type="password"
               name="new_password"
               className="form-control"
+              required
               value={new_password}
               onChange={props.handleChange}
             />
@@ -136,13 +128,14 @@ export const ChangePassword = (props) => {
               type="password"
               name="confirm_password"
               className="form-control"
+              required
               value={confirm_password}
               onChange={props.handleChange}
             />
           </div>
           <div className="mt-4 mb-3 text-center">
             <button type="submit" className="btn btn-primary">
-              Change
+              {props.loading ? <Loader size={25} /> : "Change"}
             </button>
           </div>
         </form>
@@ -192,6 +185,7 @@ ChangePassword.propTypes = {
   fieldData: PropTypes.object,
   handleChange: PropTypes.func,
   handleSubmit: PropTypes.func,
+  loading: PropTypes.bool,
 };
 
 Notifications.propTypes = {
