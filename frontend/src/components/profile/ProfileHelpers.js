@@ -1,4 +1,5 @@
 import PropTypes from "prop-types";
+import moment from "moment";
 import { Link } from "react-router-dom";
 
 export const ProfileColLeft = (props) => {
@@ -17,7 +18,7 @@ export const ProfileColLeft = (props) => {
               {props.user?.first_name} {props.user?.last_name}
             </h4>
             <p className="text-secondary mb-1">
-              Slack Id {props.user?.slack_id}
+              Slack Id {props.user?.profile?.slack_id}
             </p>
             <p className="text-muted font-size-sm">
               {props.user?.is_active
@@ -32,7 +33,7 @@ export const ProfileColLeft = (props) => {
                 ? "Profile is superuser"
                 : "Profile is non-superuser"}
             </p>
-            <p>Last Login {props.user?.last_login}</p>
+            <p>Last Login {moment(props.user?.last_login).format("LLLL")}</p>
           </div>
         </div>
       </div>
