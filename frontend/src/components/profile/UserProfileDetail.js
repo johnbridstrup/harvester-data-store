@@ -1,4 +1,5 @@
-import { useRef } from "react";
+import { useState, useRef } from "react";
+import { uuid } from "../../utils/utils";
 import ProfileUpdateModal from "../modals/ProfileUpdateModal";
 import {
   ChangePassword,
@@ -7,7 +8,62 @@ import {
   ProfileColRight,
 } from "./ProfileHelpers";
 
+const notifications = [
+  {
+    id: uuid(),
+    criteria: {
+      harvester__harv_id__in: [11, 100],
+      exceptions__code__code__in: ["1", "2"],
+    },
+    trigger_on: "ErrorReport",
+  },
+  {
+    id: uuid(),
+    criteria: {
+      harvester__harv_id__in: [11, 100],
+      exceptions__code__code__in: ["1", "2"],
+    },
+    trigger_on: "ErrorReport",
+  },
+  {
+    id: uuid(),
+    criteria: {
+      harvester__harv_id__in: [11, 100],
+      exceptions__code__code__in: ["1", "2"],
+    },
+    trigger_on: "ErrorReport",
+  },
+  {
+    id: uuid(),
+    criteria: {
+      harvester__harv_id__in: [11, 100],
+      exceptions__code__code__in: ["1", "2"],
+    },
+    trigger_on: "ErrorReport",
+  },
+  {
+    id: uuid(),
+    criteria: {
+      harvester__harv_id__in: [11, 100],
+      exceptions__code__code__in: ["1", "2"],
+    },
+    trigger_on: "ErrorReport",
+  },
+];
+
 function UserProfileDetail(props) {
+  const [fieldData, setFieldData] = useState({
+    first_name: "John",
+    last_name: "Doe",
+    username: "aft",
+    email: "aft@aft.aft",
+    slack_id: "slack@aft.aft",
+    current_password: "",
+    new_password: "",
+    confirm_password: "",
+  });
+  const [assigned] = useState(notifications);
+  const [created] = useState(notifications);
   const profileRef = useRef();
   const profileModalPopUp = () => {
     profileRef.current.click();
@@ -23,19 +79,31 @@ function UserProfileDetail(props) {
     is_superuser: true,
     last_login: new Date().toLocaleDateString(),
   };
-  let notifyObj = {
-    criteria: {
-      harvester__harv_id__in: [11, 100],
-      exceptions__code__code__in: ["1", "2"],
-    },
-    trigger_on: "ErrorReport",
+  const handleFieldChange = (e) => {
+    setFieldData((current) => {
+      return { ...current, [e.target.name]: e.target.value };
+    });
   };
+  const handleProfileSubmit = (e) => {
+    e.preventDefault();
+    console.log(fieldData);
+  };
+
+  const handlePasswordSubmit = (e) => {
+    e.preventDefault();
+    console.log(fieldData);
+  };
+
   return (
     <>
       <div className="row gutters-sm mt-5">
         <div className="col-md-4 mb-3">
           <ProfileColLeft user={user} />
-          <ChangePassword />
+          <ChangePassword
+            fieldData={fieldData}
+            handleChange={handleFieldChange}
+            handleSubmit={handlePasswordSubmit}
+          />
         </div>
         <div className="col-md-8">
           <ProfileColRight
@@ -48,21 +116,26 @@ function UserProfileDetail(props) {
             <div className="col-sm-6 mb-3">
               <Notifications
                 user={user}
-                notifyObj={notifyObj}
+                notifications={created}
                 notify_type={"Created"}
               />
             </div>
             <div className="col-sm-6 mb-3">
               <Notifications
                 user={user}
-                notifyObj={notifyObj}
+                notifications={assigned}
                 notify_type={"Assigned"}
               />
             </div>
           </div>
         </div>
       </div>
-      <ProfileUpdateModal />
+      <ProfileUpdateModal
+        fieldData={fieldData}
+        handleChange={handleFieldChange}
+        handleSubmit={handleProfileSubmit}
+        loading={false}
+      />
     </>
   );
 }

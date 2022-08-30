@@ -1,8 +1,8 @@
+import PropTypes from "prop-types";
 import { Loader } from "../../utils/utils";
 
 function ProfileUpdateModal(props) {
-  const handleSubmit = (e) => console.log(e.target);
-  let loading = false;
+  const { first_name, last_name, username, slack_id, email } = props.fieldData;
   return (
     <div className="col-md-8">
       <div
@@ -31,7 +31,7 @@ function ProfileUpdateModal(props) {
             </div>
 
             <div className="modal-body px-5 pb-4">
-              <form onSubmit={(e) => handleSubmit(e)}>
+              <form onSubmit={props.handleSubmit}>
                 <div className="row">
                   <div className="col-md-6">
                     <div className="form-group">
@@ -40,6 +40,8 @@ function ProfileUpdateModal(props) {
                         type="text"
                         className="form-control"
                         name="first_name"
+                        value={first_name}
+                        onChange={props.handleChange}
                       />
                     </div>
                   </div>
@@ -50,6 +52,8 @@ function ProfileUpdateModal(props) {
                         type="text"
                         className="form-control"
                         name="last_name"
+                        value={last_name}
+                        onChange={props.handleChange}
                       />
                     </div>
                   </div>
@@ -62,6 +66,8 @@ function ProfileUpdateModal(props) {
                         type="text"
                         className="form-control"
                         name="slack_id"
+                        value={slack_id}
+                        onChange={props.handleChange}
                       />
                     </div>
                   </div>
@@ -72,6 +78,8 @@ function ProfileUpdateModal(props) {
                         type="email"
                         className="form-control"
                         name="email"
+                        value={email}
+                        onChange={props.handleChange}
                       />
                     </div>
                   </div>
@@ -84,6 +92,8 @@ function ProfileUpdateModal(props) {
                         type="text"
                         className="form-control"
                         name="username"
+                        value={username}
+                        onChange={props.handleChange}
                       />
                     </div>
                   </div>
@@ -93,7 +103,7 @@ function ProfileUpdateModal(props) {
                     type="submit"
                     className="btn btn-block btn-primary mt-4 mb-4"
                   >
-                    {loading ? <Loader size={25} /> : "EDIT"}
+                    {props.loading ? <Loader size={25} /> : "EDIT"}
                   </button>
                 </div>
               </form>
@@ -105,6 +115,11 @@ function ProfileUpdateModal(props) {
   );
 }
 
-ProfileUpdateModal.propTypes = {};
+ProfileUpdateModal.propTypes = {
+  handleChange: PropTypes.func,
+  fieldData: PropTypes.object,
+  handleSubmit: PropTypes.func,
+  loading: PropTypes.bool,
+};
 
 export default ProfileUpdateModal;

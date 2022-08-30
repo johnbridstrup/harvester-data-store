@@ -98,10 +98,11 @@ export const ProfileColRight = (props) => {
 };
 
 export const ChangePassword = (props) => {
+  const { current_password, new_password, confirm_password } = props.fieldData;
   return (
     <div className="card mt-3">
       <div className="card-body">
-        <form>
+        <form onSubmit={props.handleSubmit}>
           <div>
             <h6 className="d-flex align-items-center mb-3">
               <i className="las la-lock size-2x mx-2"></i>
@@ -114,6 +115,8 @@ export const ChangePassword = (props) => {
               type="password"
               name="current_password"
               className="form-control"
+              value={current_password}
+              onChange={props.handleChange}
             />
           </div>
           <div className="form-group">
@@ -122,6 +125,8 @@ export const ChangePassword = (props) => {
               type="password"
               name="new_password"
               className="form-control"
+              value={new_password}
+              onChange={props.handleChange}
             />
           </div>
           <div className="form-group">
@@ -130,10 +135,14 @@ export const ChangePassword = (props) => {
               type="password"
               name="confirm_password"
               className="form-control"
+              value={confirm_password}
+              onChange={props.handleChange}
             />
           </div>
           <div className="mt-4 mb-3 text-center">
-            <button className="btn btn-primary">Change</button>
+            <button type="submit" className="btn btn-primary">
+              Change
+            </button>
           </div>
         </form>
       </div>
@@ -150,37 +159,14 @@ export const Notifications = (props) => {
           Recent Notifications ({props.notify_type}) (5)
         </h6>
         <hr />
-        <div className="mb-3 hover-div">
-          <div>
-            Notify {props.user?.username} when {props.notifyObj?.trigger_on} has{" "}
-            {JSON.stringify(props.notifyObj?.criteria)}
+        {props.notifications.map((notifyObj, index) => (
+          <div key={index} className="mb-3 hover-div">
+            <div>
+              Notify {props.user?.username} when {notifyObj?.trigger_on} has{" "}
+              {JSON.stringify(notifyObj?.criteria)}
+            </div>
           </div>
-          props.
-        </div>
-        <div className="mb-3 hover-div">
-          <div>
-            Notify {props.user?.username} when {props.notifyObj?.trigger_on} has{" "}
-            {JSON.stringify(props.notifyObj?.criteria)}
-          </div>
-        </div>
-        <div className="mb-3 hover-div">
-          <div>
-            Notify {props.user?.username} when {props.notifyObj?.trigger_on} has{" "}
-            {JSON.stringify(props.notifyObj?.criteria)}
-          </div>
-        </div>
-        <div className="mb-3 hover-div">
-          <div>
-            Notify {props.user?.username} when {props.notifyObj?.trigger_on} has{" "}
-            {JSON.stringify(props.notifyObj?.criteria)}
-          </div>
-        </div>
-        <div className="mb-3 hover-div">
-          <div>
-            Notify {props.user?.username} when {props.notifyObj?.trigger_on} has{" "}
-            {JSON.stringify(props.notifyObj?.criteria)}
-          </div>
-        </div>
+        ))}
         <div className="text-center">
           <Link to="/notifications/all" className="btn btn-primary ">
             View All
@@ -201,10 +187,15 @@ ProfileColRight.propTypes = {
   profileRef: PropTypes.object,
 };
 
-ChangePassword.propTypes = {};
+ChangePassword.propTypes = {
+  fieldData: PropTypes.object,
+  handleChange: PropTypes.func,
+  handleSubmit: PropTypes.func,
+};
 
 Notifications.propTypes = {
   user: PropTypes.object,
   notifyObj: PropTypes.object,
   notify_type: PropTypes.string,
+  notifications: PropTypes.array,
 };
