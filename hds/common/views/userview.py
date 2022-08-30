@@ -1,13 +1,16 @@
 from rest_framework.views import APIView
-from django.contrib.auth.models import update_last_login
+from rest_framework.viewsets import ModelViewSet
+from rest_framework.permissions import IsAuthenticated
+from django.contrib.auth.models import update_last_login, User
 from django.contrib.auth import authenticate
 from django.middleware.csrf import get_token
 from rest_framework.authtoken.models import Token
 from common.renderers import HDSJSONRenderer
 from common.utils import make_ok
+from common.serializers.userserializer import UserSerializer
 
 
-class LoginAPIView(APIView):        
+class LoginAPIView(APIView):
     """Login and generate auth token"""
     renderer_classes = (HDSJSONRenderer,)
 
@@ -21,7 +24,8 @@ class LoginAPIView(APIView):
             if user is not None:
                 update_last_login(None, user)
                 token, created = Token.objects.get_or_create(user=user)
-                return make_ok("Login successful", {"token": token.key, "user": {"username": user.username, "email": user.email, "user_id": user.pk}})
+                serializer = UserSerializer(user)
+                return make_ok("Login successful", {"token": token.key, "user": serializer.data})
             else:
                 raise Exception("invalid username or password")
         except Exception as e:
@@ -31,7 +35,7 @@ class LoginAPIView(APIView):
 class LogoutAPIView(APIView):
     """Logout and invalidate auth token"""
     renderer_classes = (HDSJSONRenderer,)
-    
+
     def post(self, request, *args, **kwargs):
         try:
             if "token" not in request.data.keys():
@@ -57,3 +61,11 @@ class CSRFAPIView(APIView):
 
     def post(self, request, *args, **kwargs):
         return make_ok("result successful", {"result": "ok"})
+
+
+class ManageUserView(ModelViewSet):
+    """manage user api viewset"""
+    serializer_class = UserSerializer
+    renderer_classes = (HDSJSONRenderer,)
+    permission_classes = (IsAuthenticated,)
+    queryset = User.objects.all()
