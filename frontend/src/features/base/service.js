@@ -25,6 +25,24 @@ export const axiosService = {
     const res = await axios.get(url, this.config);
     return res.data.data;
   },
+  put: async function (url, token, data = {}) {
+    let csrftoken = localStorage.getItem("csrftoken");
+    if (typeof token === "string" && token.length > 0) {
+      this.config["headers"]["Authorization"] = `Token ${token}`;
+    }
+    this.config["headers"]["X-CSRFToken"] = csrftoken;
+    const res = await axios.put(url, data, this.config);
+    return res.data;
+  },
+  patch: async function (url, token, data = {}) {
+    let csrftoken = localStorage.getItem("csrftoken");
+    if (typeof token === "string" && token.length > 0) {
+      this.config["headers"]["Authorization"] = `Token ${token}`;
+    }
+    this.config["headers"]["X-CSRFToken"] = csrftoken;
+    const res = await axios.patch(url, data, this.config);
+    return res.data;
+  },
 };
 
 export const persistCSRFToken = async () => {
