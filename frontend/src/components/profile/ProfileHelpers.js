@@ -100,7 +100,7 @@ export const ProfileColRight = (props) => {
 };
 
 export const ChangePassword = (props) => {
-  const { current_password, new_password, confirm_password } = props.fieldData;
+  const { new_password, confirm_password } = props.fieldData;
   return (
     <div className="card mt-3">
       <div className="card-body">
