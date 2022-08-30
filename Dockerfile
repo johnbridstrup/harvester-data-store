@@ -15,13 +15,11 @@ RUN apt update && apt install -y\
     python3-pip\
     virtualenv
 
-# Nexus keyring and sqs-client
-COPY debian_packages/aft-nexus-eng-keyring_1.1-2_all.deb /opt/app/
-RUN dpkg -i /opt/app/aft-nexus-eng-keyring_1.1-2_all.deb
-RUN rm /opt/app/aft-nexus-eng-keyring_1.1-2_all.deb
-RUN apt update && apt install -y\
-    aft-sqs-client\
-    && rm -rf /var/lib/apt/lists/*
+# SQS-client
+COPY debian_packages/aft-sqs-client_0.2-1_all.deb /opt/app/
+RUN dpkg -i /opt/app/aft-sqs-client_0.2-1_all.deb
+RUN rm /opt/app/aft-sqs-client_0.2-1_all.deb
+
 
 # copy source and install dependencies
 COPY requirements.txt /opt/app/
