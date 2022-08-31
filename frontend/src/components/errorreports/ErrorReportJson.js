@@ -1,11 +1,14 @@
 import { useState, useRef } from "react";
+import { useSelector } from "react-redux";
 import PropTypes from "prop-types";
 import ReactJson from "@microlink/react-json-view";
 import { JsonDiv } from "../styled";
 import DownloadModal from "../modals/DownloadModal";
+import s3FileService from "../../features/s3file/s3fileService";
 
 function ErrorReportJson(props) {
   const [toggleOpen, setToggleOpen] = useState(false);
+  const { token } = useSelector((state) => state.auth);
   const downloadRef = useRef();
 
   const downloadFilesPopUp = () => {
@@ -13,7 +16,13 @@ function ErrorReportJson(props) {
   };
 
   const handleDownloadFiles = async (fileObj) => {
-    console.log(fileObj);
+    const res = await s3FileService.s3FileDownload(fileObj.url, token);
+    const url = window.URL.createObjectURL(new Blob([res]));
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", "errorreport.zip");
+    document.body.appendChild(link);
+    link.click();
   };
 
   const handleOpenJson = () => {

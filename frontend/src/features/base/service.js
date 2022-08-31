@@ -25,6 +25,16 @@ export const axiosService = {
     const res = await axios.get(url, this.config);
     return res.data.data;
   },
+  download: async function (url, token) {
+    if (typeof token === "string" && token.length > 0) {
+      this.config["headers"]["Authorization"] = `Token ${token}`;
+      this.config["headers"]["responseType"] = "blob";
+      this.config["headers"]["Content-Type"] = "application/zip";
+      delete this.config["headers"]["Accept"];
+    }
+    const res = await axios.get(url, this.config);
+    return res.data;
+  },
 };
 
 export const persistCSRFToken = async () => {
