@@ -1,0 +1,18 @@
+[
+{
+    "model": "common.userprofile",
+    "pk": 1,
+    "fields": {
+        "user": 1,
+        "slack_id": "slack@aft.aft"
+    }
+},
+{
+    "model": "common.userprofile",
+    "pk": 2,
+    "fields": {
+        "user": 2,
+        "slack_id": "slack@not_aft"
+    }
+}
+]
