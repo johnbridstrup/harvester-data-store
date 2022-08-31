@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from django.utils.translation import gettext as _
 from rest_framework import serializers
 from common.models import UserProfile
 
@@ -37,6 +38,12 @@ class UserSerializer(serializers.ModelSerializer):
         """update and return the user"""
         password = validated_data.pop("password", None)
         profile = validated_data.pop("profile", None)
+        request = self.context.get("request")
+
+        if instance.pk != request.user.pk:
+            msg = _("Unable to authorize user for update action")
+            raise serializers.ValidationError(msg, code="authorization")
+
         user = super().update(instance, validated_data)
 
         if password:
