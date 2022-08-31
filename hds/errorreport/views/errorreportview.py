@@ -17,6 +17,8 @@ from common.utils import make_ok, build_frontend_url
 from notifications.signals import error_report_created
 from notifications.serializers import NotificationSerializer
 from django.db.models import Count, F
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page 
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
 from rest_framework.filters import SearchFilter, OrderingFilter
@@ -134,7 +136,7 @@ class ErrorReportView(CreateModelViewSet):
         return ErrorReport.objects.filter(**listfilter).order_by('-reportTime').distinct()
 
     @classmethod
-    @PARETO_QUERY_TIMER.time()
+    @PARETO_QUERY_TIMER.time() 
     def create_pareto(cls, field_lookup, listfilter=None):
         """Create pareto data.
 
@@ -169,6 +171,7 @@ class ErrorReportView(CreateModelViewSet):
         detail=False,
         renderer_classes=[JSONRenderer]
     )
+    @method_decorator(cache_page(60*20))
     def pareto(self, request):
         listfilter = self.build_list_filter(request)
         listfilter = self.swap_foreign_key_relation_lookup(listfilter)

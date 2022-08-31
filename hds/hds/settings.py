@@ -139,6 +139,23 @@ DATABASES = {
     }
 }
 
+# Cache
+REDIS_DEFAULT_URL = 'redis://localhost:6379'
+
+if os.environ.get("PAGE_CACHING", "false") == "false":
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
+        }
+    }
+else:
+    CACHES = {
+        'default': {
+            'BACKEND': 'django_prometheus.cache.backends.redis.RedisCache',
+            'LOCATION': os.environ.get('BROKER_URL', REDIS_DEFAULT_URL),
+        }
+    }
+
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
 
@@ -203,4 +220,4 @@ if 'test' in sys.argv[1:]:
 else:
     CELERY_RESULT_BACKEND = 'django-db'
     CELERY_CACHE_BACKEND = 'redis'
-    CELERY_BROKER_URL = os.environ.get('BROKER_URL', 'redis://localhost:6379')
+    CELERY_BROKER_URL = os.environ.get('BROKER_URL', REDIS_DEFAULT_URL)
