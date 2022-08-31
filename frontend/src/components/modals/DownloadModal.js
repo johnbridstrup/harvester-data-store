@@ -14,7 +14,10 @@ function DownloadModal(props) {
       >
         <div className="modal-dialog modal-dialog-centered" role="document">
           <div className="modal-content profile-modal">
-            <div className="text-right">
+            <div
+              className="text-right"
+              style={{ display: "flex", justifyContent: "flex-end" }}
+            >
               <button
                 type="button"
                 className="btn closeModalBtn"
