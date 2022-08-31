@@ -408,3 +408,13 @@ export const uuid = () => {
   }
   return uuid.join("");
 };
+
+export const transformAssignedNotification = (notifications = [], username) => {
+  let arr = [];
+  notifications.forEach((notif, index) => {
+    if (notif.recipients.includes(username)) {
+      arr.push(notif);
+    }
+  });
+  return arr;
+};

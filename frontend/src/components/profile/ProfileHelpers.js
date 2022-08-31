@@ -150,15 +150,21 @@ export const Notifications = (props) => {
       <div className="card-body">
         <h6 className="d-flex align-items-center mb-3">
           <i className="las la-bell size-2x mx-2"></i>
-          Recent Notifications ({props.notify_type}) (5)
+          Recent Notifications ({props.notify_type}) (
+          {props.notifications.length})
         </h6>
         <hr />
         {props.notifications.map((notifyObj, index) => (
-          <div key={index} className="mb-3 hover-div">
-            <div>
-              Notify {props.user?.username} when {notifyObj?.trigger_on} has{" "}
-              {JSON.stringify(notifyObj?.criteria)}
-            </div>
+          <div key={index} className="mb-4">
+            <Link
+              to={`/notifications/${notifyObj.id}`}
+              className="notification"
+            >
+              <div>
+                Notify {props.user?.username} when {notifyObj?.trigger_on} has{" "}
+                {JSON.stringify(notifyObj?.criteria)}
+              </div>
+            </Link>
           </div>
         ))}
         <div className="text-center">

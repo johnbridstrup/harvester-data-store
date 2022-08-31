@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { updateProfile } from "../../features/auth/authSlice";
-import { uuid } from "../../utils/utils";
+import { transformAssignedNotification } from "../../utils/utils";
 import ProfileUpdateModal from "../modals/ProfileUpdateModal";
 import {
   ChangePassword,
@@ -10,49 +10,6 @@ import {
   ProfileColLeft,
   ProfileColRight,
 } from "./ProfileHelpers";
-
-const notifications = [
-  {
-    id: uuid(),
-    criteria: {
-      harvester__harv_id__in: [11, 100],
-      exceptions__code__code__in: ["1", "2"],
-    },
-    trigger_on: "ErrorReport",
-  },
-  {
-    id: uuid(),
-    criteria: {
-      harvester__harv_id__in: [11, 100],
-      exceptions__code__code__in: ["1", "2"],
-    },
-    trigger_on: "ErrorReport",
-  },
-  {
-    id: uuid(),
-    criteria: {
-      harvester__harv_id__in: [11, 100],
-      exceptions__code__code__in: ["1", "2"],
-    },
-    trigger_on: "ErrorReport",
-  },
-  {
-    id: uuid(),
-    criteria: {
-      harvester__harv_id__in: [11, 100],
-      exceptions__code__code__in: ["1", "2"],
-    },
-    trigger_on: "ErrorReport",
-  },
-  {
-    id: uuid(),
-    criteria: {
-      harvester__harv_id__in: [11, 100],
-      exceptions__code__code__in: ["1", "2"],
-    },
-    trigger_on: "ErrorReport",
-  },
-];
 
 function UserProfileDetail(props) {
   const [fieldData, setFieldData] = useState({
@@ -68,14 +25,18 @@ function UserProfileDetail(props) {
     new_password: "",
     confirm_password: "",
   });
-  const [assigned] = useState(notifications);
-  const [created] = useState(notifications);
   const { user } = useSelector((state) => state.auth);
+  const { notifications } = useSelector((state) => state.notification);
   const dispatch = useDispatch();
   const profileRef = useRef();
-  const profileModalPopUp = () => {
-    profileRef.current.click();
-  };
+
+  const createdNotification = notifications
+    .slice(0, 5)
+    .filter((notification, index) => notification.creator === user?.id);
+  const assignedNotification = transformAssignedNotification(
+    notifications.slice(0, 5),
+    user?.username
+  );
 
   useEffect(() => {
     setFieldData((current) => {
@@ -93,6 +54,10 @@ function UserProfileDetail(props) {
       };
     });
   }, [user]);
+
+  const profileModalPopUp = () => {
+    profileRef.current.click();
+  };
 
   const handleFieldChange = (e) => {
     setFieldData((current) => {
@@ -156,14 +121,14 @@ function UserProfileDetail(props) {
             <div className="col-sm-6 mb-3">
               <Notifications
                 user={user}
-                notifications={created}
+                notifications={createdNotification}
                 notify_type={"Created"}
               />
             </div>
             <div className="col-sm-6 mb-3">
               <Notifications
                 user={user}
-                notifications={assigned}
+                notifications={assignedNotification}
                 notify_type={"Assigned"}
               />
             </div>
