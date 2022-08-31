@@ -34,7 +34,7 @@ function DownloadModal(props) {
             <div className="modal-body px-5 pb-4">
               <div>
                 <ul className="list-group">
-                  {props.eventObj?.related_objects?.map((file, index) => (
+                  {props.eventObj?.related_files?.map((file, index) => (
                     <li
                       className="list-group-item cursor"
                       key={index}
