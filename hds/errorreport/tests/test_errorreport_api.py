@@ -42,7 +42,7 @@ class ErrorReportAPITest(HDSAPITestBase):
     def test_create_errorreport_with_uuid(self):
         """ create error report with uuid in data """
         UUID = "a-test-uuid-string"
-        self.data['uuid'] = UUID
+        self.data['data']['uuid'] = UUID
 
         r = self.client.post(f'{self.api_base_url}/errorreports/', self.data, format='json', HTTP_ACCEPT='application/json')
 

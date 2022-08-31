@@ -32,7 +32,7 @@ class ErrorReportSerializer(EventSerializerMixin, ReportSerializerBase):
         harv_id = int(report['data']['sysmon_report']['serial_number'])
         harvester = Harvester.objects.get(harv_id=harv_id)
         reportTime = self.extract_timestamp(report['timestamp'])
-        UUID = report.get("uuid", Event.generate_uuid())
+        UUID = report['data'].get("uuid", Event.generate_uuid())
         
         data = {
             'harvester': harvester.id,
