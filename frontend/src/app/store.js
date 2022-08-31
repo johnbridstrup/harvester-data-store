@@ -5,6 +5,7 @@ import codeReducer from "../features/excecode/codeSlice";
 import fruitReducer from "../features/fruit/fruitSlice";
 import harvesterReducer from "../features/harvester/harvesterSlice";
 import locationReducer from "../features/location/locationSlice";
+import notificationReducer from "../features/notification/notificationSlice";
 
 const store = configureStore({
   reducer: {
@@ -14,6 +15,7 @@ const store = configureStore({
     errorreport: errorreportReducer,
     fruit: fruitReducer,
     exceptioncode: codeReducer,
+    notification: notificationReducer,
   },
 });
 
