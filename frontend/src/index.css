@@ -12,6 +12,10 @@ body {
   font-family: "Roboto", sans-serif;
 }
 
+a {
+  text-decoration: none;
+}
+
 .admin-route {
   margin-left: 1rem;
   text-decoration: none;
