@@ -69,3 +69,22 @@ class ManageUserView(ModelViewSet):
     renderer_classes = (HDSJSONRenderer,)
     permission_classes = (IsAuthenticated,)
     queryset = User.objects.all()
+
+
+class ChangePasswordView(APIView):
+    """validate user password and update new password"""
+    renderer_classes = (HDSJSONRenderer,)
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request, *args, **kwargs):
+        try:
+            # current_password and new_password are required
+            if "current_password" not in request.data.keys() or "new_password" not in request.data.keys():
+                raise Exception("current_password and new_password are required")
+            if request.user.check_password(request.data["current_password"]):
+                request.user.set_password(request.data["new_password"])
+                request.user.save()
+                return make_ok("Password changed successful", {})
+            raise Exception("could not authenticate with given credentials")
+        except Exception as e:
+            raise Exception(str(e))

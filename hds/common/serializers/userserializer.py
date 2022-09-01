@@ -36,23 +36,20 @@ class UserSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         """update and return the user"""
-        password = validated_data.pop("password", None)
+        validated_data.pop("password", None)
         profile = validated_data.pop("profile", None)
         request = self.context.get("request")
 
-        if instance.pk != request.user.pk:
+        if instance.pk != request.user.pk and not request.user.is_superuser:
             msg = _("Unable to authorize user for update action")
             raise serializers.ValidationError(msg, code="authorization")
 
         user = super().update(instance, validated_data)
 
-        if password:
-            user.set_password(password)
-            user.save()
-
         if profile:
-            user_profile = UserProfile.objects.get(user=user)
-            user_profile.slack_id = profile.get("slack_id")
-            user_profile.save()
+            profile['user'] = user.pk
+            serializer = ProfileSerializer(instance=user.profile, data=profile)
+            if serializer.is_valid():
+                serializer.save()
 
         return user

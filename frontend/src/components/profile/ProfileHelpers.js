@@ -100,7 +100,7 @@ export const ProfileColRight = (props) => {
 };
 
 export const ChangePassword = (props) => {
-  const { new_password, confirm_password } = props.fieldData;
+  const { current_password, new_password, confirm_password } = props.fieldData;
   return (
     <div className="card mt-3">
       <div className="card-body">
@@ -110,6 +110,17 @@ export const ChangePassword = (props) => {
               <i className="las la-lock size-2x mx-2"></i>
               Change Password
             </h6>
+          </div>
+          <div className="form-group">
+            <label htmlFor="current_password">Current Password</label>
+            <input
+              type="password"
+              name="current_password"
+              className="form-control"
+              required
+              value={current_password}
+              onChange={props.handleChange}
+            />
           </div>
           <div className="form-group">
             <label htmlFor="new_password">New Password</label>

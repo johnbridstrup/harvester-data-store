@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
-import { updateProfile } from "../../features/auth/authSlice";
+import { changePassword, updateProfile } from "../../features/auth/authSlice";
 import { transformAssignedNotification } from "../../utils/utils";
 import ProfileUpdateModal from "../modals/ProfileUpdateModal";
 import {
@@ -23,6 +23,7 @@ function UserProfileDetail(props) {
     is_superuser: "",
     last_login: "",
     new_password: "",
+    current_password: "",
     confirm_password: "",
   });
   const { user } = useSelector((state) => state.auth);
@@ -87,12 +88,15 @@ function UserProfileDetail(props) {
     if (fieldData.new_password !== fieldData.confirm_password) {
       toast.error("passwords do not match!");
     } else {
-      const data = { userId: user.id, password: fieldData.new_password };
-      const res = await dispatch(updateProfile(data));
-      if (res.type === "auth/updateProfile/fulfilled") {
+      const data = {
+        current_password: fieldData.current_password,
+        new_password: fieldData.new_password,
+      };
+      const res = await dispatch(changePassword(data));
+      if (res.type === "auth/changePassword/fulfilled") {
         toast.success("password updated successfully");
-      } else if (res.type === "auth/updateProfile/rejected") {
-        toast.error(res?.payload + " minimum password length 5 characters");
+      } else if (res.type === "auth/changePassword/rejected") {
+        toast.error(res?.payload);
       } else {
         toast.error("something went wrong try again later");
       }

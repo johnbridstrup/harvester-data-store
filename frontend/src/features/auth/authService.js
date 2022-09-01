@@ -4,6 +4,7 @@ import { axiosService } from "../base/service";
 const LOGIN_URL = `${API_URL}/users/login/`;
 const LOGOUT_URL = `${API_URL}/users/logout/`;
 const USER_PROFILE_URL = `${API_URL}/users/profiles/`;
+const PASSWORD_URL = `${API_URL}/users/change/password/`;
 
 const login = async (userData) => {
   const res = await axiosService.post(LOGIN_URL, undefined, userData);
@@ -37,9 +38,15 @@ const update = async (userId, token, userData) => {
   return response;
 };
 
+const changePassword = async (token, userData) => {
+  const response = await axiosService.post(`${PASSWORD_URL}`, token, userData);
+  return response;
+};
+
 const authService = {
   login,
   logout,
   update,
+  changePassword,
 };
 export default authService;
