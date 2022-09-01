@@ -16,11 +16,11 @@ function ErrorReportJson(props) {
   };
 
   const handleDownloadFiles = async (fileObj) => {
-    const res = await s3FileService.s3FileDownload(fileObj.url, token);
-    const url = window.URL.createObjectURL(new Blob([res]));
+    const s3fileUrl = await s3FileService.s3FileDownload(fileObj.url, token);
     const link = document.createElement("a");
-    link.href = url;
-    link.setAttribute("download", "errorreport.zip");
+    link.href = s3fileUrl;
+    link.setAttribute("target", `_blank`);
+    link.setAttribute("rel", "noopener");
     document.body.appendChild(link);
     link.click();
   };

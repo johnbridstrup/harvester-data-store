@@ -40,7 +40,9 @@ function DownloadModal(props) {
                       key={index}
                       onClick={() => props.handleDownload(file)}
                     >
-                      <span>{file.object}</span>
+                      <span style={{ fontSize: "1.5rem" }}>
+                        {file.filetype}
+                      </span>
                       <i
                         className="las la-download"
                         style={{ fontSize: "1.8rem", marginLeft: "1rem" }}
