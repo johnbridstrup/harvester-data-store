@@ -35,7 +35,7 @@ class S3FileTestCase(HDSAPITestBase):
         )
         self._setup_basic()
         self._load_report_data()
-        self.data['uuid'] = self.uuid
+        self.data['data']['uuid'] = self.uuid
         rep_resp = self._post_error_report(load=False)
 
         self.assertEqual(
