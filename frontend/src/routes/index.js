@@ -5,6 +5,8 @@ import ErrorsReportDetail from "../pages/errorreports/errordetail";
 import ErrorsReportList from "../pages/errorreports/errorlist";
 import ErrorReportPareto from "../pages/errorreports/errorpareto";
 import Home from "../pages/home";
+import NotificationDetail from "../pages/notification/notifydetail";
+import NotificationList from "../pages/notification/notifylist";
 import UserProfileView from "../pages/profile/profiledetail";
 import { RequireUser, UserAuth } from "../utils/guards";
 
@@ -57,6 +59,22 @@ const BaseRouter = () => {
           element={
             <RequireUser>
               <UserProfileView />
+            </RequireUser>
+          }
+        />
+        <Route
+          path="/notifications"
+          element={
+            <RequireUser>
+              <NotificationList />
+            </RequireUser>
+          }
+        />
+        <Route
+          path="/notifications/:notifyId"
+          element={
+            <RequireUser>
+              <NotificationDetail />
             </RequireUser>
           }
         />

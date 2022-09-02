@@ -17,7 +17,7 @@ alias setport="source $HDS_ROOT/scripts/set_port.sh"
 alias hds-logs="docker compose logs web"
 alias db-logs="docker compose logs db"
 alias install-node="$HDS_ROOT/install-node.sh"
-alias build="$HDS_ROOT/build.sh"
+alias build="$HDS_ROOT/frontend/build.start.sh"
 
 PORT=$1
 if [ -z $PORT ]

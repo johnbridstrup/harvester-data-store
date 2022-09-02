@@ -72,7 +72,7 @@ function Navbar(props) {
                 </Link>
               </div>
               <div className="py-2">
-                <Link to="/accounts/notifications" className="link-item">
+                <Link to="/notifications" className="link-item">
                   <i className="las la-bell size-2x"></i> Notifications
                 </Link>
               </div>

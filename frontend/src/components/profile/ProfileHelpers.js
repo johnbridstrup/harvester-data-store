@@ -179,7 +179,10 @@ export const Notifications = (props) => {
           </div>
         ))}
         <div className="text-center">
-          <Link to="/notifications/all" className="btn btn-primary ">
+          <Link
+            to={`/notifications?category=${props.notify_type.toLowerCase()}`}
+            className="btn btn-primary "
+          >
             View All
           </Link>
         </div>
