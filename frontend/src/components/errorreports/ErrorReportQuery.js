@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
 import Select from "react-select";
@@ -13,6 +13,7 @@ import {
   transformHarvOptions,
   transformLocOptions,
   transformTzOptions,
+  transformUserOptions,
   translateCodeOptions,
   translateFruitOptions,
   translateHarvOptions,
@@ -25,6 +26,7 @@ import {
 } from "../../features/errorreport/errorreportSlice";
 import { DivTotalReport, InputFormControl } from "../styled";
 import timezones from "../../utils/timezones";
+import NotificationModal from "../modals/NotificationModal";
 
 function ErrorReportQuery(props) {
   const [selectedHarvId, setSelectedHarvId] = useState(null);
@@ -32,6 +34,7 @@ function ErrorReportQuery(props) {
   const [selectedTimezone, setSelectedTimezone] = useState(null);
   const [selectedFruit, setSelectedFruit] = useState(null);
   const [selectedCode, setSelectedCode] = useState(null);
+  const [selectedRecipient, setSelectedRecipient] = useState(null);
   const [datesQuery, setDatesQuery] = useState({
     start_time: "",
     end_time: "",
@@ -47,9 +50,11 @@ function ErrorReportQuery(props) {
   const timezoneOptions = transformTzOptions(timezones);
   const fruitOptions = transformFruitOptions(fruits);
   const codeOptions = transformCodeOptions(exceptioncodes);
+  const usersOptions = transformUserOptions([]);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { search } = useLocation();
+  const notifyRef = useRef();
 
   useEffect(() => {
     const paramsObj = paramsToObject(search);
@@ -127,6 +132,10 @@ function ErrorReportQuery(props) {
     setTraceback(e.target.value);
   };
 
+  const handleRecipientSelect = (newValue, actionMeta) => {
+    setSelectedRecipient((current) => newValue);
+  };
+
   const buildQueryObj = () => {
     let queryObj = {};
     if (datesQuery.start_time) {
@@ -182,163 +191,197 @@ function ErrorReportQuery(props) {
     navigate(routeto);
   };
 
+  const handleModalPopUp = () => {
+    notifyRef.current.click();
+  };
+
+  const handleNotificationCreate = () => {
+    if (selectedRecipient && selectedRecipient.length > 0) {
+      console.log(selectedRecipient);
+    }
+  };
+
   return (
-    <div className="row">
-      <div className="col-lg-10 col-md-8 col-sm-12">
-        <div>
-          <form onSubmit={handleFormQuerySubmit}>
-            <div className="row mb-4 mt-2">
-              <div className="col-md-6">
-                <div className="form-group">
-                  <label htmlFor="harv_ids">Harv IDS</label>
-                  <Select
-                    isMulti
-                    isSearchable
-                    placeholder="1,2,3,..."
-                    options={harvesterOptions}
-                    name="harv_ids"
-                    onChange={handleHarvestSelect}
-                    value={selectedHarvId}
-                    defaultValue={selectedHarvId}
-                    className="multi-select-container"
-                    classNamePrefix="select"
-                  />
+    <>
+      <div className="row">
+        <div className="col-lg-10 col-md-8 col-sm-12">
+          <div>
+            <form onSubmit={handleFormQuerySubmit}>
+              <div className="row mb-4 mt-2">
+                <div className="col-md-6">
+                  <div className="form-group">
+                    <label htmlFor="harv_ids">Harv IDS</label>
+                    <Select
+                      isMulti
+                      isSearchable
+                      placeholder="1,2,3,..."
+                      options={harvesterOptions}
+                      name="harv_ids"
+                      onChange={handleHarvestSelect}
+                      value={selectedHarvId}
+                      defaultValue={selectedHarvId}
+                      className="multi-select-container"
+                      classNamePrefix="select"
+                    />
+                  </div>
+                </div>
+                <div className="col-md-6">
+                  <div className="form-group">
+                    <label htmlFor="locations">Ranches</label>
+                    <Select
+                      isMulti
+                      isSearchable
+                      placeholder="ranch1, ranch2, ..."
+                      options={locationOptions}
+                      name="locations"
+                      onChange={handleLocationSelect}
+                      defaultValue={selectedLocation}
+                      value={selectedLocation}
+                      className="multi-select-container"
+                      classNamePrefix="select"
+                    />
+                  </div>
                 </div>
               </div>
-              <div className="col-md-6">
-                <div className="form-group">
-                  <label htmlFor="locations">Ranches</label>
-                  <Select
-                    isMulti
-                    isSearchable
-                    placeholder="ranch1, ranch2, ..."
-                    options={locationOptions}
-                    name="locations"
-                    onChange={handleLocationSelect}
-                    defaultValue={selectedLocation}
-                    value={selectedLocation}
-                    className="multi-select-container"
-                    classNamePrefix="select"
-                  />
+              <div className="row mb-4">
+                <div className="col-md-6">
+                  <div className="form-group">
+                    <label htmlFor="fruit">Fruit</label>
+                    <Select
+                      isMulti
+                      isSearchable
+                      placeholder="strawberry"
+                      options={fruitOptions}
+                      name="fruit"
+                      onChange={handleFruitSelect}
+                      defaultValue={selectedFruit}
+                      value={selectedFruit}
+                      className="multi-select-container"
+                      classNamePrefix="select"
+                    />
+                  </div>
+                </div>
+                <div className="col-md-6">
+                  <div className="form-group">
+                    <label htmlFor="code">Code</label>
+                    <Select
+                      isMulti
+                      isSearchable
+                      placeholder="1,2,3,..."
+                      options={codeOptions}
+                      name="code"
+                      onChange={handleCodeSelect}
+                      defaultValue={selectedCode}
+                      value={selectedCode}
+                      className="multi-select-container"
+                      classNamePrefix="select"
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="row mb-4">
-              <div className="col-md-6">
-                <div className="form-group">
-                  <label htmlFor="fruit">Fruit</label>
-                  <Select
-                    isMulti
-                    isSearchable
-                    placeholder="strawberry"
-                    options={fruitOptions}
-                    name="fruit"
-                    onChange={handleFruitSelect}
-                    defaultValue={selectedFruit}
-                    value={selectedFruit}
-                    className="multi-select-container"
-                    classNamePrefix="select"
-                  />
+              <div className="row mb-4">
+                <div className="col-md-6">
+                  <div className="form-group">
+                    <label htmlFor="traceback">Traceback</label>
+                    <InputFormControl
+                      type="text"
+                      name="traceback"
+                      value={traceback}
+                      onChange={handleTracebackChange}
+                      placeholder="traceback string"
+                    />
+                  </div>
                 </div>
               </div>
-              <div className="col-md-6">
-                <div className="form-group">
-                  <label htmlFor="code">Code</label>
-                  <Select
-                    isMulti
-                    isSearchable
-                    placeholder="1,2,3,..."
-                    options={codeOptions}
-                    name="code"
-                    onChange={handleCodeSelect}
-                    defaultValue={selectedCode}
-                    value={selectedCode}
-                    className="multi-select-container"
-                    classNamePrefix="select"
-                  />
+              <div className="row mb-4">
+                <div className="col-md-4">
+                  <div className="form-group">
+                    <label htmlFor="start_time">Start Time</label>
+                    <InputFormControl
+                      type="text"
+                      name="start_time"
+                      value={datesQuery.start_time}
+                      onChange={handleDateChange}
+                      placeholder="YYYYMMDDHHmmSS"
+                      maxLength={14}
+                    />
+                  </div>
+                </div>
+                <div className="col-md-4">
+                  <div className="form-group">
+                    <label htmlFor="end_time">End Time</label>
+                    <InputFormControl
+                      type="text"
+                      name="end_time"
+                      value={datesQuery.end_time}
+                      onChange={handleDateChange}
+                      placeholder="YYYYMMDDHHmmSS"
+                      maxLength={14}
+                    />
+                  </div>
+                </div>
+                <div className="col-md-4">
+                  <div className="form-group">
+                    <label htmlFor="tz">Timezone</label>
+                    <Select
+                      isSearchable
+                      placeholder="US/Pacific"
+                      options={timezoneOptions}
+                      name="tz"
+                      onChange={handleTimezoneSelect}
+                      defaultValue={selectedTimezone}
+                      value={selectedTimezone}
+                      className="multi-select-container"
+                      classNamePrefix="select"
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="row mb-4">
-              <div className="col-md-6">
-                <div className="form-group">
-                  <label htmlFor="traceback">Traceback</label>
-                  <InputFormControl
-                    type="text"
-                    name="traceback"
-                    value={traceback}
-                    onChange={handleTracebackChange}
-                    placeholder="traceback string"
-                  />
-                </div>
+              <div className="form-group">
+                <button type="submit" className="btn btn-primary btn-md">
+                  Submit
+                </button>
+                <button
+                  type="button"
+                  onClick={handleGenPareto}
+                  className="btn btn-primary btn-md mx-2"
+                >
+                  Generate Pareto
+                </button>
+                <button
+                  onClick={handleModalPopUp}
+                  type="button"
+                  className="btn btn-primary"
+                >
+                  Create Notification
+                </button>
+                <button
+                  ref={notifyRef}
+                  type="button"
+                  data-bs-toggle="modal"
+                  data-bs-target="#notificationModal"
+                  style={{ display: "none" }}
+                >
+                  Create Notification
+                </button>
               </div>
-            </div>
-            <div className="row mb-4">
-              <div className="col-md-4">
-                <div className="form-group">
-                  <label htmlFor="start_time">Start Time</label>
-                  <InputFormControl
-                    type="text"
-                    name="start_time"
-                    value={datesQuery.start_time}
-                    onChange={handleDateChange}
-                    placeholder="YYYYMMDDHHmmSS"
-                    maxLength={14}
-                  />
-                </div>
-              </div>
-              <div className="col-md-4">
-                <div className="form-group">
-                  <label htmlFor="end_time">End Time</label>
-                  <InputFormControl
-                    type="text"
-                    name="end_time"
-                    value={datesQuery.end_time}
-                    onChange={handleDateChange}
-                    placeholder="YYYYMMDDHHmmSS"
-                    maxLength={14}
-                  />
-                </div>
-              </div>
-              <div className="col-md-4">
-                <div className="form-group">
-                  <label htmlFor="tz">Timezone</label>
-                  <Select
-                    isSearchable
-                    placeholder="US/Pacific"
-                    options={timezoneOptions}
-                    name="tz"
-                    onChange={handleTimezoneSelect}
-                    defaultValue={selectedTimezone}
-                    value={selectedTimezone}
-                    className="multi-select-container"
-                    classNamePrefix="select"
-                  />
-                </div>
-              </div>
-            </div>
-            <div className="form-group">
-              <button type="submit" className="btn btn-primary btn-md">
-                Submit
-              </button>
-              <button
-                type="button"
-                onClick={handleGenPareto}
-                className="btn btn-primary btn-md mx-2"
-              >
-                Generate Pareto
-              </button>
-            </div>
-          </form>
+            </form>
+          </div>
+        </div>
+        <div className="col-lg-2 col-md-4 col-sm-12">
+          <DivTotalReport className="total-report">
+            <span>Total Report</span>
+            <span>{count}</span>
+          </DivTotalReport>
         </div>
       </div>
-      <div className="col-lg-2 col-md-4 col-sm-12">
-        <DivTotalReport className="total-report">
-          <span>Total Report</span>
-          <span>{count}</span>
-        </DivTotalReport>
-      </div>
-    </div>
+      <NotificationModal
+        usersOptions={usersOptions}
+        handleRecipientSelect={handleRecipientSelect}
+        handleSubmit={handleNotificationCreate}
+        selectedRecipient={selectedRecipient}
+      />
+    </>
   );
 }
 

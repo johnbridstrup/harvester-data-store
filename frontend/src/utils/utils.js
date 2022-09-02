@@ -248,6 +248,18 @@ export const translateCodeOptions = (codes = []) => {
   });
 };
 
+export const transformUserOptions = (users = []) => {
+  return users.map((user, index) => {
+    return { value: user.id, label: user.username };
+  });
+};
+
+export const translateUserOptions = (users = []) => {
+  return users.map((user, index) => {
+    return user.value;
+  });
+};
+
 export const getUniqueListBy = (arr, key) => {
   return [...new Map(arr.map((item) => [item[key]["code"], item])).values()];
 };
