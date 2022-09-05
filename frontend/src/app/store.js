@@ -6,6 +6,7 @@ import fruitReducer from "../features/fruit/fruitSlice";
 import harvesterReducer from "../features/harvester/harvesterSlice";
 import locationReducer from "../features/location/locationSlice";
 import notificationReducer from "../features/notification/notificationSlice";
+import userReducer from "../features/user/userSlice";
 
 const store = configureStore({
   reducer: {
@@ -16,6 +17,7 @@ const store = configureStore({
     fruit: fruitReducer,
     exceptioncode: codeReducer,
     notification: notificationReducer,
+    user: userReducer,
   },
 });
 

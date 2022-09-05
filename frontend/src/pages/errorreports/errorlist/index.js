@@ -19,6 +19,7 @@ import { MAX_LIMIT } from "../../../features/base/constants";
 import { listFruits } from "../../../features/fruit/fruitSlice";
 import { listCodes } from "../../../features/excecode/codeSlice";
 import Header from "../../../components/layout/header";
+import { listUsers } from "../../../features/user/userSlice";
 
 function ErrorsReportList(props) {
   const dispatch = useDispatch();
@@ -31,6 +32,7 @@ function ErrorsReportList(props) {
         dispatch(listLocations(MAX_LIMIT)),
         dispatch(listFruits(MAX_LIMIT)),
         dispatch(listCodes(MAX_LIMIT)),
+        dispatch(listUsers(MAX_LIMIT)),
       ]);
     })();
     if (search) {

@@ -45,12 +45,13 @@ function ErrorReportQuery(props) {
   const { locations } = useSelector((state) => state.location);
   const { fruits } = useSelector((state) => state.fruit);
   const { exceptioncodes } = useSelector((state) => state.exceptioncode);
+  const { users } = useSelector((state) => state.user);
   const harvesterOptions = transformHarvOptions(harvesters);
   const locationOptions = transformLocOptions(locations);
   const timezoneOptions = transformTzOptions(timezones);
   const fruitOptions = transformFruitOptions(fruits);
   const codeOptions = transformCodeOptions(exceptioncodes);
-  const usersOptions = transformUserOptions([]);
+  const usersOptions = transformUserOptions(users);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { search } = useLocation();

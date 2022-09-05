@@ -52,7 +52,7 @@ const userSlice = createSlice({
       })
       .addCase(listUsers.fulfilled, (state, action) => {
         state.loading = false;
-        state.locations = action.payload;
+        state.users = action.payload;
       })
       .addCase(listUsers.rejected, (state, action) => {
         state.loading = false;
