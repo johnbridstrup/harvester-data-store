@@ -2,6 +2,10 @@ import { useState, useRef, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { changePassword, updateProfile } from "../../features/auth/authSlice";
+import {
+  deleteNotification,
+  listNotifications,
+} from "../../features/notification/notificationSlice";
 import { transformAssignedNotification } from "../../utils/utils";
 import ProfileUpdateModal from "../modals/ProfileUpdateModal";
 import {
@@ -103,8 +107,15 @@ function UserProfileDetail(props) {
     }
   };
 
-  const handleDeleteNotification = (notifObj) => {
-    console.log(notifObj);
+  const handleDeleteNotification = async (notifObj) => {
+    const res = await dispatch(deleteNotification(notifObj.id));
+    console.log(res);
+    if (res.type === "notification/deleteNotification/fulfilled") {
+      toast.success("Notification deleted successfully");
+      await dispatch(listNotifications());
+    } else {
+      toast.error("Could not delete the specified notification");
+    }
   };
 
   return (

@@ -43,6 +43,13 @@ export const axiosService = {
     const res = await axios.patch(url, data, this.config);
     return res.data;
   },
+  delete: async function (url, token) {
+    if (typeof token === "string" && token.length > 0) {
+      this.config["headers"]["Authorization"] = `Token ${token}`;
+    }
+    const res = await axios.delete(url, this.config);
+    return res.data;
+  },
 };
 
 export const persistCSRFToken = async () => {

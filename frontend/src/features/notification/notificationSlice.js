@@ -27,12 +27,28 @@ export const listNotifications = createAsyncThunk(
 
 export const getNotificationById = createAsyncThunk(
   "notification/getNotificationById",
-  async (locId, thunkAPI) => {
+  async (notifyId, thunkAPI) => {
     try {
       const {
         auth: { token },
       } = thunkAPI.getState();
-      return await notificationService.getNotificationById(locId, token);
+      return await notificationService.getNotificationById(notifyId, token);
+    } catch (error) {
+      console.log(error);
+      const message = invalidateCache(error, thunkAPI.dispatch);
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const deleteNotification = createAsyncThunk(
+  "notification/deleteNotification",
+  async (notifyId, thunkAPI) => {
+    try {
+      const {
+        auth: { token },
+      } = thunkAPI.getState();
+      return await notificationService.deleteNotification(notifyId, token);
     } catch (error) {
       console.log(error);
       const message = invalidateCache(error, thunkAPI.dispatch);
@@ -66,6 +82,16 @@ const notificationSlice = createSlice({
         state.notification = action.payload;
       })
       .addCase(getNotificationById.rejected, (state, action) => {
+        state.loading = false;
+        state.errorMsg = action.payload;
+      })
+      .addCase(deleteNotification.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(deleteNotification.fulfilled, (state, action) => {
+        state.loading = false;
+      })
+      .addCase(deleteNotification.rejected, (state, action) => {
         state.loading = false;
         state.errorMsg = action.payload;
       });

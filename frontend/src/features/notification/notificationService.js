@@ -19,9 +19,18 @@ const getNotificationById = async (notifyId, token) => {
   return response;
 };
 
+const deleteNotification = async (notifyId, token) => {
+  const response = await axiosService.delete(
+    `${NOTIFICATION_URL}${notifyId}/`,
+    token
+  );
+  return response;
+};
+
 const notificationService = {
   listNotifications,
   getNotificationById,
+  deleteNotification,
 };
 
 export default notificationService;
