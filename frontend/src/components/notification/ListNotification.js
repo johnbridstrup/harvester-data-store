@@ -19,14 +19,30 @@ function ListNotification(props) {
     user?.username
   );
 
+  const handleDelete = (notifObj) => {
+    console.log(notifObj);
+  };
+
   return (
     <>
       {params.category === "created" ? (
-        <NotificationTable notifications={createdNotification} />
+        <NotificationTable
+          notifications={createdNotification}
+          handleDelete={handleDelete}
+          user={user}
+        />
       ) : params.category === "assigned" ? (
-        <NotificationTable notifications={assignedNotification} />
+        <NotificationTable
+          notifications={assignedNotification}
+          handleDelete={handleDelete}
+          user={user}
+        />
       ) : (
-        <NotificationTable notifications={notifications} />
+        <NotificationTable
+          notifications={notifications}
+          handleDelete={handleDelete}
+          user={user}
+        />
       )}
     </>
   );

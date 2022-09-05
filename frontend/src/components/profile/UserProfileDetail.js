@@ -103,6 +103,10 @@ function UserProfileDetail(props) {
     }
   };
 
+  const handleDeleteNotification = (notifObj) => {
+    console.log(notifObj);
+  };
+
   return (
     <>
       <div className="row gutters-sm mt-5">
@@ -127,6 +131,7 @@ function UserProfileDetail(props) {
                 user={user}
                 notifications={createdNotification}
                 notify_type={"Created"}
+                deleteNotif={handleDeleteNotification}
               />
             </div>
             <div className="col-sm-6 mb-3">
@@ -134,6 +139,7 @@ function UserProfileDetail(props) {
                 user={user}
                 notifications={assignedNotification}
                 notify_type={"Assigned"}
+                deleteNotif={handleDeleteNotification}
               />
             </div>
           </div>

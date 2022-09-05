@@ -176,12 +176,23 @@ export const Notifications = (props) => {
                 {JSON.stringify(notifyObj?.criteria)}
               </div>
             </Link>
+            {(props.user?.id === notifyObj.creator ||
+              props.user?.is_superuser === true) && (
+              <div className="mb-2 mt-2">
+                <button
+                  onClick={() => props.deleteNotif(notifyObj)}
+                  className="btn btn-danger btn-sm"
+                >
+                  Delete
+                </button>
+              </div>
+            )}
           </div>
         ))}
         <div className="text-center">
           <Link
             to={`/notifications?category=${props.notify_type.toLowerCase()}`}
-            className="btn btn-primary "
+            className="btn btn-primary"
           >
             View All
           </Link>
@@ -213,4 +224,5 @@ Notifications.propTypes = {
   notifyObj: PropTypes.object,
   notify_type: PropTypes.string,
   notifications: PropTypes.array,
+  deleteNotif: PropTypes.func,
 };
