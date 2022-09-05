@@ -12,7 +12,7 @@ services:
       context: .
       dockerfile: Dockerfile.local
     command: supervisord
-    volumes: 
+    volumes:
       - ./hds/:/opt/app/hds
       - ./fixtures:/opt/app/fixtures
     ports:
@@ -36,7 +36,7 @@ services:
       - BROKER_URL=redis://redis:6379/0
     depends_on:
       - db
-      - cache
+      - redis
     networks:
       - "hds-network"
   frontend:
@@ -52,7 +52,7 @@ services:
     restart: always
     networks:
       - "hds-network"
-    
+
 networks:
   hds-network:
     driver: bridge
