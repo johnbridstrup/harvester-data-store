@@ -39,12 +39,25 @@ const generatePareto = async (paramsObj, token) => {
   return response;
 };
 
+const createNotification = async (paramsObj, token) => {
+  const recipients = paramsObj["recipients"];
+  delete paramsObj["recipients"];
+  const searchParams = new URLSearchParams(paramsObj);
+  const response = await axiosService.post(
+    `${ERROR_REPORT_URL}createnotification/?${searchParams.toString()}`,
+    token,
+    { recipients }
+  );
+  return response;
+};
+
 const errorreportService = {
   errorListView,
   queryErrorReport,
   paginateErrorReport,
   detailErrorReport,
   generatePareto,
+  createNotification,
 };
 
 export default errorreportService;

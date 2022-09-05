@@ -17,7 +17,7 @@ function DetailNotification(props) {
               <span>
                 <strong>Recipients: </strong>
               </span>
-              <div>{notification.recipients.join(", ")}</div>
+              <div>{notification.recipients?.join(", ")}</div>
             </div>
             <div className="col-md-4">
               <span>

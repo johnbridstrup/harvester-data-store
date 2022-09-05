@@ -430,3 +430,20 @@ export const transformAssignedNotification = (notifications = [], username) => {
   });
   return arr;
 };
+
+export const validateQueryObj = (queryObj = {}) => {
+  if (
+    queryObj.harv_ids ||
+    queryObj.locations ||
+    queryObj.tz ||
+    queryObj.fruits ||
+    queryObj.codes ||
+    queryObj.traceback ||
+    queryObj.start_time ||
+    queryObj.end_time
+  ) {
+    return true;
+  } else {
+    return false;
+  }
+};

@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
 import Select from "react-select";
+import { toast } from "react-toastify";
 import {
   copiedUrl,
   extractDateFromString,
@@ -18,9 +19,12 @@ import {
   translateFruitOptions,
   translateHarvOptions,
   translateLocOptions,
+  translateUserOptions,
+  validateQueryObj,
 } from "../../utils/utils";
 import {
   copyQueryUrl,
+  createNotification,
   queryErrorReport,
   timezoneUpdate,
 } from "../../features/errorreport/errorreportSlice";
@@ -196,9 +200,20 @@ function ErrorReportQuery(props) {
     notifyRef.current.click();
   };
 
-  const handleNotificationCreate = () => {
+  const handleNotificationCreate = async () => {
+    let queryObj = buildQueryObj();
     if (selectedRecipient && selectedRecipient.length > 0) {
-      console.log(selectedRecipient);
+      let recipients = translateUserOptions(selectedRecipient);
+      let isValid = validateQueryObj(queryObj);
+      if (!isValid) {
+        toast.error(
+          "You must include at least one query to create a notification"
+        );
+      } else {
+        queryObj["recipients"] = recipients;
+        await dispatch(createNotification(queryObj));
+        toast.success("Notification created successfully.");
+      }
     }
   };
 
