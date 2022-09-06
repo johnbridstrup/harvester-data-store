@@ -80,7 +80,7 @@ export const ProfileColRight = (props) => {
           <div className="col-sm-12 text-center">
             <button
               className="btn btn-primary"
-              onClick={props.profileModalPopUp}
+              onClick={props.passwordModalPopUp}
             >
               Edit
             </button>
@@ -88,6 +88,14 @@ export const ProfileColRight = (props) => {
               ref={props.profileRef}
               data-bs-toggle="modal"
               data-bs-target="#profileModal"
+              style={{ display: "none" }}
+            >
+              Edit
+            </button>
+            <button
+              ref={props.passwordRef}
+              data-bs-toggle="modal"
+              data-bs-target="#passwordModal"
               style={{ display: "none" }}
             >
               Edit
@@ -210,6 +218,8 @@ ProfileColRight.propTypes = {
   user: PropTypes.object,
   profileModalPopUp: PropTypes.func,
   profileRef: PropTypes.object,
+  passwordModalPopUp: PropTypes.func,
+  passwordRef: PropTypes.object,
 };
 
 ChangePassword.propTypes = {

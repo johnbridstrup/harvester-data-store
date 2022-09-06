@@ -7,6 +7,7 @@ import {
   listNotifications,
 } from "../../features/notification/notificationSlice";
 import { transformAssignedNotification } from "../../utils/utils";
+import PasswordModal from "../modals/PasswordModal";
 import ProfileUpdateModal from "../modals/ProfileUpdateModal";
 import {
   ChangePassword,
@@ -26,6 +27,7 @@ function UserProfileDetail(props) {
     is_staff: "",
     is_superuser: "",
     last_login: "",
+    password: "",
     new_password: "",
     current_password: "",
     confirm_password: "",
@@ -34,6 +36,7 @@ function UserProfileDetail(props) {
   const { notifications } = useSelector((state) => state.notification);
   const dispatch = useDispatch();
   const profileRef = useRef();
+  const passwordRef = useRef();
 
   const createdNotification = notifications
     .slice(0, 5)
@@ -64,6 +67,10 @@ function UserProfileDetail(props) {
     profileRef.current.click();
   };
 
+  const passwordModalPopUp = () => {
+    passwordRef.current.click();
+  };
+
   const handleFieldChange = (e) => {
     setFieldData((current) => {
       return { ...current, [e.target.name]: e.target.value };
@@ -80,6 +87,7 @@ function UserProfileDetail(props) {
     const res = await dispatch(updateProfile(data));
     if (res.type === "auth/updateProfile/fulfilled") {
       toast.success("profile information updated successfully");
+      profileModalPopUp();
     } else if (res === "auth/updateProfile/rejected") {
       toast.error(res?.payload);
     } else {
@@ -117,6 +125,18 @@ function UserProfileDetail(props) {
     }
   };
 
+  const handleConfirmPassword = (e) => {
+    e.preventDefault();
+    if (fieldData.password) {
+      passwordModalPopUp();
+      setTimeout(() => {
+        profileModalPopUp();
+      }, 1000);
+    } else {
+      console.log("password is required!!");
+    }
+  };
+
   return (
     <>
       <div className="row gutters-sm mt-5">
@@ -133,6 +153,8 @@ function UserProfileDetail(props) {
             user={user}
             profileModalPopUp={profileModalPopUp}
             profileRef={profileRef}
+            passwordModalPopUp={passwordModalPopUp}
+            passwordRef={passwordRef}
           />
 
           <div className="row gutters-sm">
@@ -160,6 +182,11 @@ function UserProfileDetail(props) {
         handleChange={handleFieldChange}
         handleSubmit={handleProfileSubmit}
         loading={false}
+      />
+      <PasswordModal
+        password={fieldData.password}
+        handleChange={handleFieldChange}
+        handleSubmit={handleConfirmPassword}
       />
     </>
   );
