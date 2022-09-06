@@ -49,7 +49,7 @@ class UserSerializer(serializers.ModelSerializer):
         if profile:
             profile['user'] = user.pk
             serializer = ProfileSerializer(instance=user.profile, data=profile)
-            if serializer.is_valid():
+            if serializer.is_valid(raise_exception=True):
                 serializer.save()
 
         return user
