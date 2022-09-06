@@ -181,9 +181,9 @@ export const Notifications = (props) => {
               <div className="mb-2 mt-2">
                 <button
                   onClick={() => props.deleteNotif(notifyObj)}
-                  className="btn btn-danger btn-sm"
+                  className="btn btn-sm text-danger"
                 >
-                  Delete
+                  Del
                 </button>
               </div>
             )}

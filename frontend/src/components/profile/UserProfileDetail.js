@@ -109,7 +109,6 @@ function UserProfileDetail(props) {
 
   const handleDeleteNotification = async (notifObj) => {
     const res = await dispatch(deleteNotification(notifObj.id));
-    console.log(res);
     if (res.type === "notification/deleteNotification/fulfilled") {
       toast.success("Notification deleted successfully");
       await dispatch(listNotifications());
