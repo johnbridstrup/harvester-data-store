@@ -43,10 +43,16 @@ const changePassword = async (token, userData) => {
   return response;
 };
 
+const confirmPassword = async (userData) => {
+  const res = await axiosService.post(LOGIN_URL, undefined, userData);
+  return res;
+};
+
 const authService = {
   login,
   logout,
   update,
   changePassword,
+  confirmPassword,
 };
 export default authService;

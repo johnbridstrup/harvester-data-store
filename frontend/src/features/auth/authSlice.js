@@ -11,6 +11,7 @@ const initialState = {
   isAuthenticated,
   loading: false,
   editting: false,
+  confirming: false,
   user,
   errorCode: null,
   errorMsg: null,
@@ -107,6 +108,24 @@ export const changePassword = createAsyncThunk(
   }
 );
 
+export const confirmPassword = createAsyncThunk(
+  "auth/confirmPassword",
+  async (userData, thunkAPI) => {
+    try {
+      return await authService.confirmPassword(userData);
+    } catch (error) {
+      console.log(error);
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 export const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -169,6 +188,16 @@ export const authSlice = createSlice({
       })
       .addCase(changePassword.rejected, (state, action) => {
         state.editting = false;
+        state.errorMsg = action.payload;
+      })
+      .addCase(confirmPassword.pending, (state) => {
+        state.confirming = true;
+      })
+      .addCase(confirmPassword.fulfilled, (state, action) => {
+        state.confirming = false;
+      })
+      .addCase(confirmPassword.rejected, (state, action) => {
+        state.confirming = false;
         state.errorMsg = action.payload;
       });
   },

@@ -1,7 +1,11 @@
 import { useState, useRef, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
-import { changePassword, updateProfile } from "../../features/auth/authSlice";
+import {
+  changePassword,
+  confirmPassword,
+  updateProfile,
+} from "../../features/auth/authSlice";
 import {
   deleteNotification,
   listNotifications,
@@ -83,6 +87,7 @@ function UserProfileDetail(props) {
       ...fieldData,
       userId: user.id,
       profile: { slack_id: fieldData.slack_id },
+      password: undefined,
     };
     const res = await dispatch(updateProfile(data));
     if (res.type === "auth/updateProfile/fulfilled") {
@@ -125,15 +130,20 @@ function UserProfileDetail(props) {
     }
   };
 
-  const handleConfirmPassword = (e) => {
+  const handleConfirmPassword = async (e) => {
     e.preventDefault();
-    if (fieldData.password) {
+    const data = {
+      username: user?.username,
+      password: fieldData.password,
+    };
+    const res = await dispatch(confirmPassword(data));
+    if (res.type === "auth/confirmPassword/fulfilled") {
       passwordModalPopUp();
       setTimeout(() => {
         profileModalPopUp();
       }, 1000);
     } else {
-      console.log("password is required!!");
+      toast.error("could not authenticate with the given credentials");
     }
   };
 

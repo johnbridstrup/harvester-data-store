@@ -39,6 +39,7 @@ function PasswordModal(props) {
                     type="password"
                     className="form-control"
                     name="password"
+                    required
                     value={props.password}
                     onChange={props.handleChange}
                   />
