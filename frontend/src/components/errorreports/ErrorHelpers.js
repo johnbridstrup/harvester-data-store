@@ -1,5 +1,11 @@
 import { useNavigate } from "react-router-dom";
-import { CodeServiceDiv, HoverDiv, HoverDivModal, ToolBox } from "../styled";
+import {
+  CodeServiceDiv,
+  HoverDiv,
+  HoverDivModal,
+  InputFormControl,
+  ToolBox,
+} from "../styled";
 import PropTypes from "prop-types";
 import Select from "react-select";
 import { aggregateOptions, getUniqueListBy } from "../../utils/utils";
@@ -223,6 +229,192 @@ export const CodeHover = (props) => {
   );
 };
 
+export const FormQuery = (props) => {
+  const {
+    handleFormQuerySubmit,
+    harvesterOptions,
+    handleHarvestSelect,
+    selectedHarvId,
+    locationOptions,
+    handleLocationSelect,
+    selectedLocation,
+    fruitOptions,
+    handleFruitSelect,
+    selectedFruit,
+    codeOptions,
+    handleCodeSelect,
+    selectedCode,
+    traceback,
+    handleTracebackChange,
+    generic,
+    handleGenericChange,
+    datesQuery,
+    handleDateChange,
+    timezoneOptions,
+    handleTimezoneSelect,
+    selectedTimezone,
+    handleGenPareto,
+  } = props;
+  return (
+    <form onSubmit={handleFormQuerySubmit}>
+      <div className="row mb-4 mt-2">
+        <div className="col-md-6">
+          <div className="form-group">
+            <label htmlFor="harv_ids">Harv IDS</label>
+            <Select
+              isMulti
+              isSearchable
+              placeholder="1,2,3,..."
+              options={harvesterOptions}
+              name="harv_ids"
+              onChange={handleHarvestSelect}
+              value={selectedHarvId}
+              defaultValue={selectedHarvId}
+              className="multi-select-container"
+              classNamePrefix="select"
+            />
+          </div>
+        </div>
+        <div className="col-md-6">
+          <div className="form-group">
+            <label htmlFor="locations">Ranches</label>
+            <Select
+              isMulti
+              isSearchable
+              placeholder="ranch1, ranch2, ..."
+              options={locationOptions}
+              name="locations"
+              onChange={handleLocationSelect}
+              defaultValue={selectedLocation}
+              value={selectedLocation}
+              className="multi-select-container"
+              classNamePrefix="select"
+            />
+          </div>
+        </div>
+      </div>
+      <div className="row mb-4">
+        <div className="col-md-6">
+          <div className="form-group">
+            <label htmlFor="fruit">Fruit</label>
+            <Select
+              isMulti
+              isSearchable
+              placeholder="strawberry"
+              options={fruitOptions}
+              name="fruit"
+              onChange={handleFruitSelect}
+              defaultValue={selectedFruit}
+              value={selectedFruit}
+              className="multi-select-container"
+              classNamePrefix="select"
+            />
+          </div>
+        </div>
+        <div className="col-md-6">
+          <div className="form-group">
+            <label htmlFor="code">Code</label>
+            <Select
+              isMulti
+              isSearchable
+              placeholder="1,2,3,..."
+              options={codeOptions}
+              name="code"
+              onChange={handleCodeSelect}
+              defaultValue={selectedCode}
+              value={selectedCode}
+              className="multi-select-container"
+              classNamePrefix="select"
+            />
+          </div>
+        </div>
+      </div>
+      <div className="row mb-4">
+        <div className="col-md-6">
+          <div className="form-group">
+            <label htmlFor="traceback">Traceback</label>
+            <InputFormControl
+              type="text"
+              name="traceback"
+              value={traceback}
+              onChange={handleTracebackChange}
+              placeholder="traceback string"
+            />
+          </div>
+        </div>
+        <div className="col-md-6">
+          <div className="form-group">
+            <label htmlFor="generic">Generic LookUp</label>
+            <InputFormControl
+              type="text"
+              name="generic"
+              value={generic}
+              onChange={handleGenericChange}
+              placeholder="field__lookup=x, column_lookup=y"
+            />
+          </div>
+        </div>
+      </div>
+      <div className="row mb-4">
+        <div className="col-md-4">
+          <div className="form-group">
+            <label htmlFor="start_time">Start Time</label>
+            <InputFormControl
+              type="text"
+              name="start_time"
+              value={datesQuery.start_time}
+              onChange={handleDateChange}
+              placeholder="YYYYMMDDHHmmSS"
+              maxLength={14}
+            />
+          </div>
+        </div>
+        <div className="col-md-4">
+          <div className="form-group">
+            <label htmlFor="end_time">End Time</label>
+            <InputFormControl
+              type="text"
+              name="end_time"
+              value={datesQuery.end_time}
+              onChange={handleDateChange}
+              placeholder="YYYYMMDDHHmmSS"
+              maxLength={14}
+            />
+          </div>
+        </div>
+        <div className="col-md-4">
+          <div className="form-group">
+            <label htmlFor="tz">Timezone</label>
+            <Select
+              isSearchable
+              placeholder="US/Pacific"
+              options={timezoneOptions}
+              name="tz"
+              onChange={handleTimezoneSelect}
+              defaultValue={selectedTimezone}
+              value={selectedTimezone}
+              className="multi-select-container"
+              classNamePrefix="select"
+            />
+          </div>
+        </div>
+      </div>
+      <div className="form-group">
+        <button type="submit" className="btn btn-primary btn-md">
+          Submit
+        </button>
+        <button
+          type="button"
+          onClick={handleGenPareto}
+          className="btn btn-primary btn-md mx-2"
+        >
+          Generate Pareto
+        </button>
+      </div>
+    </form>
+  );
+};
+
 ExceptTabular.propTypes = {
   exceptName: PropTypes.string,
   timestamp: PropTypes.string,
@@ -255,4 +447,30 @@ LocationHover.propTypes = {
 CodeHover.propTypes = {
   exceptions: PropTypes.array,
   position: PropTypes.string,
+};
+
+FormQuery.propTypes = {
+  handleFormQuerySubmit: PropTypes.func,
+  harvesterOptions: PropTypes.array,
+  handleHarvestSelect: PropTypes.array,
+  selectedHarvId: PropTypes.array,
+  locationOptions: PropTypes.array,
+  handleLocationSelect: PropTypes.func,
+  selectedLocation: PropTypes.array,
+  fruitOptions: PropTypes.array,
+  handleFruitSelect: PropTypes.func,
+  selectedFruit: PropTypes.array,
+  codeOptions: PropTypes.array,
+  handleCodeSelect: PropTypes.func,
+  selectedCode: PropTypes.array,
+  traceback: PropTypes.string,
+  handleTracebackChange: PropTypes.func,
+  generic: PropTypes.string,
+  handleGenericChange: PropTypes.func,
+  datesQuery: PropTypes.object,
+  handleDateChange: PropTypes.func,
+  timezoneOptions: PropTypes.array,
+  handleTimezoneSelect: PropTypes.func,
+  selectedTimezone: PropTypes.array,
+  handleGenPareto: PropTypes.func,
 };
