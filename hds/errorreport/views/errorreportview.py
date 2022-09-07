@@ -36,7 +36,7 @@ class ErrorReportView(CreateModelViewSet):
         super().perform_create(serializer)
         report_id = serializer.data['id']
         url = build_frontend_url(endpoint="errorreports", _id=report_id)
-        error_report_created.send(sender=ErrorReport, instance_id=report_id, url=url) 
+        error_report_created.send(sender=ErrorReport, instance_id=report_id, url=url)
 
     @classmethod
     def build_list_filter(cls, request):
@@ -102,6 +102,8 @@ class ErrorReportView(CreateModelViewSet):
             if len(traceback) > 0:
                 listfilter['exceptions__traceback__icontains'] = traceback
 
+        # update listfilter with generic query dict
+        listfilter.update(cls.build_generic_query(request))
         return listfilter
 
     @classmethod
@@ -195,7 +197,7 @@ class ErrorReportView(CreateModelViewSet):
             "trigger_on": trigger_on,
             "recipients": recipients
         }
-        
+
         serializer = NotificationSerializer(data=notification)
         serializer.is_valid()
         serializer.save(creator=request.user)
