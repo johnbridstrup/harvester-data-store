@@ -115,6 +115,12 @@ export const ParetoTabular = (props) => {
           <div className="tabular">{props.paramsObj.end_time}</div>
         </div>
       )}
+      {props.paramsObj?.generic && (
+        <div className="d-flex">
+          <div className="tabular">Generics</div>
+          <div className="tabular">{props.paramsObj.generic}</div>
+        </div>
+      )}
     </div>
   );
 };

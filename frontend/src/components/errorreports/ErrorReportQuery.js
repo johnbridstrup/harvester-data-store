@@ -110,6 +110,9 @@ function ErrorReportQuery(props) {
       let tzObj = { value: paramsObj.tz, label: paramsObj.tz };
       setSelectedTimezone((current) => tzObj);
     }
+    if (paramsObj.generic) {
+      setGeneric((current) => paramsObj.generic);
+    }
   }, [search]);
 
   const handleHarvestSelect = (newValue, actionMeta) => {
