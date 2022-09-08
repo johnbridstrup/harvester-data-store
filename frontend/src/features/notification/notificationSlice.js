@@ -57,6 +57,18 @@ export const deleteNotification = createAsyncThunk(
   }
 );
 
+export const deleteManyNotif = async (notifs, token) => {
+  try {
+    for (let i = 0; i < notifs.length; i++) {
+      await notificationService.deleteNotification(notifs[i].id, token);
+    }
+    return { success: true, message: "Notification(s) deleted successfully" };
+  } catch (error) {
+    console.log(error);
+    return { success: false, message: error.message };
+  }
+};
+
 const notificationSlice = createSlice({
   name: "notification",
   initialState,

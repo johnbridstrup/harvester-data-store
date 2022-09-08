@@ -10,7 +10,18 @@ function NotificationTable(props) {
             <th>Trigger On</th>
             <th>Recipients</th>
             <th>Criteria</th>
-            <th>Action</th>
+            <th>
+              {props.checkedNotif.length > 0 ? (
+                <button
+                  onClick={props.handleDeleteMany}
+                  className="btn btn-sm btn-danger"
+                >
+                  DEL
+                </button>
+              ) : (
+                "Action"
+              )}
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -26,10 +37,11 @@ function NotificationTable(props) {
               <td>
                 {(props.user?.id === notif.creator ||
                   props.user?.is_superuser === true) && (
-                  <i
-                    onClick={() => props.handleDelete(notif)}
-                    className="las la-times"
-                  ></i>
+                  <input
+                    type="checkbox"
+                    className="form-check-input"
+                    onChange={(e) => props.handleChange(e, notif)}
+                  />
                 )}
               </td>
             </tr>
@@ -42,8 +54,10 @@ function NotificationTable(props) {
 
 NotificationTable.propTypes = {
   notifications: PropTypes.array,
-  handleDelete: PropTypes.func,
+  handleDeleteMany: PropTypes.func,
   user: PropTypes.object,
+  handleChange: PropTypes.func,
+  checkedNotif: PropTypes.array,
 };
 
 export default NotificationTable;

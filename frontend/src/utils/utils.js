@@ -435,7 +435,6 @@ export const validateQueryObj = (queryObj = {}) => {
   if (
     queryObj.harv_ids ||
     queryObj.locations ||
-    queryObj.tz ||
     queryObj.fruits ||
     queryObj.codes ||
     queryObj.traceback ||
