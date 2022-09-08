@@ -260,6 +260,8 @@ export const FormQuery = (props) => {
     handleTimezoneSelect,
     selectedTimezone,
     handleGenPareto,
+    handleModalPopUp,
+    notifyRef,
   } = props;
   return (
     <form onSubmit={handleFormQuerySubmit}>
@@ -416,6 +418,22 @@ export const FormQuery = (props) => {
         >
           Generate Pareto
         </button>
+        <button
+          onClick={handleModalPopUp}
+          type="button"
+          className="btn btn-primary"
+        >
+          Create Notification
+        </button>
+        <button
+          ref={notifyRef}
+          type="button"
+          data-bs-toggle="modal"
+          data-bs-target="#notificationModal"
+          style={{ display: "none" }}
+        >
+          Create Notification
+        </button>
       </div>
     </form>
   );
@@ -479,4 +497,6 @@ FormQuery.propTypes = {
   handleTimezoneSelect: PropTypes.func,
   selectedTimezone: PropTypes.array,
   handleGenPareto: PropTypes.func,
+  handleModalPopUp: PropTypes.func,
+  notifyRef: PropTypes.object,
 };

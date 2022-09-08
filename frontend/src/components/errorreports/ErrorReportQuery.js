@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
-import Select from "react-select";
 import { toast } from "react-toastify";
 import {
   copiedUrl,
@@ -28,9 +27,10 @@ import {
   queryErrorReport,
   timezoneUpdate,
 } from "../../features/errorreport/errorreportSlice";
-import { DivTotalReport, InputFormControl } from "../styled";
+import { DivTotalReport } from "../styled";
 import timezones from "../../utils/timezones";
 import NotificationModal from "../modals/NotificationModal";
+import { FormQuery } from "./ErrorHelpers";
 
 function ErrorReportQuery(props) {
   const [selectedHarvId, setSelectedHarvId] = useState(null);
@@ -44,6 +44,7 @@ function ErrorReportQuery(props) {
     end_time: "",
   });
   const [traceback, setTraceback] = useState("");
+  const [generic, setGeneric] = useState("");
   const count = useSelector((state) => state.errorreport.count);
   const { harvesters } = useSelector((state) => state.harvester);
   const { locations } = useSelector((state) => state.location);
@@ -144,6 +145,10 @@ function ErrorReportQuery(props) {
     setSelectedRecipient((current) => newValue);
   };
 
+  const handleGenericChange = (e) => {
+    setGeneric(e.target.value);
+  };
+
   const buildQueryObj = () => {
     let queryObj = {};
     if (datesQuery.start_time) {
@@ -173,6 +178,9 @@ function ErrorReportQuery(props) {
     }
     if (traceback) {
       queryObj["traceback"] = traceback;
+    }
+    if (generic) {
+      queryObj["generic"] = generic;
     }
     return queryObj;
   };
@@ -216,6 +224,7 @@ function ErrorReportQuery(props) {
         queryObj["recipients"] = recipients;
         await dispatch(createNotification(queryObj));
         toast.success("Notification created successfully.");
+        handleModalPopUp();
       }
     }
   };
@@ -225,166 +234,33 @@ function ErrorReportQuery(props) {
       <div className="row">
         <div className="col-lg-10 col-md-8 col-sm-12">
           <div>
-            <form onSubmit={handleFormQuerySubmit}>
-              <div className="row mb-4 mt-2">
-                <div className="col-md-6">
-                  <div className="form-group">
-                    <label htmlFor="harv_ids">Harv IDS</label>
-                    <Select
-                      isMulti
-                      isSearchable
-                      placeholder="1,2,3,..."
-                      options={harvesterOptions}
-                      name="harv_ids"
-                      onChange={handleHarvestSelect}
-                      value={selectedHarvId}
-                      defaultValue={selectedHarvId}
-                      className="multi-select-container"
-                      classNamePrefix="select"
-                    />
-                  </div>
-                </div>
-                <div className="col-md-6">
-                  <div className="form-group">
-                    <label htmlFor="locations">Ranches</label>
-                    <Select
-                      isMulti
-                      isSearchable
-                      placeholder="ranch1, ranch2, ..."
-                      options={locationOptions}
-                      name="locations"
-                      onChange={handleLocationSelect}
-                      defaultValue={selectedLocation}
-                      value={selectedLocation}
-                      className="multi-select-container"
-                      classNamePrefix="select"
-                    />
-                  </div>
-                </div>
-              </div>
-              <div className="row mb-4">
-                <div className="col-md-6">
-                  <div className="form-group">
-                    <label htmlFor="fruit">Fruit</label>
-                    <Select
-                      isMulti
-                      isSearchable
-                      placeholder="strawberry"
-                      options={fruitOptions}
-                      name="fruit"
-                      onChange={handleFruitSelect}
-                      defaultValue={selectedFruit}
-                      value={selectedFruit}
-                      className="multi-select-container"
-                      classNamePrefix="select"
-                    />
-                  </div>
-                </div>
-                <div className="col-md-6">
-                  <div className="form-group">
-                    <label htmlFor="code">Code</label>
-                    <Select
-                      isMulti
-                      isSearchable
-                      placeholder="1,2,3,..."
-                      options={codeOptions}
-                      name="code"
-                      onChange={handleCodeSelect}
-                      defaultValue={selectedCode}
-                      value={selectedCode}
-                      className="multi-select-container"
-                      classNamePrefix="select"
-                    />
-                  </div>
-                </div>
-              </div>
-              <div className="row mb-4">
-                <div className="col-md-6">
-                  <div className="form-group">
-                    <label htmlFor="traceback">Traceback</label>
-                    <InputFormControl
-                      type="text"
-                      name="traceback"
-                      value={traceback}
-                      onChange={handleTracebackChange}
-                      placeholder="traceback string"
-                    />
-                  </div>
-                </div>
-              </div>
-              <div className="row mb-4">
-                <div className="col-md-4">
-                  <div className="form-group">
-                    <label htmlFor="start_time">Start Time</label>
-                    <InputFormControl
-                      type="text"
-                      name="start_time"
-                      value={datesQuery.start_time}
-                      onChange={handleDateChange}
-                      placeholder="YYYYMMDDHHmmSS"
-                      maxLength={14}
-                    />
-                  </div>
-                </div>
-                <div className="col-md-4">
-                  <div className="form-group">
-                    <label htmlFor="end_time">End Time</label>
-                    <InputFormControl
-                      type="text"
-                      name="end_time"
-                      value={datesQuery.end_time}
-                      onChange={handleDateChange}
-                      placeholder="YYYYMMDDHHmmSS"
-                      maxLength={14}
-                    />
-                  </div>
-                </div>
-                <div className="col-md-4">
-                  <div className="form-group">
-                    <label htmlFor="tz">Timezone</label>
-                    <Select
-                      isSearchable
-                      placeholder="US/Pacific"
-                      options={timezoneOptions}
-                      name="tz"
-                      onChange={handleTimezoneSelect}
-                      defaultValue={selectedTimezone}
-                      value={selectedTimezone}
-                      className="multi-select-container"
-                      classNamePrefix="select"
-                    />
-                  </div>
-                </div>
-              </div>
-              <div className="form-group">
-                <button type="submit" className="btn btn-primary btn-md">
-                  Submit
-                </button>
-                <button
-                  type="button"
-                  onClick={handleGenPareto}
-                  className="btn btn-primary btn-md mx-2"
-                >
-                  Generate Pareto
-                </button>
-                <button
-                  onClick={handleModalPopUp}
-                  type="button"
-                  className="btn btn-primary"
-                >
-                  Create Notification
-                </button>
-                <button
-                  ref={notifyRef}
-                  type="button"
-                  data-bs-toggle="modal"
-                  data-bs-target="#notificationModal"
-                  style={{ display: "none" }}
-                >
-                  Create Notification
-                </button>
-              </div>
-            </form>
+            <FormQuery
+              codeOptions={codeOptions}
+              datesQuery={datesQuery}
+              fruitOptions={fruitOptions}
+              generic={generic}
+              handleCodeSelect={handleCodeSelect}
+              handleDateChange={handleDateChange}
+              handleFormQuerySubmit={handleFormQuerySubmit}
+              handleFruitSelect={handleFruitSelect}
+              handleGenPareto={handleGenPareto}
+              handleGenericChange={handleGenericChange}
+              handleHarvestSelect={handleHarvestSelect}
+              handleLocationSelect={handleLocationSelect}
+              handleModalPopUp={handleModalPopUp}
+              handleTimezoneSelect={handleTimezoneSelect}
+              handleTracebackChange={handleTracebackChange}
+              harvesterOptions={harvesterOptions}
+              locationOptions={locationOptions}
+              notifyRef={notifyRef}
+              selectedCode={selectedCode}
+              selectedFruit={selectedFruit}
+              selectedHarvId={selectedHarvId}
+              selectedLocation={selectedLocation}
+              selectedTimezone={selectedTimezone}
+              timezoneOptions={timezoneOptions}
+              traceback={traceback}
+            />
           </div>
         </div>
         <div className="col-lg-2 col-md-4 col-sm-12">
