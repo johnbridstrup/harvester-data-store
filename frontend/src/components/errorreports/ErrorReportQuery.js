@@ -31,6 +31,7 @@ import { DivTotalReport } from "../styled";
 import timezones from "../../utils/timezones";
 import NotificationModal from "../modals/NotificationModal";
 import { FormQuery } from "./ErrorHelpers";
+import { HoverTabular } from "./ErrorHelpers";
 
 function ErrorReportQuery(props) {
   const [selectedHarvId, setSelectedHarvId] = useState(null);
@@ -45,7 +46,7 @@ function ErrorReportQuery(props) {
   });
   const [traceback, setTraceback] = useState("");
   const [generic, setGeneric] = useState("");
-  const count = useSelector((state) => state.errorreport.count);
+  const { count, hovered } = useSelector((state) => state.errorreport);
   const { harvesters } = useSelector((state) => state.harvester);
   const { locations } = useSelector((state) => state.location);
   const { fruits } = useSelector((state) => state.fruit);
@@ -268,6 +269,7 @@ function ErrorReportQuery(props) {
             <span>Total Report</span>
             <span>{count}</span>
           </DivTotalReport>
+          <HoverTabular hoverObj={hovered} />
         </div>
       </div>
       <NotificationModal

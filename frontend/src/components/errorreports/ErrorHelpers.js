@@ -1,11 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import {
-  CodeServiceDiv,
-  HoverDiv,
-  HoverDivModal,
-  InputFormControl,
-  ToolBox,
-} from "../styled";
+import { CodeServiceDiv, HoverDiv, HoverDivModal, ToolBox } from "../styled";
 import PropTypes from "prop-types";
 import Select from "react-select";
 import { aggregateOptions, getUniqueListBy } from "../../utils/utils";
@@ -25,6 +19,87 @@ export const DownloadButton = (props) => {
         Get Files
       </button>
     </div>
+  );
+};
+
+export const HoverTabular = (props) => {
+  return (
+    <>
+      {props.hoverObj?.type === "HARVESTER" && (
+        <div>
+          <div className="d-flex">
+            <div className="tabular bg-gray">Property</div>
+            <div className="tabular bg-gray">Value</div>
+          </div>
+          <div className="d-flex">
+            <div className="tabular">Harv ID</div>
+            <div className="tabular">{props.hoverObj?.obj?.harv_id}</div>
+          </div>
+          <div className="d-flex">
+            <div className="tabular">Name</div>
+            <div className="tabular">{props.hoverObj?.obj?.name}</div>
+          </div>
+          <div className="d-flex">
+            <div className="tabular">Fruit</div>
+            <div className="tabular">{props.hoverObj?.obj?.fruit?.name}</div>
+          </div>
+          <div className="d-flex">
+            <div className="tabular">Location</div>
+            <div className="tabular">
+              {props.hoverObj?.obj?.location?.ranch}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {props.hoverObj?.type === "LOCATION" && (
+        <div>
+          <div className="d-flex">
+            <div className="tabular bg-gray">Property</div>
+            <div className="tabular bg-gray">Value</div>
+          </div>
+          <div className="d-flex">
+            <div className="tabular">Ranch</div>
+            <div className="tabular">{props.hoverObj?.obj?.ranch}</div>
+          </div>
+          <div className="d-flex">
+            <div className="tabular">Country</div>
+            <div className="tabular">{props.hoverObj?.obj?.country}</div>
+          </div>
+          <div className="d-flex">
+            <div className="tabular">Region</div>
+            <div className="tabular">{props.hoverObj?.obj?.region}</div>
+          </div>
+          <div className="d-flex">
+            <div className="tabular">Location</div>
+            <div className="tabular">
+              {props.hoverObj?.obj?.distributor?.name}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {props.hoverObj?.type === "CODE" && (
+        <div>
+          <div className="d-flex">
+            <div className="tabular bg-gray">Code</div>
+            <div className="tabular bg-gray">Exception</div>
+            <div className="tabular bg-gray">Service</div>
+          </div>
+          {props.hoverObj?.obj?.map((obj, i) => (
+            <div className="d-flex" key={i}>
+              <div className="tabular">{obj.code?.code}</div>
+              <div className="tabular">{obj.code?.name}</div>
+              <div className="tabular">{obj.service}</div>
+            </div>
+          ))}
+        </div>
+      )}
+      <small>
+        ** <b>Note</b> If you hover over (harvester) (location) and (code).
+        Extra information will appear here **
+      </small>
+    </>
   );
 };
 
@@ -460,6 +535,10 @@ export const FormQuery = (props) => {
 DownloadButton.propTypes = {
   popUp: PropTypes.func,
   downloadRef: PropTypes.object,
+};
+
+HoverTabular.propTypes = {
+  hoverObj: PropTypes.object,
 };
 
 ExceptTabular.propTypes = {

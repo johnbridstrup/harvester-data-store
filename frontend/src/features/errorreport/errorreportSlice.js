@@ -33,6 +33,7 @@ const initialState = {
     erroredservices: [],
     exceptions: [],
   },
+  hovered: null,
 };
 
 export const errorreportListView = createAsyncThunk(
@@ -141,6 +142,9 @@ const errorreportSlice = createSlice({
     copyQueryUrl: (state, action) => {
       state.queryUrl = action.payload;
     },
+    hoverEffect: (state, action) => {
+      state.hovered = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -237,5 +241,6 @@ const errorreportSlice = createSlice({
   },
 });
 
-export const { timezoneUpdate, copyQueryUrl } = errorreportSlice.actions;
+export const { timezoneUpdate, copyQueryUrl, hoverEffect } =
+  errorreportSlice.actions;
 export default errorreportSlice.reducer;
