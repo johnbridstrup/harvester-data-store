@@ -590,7 +590,7 @@ CodeHover.propTypes = {
 FormQuery.propTypes = {
   handleFormQuerySubmit: PropTypes.func,
   harvesterOptions: PropTypes.array,
-  handleHarvestSelect: PropTypes.array,
+  handleHarvestSelect: PropTypes.func,
   selectedHarvId: PropTypes.array,
   locationOptions: PropTypes.array,
   handleLocationSelect: PropTypes.func,
