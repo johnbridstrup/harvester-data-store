@@ -1,6 +1,8 @@
-import { useState, useEffect, lazy, Suspense } from "react";
+import { useState, useEffect, lazy, Suspense, useRef } from "react";
 import { useSelector } from "react-redux";
+import s3FileService from "../../features/s3file/s3fileService";
 import { Loader, robotInError, timeStampFormat } from "../../utils/utils";
+import DownloadModal from "../modals/DownloadModal";
 import {
   Container,
   LoaderDiv,
@@ -13,7 +15,7 @@ import {
 import ErrorReportDetailTable from "../tables/ErrorReportDetailTable";
 import ServiceTable from "../tables/ServiceTable";
 import TimeTable from "../tables/TimeTable";
-import { ExceptTabular } from "./ErrorHelpers";
+import { DownloadButton, ExceptTabular } from "./ErrorHelpers";
 const ChronyInfoPlot = lazy(() => import("../plotly/ChronyInfoPlot"));
 const ErrorReportJson = lazy(() => import("./ErrorReportJson"));
 
@@ -44,7 +46,9 @@ function ErrorReportDetail(props) {
       exceptions,
     },
   } = useSelector((state) => state.errorreport);
+  const { token } = useSelector((state) => state.auth);
   const exceptObj = exceptions[activeTab.exception];
+  const downloadRef = useRef();
 
   useEffect(() => {
     setSysmonReport((current) => sysmonreport);
@@ -105,8 +109,23 @@ function ErrorReportDetail(props) {
     }
   };
 
+  const downloadPopUp = () => {
+    downloadRef.current.click();
+  };
+
+  const handleDownloadFiles = async (fileObj) => {
+    const s3fileUrl = await s3FileService.s3FileDownload(fileObj.url, token);
+    const link = document.createElement("a");
+    link.href = s3fileUrl;
+    link.setAttribute("target", `_blank`);
+    link.setAttribute("rel", "noopener");
+    document.body.appendChild(link);
+    link.click();
+  };
+
   return (
     <>
+      <DownloadButton popUp={downloadPopUp} downloadRef={downloadRef} />
       <ErrorReportDetailTable reportObj={reportobj} timezone={timezone} />
       <div className="row">
         <div className="col-md-7">
@@ -256,6 +275,10 @@ function ErrorReportDetail(props) {
           <ErrorReportJson reportObj={reportobj} />
         </Suspense>
       </Container>
+      <DownloadModal
+        eventObj={reportobj?.event}
+        handleDownload={handleDownloadFiles}
+      />
     </>
   );
 }
