@@ -10,6 +10,10 @@ from exceptions.serializers import AFTExceptionSerializer
 from rest_framework import serializers
 
 
+NO_TRACEBACK_STR = 'No Traceback Available (HDS)'
+NO_VALUE_STR = 'No Value Available (HDS)'
+
+
 class ErrorReportSerializer(EventSerializerMixin, ReportSerializerBase):
     """Serializer for the ErrorReport model"""
     exceptions = AFTExceptionSerializer(many=True, required=False)
@@ -50,16 +54,20 @@ class ErrorReportSerializer(EventSerializerMixin, ReportSerializerBase):
             if "errors" in sysdict:
                 for serv, errdict in sysdict['errors'].items():
                     service, index = serv.split('.')
-                    node = sysdict.get('robot_index', index)
+                    robot = sysdict.get('robot_index', index)
+                    node = sysdict.get('index', 0)
                     code = errdict.get('code', 0)
                     timestamp = cls.extract_timestamp(errdict.get('ts'))
-                    traceback = errdict.get('traceback', 'No Traceback Available')
+                    traceback = errdict.get('traceback', NO_TRACEBACK_STR)
+                    info = errdict.get('value', NO_VALUE_STR)
                     errors.append(
                         {
                             "code": code,
                             "service": service,
                             "node": node,
+                            "robot": robot,
                             "traceback": traceback,
+                            "info": info,
                             "timestamp": timestamp,
                         }
                     )

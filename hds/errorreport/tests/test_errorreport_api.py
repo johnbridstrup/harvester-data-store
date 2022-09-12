@@ -19,6 +19,10 @@ class ErrorReportAPITest(HDSAPITestBase):
         with open(report_json_path) as f:
             self.data = json.load(f)
 
+    def _extract_service_node(self, serv_str):
+        serv_split = serv_str.split('.')
+        return serv_split[0], serv_split[1]
+
     def test_create_errorreport_no_uuid(self):
         """ create error report and assert it exists """
         r = self.client.post(f'{self.api_base_url}/errorreports/', self.data, format='json', HTTP_ACCEPT='application/json')
@@ -111,14 +115,17 @@ class ErrorReportAPITest(HDSAPITestBase):
         errs = ErrorReportSerializer._extract_exception_data(self.data['data']['sysmon_report'])
         
         errdict = self.data['data']['sysmon_report']['sysmon.0']['errors']
-        serv = 'traychg.0'
+        serv_str = list(errdict.keys())[0]
+        service, node = self._extract_service_node(serv_str)
 
         compare = {
-            'code': errdict[serv]['code'],
-            'service': serv.split('.')[0],
-            'node': int(serv.split('.')[1]),
-            'traceback': errdict[serv]['traceback'],
-            'timestamp': ErrorReportSerializer.extract_timestamp(errdict[serv]['ts'])
+            'code': errdict[serv_str]['code'],
+            'service': service,
+            'node': int(node),
+            'robot': int(node),
+            'traceback': errdict[serv_str]['traceback'],
+            'info': errdict[serv_str]['value'],
+            'timestamp': ErrorReportSerializer.extract_timestamp(errdict[serv_str]['ts'])
         }
         self.assertDictEqual(errs[0], compare)
 

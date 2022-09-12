@@ -27,7 +27,9 @@ class AFTException(CommonInfo):
     code = models.ForeignKey(AFTExceptionCode, on_delete=models.SET_NULL, null=True)
     service = models.TextField(max_length=20, blank=True, null=True)
     node = models.IntegerField(blank=True, null=True)
+    robot = models.IntegerField(null=True, blank=True)
     traceback = models.TextField(blank=True, null=True)
+    info = models.TextField(blank=True, null=True)
     timestamp = models.DateTimeField(blank=True, null=True)
     report = models.ForeignKey(ErrorReport, on_delete=models.SET_NULL, null=True, related_name="exceptions")
 

@@ -60,6 +60,7 @@ class AFTExceptionTestCase(ExceptionTestBase):
     SERVICE = 'TestService'
     NODE = 1
     TRACEBACK = "Test traceback"
+    INFO = "Test value"
     TIMESTAMP = datetime.now().replace(tzinfo=pytz.utc)
 
     @classmethod
@@ -72,6 +73,8 @@ class AFTExceptionTestCase(ExceptionTestBase):
             code=code,
             service=cls.SERVICE,
             node=cls.NODE,
+            robot=cls.NODE,
+            info=cls.INFO,
             traceback=cls.TRACEBACK,
             timestamp=cls.TIMESTAMP
         )
@@ -82,6 +85,8 @@ class AFTExceptionTestCase(ExceptionTestBase):
         self.assertEqual(exc.code.code, self.CODES[0]['code'])
         self.assertEqual(exc.service, self.SERVICE)
         self.assertEqual(exc.node, self.NODE)
+        self.assertEqual(exc.robot, self.NODE)
+        self.assertEqual(exc.info, self.INFO)
         self.assertEqual(exc.traceback, self.TRACEBACK)
         self.assertEqual(exc.timestamp, self.TIMESTAMP)
         

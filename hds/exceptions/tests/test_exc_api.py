@@ -14,6 +14,8 @@ class AFTExceptionTest(ExceptionTestBase):
                 'code': code,
                 'service': service,
                 'node': node,
+                'robot': node,
+                'value': 'Test value',
                 'traceback': 'Test traceback',
                 'timestamp': str(ts)
             }
