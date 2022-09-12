@@ -15,7 +15,7 @@ class S3FileSerializer(EventSerializerMixin, serializers.ModelSerializer):
 
     @classmethod
     def get_filetype_uuid(cls, key):
-        filetype = key.split('_')[0]
+        filetype = key.split('/')[-1].split('_')[0]
         UUID = key.split('_')[-1].split('.')[0]
         return filetype, UUID
 
