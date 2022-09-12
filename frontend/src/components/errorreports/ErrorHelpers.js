@@ -86,19 +86,25 @@ export const HoverTabular = (props) => {
       )}
 
       {props.hoverObj?.type === "CODE" && (
-        <div>
-          <div className="d-flex">
-            <div className="tabular bg-gray">Code</div>
-            <div className="tabular bg-gray">Exception</div>
-            <div className="tabular bg-gray">Service</div>
-          </div>
-          {props.hoverObj?.obj?.map((obj, i) => (
-            <div className="d-flex" key={i}>
-              <div className="tabular">{obj.code?.code}</div>
-              <div className="tabular">{obj.code?.name}</div>
-              <div className="tabular">{obj.service}</div>
-            </div>
-          ))}
+        <div className="table-responsive">
+          <table className="table">
+            <thead>
+              <tr>
+                <th style={{ background: "#f4f4f4" }}>Code</th>
+                <th style={{ background: "#f4f4f4" }}>Exception</th>
+                <th style={{ background: "#f4f4f4" }}>Service</th>
+              </tr>
+            </thead>
+            <tbody>
+              {props.hoverObj?.obj?.map((obj, i) => (
+                <tr key={i}>
+                  <td>{obj.code?.code}</td>
+                  <td>{obj.code?.name}</td>
+                  <td>{obj.service}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       )}
       <small>
