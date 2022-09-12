@@ -20,7 +20,7 @@ const extractServiceCodes = (exceptions = []) => {
   let services = [];
   let codes = [];
   exceptions.forEach((exec) => {
-    services.push(`${exec.service}.${exec.node}`);
+    services.push(`${exec.service}.${exec.robot}`);
     codes.push(exec.code.code);
   });
   return { services, codes };
@@ -164,7 +164,7 @@ export const transformReportDetail = (report = {}) => {
 export const transformExceptionObj = (exceptions = []) => {
   let exceptObj = {};
   exceptions.forEach((obj) => {
-    exceptObj[`${obj.service}.${obj.node}: ${obj.code.code}`] = obj;
+    exceptObj[`${obj.service}.${obj.robot}: ${obj.code.code}`] = obj;
   });
   return exceptObj;
 };
@@ -381,7 +381,7 @@ export const aggregateOptions = [
   { label: "harvester", value: "report__harvester__name" },
   { label: "exception", value: "code__name" },
   { label: "team", value: "code__team" },
-  { label: "robot", value: "node" },
+  { label: "robot", value: "robot" },
   { label: "location", value: "report__location__ranch" },
 ];
 
