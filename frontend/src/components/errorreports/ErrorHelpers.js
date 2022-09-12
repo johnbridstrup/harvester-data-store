@@ -90,9 +90,9 @@ export const HoverTabular = (props) => {
           <table className="table">
             <thead>
               <tr>
-                <th style={{ background: "#f4f4f4" }}>Code</th>
-                <th style={{ background: "#f4f4f4" }}>Exception</th>
-                <th style={{ background: "#f4f4f4" }}>Service</th>
+                <th className="bordered-th">Code</th>
+                <th className="bordered-th">Exception</th>
+                <th className="bordered-th">Service</th>
               </tr>
             </thead>
             <tbody>

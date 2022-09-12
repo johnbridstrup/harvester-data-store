@@ -1,5 +1,4 @@
-.flex-right {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
+.bordered-th {
+  background: #f4f4f4;
+  border: 1px solid #ccc;
 }
