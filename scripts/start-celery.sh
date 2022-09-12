@@ -7,6 +7,12 @@ cd hds
 echo "Migrating"
 python manage.py migrate
 
+echo "Creating Superuser"
+python manage.py initsuperuser
+
+echo "Creating SQS Token"
+python manage.py create_sqs_user
+
 until [ -d /opt/app/multiproc-tmp ]
 do
     echo "Celery waiting for multiproc dir"

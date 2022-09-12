@@ -4,12 +4,6 @@
 set -e
 cd hds
 
-echo "Creating Superuser"
-python manage.py initsuperuser
-
-echo "Creating SQS Token"
-python manage.py create_sqs_user
-
 echo "Creating prometheus multi-process directory"
 if [ -d "/opt/app/multiproc-tmp" ]
 then
