@@ -230,10 +230,19 @@ function ErrorReportQuery(props) {
     }
   };
 
+  const queryColClassName =
+    hovered?.type === "CODE"
+      ? "col-lg-6 col-md-6 col-sm-12"
+      : "col-lg-9 col-md-8 col-sm-12";
+  const hoverColClassName =
+    hovered?.type === "CODE"
+      ? "col-lg-6 col-md-6 col-sm-12"
+      : "col-lg-3 col-md-4 col-sm-12";
+
   return (
     <>
       <div className="row">
-        <div className="col-lg-9 col-md-8 col-sm-12">
+        <div className={queryColClassName}>
           <div>
             <FormQuery
               codeOptions={codeOptions}
@@ -264,7 +273,7 @@ function ErrorReportQuery(props) {
             />
           </div>
         </div>
-        <div className="col-lg-3 col-md-4 col-sm-12">
+        <div className={hoverColClassName}>
           <DivTotalReport className="total-report">
             <span>Total Report</span>
             <span>{count}</span>
