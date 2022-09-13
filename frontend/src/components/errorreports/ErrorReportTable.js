@@ -1,17 +1,28 @@
 import { useSelector, useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { hoverEffect } from "../../features/errorreport/errorreportSlice";
 import { Loader, timeStampFormat } from "../../utils/utils";
 import { Container, LoaderDiv, SpanTarget, Table, Td } from "../styled";
 
 function ErrorReportTable(props) {
-  const { reports, loading, timezone } = useSelector(
-    (state) => state.errorreport
-  );
+  const {
+    reports,
+    loading,
+    timezone,
+    internal: { searchObj },
+  } = useSelector((state) => state.errorreport);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { search } = useLocation();
 
-  const navigateToDetail = (reportId) => navigate(`/errorreports/${reportId}`);
+  const navigateToDetail = (reportId) => {
+    const params = new URLSearchParams(searchObj || {});
+    if (searchObj) {
+      navigate(`/errorreports/${reportId}?${params.toString()}`);
+    } else {
+      navigate(`/errorreports/${reportId}${search.toString()}`);
+    }
+  };
 
   const handleOnMouseEnter = (e, index, target, obj) => {
     dispatch(hoverEffect({ obj, type: target.toUpperCase() }));

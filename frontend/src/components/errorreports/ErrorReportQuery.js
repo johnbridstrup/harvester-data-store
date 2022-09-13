@@ -22,6 +22,7 @@ import {
   validateQueryObj,
 } from "../../utils/utils";
 import {
+  cacheParamsObj,
   copyQueryUrl,
   createNotification,
   queryErrorReport,
@@ -46,7 +47,10 @@ function ErrorReportQuery(props) {
   });
   const [traceback, setTraceback] = useState("");
   const [generic, setGeneric] = useState("");
-  const { count, hovered } = useSelector((state) => state.errorreport);
+  const {
+    count,
+    internal: { hovered },
+  } = useSelector((state) => state.errorreport);
   const { harvesters } = useSelector((state) => state.harvester);
   const { locations } = useSelector((state) => state.location);
   const { fruits } = useSelector((state) => state.fruit);
@@ -191,6 +195,7 @@ function ErrorReportQuery(props) {
     let queryObj = buildQueryObj();
     await dispatch(queryErrorReport(queryObj));
     dispatch(copyQueryUrl(copiedUrl(queryObj)));
+    dispatch(cacheParamsObj(queryObj));
     pushState(queryObj, false);
   };
 

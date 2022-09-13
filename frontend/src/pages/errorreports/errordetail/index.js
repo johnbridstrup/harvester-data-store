@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import { BackButton } from "../../../components/errorreports/ErrorHelpers";
 import ErrorReportDetail from "../../../components/errorreports/ErrorReportDetail";
 import Header from "../../../components/layout/header";
@@ -9,13 +9,15 @@ import { LoaderDiv } from "../../../components/styled";
 import { detailErrorReport } from "../../../features/errorreport/errorreportSlice";
 import { listHarvesters } from "../../../features/harvester/harvesterSlice";
 import { listLocations } from "../../../features/location/locationSlice";
-import { Loader } from "../../../utils/utils";
+import { Loader, paramsToObject } from "../../../utils/utils";
 import "./styles.css";
 
 function ErrorsReportDetail(props) {
   const { loading } = useSelector((state) => state.errorreport);
   const params = useParams();
   const dispatch = useDispatch();
+  const { search } = useLocation();
+  const paramsObj = paramsToObject(search);
 
   useEffect(() => {
     (async () => {
@@ -31,7 +33,7 @@ function ErrorsReportDetail(props) {
     <MainLayout>
       <div className="container">
         <div>
-          <BackButton />
+          <BackButton paramsObj={paramsObj} />
           <Header
             title={"HDS Prototype: Error Reports"}
             className={"display-6 mb-4"}
