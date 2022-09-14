@@ -81,7 +81,7 @@ const BaseRouter = () => {
           }
         />
         <Route
-          path="/users/add"
+          path="/users/all"
           element={
             <RequireUser>
               <IsAdminOnly>
