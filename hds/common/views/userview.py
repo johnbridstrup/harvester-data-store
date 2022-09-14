@@ -7,7 +7,7 @@ from django.middleware.csrf import get_token
 from rest_framework.authtoken.models import Token
 from common.renderers import HDSJSONRenderer
 from common.utils import make_ok
-from common.serializers.userserializer import UserSerializer
+from common.serializers.userserializer import UserCreateSerializer, UserSerializer
 
 
 class LoginAPIView(APIView):
@@ -70,6 +70,13 @@ class ManageUserView(ModelViewSet):
     permission_classes = (IsAuthenticated,)
     queryset = User.objects.all()
 
+    def get_serializer_class(self):
+        """
+        switch serializer to UserCreateSerializer for create action
+        """
+        if self.action == "create":
+            self.serializer_class = UserCreateSerializer
+        return self.serializer_class
 
 class ChangePasswordView(APIView):
     """validate user password and update new password"""

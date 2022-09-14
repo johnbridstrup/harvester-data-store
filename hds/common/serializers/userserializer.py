@@ -53,3 +53,48 @@ class UserSerializer(serializers.ModelSerializer):
                 serializer.save()
 
         return user
+
+
+class UserCreateSerializer(UserSerializer):
+    """user creation serializer.
+    it overrides the required UserProfile.user attr
+    """
+    profile = serializers.JSONField(required=False)
+
+    class Meta(UserSerializer.Meta):
+        fields = UserSerializer.Meta.fields
+
+    def create(self, validated_data):
+        """create and return the user"""
+        password = validated_data.pop("password", None)
+        profile = validated_data.pop("profile", None)
+        request = self.context.get("request")
+
+        if not request.user.is_superuser:
+            msg = _("Unable to authorize user for create action")
+            raise serializers.ValidationError(msg, code="authorization")
+
+        user = super().create(validated_data)
+
+        if password:
+            user.set_password(password)
+            user.save()
+
+        if not profile:
+            profile = {}
+
+        profile['user'] = user.pk
+        serializer = ProfileSerializer(data=profile)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+
+        return user
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data['profile'] = {
+            'id': instance.profile.id,
+            'slack_id': instance.profile.slack_id,
+            'user': instance.pk
+        }
+        return data
