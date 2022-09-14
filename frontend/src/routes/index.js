@@ -8,7 +8,8 @@ import Home from "../pages/home";
 import NotificationDetail from "../pages/notification/notifydetail";
 import NotificationList from "../pages/notification/notifylist";
 import UserProfileView from "../pages/profile/profiledetail";
-import { RequireUser, UserAuth } from "../utils/guards";
+import UserListView from "../pages/users/userslist";
+import { IsAdminOnly, RequireUser, UserAuth } from "../utils/guards";
 
 const BaseRouter = () => {
   return (
@@ -75,6 +76,16 @@ const BaseRouter = () => {
           element={
             <RequireUser>
               <NotificationDetail />
+            </RequireUser>
+          }
+        />
+        <Route
+          path="/users/add"
+          element={
+            <RequireUser>
+              <IsAdminOnly>
+                <UserListView />
+              </IsAdminOnly>
             </RequireUser>
           }
         />

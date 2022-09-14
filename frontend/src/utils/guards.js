@@ -22,3 +22,12 @@ export const UserAuth = (props) => {
     return props.children;
   }
 };
+
+export const IsAdminOnly = (props) => {
+  const { token, user, isAuthenticated } = useSelector((state) => state.auth);
+  if (token && isAuthenticated && user?.is_superuser) {
+    return props.children;
+  } else {
+    return <Navigate to={{ pathname: "/forbidden" }} />;
+  }
+};
