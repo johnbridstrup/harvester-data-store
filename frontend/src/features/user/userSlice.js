@@ -4,6 +4,7 @@ import userService from "./userService";
 
 const initialState = {
   loading: false,
+  adding: false,
   user: {},
   users: [],
   errorMsg: null,
@@ -41,6 +42,22 @@ export const getUserById = createAsyncThunk(
   }
 );
 
+export const createUser = createAsyncThunk(
+  "user/createUser",
+  async (userData, thunkAPI) => {
+    try {
+      const {
+        auth: { token },
+      } = thunkAPI.getState();
+      return await userService.createUser(userData, token);
+    } catch (error) {
+      console.log(error);
+      const message = invalidateCache(error, thunkAPI.dispatch);
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 const userSlice = createSlice({
   name: "user",
   initialState,
@@ -67,6 +84,16 @@ const userSlice = createSlice({
       })
       .addCase(getUserById.rejected, (state, action) => {
         state.loading = false;
+        state.errorMsg = action.payload;
+      })
+      .addCase(createUser.pending, (state, action) => {
+        state.adding = true;
+      })
+      .addCase(createUser.fulfilled, (state, action) => {
+        state.adding = false;
+      })
+      .addCase(createUser.rejected, (state, action) => {
+        state.adding = false;
         state.errorMsg = action.payload;
       });
   },

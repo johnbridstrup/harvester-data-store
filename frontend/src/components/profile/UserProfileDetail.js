@@ -59,9 +59,9 @@ function UserProfileDetail(props) {
         username: user && user.username ? user.username : "",
         email: user && user.email ? user.email : "",
         slack_id: user && user.profile?.slack_id ? user.profile?.slack_id : "",
-        is_active: user && user.is_active ? user.is_active : "",
-        is_staff: user && user.is_staff ? user.is_staff : "",
-        is_superuser: user && user.is_superuser ? user.is_superuser : "",
+        is_active: user && user.is_active ? user.is_active : false,
+        is_staff: user && user.is_staff ? user.is_staff : false,
+        is_superuser: user && user.is_superuser ? user.is_superuser : false,
         last_login: user && user.last_login ? user.last_login : "",
       };
     });

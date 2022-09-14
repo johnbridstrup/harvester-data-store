@@ -77,6 +77,11 @@ function Navbar(props) {
                 </Link>
               </div>
               <div className="py-2">
+                <Link to="/users/all" className="link-item">
+                  <i className="las la-users size-2x"></i> Users
+                </Link>
+              </div>
+              <div className="py-2">
                 <Link to="/accounts/settings" className="link-item">
                   <i className="las la-cog size-2x"></i> Settings
                 </Link>

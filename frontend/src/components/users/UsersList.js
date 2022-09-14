@@ -1,6 +1,8 @@
 import moment from "moment";
 import { useRef, useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { toast } from "react-toastify";
+import { createUser, listUsers } from "../../features/user/userSlice";
 import { Loader } from "../../utils/utils";
 import UserModal from "../modals/UserModal";
 import { LoaderDiv } from "../styled";
@@ -12,22 +14,36 @@ function UsersList(props) {
     username: "",
     slack_id: "",
     email: "",
+    password: "",
+    password2: "",
   });
   const { users, loading } = useSelector((state) => state.user);
   const userRef = useRef();
+  const dispatch = useDispatch();
 
   const handleFieldChange = (e) => {
     setFieldData((current) => {
       return { ...current, [e.target.name]: e.target.value };
     });
   };
-  const handleFormSubmit = (e) => {
-    e.preventDefault();
-    console.log(fieldData);
-  };
 
   const modalPopUp = () => {
     userRef.current.click();
+  };
+
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
+    if (fieldData.password !== fieldData.password2) {
+      toast.error("passwords do not match!");
+      return;
+    }
+    const data = { ...fieldData, profile: { slack_id: fieldData.slack_id } };
+    const res = await dispatch(createUser(data));
+    if (res.type === "user/createUser/fulfilled") {
+      await dispatch(listUsers());
+      toast.success("User created successfully");
+      modalPopUp();
+    }
   };
 
   return (

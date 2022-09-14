@@ -2,7 +2,15 @@ import PropTypes from "prop-types";
 import { Loader } from "../../utils/utils";
 
 function UserModal(props) {
-  const { first_name, last_name, username, slack_id, email } = props.fieldData;
+  const {
+    first_name,
+    last_name,
+    username,
+    slack_id,
+    email,
+    password,
+    password2,
+  } = props.fieldData;
   return (
     <div className="col-md-8">
       <div
@@ -91,6 +99,32 @@ function UserModal(props) {
                         className="form-control"
                         name="username"
                         value={username}
+                        onChange={props.handleChange}
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div className="row">
+                  <div className="col-md-6">
+                    <div className="form-group">
+                      <label htmlFor="password">Password</label>
+                      <input
+                        type="password"
+                        className="form-control"
+                        name="password"
+                        value={password}
+                        onChange={props.handleChange}
+                      />
+                    </div>
+                  </div>
+                  <div className="col-md-6">
+                    <div className="form-group">
+                      <label htmlFor="password2">Confirm Password</label>
+                      <input
+                        type="password"
+                        className="form-control"
+                        name="password2"
+                        value={password2}
                         onChange={props.handleChange}
                       />
                     </div>
