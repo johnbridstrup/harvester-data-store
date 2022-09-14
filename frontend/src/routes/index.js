@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Forbidden from "../pages/403";
 import NotFound from "../pages/404";
 import Login from "../pages/auth/login";
 import ErrorsReportDetail from "../pages/errorreports/errordetail";
@@ -86,6 +87,14 @@ const BaseRouter = () => {
               <IsAdminOnly>
                 <UserListView />
               </IsAdminOnly>
+            </RequireUser>
+          }
+        />
+        <Route
+          path="/forbidden"
+          element={
+            <RequireUser>
+              <Forbidden />
             </RequireUser>
           }
         />
