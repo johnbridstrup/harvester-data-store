@@ -1,5 +1,9 @@
+import moment from "moment";
 import { useRef, useState } from "react";
+import { useSelector } from "react-redux";
+import { Loader } from "../../utils/utils";
 import UserModal from "../modals/UserModal";
+import { LoaderDiv } from "../styled";
 
 function UsersList(props) {
   const [fieldData, setFieldData] = useState({
@@ -9,6 +13,7 @@ function UsersList(props) {
     slack_id: "",
     email: "",
   });
+  const { users, loading } = useSelector((state) => state.user);
   const userRef = useRef();
 
   const handleFieldChange = (e) => {
@@ -41,41 +46,43 @@ function UsersList(props) {
           Create Notification
         </button>
       </div>
-      <div className="table-responsive">
-        <table className="table">
-          <thead>
-            <tr>
-              <th>Username</th>
-              <th>Slack ID</th>
-              <th>First Name</th>
-              <th>Last Name</th>
-              <th>Status</th>
-              <th>Role</th>
-              <th>Last Login</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>aft</td>
-              <td>slack@aft.aft</td>
-              <td>Aft</td>
-              <td>Aft</td>
-              <td>Active</td>
-              <td>Staff, Superuser</td>
-              <td>{new Date().toLocaleDateString()}</td>
-            </tr>
-            <tr>
-              <td>not_aft</td>
-              <td>slack@not_aft.aft</td>
-              <td>Not Aft</td>
-              <td>Not Aft</td>
-              <td>Active</td>
-              <td>Staff</td>
-              <td>{new Date().toLocaleDateString()}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      {loading ? (
+        <LoaderDiv>
+          <Loader size={50} />
+        </LoaderDiv>
+      ) : (
+        <div className="table-responsive">
+          <table className="table">
+            <thead>
+              <tr>
+                <th>Username</th>
+                <th>Slack ID</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Status</th>
+                <th>Role</th>
+                <th>Last Login</th>
+              </tr>
+            </thead>
+            <tbody>
+              {users.map((user, index) => (
+                <tr key={index}>
+                  <td>{user.username}</td>
+                  <td>{user.profile.slack_id}</td>
+                  <td>{user.first_name}</td>
+                  <td>{user.last_name}</td>
+                  <td>{user.is_active ? "Active" : "Inactive"}</td>
+                  <td>
+                    {user.is_staff ? "Staff" : "Regular User"}{" "}
+                    {user.is_superuser && "Superuser"}
+                  </td>
+                  <td>{moment(user.last_login).format("LLLL")}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
       <UserModal
         fieldData={fieldData}
         handleChange={handleFieldChange}
