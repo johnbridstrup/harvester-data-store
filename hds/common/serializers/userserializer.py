@@ -92,9 +92,5 @@ class UserCreateSerializer(UserSerializer):
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
-        data['profile'] = {
-            'id': instance.profile.id,
-            'slack_id': instance.profile.slack_id,
-            'user': instance.pk
-        }
+        data['profile'] = ProfileSerializer(instance=instance.profile).data
         return data

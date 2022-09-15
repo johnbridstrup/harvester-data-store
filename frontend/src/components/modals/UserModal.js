@@ -76,7 +76,6 @@ function UserModal(props) {
                         name="slack_id"
                         value={slack_id}
                         onChange={props.handleChange}
-                        required
                       />
                     </div>
                   </div>
