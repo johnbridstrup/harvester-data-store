@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import { createUser, listUsers } from "../../features/user/userSlice";
 import { Loader } from "../../utils/utils";
 import UserModal from "../modals/UserModal";
+import { UserPagination } from "../pagination/Pagination";
 import { LoaderDiv } from "../styled";
 
 function UsersList(props) {
@@ -106,7 +107,7 @@ function UsersList(props) {
           </table>
         </div>
       )}
-
+      <UserPagination />
       <UserModal
         fieldData={fieldData}
         handleChange={handleFieldChange}

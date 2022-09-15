@@ -8,6 +8,13 @@ const initialState = {
   user: {},
   users: [],
   errorMsg: null,
+  pagination: {
+    next: null,
+    previous: null,
+    count: null,
+    limit: 10,
+    offset: 1,
+  },
 };
 
 export const listUsers = createAsyncThunk(
@@ -58,6 +65,22 @@ export const createUser = createAsyncThunk(
   }
 );
 
+export const paginateUser = createAsyncThunk(
+  "errorreport/paginateUser",
+  async (url, thunkAPI) => {
+    try {
+      const {
+        auth: { token },
+      } = thunkAPI.getState();
+      return await userService.paginateUser(url, token);
+    } catch (error) {
+      console.log(error);
+      const message = invalidateCache(error, thunkAPI.dispatch);
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 const userSlice = createSlice({
   name: "user",
   initialState,
@@ -69,7 +92,10 @@ const userSlice = createSlice({
       })
       .addCase(listUsers.fulfilled, (state, action) => {
         state.loading = false;
-        state.users = action.payload;
+        state.users = action.payload.results;
+        state.pagination.count = action.payload.count;
+        state.pagination.next = action.payload.next;
+        state.pagination.previous = action.payload.previous;
       })
       .addCase(listUsers.rejected, (state, action) => {
         state.loading = false;
@@ -94,6 +120,20 @@ const userSlice = createSlice({
       })
       .addCase(createUser.rejected, (state, action) => {
         state.adding = false;
+        state.errorMsg = action.payload;
+      })
+      .addCase(paginateUser.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(paginateUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.users = action.payload.results;
+        state.pagination.count = action.payload.count;
+        state.pagination.next = action.payload.next;
+        state.pagination.previous = action.payload.previous;
+      })
+      .addCase(paginateUser.rejected, (state, action) => {
+        state.loading = false;
         state.errorMsg = action.payload;
       });
   },

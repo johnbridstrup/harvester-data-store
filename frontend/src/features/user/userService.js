@@ -5,7 +5,7 @@ const USERS_URL = `${API_URL}/users/profiles/`;
 
 const listUsers = async (token, limit = 10) => {
   let response = await axiosService.get(`${USERS_URL}?limit=${limit}`, token);
-  return response.results;
+  return response;
 };
 
 const getUserById = async (userId, token) => {
@@ -18,10 +18,16 @@ const createUser = async (userData, token) => {
   return response;
 };
 
+const paginateUser = async (url, token) => {
+  const response = await axiosService.get(url, token);
+  return response;
+};
+
 const userService = {
   listUsers,
   getUserById,
   createUser,
+  paginateUser,
 };
 
 export default userService;
