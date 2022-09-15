@@ -94,7 +94,7 @@ function UserModal(props) {
                   </div>
                 </div>
                 <div className="row">
-                  <div className="col">
+                  <div className="col-md-6">
                     <div className="form-group">
                       <label htmlFor="username">Username</label>
                       <input
@@ -105,6 +105,20 @@ function UserModal(props) {
                         onChange={props.handleChange}
                         required
                       />
+                    </div>
+                  </div>
+                  <div className="col-md-6">
+                    <div className="form-check mt-4">
+                      <input
+                        className="form-check-input"
+                        name="is_staff"
+                        type="checkbox"
+                        value=""
+                        onChange={props.handleChange}
+                      />
+                      <label className="form-check-label" htmlFor="is_staff">
+                        Is Staff User
+                      </label>
                     </div>
                   </div>
                 </div>

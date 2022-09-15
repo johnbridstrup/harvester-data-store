@@ -14,6 +14,7 @@ function UsersList(props) {
     username: "",
     slack_id: "",
     email: "",
+    is_staff: "",
     password: "",
     password2: "",
   });
@@ -22,9 +23,15 @@ function UsersList(props) {
   const dispatch = useDispatch();
 
   const handleFieldChange = (e) => {
-    setFieldData((current) => {
-      return { ...current, [e.target.name]: e.target.value };
-    });
+    if (e.target.name === "is_staff") {
+      setFieldData((current) => {
+        return { ...current, is_staff: e.target.checked };
+      });
+    } else {
+      setFieldData((current) => {
+        return { ...current, [e.target.name]: e.target.value };
+      });
+    }
   };
 
   const modalPopUp = () => {
@@ -99,6 +106,7 @@ function UsersList(props) {
           </table>
         </div>
       )}
+
       <UserModal
         fieldData={fieldData}
         handleChange={handleFieldChange}
