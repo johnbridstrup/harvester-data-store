@@ -48,6 +48,7 @@ function UserModal(props) {
                         name="first_name"
                         value={first_name}
                         onChange={props.handleChange}
+                        required
                       />
                     </div>
                   </div>
@@ -60,6 +61,7 @@ function UserModal(props) {
                         name="last_name"
                         value={last_name}
                         onChange={props.handleChange}
+                        required
                       />
                     </div>
                   </div>
@@ -74,6 +76,7 @@ function UserModal(props) {
                         name="slack_id"
                         value={slack_id}
                         onChange={props.handleChange}
+                        required
                       />
                     </div>
                   </div>
@@ -86,6 +89,7 @@ function UserModal(props) {
                         name="email"
                         value={email}
                         onChange={props.handleChange}
+                        required
                       />
                     </div>
                   </div>
@@ -100,6 +104,7 @@ function UserModal(props) {
                         name="username"
                         value={username}
                         onChange={props.handleChange}
+                        required
                       />
                     </div>
                   </div>
@@ -114,6 +119,7 @@ function UserModal(props) {
                         name="password"
                         value={password}
                         onChange={props.handleChange}
+                        required
                       />
                     </div>
                   </div>
@@ -126,6 +132,7 @@ function UserModal(props) {
                         name="password2"
                         value={password2}
                         onChange={props.handleChange}
+                        required
                       />
                     </div>
                   </div>
