@@ -5,7 +5,6 @@ import { ERROR_REPORT_URL } from "../../features/errorreport/errorreportService"
 import { paginateErrorReport } from "../../features/errorreport/errorreportSlice";
 import { paginateNotification } from "../../features/notification/notificationSlice";
 import { paginateUser } from "../../features/user/userSlice";
-import { debounce } from "../../utils/utils";
 import { InputLimit, PageItem, SpanLimit } from "../styled";
 
 function Pagination(props) {
@@ -15,12 +14,15 @@ function Pagination(props) {
   const dispatch = useDispatch();
   const { search } = useLocation();
 
-  const handleOnLimitChange = debounce(async (limit) => {
+  const handleOnLimitChange = (limit) => {
     setPageLimit(limit);
+  };
+
+  const handleOnLimitSubmit = async () => {
     let url;
     if (typeof queryUrl === "string" && queryUrl.length > 0) {
       url = new URL(queryUrl);
-      url.searchParams.set("limit", limit);
+      url.searchParams.set("limit", pageLimit);
       await dispatch(
         paginateErrorReport(
           `${ERROR_REPORT_URL}?${url.searchParams.toString()}`
@@ -29,10 +31,10 @@ function Pagination(props) {
     } else {
       let urlStr = `${ERROR_REPORT_URL}?${search.toString()}`;
       url = new URL(urlStr);
-      url.searchParams.set("limit", limit);
+      url.searchParams.set("limit", pageLimit);
       await dispatch(paginateErrorReport(url));
     }
-  }, 100);
+  };
 
   const handlePagination = async (navigation) => {
     if (navigation === "next") {
@@ -84,6 +86,9 @@ function Pagination(props) {
                 value={pageLimit}
                 onChange={(e) => handleOnLimitChange(e.target.value)}
               />
+              <SpanLimit className="btn btn-sm" onClick={handleOnLimitSubmit}>
+                Go
+              </SpanLimit>
             </PageItem>
           </ul>
         </nav>
