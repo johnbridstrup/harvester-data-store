@@ -49,7 +49,11 @@ function ErrorReportTable(props) {
           </thead>
           <tbody className="report-tbody">
             {reports.map((report, index) => (
-              <tr key={index} onClick={() => navigateToDetail(report.reportId)}>
+              <tr
+                key={index}
+                onClick={() => navigateToDetail(report.reportId)}
+                className="tr-hover cursor"
+              >
                 <td>{timeStampFormat(report.reportTime, timezone)}</td>
                 <Td>
                   <SpanTarget

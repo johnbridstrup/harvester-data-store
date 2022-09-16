@@ -1,14 +1,5 @@
-.table-responsive .table tr {
-  cursor: pointer;
-}
-
-.table-responsive .table tr:hover {
-  background-color: #f4f4f4;
-}
-
 .notif-link {
   text-decoration: none;
-  color: #212529;
 }
 
 .notif-link:hover {

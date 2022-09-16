@@ -5,6 +5,7 @@ import Login from "../pages/auth/login";
 import ErrorsReportDetail from "../pages/errorreports/errordetail";
 import ErrorsReportList from "../pages/errorreports/errorlist";
 import ErrorReportPareto from "../pages/errorreports/errorpareto";
+import HarvesterListView from "../pages/harvester/harvesterlist";
 import Home from "../pages/home";
 import NotificationDetail from "../pages/notification/notifydetail";
 import NotificationList from "../pages/notification/notifylist";
@@ -95,6 +96,14 @@ const BaseRouter = () => {
           element={
             <RequireUser>
               <Forbidden />
+            </RequireUser>
+          }
+        />
+        <Route
+          path="/harvesters"
+          element={
+            <RequireUser>
+              <HarvesterListView />
             </RequireUser>
           }
         />

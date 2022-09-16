@@ -26,7 +26,7 @@ function NotificationTable(props) {
         </thead>
         <tbody>
           {props.notifications.map((notif, index) => (
-            <tr key={index}>
+            <tr key={index} className="tr-hover">
               <td>
                 <Link to={`/notifications/${notif.id}`} className="notif-link">
                   {notif.trigger_on}
