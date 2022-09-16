@@ -65,7 +65,8 @@ locals {
     { "name" : "BROKER_URL", "value" : "redis://${data.aws_elasticache_replication_group.hds_cache.primary_endpoint_address}:6379" },
     { "name" : "SLACK_TOKEN", "value" : data.aws_secretsmanager_secret_version.slack_token.secret_string },
     { "name" : "FRONTEND_URL", "value" : local.frontend_url },
-    { "name" : "S3_DOWNLOAD", "value" : "true" }
+    { "name" : "S3_DOWNLOAD", "value" : "true" },
+    { "name" : "PAGE_CACHING", "value" : "true" },
   ]
 }
 
