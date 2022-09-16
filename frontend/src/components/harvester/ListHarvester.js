@@ -1,11 +1,46 @@
+import { useRef, useState } from "react";
 import { useSelector } from "react-redux";
+import HarvesterModal from "../modals/HarvesterModal";
 
 function ListHarvester(props) {
+  const [fieldData, setFieldData] = useState({
+    name: "",
+    harv_id: "",
+  });
   const { harvesters } = useSelector((state) => state.harvester);
+  const harvesterRef = useRef();
+
+  const handleFieldChange = (e) => {
+    setFieldData((current) => {
+      return { ...current, [e.target.name]: e.target.value };
+    });
+  };
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    console.log(fieldData);
+  };
+
+  const addPopUp = () => {
+    harvesterRef.current.click();
+  };
   const editPopUp = () => console.log("edit pop up");
   const deletePopup = () => console.log("delete pop up");
   return (
     <>
+      <div className="flex-right">
+        <button onClick={addPopUp} className="btn btn-primary">
+          Add New Harvester
+        </button>
+        <button
+          ref={harvesterRef}
+          data-bs-toggle="modal"
+          data-bs-target="#harvesterModal"
+          style={{ display: "none" }}
+        >
+          Add New Harvester
+        </button>
+      </div>
       <div className="table-responsive">
         <table className="table">
           <thead>
@@ -37,6 +72,11 @@ function ListHarvester(props) {
           </tbody>
         </table>
       </div>
+      <HarvesterModal
+        fieldData={fieldData}
+        handleChange={handleFieldChange}
+        handleSubmit={handleFormSubmit}
+      />
     </>
   );
 }
