@@ -7,6 +7,13 @@ const initialState = {
   notification: {},
   notifications: [],
   errorMsg: null,
+  pagination: {
+    next: null,
+    previous: null,
+    count: null,
+    limit: 10,
+    offset: 1,
+  },
 };
 
 export const listNotifications = createAsyncThunk(
@@ -69,6 +76,22 @@ export const deleteManyNotif = async (notifs, token) => {
   }
 };
 
+export const paginateNotification = createAsyncThunk(
+  "errorreport/paginateNotification",
+  async (url, thunkAPI) => {
+    try {
+      const {
+        auth: { token },
+      } = thunkAPI.getState();
+      return await notificationService.paginateNotification(url, token);
+    } catch (error) {
+      console.log(error);
+      const message = invalidateCache(error, thunkAPI.dispatch);
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 const notificationSlice = createSlice({
   name: "notification",
   initialState,
@@ -80,7 +103,10 @@ const notificationSlice = createSlice({
       })
       .addCase(listNotifications.fulfilled, (state, action) => {
         state.loading = false;
-        state.notifications = action.payload;
+        state.notifications = action.payload.results;
+        state.pagination.count = action.payload.count;
+        state.pagination.next = action.payload.next;
+        state.pagination.previous = action.payload.previous;
       })
       .addCase(listNotifications.rejected, (state, action) => {
         state.loading = false;
@@ -104,6 +130,20 @@ const notificationSlice = createSlice({
         state.loading = false;
       })
       .addCase(deleteNotification.rejected, (state, action) => {
+        state.loading = false;
+        state.errorMsg = action.payload;
+      })
+      .addCase(paginateNotification.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(paginateNotification.fulfilled, (state, action) => {
+        state.loading = false;
+        state.notifications = action.payload.results;
+        state.pagination.count = action.payload.count;
+        state.pagination.next = action.payload.next;
+        state.pagination.previous = action.payload.previous;
+      })
+      .addCase(paginateNotification.rejected, (state, action) => {
         state.loading = false;
         state.errorMsg = action.payload;
       });

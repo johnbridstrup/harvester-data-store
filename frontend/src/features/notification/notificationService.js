@@ -8,7 +8,7 @@ const listNotifications = async (token, limit = 10) => {
     `${NOTIFICATION_URL}?limit=${limit}`,
     token
   );
-  return response.results;
+  return response;
 };
 
 const getNotificationById = async (notifyId, token) => {
@@ -27,10 +27,16 @@ const deleteNotification = async (notifyId, token) => {
   return response;
 };
 
+const paginateNotification = async (url, token) => {
+  const response = await axiosService.get(url, token);
+  return response;
+};
+
 const notificationService = {
   listNotifications,
   getNotificationById,
   deleteNotification,
+  paginateNotification,
 };
 
 export default notificationService;

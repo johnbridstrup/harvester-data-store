@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useLocation } from "react-router-dom";
 import { ERROR_REPORT_URL } from "../../features/errorreport/errorreportService";
 import { paginateErrorReport } from "../../features/errorreport/errorreportSlice";
+import { paginateNotification } from "../../features/notification/notificationSlice";
 import { paginateUser } from "../../features/user/userSlice";
 import { debounce } from "../../utils/utils";
 import { InputLimit, PageItem, SpanLimit } from "../styled";
@@ -111,6 +112,59 @@ export const UserPagination = (props) => {
         if (process.env.REACT_APP_NODE_ENV === "production")
           url.protocol = "https:";
         await dispatch(paginateUser(url));
+      }
+    }
+  };
+  return (
+    <div>
+      <section className="d-flex justify-content-center align-items-center mb-5">
+        <nav aria-label="Page navigation example">
+          <ul className="pagination mb-0">
+            <li className="page-item cursor">
+              <span
+                onClick={() => handlePagination("previous")}
+                className={`page-link ${!previous && "disabled"}`}
+                aria-label="Previous"
+              >
+                <span aria-hidden="true">Previous</span>
+              </span>
+            </li>
+            <li className="page-item cursor">
+              <span
+                onClick={() => handlePagination("next")}
+                className={`page-link ${!next && "disabled"}`}
+                aria-label="Next"
+              >
+                <span aria-hidden="true">Next</span>
+              </span>
+            </li>
+          </ul>
+        </nav>
+      </section>
+    </div>
+  );
+};
+
+export const NotificationPagination = (props) => {
+  const {
+    pagination: { next, previous },
+  } = useSelector((state) => state.notification);
+  const dispatch = useDispatch();
+
+  const handlePagination = async (navigation) => {
+    if (navigation === "next") {
+      if (next) {
+        const url = new URL(next);
+        if (process.env.REACT_APP_NODE_ENV === "production")
+          url.protocol = "https:";
+        await dispatch(paginateNotification(url));
+      }
+    } else {
+      if (previous) {
+        const url = new URL(previous);
+        if (process.env.REACT_APP_NODE_ENV === "production")
+          url.protocol = "https:";
+        await dispatch(paginateNotification(url));
       }
     }
   };
