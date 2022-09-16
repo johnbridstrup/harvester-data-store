@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useLocation } from "react-router-dom";
+import { PROD_ENV } from "../../features/base/constants";
 import { ERROR_REPORT_URL } from "../../features/errorreport/errorreportService";
 import { paginateErrorReport } from "../../features/errorreport/errorreportSlice";
 import { paginateNotification } from "../../features/notification/notificationSlice";
@@ -37,23 +38,16 @@ function Pagination(props) {
   };
 
   const handlePagination = async (navigation) => {
-    if (navigation === "next") {
-      if (next) {
-        const url = new URL(next);
-        if (process.env.REACT_APP_NODE_ENV === "production")
-          url.protocol = "https:";
-        url.searchParams.set("limit", pageLimit);
-        await dispatch(paginateErrorReport(url));
-      }
-    } else {
-      if (previous) {
-        const url = new URL(previous);
-        if (process.env.REACT_APP_NODE_ENV === "production")
-          url.protocol = "https:";
-        url.searchParams.set("limit", pageLimit);
-        await dispatch(paginateErrorReport(url));
-      }
+    const urlMap = {
+      next: next,
+      previous: previous,
+    };
+    const url = new URL(urlMap[navigation]);
+    if (process.env.REACT_APP_NODE_ENV === PROD_ENV) {
+      url.protocol = "https:";
     }
+    url.searchParams.set("limit", pageLimit);
+    await dispatch(paginateErrorReport(url));
   };
 
   return (
@@ -104,22 +98,17 @@ export const UserPagination = (props) => {
   const dispatch = useDispatch();
 
   const handlePagination = async (navigation) => {
-    if (navigation === "next") {
-      if (next) {
-        const url = new URL(next);
-        if (process.env.REACT_APP_NODE_ENV === "production")
-          url.protocol = "https:";
-        await dispatch(paginateUser(url));
-      }
-    } else {
-      if (previous) {
-        const url = new URL(previous);
-        if (process.env.REACT_APP_NODE_ENV === "production")
-          url.protocol = "https:";
-        await dispatch(paginateUser(url));
-      }
+    const urlMap = {
+      next: next,
+      previous: previous,
+    };
+    const url = new URL(urlMap[navigation]);
+    if (process.env.REACT_APP_NODE_ENV === PROD_ENV) {
+      url.protocol = "https:";
     }
+    await dispatch(paginateUser(url));
   };
+
   return (
     <div>
       <section className="d-flex justify-content-center align-items-center mb-5">
@@ -157,21 +146,15 @@ export const NotificationPagination = (props) => {
   const dispatch = useDispatch();
 
   const handlePagination = async (navigation) => {
-    if (navigation === "next") {
-      if (next) {
-        const url = new URL(next);
-        if (process.env.REACT_APP_NODE_ENV === "production")
-          url.protocol = "https:";
-        await dispatch(paginateNotification(url));
-      }
-    } else {
-      if (previous) {
-        const url = new URL(previous);
-        if (process.env.REACT_APP_NODE_ENV === "production")
-          url.protocol = "https:";
-        await dispatch(paginateNotification(url));
-      }
+    const urlMap = {
+      next: next,
+      previous: previous,
+    };
+    const url = new URL(urlMap[navigation]);
+    if (process.env.REACT_APP_NODE_ENV === PROD_ENV) {
+      url.protocol = "https:";
     }
+    await dispatch(paginateNotification(url));
   };
   return (
     <div>
