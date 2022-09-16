@@ -1,9 +1,20 @@
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
 import ListHarvester from "../../../components/harvester/ListHarvester";
 import Header from "../../../components/layout/header";
 import MainLayout from "../../../components/layout/main";
+import { listHarvesters } from "../../../features/harvester/harvesterSlice";
 import "./styles.css";
 
 function HarvesterListView(props) {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    (async () => {
+      await dispatch(listHarvesters());
+    })();
+  }, [dispatch]);
+
   return (
     <MainLayout>
       <div className="container">
