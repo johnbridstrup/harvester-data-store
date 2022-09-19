@@ -21,10 +21,20 @@ const createHarvester = async (data, token) => {
   return response;
 };
 
+const updateHarvester = async (data, token) => {
+  let response = await axiosService.patch(
+    `${HARVESTERS_URL}${data.objId}/`,
+    token,
+    data
+  );
+  return response;
+};
+
 const harvesterService = {
   listHarvesters,
   getHarvesterById,
   createHarvester,
+  updateHarvester,
 };
 
 export default harvesterService;

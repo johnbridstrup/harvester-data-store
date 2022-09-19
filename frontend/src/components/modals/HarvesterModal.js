@@ -3,7 +3,7 @@ import Select from "react-select";
 import { Loader } from "../../utils/utils";
 
 function HarvesterModal(props) {
-  const { name, harv_id } = props.fieldData;
+  const { name, harv_id, mode } = props.fieldData;
   return (
     <div className="col-md-8">
       <div
@@ -28,7 +28,7 @@ function HarvesterModal(props) {
               </button>
             </div>
             <div className="modal-body text-center px-5 pb-2">
-              ADD NEW HARVESTER
+              {mode === "edit" ? "UPDATE" : "ADD NEW"} HARVESTER
             </div>
 
             <div className="modal-body px-5 pb-4">
@@ -102,7 +102,13 @@ function HarvesterModal(props) {
                     type="submit"
                     className="btn btn-block btn-primary mt-4 mb-4"
                   >
-                    {props.loading ? <Loader size={25} /> : "ADD"}
+                    {props.loading ? (
+                      <Loader size={25} />
+                    ) : mode === "edit" ? (
+                      "EDIT"
+                    ) : (
+                      "ADD"
+                    )}
                   </button>
                 </div>
               </form>

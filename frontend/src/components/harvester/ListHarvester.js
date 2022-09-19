@@ -1,9 +1,11 @@
 import { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
+import { SUCCESS } from "../../features/base/constants";
 import {
   createHarvester,
   listHarvesters,
+  updateHarvester,
 } from "../../features/harvester/harvesterSlice";
 import { transformFruitOptions, transformLocOptions } from "../../utils/utils";
 import HarvesterModal from "../modals/HarvesterModal";
@@ -12,6 +14,8 @@ function ListHarvester(props) {
   const [fieldData, setFieldData] = useState({
     name: "",
     harv_id: "",
+    mode: "add",
+    objId: null,
   });
   const [selectedFruit, setSelectedFruit] = useState(null);
   const [selectedLocation, setSelectedLocation] = useState(null);
@@ -40,12 +44,23 @@ function ListHarvester(props) {
     }
     data["name"] = fieldData.name;
     data["harv_id"] = fieldData.harv_id;
+    data["objId"] = fieldData.objId;
 
-    const res = await dispatch(createHarvester(data));
-    if (res.type === "harvester/createHarvester/fulfilled") {
+    const dispatchObj = {
+      add: createHarvester,
+      edit: updateHarvester,
+    };
+
+    const res = await dispatch(dispatchObj[fieldData.mode](data));
+    if (res.payload?.status === SUCCESS) {
       await dispatch(listHarvesters());
       toast.success(res?.payload?.message);
       addPopUp();
+      setFieldData((current) => {
+        return { ...current, name: "", harv_id: "", mode: "add", objId: "" };
+      });
+      setSelectedFruit(null);
+      setSelectedLocation(null);
     } else {
       toast.error(res?.payload);
     }
@@ -62,8 +77,23 @@ function ListHarvester(props) {
   const addPopUp = () => {
     harvesterRef.current.click();
   };
-  const editPopUp = () => console.log("edit pop up");
-  const deletePopup = () => console.log("delete pop up");
+
+  const handleHarvUpdateClick = (harvObj) => {
+    setFieldData((current) => {
+      return {
+        ...current,
+        name: harvObj.name,
+        harv_id: harvObj.harv_id,
+        mode: "edit",
+        objId: harvObj.id,
+      };
+    });
+    let fruitObj = { value: harvObj.fruit.id, label: harvObj.fruit.name };
+    let locObj = { value: harvObj.location.id, label: harvObj.location.ranch };
+    setSelectedFruit((current) => fruitObj);
+    setSelectedLocation((current) => locObj);
+    addPopUp();
+  };
   return (
     <>
       <div className="flex-right">
@@ -99,10 +129,10 @@ function ListHarvester(props) {
                 <td>{harvester.location?.ranch}</td>
                 <td>
                   <span>
-                    <i onClick={editPopUp} className="las la-pencil-alt"></i>
-                  </span>
-                  <span className="mx-4">
-                    <i onClick={deletePopup} className="las la-times"></i>
+                    <i
+                      onClick={() => handleHarvUpdateClick(harvester)}
+                      className="las la-pencil-alt"
+                    ></i>
                   </span>
                 </td>
               </tr>
