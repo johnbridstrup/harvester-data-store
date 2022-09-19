@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import { useSelector } from "react-redux";
+import { transformFruitOptions, transformLocOptions } from "../../utils/utils";
 import HarvesterModal from "../modals/HarvesterModal";
 
 function ListHarvester(props) {
@@ -7,7 +8,13 @@ function ListHarvester(props) {
     name: "",
     harv_id: "",
   });
+  const [selectedFruit, setSelectedFruit] = useState(null);
+  const [selectedLocation, setSelectedLocation] = useState(null);
   const { harvesters } = useSelector((state) => state.harvester);
+  const { fruits } = useSelector((state) => state.fruit);
+  const { locations } = useSelector((state) => state.location);
+  const fruitOptions = transformFruitOptions(fruits);
+  const locationOptions = transformLocOptions(locations);
   const harvesterRef = useRef();
 
   const handleFieldChange = (e) => {
@@ -19,6 +26,14 @@ function ListHarvester(props) {
   const handleFormSubmit = (e) => {
     e.preventDefault();
     console.log(fieldData);
+  };
+
+  const handleLocationSelect = (newValue, actionMeta) => {
+    setSelectedLocation((current) => newValue);
+  };
+
+  const handleFruitSelect = (newValue, actionMeta) => {
+    setSelectedFruit((current) => newValue);
   };
 
   const addPopUp = () => {
@@ -76,6 +91,12 @@ function ListHarvester(props) {
         fieldData={fieldData}
         handleChange={handleFieldChange}
         handleSubmit={handleFormSubmit}
+        fruitOptions={fruitOptions}
+        selectedFruit={selectedFruit}
+        handleFruitSelect={handleFruitSelect}
+        locationOptions={locationOptions}
+        selectedLocation={selectedLocation}
+        handleLocSelect={handleLocationSelect}
       />
     </>
   );

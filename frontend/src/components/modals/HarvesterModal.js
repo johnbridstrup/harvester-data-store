@@ -82,11 +82,11 @@ function HarvesterModal(props) {
                       <Select
                         isSearchable
                         placeholder="location"
-                        options={props.locOptions}
+                        options={props.locationOptions}
                         name="fruit"
                         onChange={props.handleLocSelect}
-                        defaultValue={props.selectedLoc}
-                        value={props.selectedLoc}
+                        defaultValue={props.selectedLocation}
+                        value={props.selectedLocation}
                         className="multi-select-container"
                         classNamePrefix="select"
                       />
@@ -116,11 +116,11 @@ HarvesterModal.propTypes = {
   handleSubmit: PropTypes.func,
   loading: PropTypes.bool,
   fruitOptions: PropTypes.array,
-  selectedFruit: PropTypes.array,
+  selectedFruit: PropTypes.object,
   handleFruitSelect: PropTypes.func,
-  locOptions: PropTypes.array,
+  locationOptions: PropTypes.array,
+  selectedLocation: PropTypes.object,
   handleLocSelect: PropTypes.func,
-  selectedLoc: PropTypes.array,
 };
 
 export default HarvesterModal;
