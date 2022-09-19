@@ -74,7 +74,14 @@ function ListHarvester(props) {
     setSelectedFruit((current) => newValue);
   };
 
-  const addPopUp = () => {
+  const addPopUp = (mode) => {
+    if (typeof mode === "string" && mode === "add") {
+      setFieldData((current) => {
+        return { ...current, name: "", harv_id: "", mode: "add", objId: "" };
+      });
+      setSelectedFruit(null);
+      setSelectedLocation(null);
+    }
     harvesterRef.current.click();
   };
 
@@ -97,7 +104,7 @@ function ListHarvester(props) {
   return (
     <>
       <div className="flex-right">
-        <button onClick={addPopUp} className="btn btn-primary">
+        <button onClick={() => addPopUp("add")} className="btn btn-primary">
           Add New Harvester
         </button>
         <button
