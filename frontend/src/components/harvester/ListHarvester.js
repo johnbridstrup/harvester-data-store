@@ -7,8 +7,14 @@ import {
   listHarvesters,
   updateHarvester,
 } from "../../features/harvester/harvesterSlice";
-import { transformFruitOptions, transformLocOptions } from "../../utils/utils";
+import {
+  Loader,
+  transformFruitOptions,
+  transformLocOptions,
+} from "../../utils/utils";
 import HarvesterModal from "../modals/HarvesterModal";
+import { LoaderDiv } from "../styled";
+import HarvesterTable from "../tables/HarvesterTable";
 
 function ListHarvester(props) {
   const [fieldData, setFieldData] = useState({
@@ -19,7 +25,7 @@ function ListHarvester(props) {
   });
   const [selectedFruit, setSelectedFruit] = useState(null);
   const [selectedLocation, setSelectedLocation] = useState(null);
-  const { harvesters } = useSelector((state) => state.harvester);
+  const { harvesters, loading } = useSelector((state) => state.harvester);
   const { fruits } = useSelector((state) => state.fruit);
   const { locations } = useSelector((state) => state.location);
   const fruitOptions = transformFruitOptions(fruits, true);
@@ -116,37 +122,16 @@ function ListHarvester(props) {
           Add New Harvester
         </button>
       </div>
-      <div className="table-responsive">
-        <table className="table">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Harv ID</th>
-              <th>Fruit</th>
-              <th>Location</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {harvesters.map((harvester, index) => (
-              <tr key={index} className="tr-hover">
-                <td>{harvester.name}</td>
-                <td>{harvester.harv_id}</td>
-                <td>{harvester.fruit?.name}</td>
-                <td>{harvester.location?.ranch}</td>
-                <td>
-                  <span>
-                    <i
-                      onClick={() => handleHarvUpdateClick(harvester)}
-                      className="las la-pencil-alt"
-                    ></i>
-                  </span>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      {loading ? (
+        <LoaderDiv>
+          <Loader size={50} />
+        </LoaderDiv>
+      ) : (
+        <HarvesterTable
+          harvesters={harvesters}
+          handleHarvUpdateClick={handleHarvUpdateClick}
+        />
+      )}
       <HarvesterModal
         fieldData={fieldData}
         handleChange={handleFieldChange}
