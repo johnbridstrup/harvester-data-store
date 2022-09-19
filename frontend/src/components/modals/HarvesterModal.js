@@ -42,6 +42,7 @@ function HarvesterModal(props) {
                         className="form-control"
                         name="name"
                         value={name}
+                        required
                         onChange={props.handleChange}
                       />
                     </div>
@@ -54,6 +55,7 @@ function HarvesterModal(props) {
                         className="form-control"
                         name="harv_id"
                         value={harv_id}
+                        required
                         onChange={props.handleChange}
                       />
                     </div>
@@ -65,6 +67,7 @@ function HarvesterModal(props) {
                       <label htmlFor="fruit">Fruit</label>
                       <Select
                         isSearchable
+                        isClearable
                         placeholder="strawberry"
                         options={props.fruitOptions}
                         name="fruit"
@@ -81,6 +84,7 @@ function HarvesterModal(props) {
                       <label htmlFor="location">Location</label>
                       <Select
                         isSearchable
+                        isClearable
                         placeholder="location"
                         options={props.locationOptions}
                         name="fruit"

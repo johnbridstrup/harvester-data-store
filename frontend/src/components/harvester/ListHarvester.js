@@ -1,7 +1,10 @@
 import { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { createHarvester } from "../../features/harvester/harvesterSlice";
+import {
+  createHarvester,
+  listHarvesters,
+} from "../../features/harvester/harvesterSlice";
 import { transformFruitOptions, transformLocOptions } from "../../utils/utils";
 import HarvesterModal from "../modals/HarvesterModal";
 
@@ -15,8 +18,8 @@ function ListHarvester(props) {
   const { harvesters } = useSelector((state) => state.harvester);
   const { fruits } = useSelector((state) => state.fruit);
   const { locations } = useSelector((state) => state.location);
-  const fruitOptions = transformFruitOptions(fruits);
-  const locationOptions = transformLocOptions(locations);
+  const fruitOptions = transformFruitOptions(fruits, true);
+  const locationOptions = transformLocOptions(locations, true);
   const dispatch = useDispatch();
   const harvesterRef = useRef();
 
@@ -40,7 +43,8 @@ function ListHarvester(props) {
 
     const res = await dispatch(createHarvester(data));
     if (res.type === "harvester/createHarvester/fulfilled") {
-      toast.success("harvester created successfully");
+      await dispatch(listHarvesters());
+      toast.success(res?.payload?.message);
       addPopUp();
     } else {
       toast.error(res?.payload);

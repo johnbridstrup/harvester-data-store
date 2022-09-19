@@ -10,7 +10,12 @@ export const transformHarvOptions = (harvesters = []) => {
   });
 };
 
-export const transformLocOptions = (locations = []) => {
+export const transformLocOptions = (locations = [], includeID = false) => {
+  if (includeID) {
+    return locations.map((loc, index) => {
+      return { value: loc.id, label: loc.ranch };
+    });
+  }
   return locations.map((loc, index) => {
     return { value: loc.ranch, label: loc.ranch };
   });
@@ -230,7 +235,12 @@ export const debounce = function (cb, timeout) {
   };
 };
 
-export const transformFruitOptions = (fruits = []) => {
+export const transformFruitOptions = (fruits = [], includeID = false) => {
+  if (includeID) {
+    return fruits.map((fruit, index) => {
+      return { value: fruit.id, label: fruit.name };
+    });
+  }
   return fruits.map((fruit, index) => {
     return { value: fruit.name, label: fruit.name };
   });
