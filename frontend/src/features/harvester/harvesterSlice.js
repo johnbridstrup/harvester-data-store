@@ -4,6 +4,7 @@ import harvesterService from "./harvesterService";
 
 const initialState = {
   loading: false,
+  adding: false,
   harvester: {},
   harvesters: [],
   errorMsg: null,
@@ -30,6 +31,22 @@ export const getHarvesterById = createAsyncThunk(
   async (harvId, thunkAPI) => {
     try {
       return await harvesterService.getHarvesterById(harvId);
+    } catch (error) {
+      console.log(error);
+      const message = invalidateCache(error, thunkAPI.dispatch);
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const createHarvester = createAsyncThunk(
+  "harvester/createHarvester",
+  async (harvData, thunkAPI) => {
+    try {
+      const {
+        auth: { token },
+      } = thunkAPI.getState();
+      return await harvesterService.createHarvester(harvData, token);
     } catch (error) {
       console.log(error);
       const message = invalidateCache(error, thunkAPI.dispatch);
@@ -66,6 +83,16 @@ const harvesterSlice = createSlice({
       .addCase(getHarvesterById.rejected, (state, action) => {
         state.loading = false;
         state.harvester = {};
+        state.errorMsg = action.payload;
+      })
+      .addCase(createHarvester.pending, (state) => {
+        state.adding = true;
+      })
+      .addCase(createHarvester.fulfilled, (state, action) => {
+        state.adding = false;
+      })
+      .addCase(createHarvester.rejected, (state, action) => {
+        state.adding = false;
         state.errorMsg = action.payload;
       });
   },

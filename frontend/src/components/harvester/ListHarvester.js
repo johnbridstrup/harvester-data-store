@@ -1,5 +1,7 @@
 import { useRef, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import { createHarvester } from "../../features/harvester/harvesterSlice";
 import { transformFruitOptions, transformLocOptions } from "../../utils/utils";
 import HarvesterModal from "../modals/HarvesterModal";
 
@@ -15,6 +17,7 @@ function ListHarvester(props) {
   const { locations } = useSelector((state) => state.location);
   const fruitOptions = transformFruitOptions(fruits);
   const locationOptions = transformLocOptions(locations);
+  const dispatch = useDispatch();
   const harvesterRef = useRef();
 
   const handleFieldChange = (e) => {
@@ -23,9 +26,25 @@ function ListHarvester(props) {
     });
   };
 
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
-    console.log(fieldData);
+    const data = {};
+    if (selectedFruit && selectedFruit.hasOwnProperty("value")) {
+      data["fruit"] = selectedFruit.value;
+    }
+    if (selectedLocation && selectedLocation.hasOwnProperty("value")) {
+      data["location"] = selectedLocation.value;
+    }
+    data["name"] = fieldData.name;
+    data["harv_id"] = fieldData.harv_id;
+
+    const res = await dispatch(createHarvester(data));
+    if (res.type === "harvester/createHarvester/fulfilled") {
+      toast.success("harvester created successfully");
+      addPopUp();
+    } else {
+      toast.error(res?.payload);
+    }
   };
 
   const handleLocationSelect = (newValue, actionMeta) => {

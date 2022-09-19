@@ -16,9 +16,15 @@ const getHarvesterById = async (harvId, token) => {
   return response;
 };
 
+const createHarvester = async (data, token) => {
+  let response = await axiosService.post(HARVESTERS_URL, token, data);
+  return response;
+};
+
 const harvesterService = {
   listHarvesters,
   getHarvesterById,
+  createHarvester,
 };
 
 export default harvesterService;
