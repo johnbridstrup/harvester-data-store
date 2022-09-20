@@ -7,6 +7,7 @@ import ErrorsReportList from "../pages/errorreports/errorlist";
 import ErrorReportPareto from "../pages/errorreports/errorpareto";
 import HarvesterListView from "../pages/harvester/harvesterlist";
 import Home from "../pages/home";
+import LocationListView from "../pages/location/locationlist";
 import NotificationDetail from "../pages/notification/notifydetail";
 import NotificationList from "../pages/notification/notifylist";
 import UserProfileView from "../pages/profile/profiledetail";
@@ -92,18 +93,26 @@ const BaseRouter = () => {
           }
         />
         <Route
-          path="/forbidden"
-          element={
-            <RequireUser>
-              <Forbidden />
-            </RequireUser>
-          }
-        />
-        <Route
           path="/harvesters"
           element={
             <RequireUser>
               <HarvesterListView />
+            </RequireUser>
+          }
+        />
+        <Route
+          path="/locations"
+          element={
+            <RequireUser>
+              <LocationListView />
+            </RequireUser>
+          }
+        />
+        <Route
+          path="/forbidden"
+          element={
+            <RequireUser>
+              <Forbidden />
             </RequireUser>
           }
         />
