@@ -8,7 +8,7 @@ const listHarvesters = async (token, limit = 10) => {
     `${HARVESTERS_URL}?limit=${limit}`,
     token
   );
-  return response.results;
+  return response;
 };
 
 const getHarvesterById = async (harvId, token) => {
@@ -30,11 +30,17 @@ const updateHarvester = async (data, token) => {
   return response;
 };
 
+const paginateHarvester = async (url, token) => {
+  const response = await axiosService.get(url, token);
+  return response;
+};
+
 const harvesterService = {
   listHarvesters,
   getHarvesterById,
   createHarvester,
   updateHarvester,
+  paginateHarvester,
 };
 
 export default harvesterService;

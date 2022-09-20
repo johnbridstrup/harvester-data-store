@@ -9,6 +9,13 @@ const initialState = {
   harvester: {},
   harvesters: [],
   errorMsg: null,
+  pagination: {
+    next: null,
+    previous: null,
+    count: null,
+    limit: 10,
+    offset: 1,
+  },
 };
 
 export const listHarvesters = createAsyncThunk(
@@ -72,6 +79,22 @@ export const updateHarvester = createAsyncThunk(
   }
 );
 
+export const paginateHarvester = createAsyncThunk(
+  "harvester/paginateHarvester",
+  async (url, thunkAPI) => {
+    try {
+      const {
+        auth: { token },
+      } = thunkAPI.getState();
+      return await harvesterService.paginateHarvester(url, token);
+    } catch (error) {
+      console.log(error);
+      const message = invalidateCache(error, thunkAPI.dispatch);
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 const harvesterSlice = createSlice({
   name: "harvester",
   initialState,
@@ -83,7 +106,10 @@ const harvesterSlice = createSlice({
       })
       .addCase(listHarvesters.fulfilled, (state, action) => {
         state.loading = false;
-        state.harvesters = action.payload;
+        state.harvesters = action.payload.results;
+        state.pagination.count = action.payload.count;
+        state.pagination.next = action.payload.next;
+        state.pagination.previous = action.payload.previous;
       })
       .addCase(listHarvesters.rejected, (state, action) => {
         state.loading = false;
@@ -120,6 +146,20 @@ const harvesterSlice = createSlice({
       })
       .addCase(updateHarvester.rejected, (state, action) => {
         state.editting = false;
+        state.errorMsg = action.payload;
+      })
+      .addCase(paginateHarvester.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(paginateHarvester.fulfilled, (state, action) => {
+        state.loading = false;
+        state.harvesters = action.payload.results;
+        state.pagination.count = action.payload.count;
+        state.pagination.next = action.payload.next;
+        state.pagination.previous = action.payload.previous;
+      })
+      .addCase(paginateHarvester.rejected, (state, action) => {
+        state.loading = false;
         state.errorMsg = action.payload;
       });
   },
