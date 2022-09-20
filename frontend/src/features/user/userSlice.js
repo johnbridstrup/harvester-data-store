@@ -66,7 +66,7 @@ export const createUser = createAsyncThunk(
 );
 
 export const paginateUser = createAsyncThunk(
-  "errorreport/paginateUser",
+  "user/paginateUser",
   async (url, thunkAPI) => {
     try {
       const {
