@@ -1,5 +1,11 @@
 import { useState, useRef } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import { SUCCESS } from "../../features/base/constants";
+import {
+  createLocation,
+  listLocations,
+} from "../../features/location/locationSlice";
 import { Loader } from "../../utils/utils";
 import LocationModal from "../modals/LocationModal";
 import { LoaderDiv } from "../styled";
@@ -15,6 +21,7 @@ function ListLocation(props) {
   });
   const [selectedDistributor, setSelectedDistributor] = useState(null);
   const { locations, loading } = useSelector((state) => state.location);
+  const dispatch = useDispatch();
   const locationRef = useRef();
 
   const handleFieldChange = (e) => {
@@ -27,8 +34,40 @@ function ListLocation(props) {
     setSelectedDistributor((current) => newValue);
   };
 
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
+    const data = {};
+    if (selectedDistributor && selectedDistributor.hasOwnProperty("value")) {
+      data["distributor"] = selectedDistributor.value;
+    }
+    data["ranch"] = fieldData.ranch;
+    data["country"] = fieldData.country;
+    data["region"] = fieldData.region;
+    data["objId"] = fieldData.objId;
+
+    const dispatchObj = {
+      add: createLocation,
+    };
+
+    const res = await dispatch(dispatchObj[fieldData.mode](data));
+    if (res.payload?.status === SUCCESS) {
+      await dispatch(listLocations());
+      toast.success(res?.payload?.message);
+      addPopUp();
+      setFieldData((current) => {
+        return {
+          ...current,
+          ranch: "",
+          country: "",
+          region: "",
+          mode: "add",
+          objId: null,
+        };
+      });
+      setSelectedDistributor(null);
+    } else {
+      toast.error(res?.payload);
+    }
   };
 
   const addPopUp = (mode) => {

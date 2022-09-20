@@ -16,9 +16,15 @@ const getLocationById = async (locId, token) => {
   return response;
 };
 
+const createLocation = async (data, token) => {
+  let response = await axiosService.post(LOCATION_URL, token, data);
+  return response;
+};
+
 const locationService = {
   listLocations,
   getLocationById,
+  createLocation,
 };
 
 export default locationService;

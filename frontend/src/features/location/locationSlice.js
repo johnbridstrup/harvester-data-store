@@ -7,6 +7,7 @@ const initialState = {
   location: {},
   locations: [],
   errorMsg: null,
+  adding: false,
 };
 
 export const listLocations = createAsyncThunk(
@@ -41,6 +42,22 @@ export const getLocationById = createAsyncThunk(
   }
 );
 
+export const createLocation = createAsyncThunk(
+  "location/createLocation",
+  async (locData, thunkAPI) => {
+    try {
+      const {
+        auth: { token },
+      } = thunkAPI.getState();
+      return await locationService.createLocation(locData, token);
+    } catch (error) {
+      console.log(error);
+      const message = invalidateCache(error, thunkAPI.dispatch);
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 const locationSlice = createSlice({
   name: "location",
   initialState,
@@ -67,6 +84,16 @@ const locationSlice = createSlice({
       })
       .addCase(getLocationById.rejected, (state, action) => {
         state.loading = false;
+        state.errorMsg = action.payload;
+      })
+      .addCase(createLocation.pending, (state) => {
+        state.adding = true;
+      })
+      .addCase(createLocation.fulfilled, (state, action) => {
+        state.adding = false;
+      })
+      .addCase(createLocation.rejected, (state, action) => {
+        state.adding = false;
         state.errorMsg = action.payload;
       });
   },
