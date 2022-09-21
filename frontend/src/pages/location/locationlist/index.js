@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import Header from "../../../components/layout/header";
 import MainLayout from "../../../components/layout/main";
 import ListLocation from "../../../components/location/ListLocation";
+import { LocationPagination } from "../../../components/pagination/Pagination";
 import { MAX_LIMIT } from "../../../features/base/constants";
 import { listDistributors } from "../../../features/distributor/distributorSlice";
 import { listLocations } from "../../../features/location/locationSlice";
@@ -24,6 +25,7 @@ function LocationListView(props) {
       <div className="container">
         <Header title={"HDS Locations"} className={"display-6 mt-4 mb-4"} />
         <ListLocation />
+        <LocationPagination />
       </div>
     </MainLayout>
   );

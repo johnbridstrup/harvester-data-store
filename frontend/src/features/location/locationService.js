@@ -8,7 +8,7 @@ const listLocations = async (token, limit = 10) => {
     `${LOCATION_URL}?limit=${limit}`,
     token
   );
-  return response.results;
+  return response;
 };
 
 const getLocationById = async (locId, token) => {
@@ -30,11 +30,17 @@ const updateLocation = async (data, token) => {
   return response;
 };
 
+const paginateLocation = async (url, token) => {
+  let response = await axiosService.get(url, token);
+  return response;
+};
+
 const locationService = {
   listLocations,
   getLocationById,
   createLocation,
   updateLocation,
+  paginateLocation,
 };
 
 export default locationService;

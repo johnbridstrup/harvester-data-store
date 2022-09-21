@@ -9,6 +9,7 @@ import { paginateNotification } from "../../features/notification/notificationSl
 import { paginateUser } from "../../features/user/userSlice";
 import { InputLimit, PageItem, SpanLimit } from "../styled";
 import { paginateHarvester } from "../../features/harvester/harvesterSlice";
+import { paginateLocation } from "../../features/location/locationSlice";
 
 function Pagination(props) {
   const [pageLimit, setPageLimit] = useState(10);
@@ -193,6 +194,32 @@ export const HarvesterPagination = (props) => {
       url.protocol = "https:";
     }
     await dispatch(paginateHarvester(url));
+  };
+  return (
+    <GenericRenderer
+      handlePagination={handlePagination}
+      next={next}
+      previous={previous}
+    />
+  );
+};
+
+export const LocationPagination = (props) => {
+  const {
+    pagination: { next, previous },
+  } = useSelector((state) => state.location);
+  const dispatch = useDispatch();
+
+  const handlePagination = async (navigation) => {
+    const urlMap = {
+      next: next,
+      previous: previous,
+    };
+    const url = new URL(urlMap[navigation]);
+    if (process.env.REACT_APP_NODE_ENV === PROD_ENV) {
+      url.protocol = "https:";
+    }
+    await dispatch(paginateLocation(url));
   };
   return (
     <GenericRenderer

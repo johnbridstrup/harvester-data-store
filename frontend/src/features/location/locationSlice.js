@@ -4,12 +4,18 @@ import locationService from "./locationService";
 
 const initialState = {
   loading: false,
-
   location: {},
   locations: [],
   errorMsg: null,
   adding: false,
   editting: false,
+  pagination: {
+    next: null,
+    previous: null,
+    count: null,
+    limit: 10,
+    offset: 1,
+  },
 };
 
 export const listLocations = createAsyncThunk(
@@ -76,6 +82,22 @@ export const updateLocation = createAsyncThunk(
   }
 );
 
+export const paginateLocation = createAsyncThunk(
+  "location/paginateLocation",
+  async (url, thunkAPI) => {
+    try {
+      const {
+        auth: { token },
+      } = thunkAPI.getState();
+      return await locationService.paginateLocation(url, token);
+    } catch (error) {
+      console.log(error);
+      const message = invalidateCache(error, thunkAPI.dispatch);
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 const locationSlice = createSlice({
   name: "location",
   initialState,
@@ -87,7 +109,10 @@ const locationSlice = createSlice({
       })
       .addCase(listLocations.fulfilled, (state, action) => {
         state.loading = false;
-        state.locations = action.payload;
+        state.locations = action.payload.results;
+        state.pagination.count = action.payload.count;
+        state.pagination.next = action.payload.next;
+        state.pagination.previous = action.payload.previous;
       })
       .addCase(listLocations.rejected, (state, action) => {
         state.loading = false;
@@ -122,6 +147,20 @@ const locationSlice = createSlice({
       })
       .addCase(updateLocation.rejected, (state, action) => {
         state.editting = false;
+        state.errorMsg = action.payload;
+      })
+      .addCase(paginateLocation.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(paginateLocation.fulfilled, (state, action) => {
+        state.loading = false;
+        state.locations = action.payload.results;
+        state.pagination.count = action.payload.count;
+        state.pagination.next = action.payload.next;
+        state.pagination.previous = action.payload.previous;
+      })
+      .addCase(paginateLocation.rejected, (state, action) => {
+        state.loading = false;
         state.errorMsg = action.payload;
       });
   },
