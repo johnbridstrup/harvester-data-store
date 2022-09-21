@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import ListDistributor from "../../../components/distributor/ListDistributor";
 import Header from "../../../components/layout/header";
 import MainLayout from "../../../components/layout/main";
+import { DistributorPagination } from "../../../components/pagination/Pagination";
 import { listDistributors } from "../../../features/distributor/distributorSlice";
 import "./styles.css";
 
@@ -19,6 +20,7 @@ function DistributorListView(props) {
       <div className="container">
         <Header title={"HDS Distributors"} className={"display-6 mt-4 mb-4"} />
         <ListDistributor />
+        <DistributorPagination />
       </div>
     </MainLayout>
   );

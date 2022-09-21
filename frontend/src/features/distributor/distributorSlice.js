@@ -82,6 +82,22 @@ export const updateDistributor = createAsyncThunk(
   }
 );
 
+export const paginateDistributor = createAsyncThunk(
+  "distributor/paginateDistributor",
+  async (url, thunkAPI) => {
+    try {
+      const {
+        auth: { token },
+      } = thunkAPI.getState();
+      return await distributorService.paginateDistributor(url, token);
+    } catch (error) {
+      console.log(error);
+      const message = invalidateCache(error, thunkAPI.dispatch);
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 const distributorSlice = createSlice({
   name: "distributor",
   initialState,
@@ -131,6 +147,20 @@ const distributorSlice = createSlice({
       })
       .addCase(updateDistributor.rejected, (state, action) => {
         state.editting = false;
+        state.errorMsg = action.payload;
+      })
+      .addCase(paginateDistributor.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(paginateDistributor.fulfilled, (state, action) => {
+        state.loading = false;
+        state.distributors = action.payload.results;
+        state.pagination.count = action.payload.count;
+        state.pagination.next = action.payload.next;
+        state.pagination.previous = action.payload.previous;
+      })
+      .addCase(paginateDistributor.rejected, (state, action) => {
+        state.loading = false;
         state.errorMsg = action.payload;
       });
   },

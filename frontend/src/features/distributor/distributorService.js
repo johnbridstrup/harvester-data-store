@@ -30,11 +30,17 @@ const updateDistributor = async (data, token) => {
   return response;
 };
 
+const paginateDistributor = async (url, token) => {
+  let response = await axiosService.get(url, token);
+  return response;
+};
+
 const distributorService = {
   listDistributors,
   getDistributorById,
   createDistributor,
   updateDistributor,
+  paginateDistributor,
 };
 
 export default distributorService;
