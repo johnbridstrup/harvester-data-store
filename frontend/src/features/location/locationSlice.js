@@ -4,10 +4,12 @@ import locationService from "./locationService";
 
 const initialState = {
   loading: false,
+
   location: {},
   locations: [],
   errorMsg: null,
   adding: false,
+  editting: false,
 };
 
 export const listLocations = createAsyncThunk(
@@ -58,6 +60,22 @@ export const createLocation = createAsyncThunk(
   }
 );
 
+export const updateLocation = createAsyncThunk(
+  "location/updateLocation",
+  async (locData, thunkAPI) => {
+    try {
+      const {
+        auth: { token },
+      } = thunkAPI.getState();
+      return await locationService.updateLocation(locData, token);
+    } catch (error) {
+      console.log(error);
+      const message = invalidateCache(error, thunkAPI.dispatch);
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 const locationSlice = createSlice({
   name: "location",
   initialState,
@@ -94,6 +112,16 @@ const locationSlice = createSlice({
       })
       .addCase(createLocation.rejected, (state, action) => {
         state.adding = false;
+        state.errorMsg = action.payload;
+      })
+      .addCase(updateLocation.pending, (state) => {
+        state.editting = true;
+      })
+      .addCase(updateLocation.fulfilled, (state, action) => {
+        state.editting = false;
+      })
+      .addCase(updateLocation.rejected, (state, action) => {
+        state.editting = false;
         state.errorMsg = action.payload;
       });
   },

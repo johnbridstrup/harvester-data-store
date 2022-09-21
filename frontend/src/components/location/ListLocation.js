@@ -5,8 +5,9 @@ import { SUCCESS } from "../../features/base/constants";
 import {
   createLocation,
   listLocations,
+  updateLocation,
 } from "../../features/location/locationSlice";
-import { Loader } from "../../utils/utils";
+import { Loader, transformDistOptions } from "../../utils/utils";
 import LocationModal from "../modals/LocationModal";
 import { LoaderDiv } from "../styled";
 import LocationTable from "../tables/LocationTable";
@@ -21,6 +22,8 @@ function ListLocation(props) {
   });
   const [selectedDistributor, setSelectedDistributor] = useState(null);
   const { locations, loading } = useSelector((state) => state.location);
+  const { distributors } = useSelector((state) => state.distributor);
+  const distributorOptions = transformDistOptions(distributors);
   const dispatch = useDispatch();
   const locationRef = useRef();
 
@@ -47,6 +50,7 @@ function ListLocation(props) {
 
     const dispatchObj = {
       add: createLocation,
+      edit: updateLocation,
     };
 
     const res = await dispatch(dispatchObj[fieldData.mode](data));
@@ -88,7 +92,22 @@ function ListLocation(props) {
   };
 
   const handleLocUpdateClick = (location) => {
-    console.log(location);
+    setFieldData((current) => {
+      return {
+        ...current,
+        ranch: location.ranch,
+        country: location.country,
+        mode: "edit",
+        region: location.region,
+        objId: location.id,
+      };
+    });
+    let distObj = {
+      value: location.distributor.id,
+      label: location.distributor.name,
+    };
+    setSelectedDistributor((current) => distObj);
+    addPopUp();
   };
 
   return (
@@ -117,7 +136,7 @@ function ListLocation(props) {
         />
       )}
       <LocationModal
-        distributorOptions={[]}
+        distributorOptions={distributorOptions}
         fieldData={fieldData}
         handleChange={handleFieldChange}
         handleSubmit={handleFormSubmit}

@@ -270,6 +270,12 @@ export const translateUserOptions = (users = []) => {
   });
 };
 
+export const transformDistOptions = (distributors = []) => {
+  return distributors.map((distributor, index) => {
+    return { value: distributor.id, label: distributor.name };
+  });
+};
+
 export const getUniqueListBy = (arr, key) => {
   return [...new Map(arr.map((item) => [item[key]["code"], item])).values()];
 };

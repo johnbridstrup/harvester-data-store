@@ -21,10 +21,20 @@ const createLocation = async (data, token) => {
   return response;
 };
 
+const updateLocation = async (data, token) => {
+  let response = await axiosService.patch(
+    `${LOCATION_URL}${data.objId}/`,
+    token,
+    data
+  );
+  return response;
+};
+
 const locationService = {
   listLocations,
   getLocationById,
   createLocation,
+  updateLocation,
 };
 
 export default locationService;
