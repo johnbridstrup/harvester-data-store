@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Forbidden from "../pages/403";
 import NotFound from "../pages/404";
 import Login from "../pages/auth/login";
+import DistributorListView from "../pages/distributor/distributorlist";
 import ErrorsReportDetail from "../pages/errorreports/errordetail";
 import ErrorsReportList from "../pages/errorreports/errorlist";
 import ErrorReportPareto from "../pages/errorreports/errorpareto";
@@ -105,6 +106,14 @@ const BaseRouter = () => {
           element={
             <RequireUser>
               <LocationListView />
+            </RequireUser>
+          }
+        />
+        <Route
+          path="/distributors"
+          element={
+            <RequireUser>
+              <DistributorListView />
             </RequireUser>
           }
         />
