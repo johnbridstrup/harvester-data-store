@@ -6,7 +6,7 @@ function Home(props) {
   return (
     <MainLayout>
       <div className="container">
-        <div className="welcome-brand">
+        <div className="welcome-brand mb-5">
           <h2>Welcome to HDS</h2>
         </div>
         <div>
@@ -15,6 +15,9 @@ function Home(props) {
           </Link>
           <Link to={"/harvesters"} className="btn btn-md btn-primary mx-2">
             Harvesters
+          </Link>
+          <Link to={"/locations"} className="btn btn-md btn-primary">
+            Locations
           </Link>
         </div>
       </div>
