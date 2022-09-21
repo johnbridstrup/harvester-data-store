@@ -13,6 +13,9 @@ function Home(props) {
           <Link to={"/errorreports"} className="btn btn-md btn-primary">
             Error Reports
           </Link>
+          <Link to={"/harvesters"} className="btn btn-md btn-primary mx-2">
+            Harvesters
+          </Link>
         </div>
       </div>
     </MainLayout>
