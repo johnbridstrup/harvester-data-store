@@ -24,6 +24,7 @@ function ErrorReportDetail(props) {
     exception: "",
     sysmon: "Master",
     subtabs: "NUC",
+    traceback: "Traceback",
   });
   const [sysmonObj, setSysmonObj] = useState({
     sysmonKeys: [],
@@ -106,6 +107,10 @@ function ErrorReportDetail(props) {
       } else {
         setSubTabObj((current) => obj.JETSON);
       }
+    } else if (category === "traceback") {
+      setActiveTab((current) => {
+        return { ...current, traceback: tab };
+      });
     }
   };
 
@@ -146,12 +151,46 @@ function ErrorReportDetail(props) {
 
             {exceptObj && (
               <TabContent>
+                <NavTabs>
+                  <NavTabItem>
+                    <NavTabSpan
+                      onClick={() =>
+                        handleTabChange("Traceback", "traceback", undefined)
+                      }
+                      activetab={activeTab.traceback}
+                      navto={"Traceback"}
+                    >
+                      Traceback
+                    </NavTabSpan>
+                  </NavTabItem>
+                  <NavTabItem>
+                    <NavTabSpan
+                      onClick={() =>
+                        handleTabChange("Info", "traceback", undefined)
+                      }
+                      activetab={activeTab.traceback}
+                      navto={"Info"}
+                    >
+                      Info
+                    </NavTabSpan>
+                  </NavTabItem>
+                </NavTabs>
                 <ExceptTabular
                   exceptName={exceptObj.code.name}
                   timestamp={timeStampFormat(exceptObj.timestamp, timezone)}
                 />
-                <pre style={{ height: "400px", whiteSpace: "break-spaces" }}>
-                  <code className="language-python">{exceptObj.traceback}</code>
+                <pre
+                  style={{
+                    height: "400px",
+                    whiteSpace: "break-spaces",
+                    marginTop: "2rem",
+                  }}
+                >
+                  <code className="language-python">
+                    {activeTab.traceback === "Traceback"
+                      ? exceptObj.traceback
+                      : exceptObj.info}
+                  </code>
                 </pre>
               </TabContent>
             )}
