@@ -454,8 +454,7 @@ export const validateQueryObj = (queryObj = {}) => {
     queryObj.fruits ||
     queryObj.codes ||
     queryObj.traceback ||
-    queryObj.start_time ||
-    queryObj.end_time
+    queryObj.generic
   ) {
     return true;
   } else {

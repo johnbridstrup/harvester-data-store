@@ -33,6 +33,7 @@ import timezones from "../../utils/timezones";
 import NotificationModal from "../modals/NotificationModal";
 import { FormQuery } from "./ErrorHelpers";
 import { HoverTabular } from "./ErrorHelpers";
+import { SUCCESS } from "../../features/base/constants";
 
 function ErrorReportQuery(props) {
   const [selectedHarvId, setSelectedHarvId] = useState(null);
@@ -228,9 +229,15 @@ function ErrorReportQuery(props) {
         );
       } else {
         queryObj["recipients"] = recipients;
-        await dispatch(createNotification(queryObj));
-        toast.success("Notification created successfully.");
-        handleModalPopUp();
+        delete queryObj["start_time"];
+        delete queryObj["end_time"];
+        const res = await dispatch(createNotification(queryObj));
+        if (res?.payload?.status === SUCCESS) {
+          toast.success(res?.payload?.message);
+          handleModalPopUp();
+        } else {
+          toast.error(res?.payload);
+        }
       }
     }
   };
