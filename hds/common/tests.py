@@ -60,16 +60,16 @@ class HDSAPITestBase(APITestCase):
 
     def _setup_basic(self):
         test_objects = {}
-        test_objects["fruit"] = Fruit.objects.create(name='strawberry', creator=self.user)
-        test_objects["distributor"] = Distributor.objects.create(name='test_distrib', creator=self.user)
-        test_objects["location"] = Location.objects.create(**{
+        test_objects["fruit"] = self.create_fruit_object('strawberry')
+        test_objects["distributor"] = self.create_distributor_object('test_distrib')
+        test_objects["location"] = self.create_location_object(**{
             "distributor": test_objects["distributor"],
             "ranch": "Ranch A",
             "country": "US",
             "region": "California",
             'creator': self.user
         })
-        test_objects["harvester"] = Harvester.objects.create(**{
+        test_objects["harvester"] = self.create_harvester_object(**{
             'harv_id': 11,
             'fruit': test_objects["fruit"],
             'location': test_objects["location"],
@@ -86,6 +86,40 @@ class HDSAPITestBase(APITestCase):
         })
 
         return test_objects
+
+    def create_fruit_object(self, name):
+        return Fruit.objects.create(name=name, creator=self.user)
+
+    def create_distributor_object(self, name):
+        return Distributor.objects.create(name=name, creator=self.user)
+
+    def create_location_object(self, distributor, ranch, country, region, creator):
+        return Location.objects.create(**{
+            "distributor": distributor,
+            "ranch": ranch,
+            "country": country,
+            "region": region,
+            'creator': creator
+        })
+
+    def create_harvester_object(self, harv_id, fruit, location, name, creator):
+        return Harvester.objects.create(**{
+            'harv_id': harv_id,
+            'fruit': fruit,
+            'location': location,
+            'name': name,
+            'creator': creator
+        })
+
+    def create_exception_code_object(self, code, name, msg, team, cycle, creator):
+        return AFTExceptionCode.objects.create(**{
+            'code': code,
+            'name': name,
+            'msg': msg,
+            'team': team,
+            'cycle': cycle,
+            'creator': creator
+        })
 
     def _load_report_data(self):
         report_path = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'test_data/report.json')
