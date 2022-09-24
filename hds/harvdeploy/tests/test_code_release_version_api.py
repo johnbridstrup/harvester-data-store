@@ -246,4 +246,28 @@ class ReleaseApiTestCase(HDSAPITestBase):
 
         self.assertDictEqual(data['report'], self.version2)
 
-        
+    def test_version_history_by_harv_id(self):
+        harv = self.create_harvester_object(
+            15,
+            self.test_objects['fruit'],
+            self.test_objects['location'],
+            'new_harv',
+            self.user
+        )
+        resp,_ = self.create_version()
+
+        self.versions['data']['serial_number'] = harv.harv_id
+        resp,_ = self.create_version()
+
+        resp = self.client.get(f"{self.api_base_url}/harvversion/")
+        data = resp.json()['data']
+        self.assertEqual(data['count'], 2)
+
+        resp = self.client.get(f"{self.api_base_url}/harvversion/?harv_id={harv.harv_id}")
+        data = resp.json()['data']
+        self.assertEqual(data['count'], 1)
+        self.assertEqual(
+            data['results'][0]['harvester'],
+            harv.id
+        )
+      
