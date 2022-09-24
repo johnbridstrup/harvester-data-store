@@ -34,3 +34,9 @@ class Harvester(CommonInfo):
 
     def __str__(self):
         return self.name
+
+    def current_version(self, before=None):
+        if before is not None:
+            return self.version_history.filter(reportTime__lte=before).latest('reportTime')
+        else:
+            return self.version_history.latest('reportTime')
