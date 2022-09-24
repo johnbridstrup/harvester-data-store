@@ -79,6 +79,41 @@ class ReleaseApiTestCase(HDSAPITestBase):
 
         self.assertEqual(resp.status_code, 200)
 
+    def test_get_releases_by_fruit(self):
+        self.create_release()
+
+        fruit2 = "apple"
+        fruit2_obj = self.create_fruit_object(fruit2)
+        release2 = self.release
+        release2['project'] = fruit2
+        release2['version'] = 1.111
+        self.create_release(release2)
+
+        # assert both are there
+        resp = self.client.get(
+            f"{self.api_base_url}/release/"
+        )
+        data = resp.json()['data']
+        self.assertEqual(
+            data['count'],
+            2
+        )
+
+        #assert only apple release retrieved
+        resp = self.client.get(
+            f"{self.api_base_url}/release/?fruit=apple"
+        )
+        data = resp.json()['data']
+        self.assertEqual(
+            data['count'],
+            1
+        )
+        self.assertEqual(
+            data['results'][0]['fruit']['id'],
+            fruit2_obj.id
+        )
+
+
     def test_delete_release(self):
         self.create_release()
 
