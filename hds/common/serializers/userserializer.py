@@ -40,9 +40,12 @@ class UserSerializer(serializers.ModelSerializer):
         profile = validated_data.pop("profile", None)
         request = self.context.get("request")
 
-        if instance.pk != request.user.pk and not request.user.is_superuser:
-            msg = _("Unable to authorize user for update action")
-            raise serializers.ValidationError(msg, code="authorization")
+        if instance.pk != request.user.pk:
+            if request.user.is_superuser:
+                pass
+            else:
+                msg = _("Unable to authorize user for update action")
+                raise serializers.ValidationError(msg, code="authorization")
 
         user = super().update(instance, validated_data)
 
