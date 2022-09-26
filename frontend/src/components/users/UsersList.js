@@ -133,6 +133,7 @@ function UsersList(props) {
                 <th>Slack ID</th>
                 <th>First Name</th>
                 <th>Last Name</th>
+                <th>Email Address</th>
                 <th>Status</th>
                 <th>Role</th>
                 <th>Last Login</th>
@@ -146,6 +147,7 @@ function UsersList(props) {
                   <td>{user.profile?.slack_id}</td>
                   <td>{user.first_name}</td>
                   <td>{user.last_name}</td>
+                  <td>{user.email}</td>
                   <td>{user.is_active ? "Active" : "Inactive"}</td>
                   <td>
                     {user.is_staff ? "Staff" : "Regular User"}{" "}

@@ -52,7 +52,7 @@ function UserModal(props) {
                         name="first_name"
                         value={first_name}
                         onChange={props.handleChange}
-                        required
+                        required={mode === "add" ? true : false}
                       />
                     </div>
                   </div>
@@ -65,7 +65,7 @@ function UserModal(props) {
                         name="last_name"
                         value={last_name}
                         onChange={props.handleChange}
-                        required
+                        required={mode === "add" ? true : false}
                       />
                     </div>
                   </div>
@@ -92,7 +92,7 @@ function UserModal(props) {
                         name="email"
                         value={email}
                         onChange={props.handleChange}
-                        required
+                        required={mode === "add" ? true : false}
                       />
                     </div>
                   </div>
@@ -107,7 +107,7 @@ function UserModal(props) {
                         name="username"
                         value={username}
                         onChange={props.handleChange}
-                        required
+                        required={mode === "add" ? true : false}
                       />
                     </div>
                   </div>
