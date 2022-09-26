@@ -1,3 +1,6 @@
+# frontend
+frontend/
+
 # Django #
 *.log
 *.pot
@@ -9,48 +12,40 @@ media
 hds/static
 
 
-# Backup files
-*.bak
+# development
+.git
+.gitignore
+.husky
+.prettierrc.json
+.prettierignore
 
-# If you are using PyCharm #
-# User-specific stuff
-.idea/**/workspace.xml
-.idea/**/tasks.xml
-.idea/**/usage.statistics.xml
-.idea/**/dictionaries
-.idea/**/shelf
+Dockerfile
+Dockerfile.local
+README.md
+make/
+jenkins/
+postman/
 
-# AWS User-specific
-.idea/**/aws.xml
+setup-venv.sh
+start.sh
 
-# Generated files
-.idea/**/contentModel.xml
+# env
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
 
-# Sensitive or high-churn files
-.idea/**/dataSources/
-.idea/**/dataSources.ids
-.idea/**/dataSources.local.xml
-.idea/**/sqlDataSources.xml
-.idea/**/dynamic.xml
-.idea/**/uiDesigner.xml
-.idea/**/dbnavigator.xml
+# misc
+.DS_Store
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
 
-# Gradle
-.idea/**/gradle.xml
-.idea/**/libraries
-
-# File-based project format
-*.iws
-
-# IntelliJ
-out/
-
-# JIRA plugin
-atlassian-ide-plugin.xml
-
-# Python #
-*.py[cod]
-*$py.class
+# Jupyter Notebook
+.ipynb_checkpoints
 
 # Distribution / packaging
 .Python build/
@@ -71,10 +66,6 @@ wheels/
 *.manifest
 *.spec
 
-# Installer logs
-pip-log.txt
-pip-delete-this-directory.txt
-
 # Unit test / coverage reports
 htmlcov/
 .tox/
@@ -86,27 +77,6 @@ nosetests.xml
 coverage.xml
 *.cover
 .hypothesis/
-
-# Jupyter Notebook
-.ipynb_checkpoints
-
-# pyenv
-.python-version
-
-# celery
-celerybeat-schedule.*
-
-# SageMath parsed files
-*.sage.py
-
-# Environments
-.env
-.venv
-env/
-venv/
-ENV/
-env.bak/
-venv.bak/
 
 # mkdocs documentation
 /site
@@ -141,15 +111,23 @@ GitHub.sublime-settings
 launch.json
 settings.json
 
-# Data
-data/
+# If you are using PyCharm #
+# User-specific stuff
+.idea/**/workspace.xml
+.idea/**/tasks.xml
+.idea/**/usage.statistics.xml
+.idea/**/dictionaries
+.idea/**/shelf
 
 # Terraform
-.terraform/
+terraform/
 artifacts
 *.tfplan
 *.coverage
 *.terraform.lock.hcl
+
+# Data
+data/
 
 # HDS
 .sqstoken
@@ -157,3 +135,4 @@ artifacts
 # Celery
 dump.rdb
 multiproc-tmp
+celerybeat-schedule.*
