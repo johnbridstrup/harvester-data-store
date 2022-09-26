@@ -1,17 +1,44 @@
 import json, os
+from rest_framework import status
 from rest_framework.test import APITestCase
 from rest_framework.test import APIClient
 from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
+from django.urls import reverse
+from .serializers.userserializer import UserSerializer
+from .models import UserProfile
 from hds.urls import urlpatterns
 from exceptions.models import AFTExceptionCode
 from harvester.models import Fruit, Harvester
 from location.models import Distributor, Location
 from .utils import build_frontend_url
-
 import logging
+
+
 # Disable logging in unit tests
-logging.disable(level=logging.CRITICAL) 
+logging.disable(level=logging.CRITICAL)
+
+USERS_URL = reverse('users:user-list')
+
+CHANGE_PASSWORD_URL = reverse('users:change_password')
+
+UNAUTHORIZED_CREATE_MSG = 'Unable to authorize user for create action'
+
+UNAUTHORIZED_UPDATE_MSG = 'Unable to authorize user for update action'
+
+
+def create_user(username, password, **kwargs):
+    user = User.objects.create_user(
+        username=username,
+        password=password,
+        **kwargs
+        )
+    UserProfile.objects.create(user=user)
+    return user
+
+
+def detail_url(user_id):
+    return reverse("users:user-detail", args=[user_id])
 
 
 def get_endpoint(urlpattern):
@@ -86,7 +113,7 @@ class OpenApiTest(HDSAPITestBase):
         endpoints = [get_endpoint(p) for p in urlpatterns]
 
         assert compare_patterns(keys, endpoints)
-        
+
         assert data['info']['title'] == "Harvester Data Store"
 
 
@@ -97,3 +124,118 @@ class PrometheusTest(HDSAPITestBase):
         """ create fruit and assert it exists """
         resp = self.client.get('/metrics')
         assert resp.status_code == 200
+
+
+class ManageUserTest(HDSAPITestBase):
+    """Test User Management APIs."""
+
+    def setUp(self):
+        self.payload = {
+            'username': 'afttest',
+            'first_name': 'Aft',
+            'last_name': 'Aft',
+            'email': 'aft@aft.aft',
+            'password': 'password',
+            'profile': {
+                'slack_id': 'slack@aft.aft'
+            }
+        }
+        return super().setUp()
+
+    def test_non_superuser_cannot_create_user(self):
+        """
+        Test non superuser cannot add new users.
+
+        Raises validation error
+        """
+        res = self.client.post(USERS_URL, self.payload, format='json')
+        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(
+            res.json()["errors"]["detail"][0],
+            UNAUTHORIZED_CREATE_MSG
+        )
+
+    def test_non_superuser_cannot_update_user(self):
+        """
+        Test non superuser and cannot update user profile.
+
+        Raise validation error
+        """
+        user = create_user(username='aftuser', password='testpass123')
+        self.payload.update({'username': user.username})
+        self.payload.pop('password')
+        url = detail_url(user.id)
+        res = self.client.patch(url, self.payload, format='json')
+
+        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(
+            res.json()["errors"]["detail"][0],
+            UNAUTHORIZED_UPDATE_MSG
+        )
+
+    def test_create_user_successfully(self):
+        """Test creating new user."""
+        self.user.is_staff = True
+        self.user.is_superuser = True
+        self.user.save()
+        self.user.refresh_from_db()
+        res = self.client.post(USERS_URL, self.payload, format='json')
+
+        self.assertEqual(res.status_code, status.HTTP_201_CREATED)
+        user = User.objects.get(username=self.payload['username'])
+        self.assertEqual(user.email, self.payload['email'])
+
+    def test_retrieve_user_successfully(self):
+        """Test retrieve new user successfully"""
+        user = create_user(username='aftuser', password='testpass123')
+        serializer = UserSerializer(user).data
+        res = self.client.get(detail_url(user.id))
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(
+            res.json()['data']['first_name'],
+            serializer.get('first_name')
+        )
+
+    def test_update_user_detail_successfully(self):
+        """Test updating user detail."""
+        self.user.is_staff = True
+        self.user.is_superuser = True
+        self.user.save()
+        self.user.refresh_from_db()
+        user = create_user(username='aftuser', password='testpass123')
+        self.payload.update({'username': user.username})
+        self.payload.pop('password')
+        url = detail_url(user.id)
+        res = self.client.patch(url, self.payload, format='json')
+        user.refresh_from_db()
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(user.first_name, self.payload['first_name'])
+
+    def test_self_can_update_user_profile(self):
+        """Test self can update his/her user profle."""
+        self.payload.update({'username': self.user.username})
+        UserProfile.objects.create(user=self.user)
+        url = detail_url(self.user.id)
+        res = self.client.patch(url, self.payload, format='json')
+        self.user.refresh_from_db()
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(self.user.email, self.payload['email'])
+
+    def test_user_can_change_password(self):
+        """Test user can change password."""
+        og_user_password = "ogpasswd123"
+        self.user.set_password(og_user_password)
+        self.user.save()
+        self.user.refresh_from_db()
+        self.payload.update({
+            'username': self.user.username,
+            'new_password': 'newpasswordtobeupdated',
+            'current_password': og_user_password,
+        })
+        res = self.client.post(CHANGE_PASSWORD_URL, self.payload, format='json')
+        self.user.refresh_from_db()
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertTrue(self.user.check_password(self.payload['new_password']))

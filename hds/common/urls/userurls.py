@@ -5,6 +5,8 @@ from ..views.userview import CSRFAPIView, ChangePasswordView, LoginAPIView, Logo
 router = routers.SimpleRouter()
 router.register('profiles', ManageUserView)
 
+app_name = "users"
+
 urlpatterns = [
   path('login/', LoginAPIView.as_view(), name="login"),
   path('logout/', LogoutAPIView.as_view(), name="logout"),
