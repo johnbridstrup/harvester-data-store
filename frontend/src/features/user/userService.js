@@ -23,11 +23,21 @@ const paginateUser = async (url, token) => {
   return response;
 };
 
+const updateUser = async (userData, token) => {
+  const response = await axiosService.patch(
+    `${USERS_URL}${userData.objId}/`,
+    token,
+    userData
+  );
+  return response;
+};
+
 const userService = {
   listUsers,
   getUserById,
   createUser,
   paginateUser,
+  updateUser,
 };
 
 export default userService;

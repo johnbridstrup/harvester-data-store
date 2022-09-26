@@ -5,6 +5,7 @@ import userService from "./userService";
 const initialState = {
   loading: false,
   adding: false,
+  editting: false,
   user: {},
   users: [],
   errorMsg: null,
@@ -81,6 +82,22 @@ export const paginateUser = createAsyncThunk(
   }
 );
 
+export const updateUser = createAsyncThunk(
+  "user/updateUser",
+  async (data, thunkAPI) => {
+    try {
+      const {
+        auth: { token },
+      } = thunkAPI.getState();
+      return await userService.updateUser(data, token);
+    } catch (error) {
+      console.log(error);
+      const message = invalidateCache(error, thunkAPI.dispatch);
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 const userSlice = createSlice({
   name: "user",
   initialState,
@@ -134,6 +151,16 @@ const userSlice = createSlice({
       })
       .addCase(paginateUser.rejected, (state, action) => {
         state.loading = false;
+        state.errorMsg = action.payload;
+      })
+      .addCase(updateUser.pending, (state) => {
+        state.editting = true;
+      })
+      .addCase(updateUser.fulfilled, (state) => {
+        state.editting = false;
+      })
+      .addCase(updateUser.rejected, (state, action) => {
+        state.editting = false;
         state.errorMsg = action.payload;
       });
   },

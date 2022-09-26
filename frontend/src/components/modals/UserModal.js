@@ -10,6 +10,8 @@ function UserModal(props) {
     email,
     password,
     password2,
+    mode,
+    is_staff,
   } = props.fieldData;
   return (
     <div className="col-md-8">
@@ -34,7 +36,9 @@ function UserModal(props) {
                 <span className="las la-times"></span>
               </button>
             </div>
-            <div className="modal-body text-center px-5 pb-2">ADD NEW USER</div>
+            <div className="modal-body text-center px-5 pb-2">
+              {mode === "add" ? "ADD NEW" : "EDIT"} USER
+            </div>
 
             <div className="modal-body px-5 pb-4">
               <form onSubmit={props.handleSubmit}>
@@ -114,6 +118,7 @@ function UserModal(props) {
                         name="is_staff"
                         type="checkbox"
                         value=""
+                        checked={is_staff ? true : false}
                         onChange={props.handleChange}
                       />
                       <label className="form-check-label" htmlFor="is_staff">
@@ -122,40 +127,46 @@ function UserModal(props) {
                     </div>
                   </div>
                 </div>
-                <div className="row">
-                  <div className="col-md-6">
-                    <div className="form-group">
-                      <label htmlFor="password">Password</label>
-                      <input
-                        type="password"
-                        className="form-control"
-                        name="password"
-                        value={password}
-                        onChange={props.handleChange}
-                        required
-                      />
+                {mode === "add" && (
+                  <div className="row">
+                    <div className="col-md-6">
+                      <div className="form-group">
+                        <label htmlFor="password">Password</label>
+                        <input
+                          type="password"
+                          className="form-control"
+                          name="password"
+                          value={password}
+                          onChange={props.handleChange}
+                        />
+                      </div>
+                    </div>
+                    <div className="col-md-6">
+                      <div className="form-group">
+                        <label htmlFor="password2">Confirm Password</label>
+                        <input
+                          type="password"
+                          className="form-control"
+                          name="password2"
+                          value={password2}
+                          onChange={props.handleChange}
+                        />
+                      </div>
                     </div>
                   </div>
-                  <div className="col-md-6">
-                    <div className="form-group">
-                      <label htmlFor="password2">Confirm Password</label>
-                      <input
-                        type="password"
-                        className="form-control"
-                        name="password2"
-                        value={password2}
-                        onChange={props.handleChange}
-                        required
-                      />
-                    </div>
-                  </div>
-                </div>
+                )}
                 <div className="text-center">
                   <button
                     type="submit"
                     className="btn btn-block btn-primary mt-4 mb-4"
                   >
-                    {props.loading ? <Loader size={25} /> : "ADD"}
+                    {props.loading ? (
+                      <Loader size={25} />
+                    ) : mode === "add" ? (
+                      "ADD"
+                    ) : (
+                      "EDIT"
+                    )}
                   </button>
                 </div>
               </form>
