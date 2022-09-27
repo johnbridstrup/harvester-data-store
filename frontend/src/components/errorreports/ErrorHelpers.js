@@ -106,7 +106,9 @@ export const HoverTabular = (props) => {
                 <tr key={i}>
                   <td>{obj.code?.code}</td>
                   <td>{obj.code?.name}</td>
-                  <td>{obj.service}</td>
+                  <td>
+                    {obj.service}.{obj.robot}
+                  </td>
                 </tr>
               ))}
             </tbody>
