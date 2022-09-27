@@ -11,6 +11,7 @@ import {
   listNotifications,
 } from "../../features/notification/notificationSlice";
 import { transformAssignedNotification } from "../../utils/utils";
+import ConfirmModal from "../modals/ConfirmModal";
 import PasswordModal from "../modals/PasswordModal";
 import ProfileUpdateModal from "../modals/ProfileUpdateModal";
 import {
@@ -36,11 +37,13 @@ function UserProfileDetail(props) {
     current_password: "",
     confirm_password: "",
   });
+  const [notifObj, setNotifObj] = useState(null)
   const { user } = useSelector((state) => state.auth);
   const { notifications } = useSelector((state) => state.notification);
   const dispatch = useDispatch();
   const profileRef = useRef();
   const passwordRef = useRef();
+  const confirmRef = useRef();
 
   const createdNotification = notifications
     .slice(0, 5)
@@ -120,11 +123,12 @@ function UserProfileDetail(props) {
     }
   };
 
-  const handleDeleteNotification = async (notifObj) => {
+  const handleDeleteNotification = async () => {
     const res = await dispatch(deleteNotification(notifObj.id));
     if (res.type === "notification/deleteNotification/fulfilled") {
       toast.success("Notification deleted successfully");
       await dispatch(listNotifications());
+      confirmPopUp(null)
     } else {
       toast.error("Could not delete the specified notification");
     }
@@ -145,6 +149,11 @@ function UserProfileDetail(props) {
     } else {
       toast.error("could not authenticate with the given credentials");
     }
+  };
+
+  const confirmPopUp = (obj) => {
+    setNotifObj(current => obj);
+    confirmRef.current.click();
   };
 
   return (
@@ -173,7 +182,7 @@ function UserProfileDetail(props) {
                 user={user}
                 notifications={createdNotification}
                 notify_type={"Created"}
-                deleteNotif={handleDeleteNotification}
+                confirmDel={confirmPopUp}
               />
             </div>
             <div className="col-sm-6 mb-3">
@@ -181,7 +190,7 @@ function UserProfileDetail(props) {
                 user={user}
                 notifications={assignedNotification}
                 notify_type={"Assigned"}
-                deleteNotif={handleDeleteNotification}
+                confirmDel={confirmPopUp}
               />
             </div>
           </div>
@@ -197,6 +206,11 @@ function UserProfileDetail(props) {
         password={fieldData.password}
         handleChange={handleFieldChange}
         handleSubmit={handleConfirmPassword}
+      />
+      <ConfirmModal
+        confirmRef={confirmRef}
+        cancelRequest={confirmPopUp}
+        handleDelete={handleDeleteNotification}
       />
     </>
   );

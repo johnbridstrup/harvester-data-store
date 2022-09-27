@@ -188,7 +188,7 @@ export const Notifications = (props) => {
               props.user?.is_superuser === true) && (
               <div className="mb-2 mt-2">
                 <button
-                  onClick={() => props.deleteNotif(notifyObj)}
+                  onClick={() => props.confirmDel(notifyObj)}
                   className="btn btn-sm text-danger"
                 >
                   Del
@@ -234,5 +234,5 @@ Notifications.propTypes = {
   notifyObj: PropTypes.object,
   notify_type: PropTypes.string,
   notifications: PropTypes.array,
-  deleteNotif: PropTypes.func,
+  confirmDel: PropTypes.func,
 };

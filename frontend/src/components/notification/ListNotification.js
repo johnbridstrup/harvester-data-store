@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -10,6 +10,7 @@ import {
   paramsToObject,
   transformAssignedNotification,
 } from "../../utils/utils";
+import ConfirmModal from "../modals/ConfirmModal";
 import NotificationTable from "../tables/NotificationTable";
 
 function ListNotification(props) {
@@ -17,6 +18,7 @@ function ListNotification(props) {
   const { user, token } = useSelector((state) => state.auth);
   const { notifications } = useSelector((state) => state.notification);
   const dispatch = useDispatch();
+  const confirmRef = useRef();
   const { search } = useLocation();
   const params = paramsToObject(search);
   const createdNotification = notifications.filter(
@@ -31,7 +33,9 @@ function ListNotification(props) {
     const { success, message } = await deleteManyNotif(checkedNotif, token);
     if (success) {
       toast.success(message);
+      setCheckedNotif((current) => []);
       dispatch(listNotifications());
+      confirmPopUp();
     } else {
       toast.error(message);
     }
@@ -51,6 +55,10 @@ function ListNotification(props) {
     setCheckedNotif(notif);
   };
 
+  const confirmPopUp = () => {
+    confirmRef.current.click();
+  };
+
   return (
     <>
       {params.category === "created" ? (
@@ -59,7 +67,7 @@ function ListNotification(props) {
           user={user}
           checkedNotif={checkedNotif}
           handleChange={handleChange}
-          handleDeleteMany={handleDeleteMany}
+          handleDeleteMany={confirmPopUp}
         />
       ) : params.category === "assigned" ? (
         <NotificationTable
@@ -67,7 +75,7 @@ function ListNotification(props) {
           user={user}
           checkedNotif={checkedNotif}
           handleChange={handleChange}
-          handleDeleteMany={handleDeleteMany}
+          handleDeleteMany={confirmPopUp}
         />
       ) : (
         <NotificationTable
@@ -75,9 +83,15 @@ function ListNotification(props) {
           user={user}
           checkedNotif={checkedNotif}
           handleChange={handleChange}
-          handleDeleteMany={handleDeleteMany}
+          handleDeleteMany={confirmPopUp}
         />
       )}
+
+      <ConfirmModal
+        handleDelete={handleDeleteMany}
+        cancelRequest={confirmPopUp}
+        confirmRef={confirmRef}
+      />
     </>
   );
 }
