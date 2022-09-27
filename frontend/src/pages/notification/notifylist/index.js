@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import Header from "../../../components/layout/header";
 import MainLayout from "../../../components/layout/main";
 import ListNotification from "../../../components/notification/ListNotification";
-import { NotificationPagination } from "../../../components/pagination/Pagination";
+import { GenericPagination } from "../../../components/pagination/Pagination";
 import { listNotifications } from "../../../features/notification/notificationSlice";
 import "./styles.css";
 
@@ -20,7 +20,7 @@ function NotificationList(props) {
         <Header title={"HDS Notifications"} className={"display-6 mt-4 mb-4"} />
 
         <ListNotification />
-        <NotificationPagination />
+        <GenericPagination state="notification" />
       </div>
     </MainLayout>
   );

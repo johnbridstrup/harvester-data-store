@@ -127,39 +127,21 @@ const GenericRenderer = (props) => {
   );
 };
 
-export const UserPagination = (props) => {
+export const GenericPagination = (props) => {
   const {
     pagination: { next, previous },
-  } = useSelector((state) => state.user);
+  } = useSelector((state) => state[props.state]);
   const dispatch = useDispatch();
 
-  const handlePagination = async (navigation) => {
-    const urlMap = {
-      next: next,
-      previous: previous,
-    };
-    const url = new URL(urlMap[navigation]);
-    if (process.env.REACT_APP_NODE_ENV === PROD_ENV) {
-      url.protocol = "https:";
-    }
-    await dispatch(paginateUser(url));
+  const dispatchObj = {
+    distributor: paginateDistributor,
+    event: paginateEvent,
+    harvester: paginateHarvester,
+    location: paginateLocation,
+    notification: paginateNotification,
+    user: paginateUser,
   };
 
-  return (
-    <GenericRenderer
-      handlePagination={handlePagination}
-      next={next}
-      previous={previous}
-    />
-  );
-};
-
-export const NotificationPagination = (props) => {
-  const {
-    pagination: { next, previous },
-  } = useSelector((state) => state.notification);
-  const dispatch = useDispatch();
-
   const handlePagination = async (navigation) => {
     const urlMap = {
       next: next,
@@ -169,111 +151,7 @@ export const NotificationPagination = (props) => {
     if (process.env.REACT_APP_NODE_ENV === PROD_ENV) {
       url.protocol = "https:";
     }
-    await dispatch(paginateNotification(url));
-  };
-  return (
-    <GenericRenderer
-      handlePagination={handlePagination}
-      next={next}
-      previous={previous}
-    />
-  );
-};
-
-export const HarvesterPagination = (props) => {
-  const {
-    pagination: { next, previous },
-  } = useSelector((state) => state.harvester);
-  const dispatch = useDispatch();
-
-  const handlePagination = async (navigation) => {
-    const urlMap = {
-      next: next,
-      previous: previous,
-    };
-    const url = new URL(urlMap[navigation]);
-    if (process.env.REACT_APP_NODE_ENV === PROD_ENV) {
-      url.protocol = "https:";
-    }
-    await dispatch(paginateHarvester(url));
-  };
-  return (
-    <GenericRenderer
-      handlePagination={handlePagination}
-      next={next}
-      previous={previous}
-    />
-  );
-};
-
-export const LocationPagination = (props) => {
-  const {
-    pagination: { next, previous },
-  } = useSelector((state) => state.location);
-  const dispatch = useDispatch();
-
-  const handlePagination = async (navigation) => {
-    const urlMap = {
-      next: next,
-      previous: previous,
-    };
-    const url = new URL(urlMap[navigation]);
-    if (process.env.REACT_APP_NODE_ENV === PROD_ENV) {
-      url.protocol = "https:";
-    }
-    await dispatch(paginateLocation(url));
-  };
-  return (
-    <GenericRenderer
-      handlePagination={handlePagination}
-      next={next}
-      previous={previous}
-    />
-  );
-};
-
-export const DistributorPagination = (props) => {
-  const {
-    pagination: { next, previous },
-  } = useSelector((state) => state.distributor);
-  const dispatch = useDispatch();
-
-  const handlePagination = async (navigation) => {
-    const urlMap = {
-      next: next,
-      previous: previous,
-    };
-    const url = new URL(urlMap[navigation]);
-    if (process.env.REACT_APP_NODE_ENV === PROD_ENV) {
-      url.protocol = "https:";
-    }
-    await dispatch(paginateDistributor(url));
-  };
-  return (
-    <GenericRenderer
-      handlePagination={handlePagination}
-      next={next}
-      previous={previous}
-    />
-  );
-};
-
-export const EventPagination = (props) => {
-  const {
-    pagination: { next, previous },
-  } = useSelector((state) => state.event);
-  const dispatch = useDispatch();
-
-  const handlePagination = async (navigation) => {
-    const urlMap = {
-      next: next,
-      previous: previous,
-    };
-    const url = new URL(urlMap[navigation]);
-    if (process.env.REACT_APP_NODE_ENV === PROD_ENV) {
-      url.protocol = "https:";
-    }
-    await dispatch(paginateEvent(url));
+    await dispatch(dispatchObj[props.state](url));
   };
   return (
     <GenericRenderer
@@ -290,6 +168,10 @@ GenericRenderer.propTypes = {
   handlePagination: PropTypes.func,
   previous: PropTypes.string,
   next: PropTypes.string,
+};
+
+GenericPagination.propTypes = {
+  state: PropTypes.string.isRequired,
 };
 
 export default Pagination;

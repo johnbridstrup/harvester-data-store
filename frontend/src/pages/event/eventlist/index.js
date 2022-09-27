@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import ListEvent from "../../../components/event/ListEvent";
 import Header from "../../../components/layout/header";
 import MainLayout from "../../../components/layout/main";
-import { EventPagination } from "../../../components/pagination/Pagination";
+import { GenericPagination } from "../../../components/pagination/Pagination";
 import { listEvents } from "../../../features/event/eventSlice";
 import "./styles.css";
 
@@ -21,7 +21,7 @@ function EventListView(props) {
         <Header title={"HDS Events"} className={"display-6 mt-4 mb-4"} />
 
         <ListEvent />
-        <EventPagination />
+        <GenericPagination state="event" />
       </div>
     </MainLayout>
   );
