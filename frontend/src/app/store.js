@@ -2,6 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "../features/auth/authSlice";
 import distributorReducer from "../features/distributor/distributorSlice";
 import errorreportReducer from "../features/errorreport/errorreportSlice";
+import eventReducer from "../features/event/eventSlice";
 import codeReducer from "../features/excecode/codeSlice";
 import fruitReducer from "../features/fruit/fruitSlice";
 import harvesterReducer from "../features/harvester/harvesterSlice";
@@ -20,6 +21,7 @@ const store = configureStore({
     notification: notificationReducer,
     user: userReducer,
     distributor: distributorReducer,
+    event: eventReducer,
   },
 });
 
