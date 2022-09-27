@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import moment from "moment"
+import moment from "moment";
 import { Link } from "react-router-dom";
 
 function EventTable(props) {

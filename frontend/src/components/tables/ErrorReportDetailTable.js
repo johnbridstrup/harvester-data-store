@@ -1,4 +1,5 @@
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 import { timeStampFormat } from "../../utils/utils";
 
 function ErrorReportDetailTable(props) {
@@ -16,6 +17,7 @@ function ErrorReportDetailTable(props) {
                 <th>Services</th>
                 <th>Branch</th>
                 <th>Githash</th>
+                <th>Event</th>
               </tr>
             </thead>
             <tbody>
@@ -29,6 +31,11 @@ function ErrorReportDetailTable(props) {
                 <td>{props.reportObj?.service}</td>
                 <td>{props.reportObj?.report?.data?.branch_name}</td>
                 <td>{props.reportObj?.report?.data?.githash}</td>
+                <td>
+                  <Link to={`/events/${props.reportObj?.event?.id}`}>
+                    {props.reportObj?.event?.id}
+                  </Link>
+                </td>
               </tr>
             </tbody>
           </table>
