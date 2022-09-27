@@ -1,6 +1,6 @@
 import { useState, useEffect, lazy, Suspense, useRef } from "react";
 import { useSelector } from "react-redux";
-import s3FileService from "../../features/s3file/s3fileService";
+import { handleDownload } from "../../utils/services";
 import { Loader, robotInError, timeStampFormat } from "../../utils/utils";
 import DownloadModal from "../modals/DownloadModal";
 import {
@@ -119,13 +119,7 @@ function ErrorReportDetail(props) {
   };
 
   const handleDownloadFiles = async (fileObj) => {
-    const s3fileUrl = await s3FileService.s3FileDownload(fileObj.url, token);
-    const link = document.createElement("a");
-    link.href = s3fileUrl;
-    link.setAttribute("target", `_blank`);
-    link.setAttribute("rel", "noopener");
-    document.body.appendChild(link);
-    link.click();
+    await handleDownload(fileObj, token);
   };
 
   return (

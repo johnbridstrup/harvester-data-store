@@ -6,6 +6,7 @@ import DistributorListView from "../pages/distributor/distributorlist";
 import ErrorsReportDetail from "../pages/errorreports/errordetail";
 import ErrorsReportList from "../pages/errorreports/errorlist";
 import ErrorReportPareto from "../pages/errorreports/errorpareto";
+import EventListView from "../pages/event/eventlist";
 import HarvesterListView from "../pages/harvester/harvesterlist";
 import Home from "../pages/home";
 import LocationListView from "../pages/location/locationlist";
@@ -114,6 +115,14 @@ const BaseRouter = () => {
           element={
             <RequireUser>
               <DistributorListView />
+            </RequireUser>
+          }
+        />
+        <Route
+          path="/events"
+          element={
+            <RequireUser>
+              <EventListView />
             </RequireUser>
           }
         />

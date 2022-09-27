@@ -22,6 +22,9 @@ function Home(props) {
           <Link to={"/distributors"} className="btn btn-md btn-primary mx-2">
             Distributors
           </Link>
+          <Link to={"/events"} className="btn btn-md btn-primary">
+            Events
+          </Link>
         </div>
       </div>
     </MainLayout>
