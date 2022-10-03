@@ -5,11 +5,11 @@ import { handleDownload } from "../../utils/services";
 
 function DetailEvent(props) {
   const { event } = useSelector((state) => state.event);
-  const { token } = useSelector(state => state.auth);
+  const { token } = useSelector((state) => state.auth);
 
   const handleDownloadFiles = async (fileObj) => {
     await handleDownload(fileObj, token);
-  }
+  };
 
   return (
     <>
@@ -40,7 +40,11 @@ function DetailEvent(props) {
               </div>
               <div>
                 {event.related_files?.map((obj, index) => (
-                  <a href="#!" key={index} onClick={() => handleDownloadFiles(obj)}>
+                  <a
+                    href="#!"
+                    key={index}
+                    onClick={() => handleDownloadFiles(obj)}
+                  >
                     {obj.filetype}
                   </a>
                 ))}

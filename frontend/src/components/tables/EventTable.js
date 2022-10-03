@@ -49,7 +49,7 @@ function EventTable(props) {
 
 EventTable.propTypes = {
   events: PropTypes.array.isRequired,
-  handleDownload: PropTypes.func
+  handleDownload: PropTypes.func,
 };
 
 export default EventTable;

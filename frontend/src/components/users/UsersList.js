@@ -98,7 +98,7 @@ function UsersList(props) {
         mode: "edit",
         objId: user.id,
         password: "",
-        password2: ""
+        password2: "",
       };
     });
     modalPopUp();
