@@ -37,6 +37,8 @@ urlpatterns = [
     path(f'{version}/s3files/', include('s3file.urls')),
     path(f'{version}/release/', include('harvdeploy.urls.harvestercodereleaseurls')),
     path(f'{version}/harvversion/', include('harvdeploy.urls.harvesterversionreporturls')),
+    path(f'{version}/jobtypes/', include('harvjobs.urls.jobtypeurls')),
+    path(f'{version}/jobschemas/', include('harvjobs.urls.jobschemaurls')),
     path(f'{version}/users/', include('common.urls.userurls')),
     path(f'{version}/healthcheck/', include('healthcheck.urls')),
     path(
