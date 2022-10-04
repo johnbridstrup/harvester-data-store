@@ -4,7 +4,7 @@ function MainLayout(props) {
   return (
     <>
       <Navbar />
-      {props.children}
+      <div className="main-layout">{props.children}</div>
     </>
   );
 }

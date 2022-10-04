@@ -1,32 +1,30 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import Logo from "../../../assets/images/advanced_farm_logo_alpha.png";
+import { ArrowDown, Menu, Notification } from "../../../assets/svg";
 import { logout } from "../../../features/auth/authSlice";
 import { API_BASE_URL } from "../../../features/base/constants";
+import useClickOutside from "../../../hooks/clickOutSide";
+import AllMenu from "./AllMenu";
+import UserMenu from "./UserMenu";
+import "./styles.css";
 
 function Navbar(props) {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { user, isAuthenticated, token } = useSelector((state) => state.auth);
+  const [showAllMenu, setshowAllMenu] = useState(false);
+  const [showUserMenu, setshowUserMenu] = useState(false);
+  const { user, token } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
-  const menuRef = useRef();
+  const allMenuRef = useRef();
+  const userMenuRef = useRef();
   const adminUrl = process.env.REACT_APP_ADMIN_URL || `${API_BASE_URL}/admin`;
 
-  useEffect(() => {
-    const checkIfClickedOutside = (e) => {
-      if (
-        isMenuOpen &&
-        menuRef.current &&
-        !menuRef.current.contains(e.target)
-      ) {
-        setIsMenuOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", checkIfClickedOutside);
-    return () => {
-      document.removeEventListener("mousedown", checkIfClickedOutside);
-    };
-  }, [isMenuOpen]);
+  useClickOutside(allMenuRef, () => {
+    setshowAllMenu(false);
+  });
+  useClickOutside(userMenuRef, () => {
+    setshowUserMenu(false);
+  });
 
   const handleLogout = async () => {
     const res = await dispatch(logout({ token }));
@@ -35,73 +33,57 @@ function Navbar(props) {
     }
   };
 
-  const toggleMenuModal = () => setIsMenuOpen(!isMenuOpen);
-
   return (
-    <nav className="navbar bg-light">
-      <div className="container">
-        <div className="navbar-brand">
-          <a className="" href="/">
-            <img src={Logo} alt="logo" width="30" height="24" />
-          </a>
-          <a
-            href={adminUrl}
-            target="_blank"
-            rel="noreferrer"
-            className="admin-route"
-          >
-            Admin
-          </a>
-        </div>
-        <div className="d-flex-relative">
-          <div onClick={toggleMenuModal}>
-            {user && user.username && (
-              <div className="flex-align-center">
-                <span>
-                  <i className="las la-user-circle size-2x"></i>
-                </span>
-                <span className="mx-2">{user.username}</span>
-              </div>
-            )}
-          </div>
-          {isMenuOpen && (
-            <div className="profile-menu" ref={menuRef}>
-              <div className="py-2">
-                <Link to="/users/profile/me" className="link-item">
-                  <i className="las la-user size-2x"></i> My Profile
-                </Link>
-              </div>
-              <div className="py-2">
-                <Link to="/notifications" className="link-item">
-                  <i className="las la-bell size-2x"></i> Notifications
-                </Link>
-              </div>
-              {user?.is_superuser && (
-                <div className="py-2">
-                  <Link to="/users/all" className="link-item">
-                    <i className="las la-users size-2x"></i> Users
-                  </Link>
-                </div>
-              )}
-              <div className="py-2">
-                <Link to="/accounts/settings" className="link-item">
-                  <i className="las la-cog size-2x"></i> Settings
-                </Link>
-              </div>
+    <header>
+      <div className="container-fluid header">
+        <div className="header-left">
+          <Link to="/" className="header-logo">
+            <div className="circle">
+              <img src={Logo} alt="" />
+            </div>
+          </Link>
+          {user.is_superuser && (
+            <div className="external-admin hover1">
+              <a href={adminUrl} target="_blank" rel="noreferrer">
+                Admin
+              </a>
             </div>
           )}
-          {isAuthenticated ? (
-            <button onClick={handleLogout} className="btn btn-sm btn-warning">
-              Logout
-            </button>
-          ) : (
-            <Link to="/login" className="btn btn-sm btn-warning">
-              Login
-            </Link>
-          )}
+        </div>
+        <div className="header-middle"></div>
+        <div className="header-right">
+          <Link to="/users/profile/me" className="profile-link hover1">
+            <img
+              src="https://bootdey.com/img/Content/avatar/avatar7.png"
+              alt=""
+            />
+            <span>{user?.first_name}</span>
+          </Link>
+          <div
+            className={`circle-icon hover1 ${showAllMenu && "active-header"}`}
+            ref={allMenuRef}
+          >
+            <div onClick={() => setshowAllMenu((prev) => !prev)}>
+              <Menu />
+            </div>
+            {showAllMenu && <AllMenu user={user} />}
+          </div>
+          <Link to="/notifications" className="circle-icon hover1">
+            <Notification />
+            <div className="right-notification">5</div>
+          </Link>
+          <div
+            className={`circle-icon hover1 ${showUserMenu && "active-header"}`}
+            ref={userMenuRef}
+          >
+            <div onClick={() => setshowUserMenu((prev) => !prev)}>
+              <ArrowDown />
+            </div>
+            {showUserMenu && <UserMenu user={user} logout={handleLogout} />}
+          </div>
         </div>
       </div>
-    </nav>
+    </header>
   );
 }
 
