@@ -41,7 +41,7 @@ function ErrorReportJson(props) {
           <JsonDiv>
             <ReactJson
               src={props.reportObj?.report}
-              collapsed={true}
+              collapsed={3}
               thme="monokai"
               enableClipboard
             />
