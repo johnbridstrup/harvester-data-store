@@ -39,6 +39,8 @@ urlpatterns = [
     path(f'{version}/harvversion/', include('harvdeploy.urls.harvesterversionreporturls')),
     path(f'{version}/jobtypes/', include('harvjobs.urls.jobtypeurls')),
     path(f'{version}/jobschemas/', include('harvjobs.urls.jobschemaurls')),
+    path(f'{version}/jobresults/', include('harvjobs.urls.jobresultsurls')),
+    path(f'{version}/harvjobs/', include('harvjobs.urls.joburls')),
     path(f'{version}/users/', include('common.urls.userurls')),
     path(f'{version}/healthcheck/', include('healthcheck.urls')),
     path(

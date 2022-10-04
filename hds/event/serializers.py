@@ -18,8 +18,21 @@ class EventSerializer(serializers.ModelSerializer):
                 'object': 'Error Report'
             } for rep in instance.errorreport_set.all()
         ]
+
+        jobs = [
+            {
+                'url': f'/jobs/{rep.id}/', 
+                'object': 'Job'
+            } for rep in instance.job_set.all()
+        ] + [
+            {
+                'url': f'/jobstatus/{rep.id}/', 
+                'object': 'Job Status'
+            } for rep in instance.jobresults_set.all()
+        ]
         data['related_objects'] = [
             *error_reports,
+            *jobs,
         ]
 
         # Connect related files here

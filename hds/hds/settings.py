@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'django_prometheus',
     'django_celery_results',
+    'django_filters',
     'common',
     'location',
     'errorreport',
