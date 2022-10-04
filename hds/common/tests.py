@@ -9,6 +9,7 @@ from django.urls import reverse
 from .serializers.userserializer import UserSerializer
 from .models import UserProfile
 from hds.urls import urlpatterns
+from common.models import UserProfile
 from exceptions.models import AFTExceptionCode
 from harvester.models import Fruit, Harvester
 from location.models import Distributor, Location
@@ -54,6 +55,7 @@ class HDSAPITestBase(APITestCase):
     def setUp(self):
         self.client = APIClient()
         self.user = User.objects.create(username='test_user')
+        self.user_profile = UserProfile.objects.create(user=self.user, slack_id="fake-id")
         self.token = Token.objects.create(user=self.user)
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
         self.api_base_url = '/api/v1'
@@ -258,7 +260,6 @@ class ManageUserTest(HDSAPITestBase):
     def test_self_can_update_user_profile(self):
         """Test self can update his/her user profle."""
         self.payload.update({'username': self.user.username})
-        UserProfile.objects.create(user=self.user)
         url = detail_url(self.user.id)
         res = self.client.patch(url, self.payload, format='json')
         self.user.refresh_from_db()

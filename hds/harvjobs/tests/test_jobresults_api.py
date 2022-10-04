@@ -1,11 +1,14 @@
 from .HarvJobApiTestBase import HarvJobApiTestBase
 from ..models import Job
+from ..tasks import JOB_STATUS_MSG_FMT, JOB_SLACK_CHANNEL
+from common.utils import build_frontend_url
 
 from rest_framework import status
-
+from unittest.mock import patch
 
 class JobResultApiTestCase(HarvJobApiTestBase):
-    def test_create_jobresult(self):
+    @patch("harvjobs.tasks.post_to_slack")
+    def test_create_jobresult(self, slack):
         self.create_jobtype()
         self.create_jobschema()
         _, job_resp = self.create_job()
@@ -46,6 +49,18 @@ class JobResultApiTestCase(HarvJobApiTestBase):
 
         self.assertEqual(updated_job_data["jobstatus"], Job.StatusChoices.SUCCESS)
 
+        # Assert post_to_slack called correctly
+        self.assertEqual(slack.call_count, 1)
+
+        expect_msg = JOB_STATUS_MSG_FMT.format(
+            result=Job.StatusChoices.SUCCESS,
+            UUID=UUID,
+            url=build_frontend_url("harvjobs", 1)
+        ) + f"<@{self.user_profile.slack_id}>"
+
+        self.assertEqual(slack.call_args[0][0], expect_msg)
+        self.assertDictEqual(slack.call_args[1], {"channel": JOB_SLACK_CHANNEL})
+    
     def test_create_fail(self):
         self.create_jobtype()
         self.create_jobschema()

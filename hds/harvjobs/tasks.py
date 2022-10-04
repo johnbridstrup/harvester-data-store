@@ -3,10 +3,21 @@ from django.contrib.auth.models import User
 
 from .models import Job, JobHostResult, JobResults
 from common.serializers.reportserializer import ReportSerializerBase
+from notifications.slack import post_to_slack
+
+
+JOB_STATUS_MSG_FMT = (
+    "*Job Complete*\n"
+    "\tRESULT: {result}"
+    "\tUUID: {UUID}\n"
+    "\tURL: {url}\n"
+)
+
+JOB_SLACK_CHANNEL = "hds-jobs"
 
 
 @shared_task
-def job_status_update(UUID, results, jobresult_pk, user_pk):
+def job_status_update(UUID, results, jobresult_pk, user_pk, url):
     job = Job.objects.get(event__UUID=UUID)
     jobresults = JobResults.objects.get(id=jobresult_pk)
     user = User.objects.get(id=user_pk)
@@ -42,5 +53,15 @@ def job_status_update(UUID, results, jobresult_pk, user_pk):
         status = Job.StatusChoices.ERROR
     job.jobstatus = status
     job.save()
+
+    msg = JOB_STATUS_MSG_FMT.format(
+        result=status,
+        UUID=UUID,
+        url=url,
+    )
+    if job.creator.profile.slack_id is not None:
+        msg += f"<@{job.creator.profile.slack_id}>"
+        
+    post_to_slack(msg, channel=JOB_SLACK_CHANNEL)
 
     return f"Job {UUID} complete. Status: {status}"
