@@ -8,6 +8,7 @@ import ErrorsReportList from "../pages/errorreports/errorlist";
 import ErrorReportPareto from "../pages/errorreports/errorpareto";
 import EventDetailView from "../pages/event/eventdetail";
 import EventListView from "../pages/event/eventlist";
+import ReleaseCodeListView from "../pages/harvdeploy/releaselist";
 import HarvesterListView from "../pages/harvester/harvesterlist";
 import Home from "../pages/home";
 import LocationListView from "../pages/location/locationlist";
@@ -132,6 +133,14 @@ const BaseRouter = () => {
           element={
             <RequireUser>
               <EventDetailView />
+            </RequireUser>
+          }
+        />
+        <Route
+          path="/release"
+          element={
+            <RequireUser>
+              <ReleaseCodeListView />
             </RequireUser>
           }
         />

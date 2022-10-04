@@ -12,6 +12,7 @@ import { paginateHarvester } from "../../features/harvester/harvesterSlice";
 import { paginateLocation } from "../../features/location/locationSlice";
 import { paginateDistributor } from "../../features/distributor/distributorSlice";
 import { paginateEvent } from "../../features/event/eventSlice";
+import { paginateRelease } from "../../features/harvdeploy/releaseSlice";
 
 function Pagination(props) {
   const [pageLimit, setPageLimit] = useState(10);
@@ -140,6 +141,7 @@ export const GenericPagination = (props) => {
     location: paginateLocation,
     notification: paginateNotification,
     user: paginateUser,
+    release: paginateRelease,
   };
 
   const handlePagination = async (navigation) => {

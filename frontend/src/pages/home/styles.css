@@ -2,6 +2,28 @@
   margin-top: 2.5rem;
 }
 
-/* .welcome-brand h2 {
-  font-size: 2rem;
-} */
+.home-buttons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 945px) {
+  .home-buttons a:last-of-type {
+    margin-top: 10px;
+  }
+}
+
+@media (max-width: 760px) {
+  .home-buttons a:nth-child(5) {
+    margin-top: 10px;
+  }
+}
+
+@media (max-width: 375px) {
+  .home-buttons a:nth-child(4),
+  .home-buttons a:nth-child(3) {
+    margin-top: 10px;
+  }
+}
