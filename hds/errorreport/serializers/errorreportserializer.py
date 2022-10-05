@@ -34,10 +34,9 @@ class ErrorReportSerializer(EventSerializerMixin, ReportSerializerBase):
     def to_internal_value(self, data):
         report = data.copy()
         harv_id = int(report['data']['sysmon_report']['serial_number'])
-        harvester = Harvester.objects.get(harv_id=harv_id)
+        harvester = self.get_harvester(harv_id, report['data']['sysmon_report'])
         reportTime = self.extract_timestamp(report['timestamp'])
         UUID = report['data'].get("uuid", Event.generate_uuid())
-        
         data = {
             'harvester': harvester.id,
             'location': harvester.location.id,
@@ -50,8 +49,8 @@ class ErrorReportSerializer(EventSerializerMixin, ReportSerializerBase):
     @classmethod
     def _extract_exception_data(cls, sysmon_report):
         errors = []
-        for sysdict in sysmon_report.values():
-            if "errors" in sysdict:
+        for key, sysdict in sysmon_report.items():
+            if "sysmon" in key and "errors" in sysdict:
                 for serv, errdict in sysdict['errors'].items():
                     service, index = serv.split('.')
                     robot = sysdict.get('robot_index', index)

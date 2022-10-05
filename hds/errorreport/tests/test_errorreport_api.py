@@ -1,10 +1,12 @@
 """ Test ErrorReport APIs """
 from common.tests import HDSAPITestBase
+from harvester.models import Harvester
 from event.models import Event
 from exceptions.models import AFTException
 from ..models import ErrorReport
 from ..serializers.errorreportserializer import ErrorReportSerializer
 from django.utils.timezone import make_aware
+from rest_framework import status
 import datetime
 import json
 import os
@@ -171,3 +173,79 @@ class ErrorReportAPITest(HDSAPITestBase):
         self.assertIn("*Error on Harvester", str(inst))
         self.assertIn("AFTBaseException", str(inst))
         self.assertIn("traychg.0", str(inst))
+
+    def test_create_emu_report(self):
+        Harvester.objects.create(**{
+            'harv_id': 1100,
+            'fruit': self.test_objects["fruit"],
+            'location': self.test_objects["location"],
+            'name': 'Harvester 1',
+            'creator': self.user,
+            'is_emulator': True
+        })
+
+        data = self.data.copy()
+        data['data']['sysmon_report']['fruit'] = self.test_objects['fruit'].name
+        data['data']['sysmon_report']['is_emulator'] = True
+
+        self.assertEqual(data['data']['serial_number'], '011')
+
+        resp = self.client.post(
+            f'{self.api_base_url}/errorreports/', 
+            data, 
+            format='json'
+        )
+
+        self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
+        resp_data = resp.json()['data']
+
+        # Assert we used the emulated harvester and not harv 11
+        self.assertEqual(resp_data['harvester']['harv_id'], 1100)
+
+    def test_get_emu_get_non_emu(self):
+        # Create real harv report
+        self.client.post(
+            f'{self.api_base_url}/errorreports/', 
+            self.data, 
+            format='json'
+        )
+
+        # Create emulator report
+        Harvester.objects.create(**{
+            'harv_id': 1100,
+            'fruit': self.test_objects["fruit"],
+            'location': self.test_objects["location"],
+            'name': 'Harvester 1',
+            'creator': self.user,
+            'is_emulator': True
+        })
+
+        data = self.data.copy()
+        data['data']['sysmon_report']['fruit'] = self.test_objects['fruit'].name
+        data['data']['sysmon_report']['is_emulator'] = True
+        self.client.post(
+            f'{self.api_base_url}/errorreports/', 
+            data, 
+            format='json'
+        )
+
+        self.assertEqual(Harvester.objects.count(), 2)
+
+        # get all
+        resp = self.client.get(f'{self.api_base_url}/errorreports/')
+        all_data = resp.json()['data']
+        self.assertEqual(all_data['count'], 2)
+
+        # get real
+        resp = self.client.get(f'{self.api_base_url}/errorreports/?is_emulator=0')
+        real_data = resp.json()['data']
+        self.assertEqual(real_data['count'], 1)
+        self.assertEqual(real_data['results'][0]['harvester']['harv_id'], 11)
+        self.assertFalse(real_data['results'][0]['harvester']['is_emulator'])
+
+        # # get emu
+        resp = self.client.get(f'{self.api_base_url}/errorreports/?is_emulator=1')
+        emu_data = resp.json()['data']
+        self.assertEqual(emu_data['count'], 1)
+        self.assertEqual(emu_data['results'][0]['harvester']['harv_id'], 1100)
+        self.assertTrue(emu_data['results'][0]['harvester']['is_emulator'])

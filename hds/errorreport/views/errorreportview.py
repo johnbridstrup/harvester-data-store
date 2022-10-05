@@ -104,8 +104,14 @@ class ErrorReportView(CreateModelViewSet):
             if len(traceback) > 0:
                 listfilter['exceptions__traceback__icontains'] = traceback
 
+        # Filter for emulator data
+        if 'is_emulator' in request.query_params:
+            is_emu = bool(int(request.query_params['is_emulator']))
+            listfilter['harvester__is_emulator'] = is_emu
+
         # update listfilter with generic query dict
         listfilter.update(cls.build_generic_query(request))
+
         return listfilter
 
     @classmethod
@@ -133,7 +139,8 @@ class ErrorReportView(CreateModelViewSet):
     @ERRORREPORT_LIST_QUERY_TIMER.time()
     def get_queryset(self):
         listfilter = self.build_list_filter(self.request)
-        return ErrorReport.objects.filter(**listfilter).order_by('-reportTime').distinct()
+        harvs = ErrorReport.objects.filter(**listfilter).order_by('-reportTime').distinct()
+        return harvs
 
     @classmethod
     @PARETO_QUERY_TIMER.time() 
