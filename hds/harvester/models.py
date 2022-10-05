@@ -19,6 +19,7 @@ class Harvester(CommonInfo):
     is_emulator = models.BooleanField(default=False)
     release = models.ForeignKey("harvdeploy.HarvesterCodeRelease", blank=True, null=True, on_delete=models.SET_NULL)
     history = HistoricalRecords()
+    thingName = models.CharField(max_length=20, null=True, blank=True)
 
     def save(self, *args, **kwargs):
         if self.is_emulator:

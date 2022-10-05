@@ -2,10 +2,12 @@ from .HarvJobApiTestBase import HarvJobApiTestBase
 from ..models import Job
 
 from rest_framework import status
+from unittest.mock import patch
 
 
 class JobApiTestCase(HarvJobApiTestBase):
-    def test_create_job(self):
+    @patch("harvjobs.views.jobviews.schedule_job.delay")
+    def test_create_job(self, task):
         self.create_jobtype()
         self.create_jobschema()
         _, job_resp = self.create_job()
@@ -22,8 +24,10 @@ class JobApiTestCase(HarvJobApiTestBase):
 
         # Assert the UUIDs match
         event_data = event_resp.json()["data"]
-        
         self.assertEqual(event_data["UUID"], job_data["event"]["UUID"])
+
+        # Assert celery task was called
+        self.assertEqual(task.call_count, 1)
 
     def test_missing_required_arg(self):
         self.create_jobtype()

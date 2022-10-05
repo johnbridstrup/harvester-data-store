@@ -1,5 +1,6 @@
 from ..models import Job
 from ..serializers.jobserializer import JobSerializer, JobHistorySerializer
+from ..tasks import schedule_job
 
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.decorators import action
@@ -34,3 +35,12 @@ class JobView(CreateModelViewSet):
             serializer = JobHistorySerializer(queryset, many=True)
             data = serializer.data
         return make_ok(f"Job {job.event.UUID} history", data)
+        
+    def perform_create(self, serializer):
+        super().perform_create(serializer)
+
+        job_id = serializer.data["id"]
+        harv_pk = serializer.data["target"]
+
+        schedule_job.delay(job_id, harv_pk, self.request.user.id)
+
