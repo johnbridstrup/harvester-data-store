@@ -45,3 +45,45 @@ class HarvesterTestCase(TestCase):
         with self.assertRaises(ValueError):
             Harvester.objects.create(fruit=self.fruit, harv_id=1001,
                                      location="new location", name="Harvester 1")
+
+    def test_create_emulator(self):
+        harvester = Harvester.objects.create(
+            creator=self.creator, 
+            fruit=self.fruit, 
+            harv_id=1001,
+            location=self.location, name="Harvester 1",
+            is_emulator=True
+        )
+        self.assertEqual(Harvester.objects.count(), 1)
+        self.assertTrue(harvester.is_emulator)
+
+    def test_duplicate_emulator(self):
+        Harvester.objects.create(
+            creator=self.creator, 
+            fruit=self.fruit, 
+            harv_id=1002,
+            location=self.location, name="Harvester 1",
+            is_emulator=True
+        )
+        self.assertEqual(Harvester.objects.count(), 1)
+
+        with self.assertRaises(ValueError, msg=f"There can only be one {self.fruit} emulator"):
+            Harvester.objects.create(
+                creator=self.creator, 
+                fruit=self.fruit, 
+                harv_id=1001,
+                location=self.location, name="Harvester 1",
+                is_emulator=True
+            )
+        
+    def test_update_emulator(self):
+        harv = Harvester.objects.create(
+            creator=self.creator, 
+            fruit=self.fruit, 
+            harv_id=1002,
+            location=self.location, name="Harvester 1",
+            is_emulator=True
+        )
+
+        harv.harv_id = harv.harv_id + 1
+        harv.save()
