@@ -37,7 +37,7 @@ function UserProfileDetail(props) {
     current_password: "",
     confirm_password: "",
   });
-  const [notifObj, setNotifObj] = useState(null)
+  const [notifObj, setNotifObj] = useState(null);
   const { user } = useSelector((state) => state.auth);
   const { notifications } = useSelector((state) => state.notification);
   const dispatch = useDispatch();
@@ -128,7 +128,7 @@ function UserProfileDetail(props) {
     if (res.type === "notification/deleteNotification/fulfilled") {
       toast.success("Notification deleted successfully");
       await dispatch(listNotifications());
-      confirmPopUp(null)
+      confirmPopUp(null);
     } else {
       toast.error("Could not delete the specified notification");
     }
@@ -152,7 +152,7 @@ function UserProfileDetail(props) {
   };
 
   const confirmPopUp = (obj) => {
-    setNotifObj(current => obj);
+    setNotifObj((current) => obj);
     confirmRef.current.click();
   };
 
