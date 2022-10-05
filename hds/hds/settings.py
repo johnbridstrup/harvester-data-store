@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'exceptions',
     'harvester',
     'harvdeploy',
+    'harvjobs',
     'healthcheck',
     'notifications',
     's3file',
