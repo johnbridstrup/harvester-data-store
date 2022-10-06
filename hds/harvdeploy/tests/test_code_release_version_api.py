@@ -271,3 +271,44 @@ class ReleaseApiTestCase(HDSAPITestBase):
             harv.id
         )
       
+    ## Integration with Harvester
+
+    def test_harv_version_release(self):
+        # Create release
+        self.create_release()
+
+        # Set to harvester
+        self.client.patch(f"{self.api_base_url}/harvesters/1/", data={"release": 1})
+
+        # Upload version from harvester
+        self.create_version()
+
+        # GET harvester and check release + versions
+        resp = self.client.get(f"{self.api_base_url}/harvesters/1/")
+        data = resp.json()["data"]
+        self.assertDictEqual(data["release"]["release"], self.release)
+        self.assertDictEqual(data["version"]["report"], self.versions)
+
+        # Update version and re-check
+        self.create_version(versions=self.version2)
+        resp = self.client.get(f"{self.api_base_url}/harvesters/1/")
+        data = resp.json()["data"]
+        self.assertDictEqual(data["release"]["release"], self.release)
+        self.assertDictEqual(data["version"]["report"], self.version2)
+
+    def test_no_release(self):
+        self.create_version()
+
+        resp = self.client.get(f"{self.api_base_url}/harvesters/1/")
+        data = resp.json()["data"]
+        self.assertIsNone(data["release"])
+        self.assertDictEqual(data["version"]["report"], self.versions)
+
+    def test_no_versions(self):
+        self.create_release()
+        self.client.patch(f"{self.api_base_url}/harvesters/1/", data={"release": 1})
+
+        resp = self.client.get(f"{self.api_base_url}/harvesters/1/")
+        data = resp.json()["data"]
+        self.assertDictEqual(data["release"]["release"], self.release)
+        self.assertIsNone(data["version"])

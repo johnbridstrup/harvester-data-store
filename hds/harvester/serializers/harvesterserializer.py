@@ -1,7 +1,8 @@
 # import serializers
 from rest_framework import serializers
 
-from harvdeploy.serializers import HarvesterCodeReleaseSerializer
+from harvdeploy.models import HarvesterVersionReport
+from harvdeploy.serializers import HarvesterCodeReleaseSerializer, HarvesterVersionReportSerializer
 from location.serializers.locationserializer import LocationSerializer
 from .fruitserializer import FruitSerializer
 from ..models import Harvester
@@ -19,6 +20,13 @@ class HarvesterSerializer(serializers.ModelSerializer):
         data['location'] = LocationSerializer(instance.location).data
         if instance.release:
             data['release'] = HarvesterCodeReleaseSerializer(instance.release).data
+        else:
+            data['release'] = None
+        try:
+            vers = instance.current_version()
+            data['version'] = HarvesterVersionReportSerializer(vers).data
+        except HarvesterVersionReport.DoesNotExist:
+            data['version'] = None
         return data
 
 
