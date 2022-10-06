@@ -16,6 +16,7 @@ class Harvester(CommonInfo):
     location = models.ForeignKey(Location, on_delete=models.CASCADE)
     name = models.CharField(max_length=255, blank=True, null=True)
     is_emulator = models.BooleanField(default=False)
+    release = models.ForeignKey("harvdeploy.HarvesterCodeRelease", blank=True, null=True, on_delete=models.SET_NULL)
 
     def save(self, *args, **kwargs):
         if self.is_emulator:
@@ -29,6 +30,7 @@ class Harvester(CommonInfo):
             except Harvester.DoesNotExist:
                 pass
         super(Harvester, self).save(*args, **kwargs)
+    
 
     def __str__(self):
         return self.name
