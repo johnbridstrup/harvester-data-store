@@ -1,33 +1,38 @@
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 import MainLayout from "../../components/layout/main";
+import { menu, adminMenu } from "../../assets/menu";
 import "./styles.css";
 
 function Home(props) {
+  const { user } = useSelector((state) => state.auth);
+  const menus = user.is_superuser ? adminMenu : menu;
   return (
     <MainLayout>
       <div className="container">
-        <div className="welcome-brand mb-5">
-          <h2>Welcome to HDS</h2>
+        <div className="mb-5">
+          <h2 className="display-4">Welcome to HDS</h2>
         </div>
-        <div className="home-buttons">
-          <Link to={"/errorreports"} className="btn btn-md btn-primary">
-            Error Reports
-          </Link>
-          <Link to={"/harvesters"} className="btn btn-md btn-primary">
-            Harvesters
-          </Link>
-          <Link to={"/locations"} className="btn btn-md btn-primary">
-            Locations
-          </Link>
-          <Link to={"/distributors"} className="btn btn-md btn-primary">
-            Distributors
-          </Link>
-          <Link to={"/events"} className="btn btn-md btn-primary">
-            Events
-          </Link>
-          <Link to={"/release"} className="btn btn-md btn-primary">
-            Harvester Releases
-          </Link>
+        <div className="row">
+          {menus.map((item, index) => (
+            <Link
+              to={item.href}
+              key={index}
+              className="col-md-4 link-secondary mt-4"
+            >
+              <div className="card card-body hover1">
+                <div className="link-icon-container">
+                  <img
+                    className="menu-icon"
+                    src={`../../icons/${item.icon}.png`}
+                    alt=""
+                  />
+                  <span className="link">{item.name}</span>
+                </div>
+                <div>{item.description}</div>
+              </div>
+            </Link>
+          ))}
         </div>
       </div>
     </MainLayout>

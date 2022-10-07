@@ -4,7 +4,7 @@ import { menu, adminMenu } from "../../../assets/menu";
 import AllMenuItem from "./AllMenuItem";
 
 function AllMenu(props) {
-  const menus = props.user?.is_superadmin ? adminMenu : menu;
+  const menus = props.user?.is_superuser ? adminMenu : menu;
   const [searched, setSearched] = useState(menus);
   const handleChange = (e) => {
     let value = e.target.value;

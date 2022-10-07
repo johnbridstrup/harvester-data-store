@@ -2,28 +2,18 @@
   margin-top: 2.5rem;
 }
 
-.home-buttons {
+.link-icon-container {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  flex-wrap: wrap;
+  gap: 10px;
 }
 
-@media (max-width: 945px) {
-  .home-buttons a:last-of-type {
-    margin-top: 10px;
-  }
+.menu-icon {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
 }
 
-@media (max-width: 760px) {
-  .home-buttons a:nth-child(5) {
-    margin-top: 10px;
-  }
-}
-
-@media (max-width: 375px) {
-  .home-buttons a:nth-child(4),
-  .home-buttons a:nth-child(3) {
-    margin-top: 10px;
-  }
+.link-secondary {
+  color: var(--color-secondary);
 }
