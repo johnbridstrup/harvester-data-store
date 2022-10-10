@@ -1,0 +1,267 @@
+[
+{
+    "model": "harvdeploy.harvestercoderelease",
+    "pk": 1,
+    "fields": {
+        "creator": 1,
+        "modifiedBy": null,
+        "created": "2022-09-21T15:33:52.778Z",
+        "lastModified": "2022-09-21T15:33:52.778Z",
+        "version": "20220922.163848",
+        "release": {
+            "master": {
+                "package": "version"
+            },
+            "robot": {
+                "package": "version"
+            },
+            "stereo": {
+                "package": "version"
+            },
+            "version": "20220922.163848",
+            "project": "strawberry"
+        },
+        "fruit": 2
+    }
+},
+{
+    "model": "harvdeploy.harvesterversionreport",
+    "pk": 1,
+    "fields": {
+        "creator": 1,
+        "modifiedBy": null,
+        "created": "2022-10-10T22:25:38.062Z",
+        "lastModified": "2022-10-10T22:25:38.062Z",
+        "reportTime": "2022-10-10T22:25:24Z",
+        "report": {
+            "type": "version",
+            "data": {
+                "serial_number": "011",
+                "master": {
+                    "version": 1.0,
+                    "dirty": {}
+                },
+                "robot.1": {
+                    "version": 1.0,
+                    "dirty": {}
+                },
+                "stereo.1": {
+                    "version": 1.0,
+                    "dirty": {}
+                },
+                "robot.2": {
+                    "version": 1.0,
+                    "dirty": {}
+                },
+                "stereo.2": {
+                    "version": 1.0,
+                    "dirty": {}
+                }
+            }
+        },
+        "harvester": 3,
+        "is_dirty": false
+    }
+},
+{
+    "model": "harvdeploy.harvesterversionreport",
+    "pk": 2,
+    "fields": {
+        "creator": 1,
+        "modifiedBy": null,
+        "created": "2022-10-10T22:25:59.922Z",
+        "lastModified": "2022-10-10T22:25:59.922Z",
+        "reportTime": null,
+        "report": {
+            "type": "version",
+            "data": {
+                "serial_number": "011",
+                "master": {
+                    "version": 1.0,
+                    "dirty": {}
+                },
+                "robot.1": {
+                    "version": 1.0,
+                    "dirty": {}
+                },
+                "stereo.1": {
+                    "version": 1.0,
+                    "dirty": {}
+                },
+                "robot.2": {
+                    "version": 1.0,
+                    "dirty": {}
+                },
+                "stereo.2": {
+                    "version": 1.0,
+                    "dirty": {
+                        "dirty": "package"
+                    }
+                }
+            }
+        },
+        "harvester": 3,
+        "is_dirty": true
+    }
+},
+{
+    "model": "harvdeploy.harvesterversionreport",
+    "pk": 3,
+    "fields": {
+        "creator": 1,
+        "modifiedBy": null,
+        "created": "2022-10-10T22:26:27.629Z",
+        "lastModified": "2022-10-10T22:26:27.629Z",
+        "reportTime": "2022-10-10T22:26:03Z",
+        "report": {
+            "type": "version",
+            "data": {
+                "serial_number": "100",
+                "master": {
+                    "version": 1.0,
+                    "dirty": {}
+                },
+                "robot.1": {
+                    "version": 1.0,
+                    "dirty": {}
+                },
+                "stereo.1": {
+                    "version": 1.0,
+                    "dirty": {}
+                },
+                "robot.2": {
+                    "version": 1.0,
+                    "dirty": {}
+                },
+                "stereo.2": {
+                    "version": 1.0,
+                    "dirty": {}
+                }
+            }
+        },
+        "harvester": 1,
+        "is_dirty": false
+    }
+},
+{
+    "model": "harvdeploy.harvesterversionreport",
+    "pk": 4,
+    "fields": {
+        "creator": 1,
+        "modifiedBy": null,
+        "created": "2022-10-10T22:26:42.597Z",
+        "lastModified": "2022-10-10T22:26:42.597Z",
+        "reportTime": "2022-10-10T22:26:36Z",
+        "report": {
+            "type": "version",
+            "data": {
+                "serial_number": "100",
+                "master": {
+                    "version": 1.0,
+                    "dirty": {}
+                },
+                "robot.1": {
+                    "version": 1.0,
+                    "dirty": {}
+                },
+                "stereo.1": {
+                    "version": 1.0,
+                    "dirty": {}
+                },
+                "robot.2": {
+                    "version": 1.0,
+                    "dirty": {}
+                },
+                "stereo.2": {
+                    "version": 1.0,
+                    "dirty": {
+                        "dirty": "package"
+                    }
+                }
+            }
+        },
+        "harvester": 1,
+        "is_dirty": true
+    }
+},
+{
+    "model": "harvdeploy.harvesterversionreport",
+    "pk": 5,
+    "fields": {
+        "creator": 1,
+        "modifiedBy": null,
+        "created": "2022-10-10T22:26:56.912Z",
+        "lastModified": "2022-10-10T22:26:56.912Z",
+        "reportTime": "2022-10-10T22:26:46Z",
+        "report": {
+            "type": "version",
+            "data": {
+                "serial_number": "200",
+                "master": {
+                    "version": 1.0,
+                    "dirty": {}
+                },
+                "robot.1": {
+                    "version": 1.0,
+                    "dirty": {}
+                },
+                "stereo.1": {
+                    "version": 1.0,
+                    "dirty": {}
+                },
+                "robot.2": {
+                    "version": 1.0,
+                    "dirty": {}
+                },
+                "stereo.2": {
+                    "version": 1.0,
+                    "dirty": {}
+                }
+            }
+        },
+        "harvester": 2,
+        "is_dirty": false
+    }
+},
+{
+    "model": "harvdeploy.harvesterversionreport",
+    "pk": 6,
+    "fields": {
+        "creator": 1,
+        "modifiedBy": null,
+        "created": "2022-10-10T22:27:14.124Z",
+        "lastModified": "2022-10-10T22:27:14.124Z",
+        "reportTime": "2022-10-10T22:27:08Z",
+        "report": {
+            "type": "version",
+            "data": {
+                "serial_number": "200",
+                "master": {
+                    "version": 1.0,
+                    "dirty": {}
+                },
+                "robot.1": {
+                    "version": 1.0,
+                    "dirty": {}
+                },
+                "stereo.1": {
+                    "version": 1.0,
+                    "dirty": {}
+                },
+                "robot.2": {
+                    "version": 1.0,
+                    "dirty": {}
+                },
+                "stereo.2": {
+                    "version": 1.0,
+                    "dirty": {
+                        "dirty": "package"
+                    }
+                }
+            }
+        },
+        "harvester": 2,
+        "is_dirty": true
+    }
+}
+]
