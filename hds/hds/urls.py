@@ -26,6 +26,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path(f'{version}/fruits/', include('harvester.urls.fruiturls')),
     path(f'{version}/harvesters/', include('harvester.urls.harvesterurls')),
+    path(f'{version}/harvesterhistory/', include('harvester.urls.harvesterhistoryurls')),
     path(f'{version}/locations/', include('location.urls.locationurls')),
     path(f'{version}/distributors/', include('location.urls.distributorurls')),
     path(f'{version}/errorreports/', include('errorreport.urls')),

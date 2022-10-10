@@ -1,7 +1,9 @@
 from ..models import HarvesterCodeRelease, HarvesterVersionReport
 from common.tests import HDSAPITestBase
+
 import time
 from dateutil import parser as dateparser
+from urllib.parse import urljoin
 
 from rest_framework import status
 
@@ -312,3 +314,41 @@ class ReleaseApiTestCase(HDSAPITestBase):
         data = resp.json()["data"]
         self.assertDictEqual(data["release"]["release"], self.release)
         self.assertIsNone(data["version"])
+
+    def test_version_history(self):
+        self.create_release()
+        self.client.patch(f"{self.api_base_url}/harvesters/1/", data={"release": 1})
+        self.create_version()
+        self.create_version(versions=self.version2)
+
+        harv_url = f"{self.api_base_url}/harvesters/1/"
+
+        harv_resp = self.client.get(harv_url)
+        vers_hist_rel_url = harv_resp.json()["data"]["version_history"]
+
+        # Version history is relative to the current harv endpoint
+        hist_url = urljoin(harv_url, vers_hist_rel_url)
+        hist_resp = self.client.get(hist_url)
+        hist_data = hist_resp.json()["data"]
+        self.assertEqual(hist_data["count"], 2)
+    
+    def test_release_history(self):
+        self.create_release()
+        self.client.patch(f"{self.api_base_url}/harvesters/1/", data={"release": 1})
+
+        rel2 = self.release.copy()
+        rel2["version"] = 2.0
+        self.create_release(release=rel2)
+        self.client.patch(f"{self.api_base_url}/harvesters/1/", data={"release": 2})
+
+        harv_url = f"{self.api_base_url}/harvesters/1/"
+        harv_resp = self.client.get(harv_url)
+
+        # Release history is relative to the API root endpoint
+        harv_hist_url = self.api_base_url + harv_resp.json()["data"]["harvester_history"]
+        hist_resp = self.client.get(harv_hist_url)
+        hist_data = hist_resp.json()["data"]
+
+        self.assertEqual(hist_data["count"], 3) # The initial PATCH also introduced a history entry
+        for res in hist_data["results"]:
+            self.assertEqual(res["harv_id"], self.test_objects["harvester"].harv_id)

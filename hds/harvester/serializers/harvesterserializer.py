@@ -18,6 +18,8 @@ class HarvesterSerializer(serializers.ModelSerializer):
         data = super().to_representation(instance)
         data['fruit'] = FruitSerializer(instance.fruit).data
         data['location'] = LocationSerializer(instance.location).data
+        data['harvester_history'] = f"/harvesterhistory/?harv_id={instance.harv_id}"
+        data['version_history'] = 'versions/'
         if instance.release:
             data['release'] = HarvesterCodeReleaseSerializer(instance.release).data
         else:
@@ -30,3 +32,11 @@ class HarvesterSerializer(serializers.ModelSerializer):
         return data
 
 
+class HarvesterHistorySerializer(serializers.ModelSerializer):
+    fruit = FruitSerializer()
+    location = LocationSerializer()
+    release = HarvesterCodeReleaseSerializer()
+    class Meta:
+        model = Harvester.history.model
+        fields = ('__all__')
+        read_only_fields = ('__all__',)
