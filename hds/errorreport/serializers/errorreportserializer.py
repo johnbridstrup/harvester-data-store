@@ -100,6 +100,7 @@ class ErrorReportSerializer(EventSerializerMixin, ReportSerializerBase):
                 timestamp = cls.extract_timestamp(errdict.get('ts'))
                 traceback = errdict.get('traceback', NO_TRACEBACK_STR)
                 info = errdict.get('value', NO_VALUE_STR)
+                handled = errdict.get('handled', False)
                 errors.append(
                     {
                         "code": code,
@@ -109,6 +110,7 @@ class ErrorReportSerializer(EventSerializerMixin, ReportSerializerBase):
                         "traceback": traceback,
                         "info": info,
                         "timestamp": timestamp,
+                        "handled": handled
                     }
                 )
         if incomplete:

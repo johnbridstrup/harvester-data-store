@@ -32,6 +32,7 @@ class AFTException(CommonInfo):
     info = models.TextField(blank=True, null=True)
     timestamp = models.DateTimeField(blank=True, null=True)
     report = models.ForeignKey(ErrorReport, on_delete=models.SET_NULL, null=True, related_name="exceptions")
+    handled = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.service}.{self.robot}: {self.code.name}"

@@ -128,6 +128,32 @@ class ErrorReportAPITest(HDSAPITestBase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data["count"], 2)
 
+    def test_get_with_params(self):
+        data= self.data.copy()
+
+        self.client.post(
+            f'{self.api_base_url}/errorreports/',
+            data,
+            format='json'
+        )
+        data['data']['sysmon_report']['sysmon.0']['errors']['traychg.0']['handled'] = True
+        self.client.post(
+            f'{self.api_base_url}/errorreports/',
+            data,
+            format='json'
+        )
+
+        resp_unhandled = self.client.get(f'{self.api_base_url}/errorreports/?handled=0')
+        resp_handled = self.client.get(f'{self.api_base_url}/errorreports/?handled=1')
+
+        hand_data = resp_handled.json()['data']
+        unhand_data = resp_unhandled.json()['data']
+
+        self.assertEqual(hand_data['count'], 1)
+        self.assertEqual(unhand_data['count'], 1)
+        self.assertEqual(hand_data['results'][0]['exceptions'][0]['handled'], True)
+        self.assertEqual(unhand_data['results'][0]['exceptions'][0]['handled'], False)
+
     def test_get_errorreport_by_id(self):
         """ get error report by id """
         self._post_error_report()
@@ -151,8 +177,19 @@ class ErrorReportAPITest(HDSAPITestBase):
             'robot': int(node),
             'traceback': errdict[serv_str]['traceback'],
             'info': errdict[serv_str]['value'],
-            'timestamp': ErrorReportSerializer.extract_timestamp(errdict[serv_str]['ts'])
+            'timestamp': ErrorReportSerializer.extract_timestamp(errdict[serv_str]['ts']),
+            'handled': False
         }
+        self.assertDictEqual(errs[0], compare)
+
+        # Handled error
+        data = self.data.copy()
+        data['data']['sysmon_report']['sysmon.0']['errors']['traychg.0']['handled'] = True
+        self.client.post(f'{self.api_base_url}/errorreports/', data, format='json')
+        report = ErrorReport.objects.get(id=2)
+        errs = ErrorReportSerializer._extract_exception_data(report)
+
+        compare['handled'] = True
         self.assertDictEqual(errs[0], compare)
 
     def test_generate_pareto(self):

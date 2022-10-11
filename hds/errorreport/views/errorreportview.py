@@ -109,6 +109,11 @@ class ErrorReportView(CreateModelViewSet):
             is_emu = bool(int(request.query_params['is_emulator']))
             listfilter['harvester__is_emulator'] = is_emu
 
+        # Filter for handled/unhandled errors
+        if 'handled' in request.query_params:
+            handled = bool(int(request.query_params['handled']))
+            listfilter['exceptions__handled'] = handled
+
         # update listfilter with generic query dict
         listfilter.update(cls.build_generic_query(request))
 

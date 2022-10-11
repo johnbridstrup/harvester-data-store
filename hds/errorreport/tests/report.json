@@ -172,7 +172,8 @@
             "value": "traychgunit.1 Error: No tray detected in collection",
             "traceback": "",
             "code": 0,
-            "operator_err_type": "traychg"
+            "operator_err_type": "traychg",
+            "handled": false
           }
         }
       },
