@@ -1,12 +1,14 @@
 """ Test ErrorReport APIs """
+from common.metrics import ERROR_COUNTER
 from common.tests import HDSAPITestBase
 from harvester.models import Harvester
 from event.models import Event
 from exceptions.models import AFTException
 from ..models import ErrorReport
-from ..serializers.errorreportserializer import ErrorReportSerializer
+from ..serializers.errorreportserializer import ErrorReportSerializer, FAILED_SPLIT_MSG
 from django.utils.timezone import make_aware
 from rest_framework import status
+from unittest.mock import patch
 import datetime
 import json
 import os
@@ -249,3 +251,34 @@ class ErrorReportAPITest(HDSAPITestBase):
         self.assertEqual(emu_data['count'], 1)
         self.assertEqual(emu_data['results'][0]['harvester']['harv_id'], 1100)
         self.assertTrue(emu_data['results'][0]['harvester']['is_emulator'])
+
+    @patch('errorreport.serializers.errorreportserializer.logging')
+    def test_catch_extract_exc_errors(self, mock_logger):
+        data = self.data.copy()
+        # replace traychg.0 error with no '.' to split on
+        data['data']['sysmon_report']['sysmon.0']['errors'] = {
+            'traychg_0': {}
+        }
+        expected_error = ValueError.__name__
+        counter = ERROR_COUNTER.labels(expected_error, FAILED_SPLIT_MSG)
+
+        r = self.client.post(
+            f'{self.api_base_url}/errorreports/', 
+            data, 
+            format='json'
+        )
+        self.assertEqual(r.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(ErrorReport.objects.count(),1)
+        self.assertEqual(AFTException.objects.count(), 0)
+        self.assertEqual(counter._value.get(), 1)
+
+        mock_logger.exception.assert_called_with(FAILED_SPLIT_MSG)
+
+        # Assert counter continues increasing
+        self.client.post(
+            f'{self.api_base_url}/errorreports/', 
+            data, 
+            format='json'
+        )
+        self.assertEqual(counter._value.get(), 2)
+        
