@@ -1,3 +1,4 @@
+from common.metrics import ERROR_COUNTER
 from common.serializers.reportserializer import ReportSerializerBase
 from ..models import ErrorReport
 from harvester.models import Harvester
@@ -10,9 +11,13 @@ from exceptions.serializers import AFTExceptionSerializer
 from collections.abc import Mapping
 from rest_framework import serializers
 
+import logging
+
 
 NO_TRACEBACK_STR = 'No Traceback Available (HDS)'
 NO_VALUE_STR = 'No Value Available (HDS)'
+FAILED_SPLIT_MSG = "Failed to split into service and index"
+EXC_EXT_FAIL_MSG = "Error extracting exceptions"
 
 
 class ErrorReportSerializer(EventSerializerMixin, ReportSerializerBase):
@@ -21,7 +26,12 @@ class ErrorReportSerializer(EventSerializerMixin, ReportSerializerBase):
 
     def create(self, validated_data):
         report_inst = super().create(validated_data)
-        self.create_exceptions(report_inst)      
+        try:
+            self.create_exceptions(report_inst)
+        except Exception as e:
+            exc = type(e).__name__
+            ERROR_COUNTER.labels(exc, EXC_EXT_FAIL_MSG).inc()
+            logging.exception(f"{exc} caught in create_exceptions")
         return report_inst
 
     def to_representation(self, instance):
@@ -50,13 +60,16 @@ class ErrorReportSerializer(EventSerializerMixin, ReportSerializerBase):
     @classmethod
     def _extract_exception_data(cls, sysmon_report):
         errors = []
-        for sysmon_entry in sysmon_report.values():
+        for key, sysmon_entry in sysmon_report.items():
             if not isinstance(sysmon_entry, Mapping):
+                logging.info(f"Skipping sysmon entry {key}: {sysmon_entry}")
                 continue
             for serv, errdict in sysmon_entry.get('errors', {}).items():
                 try:
                     service, index = serv.split('.')
                 except ValueError as e:
+                    logging.exception(FAILED_SPLIT_MSG)
+                    ERROR_COUNTER.labels(ValueError.__name__, FAILED_SPLIT_MSG).inc()
                     continue
                 robot = sysmon_entry.get('robot_index', index)
                 node = sysmon_entry.get('index', 0)
