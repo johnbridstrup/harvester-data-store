@@ -7,6 +7,7 @@ from event.models import Event
 from event.serializers import EventSerializerMixin
 from exceptions.models import AFTException, AFTExceptionCode
 from exceptions.serializers import AFTExceptionSerializer
+from collections.abc import Mapping
 from rest_framework import serializers
 
 
@@ -49,27 +50,31 @@ class ErrorReportSerializer(EventSerializerMixin, ReportSerializerBase):
     @classmethod
     def _extract_exception_data(cls, sysmon_report):
         errors = []
-        for key, sysdict in sysmon_report.items():
-            if "sysmon" in key and "errors" in sysdict:
-                for serv, errdict in sysdict['errors'].items():
+        for sysmon_entry in sysmon_report.values():
+            if not isinstance(sysmon_entry, Mapping):
+                continue
+            for serv, errdict in sysmon_entry.get('errors', {}).items():
+                try:
                     service, index = serv.split('.')
-                    robot = sysdict.get('robot_index', index)
-                    node = sysdict.get('index', 0)
-                    code = errdict.get('code', 0)
-                    timestamp = cls.extract_timestamp(errdict.get('ts'))
-                    traceback = errdict.get('traceback', NO_TRACEBACK_STR)
-                    info = errdict.get('value', NO_VALUE_STR)
-                    errors.append(
-                        {
-                            "code": code,
-                            "service": service,
-                            "node": node,
-                            "robot": robot,
-                            "traceback": traceback,
-                            "info": info,
-                            "timestamp": timestamp,
-                        }
-                    )
+                except ValueError as e:
+                    continue
+                robot = sysmon_entry.get('robot_index', index)
+                node = sysmon_entry.get('index', 0)
+                code = errdict.get('code', 0)
+                timestamp = cls.extract_timestamp(errdict.get('ts'))
+                traceback = errdict.get('traceback', NO_TRACEBACK_STR)
+                info = errdict.get('value', NO_VALUE_STR)
+                errors.append(
+                    {
+                        "code": code,
+                        "service": service,
+                        "node": node,
+                        "robot": robot,
+                        "traceback": traceback,
+                        "info": info,
+                        "timestamp": timestamp,
+                    }
+                )
         return errors
 
     @classmethod
