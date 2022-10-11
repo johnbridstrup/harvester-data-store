@@ -1,4 +1,5 @@
 from common.metrics import ERROR_COUNTER
+from common.models import Tags
 from common.serializers.reportserializer import ReportSerializerBase
 from ..models import ErrorReport
 from harvester.models import Harvester
@@ -10,6 +11,7 @@ from exceptions.models import AFTException, AFTExceptionCode
 from exceptions.serializers import AFTExceptionSerializer
 from collections.abc import Mapping
 from rest_framework import serializers
+from taggit.serializers import TagListSerializerField
 
 import logging
 
@@ -23,6 +25,7 @@ EXC_EXT_FAIL_MSG = "Error extracting exceptions"
 class ErrorReportSerializer(EventSerializerMixin, ReportSerializerBase):
     """Serializer for the ErrorReport model"""
     exceptions = AFTExceptionSerializer(many=True, required=False)
+    tags = TagListSerializerField(required=False)
 
     def create(self, validated_data):
         report_inst = super().create(validated_data)
@@ -31,6 +34,9 @@ class ErrorReportSerializer(EventSerializerMixin, ReportSerializerBase):
         except Exception as e:
             exc = type(e).__name__
             ERROR_COUNTER.labels(exc, EXC_EXT_FAIL_MSG).inc()
+            report_inst.tags.add(Tags.INCOMPLETE.value) 
+            report_inst.save()
+            
             logging.exception(f"{exc} caught in create_exceptions")
         return report_inst
 
@@ -58,8 +64,10 @@ class ErrorReportSerializer(EventSerializerMixin, ReportSerializerBase):
         return super().to_internal_value(data)
 
     @classmethod
-    def _extract_exception_data(cls, sysmon_report):
+    def _extract_exception_data(cls, report):
+        sysmon_report = report.report['data']['sysmon_report']
         errors = []
+        incomplete = False
         for key, sysmon_entry in sysmon_report.items():
             if not isinstance(sysmon_entry, Mapping):
                 logging.info(f"Skipping sysmon entry {key}: {sysmon_entry}")
@@ -70,6 +78,7 @@ class ErrorReportSerializer(EventSerializerMixin, ReportSerializerBase):
                 except ValueError as e:
                     logging.exception(FAILED_SPLIT_MSG)
                     ERROR_COUNTER.labels(ValueError.__name__, FAILED_SPLIT_MSG).inc()
+                    incomplete = True
                     continue
                 robot = sysmon_entry.get('robot_index', index)
                 node = sysmon_entry.get('index', 0)
@@ -88,11 +97,14 @@ class ErrorReportSerializer(EventSerializerMixin, ReportSerializerBase):
                         "timestamp": timestamp,
                     }
                 )
+        if incomplete:
+            report.tags.add(Tags.INCOMPLETE.value) 
+            report.save()
         return errors
 
     @classmethod
     def create_exceptions(cls, report, user=None):
-        errors = cls._extract_exception_data(report.report['data']['sysmon_report'])
+        errors = cls._extract_exception_data(report)
         if user:
             creator = user
         else:

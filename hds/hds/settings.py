@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'healthcheck',
     'notifications',
     's3file',
+    'taggit',
 ]
 
 MIDDLEWARE = [

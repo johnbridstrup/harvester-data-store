@@ -1,5 +1,6 @@
 """ Test ErrorReport APIs """
 from common.metrics import ERROR_COUNTER
+from common.models import Tags
 from common.tests import HDSAPITestBase
 from harvester.models import Harvester
 from event.models import Event
@@ -8,6 +9,7 @@ from ..models import ErrorReport
 from ..serializers.errorreportserializer import ErrorReportSerializer, FAILED_SPLIT_MSG
 from django.utils.timezone import make_aware
 from rest_framework import status
+from taggit.models import Tag
 from unittest.mock import patch
 import datetime
 import json
@@ -116,7 +118,9 @@ class ErrorReportAPITest(HDSAPITestBase):
         self.assertEqual(response.status_code, 200)
 
     def test_extract_errors(self):
-        errs = ErrorReportSerializer._extract_exception_data(self.data['data']['sysmon_report'])
+        self._post_error_report()
+        report = ErrorReport.objects.get()
+        errs = ErrorReportSerializer._extract_exception_data(report)
         
         errdict = self.data['data']['sysmon_report']['sysmon.0']['errors']
         serv_str = list(errdict.keys())[0]
@@ -274,11 +278,22 @@ class ErrorReportAPITest(HDSAPITestBase):
 
         mock_logger.exception.assert_called_with(FAILED_SPLIT_MSG)
 
+        # Assert tag assigned
+        report = ErrorReport.objects.get()
+        tag = report.tags.get()
+        self.assertEqual(tag, Tag.objects.get())
+        self.assertEqual(tag.name, Tags.INCOMPLETE.value)
+
+        # Assert tags in response
+        resp_data = r.json()['data']
+        self.assertIn("tags", resp_data)
+        self.assertIn(Tags.INCOMPLETE.value, resp_data['tags'])
+
         # Assert counter continues increasing
         self.client.post(
             f'{self.api_base_url}/errorreports/', 
             data, 
             format='json'
         )
-        self.assertEqual(counter._value.get(), 2)
         
+        self.assertEqual(counter._value.get(), 2)
