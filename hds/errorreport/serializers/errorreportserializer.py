@@ -24,6 +24,19 @@ EXC_EXT_FAIL_MSG = "Error extracting exceptions"
 
 class ErrorReportSerializer(EventSerializerMixin, ReportSerializerBase):
     """Serializer for the ErrorReport model"""
+    # Additional report schema properties
+    REPORT_DATA_PROPERTIES = {
+        "sysmon_report": {
+            "type": "object",
+            "required": ["serial_number"],
+        },
+        "uuid": {
+            "type": "string",
+        },
+    }
+    REPORT_DATA_REQUIRED = ["sysmon_report",]
+
+    # Serializer fields
     exceptions = AFTExceptionSerializer(many=True, required=False)
     tags = TagListSerializerField(required=False)
 
@@ -33,7 +46,7 @@ class ErrorReportSerializer(EventSerializerMixin, ReportSerializerBase):
             self.create_exceptions(report_inst)
         except Exception as e:
             exc = type(e).__name__
-            ERROR_COUNTER.labels(exc, EXC_EXT_FAIL_MSG).inc()
+            ERROR_COUNTER.labels(exc, EXC_EXT_FAIL_MSG, ErrorReportSerializer.__name__).inc()
             report_inst.tags.add(Tags.INCOMPLETE.value) 
             report_inst.save()
             
@@ -49,6 +62,7 @@ class ErrorReportSerializer(EventSerializerMixin, ReportSerializerBase):
         return data
 
     def to_internal_value(self, data):
+        self.validate_incoming_report(data)
         report = data.copy()
         harv_id = int(report['data']['sysmon_report']['serial_number'])
         harvester = self.get_harvester(harv_id, report['data']['sysmon_report'])
@@ -77,7 +91,7 @@ class ErrorReportSerializer(EventSerializerMixin, ReportSerializerBase):
                     service, index = serv.split('.')
                 except ValueError as e:
                     logging.exception(FAILED_SPLIT_MSG)
-                    ERROR_COUNTER.labels(ValueError.__name__, FAILED_SPLIT_MSG).inc()
+                    ERROR_COUNTER.labels(ValueError.__name__, FAILED_SPLIT_MSG, cls.__name__).inc()
                     incomplete = True
                     continue
                 robot = sysmon_entry.get('robot_index', index)

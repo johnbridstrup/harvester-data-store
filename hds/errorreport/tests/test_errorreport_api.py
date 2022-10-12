@@ -8,7 +8,7 @@ from exceptions.models import AFTException
 from ..models import ErrorReport
 from ..serializers.errorreportserializer import ErrorReportSerializer, FAILED_SPLIT_MSG
 from django.utils.timezone import make_aware
-from rest_framework import status
+from rest_framework import serializers, status
 from taggit.models import Tag
 from unittest.mock import patch
 import datetime
@@ -57,6 +57,22 @@ class ErrorReportAPITest(HDSAPITestBase):
         r = self.client.post(f'{self.api_base_url}/errorreports/', self.data, format='json', HTTP_ACCEPT='application/json')
 
         self.assertEqual(UUID, r.json()['data']['event']['UUID'])
+
+    @patch("common.serializers.reportserializer.logging")
+    def test_create_errorreport_invalid_schema(self, mock_logger):
+        # This tests that we reject error reports that will fail to ingest
+        # and make this visible to devs
+        self.data['data'] = {}
+        r = self.client.post(f'{self.api_base_url}/errorreports/', self.data, format='json')
+
+        self.assertEqual(r.status_code, status.HTTP_400_BAD_REQUEST)
+
+        msg = "Failed to validate: required"
+        exc = serializers.ValidationError.__name__
+        raised_by = ErrorReportSerializer.__name__
+        counter = ERROR_COUNTER.labels(exc, msg, raised_by)
+        self.assertEqual(counter._value.get(), 1)
+        mock_logger.exception.assert_called_with(self.data)
 
     def test_create_errorreport_with_invalid_harvester(self):
         """ create error report with invalid harvester """
@@ -266,7 +282,7 @@ class ErrorReportAPITest(HDSAPITestBase):
             'traychg_0': {}
         }
         expected_error = ValueError.__name__
-        counter = ERROR_COUNTER.labels(expected_error, FAILED_SPLIT_MSG)
+        counter = ERROR_COUNTER.labels(expected_error, FAILED_SPLIT_MSG, ErrorReportSerializer.__name__)
 
         r = self.client.post(
             f'{self.api_base_url}/errorreports/', 

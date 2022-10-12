@@ -11,4 +11,4 @@ def prometheus_get_registry():
     return registry
 
 METHOD_TIMER = Summary("hds_method_time", "HDS method timer", labelnames=["view", "method"], registry=prometheus_get_registry())
-ERROR_COUNTER = Counter("hds_error_counter", "Counter for HDS errors", labelnames=["Exception", "description"], registry=prometheus_get_registry())
+ERROR_COUNTER = Counter("hds_error_counter", "Counter for HDS errors", labelnames=["Exception", "description", "raised_by"], registry=prometheus_get_registry())
