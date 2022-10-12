@@ -81,11 +81,13 @@ class ErrorReportAPITest(HDSAPITestBase):
     def test_update_errorreport_with_invalid_data(self):
         """ update error report with invalid data """
         self._post_error_report()
-
+        self.data["data"]["sysmon_report"]["serial_number"]= "99"
         # updating harv_id
         response = self.client.patch(
             f'{self.api_base_url}/errorreports/1/',
-            {self.data["data"]["sysmon_report"]["serial_number"]: "99"})
+            self.data,
+            format='json'
+        )
         self.assertEqual(response.status_code, 400)
 
     def test_delete_errorreport(self):
