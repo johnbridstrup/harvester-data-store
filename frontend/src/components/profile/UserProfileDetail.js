@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import {
@@ -6,11 +6,9 @@ import {
   confirmPassword,
   updateProfile,
 } from "../../features/auth/authSlice";
-import {
-  deleteNotification,
-  listNotifications,
-} from "../../features/notification/notificationSlice";
-import { transformAssignedNotification } from "../../utils/utils";
+import { NOTIFY_CATEGORY } from "../../features/base/constants";
+import notificationService from "../../features/notification/notificationService";
+import { deleteNotification } from "../../features/notification/notificationSlice";
 import ConfirmModal from "../modals/ConfirmModal";
 import PasswordModal from "../modals/PasswordModal";
 import ProfileUpdateModal from "../modals/ProfileUpdateModal";
@@ -38,20 +36,16 @@ function UserProfileDetail(props) {
     confirm_password: "",
   });
   const [notifObj, setNotifObj] = useState(null);
-  const { user } = useSelector((state) => state.auth);
-  const { notifications } = useSelector((state) => state.notification);
+  const [created, setCreated] = useState([]);
+  const [isRecipient, setIsRecipient] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const { user, token } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const profileRef = useRef();
   const passwordRef = useRef();
   const confirmRef = useRef();
-
-  const createdNotification = notifications
-    .slice(0, 5)
-    .filter((notification, index) => notification.creator === user?.id);
-  const assignedNotification = transformAssignedNotification(
-    notifications.slice(0, 5),
-    user?.username
-  );
+  const createdNotification = created.slice(0, 5);
+  const assignedNotification = isRecipient.slice(0, 5);
 
   useEffect(() => {
     setFieldData((current) => {
@@ -69,6 +63,36 @@ function UserProfileDetail(props) {
       };
     });
   }, [user]);
+
+  const fetchNotification = useCallback(() => {
+    (async () => {
+      try {
+        setLoading(true);
+        const [createdResult, recipientResult] = await Promise.all([
+          notificationService.queryNotification(
+            { category: NOTIFY_CATEGORY.created },
+            token
+          ),
+          notificationService.queryNotification(
+            { category: NOTIFY_CATEGORY.isRecipient },
+            token
+          ),
+        ]);
+
+        setCreated((current) => createdResult.results);
+        setIsRecipient((current) => recipientResult.results);
+        setLoading(false);
+      } catch (error) {
+        setCreated((current) => []);
+        setIsRecipient((current) => []);
+        setLoading(false);
+      }
+    })();
+  }, [token]);
+
+  useEffect(() => {
+    fetchNotification();
+  }, [fetchNotification]);
 
   const profileModalPopUp = () => {
     profileRef.current.click();
@@ -127,7 +151,7 @@ function UserProfileDetail(props) {
     const res = await dispatch(deleteNotification(notifObj.id));
     if (res.type === "notification/deleteNotification/fulfilled") {
       toast.success("Notification deleted successfully");
-      await dispatch(listNotifications());
+      fetchNotification();
       confirmPopUp(null);
     } else {
       toast.error("Could not delete the specified notification");
@@ -181,16 +205,20 @@ function UserProfileDetail(props) {
               <Notifications
                 user={user}
                 notifications={createdNotification}
-                notify_type={"Created"}
+                notify_type={NOTIFY_CATEGORY.created.toUpperCase()}
                 confirmDel={confirmPopUp}
+                count={created.length}
+                loading={loading}
               />
             </div>
             <div className="col-sm-6 mb-3">
               <Notifications
                 user={user}
                 notifications={assignedNotification}
-                notify_type={"Assigned"}
+                notify_type={NOTIFY_CATEGORY.isRecipient.toUpperCase()}
                 confirmDel={confirmPopUp}
+                count={isRecipient.length}
+                loading={loading}
               />
             </div>
           </div>

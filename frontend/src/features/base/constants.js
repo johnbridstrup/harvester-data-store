@@ -8,3 +8,7 @@ export const CSRF_URL = `${API_URL}/users/csrf/`;
 export const MAX_LIMIT = 10000;
 export const PROD_ENV = "production";
 export const SUCCESS = "success";
+export const NOTIFY_CATEGORY = {
+  created: "created",
+  isRecipient: "is_recipient",
+};

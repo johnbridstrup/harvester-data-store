@@ -92,6 +92,22 @@ export const paginateNotification = createAsyncThunk(
   }
 );
 
+export const queryNotification = createAsyncThunk(
+  "notification/queryNotification",
+  async (queryObj, thunkAPI) => {
+    try {
+      const {
+        auth: { token },
+      } = thunkAPI.getState();
+      return await notificationService.queryNotification(queryObj, token);
+    } catch (error) {
+      console.log(error);
+      const message = invalidateCache(error, thunkAPI.dispatch);
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 const notificationSlice = createSlice({
   name: "notification",
   initialState,
@@ -144,6 +160,20 @@ const notificationSlice = createSlice({
         state.pagination.previous = action.payload.previous;
       })
       .addCase(paginateNotification.rejected, (state, action) => {
+        state.loading = false;
+        state.errorMsg = action.payload;
+      })
+      .addCase(queryNotification.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(queryNotification.fulfilled, (state, action) => {
+        state.loading = false;
+        state.notifications = action.payload.results;
+        state.pagination.count = action.payload.count;
+        state.pagination.next = action.payload.next;
+        state.pagination.previous = action.payload.previous;
+      })
+      .addCase(queryNotification.rejected, (state, action) => {
         state.loading = false;
         state.errorMsg = action.payload;
       });

@@ -1,10 +1,15 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import Logo from "../../../assets/images/advanced_farm_logo_alpha.png";
 import { ArrowDown, Menu, Notification } from "../../../assets/svg";
 import { logout } from "../../../features/auth/authSlice";
-import { API_BASE_URL } from "../../../features/base/constants";
+import {
+  API_BASE_URL,
+  MAX_LIMIT,
+  NOTIFY_CATEGORY,
+} from "../../../features/base/constants";
+import notificationService from "../../../features/notification/notificationService";
 import useClickOutside from "../../../hooks/clickOutSide";
 import AllMenu from "./AllMenu";
 import UserMenu from "./UserMenu";
@@ -13,6 +18,7 @@ import "./styles.css";
 function Navbar(props) {
   const [showAllMenu, setshowAllMenu] = useState(false);
   const [showUserMenu, setshowUserMenu] = useState(false);
+  const [count, setCount] = useState(0);
   const { user, token } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const allMenuRef = useRef();
@@ -25,6 +31,24 @@ function Navbar(props) {
   useClickOutside(userMenuRef, () => {
     setshowUserMenu(false);
   });
+
+  const fetchNotification = useCallback(() => {
+    (async () => {
+      try {
+        const res = await notificationService.queryNotification(
+          { category: NOTIFY_CATEGORY.isRecipient, limit: MAX_LIMIT },
+          token
+        );
+        setCount(res.count);
+      } catch (error) {
+        setCount(0);
+      }
+    })();
+  }, [token]);
+
+  useEffect(() => {
+    fetchNotification();
+  }, [fetchNotification]);
 
   const handleLogout = async () => {
     const res = await dispatch(logout({ token }));
@@ -70,7 +94,7 @@ function Navbar(props) {
           </div>
           <Link to="/notifications" className="circle-icon hover1">
             <Notification />
-            <div className="right-notification">5</div>
+            <div className="right-notification">{count}</div>
           </Link>
           <div
             className={`circle-icon hover1 ${showUserMenu && "active-header"}`}

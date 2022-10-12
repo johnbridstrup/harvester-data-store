@@ -2,6 +2,7 @@ import PropTypes from "prop-types";
 import moment from "moment";
 import { Link } from "react-router-dom";
 import { Loader } from "../../utils/utils";
+import { LoaderDiv } from "../styled";
 
 export const ProfileColLeft = (props) => {
   return (
@@ -169,34 +170,42 @@ export const Notifications = (props) => {
       <div className="card-body">
         <h6 className="d-flex align-items-center mb-3">
           <i className="las la-bell size-2x mx-2"></i>
-          Recent Notifications ({props.notify_type}) (
-          {props.notifications.length})
+          Recent Notifications ({props.notify_type}) ({props.count})
         </h6>
         <hr />
-        {props.notifications.map((notifyObj, index) => (
-          <div key={index} className="mb-4">
-            <Link
-              to={`/notifications/${notifyObj.id}`}
-              className="notification"
-            >
-              <div>
-                Notify {props.user?.username} when {notifyObj?.trigger_on} has{" "}
-                {JSON.stringify(notifyObj?.criteria)}
-              </div>
-            </Link>
-            {(props.user?.id === notifyObj.creator ||
-              props.user?.is_superuser === true) && (
-              <div className="mb-2 mt-2">
-                <button
-                  onClick={() => props.confirmDel(notifyObj)}
-                  className="btn btn-sm text-danger"
+        {props.loading ? (
+          <LoaderDiv>
+            <Loader size={25} />
+          </LoaderDiv>
+        ) : (
+          <>
+            {props.notifications.map((notifyObj, index) => (
+              <div key={index} className="mb-4">
+                <Link
+                  to={`/notifications/${notifyObj.id}`}
+                  className="notification"
                 >
-                  Del
-                </button>
+                  <div>
+                    Notify {props.user?.username} when {notifyObj?.trigger_on}{" "}
+                    has {JSON.stringify(notifyObj?.criteria)}
+                  </div>
+                </Link>
+                {(props.user?.id === notifyObj.creator ||
+                  props.user?.is_superuser === true) && (
+                  <div className="mb-2 mt-2">
+                    <button
+                      onClick={() => props.confirmDel(notifyObj)}
+                      className="btn btn-sm text-danger"
+                    >
+                      Del
+                    </button>
+                  </div>
+                )}
               </div>
-            )}
-          </div>
-        ))}
+            ))}
+          </>
+        )}
+
         <div className="text-center">
           <Link
             to={`/notifications?category=${props.notify_type.toLowerCase()}`}
@@ -232,7 +241,9 @@ ChangePassword.propTypes = {
 Notifications.propTypes = {
   user: PropTypes.object,
   notifyObj: PropTypes.object,
-  notify_type: PropTypes.string,
+  notify_type: PropTypes.string.isRequired,
   notifications: PropTypes.array,
   confirmDel: PropTypes.func,
+  count: PropTypes.number.isRequired,
+  loading: PropTypes.bool.isRequired,
 };

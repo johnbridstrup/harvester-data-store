@@ -2,39 +2,36 @@ import { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
+import { MAX_LIMIT } from "../../features/base/constants";
 import {
   deleteManyNotif,
   listNotifications,
+  queryNotification,
 } from "../../features/notification/notificationSlice";
-import {
-  paramsToObject,
-  transformAssignedNotification,
-} from "../../utils/utils";
+import { paramsToObject } from "../../utils/utils";
 import ConfirmModal from "../modals/ConfirmModal";
 import NotificationTable from "../tables/NotificationTable";
 
 function ListNotification(props) {
   const [checkedNotif, setCheckedNotif] = useState([]);
   const { user, token } = useSelector((state) => state.auth);
-  const { notifications } = useSelector((state) => state.notification);
+  const { notifications, loading } = useSelector((state) => state.notification);
   const dispatch = useDispatch();
   const confirmRef = useRef();
   const { search } = useLocation();
-  const params = paramsToObject(search);
-  const createdNotification = notifications.filter(
-    (x, i) => x.creator === user?.id
-  );
-  const assignedNotification = transformAssignedNotification(
-    notifications,
-    user?.username
-  );
 
   const handleDeleteMany = async () => {
     const { success, message } = await deleteManyNotif(checkedNotif, token);
     if (success) {
       toast.success(message);
       setCheckedNotif((current) => []);
-      dispatch(listNotifications());
+      if (search) {
+        let queryObj = paramsToObject(search);
+        queryObj["limit"] = MAX_LIMIT;
+        await dispatch(queryNotification(queryObj));
+      } else {
+        await dispatch(listNotifications());
+      }
       confirmPopUp();
     } else {
       toast.error(message);
@@ -61,31 +58,14 @@ function ListNotification(props) {
 
   return (
     <>
-      {params.category === "created" ? (
-        <NotificationTable
-          notifications={createdNotification}
-          user={user}
-          checkedNotif={checkedNotif}
-          handleChange={handleChange}
-          handleDeleteMany={confirmPopUp}
-        />
-      ) : params.category === "assigned" ? (
-        <NotificationTable
-          notifications={assignedNotification}
-          user={user}
-          checkedNotif={checkedNotif}
-          handleChange={handleChange}
-          handleDeleteMany={confirmPopUp}
-        />
-      ) : (
-        <NotificationTable
-          notifications={notifications}
-          user={user}
-          checkedNotif={checkedNotif}
-          handleChange={handleChange}
-          handleDeleteMany={confirmPopUp}
-        />
-      )}
+      <NotificationTable
+        notifications={notifications}
+        user={user}
+        checkedNotif={checkedNotif}
+        handleChange={handleChange}
+        handleDeleteMany={confirmPopUp}
+        loading={loading}
+      />
 
       <ConfirmModal
         handleDelete={handleDeleteMany}

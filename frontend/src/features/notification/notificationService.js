@@ -32,11 +32,21 @@ const paginateNotification = async (url, token) => {
   return response;
 };
 
+const queryNotification = async (queryObj, token) => {
+  const params = new URLSearchParams(queryObj);
+  const response = await axiosService.get(
+    `${NOTIFICATION_URL}?${params.toString()}`,
+    token
+  );
+  return response;
+};
+
 const notificationService = {
   listNotifications,
   getNotificationById,
   deleteNotification,
   paginateNotification,
+  queryNotification,
 };
 
 export default notificationService;
