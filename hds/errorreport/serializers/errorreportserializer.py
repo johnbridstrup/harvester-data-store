@@ -81,7 +81,7 @@ class ErrorReportSerializer(EventSerializerMixin, ReportSerializerBase):
                     incomplete = True
                     continue
                 robot = sysmon_entry.get('robot_index', index)
-                node = sysmon_entry.get('index', 0)
+                node = sysmon_entry.get('index', index)
                 code = errdict.get('code', 0)
                 timestamp = cls.extract_timestamp(errdict.get('ts'))
                 traceback = errdict.get('traceback', NO_TRACEBACK_STR)
