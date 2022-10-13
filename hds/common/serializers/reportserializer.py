@@ -4,7 +4,6 @@ from harvester.models import Harvester
 import datetime
 import jsonschema
 import logging
-import re
 
 
 class ReportSerializerBase(serializers.ModelSerializer):
@@ -29,10 +28,15 @@ class ReportSerializerBase(serializers.ModelSerializer):
     REPORT_DATA_REQUIRED = [] # Override these in new report serializers
 
     @classmethod
-    def validate_incoming_report(cls, data):
+    def get_schema(cls):
         schema = cls.REPORT_BASE_SCHEMA
         schema["properties"]["data"]["properties"] = cls.REPORT_DATA_PROPERTIES
         schema["properties"]["data"]["required"] = cls.REPORT_DATA_REQUIRED
+        return schema
+
+    @classmethod
+    def validate_incoming_report(cls, data):
+        schema = cls.get_schema()
         try:
             jsonschema.validate(data, schema)
         except jsonschema.ValidationError as e:
@@ -41,14 +45,12 @@ class ReportSerializerBase(serializers.ModelSerializer):
                     "path": e.json_path,
                     "error": f"Must be {e.validator_value}"
                 }
-            elif e.validator == "required":
-                err = re.findall(r"'(?:[^']|'')*'* is a required property", str(e))
             else:
-                err = str(e)
+                err = str(e.message)
             
             msg = f"Failed to validate: {e.validator}"       
             ERROR_COUNTER.labels(serializers.ValidationError.__name__, msg, cls.__name__).inc()
-            logging.exception(data)
+            logging.exception(err)
             raise serializers.ValidationError(detail={"validation error": err})
 
     @classmethod

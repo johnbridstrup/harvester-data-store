@@ -63,22 +63,6 @@ class ErrorReportAPITest(HDSAPITestBase):
 
         self.assertEqual(UUID, r.json()['data']['event']['UUID'])
 
-    @patch("common.serializers.reportserializer.logging")
-    def test_create_errorreport_invalid_schema(self, mock_logger):
-        # This tests that we reject error reports that will fail to ingest
-        # and make this visible to devs
-        self.data['data'] = {}
-        r = self.client.post(f'{self.api_base_url}/errorreports/', self.data, format='json')
-
-        self.assertEqual(r.status_code, status.HTTP_400_BAD_REQUEST)
-
-        msg = "Failed to validate: required"
-        exc = serializers.ValidationError.__name__
-        raised_by = ErrorReportSerializer.__name__
-        counter = ERROR_COUNTER.labels(exc, msg, raised_by)
-        self.assertEqual(counter._value.get(), 1)
-        mock_logger.exception.assert_called_with(self.data)
-
     def test_create_errorreport_with_invalid_harvester(self):
         """ create error report with invalid harvester """
         data = self.data.copy()
@@ -357,3 +341,47 @@ class ErrorReportAPITest(HDSAPITestBase):
         )
         
         self.assertEqual(counter._value.get(), 2)
+
+    ## Schema validation tests
+    @patch("common.serializers.reportserializer.logging")
+    def test_create_errorreport_invalid_schema(self, mock_logger):
+        # This tests that we reject error reports that will fail to ingest
+        # and make this visible to devs
+        self.data['data'] = {}
+        r = self.client.post(f'{self.api_base_url}/errorreports/', self.data, format='json')
+
+        self.assertEqual(r.status_code, status.HTTP_400_BAD_REQUEST)
+
+        msg = "Failed to validate: required"
+        exc = serializers.ValidationError.__name__
+        raised_by = ErrorReportSerializer.__name__
+        counter = ERROR_COUNTER.labels(exc, msg, raised_by)
+        self.assertEqual(counter._value.get(), 1)
+        mock_logger.exception.assert_called_with("'sysmon_report' is a required property")
+    
+    def test_sysmon_entry_key_invalid(self):
+        # Note: This also tests any invalid key, including ones without
+        # info_ prepended.
+        data = self.data.copy()
+        data['data']['sysmon_report']['sysmon_0'] = {}
+        resp = self.client.post(
+            f'{self.api_base_url}/errorreports/', 
+            data, 
+            format='json'
+        )
+        self.assertEqual(resp.status_code, status.HTTP_400_BAD_REQUEST)
+        resp_errs = resp.json()['errors']['detail']
+        self.assertIn("validation error", resp_errs)
+
+    def test_new_info_key(self):
+        data = self.data.copy()
+        data['data']['sysmon_report']['info_str'] = "Some new information"
+        data['data']['sysmon_report']['info_num'] = 10101
+        data['data']['sysmon_report']['info_obj'] = {"new": "info"}
+
+        resp = self.client.post(
+            f'{self.api_base_url}/errorreports/', 
+            data, 
+            format='json'
+        )
+        self.assertEqual(resp.status_code, status.HTTP_201_CREATED)

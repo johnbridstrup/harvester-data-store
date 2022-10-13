@@ -28,7 +28,41 @@ class ErrorReportSerializer(EventSerializerMixin, ReportSerializerBase):
     REPORT_DATA_PROPERTIES = {
         "sysmon_report": {
             "type": "object",
+            "patternProperties": {
+                # Match "sysmon.x" and "sysmon_ap.x"
+                "^(sysmon)(_ap)?\.[0-9][0-9]?": {
+                    "type": "object",
+                    "properties": {
+                        "index": {"type": "integer"},
+                        "robot_index": {"type": "integer"},
+                        "version": {"type": ["string", "number"]},
+                        "errors": {
+                            "type": "object",
+                            "patternProperties": {
+                                "^\S*\.[0-9][0-9]?": {"type": "object"}
+                            },
+                            "additionalProperties": False,
+                        },
+                        "services": {"type": "object"},
+                        "chrony_info": {"type": "object"},
+                    },
+                },
+                # Match "info_<any word>"
+                # This allows new info to be added in a controlled way
+                "info_\S*": {"type": ["string", "number", "object"]},
+            },
+            # These properties have already been hard-coded elsewhere
+            # and are used explicitly by hds
+            "properties": {
+                "fruit": {"type": "string"},
+                "is_emulator": {"type": "boolean"},
+                "scene": {"type": ["string", "null"]},
+                "serial_number": {"type": ["number", "string"]}
+            },
             "required": ["serial_number"],
+            # The below requires new additions to either be added to 
+            # HDS first or contain "info_"
+            "additionalProperties": False, 
         },
         "uuid": {
             "type": "string",
