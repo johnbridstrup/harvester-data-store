@@ -1,4 +1,5 @@
 from ..models import HarvesterCodeRelease, HarvesterVersionReport
+from harvester.models import Harvester
 from common.tests import HDSAPITestBase
 
 import time
@@ -11,6 +12,9 @@ from rest_framework import status
 class ReleaseApiTestCase(HDSAPITestBase):
     def setUp(self):
         super().setUp()
+        self.update_user_permissions_all(HarvesterCodeRelease)
+        self.update_user_permissions_all(HarvesterVersionReport)
+        self.update_user_permissions_all(Harvester)
         self.test_objects = self._setup_basic()
 
         self.release = {
@@ -277,7 +281,7 @@ class ReleaseApiTestCase(HDSAPITestBase):
 
     def test_harv_version_release(self):
         # Create release
-        self.create_release()
+        r,_=self.create_release()
 
         # Set to harvester
         self.client.patch(f"{self.api_base_url}/harvesters/1/", data={"release": 1})

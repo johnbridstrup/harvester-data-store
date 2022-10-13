@@ -13,7 +13,6 @@ from common.viewsets import CreateModelViewSet
 class HarvesterView(CreateModelViewSet):
     queryset = Harvester.objects.all()
     serializer_class = HarvesterSerializer
-    permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
         filter_dict = {}
@@ -45,7 +44,6 @@ class HarvesterView(CreateModelViewSet):
 class HarvesterHistoryView(CreateModelViewSet):
     queryset = Harvester.history.model.objects.all()
     serializer_class = HarvesterHistorySerializer
-    permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
         filter = {}

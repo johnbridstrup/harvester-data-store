@@ -3,12 +3,14 @@ from errorreport.models import ErrorReport
 from ..models import Notification
 from django.contrib.auth.models import User
 from unittest.mock import patch
+from rest_framework import status
 
 class NotificationAPITest(HDSAPITestBase):
     """ Test Notification APIs """
     def setUp(self):
         super().setUp()
         self.update_user_permissions_all(ErrorReport)
+        self.update_user_permissions_all(Notification)
         self.test_objects = self._setup_basic()
         self.notification = {
             "trigger_on": "ErrorReport",
@@ -29,7 +31,7 @@ class NotificationAPITest(HDSAPITestBase):
             format="json"
         )
 
-        self.assertEqual(resp.status_code, 405)
+        self.assertEqual(resp.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
         self.assertEqual(Notification.objects.count(), 1)
 
     def test_delete_notification(self):
@@ -47,7 +49,7 @@ class NotificationAPITest(HDSAPITestBase):
             format="json"
         )
 
-        self.assertEqual(resp.status_code, 405)
+        self.assertEqual(resp.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
 
     @patch("notifications.tasks.check_notifications.delay")
     @patch("notifications.tasks.post_to_slack_task.delay")

@@ -8,7 +8,6 @@ from common.viewsets import CreateModelViewSet
 class EventView(CreateModelViewSet):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
-    permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
         filter_dict = {}

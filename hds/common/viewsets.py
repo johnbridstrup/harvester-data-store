@@ -9,6 +9,7 @@ from .renderers import HDSJSONRenderer
 
 class CreateModelViewSet(ModelViewSet):
     renderer_classes = (HDSJSONRenderer,)
+    permission_classes = (permissions.DjangoModelPermissions,)
 
     def perform_create(self, serializer):
         serializer.save(creator=self.request.user)

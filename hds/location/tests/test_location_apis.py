@@ -6,6 +6,8 @@ class LocationAPITest(HDSAPITestBase):
     """ Test Location APIs """
     def setUp(self):
         super().setUp()
+        self.update_user_permissions_all(Location)
+        self.update_user_permissions_all(Distributor)
         self.distributor = Distributor.objects.create(name='Distributor 1', creator=self.user)
         # initialize data
         # to create via objects.create()

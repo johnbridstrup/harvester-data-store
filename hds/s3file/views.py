@@ -26,7 +26,6 @@ class PassthroughRenderer(BaseRenderer):
 class S3FileView(CreateModelViewSet):
     queryset = S3File.objects.all()
     serializer_class = S3FileSerializer
-    permission_classes = (IsAuthenticated,)
     http_method_names = ['get', 'delete', 'post']
 
     def retrieve(self, request, *args, **kwargs):

@@ -8,7 +8,6 @@ from common.viewsets import CreateModelViewSet
 class NotificationView(CreateModelViewSet):
     queryset = Notification.objects.all()
     serializer_class = NotificationSerializer
-    permission_classes = (IsAuthenticated,)
     http_method_names = ['get', 'delete']
 
     def get_queryset(self):

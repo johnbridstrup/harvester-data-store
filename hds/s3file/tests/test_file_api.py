@@ -1,5 +1,6 @@
 from common.tests import HDSAPITestBase
 from errorreport.models import ErrorReport
+from ..models import S3File
 from ..serializers import S3FileSerializer
 import os
 import json
@@ -18,6 +19,7 @@ class S3FileTestCase(HDSAPITestBase):
 
         super().setUp()
         self.update_user_permissions_all(ErrorReport)
+        self.update_user_permissions_all(S3File)
 
     def test_create_s3file(self):
         resp = self.client.post(

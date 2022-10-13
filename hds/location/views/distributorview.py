@@ -8,5 +8,4 @@ from common.viewsets import CreateModelViewSet
 class DistributorView(CreateModelViewSet):
     queryset = Distributor.objects.all()
     serializer_class = DistributorSerializer
-    permission_classes = (IsAuthenticated,)
 

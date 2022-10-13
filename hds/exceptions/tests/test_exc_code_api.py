@@ -1,8 +1,8 @@
-from ..models import AFTExceptionCode
+from ..models import AFTExceptionCode, AFTException
 from common.tests import HDSAPITestBase
 
 
-class ExceptionTestBase(HDSAPITestBase):
+class ExceptionTestBase(HDSAPITestBase):   
     CODE = 0
     CODES = [
         {
@@ -20,6 +20,11 @@ class ExceptionTestBase(HDSAPITestBase):
             'cycle': False
         }
     ]
+
+    def setUp(self):
+        super().setUp()
+        self.update_user_permissions_all(AFTExceptionCode)
+        self.update_user_permissions_all(AFTException)
 
     def _send_code(self, code=None, name='TestException'):
         if not code:

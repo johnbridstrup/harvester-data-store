@@ -8,6 +8,8 @@ class HarvesterAPITest(HDSAPITestBase):
     """ Test Harvester APIs """
     def setUp(self):
         super().setUp()
+        self.update_user_permissions_all(Fruit)
+        self.update_user_permissions_all(Harvester)
         self.distributor = Distributor.objects.create(name='Distributor 1', creator=self.user)
         self.location = Location.objects.create(
             distributor=self.distributor, ranch='Ranch 1', country='USA', region='Region 1', creator=self.user)

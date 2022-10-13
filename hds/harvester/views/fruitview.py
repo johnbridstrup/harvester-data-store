@@ -8,5 +8,4 @@ from common.viewsets import CreateModelViewSet
 class FruitView(CreateModelViewSet):
     queryset = Fruit.objects.all()
     serializer_class = FruitSerializer
-    permission_classes = (IsAuthenticated,)
 

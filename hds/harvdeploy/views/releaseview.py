@@ -8,7 +8,6 @@ from common.viewsets import CreateModelViewSet
 class HarvesterCodeReleaseView(CreateModelViewSet):
     queryset = HarvesterCodeRelease.objects.all()
     serializer_class = HarvesterCodeReleaseSerializer
-    permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
         listfilter = {}
