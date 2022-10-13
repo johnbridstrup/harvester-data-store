@@ -334,9 +334,11 @@ class ErrorReportAPITest(HDSAPITestBase):
 
         # Assert tag assigned
         report = ErrorReport.objects.get()
-        tag = report.tags.get()
-        self.assertEqual(tag, Tag.objects.get())
-        self.assertEqual(tag.name, Tags.INCOMPLETE.value)
+        tags = report.tags.all()
+        self.assertEqual(len(tags), 2)
+        self.assertQuerysetEqual(list(tags), Tag.objects.all())
+        self.assertIn(Tags.INCOMPLETE.value, [tag.name for tag in tags])
+        self.assertIn(Tags.INVALIDSCHEMA.value, [tag.name for tag in tags])
 
         # Assert tags in response
         resp_data = r.json()['data']
@@ -379,9 +381,23 @@ class ErrorReportAPITest(HDSAPITestBase):
             data, 
             format='json'
         )
+
+        # This won't fail to create, we can actually handle sysmon_0 now
+        self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
+        
+        resp_data = resp.json()['data']
+        self.assertIn("tags", resp_data)
+        self.assertIn(Tags.INVALIDSCHEMA.value, resp_data['tags'])
+
+        # It will however fail if the timestamp isn't there
+        del data['timestamp']
+        resp = self.client.post(
+            f'{self.api_base_url}/errorreports/', 
+            data, 
+            format='json'
+        )
+
         self.assertEqual(resp.status_code, status.HTTP_400_BAD_REQUEST)
-        resp_errs = resp.json()['errors']['detail']
-        self.assertIn("validation error", resp_errs)
 
     def test_new_info_key(self):
         data = self.data.copy()

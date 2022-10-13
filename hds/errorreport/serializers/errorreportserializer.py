@@ -11,7 +11,7 @@ from exceptions.models import AFTException, AFTExceptionCode
 from exceptions.serializers import AFTExceptionSerializer
 from collections.abc import Mapping
 from rest_framework import serializers
-from taggit.serializers import TagListSerializerField
+from taggit.serializers import TagListSerializerField, TaggitSerializer
 
 import logging
 
@@ -22,7 +22,7 @@ FAILED_SPLIT_MSG = "Failed to split into service and index"
 EXC_EXT_FAIL_MSG = "Error extracting exceptions"
 
 
-class ErrorReportSerializer(EventSerializerMixin, ReportSerializerBase):
+class ErrorReportSerializer(TaggitSerializer, EventSerializerMixin, ReportSerializerBase):
     """Serializer for the ErrorReport model"""
     report_type = "error"
     
@@ -98,7 +98,15 @@ class ErrorReportSerializer(EventSerializerMixin, ReportSerializerBase):
         return data
 
     def to_internal_value(self, data):
-        self.validate_incoming_report(data)
+        try:
+            self.validate_incoming_report(data)
+            tags = []
+        except serializers.ValidationError:
+            # We will try anyway.
+            # This failure has already been logged.
+            # The tag will only apply if we are able to ingest.
+            tags = [Tags.INVALIDSCHEMA.value]
+
         report = data.copy()
         harv_id = int(report['data']['sysmon_report']['serial_number'])
         harvester = self.get_harvester(harv_id, report['data']['sysmon_report'])
@@ -114,6 +122,7 @@ class ErrorReportSerializer(EventSerializerMixin, ReportSerializerBase):
             'UUID': UUID,
             'githash': githash,
             'gitbranch': gitbranch,
+            'tags': tags,
         }
         return super().to_internal_value(data)
 
@@ -154,7 +163,7 @@ class ErrorReportSerializer(EventSerializerMixin, ReportSerializerBase):
                     }
                 )
         if incomplete:
-            report.tags.add(Tags.INCOMPLETE.value) 
+            report.tags.add(Tags.INCOMPLETE.value)
             report.save()
         return errors
 

@@ -37,3 +37,4 @@ class Tags(Enum):
     # Adding new ones is fine.
     INCOMPLETE = "incomplete"
     INVALID = "invalid"
+    INVALIDSCHEMA = "invalid schema"
