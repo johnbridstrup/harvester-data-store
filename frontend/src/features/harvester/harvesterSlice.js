@@ -8,6 +8,7 @@ const initialState = {
   editting: false,
   harvester: {},
   harvesters: [],
+  harvversion: [],
   errorMsg: null,
   pagination: {
     next: null,
@@ -38,7 +39,10 @@ export const getHarvesterById = createAsyncThunk(
   "harvester/getHarvesterById",
   async (harvId, thunkAPI) => {
     try {
-      return await harvesterService.getHarvesterById(harvId);
+      const {
+        auth: { token },
+      } = thunkAPI.getState();
+      return await harvesterService.getHarvesterById(harvId, token);
     } catch (error) {
       console.log(error);
       const message = invalidateCache(error, thunkAPI.dispatch);
@@ -103,6 +107,42 @@ export const queryHarvester = createAsyncThunk(
         auth: { token },
       } = thunkAPI.getState();
       return await harvesterService.queryHarvester(queryObj, token);
+    } catch (error) {
+      console.log(error);
+      const message = invalidateCache(error, thunkAPI.dispatch);
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const listHarvVersion = createAsyncThunk(
+  "harvester/listHarvVersion",
+  async (obj, thunkAPI) => {
+    try {
+      const {
+        auth: { token },
+      } = thunkAPI.getState();
+      return await harvesterService.listHarvVersion(
+        obj.harvId,
+        token,
+        obj.limit
+      );
+    } catch (error) {
+      console.log(error);
+      const message = invalidateCache(error, thunkAPI.dispatch);
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const paginateHarvVersion = createAsyncThunk(
+  "harvester/paginateHarvVersion",
+  async (url, thunkAPI) => {
+    try {
+      const {
+        auth: { token },
+      } = thunkAPI.getState();
+      return await harvesterService.paginateHarvester(url, token);
     } catch (error) {
       console.log(error);
       const message = invalidateCache(error, thunkAPI.dispatch);
@@ -189,6 +229,34 @@ const harvesterSlice = createSlice({
         state.pagination.previous = action.payload.previous;
       })
       .addCase(queryHarvester.rejected, (state, action) => {
+        state.loading = false;
+        state.errorMsg = action.payload;
+      })
+      .addCase(listHarvVersion.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(listHarvVersion.fulfilled, (state, action) => {
+        state.loading = false;
+        state.harvversion = action.payload.results;
+        state.pagination.count = action.payload.count;
+        state.pagination.next = action.payload.next;
+        state.pagination.previous = action.payload.previous;
+      })
+      .addCase(listHarvVersion.rejected, (state, action) => {
+        state.loading = false;
+        state.errorMsg = action.payload;
+      })
+      .addCase(paginateHarvVersion.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(paginateHarvVersion.fulfilled, (state, action) => {
+        state.loading = false;
+        state.harvversion = action.payload.results;
+        state.pagination.count = action.payload.count;
+        state.pagination.next = action.payload.next;
+        state.pagination.previous = action.payload.previous;
+      })
+      .addCase(paginateHarvVersion.rejected, (state, action) => {
         state.loading = false;
         state.errorMsg = action.payload;
       });

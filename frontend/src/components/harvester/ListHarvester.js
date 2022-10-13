@@ -109,7 +109,7 @@ function ListHarvester(props) {
   };
   return (
     <>
-      <div className="flex-right">
+      <div className="flex-right mb-4">
         <button onClick={() => addPopUp("add")} className="btn btn-primary">
           Add New Harvester
         </button>

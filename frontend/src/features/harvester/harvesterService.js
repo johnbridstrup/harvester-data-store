@@ -44,6 +44,14 @@ const queryHarvester = async (queryObj, token) => {
   return response;
 };
 
+const listHarvVersion = async (harvId, token, limit = 10) => {
+  let response = await axiosService.get(
+    `${HARVESTERS_URL}${harvId}/versions/?limit=${limit}`,
+    token
+  );
+  return response;
+};
+
 const harvesterService = {
   listHarvesters,
   getHarvesterById,
@@ -51,6 +59,7 @@ const harvesterService = {
   updateHarvester,
   paginateHarvester,
   queryHarvester,
+  listHarvVersion,
 };
 
 export default harvesterService;
