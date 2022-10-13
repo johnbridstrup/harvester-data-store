@@ -14,13 +14,15 @@ def build_frontend_url(endpoint, _id=None):
         frontend_url = frontend_url + f"{_id}/"
     return frontend_url
 
-def make_ok(response_message, response_data, response_status=200):
+def make_ok(response_message, response_data=None, response_status=200):
     """ generate success response """
-    return Response({
+    response = {
         'status': 'success',
         'message': response_message,
-        'data': response_data
-    }, status=response_status)
+    }
+    if response_data is not None:
+        response['data'] = response_data
+    return Response(response, status=response_status)
 
 
 def make_error(errors, response_status=400):

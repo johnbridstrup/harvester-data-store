@@ -24,6 +24,8 @@ EXC_EXT_FAIL_MSG = "Error extracting exceptions"
 
 class ErrorReportSerializer(EventSerializerMixin, ReportSerializerBase):
     """Serializer for the ErrorReport model"""
+    report_type = "error"
+    
     # Additional report schema properties
     REPORT_DATA_PROPERTIES = {
         "sysmon_report": {

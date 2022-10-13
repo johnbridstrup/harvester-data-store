@@ -1,14 +1,12 @@
 from ..models import HarvesterVersionReport
 from ..serializers import HarvesterVersionReportSerializer
 
-from rest_framework.permissions import IsAuthenticated
-from common.viewsets import CreateModelViewSet
+from common.viewsets import ReportModelViewSet
 
 
-class HarvesterVersionReportView(CreateModelViewSet):
+class HarvesterVersionReportView(ReportModelViewSet):
     queryset = HarvesterVersionReport.objects.all()
     serializer_class = HarvesterVersionReportSerializer
-    permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
         listfilter = {}

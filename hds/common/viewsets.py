@@ -1,4 +1,8 @@
+from crypt import methods
+from rest_framework.decorators import action
+from rest_framework.renderers import JSONRenderer
 from rest_framework.viewsets import ModelViewSet
+from common.utils import make_ok
 from .renderers import HDSJSONRenderer
 
 
@@ -30,4 +34,18 @@ class CreateModelViewSet(ModelViewSet):
 
 class ReportModelViewSet(CreateModelViewSet):
     """ Viewset for error reports """
-    pass
+    @property
+    def report_type(self):
+        return self.serializer_class.report_type
+
+    @action(
+        methods=['get'],
+        detail=False,
+        url_path='getschema',
+        renderer_classes=[JSONRenderer,]
+    )
+    def get_schema(self, request):
+        schema = self.serializer_class.get_schema()
+        msg = f"{self.report_type} schema retrieved"
+        return make_ok(msg, schema)
+

@@ -315,6 +315,7 @@ class ErrorReportAPITest(HDSAPITestBase):
             data, 
             format='json'
         )
+        
         self.assertEqual(r.status_code, status.HTTP_201_CREATED)
         self.assertEqual(ErrorReport.objects.count(),1)
         self.assertEqual(AFTException.objects.count(), 0)
@@ -385,3 +386,20 @@ class ErrorReportAPITest(HDSAPITestBase):
             format='json'
         )
         self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
+
+    def test_get_schema(self):
+        resp = self.client.get(f'{self.api_base_url}/errorreports/getschema/')
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+
+        msg = resp.json()['message']
+        data = resp.json()['data']
+
+        self.assertEqual(
+            msg,
+            f"{ErrorReportSerializer.report_type} schema retrieved"
+        )
+
+        self.assertDictEqual(
+            data,
+            ErrorReportSerializer.get_schema()
+        )

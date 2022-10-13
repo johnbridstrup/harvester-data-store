@@ -31,6 +31,7 @@ class HarvesterCodeReleaseSerializer(serializers.ModelSerializer):
         return data
 
 class HarvesterVersionReportSerializer(ReportSerializerBase):
+    report_type = "version"
     class Meta:
         model = HarvesterVersionReport
         fields = ('__all__')

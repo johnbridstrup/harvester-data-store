@@ -12,7 +12,7 @@ from ..serializers.errorreportserializer import (
     ParetoSerializer,
 )
 from exceptions.models import AFTException
-from common.viewsets import CreateModelViewSet
+from common.viewsets import ReportModelViewSet
 from common.reports import DTimeFormatter
 from common.utils import make_ok, build_frontend_url
 from notifications.signals import error_report_created
@@ -26,7 +26,7 @@ from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.negotiation import DefaultContentNegotiation
 
 
-class ErrorReportView(CreateModelViewSet):
+class ErrorReportView(ReportModelViewSet):
     queryset = ErrorReport.objects.all()
     content_negotiation_class = DefaultContentNegotiation
     permission_classes = (IsAuthenticated,)
