@@ -95,6 +95,22 @@ export const paginateHarvester = createAsyncThunk(
   }
 );
 
+export const queryHarvester = createAsyncThunk(
+  "harvester/queryHarvester",
+  async (queryObj, thunkAPI) => {
+    try {
+      const {
+        auth: { token },
+      } = thunkAPI.getState();
+      return await harvesterService.queryHarvester(queryObj, token);
+    } catch (error) {
+      console.log(error);
+      const message = invalidateCache(error, thunkAPI.dispatch);
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 const harvesterSlice = createSlice({
   name: "harvester",
   initialState,
@@ -159,6 +175,20 @@ const harvesterSlice = createSlice({
         state.pagination.previous = action.payload.previous;
       })
       .addCase(paginateHarvester.rejected, (state, action) => {
+        state.loading = false;
+        state.errorMsg = action.payload;
+      })
+      .addCase(queryHarvester.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(queryHarvester.fulfilled, (state, action) => {
+        state.loading = false;
+        state.harvesters = action.payload.results;
+        state.pagination.count = action.payload.count;
+        state.pagination.next = action.payload.next;
+        state.pagination.previous = action.payload.previous;
+      })
+      .addCase(queryHarvester.rejected, (state, action) => {
         state.loading = false;
         state.errorMsg = action.payload;
       });

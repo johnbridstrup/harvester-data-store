@@ -15,6 +15,12 @@ class HarvesterView(CreateModelViewSet):
     serializer_class = HarvesterSerializer
     permission_classes = (IsAuthenticated,)
 
+    def get_queryset(self):
+        filter_dict = {}
+        if "harv_id" in self.request.query_params:
+            filter_dict["harv_id"] = int(self.request.query_params.get("harv_id"))
+        return self.queryset.filter(**filter_dict).order_by('-id').distinct()
+
     @action(
         methods=["get"],
         detail=True,

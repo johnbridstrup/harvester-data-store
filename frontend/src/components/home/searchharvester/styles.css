@@ -1,0 +1,32 @@
+.harv-search-heading {
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.search-wrap {
+  background: var(--bg-secondary);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 10px;
+  border-radius: 50px;
+}
+
+.search-wrap input {
+  border: none;
+  outline: none;
+  background: transparent;
+  width: 100%;
+  font-size: 15px;
+  padding: 0 10px;
+}
+
+.search-wrap span {
+  background: var(--bg-primary);
+  padding: 5px;
+  border-radius: 50px;
+  font-size: 13px;
+  cursor: pointer;
+}

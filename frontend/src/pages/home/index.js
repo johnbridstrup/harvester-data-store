@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import MainLayout from "../../components/layout/main";
 import { menu, adminMenu } from "../../assets/menu";
 import "./styles.css";
+import LandingView from "../../components/home";
 
 function Home(props) {
   const { user } = useSelector((state) => state.auth);
@@ -13,7 +14,8 @@ function Home(props) {
         <div className="mb-5">
           <h2 className="display-4">Welcome to HDS</h2>
         </div>
-        <div className="row">
+        <LandingView />
+        <div className="row mb-4">
           {menus.map((item, index) => (
             <Link
               to={item.href}

@@ -2,6 +2,7 @@ import { useState } from "react";
 import PropTypes from "prop-types";
 import { menu, adminMenu } from "../../../assets/menu";
 import AllMenuItem from "./AllMenuItem";
+import SearchHarvester from "../../home/searchharvester";
 
 function AllMenu(props) {
   const menus = props.user?.is_superuser ? adminMenu : menu;
@@ -28,6 +29,9 @@ function AllMenu(props) {
               placeholder="Search Menu"
               onChange={handleChange}
             />
+          </div>
+          <div className="all-menu-group">
+            <SearchHarvester component="navbar" />
           </div>
           <div className="all-menu-group">
             <div className="all-menu-group-header">HDS</div>

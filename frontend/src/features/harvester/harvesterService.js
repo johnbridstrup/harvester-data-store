@@ -35,12 +35,22 @@ const paginateHarvester = async (url, token) => {
   return response;
 };
 
+const queryHarvester = async (queryObj, token) => {
+  const params = new URLSearchParams(queryObj);
+  const response = await axiosService.get(
+    `${HARVESTERS_URL}?${params.toString()}`,
+    token
+  );
+  return response;
+};
+
 const harvesterService = {
   listHarvesters,
   getHarvesterById,
   createHarvester,
   updateHarvester,
   paginateHarvester,
+  queryHarvester,
 };
 
 export default harvesterService;
