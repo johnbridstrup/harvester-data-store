@@ -3,7 +3,8 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 from rest_framework.test import APIClient
 from rest_framework.authtoken.models import Token
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Permission
+from django.contrib.contenttypes.models import ContentType
 from django.urls import reverse
 from .serializers.userserializer import UserSerializer
 from .models import UserProfile
@@ -50,7 +51,6 @@ def compare_patterns(keys, urls):
 
 
 class HDSAPITestBase(APITestCase):
-
     def setUp(self):
         self.client = APIClient()
         self.user = User.objects.create(username='test_user')
@@ -86,6 +86,14 @@ class HDSAPITestBase(APITestCase):
         })
 
         return test_objects
+
+    def update_user_permissions_all(self, model):
+        content_type = ContentType.objects.get_for_model(model)
+        model_perm = Permission.objects.filter(content_type=content_type)
+        for perm in model_perm:
+            # Give test user all permissions
+            self.user.user_permissions.add(perm)
+        self.user = User.objects.get(id=1)
 
     def create_fruit_object(self, name):
         return Fruit.objects.create(name=name, creator=self.user)

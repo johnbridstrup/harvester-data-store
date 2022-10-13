@@ -20,7 +20,7 @@ from notifications.serializers import NotificationSerializer
 from django.db.models import Count, F
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page 
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, DjangoModelPermissions
 from rest_framework.decorators import action
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.negotiation import DefaultContentNegotiation
@@ -29,7 +29,7 @@ from rest_framework.negotiation import DefaultContentNegotiation
 class ErrorReportView(ReportModelViewSet):
     queryset = ErrorReport.objects.all()
     content_negotiation_class = DefaultContentNegotiation
-    permission_classes = (IsAuthenticated,)
+    serializer_class = ErrorReportSerializer
     filter_backends = (SearchFilter, OrderingFilter)
     search_fields = ['harvester']
     ordering_fields = ('harvester', 'location', 'reportTime')

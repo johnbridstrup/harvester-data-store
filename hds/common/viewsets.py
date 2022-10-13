@@ -1,5 +1,6 @@
 from crypt import methods
 from rest_framework.decorators import action
+from rest_framework import permissions
 from rest_framework.renderers import JSONRenderer
 from rest_framework.viewsets import ModelViewSet
 from common.utils import make_ok
@@ -31,9 +32,10 @@ class CreateModelViewSet(ModelViewSet):
                 query_filter[key] = value
         return query_filter
 
-
 class ReportModelViewSet(CreateModelViewSet):
     """ Viewset for error reports """
+    permission_classes = (permissions.DjangoModelPermissions,)
+    
     @property
     def report_type(self):
         return self.serializer_class.report_type

@@ -1,4 +1,5 @@
 from common.tests import HDSAPITestBase
+from errorreport.models import ErrorReport
 from ..serializers import S3FileSerializer
 import os
 import json
@@ -15,7 +16,8 @@ class S3FileTestCase(HDSAPITestBase):
         self.bucket, self.key = S3FileSerializer.get_bucket_key(self.s3event)
         self.filetype, self.uuid = S3FileSerializer.get_filetype_uuid(self.key)
 
-        return super().setUp()
+        super().setUp()
+        self.update_user_permissions_all(ErrorReport)
 
     def test_create_s3file(self):
         resp = self.client.post(

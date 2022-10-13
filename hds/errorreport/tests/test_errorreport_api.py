@@ -1,7 +1,7 @@
 """ Test ErrorReport APIs """
 from common.metrics import ERROR_COUNTER
 from common.models import Tags
-from common.tests import HDSAPITestBase
+from common.tests import HDSAPITestBase, create_user
 from harvester.models import Harvester
 from event.models import Event
 from exceptions.models import AFTException
@@ -9,6 +9,7 @@ from ..models import ErrorReport, DEFAULT_UNKNOWN
 from ..serializers.errorreportserializer import ErrorReportSerializer, FAILED_SPLIT_MSG
 from django.utils.timezone import make_aware
 from rest_framework import serializers, status
+from rest_framework.authtoken.models import Token
 from taggit.models import Tag
 from unittest.mock import patch
 import datetime
@@ -19,6 +20,7 @@ import os
 class ErrorReportAPITest(HDSAPITestBase):
     def setUp(self):
         super().setUp()
+        self.update_user_permissions_all(ErrorReport)
         self.test_objects = self._setup_basic()
 
         report_json_path = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'report.json') 
@@ -28,6 +30,13 @@ class ErrorReportAPITest(HDSAPITestBase):
     def _extract_service_node(self, serv_str):
         serv_split = serv_str.split('.')
         return serv_split[0], serv_split[1]
+
+    def test_create_no_permission(self):
+        user = create_user("user", "password")
+        token = Token.objects.create(user=user)
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
+        r = self.client.post(f'{self.api_base_url}/errorreports/', self.data, format='json')
+        self.assertEqual(r.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_create_errorreport_no_uuid(self):
         """ create error report and assert it exists """
