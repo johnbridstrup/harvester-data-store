@@ -12,3 +12,14 @@ export const NOTIFY_CATEGORY = {
   created: "created",
   isRecipient: "is_recipient",
 };
+export const FULLFILLED_PROMISE = {
+  notification: "notification/deleteNotification/fulfilled",
+  logout: "auth/logout/fulfilled",
+};
+
+export const REJECTED_PROMISE = {
+  notification: "notification/deleteNotification/rejected",
+  password: "auth/changePassword/rejected",
+  profile: "auth/updateProfile/rejected",
+  confirm: "auth/confirmPassword/rejected",
+};

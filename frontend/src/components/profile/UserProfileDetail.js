@@ -6,7 +6,12 @@ import {
   confirmPassword,
   updateProfile,
 } from "../../features/auth/authSlice";
-import { NOTIFY_CATEGORY } from "../../features/base/constants";
+import {
+  FULLFILLED_PROMISE,
+  NOTIFY_CATEGORY,
+  REJECTED_PROMISE,
+  SUCCESS,
+} from "../../features/base/constants";
 import notificationService from "../../features/notification/notificationService";
 import { deleteNotification } from "../../features/notification/notificationSlice";
 import ConfirmModal from "../modals/ConfirmModal";
@@ -117,10 +122,10 @@ function UserProfileDetail(props) {
       password: undefined,
     };
     const res = await dispatch(updateProfile(data));
-    if (res.type === "auth/updateProfile/fulfilled") {
-      toast.success("profile information updated successfully");
+    if (res.payload?.status === SUCCESS) {
+      toast.success(res.payload?.message);
       profileModalPopUp();
-    } else if (res === "auth/updateProfile/rejected") {
+    } else if (res.type === REJECTED_PROMISE.profile) {
       toast.error(res?.payload);
     } else {
       toast.error("something went wrong. please try again");
@@ -137,9 +142,9 @@ function UserProfileDetail(props) {
         new_password: fieldData.new_password,
       };
       const res = await dispatch(changePassword(data));
-      if (res.type === "auth/changePassword/fulfilled") {
-        toast.success("password updated successfully");
-      } else if (res.type === "auth/changePassword/rejected") {
+      if (res.payload?.status === SUCCESS) {
+        toast.success(res.payload?.data?.message);
+      } else if (res.type === REJECTED_PROMISE.password) {
         toast.error(res?.payload);
       } else {
         toast.error("something went wrong try again later");
@@ -149,7 +154,7 @@ function UserProfileDetail(props) {
 
   const handleDeleteNotification = async () => {
     const res = await dispatch(deleteNotification(notifObj.id));
-    if (res.type === "notification/deleteNotification/fulfilled") {
+    if (res.type === FULLFILLED_PROMISE.notification) {
       toast.success("Notification deleted successfully");
       fetchNotification();
       confirmPopUp(null);
@@ -165,7 +170,7 @@ function UserProfileDetail(props) {
       password: fieldData.password,
     };
     const res = await dispatch(confirmPassword(data));
-    if (res.type === "auth/confirmPassword/fulfilled") {
+    if (res.payload?.status === SUCCESS) {
       passwordModalPopUp();
       setTimeout(() => {
         profileModalPopUp();

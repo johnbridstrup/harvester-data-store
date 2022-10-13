@@ -6,6 +6,7 @@ import { ArrowDown, Menu, Notification } from "../../../assets/svg";
 import { logout } from "../../../features/auth/authSlice";
 import {
   API_BASE_URL,
+  FULLFILLED_PROMISE,
   MAX_LIMIT,
   NOTIFY_CATEGORY,
 } from "../../../features/base/constants";
@@ -52,7 +53,7 @@ function Navbar(props) {
 
   const handleLogout = async () => {
     const res = await dispatch(logout({ token }));
-    if (res.type === "auth/logout/fulfilled") {
+    if (res.type === FULLFILLED_PROMISE.logout) {
       window.location.reload();
     }
   };
