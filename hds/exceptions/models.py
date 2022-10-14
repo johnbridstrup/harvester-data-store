@@ -35,4 +35,8 @@ class AFTException(CommonInfo):
     handled = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"{self.service}.{self.robot}: {self.code.name}"
+        if self.handled:
+            handled_str = "handled"
+        else:
+            handled_str = "unhandled"
+        return f"{self.service}.{self.robot}: {self.code.name} ({handled_str})"
