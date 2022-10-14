@@ -53,5 +53,16 @@
         "lastModified": "2022-08-25T22:59:57.016Z",
         "UUID": "a399d452-24c9-11ed-bb17-f9799c718175"
     }
+},
+{
+    "model": "event.event",
+    "pk": 6,
+    "fields": {
+        "creator": 1,
+        "modifiedBy": null,
+        "created": "2022-10-14T16:18:26.637Z",
+        "lastModified": "2022-10-14T16:18:26.637Z",
+        "UUID": "431afec6-3898-11ed-b748-78d00429ea2e"
+    }
 }
 ]
