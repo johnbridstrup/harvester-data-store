@@ -1,6 +1,7 @@
-from common.metrics import ERROR_COUNTER
+from common.async_metrics import ASYNC_ERROR_COUNTER
 from common.models import Tags
 from common.serializers.reportserializer import ReportSerializerBase
+from ..tasks import extract_exceptions
 from ..models import ErrorReport, DEFAULT_UNKNOWN
 from harvester.models import Harvester
 from harvester.serializers.harvesterserializer import HarvesterSerializer
@@ -78,15 +79,7 @@ class ErrorReportSerializer(TaggitSerializer, EventSerializerMixin, ReportSerial
 
     def create(self, validated_data):
         report_inst = super().create(validated_data)
-        try:
-            self.create_exceptions(report_inst)
-        except Exception as e:
-            exc = type(e).__name__
-            ERROR_COUNTER.labels(exc, EXC_EXT_FAIL_MSG, ErrorReportSerializer.__name__).inc()
-            report_inst.tags.add(Tags.INCOMPLETE.value) 
-            report_inst.save()
-            
-            logging.exception(f"{exc} caught in create_exceptions")
+        extract_exceptions.delay(report_inst.id)
         return report_inst
 
     def to_representation(self, instance):
@@ -140,7 +133,7 @@ class ErrorReportSerializer(TaggitSerializer, EventSerializerMixin, ReportSerial
                     service, index = serv.split('.')
                 except ValueError as e:
                     logging.exception(FAILED_SPLIT_MSG)
-                    ERROR_COUNTER.labels(ValueError.__name__, FAILED_SPLIT_MSG, cls.__name__).inc()
+                    ASYNC_ERROR_COUNTER.labels("_extract_exception_data", ValueError.__name__, FAILED_SPLIT_MSG).inc()
                     incomplete = True
                     continue
                 robot = sysmon_entry.get('robot_index', index)

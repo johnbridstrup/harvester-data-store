@@ -1,4 +1,5 @@
 """ Test ErrorReport APIs """
+from common.async_metrics import ASYNC_ERROR_COUNTER
 from common.metrics import ERROR_COUNTER
 from common.models import Tags
 from common.tests import HDSAPITestBase, create_user
@@ -317,7 +318,7 @@ class ErrorReportAPITest(HDSAPITestBase):
             'traychg_0': {}
         }
         expected_error = ValueError.__name__
-        counter = ERROR_COUNTER.labels(expected_error, FAILED_SPLIT_MSG, ErrorReportSerializer.__name__)
+        counter = ASYNC_ERROR_COUNTER.labels("_extract_exception_data", expected_error, FAILED_SPLIT_MSG)
 
         r = self.client.post(
             f'{self.api_base_url}/errorreports/', 
