@@ -399,6 +399,8 @@ export const aggregateOptions = [
   { label: "team", value: "code__team" },
   { label: "robot", value: "robot" },
   { label: "location", value: "report__location__ranch" },
+  { label: "handled", value: "handled" },
+  { label: "emulator", value: "report__harvester__is_emulator" },
 ];
 
 export const translateAggregateOptions = (aggregates = []) => {

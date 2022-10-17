@@ -363,18 +363,14 @@ export const FormQuery = (props) => {
     codeOptions,
     handleCodeSelect,
     selectedCode,
-    traceback,
-    handleTracebackChange,
-    generic,
-    handleGenericChange,
-    datesQuery,
-    handleDateChange,
     timezoneOptions,
     handleTimezoneSelect,
     selectedTimezone,
     handleGenPareto,
     handleModalPopUp,
     notifyRef,
+    fieldData,
+    handleFieldChange,
   } = props;
   return (
     <form onSubmit={handleFormQuerySubmit}>
@@ -457,8 +453,8 @@ export const FormQuery = (props) => {
             <InputFormControl
               type="text"
               name="traceback"
-              value={traceback}
-              onChange={handleTracebackChange}
+              value={fieldData.traceback}
+              onChange={handleFieldChange}
               placeholder="traceback string"
             />
           </div>
@@ -469,9 +465,81 @@ export const FormQuery = (props) => {
             <InputFormControl
               type="text"
               name="generic"
-              value={generic}
-              onChange={handleGenericChange}
+              value={fieldData.generic}
+              onChange={handleFieldChange}
               placeholder="field__lookup=x, column_lookup=y"
+            />
+          </div>
+        </div>
+      </div>
+      <div className="row mb-4">
+        <div className="col-md-6">
+          <div className="form-check">
+            <label htmlFor="emulator">Emulator</label>
+            <input
+              type="radio"
+              name="is_emulator"
+              value="1"
+              checked={fieldData.is_emulator === "1"}
+              onChange={handleFieldChange}
+              className="form-check-input"
+            />
+          </div>
+          <div className="form-check">
+            <label htmlFor="emulator">Harvesters</label>
+            <input
+              type="radio"
+              name="is_emulator"
+              value="0"
+              checked={fieldData.is_emulator === "0"}
+              onChange={handleFieldChange}
+              className="form-check-input"
+            />
+          </div>
+          <div className="form-check">
+            <label htmlFor="emulator">All</label>
+            <input
+              type="radio"
+              name="is_emulator"
+              value=""
+              checked={fieldData.is_emulator === ""}
+              onChange={handleFieldChange}
+              className="form-check-input"
+            />
+          </div>
+        </div>
+        <div className="col-md-6">
+          <div className="form-check">
+            <label htmlFor="handled">Handled</label>
+            <input
+              type="radio"
+              name="handled"
+              value="1"
+              checked={fieldData.handled === "1"}
+              onChange={handleFieldChange}
+              className="form-check-input"
+            />
+          </div>
+          <div className="form-check">
+            <label htmlFor="handled">Unhandled</label>
+            <input
+              type="radio"
+              name="handled"
+              value="0"
+              checked={fieldData.handled === "0"}
+              onChange={handleFieldChange}
+              className="form-check-input"
+            />
+          </div>
+          <div className="form-check">
+            <label htmlFor="handled">All</label>
+            <input
+              type="radio"
+              name="handled"
+              value=""
+              checked={fieldData.handled === ""}
+              onChange={handleFieldChange}
+              className="form-check-input"
             />
           </div>
         </div>
@@ -483,8 +551,8 @@ export const FormQuery = (props) => {
             <InputFormControl
               type="text"
               name="start_time"
-              value={datesQuery.start_time}
-              onChange={handleDateChange}
+              value={fieldData.start_time}
+              onChange={handleFieldChange}
               placeholder="YYYYMMDDHHmmSS"
               maxLength={14}
             />
@@ -496,8 +564,8 @@ export const FormQuery = (props) => {
             <InputFormControl
               type="text"
               name="end_time"
-              value={datesQuery.end_time}
-              onChange={handleDateChange}
+              value={fieldData.end_time}
+              onChange={handleFieldChange}
               placeholder="YYYYMMDDHHmmSS"
               maxLength={14}
             />
@@ -609,16 +677,12 @@ FormQuery.propTypes = {
   codeOptions: PropTypes.array,
   handleCodeSelect: PropTypes.func,
   selectedCode: PropTypes.array,
-  traceback: PropTypes.string,
-  handleTracebackChange: PropTypes.func,
-  generic: PropTypes.string,
-  handleGenericChange: PropTypes.func,
-  datesQuery: PropTypes.object,
-  handleDateChange: PropTypes.func,
   timezoneOptions: PropTypes.array,
   handleTimezoneSelect: PropTypes.func,
   selectedTimezone: PropTypes.array,
   handleGenPareto: PropTypes.func,
   handleModalPopUp: PropTypes.func,
   notifyRef: PropTypes.object,
+  fieldData: PropTypes.object,
+  handleFieldChange: PropTypes.func,
 };

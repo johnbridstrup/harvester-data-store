@@ -42,12 +42,14 @@ function ErrorReportQuery(props) {
   const [selectedFruit, setSelectedFruit] = useState(null);
   const [selectedCode, setSelectedCode] = useState(null);
   const [selectedRecipient, setSelectedRecipient] = useState(null);
-  const [datesQuery, setDatesQuery] = useState({
+  const [fieldData, setFieldData] = useState({
     start_time: "",
     end_time: "",
+    traceback: "",
+    generic: "",
+    is_emulator: "0",
+    handled: "",
   });
-  const [traceback, setTraceback] = useState("");
-  const [generic, setGeneric] = useState("");
   const {
     count,
     internal: { hovered },
@@ -95,10 +97,12 @@ function ErrorReportQuery(props) {
       setSelectedCode((current) => codes);
     }
     if (paramsObj.traceback) {
-      setTraceback((current) => paramsObj.traceback);
+      setFieldData((current) => {
+        return { ...current, traceback: paramsObj.traceback };
+      });
     }
     if (paramsObj.start_time) {
-      setDatesQuery((current) => {
+      setFieldData((current) => {
         return {
           ...current,
           start_time: paramsObj.start_time,
@@ -106,7 +110,7 @@ function ErrorReportQuery(props) {
       });
     }
     if (paramsObj.end_time) {
-      setDatesQuery((current) => {
+      setFieldData((current) => {
         return {
           ...current,
           end_time: paramsObj.end_time,
@@ -118,7 +122,19 @@ function ErrorReportQuery(props) {
       setSelectedTimezone((current) => tzObj);
     }
     if (paramsObj.generic) {
-      setGeneric((current) => paramsObj.generic);
+      setFieldData((current) => {
+        return { ...current, generic: paramsObj.generic };
+      });
+    }
+    if (paramsObj.is_emulator) {
+      setFieldData((current) => {
+        return { ...current, is_emulator: paramsObj.is_emulator };
+      });
+    }
+    if (paramsObj.handled) {
+      setFieldData((current) => {
+        return { ...current, handled: paramsObj.handled };
+      });
     }
   }, [search]);
 
@@ -143,28 +159,26 @@ function ErrorReportQuery(props) {
     setSelectedCode((current) => newValue);
   };
 
-  const handleTracebackChange = (e) => {
-    setTraceback(e.target.value);
-  };
-
   const handleRecipientSelect = (newValue, actionMeta) => {
     setSelectedRecipient((current) => newValue);
   };
 
-  const handleGenericChange = (e) => {
-    setGeneric(e.target.value);
+  const handleFieldChange = (e) => {
+    setFieldData((current) => {
+      return { ...current, [e.target.name]: e.target.value };
+    });
   };
 
   const buildQueryObj = () => {
     let queryObj = {};
-    if (datesQuery.start_time) {
+    if (fieldData.start_time) {
       queryObj["start_time"] = timeStampFormat(
-        extractDateFromString(datesQuery.start_time)
+        extractDateFromString(fieldData.start_time)
       );
     }
-    if (datesQuery.end_time) {
+    if (fieldData.end_time) {
       queryObj["end_time"] = timeStampFormat(
-        extractDateFromString(datesQuery.end_time)
+        extractDateFromString(fieldData.end_time)
       );
     }
     if (selectedHarvId && selectedHarvId.length > 0) {
@@ -182,11 +196,17 @@ function ErrorReportQuery(props) {
     if (selectedCode && selectedCode.length > 0) {
       queryObj["codes"] = translateCodeOptions(selectedCode);
     }
-    if (traceback) {
-      queryObj["traceback"] = traceback;
+    if (fieldData.traceback) {
+      queryObj["traceback"] = fieldData.traceback;
     }
-    if (generic) {
-      queryObj["generic"] = generic;
+    if (fieldData.generic) {
+      queryObj["generic"] = fieldData.generic;
+    }
+    if (fieldData.is_emulator) {
+      queryObj["is_emulator"] = fieldData.is_emulator;
+    }
+    if (fieldData.handled) {
+      queryObj["handled"] = fieldData.handled;
     }
     return queryObj;
   };
@@ -198,12 +218,6 @@ function ErrorReportQuery(props) {
     dispatch(copyQueryUrl(copiedUrl(queryObj)));
     dispatch(cacheParamsObj(queryObj));
     pushState(queryObj, false);
-  };
-
-  const handleDateChange = (e) => {
-    setDatesQuery((current) => {
-      return { ...current, [e.target.name]: e.target.value };
-    });
   };
 
   const handleGenPareto = async () => {
@@ -258,20 +272,17 @@ function ErrorReportQuery(props) {
           <div>
             <FormQuery
               codeOptions={codeOptions}
-              datesQuery={datesQuery}
               fruitOptions={fruitOptions}
-              generic={generic}
+              fieldData={fieldData}
+              handleFieldChange={handleFieldChange}
               handleCodeSelect={handleCodeSelect}
-              handleDateChange={handleDateChange}
               handleFormQuerySubmit={handleFormQuerySubmit}
               handleFruitSelect={handleFruitSelect}
               handleGenPareto={handleGenPareto}
-              handleGenericChange={handleGenericChange}
               handleHarvestSelect={handleHarvestSelect}
               handleLocationSelect={handleLocationSelect}
               handleModalPopUp={handleModalPopUp}
               handleTimezoneSelect={handleTimezoneSelect}
-              handleTracebackChange={handleTracebackChange}
               harvesterOptions={harvesterOptions}
               locationOptions={locationOptions}
               notifyRef={notifyRef}
@@ -281,7 +292,6 @@ function ErrorReportQuery(props) {
               selectedLocation={selectedLocation}
               selectedTimezone={selectedTimezone}
               timezoneOptions={timezoneOptions}
-              traceback={traceback}
             />
           </div>
         </div>
