@@ -3,7 +3,7 @@ from common.models import CommonInfo, ReportBase
 from harvester.models import Fruit, Harvester
 
 from django.db import models
-from collections import Mapping, Iterable
+from collections.abc import Mapping, Iterable
 
 class HarvesterCodeRelease(CommonInfo):
     version = models.CharField(max_length=40)
