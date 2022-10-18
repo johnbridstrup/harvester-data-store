@@ -464,3 +464,13 @@ export const validateQueryObj = (queryObj = {}) => {
     return false;
   }
 };
+
+export const getHistoryType = (historyType) => {
+  return historyType === "+"
+    ? "created"
+    : historyType === "~"
+    ? "updated"
+    : historyType === "-"
+    ? "deleted"
+    : "";
+};

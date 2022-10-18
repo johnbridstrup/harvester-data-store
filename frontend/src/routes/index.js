@@ -13,6 +13,8 @@ import ReleaseCodeListView from "../pages/harvdeploy/releaselist";
 import HarvesterDetailView from "../pages/harvester/harvesterdetail";
 import HarvesterListView from "../pages/harvester/harvesterlist";
 import HarvVersionListView from "../pages/harvester/harvversionlist";
+import HarvesterHistoryDetailView from "../pages/harvester/historydetail";
+import HarvesterHistoryListView from "../pages/harvester/historylist";
 import Home from "../pages/home";
 import LocationListView from "../pages/location/locationlist";
 import NotificationDetail from "../pages/notification/notifydetail";
@@ -120,6 +122,22 @@ const BaseRouter = () => {
           element={
             <RequireUser>
               <HarvVersionListView />
+            </RequireUser>
+          }
+        />
+        <Route
+          path="/harvesterhistory"
+          element={
+            <RequireUser>
+              <HarvesterHistoryListView />
+            </RequireUser>
+          }
+        />
+        <Route
+          path="/harvesterhistory/:historyId"
+          element={
+            <RequireUser>
+              <HarvesterHistoryDetailView />
             </RequireUser>
           }
         />

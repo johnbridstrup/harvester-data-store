@@ -2,6 +2,7 @@ import { API_URL } from "../base/constants";
 import { axiosService } from "../base/service";
 
 const HARVESTERS_URL = `${API_URL}/harvesters/`;
+const HARVESTER_HISTORY_URL = `${API_URL}/harvesterhistory/`;
 
 const listHarvesters = async (token, limit = 10) => {
   let response = await axiosService.get(
@@ -52,6 +53,36 @@ const listHarvVersion = async (harvId, token, limit = 10) => {
   return response;
 };
 
+const listHarvesterHistory = async (token, limit = 10) => {
+  let response = await axiosService.get(
+    `${HARVESTER_HISTORY_URL}?limit=${limit}`,
+    token
+  );
+  return response;
+};
+
+const getHarvHistoryById = async (harvId, token) => {
+  let response = await axiosService.get(
+    `${HARVESTER_HISTORY_URL}${harvId}/`,
+    token
+  );
+  return response;
+};
+
+const paginateHarvHistory = async (url, token) => {
+  const response = await axiosService.get(url, token);
+  return response;
+};
+
+const queryHarvHistory = async (queryObj, token) => {
+  const params = new URLSearchParams(queryObj);
+  const response = await axiosService.get(
+    `${HARVESTER_HISTORY_URL}?${params.toString()}`,
+    token
+  );
+  return response;
+};
+
 const harvesterService = {
   listHarvesters,
   getHarvesterById,
@@ -60,6 +91,10 @@ const harvesterService = {
   paginateHarvester,
   queryHarvester,
   listHarvVersion,
+  listHarvesterHistory,
+  getHarvHistoryById,
+  paginateHarvHistory,
+  queryHarvHistory,
 };
 
 export default harvesterService;

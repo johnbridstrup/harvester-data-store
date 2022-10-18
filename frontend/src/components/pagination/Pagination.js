@@ -8,7 +8,11 @@ import { paginateErrorReport } from "../../features/errorreport/errorreportSlice
 import { paginateNotification } from "../../features/notification/notificationSlice";
 import { paginateUser } from "../../features/user/userSlice";
 import { InputLimit, PageItem, SpanLimit } from "../styled";
-import { paginateHarvester } from "../../features/harvester/harvesterSlice";
+import {
+  paginateHarvester,
+  paginateHarvHistory,
+  paginateHarvVersion,
+} from "../../features/harvester/harvesterSlice";
 import { paginateLocation } from "../../features/location/locationSlice";
 import { paginateDistributor } from "../../features/distributor/distributorSlice";
 import { paginateEvent } from "../../features/event/eventSlice";
@@ -137,7 +141,12 @@ export const GenericPagination = (props) => {
   const dispatchObj = {
     distributor: paginateDistributor,
     event: paginateEvent,
-    harvester: paginateHarvester,
+    harvester:
+      props.attr === "historys"
+        ? paginateHarvHistory
+        : props.attr === "harvversion"
+        ? paginateHarvVersion
+        : paginateHarvester,
     location: paginateLocation,
     notification: paginateNotification,
     user: paginateUser,
@@ -174,6 +183,7 @@ GenericRenderer.propTypes = {
 
 GenericPagination.propTypes = {
   state: PropTypes.string.isRequired,
+  attr: PropTypes.string,
 };
 
 export default Pagination;
