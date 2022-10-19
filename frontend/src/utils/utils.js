@@ -102,12 +102,13 @@ export function timeStampFormat(dateString, timezone = "US/Pacific") {
     date = new Date(dateString);
   }
   let y = date.getFullYear().toString();
-  let M = padZeros(date.getMonth() + 1, 2);
+  let m = padZeros(date.getMonth() + 1, 2);
   let d = padZeros(date.getDate(), 2);
-  let h = padZeros(date.getHours(), 2);
-  let m = padZeros(date.getMinutes(), 2);
-  let s = padZeros(date.getSeconds(), 2);
-  return y + M + d + h + m + s;
+  let H = padZeros(date.getHours(), 2);
+  let M = padZeros(date.getMinutes(), 2);
+  let S = padZeros(date.getSeconds(), 2);
+  let mm = date.getMilliseconds().toString();
+  return `${y}${m}${d}T${H}${M}${S}.${mm}`;
 }
 
 const getDateValues = (dateString) => {
