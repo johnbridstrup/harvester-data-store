@@ -10,6 +10,8 @@ import EventDetailView from "../pages/event/eventdetail";
 import EventListView from "../pages/event/eventlist";
 import ReleaseCodeDetailView from "../pages/harvdeploy/releasedetail";
 import ReleaseCodeListView from "../pages/harvdeploy/releaselist";
+import VersionReportDetailView from "../pages/harvdeploy/versiondetail";
+import VersionReportListView from "../pages/harvdeploy/versionlist";
 import HarvesterDetailView from "../pages/harvester/harvesterdetail";
 import HarvesterListView from "../pages/harvester/harvesterlist";
 import HarvVersionListView from "../pages/harvester/harvversionlist";
@@ -186,6 +188,22 @@ const BaseRouter = () => {
           element={
             <RequireUser>
               <ReleaseCodeDetailView />
+            </RequireUser>
+          }
+        />
+        <Route
+          path="/harvversion"
+          element={
+            <RequireUser>
+              <VersionReportListView />
+            </RequireUser>
+          }
+        />
+        <Route
+          path="/harvversion/:versionId"
+          element={
+            <RequireUser>
+              <VersionReportDetailView />
             </RequireUser>
           }
         />

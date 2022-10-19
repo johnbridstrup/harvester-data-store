@@ -4,7 +4,7 @@ import ReactJson from "@microlink/react-json-view";
 import { JsonDiv } from "../../styled";
 
 function DetailReleaseCode(props) {
-  const { releasecode } = useSelector((state) => state.release);
+  const { releasecode } = useSelector((state) => state.harvdeploy);
   return (
     <>
       <div className="table-responsive">

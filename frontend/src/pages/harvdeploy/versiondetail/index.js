@@ -1,30 +1,32 @@
 import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import DetailReleaseCode from "../../../components/harvdeploy/release/DetailReleaseCode";
-import Header from "../../../components/layout/header";
+import { useDispatch, useSelector } from "react-redux";
 import MainLayout from "../../../components/layout/main";
+import Header from "../../../components/layout/header";
 import { LoaderDiv } from "../../../components/styled";
-import { getReleaseById } from "../../../features/harvdeploy/harvdeploySlice";
 import { Loader } from "../../../utils/utils";
+import { getVersionById } from "../../../features/harvdeploy/harvdeploySlice";
+import DetailVersionReport from "../../../components/harvdeploy/version/DetailVersionReport";
+import "./styles.css";
 
-function ReleaseCodeDetailView(props) {
+function VersionReportDetailView(props) {
   const { loading } = useSelector((state) => state.harvdeploy);
+  const { versionId } = useParams();
   const dispatch = useDispatch();
-  const { releaseId } = useParams();
+
   useEffect(() => {
     (async () => {
-      await dispatch(getReleaseById(releaseId));
+      await dispatch(getVersionById(versionId));
     })();
-  }, [releaseId, dispatch]);
+  }, [dispatch, versionId]);
 
   return (
     <MainLayout>
       <div className="container">
         <Header
-          title={"HDS Harvester Release Codes"}
+          title={"HDS Harvester Version Report"}
           className={"display-6 mt-4 mb-4"}
-          reportId={releaseId}
+          reportId={versionId}
         />
 
         {loading ? (
@@ -32,13 +34,13 @@ function ReleaseCodeDetailView(props) {
             <Loader size={50} />
           </LoaderDiv>
         ) : (
-          <DetailReleaseCode />
+          <DetailVersionReport />
         )}
       </div>
     </MainLayout>
   );
 }
 
-ReleaseCodeDetailView.propTypes = {};
+VersionReportDetailView.propTypes = {};
 
-export default ReleaseCodeDetailView;
+export default VersionReportDetailView;

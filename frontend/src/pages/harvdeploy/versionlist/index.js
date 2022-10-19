@@ -1,17 +1,18 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import ListReleaseCode from "../../../components/harvdeploy/release/ListReleaseCode";
-import Header from "../../../components/layout/header";
 import MainLayout from "../../../components/layout/main";
+import Header from "../../../components/layout/header";
+import ListVersionReport from "../../../components/harvdeploy/version/ListVersionReport";
+import { listVersion } from "../../../features/harvdeploy/harvdeploySlice";
 import { GenericPagination } from "../../../components/pagination/Pagination";
-import { listRelease } from "../../../features/harvdeploy/harvdeploySlice";
 import "./styles.css";
 
-function ReleaseCodeListView(props) {
+function VersionReportListView(props) {
   const dispatch = useDispatch();
+
   useEffect(() => {
     (async () => {
-      await dispatch(listRelease());
+      await dispatch(listVersion());
     })();
   }, [dispatch]);
 
@@ -19,16 +20,16 @@ function ReleaseCodeListView(props) {
     <MainLayout>
       <div className="container">
         <Header
-          title={"HDS Harvester Release Codes"}
+          title={"HDS Harvester Version Report"}
           className={"display-6 mt-4 mb-4"}
         />
-        <ListReleaseCode />
-        <GenericPagination state="harvdeploy" attr="release" />
+        <ListVersionReport />
+        <GenericPagination state="harvdeploy" />
       </div>
     </MainLayout>
   );
 }
 
-ReleaseCodeListView.propTypes = {};
+VersionReportListView.propTypes = {};
 
-export default ReleaseCodeListView;
+export default VersionReportListView;

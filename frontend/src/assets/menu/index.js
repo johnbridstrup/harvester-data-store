@@ -35,6 +35,12 @@ export const menu = [
     description: "AFT releases available for the harvester",
     href: "/release",
   },
+  {
+    name: "Harvester History",
+    icon: "history",
+    description: "Harvester historical data",
+    href: "/harvesterhistory",
+  },
 ];
 
 export const adminMenu = [
