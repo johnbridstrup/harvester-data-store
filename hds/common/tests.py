@@ -13,6 +13,7 @@ from common.models import UserProfile
 from exceptions.models import AFTExceptionCode
 from harvester.models import Fruit, Harvester
 from location.models import Distributor, Location
+from s3file.serializers import S3FileSerializer
 from .utils import build_frontend_url
 import logging
 
@@ -97,6 +98,16 @@ class HDSAPITestBase(APITestCase):
             self.user.user_permissions.add(perm)
         self.user = User.objects.get(id=1)
 
+    def _setup_s3file(self):
+        event_json_path = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'test_data/test_file_event.json')
+        with open(event_json_path, 'r') as f:
+            self.s3event = json.load(f)
+            # SQS client sends the event as a string in the 'Body' key
+            self.s3event = {'Body': json.dumps(self.s3event)}
+
+        self.bucket, self.key = S3FileSerializer.get_bucket_key(self.s3event)
+        self.filetype, self.uuid = S3FileSerializer.get_filetype_uuid(self.key)
+
     def create_fruit_object(self, name):
         return Fruit.objects.create(name=name, creator=self.user)
 
@@ -130,6 +141,14 @@ class HDSAPITestBase(APITestCase):
             'cycle': cycle,
             'creator': creator
         })
+
+    def create_s3file(self):
+        resp = self.client.post(
+            f"{self.api_base_url}/s3files/",
+            data=self.s3event,
+            format='json'
+        )
+        return resp
 
     def _load_report_data(self):
         report_path = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'test_data/report.json')
