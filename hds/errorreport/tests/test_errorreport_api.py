@@ -337,7 +337,6 @@ class ErrorReportAPITest(HDSAPITestBase):
         report = ErrorReport.objects.get()
         tags = report.tags.all()
         self.assertEqual(len(tags), 2)
-        self.assertQuerysetEqual(list(tags), Tag.objects.all())
         self.assertIn(Tags.INCOMPLETE.value, [tag.name for tag in tags])
         self.assertIn(Tags.INVALIDSCHEMA.value, [tag.name for tag in tags])
 

@@ -1,7 +1,13 @@
 from django.db import models
+from taggit.managers import TaggableManager
+from taggit.models import TaggedItemBase
 from common.models import CommonInfo
 
 import uuid
+
+
+class EventTag(TaggedItemBase):
+    content_object = models.ForeignKey('Event', on_delete=models.CASCADE)
 
 
 class Event(CommonInfo):
@@ -9,6 +15,7 @@ class Event(CommonInfo):
     reports or other objects can be linked.
     """
     UUID = models.CharField(max_length=40, unique=True)
+    tags = TaggableManager(through=EventTag)
 
     def __str__(self):
         return f"Event UUID {self.UUID}"
