@@ -8,7 +8,8 @@ from ..metrics import (
 )
 from ..serializers.errorreportserializer import (
     ErrorReportSerializer,
-    ParetoSerializer
+    ErrorReportListSerializer,
+    ParetoSerializer,
 )
 from exceptions.models import AFTException
 from common.viewsets import CreateModelViewSet
@@ -28,11 +29,15 @@ from rest_framework.negotiation import DefaultContentNegotiation
 class ErrorReportView(CreateModelViewSet):
     queryset = ErrorReport.objects.all()
     content_negotiation_class = DefaultContentNegotiation
-    serializer_class = ErrorReportSerializer
     permission_classes = (IsAuthenticated,)
     filter_backends = (SearchFilter, OrderingFilter)
     search_fields = ['harvester']
     ordering_fields = ('harvester', 'location', 'reportTime')
+
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return ErrorReportListSerializer
+        return ErrorReportSerializer
 
     def perform_create(self, serializer):
         super().perform_create(serializer)

@@ -143,6 +143,28 @@ class ErrorReportSerializer(EventSerializerMixin, ReportSerializerBase):
         read_only_fields = ('creator',)
 
 
+class ErrorReportListSerializer(serializers.ModelSerializer):
+    # Serializer fields
+    exceptions = AFTExceptionSerializer(many=True)
+    tags = TagListSerializerField()
+    harvester = HarvesterSerializer()
+    location = LocationSerializer()
+    
+    class Meta:
+        model = ErrorReport
+        fields = (
+            'id',
+            'reportTime',
+            'harvester',
+            'location',
+            'gitbranch',
+            'githash',
+            'event',
+            'exceptions',
+            'tags',
+        )
+
+
 class ParetoSerializer(serializers.Serializer):
     # Turns queryset into data with value and count
     value = serializers.CharField() # Can be int or str
