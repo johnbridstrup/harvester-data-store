@@ -5,7 +5,7 @@ from common.tests import HDSAPITestBase
 from harvester.models import Harvester
 from event.models import Event
 from exceptions.models import AFTException
-from ..models import ErrorReport
+from ..models import ErrorReport, DEFAULT_UNKNOWN
 from ..serializers.errorreportserializer import ErrorReportSerializer, FAILED_SPLIT_MSG
 from django.utils.timezone import make_aware
 from rest_framework import serializers, status
@@ -32,7 +32,6 @@ class ErrorReportAPITest(HDSAPITestBase):
     def test_create_errorreport_no_uuid(self):
         """ create error report and assert it exists """
         r = self.client.post(f'{self.api_base_url}/errorreports/', self.data, format='json', HTTP_ACCEPT='application/json')
-
         # Assert report created
         self.assertEqual(ErrorReport.objects.count(), 1)
 
@@ -48,6 +47,12 @@ class ErrorReportAPITest(HDSAPITestBase):
             f'/errorreports/{r.json()["data"]["id"]}/',
             r.json()['data']['event']['related_objects'][0]['url']
         )
+
+        # Assert hash is extracted
+        self.assertEqual(self.data["data"]["githash"], r.json()["data"]["githash"])
+
+        # Assert branch name is "unknown"
+        self.assertEqual(DEFAULT_UNKNOWN, r.json()["data"]["gitbranch"])
 
     def test_create_errorreport_with_uuid(self):
         """ create error report with uuid in data """

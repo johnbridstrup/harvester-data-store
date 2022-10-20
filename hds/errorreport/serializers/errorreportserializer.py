@@ -1,7 +1,7 @@
 from common.metrics import ERROR_COUNTER
 from common.models import Tags
 from common.serializers.reportserializer import ReportSerializerBase
-from ..models import ErrorReport
+from ..models import ErrorReport, DEFAULT_UNKNOWN
 from harvester.models import Harvester
 from harvester.serializers.harvesterserializer import HarvesterSerializer
 from location.serializers.locationserializer import LocationSerializer
@@ -67,6 +67,8 @@ class ErrorReportSerializer(EventSerializerMixin, ReportSerializerBase):
         harv_id = int(report['data']['sysmon_report']['serial_number'])
         harvester = self.get_harvester(harv_id, report['data']['sysmon_report'])
         reportTime = self.extract_timestamp(report['timestamp'])
+        githash = report['data'].get('githash') or DEFAULT_UNKNOWN
+        gitbranch = report['data'].get('branch_name') or DEFAULT_UNKNOWN
         UUID = report['data'].get("uuid", Event.generate_uuid())
         data = {
             'harvester': harvester.id,
@@ -74,6 +76,8 @@ class ErrorReportSerializer(EventSerializerMixin, ReportSerializerBase):
             'reportTime': reportTime,
             'report': report,
             'UUID': UUID,
+            'githash': githash,
+            'gitbranch': gitbranch,
         }
         return super().to_internal_value(data)
 

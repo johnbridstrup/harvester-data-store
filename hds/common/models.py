@@ -36,3 +36,4 @@ class Tags(Enum):
     # Changing any of these will require a migration.
     # Adding new ones is fine.
     INCOMPLETE = "incomplete"
+    INVALID = "invalid"
