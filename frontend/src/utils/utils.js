@@ -42,10 +42,10 @@ export const transformErrorReport = (reports = []) => {
       modifiedBy: report.modifiedBy,
       location: report.location,
       harvester: report.harvester,
-      timestamp: report.report.timestamp,
-      serial_number: report.report.data.serial_number,
-      githash: report.report.data.githash,
-      branch_name: report.report.data.branch_name,
+      timestamp: report.report?.timestamp,
+      serial_number: report.harvester.harv_id,
+      githash: report.githash,
+      branch_name: report.gitbranch,
       exceptions: report.exceptions,
     };
     const resultObj = Object.assign({}, reportObj, ...report.exceptions);
