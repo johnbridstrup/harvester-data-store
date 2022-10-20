@@ -18,10 +18,20 @@ const paginateEvent = async (url, token) => {
   return response;
 };
 
+const queryEvent = async (paramsObj, token) => {
+  const searchParams = new URLSearchParams(paramsObj);
+  const response = await axiosService.get(
+    `${EVENTS_URL}?${searchParams.toString()}`,
+    token
+  );
+  return response;
+};
+
 const eventService = {
   listEvents,
   getEventById,
   paginateEvent,
+  queryEvent,
 };
 
 export default eventService;

@@ -41,6 +41,12 @@ export const menu = [
     description: "Harvester historical data",
     href: "/harvesterhistory",
   },
+  {
+    name: "Events",
+    icon: "events",
+    description: "Events linking various models as they occur",
+    href: "/events",
+  },
 ];
 
 export const adminMenu = [

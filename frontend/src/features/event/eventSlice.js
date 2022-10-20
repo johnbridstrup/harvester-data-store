@@ -64,6 +64,22 @@ export const paginateEvent = createAsyncThunk(
   }
 );
 
+export const queryEvent = createAsyncThunk(
+  "event/queryEvent",
+  async (queryObj, thunkAPI) => {
+    try {
+      const {
+        auth: { token },
+      } = thunkAPI.getState();
+      return await eventService.queryEvent(queryObj, token);
+    } catch (error) {
+      console.log(error);
+      const message = invalidateCache(error, thunkAPI.dispatch);
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 const eventSlice = createSlice({
   name: "event",
   initialState,
@@ -106,6 +122,20 @@ const eventSlice = createSlice({
         state.pagination.previous = action.payload.previous;
       })
       .addCase(paginateEvent.rejected, (state, action) => {
+        state.loading = false;
+        state.errorMsg = action.payload;
+      })
+      .addCase(queryEvent.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(queryEvent.fulfilled, (state, action) => {
+        state.loading = false;
+        state.events = action.payload.results;
+        state.pagination.count = action.payload.count;
+        state.pagination.next = action.payload.next;
+        state.pagination.previous = action.payload.previous;
+      })
+      .addCase(queryEvent.rejected, (state, action) => {
         state.loading = false;
         state.errorMsg = action.payload;
       });
