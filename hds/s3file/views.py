@@ -1,5 +1,6 @@
 from .models import S3File
 from .serializers import S3FileSerializer
+from event.signals import update_event_tag
 
 from django.http import FileResponse
 from rest_framework.decorators import action
@@ -26,6 +27,12 @@ class S3FileView(CreateModelViewSet):
     queryset = S3File.objects.all()
     serializer_class = S3FileSerializer
     http_method_names = ['get', 'delete', 'post']
+
+    def perform_create(self, serializer):
+        super().perform_create(serializer)
+        filetype = serializer.data["filetype"]
+        event_id = serializer.data["event"]["id"]
+        update_event_tag.send(sender=S3File, event_id=event_id, tag=filetype)
 
     def retrieve(self, request, *args, **kwargs):
         if os.environ.get("S3_DOWNLOAD", "false") in ['True', 'true', '1']:
