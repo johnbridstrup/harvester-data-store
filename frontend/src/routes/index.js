@@ -1,29 +1,59 @@
+import { lazy, Suspense } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { LoaderDiv } from "../components/styled";
+import { IsAdminOnly, RequireUser, UserAuth } from "../utils/guards";
+import { Loader } from "../utils/utils";
+
 import Forbidden from "../pages/403";
 import NotFound from "../pages/404";
-import Login from "../pages/auth/login";
-import DistributorListView from "../pages/distributor/distributorlist";
-import ErrorsReportDetail from "../pages/errorreports/errordetail";
-import ErrorsReportList from "../pages/errorreports/errorlist";
-import ErrorReportPareto from "../pages/errorreports/errorpareto";
-import EventDetailView from "../pages/event/eventdetail";
-import EventListView from "../pages/event/eventlist";
-import ReleaseCodeDetailView from "../pages/harvdeploy/releasedetail";
-import ReleaseCodeListView from "../pages/harvdeploy/releaselist";
-import VersionReportDetailView from "../pages/harvdeploy/versiondetail";
-import VersionReportListView from "../pages/harvdeploy/versionlist";
-import HarvesterDetailView from "../pages/harvester/harvesterdetail";
-import HarvesterListView from "../pages/harvester/harvesterlist";
-import HarvVersionListView from "../pages/harvester/harvversionlist";
-import HarvesterHistoryDetailView from "../pages/harvester/historydetail";
-import HarvesterHistoryListView from "../pages/harvester/historylist";
-import Home from "../pages/home";
-import LocationListView from "../pages/location/locationlist";
-import NotificationDetail from "../pages/notification/notifydetail";
-import NotificationList from "../pages/notification/notifylist";
-import UserProfileView from "../pages/profile/profiledetail";
-import UserListView from "../pages/users/userslist";
-import { IsAdminOnly, RequireUser, UserAuth } from "../utils/guards";
+const Login = lazy(() => import("../pages/auth/login"));
+const DistributorListView = lazy(() =>
+  import("../pages/distributor/distributorlist")
+);
+const ErrorsReportDetail = lazy(() =>
+  import("../pages/errorreports/errordetail")
+);
+const ErrorsReportList = lazy(() => import("../pages/errorreports/errorlist"));
+const ErrorReportPareto = lazy(() =>
+  import("../pages/errorreports/errorpareto")
+);
+const EventDetailView = lazy(() => import("../pages/event/eventdetail"));
+const EventListView = lazy(() => import("../pages/event/eventlist"));
+const ReleaseCodeDetailView = lazy(() =>
+  import("../pages/harvdeploy/releasedetail")
+);
+const ReleaseCodeListView = lazy(() =>
+  import("../pages/harvdeploy/releaselist")
+);
+const VersionReportDetailView = lazy(() =>
+  import("../pages/harvdeploy/versiondetail")
+);
+const VersionReportListView = lazy(() =>
+  import("../pages/harvdeploy/versionlist")
+);
+const HarvesterDetailView = lazy(() =>
+  import("../pages/harvester/harvesterdetail")
+);
+const HarvesterListView = lazy(() =>
+  import("../pages/harvester/harvesterlist")
+);
+const HarvVersionListView = lazy(() =>
+  import("../pages/harvester/harvversionlist")
+);
+const HarvesterHistoryDetailView = lazy(() =>
+  import("../pages/harvester/historydetail")
+);
+const HarvesterHistoryListView = lazy(() =>
+  import("../pages/harvester/historylist")
+);
+const Home = lazy(() => import("../pages/home"));
+const LocationListView = lazy(() => import("../pages/location/locationlist"));
+const NotificationDetail = lazy(() =>
+  import("../pages/notification/notifydetail")
+);
+const NotificationList = lazy(() => import("../pages/notification/notifylist"));
+const UserProfileView = lazy(() => import("../pages/profile/profiledetail"));
+const UserListView = lazy(() => import("../pages/users/userslist"));
 
 const BaseRouter = () => {
   return (
@@ -33,7 +63,15 @@ const BaseRouter = () => {
           path="/"
           element={
             <RequireUser>
-              <Home />
+              <Suspense
+                fallback={
+                  <LoaderDiv>
+                    <Loader size={50} />
+                  </LoaderDiv>
+                }
+              >
+                <Home />
+              </Suspense>
             </RequireUser>
           }
         />
@@ -41,7 +79,15 @@ const BaseRouter = () => {
           path="/login"
           element={
             <UserAuth>
-              <Login />
+              <Suspense
+                fallback={
+                  <LoaderDiv>
+                    <Loader size={50} />
+                  </LoaderDiv>
+                }
+              >
+                <Login />
+              </Suspense>
             </UserAuth>
           }
         />
@@ -49,7 +95,15 @@ const BaseRouter = () => {
           path="/errorreports"
           element={
             <RequireUser>
-              <ErrorsReportList />
+              <Suspense
+                fallback={
+                  <LoaderDiv>
+                    <Loader size={50} />
+                  </LoaderDiv>
+                }
+              >
+                <ErrorsReportList />
+              </Suspense>
             </RequireUser>
           }
         />
@@ -57,7 +111,15 @@ const BaseRouter = () => {
           path="/errorreports/view/pareto"
           element={
             <RequireUser>
-              <ErrorReportPareto />
+              <Suspense
+                fallback={
+                  <LoaderDiv>
+                    <Loader size={50} />
+                  </LoaderDiv>
+                }
+              >
+                <ErrorReportPareto />
+              </Suspense>
             </RequireUser>
           }
         />
@@ -65,7 +127,15 @@ const BaseRouter = () => {
           path="/errorreports/:reportId"
           element={
             <RequireUser>
-              <ErrorsReportDetail />
+              <Suspense
+                fallback={
+                  <LoaderDiv>
+                    <Loader size={50} />
+                  </LoaderDiv>
+                }
+              >
+                <ErrorsReportDetail />
+              </Suspense>
             </RequireUser>
           }
         />
@@ -73,7 +143,15 @@ const BaseRouter = () => {
           path="/users/profile/me"
           element={
             <RequireUser>
-              <UserProfileView />
+              <Suspense
+                fallback={
+                  <LoaderDiv>
+                    <Loader size={50} />
+                  </LoaderDiv>
+                }
+              >
+                <UserProfileView />
+              </Suspense>
             </RequireUser>
           }
         />
@@ -81,7 +159,15 @@ const BaseRouter = () => {
           path="/notifications"
           element={
             <RequireUser>
-              <NotificationList />
+              <Suspense
+                fallback={
+                  <LoaderDiv>
+                    <Loader size={50} />
+                  </LoaderDiv>
+                }
+              >
+                <NotificationList />
+              </Suspense>
             </RequireUser>
           }
         />
@@ -89,7 +175,15 @@ const BaseRouter = () => {
           path="/notifications/:notifyId"
           element={
             <RequireUser>
-              <NotificationDetail />
+              <Suspense
+                fallback={
+                  <LoaderDiv>
+                    <Loader size={50} />
+                  </LoaderDiv>
+                }
+              >
+                <NotificationDetail />
+              </Suspense>
             </RequireUser>
           }
         />
@@ -98,7 +192,15 @@ const BaseRouter = () => {
           element={
             <RequireUser>
               <IsAdminOnly>
-                <UserListView />
+                <Suspense
+                  fallback={
+                    <LoaderDiv>
+                      <Loader size={50} />
+                    </LoaderDiv>
+                  }
+                >
+                  <UserListView />
+                </Suspense>
               </IsAdminOnly>
             </RequireUser>
           }
@@ -107,7 +209,15 @@ const BaseRouter = () => {
           path="/harvesters"
           element={
             <RequireUser>
-              <HarvesterListView />
+              <Suspense
+                fallback={
+                  <LoaderDiv>
+                    <Loader size={50} />
+                  </LoaderDiv>
+                }
+              >
+                <HarvesterListView />
+              </Suspense>
             </RequireUser>
           }
         />
@@ -115,7 +225,15 @@ const BaseRouter = () => {
           path="/harvesters/:harvId"
           element={
             <RequireUser>
-              <HarvesterDetailView />
+              <Suspense
+                fallback={
+                  <LoaderDiv>
+                    <Loader size={50} />
+                  </LoaderDiv>
+                }
+              >
+                <HarvesterDetailView />
+              </Suspense>
             </RequireUser>
           }
         />
@@ -123,7 +241,15 @@ const BaseRouter = () => {
           path="/harvesters/:harvId/versions"
           element={
             <RequireUser>
-              <HarvVersionListView />
+              <Suspense
+                fallback={
+                  <LoaderDiv>
+                    <Loader size={50} />
+                  </LoaderDiv>
+                }
+              >
+                <HarvVersionListView />
+              </Suspense>
             </RequireUser>
           }
         />
@@ -131,7 +257,15 @@ const BaseRouter = () => {
           path="/harvesterhistory"
           element={
             <RequireUser>
-              <HarvesterHistoryListView />
+              <Suspense
+                fallback={
+                  <LoaderDiv>
+                    <Loader size={50} />
+                  </LoaderDiv>
+                }
+              >
+                <HarvesterHistoryListView />
+              </Suspense>
             </RequireUser>
           }
         />
@@ -139,7 +273,15 @@ const BaseRouter = () => {
           path="/harvesterhistory/:historyId"
           element={
             <RequireUser>
-              <HarvesterHistoryDetailView />
+              <Suspense
+                fallback={
+                  <LoaderDiv>
+                    <Loader size={50} />
+                  </LoaderDiv>
+                }
+              >
+                <HarvesterHistoryDetailView />
+              </Suspense>
             </RequireUser>
           }
         />
@@ -147,7 +289,15 @@ const BaseRouter = () => {
           path="/locations"
           element={
             <RequireUser>
-              <LocationListView />
+              <Suspense
+                fallback={
+                  <LoaderDiv>
+                    <Loader size={50} />
+                  </LoaderDiv>
+                }
+              >
+                <LocationListView />
+              </Suspense>
             </RequireUser>
           }
         />
@@ -155,7 +305,15 @@ const BaseRouter = () => {
           path="/distributors"
           element={
             <RequireUser>
-              <DistributorListView />
+              <Suspense
+                fallback={
+                  <LoaderDiv>
+                    <Loader size={50} />
+                  </LoaderDiv>
+                }
+              >
+                <DistributorListView />
+              </Suspense>
             </RequireUser>
           }
         />
@@ -163,7 +321,15 @@ const BaseRouter = () => {
           path="/events"
           element={
             <RequireUser>
-              <EventListView />
+              <Suspense
+                fallback={
+                  <LoaderDiv>
+                    <Loader size={50} />
+                  </LoaderDiv>
+                }
+              >
+                <EventListView />
+              </Suspense>
             </RequireUser>
           }
         />
@@ -171,7 +337,15 @@ const BaseRouter = () => {
           path="/events/:eventId"
           element={
             <RequireUser>
-              <EventDetailView />
+              <Suspense
+                fallback={
+                  <LoaderDiv>
+                    <Loader size={50} />
+                  </LoaderDiv>
+                }
+              >
+                <EventDetailView />
+              </Suspense>
             </RequireUser>
           }
         />
@@ -179,7 +353,15 @@ const BaseRouter = () => {
           path="/release"
           element={
             <RequireUser>
-              <ReleaseCodeListView />
+              <Suspense
+                fallback={
+                  <LoaderDiv>
+                    <Loader size={50} />
+                  </LoaderDiv>
+                }
+              >
+                <ReleaseCodeListView />
+              </Suspense>
             </RequireUser>
           }
         />
@@ -187,7 +369,15 @@ const BaseRouter = () => {
           path="/release/:releaseId"
           element={
             <RequireUser>
-              <ReleaseCodeDetailView />
+              <Suspense
+                fallback={
+                  <LoaderDiv>
+                    <Loader size={50} />
+                  </LoaderDiv>
+                }
+              >
+                <ReleaseCodeDetailView />
+              </Suspense>
             </RequireUser>
           }
         />
@@ -195,7 +385,15 @@ const BaseRouter = () => {
           path="/harvversion"
           element={
             <RequireUser>
-              <VersionReportListView />
+              <Suspense
+                fallback={
+                  <LoaderDiv>
+                    <Loader size={50} />
+                  </LoaderDiv>
+                }
+              >
+                <VersionReportListView />
+              </Suspense>
             </RequireUser>
           }
         />
@@ -203,7 +401,15 @@ const BaseRouter = () => {
           path="/harvversion/:versionId"
           element={
             <RequireUser>
-              <VersionReportDetailView />
+              <Suspense
+                fallback={
+                  <LoaderDiv>
+                    <Loader size={50} />
+                  </LoaderDiv>
+                }
+              >
+                <VersionReportDetailView />
+              </Suspense>
             </RequireUser>
           }
         />
