@@ -1,0 +1,197 @@
+[
+{
+    "model": "harvjobs.jobtype",
+    "pk": 1,
+    "fields": {
+        "creator": 1,
+        "modifiedBy": null,
+        "created": "2022-10-21T23:34:36.534Z",
+        "lastModified": "2022-10-21T23:34:36.534Z",
+        "name": "test"
+    }
+},
+{
+    "model": "harvjobs.jobschema",
+    "pk": 1,
+    "fields": {
+        "creator": 1,
+        "modifiedBy": null,
+        "created": "2022-10-21T23:34:36.535Z",
+        "lastModified": "2022-10-21T23:34:36.535Z",
+        "jobtype": 1,
+        "schema": {
+            "type": "object",
+            "properties": {
+                "targets": {
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "pattern": "^(master|((robot|stereo)\\d+))$"
+                    }
+                }
+            },
+            "required": [
+                "targets"
+            ]
+        },
+        "version": "1.0",
+        "comment": "Test schema"
+    }
+},
+{
+    "model": "harvjobs.historicaljob",
+    "pk": 1,
+    "fields": {
+        "id": 1,
+        "created": "2022-10-21T23:35:49.687Z",
+        "lastModified": "2022-10-21T23:35:49.687Z",
+        "payload": {
+            "targets": [
+                "master",
+                "robot01"
+            ],
+            "id": "183a3ab2-5199-11ed-8eb4-7b94730d4c5d",
+            "job_type": "test",
+            "timeout": 6000
+        },
+        "jobstatus": "Pending",
+        "creator": 1,
+        "modifiedBy": null,
+        "event": 7,
+        "schema": 1,
+        "target": 4,
+        "history_date": "2022-10-21T23:35:49.694Z",
+        "history_change_reason": null,
+        "history_type": "+",
+        "history_user": 1
+    }
+},
+{
+    "model": "harvjobs.historicaljob",
+    "pk": 2,
+    "fields": {
+        "id": 1,
+        "created": "2022-10-21T23:35:49.687Z",
+        "lastModified": "2022-10-21T23:43:16.630Z",
+        "payload": {
+            "targets": [
+                "master",
+                "robot01"
+            ],
+            "id": "183a3ab2-5199-11ed-8eb4-7b94730d4c5d",
+            "job_type": "test",
+            "timeout": 6000
+        },
+        "jobstatus": "Success",
+        "creator": 1,
+        "modifiedBy": null,
+        "event": 7,
+        "schema": 1,
+        "target": 4,
+        "history_date": "2022-10-21T23:43:16.635Z",
+        "history_change_reason": null,
+        "history_type": "~",
+        "history_user": null
+    }
+},
+{
+    "model": "harvjobs.job",
+    "pk": 1,
+    "fields": {
+        "creator": 1,
+        "modifiedBy": null,
+        "created": "2022-10-21T23:35:49.687Z",
+        "lastModified": "2022-10-21T23:43:16.630Z",
+        "event": 7,
+        "schema": 1,
+        "target": 4,
+        "payload": {
+            "targets": [
+                "master",
+                "robot01"
+            ],
+            "id": "183a3ab2-5199-11ed-8eb4-7b94730d4c5d",
+            "job_type": "test",
+            "timeout": 6000
+        },
+        "jobstatus": "Success"
+    }
+},
+{
+    "model": "harvjobs.jobresults",
+    "pk": 1,
+    "fields": {
+        "creator": 1,
+        "modifiedBy": null,
+        "created": "2022-10-21T23:43:16.592Z",
+        "lastModified": "2022-10-21T23:43:16.592Z",
+        "reportTime": "2022-10-21T23:38:42.072Z",
+        "report": {
+            "type": "jobresults",
+            "timestamp": 1666395522.072941,
+            "uuid": "183a3ab2-5199-11ed-8eb4-7b94730d4c5d",
+            "data": {
+                "aft-robot01": {
+                    "ts": 1666395522.028461,
+                    "exit_code": 0,
+                    "stdout": "",
+                    "stderr": "",
+                    "status": "success"
+                },
+                "master": {
+                    "ts": 1666395522.0660062,
+                    "exit_code": 0,
+                    "stdout": "",
+                    "stderr": "",
+                    "status": "success"
+                }
+            },
+            "serial_number": "001"
+        },
+        "event": 7,
+        "job": 1
+    }
+},
+{
+    "model": "harvjobs.jobhostresult",
+    "pk": 1,
+    "fields": {
+        "creator": 1,
+        "modifiedBy": null,
+        "created": "2022-10-21T23:43:16.616Z",
+        "lastModified": "2022-10-21T23:43:16.616Z",
+        "parent": 1,
+        "host": "aft-robot01",
+        "result": "Success",
+        "details": {
+            "ts": 1666395522.028461,
+            "exit_code": 0,
+            "stdout": "",
+            "stderr": "",
+            "status": "success"
+        },
+        "timestamp": "2022-10-21T23:38:42.028Z"
+    }
+},
+{
+    "model": "harvjobs.jobhostresult",
+    "pk": 2,
+    "fields": {
+        "creator": 1,
+        "modifiedBy": null,
+        "created": "2022-10-21T23:43:16.625Z",
+        "lastModified": "2022-10-21T23:43:16.625Z",
+        "parent": 1,
+        "host": "master",
+        "result": "Success",
+        "details": {
+            "ts": 1666395522.0660062,
+            "exit_code": 0,
+            "stdout": "",
+            "stderr": "",
+            "status": "success"
+        },
+        "timestamp": "2022-10-21T23:38:42.066Z"
+    }
+}
+]
