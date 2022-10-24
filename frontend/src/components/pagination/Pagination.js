@@ -4,7 +4,10 @@ import { useSelector, useDispatch } from "react-redux";
 import { useLocation } from "react-router-dom";
 import { PROD_ENV } from "../../features/base/constants";
 import { ERROR_REPORT_URL } from "../../features/errorreport/errorreportService";
-import { paginateErrorReport } from "../../features/errorreport/errorreportSlice";
+import {
+  cacheParamsObj,
+  paginateErrorReport,
+} from "../../features/errorreport/errorreportSlice";
 import { paginateNotification } from "../../features/notification/notificationSlice";
 import { paginateUser } from "../../features/user/userSlice";
 import { InputLimit, PageItem, SpanLimit } from "../styled";
@@ -20,11 +23,14 @@ import {
   paginateVersion,
   paginateRelease,
 } from "../../features/harvdeploy/harvdeploySlice";
+import { mapCurrentOffset } from "../../utils/utils";
 
 function Pagination(props) {
   const [pageLimit, setPageLimit] = useState(10);
-  const { queryUrl } = useSelector((state) => state.errorreport);
-  const { next, previous } = useSelector((state) => state.errorreport);
+  const {
+    queryUrl,
+    pagination: { next, previous },
+  } = useSelector((state) => state.errorreport);
   const dispatch = useDispatch();
   const { search } = useLocation();
 
@@ -43,7 +49,7 @@ function Pagination(props) {
         )
       );
     } else {
-      let urlStr = `${ERROR_REPORT_URL}?${search.toString()}`;
+      let urlStr = `${ERROR_REPORT_URL}${search.toString()}`;
       url = new URL(urlStr);
       url.searchParams.set("limit", pageLimit);
       await dispatch(paginateErrorReport(url));
@@ -60,7 +66,12 @@ function Pagination(props) {
       url.protocol = "https:";
     }
     url.searchParams.set("limit", pageLimit);
-    await dispatch(paginateErrorReport(url));
+    const res = await dispatch(paginateErrorReport(url));
+    const paramsObj = mapCurrentOffset(
+      res.payload?.previous,
+      res.payload?.next
+    );
+    dispatch(cacheParamsObj(paramsObj || {}));
   };
 
   return (

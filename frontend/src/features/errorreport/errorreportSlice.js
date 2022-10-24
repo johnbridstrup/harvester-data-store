@@ -14,11 +14,13 @@ import errorreportService from "./errorreportService";
 const initialState = {
   loading: false,
   adding: false,
-  count: null,
-  limit: 10,
-  offset: 1,
-  next: null,
-  previous: null,
+  pagination: {
+    count: null,
+    limit: 10,
+    offset: 1,
+    next: null,
+    previous: null,
+  },
   reports: [],
   report: {},
   timezone: null,
@@ -159,9 +161,9 @@ const errorreportSlice = createSlice({
       })
       .addCase(errorreportListView.fulfilled, (state, action) => {
         state.loading = false;
-        state.count = action.payload.count;
-        state.next = action.payload.next;
-        state.previous = action.payload.previous;
+        state.pagination.count = action.payload.count;
+        state.pagination.next = action.payload.next;
+        state.pagination.previous = action.payload.previous;
         state.reports = transformErrorReport(action.payload.results);
       })
       .addCase(errorreportListView.rejected, (state, action) => {
@@ -173,9 +175,9 @@ const errorreportSlice = createSlice({
       })
       .addCase(queryErrorReport.fulfilled, (state, action) => {
         state.loading = false;
-        state.count = action.payload.count;
-        state.next = action.payload.next;
-        state.previous = action.payload.previous;
+        state.pagination.count = action.payload.count;
+        state.pagination.next = action.payload.next;
+        state.pagination.previous = action.payload.previous;
         state.reports = transformErrorReport(action.payload.results);
       })
       .addCase(queryErrorReport.rejected, (state, action) => {
@@ -187,9 +189,9 @@ const errorreportSlice = createSlice({
       })
       .addCase(paginateErrorReport.fulfilled, (state, action) => {
         state.loading = false;
-        state.count = action.payload.count;
-        state.next = action.payload.next;
-        state.previous = action.payload.previous;
+        state.pagination.count = action.payload.count;
+        state.pagination.next = action.payload.next;
+        state.pagination.previous = action.payload.previous;
         state.reports = transformErrorReport(action.payload.results);
       })
       .addCase(paginateErrorReport.rejected, (state, action) => {

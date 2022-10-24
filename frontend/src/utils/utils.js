@@ -474,3 +474,28 @@ export const getHistoryType = (historyType) => {
     ? "deleted"
     : "";
 };
+
+export const mapCurrentOffset = (previous, next) => {
+  let url;
+  let limit;
+  let offset;
+  let paramsObj;
+  if (previous) {
+    url = new URL(previous);
+    limit = url.searchParams.get("limit");
+    offset = url.searchParams.get("offset") || 0;
+    paramsObj = paramsToObject(url.searchParams.toString());
+    let current = Number(limit) + Number(offset);
+    paramsObj["offset"] = current;
+    paramsObj["limit"] = limit;
+    pushState(paramsObj);
+  } else if (!previous && next) {
+    url = new URL(next);
+    limit = url.searchParams.get("limit");
+    url.searchParams.delete("offset");
+    const paramsObj = paramsToObject(url.searchParams.toString());
+    paramsObj["limit"] = limit;
+    pushState(paramsObj);
+  }
+  return paramsObj;
+};

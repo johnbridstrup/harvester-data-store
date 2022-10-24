@@ -51,7 +51,7 @@ function ErrorReportQuery(props) {
     handled: "",
   });
   const {
-    count,
+    pagination: { count },
     internal: { hovered },
   } = useSelector((state) => state.errorreport);
   const { harvesters } = useSelector((state) => state.harvester);
