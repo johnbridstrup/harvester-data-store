@@ -1,3 +1,7 @@
 .report-tbody td {
   padding: 1rem;
 }
+
+.table-link {
+  color: inherit;
+}

@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from "react-redux";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import { hoverEffect } from "../../features/errorreport/errorreportSlice";
 import { Loader, timeStampFormat } from "../../utils/utils";
 import { Container, LoaderDiv, SpanTarget, Table, Td } from "../styled";
@@ -15,7 +15,8 @@ function ErrorReportTable(props) {
   const dispatch = useDispatch();
   const { search } = useLocation();
 
-  const navigateToDetail = (reportId) => {
+  const navigateToDetail = (e, reportId) => {
+    e.preventDefault();
     const params = new URLSearchParams(searchObj || {});
     if (searchObj) {
       navigate(`/errorreports/${reportId}?${params.toString()}`);
@@ -38,6 +39,7 @@ function ErrorReportTable(props) {
         <Table className="table">
           <thead>
             <tr>
+              <th>ID</th>
               <th>Time</th>
               <th>Harvester</th>
               <th>Location</th>
@@ -49,45 +51,106 @@ function ErrorReportTable(props) {
           </thead>
           <tbody className="report-tbody">
             {reports.map((report, index) => (
-              <tr
-                key={index}
-                onClick={() => navigateToDetail(report.reportId)}
-                className="tr-hover cursor"
-              >
-                <td>{timeStampFormat(report.reportTime, timezone)}</td>
-                <Td>
-                  <SpanTarget
-                    onMouseEnter={(e) =>
-                      handleOnMouseEnter(
-                        e,
-                        index,
-                        "harvester",
-                        report.harvester
-                      )
-                    }
+              <tr key={report.reportId} className="tr-hover cursor">
+                <td>
+                  <Link
+                    to={`/errorreports/${report.reportId}`}
+                    onClick={(e) => navigateToDetail(e, report.reportId)}
                   >
-                    {report.harvester.harv_id}
-                  </SpanTarget>
+                    {report.reportId}
+                  </Link>
+                </td>
+                <td>
+                  <Link
+                    to={`/errorreports/${report.reportId}`}
+                    onClick={(e) => navigateToDetail(e, report.reportId)}
+                    className="table-link"
+                  >
+                    {timeStampFormat(report.reportTime, timezone)}
+                  </Link>
+                </td>
+                <Td>
+                  <Link
+                    to={`/errorreports/${report.reportId}`}
+                    onClick={(e) => navigateToDetail(e, report.reportId)}
+                    className="table-link"
+                  >
+                    <SpanTarget
+                      onMouseEnter={(e) =>
+                        handleOnMouseEnter(
+                          e,
+                          index,
+                          "harvester",
+                          report.harvester
+                        )
+                      }
+                    >
+                      {report.harvester.harv_id}
+                    </SpanTarget>
+                  </Link>
                 </Td>
                 <Td>
-                  <SpanTarget
-                    onMouseEnter={(e) =>
-                      handleOnMouseEnter(e, index, "location", report.location)
-                    }
+                  <Link
+                    to={`/errorreports/${report.reportId}`}
+                    onClick={(e) => navigateToDetail(e, report.reportId)}
+                    className="table-link"
                   >
-                    {report.location.ranch}
-                  </SpanTarget>
+                    <SpanTarget
+                      onMouseEnter={(e) =>
+                        handleOnMouseEnter(
+                          e,
+                          index,
+                          "location",
+                          report.location
+                        )
+                      }
+                    >
+                      {report.location.ranch}
+                    </SpanTarget>
+                  </Link>
                 </Td>
-                <Td
-                  onMouseEnter={(e) =>
-                    handleOnMouseEnter(e, index, "code", report.exceptions)
-                  }
-                >
-                  <SpanTarget>{report.code}</SpanTarget>
+                <Td>
+                  <Link
+                    to={`/errorreports/${report.reportId}`}
+                    onClick={(e) => navigateToDetail(e, report.reportId)}
+                    className="table-link"
+                  >
+                    <SpanTarget
+                      onMouseEnter={(e) =>
+                        handleOnMouseEnter(e, index, "code", report.exceptions)
+                      }
+                    >
+                      {report.code}
+                    </SpanTarget>
+                  </Link>
                 </Td>
-                <td>{report.service}</td>
-                <td>{report.branch_name}</td>
-                <td>{report.githash}</td>
+                <td>
+                  <Link
+                    to={`/errorreports/${report.reportId}`}
+                    onClick={(e) => navigateToDetail(e, report.reportId)}
+                    className="table-link"
+                  >
+                    {report.service}
+                  </Link>
+                </td>
+                <td>
+                  <Link
+                    to={`/errorreports/${report.reportId}`}
+                    onClick={(e) => navigateToDetail(e, report.reportId)}
+                    className="table-link"
+                  >
+                    {report.branch_name}
+                  </Link>
+                </td>
+                <td>
+                  <Link
+                    to={`/errorreports/${report.reportId}`}
+                    onClick={(e) => navigateToDetail(e, report.reportId)}
+                    className="table-link"
+                  >
+                    {report.githash}
+                  </Link>
+                </td>
               </tr>
             ))}
           </tbody>
