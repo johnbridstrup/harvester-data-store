@@ -1,4 +1,4 @@
-from common.tests import HDSAPITestBase
+from common.tests import HDSAPITestBase, create_user
 from errorreport.models import ErrorReport
 from ..models import Notification
 from unittest.mock import patch
@@ -35,7 +35,7 @@ class NotificationAPITest(HDSAPITestBase):
 
     def test_delete_notification(self):
         self.assertEqual(Notification.objects.count(), 1)
-        self.client.delete(f"{self.api_base_url}/notifications/1/")
+        r=self.client.delete(f"{self.api_base_url}/notifications/1/")
         self.assertEqual(Notification.objects.count(), 0)
 
     def test_update_notification_disallowed(self):
@@ -94,5 +94,54 @@ class NotificationAPITest(HDSAPITestBase):
         self.assertIn("Error on Harvester", notify_args[0])
         self.assertIn("errorreports/2", notify_args[1])
         self.assertNotIn("api/v1", notify_args[1])
+ 
+    def test_get_notifications(self):
+        r = self.client.get(f"{self.api_base_url}/notifications/")
+        self.assertEqual(r.status_code, status.HTTP_200_OK)
+        r = self.client.get(f"{self.api_base_url}/notifications/1/")
+        self.assertEqual(r.status_code, status.HTTP_200_OK)
+
+    def test_filter_notifications(self):
+        user2 = create_user("new_user", "new_password")
+        params = {
+            "harvester__harv_id__in": [11],
+            "harvester__fruit__name": "strawberry"
+        }
         
+        notification2 = Notification.objects.create(
+            creator=user2,
+            trigger_on=self.notification["trigger_on"],
+            criteria=params
+        )
+        notification2.recipients.add(self.user)
+        notification2.save()
+
+        notification3 = Notification.objects.create(
+            creator=user2,
+            trigger_on=self.notification["trigger_on"],
+            criteria=params
+        )
+        notification3.recipients.add(user2)
+        notification3.save()
         
+        # Assert two notifications exist
+        r = self.client.get(f"{self.api_base_url}/notifications/")
+        self.assertEqual(r.json()["data"]["count"], 3)
+
+        # Get created by self.user
+        r = self.client.get(f"{self.api_base_url}/notifications/?category=created")
+        self.assertEqual(r.status_code, status.HTTP_200_OK)
+        data = r.json()["data"]
+        self.assertEqual(data["count"], 1)
+        self.assertEqual(data["results"][0]["creator"], self.user.id)
+
+        # Get self.user is recipient
+        r = self.client.get(f"{self.api_base_url}/notifications/?category=is_recipient")
+        self.assertEqual(r.status_code, status.HTTP_200_OK)
+        data = r.json()["data"]
+        self.assertEqual(data["count"], 2)
+        self.assertEqual(data["results"][0]["creator"], user2.id)
+        self.assertIn(self.user.username, data["results"][0]["recipients"])
+        self.assertIn(self.user.username, data["results"][1]["recipients"])
+
+
