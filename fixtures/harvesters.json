@@ -85,6 +85,28 @@
     }
   },
   {
+    "model": "harvester.historicalharvester",
+    "pk": 4,
+    "fields": {
+      "id": 4,
+      "created": "2022-04-26T10:07:18.334Z",
+      "lastModified": "2022-04-26T10:07:18.334Z",
+      "harv_id": 1,
+      "name": "dev",
+      "is_emulator": false,
+      "creator": 2,
+      "modifiedBy": null,
+      "fruit": 2,
+      "location": 2,
+      "release": null,
+      "thingName": "dev-dev001",
+      "history_date": "2022-10-10T21:51:41.091Z",
+      "history_change_reason": "",
+      "history_type": "+",
+      "history_user": null
+    }
+  },
+  {
     "model": "harvester.harvester",
     "pk": 1,
     "fields": {
@@ -130,6 +152,23 @@
       "name": "aft-harv011",
       "is_emulator": false,
       "release": null
+    }
+  },
+  {
+    "model": "harvester.harvester",
+    "pk": 4,
+    "fields": {
+      "creator": 2,
+      "modifiedBy": null,
+      "created": "2022-04-26T10:07:18.334Z",
+      "lastModified": "2022-04-26T10:07:18.334Z",
+      "harv_id": 1,
+      "fruit": 2,
+      "location": 2,
+      "name": "dev",
+      "is_emulator": false,
+      "release": null,
+      "thingName": "dev-dev001"
     }
   }
 ]
