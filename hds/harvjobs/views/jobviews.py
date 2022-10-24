@@ -2,7 +2,6 @@ from ..models import Job
 from ..serializers.jobserializer import JobSerializer, JobHistorySerializer
 from ..tasks import schedule_job
 
-from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.renderers import JSONRenderer
@@ -14,8 +13,8 @@ class JobView(CreateModelViewSet):
     queryset = Job.objects.all()
     serializer_class = JobSerializer
     permission_classes = (IsAuthenticated,)
-    filter_backends = (DjangoFilterBackend,)
     filterset_fields = ('target__harv_id',)
+    ordering = ('-created', )
 
     @action(
         methods=["get"],

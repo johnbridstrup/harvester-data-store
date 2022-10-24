@@ -12,12 +12,8 @@ from common.viewsets import CreateModelViewSet
 class HarvesterView(CreateModelViewSet):
     queryset = Harvester.objects.all()
     serializer_class = HarvesterSerializer
-
-    def get_queryset(self):
-        filter_dict = {}
-        if "harv_id" in self.request.query_params:
-            filter_dict["harv_id"] = int(self.request.query_params.get("harv_id"))
-        return self.queryset.filter(**filter_dict).order_by('-id').distinct()
+    filterset_fields = ('harv_id',)
+    ordering = ('-id',)
 
     @action(
         methods=["get"],
@@ -43,10 +39,5 @@ class HarvesterView(CreateModelViewSet):
 class HarvesterHistoryView(CreateModelViewSet):
     queryset = Harvester.history.model.objects.all()
     serializer_class = HarvesterHistorySerializer
-
-    def get_queryset(self):
-        filter = {}
-        if "harv_id" in self.request.query_params:
-            filter["harv_id"] = int(self.request.query_params.get("harv_id"))
-        harvs = Harvester.history.model.objects.filter(**filter).order_by('-history_date').distinct()
-        return harvs
+    filterset_fields = ('harv_id',)
+    ordering = ('-history_date',)

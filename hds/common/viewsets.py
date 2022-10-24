@@ -1,3 +1,5 @@
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters
 from rest_framework.decorators import action
 from rest_framework import permissions
 from rest_framework.renderers import JSONRenderer
@@ -9,6 +11,7 @@ from .renderers import HDSJSONRenderer
 class CreateModelViewSet(ModelViewSet):
     renderer_classes = (HDSJSONRenderer,)
     permission_classes = (permissions.DjangoModelPermissions,)
+    filter_backends = (DjangoFilterBackend, filters.OrderingFilter)
 
     def perform_create(self, serializer):
         serializer.save(creator=self.request.user)
@@ -35,6 +38,7 @@ class CreateModelViewSet(ModelViewSet):
 class ReportModelViewSet(CreateModelViewSet):
     """ Viewset for error reports """
     permission_classes = (permissions.DjangoModelPermissions,)
+    ordering = ('-reportTime',)
     
     @property
     def report_type(self):

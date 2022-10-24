@@ -5,14 +5,13 @@ from ..tasks import job_status_update
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.permissions import IsAuthenticated
 from common.utils import build_frontend_url
-from common.viewsets import CreateModelViewSet
+from common.viewsets import ReportModelViewSet
 
 
-class JobResultsView(CreateModelViewSet):
+class JobResultsView(ReportModelViewSet):
     queryset = JobResults.objects.all()
     serializer_class = JobResultsSerializer
     permission_classes = (IsAuthenticated,)
-    filter_backends = (DjangoFilterBackend,)
     filterset_fields = ('job__target__harv_id', 'job__event__UUID')
 
 
