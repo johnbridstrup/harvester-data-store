@@ -1,5 +1,3 @@
-import time
-
 from common.tests import HDSAPITestBase
 from event.models import Event
 from django.urls import reverse

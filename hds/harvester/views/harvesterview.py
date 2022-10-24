@@ -5,7 +5,6 @@ from harvdeploy.serializers import HarvesterVersionReportSerializer
 
 from rest_framework.decorators import action
 from rest_framework.renderers import JSONRenderer
-from rest_framework.permissions import IsAuthenticated
 from common.utils import make_ok
 from common.viewsets import CreateModelViewSet
 

@@ -1,5 +1,4 @@
 from django.dispatch import receiver, Signal
-from .messages import REPORT_MSG_FMT
 from .tasks import check_notifications, post_to_slack_task
 from errorreport.models import ErrorReport
 

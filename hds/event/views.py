@@ -1,7 +1,6 @@
 from .models import Event
 from .serializers import EventSerializer
 
-from rest_framework.permissions import IsAuthenticated
 from common.viewsets import CreateModelViewSet
 
 

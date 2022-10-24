@@ -3,7 +3,6 @@ from common.models import Tags
 from common.serializers.reportserializer import ReportSerializerBase
 from ..tasks import extract_exceptions
 from ..models import ErrorReport, DEFAULT_UNKNOWN
-from harvester.models import Harvester
 from harvester.serializers.harvesterserializer import HarvesterSerializer
 from location.serializers.locationserializer import LocationSerializer
 from event.models import Event

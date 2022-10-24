@@ -1,7 +1,6 @@
 from .models import Notification
 from .serializers import NotificationSerializer
 
-from rest_framework.permissions import IsAuthenticated
 from common.viewsets import CreateModelViewSet
 
 

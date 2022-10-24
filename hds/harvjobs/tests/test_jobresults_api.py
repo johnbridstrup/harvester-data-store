@@ -5,7 +5,6 @@ from common.utils import build_frontend_url
 
 from rest_framework import status
 from unittest.mock import patch
-import os
 
 class JobResultApiTestCase(HarvJobApiTestBase):
     @patch("harvjobs.tasks.post_to_slack")

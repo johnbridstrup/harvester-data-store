@@ -1,7 +1,6 @@
 from .models import AFTExceptionCode, AFTException
 from .serializers import AFTExceptionCodeSerializer, AFTExceptionSerializer
 
-from rest_framework.permissions import IsAuthenticated
 from common.viewsets import CreateModelViewSet
 
 

@@ -5,7 +5,6 @@ from harvester.models import Harvester
 from event.models import Event
 from event.serializers import EventSerializerMixin
 from ..models import Job, JobType, JobSchema
-from ..serializers.jobresultsserializer import JobResultsSerializer
 
 from django.urls import reverse
 from rest_framework import serializers

@@ -1,5 +1,3 @@
-import logging
-import os
 from rest_framework.renderers import JSONRenderer
 from ..models import ErrorReport
 from ..metrics import (
@@ -19,8 +17,7 @@ from notifications.signals import error_report_created
 from notifications.serializers import NotificationSerializer
 from django.db.models import Count, F
 from django.utils.decorators import method_decorator
-from django.views.decorators.cache import cache_page 
-from rest_framework.permissions import IsAuthenticated, DjangoModelPermissions
+from django.views.decorators.cache import cache_page
 from rest_framework.decorators import action
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.negotiation import DefaultContentNegotiation

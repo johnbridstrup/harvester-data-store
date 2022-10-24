@@ -4,7 +4,6 @@ from .serializers import S3FileSerializer
 from django.http import FileResponse
 from rest_framework.decorators import action
 from rest_framework.renderers import BaseRenderer
-from rest_framework.permissions import IsAuthenticated
 from common.viewsets import CreateModelViewSet
 from common.utils import make_ok
 

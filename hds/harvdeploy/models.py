@@ -1,4 +1,3 @@
-import json
 from common.models import CommonInfo, ReportBase
 from harvester.models import Fruit, Harvester
 

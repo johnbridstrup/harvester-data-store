@@ -1,7 +1,6 @@
 from common.tests import HDSAPITestBase
 from errorreport.models import ErrorReport
 from ..models import Notification
-from django.contrib.auth.models import User
 from unittest.mock import patch
 from rest_framework import status
 
