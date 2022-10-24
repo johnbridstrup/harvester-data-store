@@ -165,6 +165,7 @@ export const GenericPagination = (props) => {
     notification: paginateNotification,
     user: paginateUser,
     harvdeploy: props.attr ? paginateRelease : paginateVersion,
+    errorreport: paginateErrorReport,
   };
 
   const handlePagination = async (navigation) => {

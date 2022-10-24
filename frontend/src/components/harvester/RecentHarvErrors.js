@@ -1,6 +1,7 @@
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { Loader, timeStampFormat } from "../../utils/utils";
+import { GenericPagination } from "../pagination/Pagination";
 import { LoaderDiv } from "../styled";
 
 function RecentHarvErrors(props) {
@@ -9,7 +10,7 @@ function RecentHarvErrors(props) {
   );
 
   return (
-    <div>
+    <>
       <div className="recent-error">Recent Errors</div>
       <div className="table-responsive">
         {loading ? (
@@ -43,7 +44,8 @@ function RecentHarvErrors(props) {
           </table>
         )}
       </div>
-    </div>
+      <GenericPagination state="errorreport" />
+    </>
   );
 }
 
