@@ -275,6 +275,7 @@ header {
 
 .menu-span1 {
   font-size: 14px;
+  color: var(--color-primary);
 }
 
 .menu-span2 {

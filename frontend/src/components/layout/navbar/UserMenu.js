@@ -22,10 +22,15 @@ function UserMenu(props) {
           <div className="small-circle">
             <i className="las la-comments"></i>
           </div>
-          <div className="menu-col">
+          <a
+            href="https://github.com/AdvancedFarm/hds/issues/new"
+            target="_blank"
+            rel="noreferrer"
+            className="menu-col"
+          >
             <div className="menu-span1">Give feedback</div>
             <div className="menu-span2">Help us improve HDS</div>
-          </div>
+          </a>
         </div>
         <div className="menu-splitter"></div>
         <div className="menu-item hover3" onClick={props.logout}>
