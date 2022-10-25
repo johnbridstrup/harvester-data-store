@@ -457,7 +457,9 @@ export const validateQueryObj = (queryObj = {}) => {
     queryObj.fruits ||
     queryObj.codes ||
     queryObj.traceback ||
-    queryObj.generic
+    queryObj.generic ||
+    queryObj.handled ||
+    queryObj.is_emulator
   ) {
     return true;
   } else {
