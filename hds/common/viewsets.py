@@ -37,7 +37,6 @@ class CreateModelViewSet(ModelViewSet):
 
 class ReportModelViewSet(CreateModelViewSet):
     """ Viewset for error reports """
-    permission_classes = (permissions.DjangoModelPermissions,)
     ordering = ('-reportTime',)
     
     @property
