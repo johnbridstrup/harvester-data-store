@@ -29,8 +29,8 @@ function ErrorReportDetailTable(props) {
                 <td>{props.reportObj?.location?.ranch}</td>
                 <td>{props.reportObj?.code}</td>
                 <td>{props.reportObj?.service}</td>
-                <td>{props.reportObj?.report?.data?.branch_name}</td>
-                <td>{props.reportObj?.report?.data?.githash}</td>
+                <td>{props.reportObj?.gitbranch}</td>
+                <td>{props.reportObj?.githash}</td>
                 <td>
                   <Link to={`/events/${props.reportObj?.event?.id}`}>
                     {props.reportObj?.event?.id}
