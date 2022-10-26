@@ -54,6 +54,12 @@ const NotificationDetail = lazy(() =>
 const NotificationList = lazy(() => import("../pages/notification/notifylist"));
 const UserProfileView = lazy(() => import("../pages/profile/profiledetail"));
 const UserListView = lazy(() => import("../pages/users/userslist"));
+const JobTypeDetailView = lazy(() =>
+  import("../pages/harvjobs/jobtypes/detailview")
+);
+const JobTypeListView = lazy(() =>
+  import("../pages/harvjobs/jobtypes/listview")
+);
 
 const BaseRouter = () => {
   return (
@@ -409,6 +415,38 @@ const BaseRouter = () => {
                 }
               >
                 <VersionReportDetailView />
+              </Suspense>
+            </RequireUser>
+          }
+        />
+        <Route
+          path="/jobtypes"
+          element={
+            <RequireUser>
+              <Suspense
+                fallback={
+                  <LoaderDiv>
+                    <Loader size={50} />
+                  </LoaderDiv>
+                }
+              >
+                <JobTypeListView />
+              </Suspense>
+            </RequireUser>
+          }
+        />
+        <Route
+          path="/jobtypes/:jobtypeId"
+          element={
+            <RequireUser>
+              <Suspense
+                fallback={
+                  <LoaderDiv>
+                    <Loader size={50} />
+                  </LoaderDiv>
+                }
+              >
+                <JobTypeDetailView />
               </Suspense>
             </RequireUser>
           }

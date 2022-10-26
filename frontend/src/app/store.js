@@ -7,6 +7,7 @@ import codeReducer from "../features/excecode/codeSlice";
 import fruitReducer from "../features/fruit/fruitSlice";
 import harvdeployReducer from "../features/harvdeploy/harvdeploySlice";
 import harvesterReducer from "../features/harvester/harvesterSlice";
+import harvjobReducer from "../features/harvjobs/harvjobSlice";
 import locationReducer from "../features/location/locationSlice";
 import notificationReducer from "../features/notification/notificationSlice";
 import userReducer from "../features/user/userSlice";
@@ -24,6 +25,7 @@ const store = configureStore({
     distributor: distributorReducer,
     event: eventReducer,
     harvdeploy: harvdeployReducer,
+    harvjobs: harvjobReducer,
   },
 });
 

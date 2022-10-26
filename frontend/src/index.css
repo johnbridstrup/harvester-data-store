@@ -57,6 +57,12 @@ a {
   position: relative;
 }
 
+.flex-right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
 .size-2x {
   font-size: 18px;
 }
