@@ -8,6 +8,8 @@ const initialState = {
   editting: false,
   jobtypes: [],
   jobtype: {},
+  jobschemas: [],
+  jobschema: {},
   errorMsg: null,
   pagination: {
     next: null,
@@ -98,6 +100,86 @@ export const paginateJobType = createAsyncThunk(
   }
 );
 
+export const listJobSchemas = createAsyncThunk(
+  "harvjobs/listJobSchemas",
+  async (limit, thunkAPI) => {
+    try {
+      const {
+        auth: { token },
+      } = thunkAPI.getState();
+      return await harvjobService.listJobSchemas(token, limit);
+    } catch (error) {
+      console.log(error);
+      const message = invalidateCache(error, thunkAPI.dispatch);
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const getJobSchemaById = createAsyncThunk(
+  "harvjobs/getJobSchemaById",
+  async (id, thunkAPI) => {
+    try {
+      const {
+        auth: { token },
+      } = thunkAPI.getState();
+      return await harvjobService.getJobSchemaById(id, token);
+    } catch (error) {
+      console.log(error);
+      const message = invalidateCache(error, thunkAPI.dispatch);
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const createJobSchema = createAsyncThunk(
+  "harvjobs/createJobSchema",
+  async (data, thunkAPI) => {
+    try {
+      const {
+        auth: { token },
+      } = thunkAPI.getState();
+      return await harvjobService.createJobSchema(data, token);
+    } catch (error) {
+      console.log(error);
+      const message = invalidateCache(error, thunkAPI.dispatch);
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const updateJobSchema = createAsyncThunk(
+  "harvjobs/updateJobSchema",
+  async (data, thunkAPI) => {
+    try {
+      const {
+        auth: { token },
+      } = thunkAPI.getState();
+      return await harvjobService.updateJobSchema(data, token);
+    } catch (error) {
+      console.log(error);
+      const message = invalidateCache(error, thunkAPI.dispatch);
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const queryJobSchema = createAsyncThunk(
+  "harvjobs/queryJobSchema",
+  async (data, thunkAPI) => {
+    try {
+      const {
+        auth: { token },
+      } = thunkAPI.getState();
+      return await harvjobService.queryJobSchema(data, token);
+    } catch (error) {
+      console.log(error);
+      const message = invalidateCache(error, thunkAPI.dispatch);
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 const harvjobSlice = createSlice({
   name: "harvjobs",
   initialState,
@@ -160,6 +242,65 @@ const harvjobSlice = createSlice({
         state.pagination.previous = action.payload.previous;
       })
       .addCase(paginateJobType.rejected, (state, action) => {
+        state.loading = false;
+        state.errorMsg = action.payload;
+      })
+      .addCase(listJobSchemas.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(listJobSchemas.fulfilled, (state, action) => {
+        state.loading = false;
+        state.jobschemas = action.payload.results;
+        state.pagination.count = action.payload.count;
+        state.pagination.next = action.payload.next;
+        state.pagination.previous = action.payload.previous;
+      })
+      .addCase(listJobSchemas.rejected, (state, action) => {
+        state.loading = false;
+        state.errorMsg = action.payload;
+      })
+      .addCase(getJobSchemaById.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getJobSchemaById.fulfilled, (state, action) => {
+        state.loading = false;
+        state.jobschema = action.payload;
+      })
+      .addCase(getJobSchemaById.rejected, (state, action) => {
+        state.loading = false;
+        state.errorMsg = action.payload;
+      })
+      .addCase(createJobSchema.pending, (state) => {
+        state.adding = true;
+      })
+      .addCase(createJobSchema.fulfilled, (state) => {
+        state.adding = false;
+      })
+      .addCase(createJobSchema.rejected, (state, action) => {
+        state.adding = false;
+        state.errorMsg = action.payload;
+      })
+      .addCase(updateJobSchema.pending, (state) => {
+        state.editting = true;
+      })
+      .addCase(updateJobSchema.fulfilled, (state) => {
+        state.editting = false;
+      })
+      .addCase(updateJobSchema.rejected, (state, action) => {
+        state.editting = false;
+        state.errorMsg = action.payload;
+      })
+      .addCase(queryJobSchema.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(queryJobSchema.fulfilled, (state, action) => {
+        state.loading = false;
+        state.jobschemas = action.payload.results;
+        state.pagination.count = action.payload.count;
+        state.pagination.next = action.payload.next;
+        state.pagination.previous = action.payload.previous;
+      })
+      .addCase(queryJobSchema.rejected, (state, action) => {
         state.loading = false;
         state.errorMsg = action.payload;
       });

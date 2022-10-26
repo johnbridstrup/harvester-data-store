@@ -449,3 +449,9 @@ export const mapCurrentOffset = (previous, next) => {
   }
   return paramsObj;
 };
+
+export const transformJobTypeOptions = (jobtypes = []) => {
+  return jobtypes.map((jobtype, index) => {
+    return { value: jobtype.name, label: jobtype.name };
+  });
+};
