@@ -3,6 +3,9 @@ from common.models import CommonInfo
 from errorreport.models import ErrorReport
 
 
+DEFAULT_OPERATOR_MSG = "Please cycle the harvester"
+
+
 class AFTExceptionCode(CommonInfo):
     """AFT exception code schema model.
 
@@ -18,6 +21,7 @@ class AFTExceptionCode(CommonInfo):
     msg = models.TextField(max_length=255, blank=True)
     team = models.TextField(max_length=20)
     cycle = models.BooleanField()
+    operator_msg = models.CharField(max_length=255, default=DEFAULT_OPERATOR_MSG)
 
     def __str__(self):
         return f"Code {self.code}: {self.name}"

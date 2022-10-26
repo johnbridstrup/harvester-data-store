@@ -14,6 +14,7 @@ class Location(CommonInfo):
     ranch = models.CharField(max_length=255, blank=True, null=True)
     country = models.CharField(max_length=255, blank=True, null=True)
     region = models.CharField(max_length=255, blank=True, null=True)
+    site_channel = models.CharField(max_length=40, default="harvs-dev")
 
     def __str__(self):
         return self.ranch
