@@ -3,6 +3,7 @@ import { axiosService } from "../base/service";
 
 const JOBTYPES_URL = `${API_URL}/jobtypes/`;
 const JOBSCHEMAS_URL = `${API_URL}/jobschemas/`;
+const JOBS_URL = `${API_URL}/harvjobs/`;
 
 const listJobTypes = async (token, limit = 10) => {
   let response = await axiosService.get(
@@ -72,6 +73,25 @@ const queryJobSchema = async (queryObj, token) => {
   return response;
 };
 
+const listJobs = async (token, limit = 10) => {
+  let response = await axiosService.get(`${JOBS_URL}?limit=${limit}`, token);
+  return response;
+};
+
+const getJobById = async (jobtypeId, token) => {
+  let response = await axiosService.get(`${JOBS_URL}${jobtypeId}/`, token);
+  return response;
+};
+
+const queryJobs = async (queryObj, token) => {
+  let params = new URLSearchParams(queryObj);
+  let response = await axiosService.get(
+    `${JOBS_URL}?${params.toString()}`,
+    token
+  );
+  return response;
+};
+
 const harvjobService = {
   listJobTypes,
   getJobTypeById,
@@ -83,6 +103,9 @@ const harvjobService = {
   createJobSchema,
   updateJobSchema,
   queryJobSchema,
+  listJobs,
+  getJobById,
+  queryJobs,
 };
 
 export default harvjobService;

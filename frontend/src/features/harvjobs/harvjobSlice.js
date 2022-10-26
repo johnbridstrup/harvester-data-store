@@ -10,6 +10,8 @@ const initialState = {
   jobtype: {},
   jobschemas: [],
   jobschema: {},
+  jobs: [],
+  job: {},
   errorMsg: null,
   pagination: {
     next: null,
@@ -180,10 +182,63 @@ export const queryJobSchema = createAsyncThunk(
   }
 );
 
+export const listJobs = createAsyncThunk(
+  "harvjobs/listJobs",
+  async (limit, thunkAPI) => {
+    try {
+      const {
+        auth: { token },
+      } = thunkAPI.getState();
+      return await harvjobService.listJobs(token, limit);
+    } catch (error) {
+      console.log(error);
+      const message = invalidateCache(error, thunkAPI.dispatch);
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const getJobById = createAsyncThunk(
+  "harvjobs/getJobById",
+  async (id, thunkAPI) => {
+    try {
+      const {
+        auth: { token },
+      } = thunkAPI.getState();
+      return await harvjobService.getJobById(id, token);
+    } catch (error) {
+      console.log(error);
+      const message = invalidateCache(error, thunkAPI.dispatch);
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const queryJobs = createAsyncThunk(
+  "harvjobs/queryJobs",
+  async (data, thunkAPI) => {
+    try {
+      const {
+        auth: { token },
+      } = thunkAPI.getState();
+      return await harvjobService.queryJobs(data, token);
+    } catch (error) {
+      console.log(error);
+      const message = invalidateCache(error, thunkAPI.dispatch);
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 const harvjobSlice = createSlice({
   name: "harvjobs",
   initialState,
-  reducers: {},
+  reducers: {
+    resetSelectOptions: (state) => {
+      state.jobschema = {};
+      state.jobs = [];
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(listJobTypes.pending, (state) => {
@@ -303,8 +358,48 @@ const harvjobSlice = createSlice({
       .addCase(queryJobSchema.rejected, (state, action) => {
         state.loading = false;
         state.errorMsg = action.payload;
+      })
+      .addCase(listJobs.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(listJobs.fulfilled, (state, action) => {
+        state.loading = false;
+        state.jobs = action.payload.results;
+        state.pagination.count = action.payload.count;
+        state.pagination.next = action.payload.next;
+        state.pagination.previous = action.payload.previous;
+      })
+      .addCase(listJobs.rejected, (state, action) => {
+        state.loading = false;
+        state.errorMsg = action.payload;
+      })
+      .addCase(getJobById.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getJobById.fulfilled, (state, action) => {
+        state.loading = false;
+        state.job = action.payload;
+      })
+      .addCase(getJobById.rejected, (state, action) => {
+        state.loading = false;
+        state.errorMsg = action.payload;
+      })
+      .addCase(queryJobs.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(queryJobs.fulfilled, (state, action) => {
+        state.loading = false;
+        state.jobs = action.payload.results;
+        state.pagination.count = action.payload.count;
+        state.pagination.next = action.payload.next;
+        state.pagination.previous = action.payload.previous;
+      })
+      .addCase(queryJobs.rejected, (state, action) => {
+        state.loading = false;
+        state.errorMsg = action.payload;
       });
   },
 });
 
+export const { resetSelectOptions } = harvjobSlice.actions;
 export default harvjobSlice.reducer;

@@ -455,3 +455,25 @@ export const transformJobTypeOptions = (jobtypes = []) => {
     return { value: jobtype.name, label: jobtype.name };
   });
 };
+
+export const transformJobSchemaOptions = (jobschemas = []) => {
+  return jobschemas.map((jobschema, index) => {
+    return { value: jobschema.id, label: `version ${jobschema.version}` };
+  });
+};
+
+export const getUrl = (urlString = "url") => {
+  let pattern = /jobresults\/(?:&?[^=&]*=[^=&]*)*/;
+  let match = urlString.match(pattern);
+  return match ? match[0] : "";
+};
+
+export const getHarvId = (urlString = "url", target = 1) => {
+  let pattern = /job__target__harv_id=[0-9]+/;
+  let match = urlString.match(pattern);
+  if (match) {
+    return match[0].split("=")[1];
+  } else {
+    return target;
+  }
+};

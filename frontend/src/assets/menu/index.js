@@ -47,6 +47,12 @@ export const menu = [
     description: "Events linking various models as they occur",
     href: "/events",
   },
+  {
+    name: "Job Scheduler",
+    icon: "version",
+    description: "Schedule jobs on the harvesters",
+    href: "/jobscheduler",
+  },
 ];
 
 export const adminMenu = [
