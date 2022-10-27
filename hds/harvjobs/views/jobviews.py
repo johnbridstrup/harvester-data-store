@@ -13,7 +13,7 @@ class JobView(CreateModelViewSet):
     queryset = Job.objects.all()
     serializer_class = JobSerializer
     permission_classes = (IsAuthenticated,)
-    filterset_fields = ('target__harv_id',)
+    filterset_fields = ('target__harv_id', 'schema__id', 'schema__version',)
     ordering = ('-created', )
 
     @action(
@@ -34,7 +34,7 @@ class JobView(CreateModelViewSet):
             serializer = JobHistorySerializer(queryset, many=True)
             data = serializer.data
         return make_ok(f"Job {job.event.UUID} history", data)
-        
+
     def perform_create(self, serializer):
         super().perform_create(serializer)
 
