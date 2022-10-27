@@ -230,6 +230,22 @@ export const queryJobs = createAsyncThunk(
   }
 );
 
+export const createJob = createAsyncThunk(
+  "harvjobs/createJob",
+  async (data, thunkAPI) => {
+    try {
+      const {
+        auth: { token },
+      } = thunkAPI.getState();
+      return await harvjobService.createJob(data, token);
+    } catch (error) {
+      console.log(error);
+      const message = invalidateCache(error, thunkAPI.dispatch);
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 const harvjobSlice = createSlice({
   name: "harvjobs",
   initialState,
@@ -396,6 +412,16 @@ const harvjobSlice = createSlice({
       })
       .addCase(queryJobs.rejected, (state, action) => {
         state.loading = false;
+        state.errorMsg = action.payload;
+      })
+      .addCase(createJob.pending, (state) => {
+        state.adding = true;
+      })
+      .addCase(createJob.fulfilled, (state) => {
+        state.adding = false;
+      })
+      .addCase(createJob.rejected, (state, action) => {
+        state.adding = false;
         state.errorMsg = action.payload;
       });
   },

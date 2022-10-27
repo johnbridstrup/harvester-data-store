@@ -67,6 +67,7 @@ const JobSchemaListVIew = lazy(() =>
   import("../pages/harvjobs/jobschemas/listview")
 );
 const JobSchedulerView = lazy(() => import("../pages/harvjobs/jobscheduler"));
+const ScheduleJobView = lazy(() => import("../pages/harvjobs/schedulejob"));
 
 const BaseRouter = () => {
   return (
@@ -502,6 +503,22 @@ const BaseRouter = () => {
                 }
               >
                 <JobSchedulerView />
+              </Suspense>
+            </RequireUser>
+          }
+        />
+        <Route
+          path="/schedulejob/:jobschemaId"
+          element={
+            <RequireUser>
+              <Suspense
+                fallback={
+                  <LoaderDiv>
+                    <Loader size={50} />
+                  </LoaderDiv>
+                }
+              >
+                <ScheduleJobView />
               </Suspense>
             </RequireUser>
           }

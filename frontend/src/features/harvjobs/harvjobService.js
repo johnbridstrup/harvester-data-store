@@ -92,6 +92,11 @@ const queryJobs = async (queryObj, token) => {
   return response;
 };
 
+const createJob = async (data, token) => {
+  const response = await axiosService.post(JOBS_URL, token, data);
+  return response;
+};
+
 const harvjobService = {
   listJobTypes,
   getJobTypeById,
@@ -106,6 +111,7 @@ const harvjobService = {
   listJobs,
   getJobById,
   queryJobs,
+  createJob,
 };
 
 export default harvjobService;
