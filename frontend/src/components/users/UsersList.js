@@ -141,8 +141,8 @@ function UsersList(props) {
               </tr>
             </thead>
             <tbody>
-              {users.map((user, index) => (
-                <tr key={index}>
+              {users.map((user, _) => (
+                <tr key={user.id}>
                   <td>{user.username}</td>
                   <td>{user.profile?.slack_id}</td>
                   <td>{user.first_name}</td>

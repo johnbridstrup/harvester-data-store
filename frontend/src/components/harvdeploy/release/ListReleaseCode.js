@@ -25,8 +25,8 @@ function ListReleaseCode(props) {
               </tr>
             </thead>
             <tbody>
-              {releasecodes.map((obj, i) => (
-                <tr key={i}>
+              {releasecodes.map((obj, _) => (
+                <tr key={obj.id}>
                   <td>{obj.id}</td>
                   <td>
                     <Link to={`/release/${obj.id}`}>{obj.version}</Link>

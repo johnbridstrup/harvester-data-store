@@ -27,8 +27,8 @@ function ListVersionReport(props) {
               </tr>
             </thead>
             <tbody>
-              {versions.map((version, index) => (
-                <tr key={index}>
+              {versions.map((version, _) => (
+                <tr key={version.id}>
                   <td>{version.id}</td>
                   <td>
                     <Link to={`/harvversion/${version.id}`}>

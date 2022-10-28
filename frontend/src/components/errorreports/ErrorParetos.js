@@ -143,7 +143,7 @@ function ErrorParetos(props) {
         </LoaderDiv>
       ) : (
         <div className={`row ${open ? "mainchart" : "minus-side"}`}>
-          {paretoArr.map((obj, index) => (
+          {paretoArr.map((obj, _) => (
             <div key={obj.id} className={`${className} plot-div`}>
               <Suspense
                 fallback={

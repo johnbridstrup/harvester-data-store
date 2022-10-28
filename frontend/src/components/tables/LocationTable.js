@@ -6,6 +6,7 @@ function LocationTable(props) {
       <table className="table">
         <thead>
           <tr>
+            <th>ID</th>
             <th>Distributor</th>
             <th>Ranch</th>
             <th>Country</th>
@@ -14,8 +15,9 @@ function LocationTable(props) {
           </tr>
         </thead>
         <tbody>
-          {props.locations?.map((location, index) => (
-            <tr key={index} className="tr-hover">
+          {props.locations?.map((location, _) => (
+            <tr key={location.id} className="tr-hover">
+              <td>{location.id}</td>
               <td>{location?.distributor?.name}</td>
               <td>{location.ranch}</td>
               <td>{location.country}</td>

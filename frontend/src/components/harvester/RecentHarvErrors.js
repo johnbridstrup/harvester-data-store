@@ -28,8 +28,8 @@ function RecentHarvErrors(props) {
               </tr>
             </thead>
             <tbody>
-              {reports.map((report, index) => (
-                <tr key={index}>
+              {reports.map((report, _) => (
+                <tr key={report.id}>
                   <td>{report.id}</td>
                   <td>
                     <Link to={`/errorreports/${report.id}`}>

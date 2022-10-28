@@ -7,6 +7,7 @@ function DistributorTable(props) {
       <table className="table">
         <thead>
           <tr>
+            <th>ID</th>
             <th>Name</th>
             <th>Created At</th>
             <th>Updated At</th>
@@ -14,8 +15,9 @@ function DistributorTable(props) {
           </tr>
         </thead>
         <tbody>
-          {props.distributors?.map((distributor, index) => (
-            <tr key={index} className="tr-hover">
+          {props.distributors?.map((distributor, _) => (
+            <tr key={distributor.id} className="tr-hover">
+              <td>{distributor.id}</td>
               <td>{distributor.name}</td>
               <td>{moment(distributor.created).format("LLLL")}</td>
               <td>{moment(distributor.lastModified).format("LLLL")}</td>

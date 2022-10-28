@@ -17,8 +17,8 @@ function EventTable(props) {
           </tr>
         </thead>
         <tbody>
-          {props.events.map((eventObj, index) => (
-            <tr key={index}>
+          {props.events.map((eventObj, _) => (
+            <tr key={eventObj.id}>
               <td>{eventObj.id}</td>
               <td>
                 <Link to={`/events/${eventObj.id}`}>{eventObj.UUID}</Link>

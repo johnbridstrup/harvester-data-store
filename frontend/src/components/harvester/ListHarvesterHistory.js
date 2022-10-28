@@ -30,8 +30,8 @@ function ListHarvesterHistory(props) {
               </tr>
             </thead>
             <tbody>
-              {historys.map((obj, index) => (
-                <tr key={index}>
+              {historys.map((obj, _) => (
+                <tr key={obj.history_id}>
                   <td>{obj.history_id}</td>
                   <td>
                     <Link to={`/harvesterhistory/${obj.history_id}`}>

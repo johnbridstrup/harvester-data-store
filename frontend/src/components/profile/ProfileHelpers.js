@@ -179,8 +179,8 @@ export const Notifications = (props) => {
           </LoaderDiv>
         ) : (
           <>
-            {props.notifications.map((notifyObj, index) => (
-              <div key={index} className="mb-4">
+            {props.notifications.map((notifyObj, _) => (
+              <div key={notifyObj.id} className="mb-4">
                 <Link
                   to={`/notifications/${notifyObj.id}`}
                   className="notification"

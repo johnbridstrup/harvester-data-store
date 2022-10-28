@@ -19,8 +19,8 @@ function HarvesterTable(props) {
           </tr>
         </thead>
         <tbody>
-          {props.harvesters?.map((harvester, index) => (
-            <tr key={index} className="tr-hover">
+          {props.harvesters?.map((harvester, _) => (
+            <tr key={harvester.id} className="tr-hover">
               <td>{harvester.id}</td>
               <td>
                 <Link to={`/harvesters/${harvester.id}`}>{harvester.name}</Link>

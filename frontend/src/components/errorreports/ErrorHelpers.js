@@ -102,8 +102,8 @@ export const HoverTabular = (props) => {
               </tr>
             </thead>
             <tbody>
-              {props.hoverObj?.obj?.map((obj, i) => (
-                <tr key={i}>
+              {props.hoverObj?.obj?.map((obj, _) => (
+                <tr key={obj.id}>
                   <td>{obj.code?.code}</td>
                   <td>{obj.code?.name}</td>
                   <td>
@@ -324,8 +324,8 @@ export const CodeHover = (props) => {
   return (
     <HoverDivModal position={props.position}>
       <ToolBox position={props.position}>
-        {exceptions.map((excep, index) => (
-          <CodeServiceDiv key={index}>
+        {exceptions.map((excep, _) => (
+          <CodeServiceDiv key={excep.id}>
             <span>
               Code: <strong>{excep.code.code}</strong>
             </span>
