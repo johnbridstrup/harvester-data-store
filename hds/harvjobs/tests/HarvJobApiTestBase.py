@@ -97,10 +97,10 @@ class HarvJobApiTestBase(HDSAPITestBase):
         self.update_user_permissions_all(Job)
         self.update_user_permissions_all(JobResults)
         self.update_user_permissions_all(JobHostResult)
-    
+
     def create_jobtype(self, name=None):
         name = name or self.DEFAULT_JOBTYPE
-        
+
         jobtype = {
             "name": name
         }
@@ -108,17 +108,17 @@ class HarvJobApiTestBase(HDSAPITestBase):
         return jobtype, resp
 
     def create_jobschema(
-        self, 
-        jobtype=None, 
-        version=None, 
-        schema=None
+        self,
+        jobtype=None,
+        version=None,
+        schema=None,
     ):
         jobtype = jobtype or self.DEFAULT_JOBTYPE
         version = version or self.DEFAULT_SCHEMA_VERSION
         schema = schema or self.DEFAULT_SCHEMA
-        
+
         jobschema = {
-            "jobtype": jobtype, 
+            "jobtype": jobtype,
             "version": version,
             "schema": schema,
         }

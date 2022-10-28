@@ -9,13 +9,12 @@ class JobSchemaSerializer(serializers.ModelSerializer):
         read_only_fields = ("creator",)
 
     def to_internal_value(self, data):
-        jobtype_name = data["jobtype"]
+        jobtype_name = data.pop("jobtype")
         jobtype = JobType.objects.get(name=jobtype_name)
 
         jobschema = {
             "jobtype": jobtype.id,
-            "schema": data["schema"],
-            "version": data["version"],
+            **data
         }
         return super().to_internal_value(jobschema)
 
@@ -23,5 +22,5 @@ class JobSchemaSerializer(serializers.ModelSerializer):
         jobtype = instance.jobtype.name
         data = super().to_representation(instance)
         data['jobtype'] = jobtype
-        
+
         return data
