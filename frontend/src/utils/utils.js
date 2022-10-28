@@ -56,19 +56,6 @@ export const transformErrorReport = (reports = []) => {
   });
 };
 
-export const transformTableErrorReport = (
-  errorreport = [],
-  harvesters = [],
-  locations = []
-) => {
-  return errorreport.map((report, index) => {
-    const harvester = harvesters.find((x) => x.id === report.harvester) || {};
-    const location = locations.find((x) => x.id === report.location) || {};
-
-    return { ...report, harvester, location };
-  });
-};
-
 export const translateHarvOptions = (harv_ids = []) => {
   return harv_ids.map((harv_id, index) => {
     return harv_id.value;
@@ -285,20 +272,6 @@ export const objNotEmpty = (obj) => {
   return Object.keys(obj).length > 0;
 };
 
-export const transformFsmComponents = (sysmon = {}) => {
-  const sysmonArr = {};
-  for (const [key, value] of Object.entries(sysmon)) {
-    let service = [];
-    service.push(key);
-    service.push(value["cpu"]);
-    service.push(value["mem"]);
-    if (value?.fsm?.components)
-      service.push(value["fsm"]["components"].join(", "));
-    sysmonArr.push(service);
-  }
-  return sysmonArr;
-};
-
 export const getServicesInError = (exceptionsKeys = [], sysmonReport = {}) => {
   let errors = [];
   for (let i = 0; i < exceptionsKeys.length; i++) {
@@ -320,15 +293,6 @@ export const getServicesInError = (exceptionsKeys = [], sysmonReport = {}) => {
 
 export const getExceptionKeys = (exceptions = []) => {
   return Object.keys(transformExceptionObj(exceptions));
-};
-
-export const masterInError = (exceptionsKeys = []) => {
-  for (let i = 0; i < exceptionsKeys.length; i++) {
-    if (exceptionsKeys[i].includes(".0")) {
-      return true;
-    }
-  }
-  return false;
 };
 
 export const robotInError = (exceptionKey, sysmonReport) => {
@@ -404,12 +368,6 @@ export const aggregateOptions = [
   { label: "emulator", value: "report__harvester__is_emulator" },
 ];
 
-export const translateAggregateOptions = (aggregates = []) => {
-  return aggregates.map((aggregate, index) => {
-    return aggregate.value;
-  });
-};
-
 export const uuid = () => {
   const hashTable = [
     "a",
@@ -438,16 +396,6 @@ export const uuid = () => {
     }
   }
   return uuid.join("");
-};
-
-export const transformAssignedNotification = (notifications = [], username) => {
-  let arr = [];
-  notifications.forEach((notif, index) => {
-    if (notif.recipients.includes(username)) {
-      arr.push(notif);
-    }
-  });
-  return arr;
 };
 
 export const validateQueryObj = (queryObj = {}) => {
