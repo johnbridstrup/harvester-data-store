@@ -1,5 +1,5 @@
 from django.dispatch import receiver, Signal
-from .tasks import check_notifications, post_to_slack_task
+from .tasks import check_notifications, notify_operator_task, post_to_slack_task
 from errorreport.models import ErrorReport
 
 
@@ -18,3 +18,6 @@ def post_to_harv_dev(sender, instance_id, url, **kwargs):
     msg += f"{url}"
 
     post_to_slack_task.delay(msg, channel)
+    notify_operator_task.delay(instance_id)
+
+    
