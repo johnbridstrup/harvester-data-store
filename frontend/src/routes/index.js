@@ -1,6 +1,6 @@
 import { lazy, Suspense } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { LoaderDiv } from "../components/styled";
+import { RouteLoader } from "../components/styled";
 import { IsAdminOnly, RequireUser, UserAuth } from "../utils/guards";
 import { Loader } from "../utils/utils";
 
@@ -79,9 +79,9 @@ const BaseRouter = () => {
             <RequireUser>
               <Suspense
                 fallback={
-                  <LoaderDiv>
+                  <RouteLoader>
                     <Loader size={50} />
-                  </LoaderDiv>
+                  </RouteLoader>
                 }
               >
                 <Home />
@@ -95,9 +95,9 @@ const BaseRouter = () => {
             <UserAuth>
               <Suspense
                 fallback={
-                  <LoaderDiv>
+                  <RouteLoader>
                     <Loader size={50} />
-                  </LoaderDiv>
+                  </RouteLoader>
                 }
               >
                 <Login />
@@ -111,9 +111,9 @@ const BaseRouter = () => {
             <RequireUser>
               <Suspense
                 fallback={
-                  <LoaderDiv>
+                  <RouteLoader>
                     <Loader size={50} />
-                  </LoaderDiv>
+                  </RouteLoader>
                 }
               >
                 <ErrorsReportList />
@@ -127,9 +127,9 @@ const BaseRouter = () => {
             <RequireUser>
               <Suspense
                 fallback={
-                  <LoaderDiv>
+                  <RouteLoader>
                     <Loader size={50} />
-                  </LoaderDiv>
+                  </RouteLoader>
                 }
               >
                 <ErrorReportPareto />
@@ -143,9 +143,9 @@ const BaseRouter = () => {
             <RequireUser>
               <Suspense
                 fallback={
-                  <LoaderDiv>
+                  <RouteLoader>
                     <Loader size={50} />
-                  </LoaderDiv>
+                  </RouteLoader>
                 }
               >
                 <ErrorsReportDetail />
@@ -159,9 +159,9 @@ const BaseRouter = () => {
             <RequireUser>
               <Suspense
                 fallback={
-                  <LoaderDiv>
+                  <RouteLoader>
                     <Loader size={50} />
-                  </LoaderDiv>
+                  </RouteLoader>
                 }
               >
                 <UserProfileView />
@@ -175,9 +175,9 @@ const BaseRouter = () => {
             <RequireUser>
               <Suspense
                 fallback={
-                  <LoaderDiv>
+                  <RouteLoader>
                     <Loader size={50} />
-                  </LoaderDiv>
+                  </RouteLoader>
                 }
               >
                 <NotificationList />
@@ -191,9 +191,9 @@ const BaseRouter = () => {
             <RequireUser>
               <Suspense
                 fallback={
-                  <LoaderDiv>
+                  <RouteLoader>
                     <Loader size={50} />
-                  </LoaderDiv>
+                  </RouteLoader>
                 }
               >
                 <NotificationDetail />
@@ -208,9 +208,9 @@ const BaseRouter = () => {
               <IsAdminOnly>
                 <Suspense
                   fallback={
-                    <LoaderDiv>
+                    <RouteLoader>
                       <Loader size={50} />
-                    </LoaderDiv>
+                    </RouteLoader>
                   }
                 >
                   <UserListView />
@@ -225,9 +225,9 @@ const BaseRouter = () => {
             <RequireUser>
               <Suspense
                 fallback={
-                  <LoaderDiv>
+                  <RouteLoader>
                     <Loader size={50} />
-                  </LoaderDiv>
+                  </RouteLoader>
                 }
               >
                 <HarvesterListView />
@@ -241,9 +241,9 @@ const BaseRouter = () => {
             <RequireUser>
               <Suspense
                 fallback={
-                  <LoaderDiv>
+                  <RouteLoader>
                     <Loader size={50} />
-                  </LoaderDiv>
+                  </RouteLoader>
                 }
               >
                 <HarvesterDetailView />
@@ -257,9 +257,9 @@ const BaseRouter = () => {
             <RequireUser>
               <Suspense
                 fallback={
-                  <LoaderDiv>
+                  <RouteLoader>
                     <Loader size={50} />
-                  </LoaderDiv>
+                  </RouteLoader>
                 }
               >
                 <HarvVersionListView />
@@ -273,9 +273,9 @@ const BaseRouter = () => {
             <RequireUser>
               <Suspense
                 fallback={
-                  <LoaderDiv>
+                  <RouteLoader>
                     <Loader size={50} />
-                  </LoaderDiv>
+                  </RouteLoader>
                 }
               >
                 <HarvesterHistoryListView />
@@ -289,9 +289,9 @@ const BaseRouter = () => {
             <RequireUser>
               <Suspense
                 fallback={
-                  <LoaderDiv>
+                  <RouteLoader>
                     <Loader size={50} />
-                  </LoaderDiv>
+                  </RouteLoader>
                 }
               >
                 <HarvesterHistoryDetailView />
@@ -305,9 +305,9 @@ const BaseRouter = () => {
             <RequireUser>
               <Suspense
                 fallback={
-                  <LoaderDiv>
+                  <RouteLoader>
                     <Loader size={50} />
-                  </LoaderDiv>
+                  </RouteLoader>
                 }
               >
                 <LocationListView />
@@ -321,9 +321,9 @@ const BaseRouter = () => {
             <RequireUser>
               <Suspense
                 fallback={
-                  <LoaderDiv>
+                  <RouteLoader>
                     <Loader size={50} />
-                  </LoaderDiv>
+                  </RouteLoader>
                 }
               >
                 <DistributorListView />
@@ -337,9 +337,9 @@ const BaseRouter = () => {
             <RequireUser>
               <Suspense
                 fallback={
-                  <LoaderDiv>
+                  <RouteLoader>
                     <Loader size={50} />
-                  </LoaderDiv>
+                  </RouteLoader>
                 }
               >
                 <EventListView />
@@ -353,9 +353,9 @@ const BaseRouter = () => {
             <RequireUser>
               <Suspense
                 fallback={
-                  <LoaderDiv>
+                  <RouteLoader>
                     <Loader size={50} />
-                  </LoaderDiv>
+                  </RouteLoader>
                 }
               >
                 <EventDetailView />
@@ -369,9 +369,9 @@ const BaseRouter = () => {
             <RequireUser>
               <Suspense
                 fallback={
-                  <LoaderDiv>
+                  <RouteLoader>
                     <Loader size={50} />
-                  </LoaderDiv>
+                  </RouteLoader>
                 }
               >
                 <ReleaseCodeListView />
@@ -385,9 +385,9 @@ const BaseRouter = () => {
             <RequireUser>
               <Suspense
                 fallback={
-                  <LoaderDiv>
+                  <RouteLoader>
                     <Loader size={50} />
-                  </LoaderDiv>
+                  </RouteLoader>
                 }
               >
                 <ReleaseCodeDetailView />
@@ -401,9 +401,9 @@ const BaseRouter = () => {
             <RequireUser>
               <Suspense
                 fallback={
-                  <LoaderDiv>
+                  <RouteLoader>
                     <Loader size={50} />
-                  </LoaderDiv>
+                  </RouteLoader>
                 }
               >
                 <VersionReportListView />
@@ -417,9 +417,9 @@ const BaseRouter = () => {
             <RequireUser>
               <Suspense
                 fallback={
-                  <LoaderDiv>
+                  <RouteLoader>
                     <Loader size={50} />
-                  </LoaderDiv>
+                  </RouteLoader>
                 }
               >
                 <VersionReportDetailView />
@@ -433,9 +433,9 @@ const BaseRouter = () => {
             <RequireUser>
               <Suspense
                 fallback={
-                  <LoaderDiv>
+                  <RouteLoader>
                     <Loader size={50} />
-                  </LoaderDiv>
+                  </RouteLoader>
                 }
               >
                 <JobTypeListView />
@@ -449,9 +449,9 @@ const BaseRouter = () => {
             <RequireUser>
               <Suspense
                 fallback={
-                  <LoaderDiv>
+                  <RouteLoader>
                     <Loader size={50} />
-                  </LoaderDiv>
+                  </RouteLoader>
                 }
               >
                 <JobTypeDetailView />
@@ -465,9 +465,9 @@ const BaseRouter = () => {
             <RequireUser>
               <Suspense
                 fallback={
-                  <LoaderDiv>
+                  <RouteLoader>
                     <Loader size={50} />
-                  </LoaderDiv>
+                  </RouteLoader>
                 }
               >
                 <JobSchemaListVIew />
@@ -481,9 +481,9 @@ const BaseRouter = () => {
             <RequireUser>
               <Suspense
                 fallback={
-                  <LoaderDiv>
+                  <RouteLoader>
                     <Loader size={50} />
-                  </LoaderDiv>
+                  </RouteLoader>
                 }
               >
                 <JobSchemaDetailView />
@@ -497,9 +497,9 @@ const BaseRouter = () => {
             <RequireUser>
               <Suspense
                 fallback={
-                  <LoaderDiv>
+                  <RouteLoader>
                     <Loader size={50} />
-                  </LoaderDiv>
+                  </RouteLoader>
                 }
               >
                 <JobSchedulerView />
@@ -513,9 +513,9 @@ const BaseRouter = () => {
             <RequireUser>
               <Suspense
                 fallback={
-                  <LoaderDiv>
+                  <RouteLoader>
                     <Loader size={50} />
-                  </LoaderDiv>
+                  </RouteLoader>
                 }
               >
                 <ScheduleJobView />

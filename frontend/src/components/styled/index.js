@@ -33,6 +33,10 @@ export const LoaderDiv = styled.div`
   height: 25vh;
 `;
 
+export const RouteLoader = styled(LoaderDiv)`
+  height: 100vh;
+`;
+
 export const Table = styled.table``;
 
 export const DivTotalReport = styled.div`
