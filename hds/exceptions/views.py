@@ -8,6 +8,7 @@ from .serializers import (
     AFTExceptionCodeManifestSerializer, 
     AFTExceptionSerializer,
 )
+from .tasks import update_exception_codes
 
 from common.viewsets import CreateModelViewSet
 
@@ -15,6 +16,10 @@ from common.viewsets import CreateModelViewSet
 class AFTExceptionCodeManifestView(CreateModelViewSet):
     queryset = AFTExceptionCodeManifest.objects.all()
     serializer_class = AFTExceptionCodeManifestSerializer
+
+    def perform_create(self, serializer):
+        super().perform_create(serializer)
+        update_exception_codes.delay(serializer.data["id"], self.request.user.id)
 
 
 class AFTExceptionCodeView(CreateModelViewSet):

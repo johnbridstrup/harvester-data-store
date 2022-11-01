@@ -4,6 +4,7 @@ from ..models import (
     AFTException
 )
 from common.tests import HDSAPITestBase
+from django.utils.timezone import datetime
 from rest_framework import status
 
 
@@ -113,3 +114,67 @@ class AFTExceptionCodeManifestTestCase(ExceptionTestBase):
         
         self.assertEqual(r.status_code, status.HTTP_201_CREATED)
         self.assertEqual(AFTExceptionCodeManifest.objects.count(), 1)
+
+    def test_create_codes(self):
+        r = self._send_manifest()
+        self.assertEqual(r.status_code, status.HTTP_201_CREATED)
+
+        self.assertEqual(AFTExceptionCode.objects.count(), len(self.CODES))
+        code_0 = self.CODES[0]
+        code_1 = self.CODES[1]
+        assert AFTExceptionCode.objects.get(code=code_0["code"])
+        assert AFTExceptionCode.objects.get(code=code_1["code"])
+        assert AFTExceptionCodeManifest.objects.get()
+
+        aft_code_0 = AFTExceptionCode.objects.get(code=code_0["code"])
+        manifest = AFTExceptionCodeManifest.objects.get()
+
+        self.assertEqual(aft_code_0.name, code_0["name"])
+        self.assertEqual(aft_code_0.msg, code_0["msg"])
+        self.assertEqual(aft_code_0.team, code_0["team"])
+        self.assertEqual(aft_code_0.cycle, code_0["cycle"])
+        self.assertEqual(aft_code_0.manifest, manifest)
+
+    def test_update_codes(self):
+        self._send_manifest()
+        new_codes = [
+            {
+                'code': 2,
+                'name': 'NewExceptionTwo',
+                'msg': 'test message',
+                'team': 'aft',
+                'cycle': False
+            },
+            {
+                'code': 3,
+                'name': 'NewExceptionThree',
+                'msg': 'test message',
+                'team': 'aft',
+                'cycle': False
+            },
+        ]
+
+        # Add new codes and modify an existing code
+        original_0_msg = self.CODES[0]["msg"]
+        self.CODES.extend(new_codes)
+        self.MANIFEST["manifest"] = self.CODES
+        self.MANIFEST["manifest"][0]["msg"] = "A NEW MESSAGE"
+        r = self._send_manifest(manifest=self.MANIFEST)
+        
+        self.assertEqual(r.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(AFTExceptionCode.objects.count(), len(self.CODES))
+
+        code_0 = self.CODES[0]
+        code_3 = self.CODES[3]
+        aft_code_0 = AFTExceptionCode.objects.get(code=code_0["code"])
+        aft_code_3 = AFTExceptionCode.objects.get(code=code_3["code"])
+
+        self.assertEqual(code_0["msg"], aft_code_0.msg)
+        self.assertNotEqual(original_0_msg, aft_code_0.msg)
+        self.assertAlmostEqual(int(datetime.now().timestamp()), int(aft_code_0.lastModified.timestamp()))
+        self.assertEqual(code_3["name"], aft_code_3.name)
+        self.assertGreater(aft_code_3.lastModified, aft_code_3.created)
+
+        # Code 0 will be updated, code 3 will be created
+        self.assertIsNotNone(aft_code_0.modifiedBy)
+        self.assertIsNone(aft_code_3.modifiedBy)
