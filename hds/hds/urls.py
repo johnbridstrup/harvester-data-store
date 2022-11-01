@@ -32,6 +32,7 @@ urlpatterns = [
     path(f'{version}/errorreports/', include('errorreport.urls')),
     path(f'{version}/events/', include('event.urls')),
     path(f'{version}/exceptioncodes/', include('exceptions.urls.exceptioncodeurls')),
+    path(f'{version}/exceptioncodemanifests/', include('exceptions.urls.exceptioncodemanifesturls')),
     path(f'{version}/exceptions/', include('exceptions.urls.exceptionurls')),
     path(f'{version}/notifications/', include('notifications.urls')),
     path(f'{version}/s3files/', include('s3file.urls')),

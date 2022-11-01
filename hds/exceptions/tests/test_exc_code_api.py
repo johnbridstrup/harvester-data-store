@@ -1,30 +1,40 @@
-from ..models import AFTExceptionCode, AFTException
+from ..models import (
+    AFTExceptionCode,
+    AFTExceptionCodeManifest, 
+    AFTException
+)
 from common.tests import HDSAPITestBase
+from rest_framework import status
 
 
 class ExceptionTestBase(HDSAPITestBase):   
-    CODE = 0
-    CODES = [
-        {
-            'code': 0,
-            'name': 'AFTBaseException',
-            'msg': 'test message',
-            'team': 'aft',
-            'cycle': False
-        },
-        {
-            'code': 1,
-            'name': 'PickerBaseException',
-            'msg': 'Picker message',
-            'team': 'aft',
-            'cycle': False
-        }
-    ]
-
     def setUp(self):
         super().setUp()
         self.update_user_permissions_all(AFTExceptionCode)
         self.update_user_permissions_all(AFTException)
+        self.update_user_permissions_all(AFTExceptionCodeManifest)
+
+        self.CODE = 0
+        self.CODES = [
+            {
+                'code': 0,
+                'name': 'AFTBaseException',
+                'msg': 'test message',
+                'team': 'aft',
+                'cycle': False
+            },
+            {
+                'code': 1,
+                'name': 'PickerBaseException',
+                'msg': 'Picker message',
+                'team': 'aft',
+                'cycle': False
+            }
+        ]
+        self.MANIFEST = {
+            'version': '1.0.111',
+            'manifest': self.CODES
+        }
 
     def _send_code(self, code=None, name='TestException'):
         if not code:
@@ -86,3 +96,20 @@ class AFTExceptionCodeTest(ExceptionTestBase):
         )
         self.assertEqual(AFTExceptionCode.objects.count(), 1)
         self.assertEqual(AFTExceptionCode.objects.get().name, 'NewName')
+
+
+class AFTExceptionCodeManifestTestCase(ExceptionTestBase):
+    def _send_manifest(self, manifest=None):
+        manifest = manifest or self.MANIFEST
+        r = self.client.post(
+            f"{self.api_base_url}/exceptioncodemanifests/",
+            data=self.MANIFEST,
+            format="json",
+        )
+        return r
+        
+    def test_basic(self):
+        r = self._send_manifest()
+        
+        self.assertEqual(r.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(AFTExceptionCodeManifest.objects.count(), 1)

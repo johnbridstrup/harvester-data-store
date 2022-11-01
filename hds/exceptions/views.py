@@ -1,7 +1,20 @@
-from .models import AFTExceptionCode, AFTException
-from .serializers import AFTExceptionCodeSerializer, AFTExceptionSerializer
+from .models import (
+    AFTExceptionCode,
+    AFTExceptionCodeManifest, 
+    AFTException
+)
+from .serializers import (
+    AFTExceptionCodeSerializer,
+    AFTExceptionCodeManifestSerializer, 
+    AFTExceptionSerializer,
+)
 
 from common.viewsets import CreateModelViewSet
+
+
+class AFTExceptionCodeManifestView(CreateModelViewSet):
+    queryset = AFTExceptionCodeManifest.objects.all()
+    serializer_class = AFTExceptionCodeManifestSerializer
 
 
 class AFTExceptionCodeView(CreateModelViewSet):

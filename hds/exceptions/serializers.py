@@ -1,5 +1,12 @@
 from rest_framework import serializers
-from .models import AFTExceptionCode, AFTException
+from .models import AFTExceptionCode, AFTExceptionCodeManifest, AFTException
+
+
+class AFTExceptionCodeManifestSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AFTExceptionCodeManifest
+        fields = ('__all__')
+        read_only_fields = ('creator',)
 
 
 class AFTExceptionCodeSerializer(serializers.ModelSerializer):
@@ -7,6 +14,7 @@ class AFTExceptionCodeSerializer(serializers.ModelSerializer):
         model = AFTExceptionCode
         fields = ('__all__')
         read_only_fields = ('creator',)
+        
 
 class AFTExceptionSerializer(serializers.ModelSerializer):
     def to_internal_value(self, data):
