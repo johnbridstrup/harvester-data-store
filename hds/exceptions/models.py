@@ -4,6 +4,17 @@ from errorreport.models import ErrorReport
 
 
 DEFAULT_OPERATOR_MSG = "Please cycle the harvester"
+class AFTExceptionCodeManifest(CommonInfo):
+    """Manifest of exception codes.
+
+    This is a JSON containing the information for every AFTExceptionCode.
+    It will be generated in the aft-py-packages CD stage and send to HDS.
+    The point of this is to allow for a single source of truth regarding
+    the exception codes, and allow reverting to a previous set if there
+    is a mistake.
+    """
+    version = models.CharField(max_length=31)
+    manifest = models.JSONField()
 
 
 class AFTExceptionCode(CommonInfo):
@@ -22,6 +33,11 @@ class AFTExceptionCode(CommonInfo):
     team = models.TextField(max_length=20)
     cycle = models.BooleanField()
     operator_msg = models.CharField(max_length=255, default=DEFAULT_OPERATOR_MSG)
+    manifest = models.ForeignKey(
+        AFTExceptionCodeManifest, 
+        null=True, 
+        on_delete=models.SET_NULL,
+    )
 
     def __str__(self):
         return f"Code {self.code}: {self.name}"
