@@ -477,3 +477,12 @@ export const getHarvId = (urlString = "url", target = 1) => {
     return target;
   }
 };
+
+export const statusOptions = [
+  { label: "Success", value: "Success" },
+  { label: "Failed", value: "Failed" },
+  { label: "Pending", value: "Pending" },
+  { label: "Error", value: "Error" },
+  { label: "Failed and errors", value: "Failed and errors" },
+  { label: "Failed to send", value: "Failed to send" },
+];

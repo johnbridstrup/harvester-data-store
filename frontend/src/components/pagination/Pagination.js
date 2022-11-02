@@ -24,7 +24,10 @@ import {
   paginateRelease,
 } from "../../features/harvdeploy/harvdeploySlice";
 import { mapCurrentOffset } from "../../utils/utils";
-import { paginateJobType } from "../../features/harvjobs/harvjobSlice";
+import {
+  paginateJob,
+  paginateJobType,
+} from "../../features/harvjobs/harvjobSlice";
 
 function Pagination(props) {
   const [pageLimit, setPageLimit] = useState(10);
@@ -167,7 +170,7 @@ export const GenericPagination = (props) => {
     user: paginateUser,
     harvdeploy: props.attr ? paginateRelease : paginateVersion,
     errorreport: paginateErrorReport,
-    harvjobs: paginateJobType,
+    harvjobs: props.attr === "jobs" ? paginateJob : paginateJobType,
   };
 
   const handlePagination = async (navigation) => {

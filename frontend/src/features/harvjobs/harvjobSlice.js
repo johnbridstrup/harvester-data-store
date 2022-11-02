@@ -246,6 +246,22 @@ export const createJob = createAsyncThunk(
   }
 );
 
+export const paginateJob = createAsyncThunk(
+  "harvjobs/paginateJob",
+  async (url, thunkAPI) => {
+    try {
+      const {
+        auth: { token },
+      } = thunkAPI.getState();
+      return await harvjobService.paginateJob(url, token);
+    } catch (error) {
+      console.log(error);
+      const message = invalidateCache(error, thunkAPI.dispatch);
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 const harvjobSlice = createSlice({
   name: "harvjobs",
   initialState,
@@ -422,6 +438,20 @@ const harvjobSlice = createSlice({
       })
       .addCase(createJob.rejected, (state, action) => {
         state.adding = false;
+        state.errorMsg = action.payload;
+      })
+      .addCase(paginateJob.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(paginateJob.fulfilled, (state, action) => {
+        state.loading = false;
+        state.jobs = action.payload.results;
+        state.pagination.count = action.payload.count;
+        state.pagination.next = action.payload.next;
+        state.pagination.previous = action.payload.previous;
+      })
+      .addCase(paginateJob.rejected, (state, action) => {
+        state.loading = false;
         state.errorMsg = action.payload;
       });
   },

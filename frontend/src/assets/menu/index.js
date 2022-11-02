@@ -53,6 +53,12 @@ export const menu = [
     description: "Schedule jobs on the harvesters",
     href: "/jobscheduler",
   },
+  {
+    name: "Scheduled Jobs",
+    icon: "jobs",
+    description: "Scheduled jobs on the harvesters",
+    href: "/jobs",
+  },
 ];
 
 export const adminMenu = [

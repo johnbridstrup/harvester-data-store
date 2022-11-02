@@ -133,6 +133,10 @@ a {
   cursor: pointer;
 }
 
+.f-w-600 {
+  font-weight: 600;
+}
+
 /* ----- Hover----- */
 .tr-hover:hover {
   background-color: #f4f4f4;
