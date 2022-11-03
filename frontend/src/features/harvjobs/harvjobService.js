@@ -4,6 +4,7 @@ import { axiosService } from "../base/service";
 const JOBTYPES_URL = `${API_URL}/jobtypes/`;
 const JOBSCHEMAS_URL = `${API_URL}/jobschemas/`;
 const JOBS_URL = `${API_URL}/harvjobs/`;
+const JOBRESULTS_URL = `${API_URL}/jobresults/`;
 
 const listJobTypes = async (token, limit = 10) => {
   let response = await axiosService.get(
@@ -97,6 +98,31 @@ const createJob = async (data, token) => {
   return response;
 };
 
+const listJobResults = async (token, limit = 10) => {
+  let response = await axiosService.get(
+    `${JOBRESULTS_URL}?limit=${limit}`,
+    token
+  );
+  return response;
+};
+
+const getJobResultById = async (jobresultId, token) => {
+  let response = await axiosService.get(
+    `${JOBRESULTS_URL}${jobresultId}/`,
+    token
+  );
+  return response;
+};
+
+const queryJobResults = async (queryObj, token) => {
+  let params = new URLSearchParams(queryObj);
+  let response = await axiosService.get(
+    `${JOBRESULTS_URL}?${params.toString()}`,
+    token
+  );
+  return response;
+};
+
 const harvjobService = {
   listJobTypes,
   getJobTypeById,
@@ -112,6 +138,9 @@ const harvjobService = {
   getJobById,
   queryJobs,
   createJob,
+  listJobResults,
+  getJobResultById,
+  queryJobResults,
 };
 
 export default harvjobService;

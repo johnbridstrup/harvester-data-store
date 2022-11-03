@@ -12,6 +12,8 @@ const initialState = {
   jobschema: {},
   jobs: [],
   job: {},
+  jobresults: [],
+  jobresult: {},
   errorMsg: null,
   pagination: {
     next: null,
@@ -262,6 +264,70 @@ export const paginateJob = createAsyncThunk(
   }
 );
 
+export const listJobResults = createAsyncThunk(
+  "harvjobs/listJobResults",
+  async (limit, thunkAPI) => {
+    try {
+      const {
+        auth: { token },
+      } = thunkAPI.getState();
+      return await harvjobService.listJobResults(token, limit);
+    } catch (error) {
+      console.log(error);
+      const message = invalidateCache(error, thunkAPI.dispatch);
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const getJobResultById = createAsyncThunk(
+  "harvjobs/getJobResultById",
+  async (id, thunkAPI) => {
+    try {
+      const {
+        auth: { token },
+      } = thunkAPI.getState();
+      return await harvjobService.getJobResultById(id, token);
+    } catch (error) {
+      console.log(error);
+      const message = invalidateCache(error, thunkAPI.dispatch);
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const queryJobResults = createAsyncThunk(
+  "harvjobs/queryJobResults",
+  async (data, thunkAPI) => {
+    try {
+      const {
+        auth: { token },
+      } = thunkAPI.getState();
+      return await harvjobService.queryJobResults(data, token);
+    } catch (error) {
+      console.log(error);
+      const message = invalidateCache(error, thunkAPI.dispatch);
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const paginateJobResults = createAsyncThunk(
+  "harvjobs/paginateJobResults",
+  async (url, thunkAPI) => {
+    try {
+      const {
+        auth: { token },
+      } = thunkAPI.getState();
+      return await harvjobService.paginateJob(url, token);
+    } catch (error) {
+      console.log(error);
+      const message = invalidateCache(error, thunkAPI.dispatch);
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 const harvjobSlice = createSlice({
   name: "harvjobs",
   initialState,
@@ -451,6 +517,59 @@ const harvjobSlice = createSlice({
         state.pagination.previous = action.payload.previous;
       })
       .addCase(paginateJob.rejected, (state, action) => {
+        state.loading = false;
+        state.errorMsg = action.payload;
+      })
+      .addCase(listJobResults.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(listJobResults.fulfilled, (state, action) => {
+        state.loading = false;
+        state.jobresults = action.payload.results;
+        state.pagination.count = action.payload.count;
+        state.pagination.next = action.payload.next;
+        state.pagination.previous = action.payload.previous;
+      })
+      .addCase(listJobResults.rejected, (state, action) => {
+        state.loading = false;
+        state.errorMsg = action.payload;
+      })
+      .addCase(getJobResultById.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getJobResultById.fulfilled, (state, action) => {
+        state.loading = false;
+        state.jobresult = action.payload;
+      })
+      .addCase(getJobResultById.rejected, (state, action) => {
+        state.loading = false;
+        state.errorMsg = action.payload;
+      })
+      .addCase(queryJobResults.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(queryJobResults.fulfilled, (state, action) => {
+        state.loading = false;
+        state.jobresults = action.payload.results;
+        state.pagination.count = action.payload.count;
+        state.pagination.next = action.payload.next;
+        state.pagination.previous = action.payload.previous;
+      })
+      .addCase(queryJobResults.rejected, (state, action) => {
+        state.loading = false;
+        state.errorMsg = action.payload;
+      })
+      .addCase(paginateJobResults.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(paginateJobResults.fulfilled, (state, action) => {
+        state.loading = false;
+        state.jobresults = action.payload.results;
+        state.pagination.count = action.payload.count;
+        state.pagination.next = action.payload.next;
+        state.pagination.previous = action.payload.previous;
+      })
+      .addCase(paginateJobResults.rejected, (state, action) => {
         state.loading = false;
         state.errorMsg = action.payload;
       });

@@ -26,6 +26,7 @@ import {
 import { mapCurrentOffset } from "../../utils/utils";
 import {
   paginateJob,
+  paginateJobResults,
   paginateJobType,
 } from "../../features/harvjobs/harvjobSlice";
 
@@ -170,7 +171,12 @@ export const GenericPagination = (props) => {
     user: paginateUser,
     harvdeploy: props.attr ? paginateRelease : paginateVersion,
     errorreport: paginateErrorReport,
-    harvjobs: props.attr === "jobs" ? paginateJob : paginateJobType,
+    harvjobs:
+      props.attr === "jobs"
+        ? paginateJob
+        : props.attr === "jobresults"
+        ? paginateJobResults
+        : paginateJobType,
   };
 
   const handlePagination = async (navigation) => {

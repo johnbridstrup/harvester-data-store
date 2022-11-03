@@ -192,3 +192,9 @@ export const SidePane = styled.div`
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
   transition: 0.5s;
 `;
+
+export const Accordion = styled.div`
+  position: relative;
+  height: ${(props) => (props.obj.id === props.host.id ? "200px" : "0")};
+  transition: 0.5s;
+`;
