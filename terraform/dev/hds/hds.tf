@@ -5,13 +5,13 @@ locals {
   file_queue_name          = "hds-file-queue"
   service_port             = "8000"
   service_name             = "hds"
-  service_docker_image     = "082346306812.dkr.ecr.us-west-1.amazonaws.com/hds:hds-staging-ed84d1b8"
+  service_docker_image     = "082346306812.dkr.ecr.us-west-1.amazonaws.com/hds:hds-staging-60c5be32"
   healthcheck_path         = "/api/v1/healthcheck/"
   errorreport_queue_name   = "errorreport-queue"
   sqs_client_metrics_ports = [9104, 9111]
   hds_superuser_pwd_id     = "hds_superuser_pwd"
   enable_prometheus_scrape = true
-  service_container_memory = 1024
+  service_container_memory = 2048
   service_container_cpu    = 512
 }
 

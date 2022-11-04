@@ -11,7 +11,7 @@ locals {
   errorreport_queue_name   = "errorreport-queue"
   enable_prometheus_scrape = true
   sqs_client_metrics_ports  = [9104, 9111]
-  service_container_memory = 1024
+  service_container_memory = 2048
   service_container_cpu    = 512
 }
 
