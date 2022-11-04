@@ -33,7 +33,7 @@ function JobsTable(props) {
                 </Link>
               </td>
               <td>
-                <Link to={`/jobs/${job.id}/history`}>
+                <Link to={`/jobstatus/${job.id}`}>
                   <i className="las la-eye"></i>
                 </Link>
               </td>
