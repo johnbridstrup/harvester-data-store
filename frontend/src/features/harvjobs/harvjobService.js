@@ -123,6 +123,11 @@ const queryJobResults = async (queryObj, token) => {
   return response;
 };
 
+const listJobStatus = async (jobId, token) => {
+  let response = await axiosService.get(`${JOBS_URL}${jobId}/history/`, token);
+  return response;
+};
+
 const harvjobService = {
   listJobTypes,
   getJobTypeById,
@@ -141,6 +146,7 @@ const harvjobService = {
   listJobResults,
   getJobResultById,
   queryJobResults,
+  listJobStatus,
 };
 
 export default harvjobService;

@@ -14,6 +14,7 @@ const initialState = {
   job: {},
   jobresults: [],
   jobresult: {},
+  jobstatuses: [],
   errorMsg: null,
   pagination: {
     next: null,
@@ -328,6 +329,38 @@ export const paginateJobResults = createAsyncThunk(
   }
 );
 
+export const listJobStatus = createAsyncThunk(
+  "harvjobs/listJobStatus",
+  async (jobId, thunkAPI) => {
+    try {
+      const {
+        auth: { token },
+      } = thunkAPI.getState();
+      return await harvjobService.listJobStatus(jobId, token);
+    } catch (error) {
+      console.log(error);
+      const message = invalidateCache(error, thunkAPI.dispatch);
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const paginateJobStatus = createAsyncThunk(
+  "harvjobs/paginateJobStatus",
+  async (url, thunkAPI) => {
+    try {
+      const {
+        auth: { token },
+      } = thunkAPI.getState();
+      return await harvjobService.paginateJob(url, token);
+    } catch (error) {
+      console.log(error);
+      const message = invalidateCache(error, thunkAPI.dispatch);
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 const harvjobSlice = createSlice({
   name: "harvjobs",
   initialState,
@@ -570,6 +603,34 @@ const harvjobSlice = createSlice({
         state.pagination.previous = action.payload.previous;
       })
       .addCase(paginateJobResults.rejected, (state, action) => {
+        state.loading = false;
+        state.errorMsg = action.payload;
+      })
+      .addCase(listJobStatus.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(listJobStatus.fulfilled, (state, action) => {
+        state.loading = false;
+        state.jobstatuses = action.payload.results;
+        state.pagination.count = action.payload.count;
+        state.pagination.next = action.payload.next;
+        state.pagination.previous = action.payload.previous;
+      })
+      .addCase(listJobStatus.rejected, (state, action) => {
+        state.loading = false;
+        state.errorMsg = action.payload;
+      })
+      .addCase(paginateJobStatus.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(paginateJobStatus.fulfilled, (state, action) => {
+        state.loading = false;
+        state.jobstatuses = action.payload.results;
+        state.pagination.count = action.payload.count;
+        state.pagination.next = action.payload.next;
+        state.pagination.previous = action.payload.previous;
+      })
+      .addCase(paginateJobStatus.rejected, (state, action) => {
         state.loading = false;
         state.errorMsg = action.payload;
       });
