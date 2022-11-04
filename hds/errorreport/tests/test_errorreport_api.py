@@ -1,5 +1,5 @@
 """ Test ErrorReport APIs """
-from common.async_metrics import ASYNC_ERROR_COUNTER
+from common.async_metrics import ASYNC_ERROR_COUNTER, TOTAL_ERROR_COUNTER
 from common.metrics import ERROR_COUNTER
 from common.models import Tags
 from common.tests import HDSAPITestBase, create_user
@@ -80,6 +80,11 @@ class ErrorReportAPITest(HDSAPITestBase):
         response = self.client.post(f'{self.api_base_url}/errorreports/', data, format='json')
         self.assertEqual(response.status_code, 400)
         self.assertEqual(ErrorReport.objects.count(), 0)
+
+        # Check counter increments
+        expected_error = Harvester.DoesNotExist.__name__
+        total_counter = TOTAL_ERROR_COUNTER.labels(expected_error, 'errorreport')
+        self.assertEqual(total_counter._value.get(), 1)
 
     def test_update_errorreport(self):
         """ update error report and assert it exists """

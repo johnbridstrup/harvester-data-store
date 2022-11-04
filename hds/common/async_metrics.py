@@ -22,3 +22,10 @@ ASYNC_ERROR_COUNTER = Counter(
     labelnames=['task', 'exception', 'desc'],
     registry=prometheus_get_registry()
 )
+
+TOTAL_ERROR_COUNTER = Counter(
+    "hds_total_error", 
+    "Counts all errors that pass the exception handler",
+    labelnames=['exception', 'basename'],
+    registry=prometheus_get_registry()
+)

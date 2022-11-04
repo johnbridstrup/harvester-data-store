@@ -1,4 +1,5 @@
 """ utilities and helper functions """
+from .async_metrics import TOTAL_ERROR_COUNTER
 from rest_framework.response import Response
 from rest_framework.views import exception_handler
 
@@ -40,6 +41,9 @@ def custom_exception_handler(exc, context):
         basename = context['view'].basename
     except AttributeError:
         basename = context['view']
+    
+    # Increment error counter
+    TOTAL_ERROR_COUNTER.labels(exc.__class__.__name__, basename).inc()
 
     # Log exception information
     logging.error(
