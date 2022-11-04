@@ -6,7 +6,11 @@ import DetailJob from "../../../../components/harvjobs/jobs/DetailJob";
 import Header from "../../../../components/layout/header";
 import MainLayout from "../../../../components/layout/main";
 import { LoaderDiv } from "../../../../components/styled";
-import { getJobById } from "../../../../features/harvjobs/harvjobSlice";
+import {
+  getJobById,
+  listJobStatus,
+  queryJobResults,
+} from "../../../../features/harvjobs/harvjobSlice";
 import { Loader } from "../../../../utils/utils";
 
 function JobDetailView(props) {
@@ -16,7 +20,13 @@ function JobDetailView(props) {
 
   useEffect(() => {
     (async () => {
-      await dispatch(getJobById(jobId));
+      const res = await dispatch(getJobById(jobId));
+      await Promise.all([
+        dispatch(
+          queryJobResults({ job__event__UUID: res.payload?.event?.UUID })
+        ),
+        dispatch(listJobStatus(jobId)),
+      ]);
     })();
   }, [dispatch, jobId]);
 
