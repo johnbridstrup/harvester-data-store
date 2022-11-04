@@ -76,6 +76,12 @@ data "aws_security_group" "pritunl_sg" {
   }
 }
 
+data "aws_security_group" "jobserver_sg" {
+  tags = {
+    Name = "iot-job-server-sg"
+  }
+}
+
 data "aws_security_group" "vm_metrics_security_group" {
   filter {
     name   = "tag:Name"

@@ -3,6 +3,7 @@ locals {
   dns_name                 = "hdsapi.cloud.advanced.farm"
   frontend_url             = "https://hds.cloud.advanced.farm"
   file_queue_name          = "hds-file-queue"
+  jobserver_port = "8000"
   service_port             = "8000"
   service_name             = "hds"
   service_docker_image     = "838860823423.dkr.ecr.us-west-1.amazonaws.com/hds:hds-staging-ce3109b8"
@@ -146,4 +147,13 @@ resource "aws_security_group_rule" "hds_redis_rule" {
   protocol                 = "tcp"
   source_security_group_id = module.hds.service_security_group_id
   security_group_id        = data.aws_security_group.redis_sg.id
+}
+
+resource "aws_security_group_rule" "hds_jobserver_rule" {
+  type                     = "ingress"
+  from_port                = local.jobserver_port
+  to_port                  = local.jobserver_port
+  protocol                 = "tcp"
+  source_security_group_id = module.hds.service_security_group_id
+  security_group_id        = data.aws_security_group.jobserver_sg.id
 }
