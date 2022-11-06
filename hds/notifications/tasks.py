@@ -2,7 +2,7 @@ from celery import shared_task
 from collections import defaultdict
 
 from .models import Notification
-from .slack import post_to_slack
+from .slack import post_to_slack, Emojis
 from django.apps import apps
 from django.core.exceptions import FieldError
 from common.async_metrics import ASYNC_ERROR_COUNTER
@@ -47,12 +47,22 @@ def notify_operator_task(report_id):
     for exc in exceptions:
         if exc["handled"]:
             exc["code__operator_msg"] = "Handled error. Harvester will continue picking."
-            robot = exc["robot"]
+            unit = exc["robot"]
+            emoji = Emojis.GREENCHECK.value
         elif "traychg" in exc['info']:
-            robot = exc["info"].split("traychgunit.")[-1][0]
+            unit = exc["info"].split("traychgunit.")[-1][0]
+            emoji = f"{Emojis.REDX.value} {Emojis.TRAY.value}"
         else:
-            robot = exc["robot"]
-        msgs[exc["code__operator_msg"]].add(str(robot))
+            unit = exc["robot"]
+            emoji = Emojis.REDX.value
+        
+        if int(unit) == 0:
+            unit = "master"
+        else:
+            unit = f"r{unit}"
+        
+        msg = f"{exc['code__operator_msg']} {emoji}"
+        msgs[msg].add(unit)
 
     if len(msgs) > 1:
         # Our codes inherit properties of their base exceptions.
@@ -69,8 +79,8 @@ def notify_operator_task(report_id):
             "text": ":warning: *{}* ERROR! :warning:".format(harv_inst.name),
         }]
     }]
-    for msg, robots in msgs.items():
-        text = f"Robot(s) {', '.join(robots)}: {msg}"
+    for msg, units in msgs.items():
+        text = f"Unit(s): {', '.join(units)} -> {msg}"
         content_dict = {
             "type": "section",
             "text": {

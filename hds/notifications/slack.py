@@ -3,9 +3,15 @@ from slack_sdk.errors import SlackApiError
 from common.async_metrics import ASYNC_ERROR_COUNTER
 import os
 from collections.abc import Mapping
+from enum import Enum
 
 
 TOKEN = os.environ.get("SLACK_TOKEN")
+
+class Emojis(Enum):
+    REDX = ":red_cross:"
+    GREENCHECK = ":green_check_mark:"
+    TRAY = ":outbox_tray:"
 
 class SlackError(Exception):
     # Unfortunately SlackApiErrors can't be serialized to JSON, to celery complains heavily
