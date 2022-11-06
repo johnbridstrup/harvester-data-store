@@ -40,12 +40,15 @@ def notify_operator_task(report_id):
     ErrorReport = apps.get_model('errorreport', 'errorreport')
     report_inst = ErrorReport.objects.get(id=report_id)
     harv_inst = report_inst.harvester
-    exceptions = report_inst.exceptions.values("robot", "code__operator_msg", "info").distinct()
+    exceptions = report_inst.exceptions.values("robot", "code__operator_msg", "info", "handled").distinct()
 
     msgs = defaultdict(set)
     
     for exc in exceptions:
-        if "traychg" in exc['info']:
+        if exc["handled"]:
+            exc["code__operator_msg"] = "Handled error. Harvester will continue picking."
+            robot = exc["robot"]
+        elif "traychg" in exc['info']:
             robot = exc["info"].split("traychgunit.")[-1][0]
         else:
             robot = exc["robot"]
