@@ -236,7 +236,7 @@ export const transformFruitOptions = (fruits = [], includeID = false) => {
 
 export const transformCodeOptions = (codes = []) => {
   return codes.map((code, index) => {
-    return { value: code.code, label: code.code };
+    return { value: code.code, label: `${code.code}: ${code.name}` };
   });
 };
 
@@ -486,3 +486,13 @@ export const statusOptions = [
   { label: "Failed and errors", value: "Failed and errors" },
   { label: "Failed to send", value: "Failed to send" },
 ];
+
+export const appendCodeName = (codes = [], exceptioncodes = []) => {
+  let arr = [];
+  exceptioncodes.forEach((x) => {
+    if (codes.includes(String(x.code))) {
+      arr.push({ value: x.code, label: `${x.code}: ${x.name}` });
+    }
+  });
+  return arr;
+};

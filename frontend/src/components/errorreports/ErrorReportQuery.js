@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import {
+  appendCodeName,
   copiedUrl,
   extractDateFromString,
   paramsToObject,
@@ -91,10 +92,9 @@ function ErrorReportQuery(props) {
       setSelectedFruit((current) => fruits);
     }
     if (paramsObj.codes) {
-      let codes = paramsObj.codes.split(",").map((code, index) => {
-        return { value: code, label: code };
-      });
-      setSelectedCode((current) => codes);
+      let codes = paramsObj.codes.split(",");
+      let codenames = appendCodeName(codes, exceptioncodes);
+      setSelectedCode((current) => codenames);
     }
     if (paramsObj.traceback) {
       setFieldData((current) => {
@@ -136,7 +136,7 @@ function ErrorReportQuery(props) {
         return { ...current, handled: paramsObj.handled };
       });
     }
-  }, [search]);
+  }, [search, exceptioncodes]);
 
   const handleHarvestSelect = (newValue, actionMeta) => {
     setSelectedHarvId((current) => newValue);
