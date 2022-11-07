@@ -13,7 +13,7 @@ class DTimeFormatter:
     @classmethod
     def convert_to_datetime(cls, dt_str, tz_str):
         tz = pytz.timezone(tz_str)
-        dt = tz.localize(datetime.strptime(dt_str, '%Y%m%d%H%M%S'))
+        dt = tz.localize(datetime.strptime(dt_str, '%Y%m%dT%H%M%S.%f'))
 
         return dt
 
