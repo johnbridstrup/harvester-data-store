@@ -1,7 +1,6 @@
 from django.db import models
 from common.models import CommonInfo
 from event.models import EventModelMixin
-
 import logging
 
 
@@ -16,7 +15,8 @@ class S3File(EventModelMixin, CommonInfo):
     def generate_download_link(self):
         # Only import when this function is called.
         # This avoids a lot of error output locally without credentials.
-        from .s3 import s3_client, ClientError
+        from .s3 import s3_client
+        from botocore.exceptions import ClientError
         params = {
             "Bucket": self.bucket,
             "Key": self.key,
