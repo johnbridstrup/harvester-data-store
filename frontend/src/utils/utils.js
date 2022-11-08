@@ -109,7 +109,35 @@ const getDateValues = (dateString) => {
 };
 
 export const extractDateFromString = (dateString) => {
-  if (typeof dateString === "string" && dateString.length === 14) {
+  if (
+    typeof dateString === "string" &&
+    dateString.includes("T") &&
+    dateString.includes(".")
+  ) {
+    let splittedArr = dateString.split(".");
+    let dateStr = splittedArr[0].replace("T", "");
+    let ms = splittedArr[1];
+    if (dateStr.length === 14) {
+      let { year, month, day, hours, minutes, second } = getDateValues(dateStr);
+      return new Date(year, month, day, hours, minutes, second, Number(ms));
+    } else {
+      let paddedDateString = dateStr.padEnd(14, "0");
+      let { year, month, day, hours, minutes, second } =
+        getDateValues(paddedDateString);
+      return new Date(year, month, day, hours, minutes, second, Number(ms));
+    }
+  } else if (typeof dateString === "string" && dateString.includes("T")) {
+    let dateStr = dateString.replace("T", "");
+    if (dateStr.length === 14) {
+      let { year, month, day, hours, minutes, second } = getDateValues(dateStr);
+      return new Date(year, month, day, hours, minutes, second);
+    } else {
+      let paddedDateString = dateStr.padEnd(14, "0");
+      let { year, month, day, hours, minutes, second } =
+        getDateValues(paddedDateString);
+      return new Date(year, month, day, hours, minutes, second);
+    }
+  } else if (typeof dateString === "string" && dateString.length === 14) {
     let { year, month, day, hours, minutes, second } =
       getDateValues(dateString);
     return new Date(year, month, day, hours, minutes, second);

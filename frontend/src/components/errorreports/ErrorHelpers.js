@@ -453,7 +453,6 @@ export const FormQuery = (props) => {
               value={fieldData.start_time}
               onChange={handleFieldChange}
               placeholder="YYYYMMDDHHmmSS"
-              maxLength={14}
             />
           </div>
         </div>
@@ -466,7 +465,6 @@ export const FormQuery = (props) => {
               value={fieldData.end_time}
               onChange={handleFieldChange}
               placeholder="YYYYMMDDHHmmSS"
-              maxLength={14}
             />
           </div>
         </div>
