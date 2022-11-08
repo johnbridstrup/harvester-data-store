@@ -3,6 +3,7 @@ from common.async_metrics import ASYNC_ERROR_COUNTER, TOTAL_ERROR_COUNTER
 from common.metrics import ERROR_COUNTER
 from common.models import Tags
 from common.tests import HDSAPITestBase, create_user
+from common.reports import DTimeFormatter
 from harvester.models import Harvester
 from event.models import Event
 from exceptions.models import AFTException
@@ -13,6 +14,7 @@ from rest_framework import serializers, status
 from rest_framework.authtoken.models import Token
 from taggit.models import Tag
 from unittest.mock import patch
+from urllib.parse import urlencode
 import datetime
 import json
 import os
@@ -24,7 +26,7 @@ class ErrorReportAPITest(HDSAPITestBase):
         self.update_user_permissions_all(ErrorReport)
         self.test_objects = self._setup_basic()
 
-        report_json_path = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'report.json') 
+        report_json_path = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'report.json')
         with open(report_json_path) as f:
             self.data = json.load(f)
 
@@ -169,7 +171,7 @@ class ErrorReportAPITest(HDSAPITestBase):
         self._post_error_report()
         report = ErrorReport.objects.get()
         errs = ErrorReportSerializer._extract_exception_data(report)
-        
+
         errdict = self.data['data']['sysmon_report']['sysmon.0']['errors']
         serv_str = list(errdict.keys())[0]
         service, node = self._extract_service_node(serv_str)
@@ -214,7 +216,7 @@ class ErrorReportAPITest(HDSAPITestBase):
             self.assertEqual(rdata['message'], f'Pareto generated: {name}')
             self.assertEqual(rdata['data'][0]['count'], count)
             self.assertEqual(rdata['data'][0][name], name_val)
-        
+
         for group, name, val in zip(pareto_groups, pareto_names, pareto_name_vals):
             check_pareto(group, name, val, num)
 
@@ -225,9 +227,9 @@ class ErrorReportAPITest(HDSAPITestBase):
             "recipients": [1]
         }
         resp = self.client.post(
-            f'{self.api_base_url}/errorreports/createnotification/{params}', 
-            data, 
-            format='json', 
+            f'{self.api_base_url}/errorreports/createnotification/{params}',
+            data,
+            format='json',
             HTTP_ACCEPT='application/json'
         )
         self.assertEqual(resp.status_code, 200)
@@ -256,8 +258,8 @@ class ErrorReportAPITest(HDSAPITestBase):
         self.assertEqual(data['data']['serial_number'], '011')
 
         resp = self.client.post(
-            f'{self.api_base_url}/errorreports/', 
-            data, 
+            f'{self.api_base_url}/errorreports/',
+            data,
             format='json'
         )
 
@@ -270,8 +272,8 @@ class ErrorReportAPITest(HDSAPITestBase):
     def test_get_emu_get_non_emu(self):
         # Create real harv report
         self.client.post(
-            f'{self.api_base_url}/errorreports/', 
-            self.data, 
+            f'{self.api_base_url}/errorreports/',
+            self.data,
             format='json'
         )
 
@@ -289,8 +291,8 @@ class ErrorReportAPITest(HDSAPITestBase):
         data['data']['sysmon_report']['fruit'] = self.test_objects['fruit'].name
         data['data']['sysmon_report']['is_emulator'] = True
         self.client.post(
-            f'{self.api_base_url}/errorreports/', 
-            data, 
+            f'{self.api_base_url}/errorreports/',
+            data,
             format='json'
         )
 
@@ -326,11 +328,11 @@ class ErrorReportAPITest(HDSAPITestBase):
         counter = ASYNC_ERROR_COUNTER.labels("_extract_exception_data", expected_error, FAILED_SPLIT_MSG)
 
         r = self.client.post(
-            f'{self.api_base_url}/errorreports/', 
-            data, 
+            f'{self.api_base_url}/errorreports/',
+            data,
             format='json'
         )
-        
+
         self.assertEqual(r.status_code, status.HTTP_201_CREATED)
         self.assertEqual(ErrorReport.objects.count(),1)
         self.assertEqual(AFTException.objects.count(), 0)
@@ -352,11 +354,11 @@ class ErrorReportAPITest(HDSAPITestBase):
 
         # Assert counter continues increasing
         self.client.post(
-            f'{self.api_base_url}/errorreports/', 
-            data, 
+            f'{self.api_base_url}/errorreports/',
+            data,
             format='json'
         )
-        
+
         self.assertEqual(counter._value.get(), 2)
 
     ## Schema validation tests
@@ -375,21 +377,21 @@ class ErrorReportAPITest(HDSAPITestBase):
         counter = ERROR_COUNTER.labels(exc, msg, raised_by)
         self.assertEqual(counter._value.get(), 1)
         mock_logger.exception.assert_called_with("'sysmon_report' is a required property")
-    
+
     def test_sysmon_entry_key_invalid(self):
         # Note: This also tests any invalid key, including ones without
         # info_ prepended.
         data = self.data.copy()
         data['data']['sysmon_report']['sysmon_0'] = {}
         resp = self.client.post(
-            f'{self.api_base_url}/errorreports/', 
-            data, 
+            f'{self.api_base_url}/errorreports/',
+            data,
             format='json'
         )
 
         # This won't fail to create, we can actually handle sysmon_0 now
         self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
-        
+
         resp_data = resp.json()['data']
         self.assertIn("tags", resp_data)
         self.assertIn(Tags.INVALIDSCHEMA.value, resp_data['tags'])
@@ -397,8 +399,8 @@ class ErrorReportAPITest(HDSAPITestBase):
         # It will however fail if the timestamp isn't there
         del data['timestamp']
         resp = self.client.post(
-            f'{self.api_base_url}/errorreports/', 
-            data, 
+            f'{self.api_base_url}/errorreports/',
+            data,
             format='json'
         )
 
@@ -411,8 +413,8 @@ class ErrorReportAPITest(HDSAPITestBase):
         data['data']['sysmon_report']['info_obj'] = {"new": "info"}
 
         resp = self.client.post(
-            f'{self.api_base_url}/errorreports/', 
-            data, 
+            f'{self.api_base_url}/errorreports/',
+            data,
             format='json'
         )
         self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
@@ -433,3 +435,165 @@ class ErrorReportAPITest(HDSAPITestBase):
             data,
             ErrorReportSerializer.get_schema()
         )
+
+    def test_query_errorreport(self):
+        # test the available query strings for errorreport
+        res = self.client.post(
+            f'{self.api_base_url}/errorreports/',
+            self.data,
+            format='json'
+        )
+
+        self.assertEqual(res.status_code, status.HTTP_201_CREATED)
+        res_data = res.json()["data"]
+
+        # query harv_ids associated with report
+        harv_id = res_data['harvester']['harv_id']
+        harv_dict = {
+            'harv_ids': ','.join(map(str, [harv_id]))
+        }
+        resp = self.client.get(
+            f'{self.api_base_url}/errorreports/?{urlencode(harv_dict)}'
+        )
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        self.assertEqual(
+            resp.json()["data"]["results"][0]["harvester"]["harv_id"],
+            harv_id
+        )
+
+        # query harv_ids not associated with report
+        harvester = self.create_harvester_object(**{
+            'harv_id': 20,
+            'fruit': self.test_objects["fruit"],
+            'location': self.test_objects["location"],
+            'name': 'Harvester 1',
+            'creator': self.user
+        })
+        harv_dict.update({
+            'harv_ids': ','.join(map(str, [harvester.harv_id]))
+        })
+        resp = self.client.get(
+            f'{self.api_base_url}/errorreports/?{urlencode(harv_dict)}'
+        )
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(resp.json()["data"]["results"]), 0)
+
+        # query ranches associated with report
+        ranch = res_data['location']['ranch']
+        ranch_dict = {
+            'locations': ','.join(map(str, [ranch]))
+        }
+        resp = self.client.get(
+            f'{self.api_base_url}/errorreports/?{urlencode(ranch_dict)}'
+        )
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        self.assertEqual(
+            resp.json()["data"]["results"][0]["location"]["ranch"],
+            ranch
+        )
+
+        # query ranches not associated with report
+        location = self.create_location_object(**{
+            "distributor": self.test_objects["distributor"],
+            "ranch": "Ranch X",
+            "country": "US",
+            "region": "California",
+            'creator': self.user
+        })
+        ranch_dict.update({
+            'locations': ','.join(map(str, [location.ranch]))
+        })
+        resp = self.client.get(
+            f'{self.api_base_url}/errorreports/?{urlencode(harv_dict)}'
+        )
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(resp.json()["data"]["results"]), 0)
+
+        # query start_time
+        start_dict = {'start_time': DTimeFormatter.localize_to_tz(
+            self.data["timestamp"]
+        )}
+        resp = self.client.get(
+            f'{self.api_base_url}/errorreports/?{urlencode(start_dict)}'
+        )
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(resp.json()["data"]["results"]), 1)
+
+        # query start_time add 1
+        start_dict = {'start_time': DTimeFormatter.localize_to_tz(
+            self.data["timestamp"], inc=True
+        )}
+        resp = self.client.get(
+            f'{self.api_base_url}/errorreports/?{urlencode(start_dict)}'
+        )
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(resp.json()["data"]["results"]), 0)
+
+        # query end_time
+        end_dict = {'end_time': DTimeFormatter.localize_to_tz(
+            self.data["timestamp"]
+        )}
+        resp = self.client.get(
+            f'{self.api_base_url}/errorreports/?{urlencode(end_dict)}'
+        )
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(resp.json()["data"]["results"]), 1)
+
+        # query end_time subtract 1
+        end_dict = {'end_time': DTimeFormatter.localize_to_tz(
+            self.data["timestamp"], dec=True
+        )}
+        resp = self.client.get(
+            f'{self.api_base_url}/errorreports/?{urlencode(end_dict)}'
+        )
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(resp.json()["data"]["results"]), 0)
+
+        # query fruits associated with report
+        fruit = self.test_objects['fruit'].name
+        fruit_dict = {
+            'fruits': ','.join(map(str, [fruit]))
+        }
+        resp = self.client.get(
+            f'{self.api_base_url}/errorreports/?{urlencode(fruit_dict)}'
+        )
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        self.assertEqual(
+            resp.json()["data"]["results"][0]["harvester"]["fruit"]["name"],
+            fruit
+        )
+
+        # query fruits not associated with report
+        fruit = self.create_fruit_object('apple')
+        fruit_dict.update({
+            'fruits': ','.join(map(str, [fruit.name]))
+        })
+        resp = self.client.get(
+            f'{self.api_base_url}/errorreports/?{urlencode(fruit_dict)}'
+        )
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(resp.json()["data"]["results"]), 0)
+
+        # query exception codes
+        code = self.test_objects['code'].code
+        codes_dict = {
+            'codes': ','.join(map(str, [code]))
+        }
+        resp = self.client.get(
+            f'{self.api_base_url}/errorreports/?{urlencode(codes_dict)}'
+        )
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        self.assertEqual(
+            resp.json()["data"]["results"][0]["exceptions"][0]["code"]["code"],
+            code
+        )
+
+        # query traceback
+        trace_dict = {
+            'traceback': "traceback"
+        }
+        resp = self.client.get(
+            f'{self.api_base_url}/errorreports/?{urlencode(trace_dict)}'
+        )
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(resp.json()["data"]["results"]), 0)
