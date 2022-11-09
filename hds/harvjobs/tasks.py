@@ -3,6 +3,7 @@ import logging, json
 from django.contrib.auth.models import User
 
 from .models import Job, JobHostResult, JobResults
+from common.async_metrics import ASYNC_ERROR_COUNTER
 from common.serializers.reportserializer import ReportSerializerBase
 from common.utils import build_frontend_url
 from harvester.models import Harvester
@@ -24,6 +25,7 @@ FAILED_TO_SEND_FMT = (
     "*Job Failed to send*\n"
     "\tHARVESTER: {harv}\n"
     "\tUUID: {UUID}\n"
+    "\tEXCEPTION: {exc}\n"
     "\tURL: {url}\n"
 )
 
@@ -120,17 +122,30 @@ def schedule_job(job_id, harv_pk, user_pk):
     )
     session = requests.session()
     session.mount("http://", HTTPAdapter(max_retries=retry))
-    r = session.post("/".join([JOB_SERVER_ADDRESS, "job"]), json=request_payload, timeout=5, verify=True)
 
     try:
+        r = session.post("/".join([JOB_SERVER_ADDRESS, "job"]), json=request_payload, timeout=5, verify=True)
         r.raise_for_status()
-    except requests.exceptions.HTTPError as err:
-        logging.error(err.response.text)
+        return f"Job {job.event.UUID} sent to server."
+
+    except Exception as err:
+        ASYNC_ERROR_COUNTER.labels(
+            "schedule_job",
+            err.__class__.__name__,
+            "Failed to schedule job",
+        )
         job.jobstatus = Job.StatusChoices.UNSENT
         job.save()
         url = build_frontend_url("jobs", _id=job_id)
-        msg = FAILED_TO_SEND_FMT.format(harv=harv.name, UUID=job.event.UUID, url=url)
+        msg = FAILED_TO_SEND_FMT.format(
+            harv=harv.name, 
+            UUID=job.event.UUID,
+            exc=err.__class__.__name__, 
+            url=url,
+        )
 
         if job.creator.profile.slack_id is not None:
             msg += f"<@{job.creator.profile.slack_id}>"
         post_to_slack(msg, channel=JOB_SLACK_CHANNEL)
+        logging.exception("Failed to schedule job.")
+        return f"Job {job.event.UUID} failed to send"
