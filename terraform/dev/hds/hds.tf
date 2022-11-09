@@ -5,7 +5,7 @@ locals {
   file_queue_name          = "hds-file-queue"
   service_port             = "8000"
   service_name             = "hds"
-  service_docker_image     = "082346306812.dkr.ecr.us-west-1.amazonaws.com/hds:hds-staging-60c5be32"
+  service_docker_image     = "082346306812.dkr.ecr.us-west-1.amazonaws.com/hds:hds-staging-8bc57b1f"
   healthcheck_path         = "/api/v1/healthcheck/"
   errorreport_queue_name   = "errorreport-queue"
   sqs_client_metrics_ports = [9104, 9111]
