@@ -53,6 +53,7 @@ class JobResultApiTestCase(HarvJobApiTestBase):
         self.assertEqual(slack.call_count, 1)
 
         expect_msg = JOB_STATUS_MSG_FMT.format(
+            harv=self.test_objects["harvester"].name,
             result=Job.StatusChoices.SUCCESS,
             UUID=UUID,
             url=build_frontend_url("jobs", 1)

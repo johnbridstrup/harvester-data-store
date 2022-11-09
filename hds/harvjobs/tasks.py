@@ -14,13 +14,15 @@ from requests.adapters import Retry, HTTPAdapter
 
 JOB_STATUS_MSG_FMT = (
     "*Job Complete*\n"
-    "\tRESULT: {result}"
+    "\tHARVESTER: {harv}\n"
+    "\tRESULT: {result}\n"
     "\tUUID: {UUID}\n"
     "\tURL: {url}\n"
 )
 
 FAILED_TO_SEND_FMT = (
     "*Job Failed to send*\n"
+    "\tHARVESTER: {harv}\n"
     "\tUUID: {UUID}\n"
     "\tURL: {url}\n"
 )
@@ -37,6 +39,7 @@ MAX_RETRIES = 4
 @shared_task
 def job_status_update(UUID, results, jobresult_pk, user_pk, url):
     job = Job.objects.get(event__UUID=UUID)
+    harv = Harvester.objects.get(id=job.target.id)
     jobresults = JobResults.objects.get(id=jobresult_pk)
     user = User.objects.get(id=user_pk)
     status = Job.StatusChoices.SUCCESS
@@ -73,6 +76,7 @@ def job_status_update(UUID, results, jobresult_pk, user_pk, url):
     job.save()
 
     msg = JOB_STATUS_MSG_FMT.format(
+        harv=harv.name,
         result=status,
         UUID=UUID,
         url=url,
@@ -125,7 +129,7 @@ def schedule_job(job_id, harv_pk, user_pk):
         job.jobstatus = Job.StatusChoices.UNSENT
         job.save()
         url = build_frontend_url("jobs", _id=job_id)
-        msg = FAILED_TO_SEND_FMT.format(UUID=job.event.UUID, url=url)
+        msg = FAILED_TO_SEND_FMT.format(harv=harv.name, UUID=job.event.UUID, url=url)
 
         if job.creator.profile.slack_id is not None:
             msg += f"<@{job.creator.profile.slack_id}>"
