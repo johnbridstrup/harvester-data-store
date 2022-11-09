@@ -100,7 +100,7 @@ def schedule_job(job_id, harv_pk, user_pk):
         "valid_until": (datetime.datetime.now(pytz.utc) + datetime.timedelta(seconds=3600)).strftime(JOB_DATETIME_FMT)
     }
     logging.info("Sending job to server.")
-    logging.info(json.dumps(request_payload))
+    logging.debug(json.dumps(request_payload))
     logging.info("/".join([JOB_SERVER_ADDRESS, "job"]))
 
     retry = Retry(
