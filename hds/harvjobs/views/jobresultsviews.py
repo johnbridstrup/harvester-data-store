@@ -25,5 +25,5 @@ class JobResultsView(ReportModelViewSet):
         jobresults_pk = serializer.data["id"]
         user_pk = serializer.data["creator"]
         job_id = Job.objects.get(event__UUID=UUID).id
-        url = build_frontend_url(endpoint="harvjobs", _id=job_id)
+        url = build_frontend_url(endpoint="jobs", _id=job_id)
         job_status_update.delay(UUID, results, jobresults_pk, user_pk, url)

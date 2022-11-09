@@ -55,7 +55,7 @@ class JobResultApiTestCase(HarvJobApiTestBase):
         expect_msg = JOB_STATUS_MSG_FMT.format(
             result=Job.StatusChoices.SUCCESS,
             UUID=UUID,
-            url=build_frontend_url("harvjobs", 1)
+            url=build_frontend_url("jobs", 1)
         ) + f"<@{self.user_profile.slack_id}>"
 
         self.assertEqual(slack.call_args[0][0], expect_msg)
