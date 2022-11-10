@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import MainLayout from "../../../components/layout/main";
 import Header from "../../../components/layout/header";
 import {
+  cacheSelectOptions,
   getJobSchemaById,
   listJobTypes,
   queryJobs,
@@ -23,7 +24,12 @@ function JobSchedulerView(props) {
   const [selectedJobType, setSelectedJobType] = useState(null);
   const [selectedJobSchema, setSelectedJobSchema] = useState(null);
   const [schemaOptions, setSchemaOptions] = useState([]);
-  const { jobtypes, jobschema, jobs } = useSelector((state) => state.harvjobs);
+  const {
+    jobtypes,
+    jobschema,
+    jobs,
+    internal: { jtype, schema },
+  } = useSelector((state) => state.harvjobs);
   const dispatch = useDispatch();
   const jobtypeOptions = transformJobTypeOptions(jobtypes);
 
@@ -32,6 +38,17 @@ function JobSchedulerView(props) {
       await dispatch(listJobTypes(MAX_LIMIT));
     })();
   }, [dispatch]);
+
+  useEffect(() => {
+    (async () => {
+      if (jtype && schema) {
+        setSelectedJobType((current) => jtype);
+        setSelectedJobSchema((current) => schema);
+        await dispatch(getJobSchemaById(schema.value));
+        await dispatch(queryJobs({ schema__id: schema.value }));
+      }
+    })();
+  }, [dispatch, jtype, schema]);
 
   const handleJobTypeSelect = async (newValue, actionMeta) => {
     setSelectedJobType((current) => newValue);
@@ -46,6 +63,7 @@ function JobSchedulerView(props) {
         setSelectedJobSchema((current) => options[0]);
         await dispatch(getJobSchemaById(res.results[0]?.id));
         await dispatch(queryJobs({ schema__id: options[0]?.value }));
+        dispatch(cacheSelectOptions({ jtype: newValue, schema: options[0] }));
       } catch (error) {
         setSchemaOptions((current) => []);
         setSelectedJobSchema(null);
@@ -53,6 +71,7 @@ function JobSchedulerView(props) {
     } else {
       setSelectedJobSchema(null);
       dispatch(resetSelectOptions());
+      dispatch(cacheSelectOptions({}));
     }
   };
 
@@ -63,6 +82,9 @@ function JobSchedulerView(props) {
         dispatch(getJobSchemaById(newValue.value)),
         dispatch(queryJobs({ schema__id: newValue.value })),
       ]);
+      dispatch(
+        cacheSelectOptions({ jtype: selectedJobType, schema: newValue })
+      );
     }
   };
 

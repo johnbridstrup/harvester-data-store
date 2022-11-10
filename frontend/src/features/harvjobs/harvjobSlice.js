@@ -2,6 +2,8 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { invalidateCache } from "../auth/authSlice";
 import harvjobService from "./harvjobService";
 
+const selectOptions = JSON.parse(localStorage.getItem("selectOptions"));
+
 const initialState = {
   loading: false,
   adding: false,
@@ -15,6 +17,10 @@ const initialState = {
   jobresults: [],
   jobresult: {},
   jobstatuses: [],
+  internal: {
+    schema: selectOptions?.schema,
+    jtype: selectOptions?.jtype,
+  },
   errorMsg: null,
   pagination: {
     next: null,
@@ -369,6 +375,11 @@ const harvjobSlice = createSlice({
       state.jobschema = {};
       state.jobs = [];
     },
+    cacheSelectOptions: (state, action) => {
+      state.internal.schema = action.payload.schema;
+      state.internal.jtype = action.payload.jtype;
+      localStorage.setItem("selectOptions", JSON.stringify(action.payload));
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -637,5 +648,5 @@ const harvjobSlice = createSlice({
   },
 });
 
-export const { resetSelectOptions } = harvjobSlice.actions;
+export const { resetSelectOptions, cacheSelectOptions } = harvjobSlice.actions;
 export default harvjobSlice.reducer;
