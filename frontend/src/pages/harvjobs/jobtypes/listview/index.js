@@ -21,7 +21,7 @@ function JobTypeListView(props) {
     <MainLayout>
       <div className="container">
         <Header title={"HDS JobTypes"} className={`display-6 mt-4 mb-4`} />
-        <BackButton route={"jobscheduler"} />
+        <BackButton />
         <ListJobTypes />
         <GenericPagination state="harvjobs" />
       </div>

@@ -32,7 +32,7 @@ function JobResultListView(props) {
     <MainLayout>
       <div className="container">
         <Header title={"HDS Job Results"} className={`display-6 mt-4 mb-4`} />
-        <BackButton mb={"mb-4"} route={"jobscheduler"} />
+        <BackButton mb={"mb-4"} />
         <ListJobResults />
         <GenericPagination state="harvjobs" attr="jobresults" />
       </div>

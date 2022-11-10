@@ -29,7 +29,7 @@ function JobResultDetailView(props) {
           className={`display-6 mt-4 mb-4`}
           reportId={jobresultId}
         />
-        <BackButton mb={"mb-4"} route={"jobresults"} />
+        <BackButton mb={"mb-4"} />
         {loading ? (
           <LoaderDiv>
             <Loader size={50} />

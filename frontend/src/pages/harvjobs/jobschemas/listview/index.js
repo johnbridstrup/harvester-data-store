@@ -27,7 +27,7 @@ function JobSchemaListVIew(props) {
     <MainLayout>
       <div className="container">
         <Header title={"HDS Job Schemas"} className={`display-6 mt-4 mb-4`} />
-        <BackButton route={"jobscheduler"} />
+        <BackButton />
         <ListJobSchemas />
         <GenericPagination state="harvjobs" />
       </div>

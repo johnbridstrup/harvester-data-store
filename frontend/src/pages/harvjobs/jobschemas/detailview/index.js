@@ -29,7 +29,7 @@ function JobSchemaDetailView(props) {
           className={`display-6 mt-4 mb-4`}
           reportId={jobschemaId}
         />
-        <BackButton mb={"mb-4"} route={"jobschemas"} />
+        <BackButton mb={"mb-4"} />
         {loading ? (
           <LoaderDiv>
             <Loader size={50} />

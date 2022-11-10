@@ -27,7 +27,7 @@ function JobHistoryView(props) {
           className={`display-6 mt-4 mb-4`}
           reportId={jobId}
         />
-        <BackButton mb={"mb-4"} route={"jobscheduler"} />
+        <BackButton mb={"mb-4"} />
         <ListJobHistory />
         <GenericPagination state="harvjobs" attr="jobstatus" />
       </div>
