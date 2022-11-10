@@ -9,9 +9,9 @@ class HarvesterCodeReleaseAdmin(admin.ModelAdmin):
     search_fields = ('created', 'fruit')
 
 class HarvesterVersionReportAdmin(admin.ModelAdmin):
-    list_display = ('created', 'report', 'is_dirty')
+    list_display = ('created', 'report', 'is_dirty', 'has_unexpected')
     ordering = ('created',)
-    search_fields = ('created', 'is_dirty')
+    search_fields = ('created', 'is_dirty', 'has_unexpected')
 
 
 admin.site.register(HarvesterCodeRelease, HarvesterCodeReleaseAdmin)

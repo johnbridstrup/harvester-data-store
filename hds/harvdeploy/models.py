@@ -16,21 +16,33 @@ class HarvesterCodeRelease(CommonInfo):
 class HarvesterVersionReport(ReportBase):
     harvester = models.ForeignKey(Harvester, on_delete=models.CASCADE, related_name="version_history")
     is_dirty = models.BooleanField()
+    has_unexpected = models.BooleanField(default=False)
+
+    @staticmethod
+    def _check(input_versions, key):
+        versions = input_versions.copy()
+
+        for v in versions.values():
+            if not isinstance(v, Mapping):
+                continue
+            
+            check = v.get(key, None)
+            if isinstance(check, Iterable):
+                if len(check) > 0:
+                    return True
+            elif check is not None:
+                return True
+        return False
 
     @classmethod
     def check_dirty(cls, input_versions):
         # Check if any computers have dirty packages
-        versions = input_versions.copy()
+        return cls._check(input_versions, "dirty")
 
-        for v in versions.values():
-            if isinstance(v, Mapping):
-                dirty = v.get("dirty", None)
-                if isinstance(dirty, Iterable):
-                    if len(dirty) > 0:
-                        return True
-                elif dirty is not None:
-                    return True
-        return False
+    @classmethod
+    def check_unexpected(cls, input_versions):
+        # Check if there are unexpected packages
+        return cls._check(input_versions, "unexpected")
 
     @classmethod
     def is_duplicate_version(cls, incoming_vers, last_vers):

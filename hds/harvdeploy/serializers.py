@@ -65,5 +65,6 @@ class HarvesterVersionReportSerializer(ReportSerializerBase):
             "report": report,
             "reportTime": reportTime,
             "is_dirty": self.Meta.model.check_dirty(report['data']),
+            "has_unexpected": self.Meta.model.check_unexpected(report['data']),
         }
         return super().to_internal_value(data)

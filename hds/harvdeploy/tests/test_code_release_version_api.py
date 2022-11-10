@@ -29,11 +29,11 @@ class ReleaseApiTestCase(HDSAPITestBase):
             "type": "version",
             "data": {
                 "serial_number": self.test_objects["harvester"].harv_id,
-                "master": {"version": 1.0, "dirty": {}},
-                "robot.1": {"version": 1.0, "dirty": {}},
-                "stereo.1": {"version": 1.0, "dirty": {}},
-                "robot.2": {"version": 1.0, "dirty": {}},
-                "stereo.2": {"version": 1.0, "dirty": {}},
+                "master": {"version": 1.0, "dirty": {}, "unexpected": {}},
+                "robot.1": {"version": 1.0, "dirty": {}, "unexpected": {}},
+                "stereo.1": {"version": 1.0, "dirty": {}, "unexpected": {}},
+                "robot.2": {"version": 1.0, "dirty": {}, "unexpected": {}},
+                "stereo.2": {"version": 1.0, "dirty": {}, "unexpected": {}},
             }
         }
 
@@ -41,11 +41,11 @@ class ReleaseApiTestCase(HDSAPITestBase):
             "type": "version",
             "data": {
                 "serial_number": self.test_objects["harvester"].harv_id,
-                "master": {"version": 2.0, "dirty": {}},
-                "robot.1": {"version": 2.0, "dirty": {}},
-                "stereo.1": {"version": 2.0, "dirty": {}},
-                "robot.2": {"version": 2.0, "dirty": {}},
-                "stereo.2": {"version": 2.0, "dirty": {}},
+                "master": {"version": 2.0, "dirty": {}, "unexpected": {}},
+                "robot.1": {"version": 2.0, "dirty": {}, "unexpected": {}},
+                "stereo.1": {"version": 2.0, "dirty": {}, "unexpected": {}},
+                "robot.2": {"version": 2.0, "dirty": {}, "unexpected": {}},
+                "stereo.2": {"version": 2.0, "dirty": {}, "unexpected": {}},
             }
         }
 
@@ -175,6 +175,14 @@ class ReleaseApiTestCase(HDSAPITestBase):
 
         obj = HarvesterVersionReport.objects.get()
         self.assertTrue(obj.is_dirty)
+
+    def test_create_unexpected(self):
+        unexpected_versions = self.versions.copy()
+        unexpected_versions["data"]["master"]["unexpected"]["unexpected_package"] = 1.11
+        self.create_version(unexpected_versions)
+
+        obj = HarvesterVersionReport.objects.get()
+        self.assertTrue(obj.has_unexpected)
 
     def test_create_version_changed(self):
         self.create_version()

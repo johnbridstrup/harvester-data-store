@@ -31,7 +31,7 @@
         "creator": 1,
         "modifiedBy": null,
         "created": "2022-10-10T22:25:38.062Z",
-        "lastModified": "2022-10-10T22:25:38.062Z",
+        "lastModified": "2022-11-10T20:53:14.952Z",
         "reportTime": "2022-10-10T22:25:24Z",
         "report": {
             "type": "version",
@@ -60,7 +60,8 @@
             }
         },
         "harvester": 3,
-        "is_dirty": false
+        "is_dirty": false,
+        "has_unexpected": false
     }
 },
 {
@@ -70,7 +71,7 @@
         "creator": 1,
         "modifiedBy": null,
         "created": "2022-10-10T22:25:59.922Z",
-        "lastModified": "2022-10-10T22:25:59.922Z",
+        "lastModified": "2022-11-10T20:53:14.953Z",
         "reportTime": null,
         "report": {
             "type": "version",
@@ -101,7 +102,8 @@
             }
         },
         "harvester": 3,
-        "is_dirty": true
+        "is_dirty": true,
+        "has_unexpected": false
     }
 },
 {
@@ -111,7 +113,7 @@
         "creator": 1,
         "modifiedBy": null,
         "created": "2022-10-10T22:26:27.629Z",
-        "lastModified": "2022-10-10T22:26:27.629Z",
+        "lastModified": "2022-11-10T20:53:14.953Z",
         "reportTime": "2022-10-10T22:26:03Z",
         "report": {
             "type": "version",
@@ -140,7 +142,8 @@
             }
         },
         "harvester": 1,
-        "is_dirty": false
+        "is_dirty": false,
+        "has_unexpected": false
     }
 },
 {
@@ -150,7 +153,7 @@
         "creator": 1,
         "modifiedBy": null,
         "created": "2022-10-10T22:26:42.597Z",
-        "lastModified": "2022-10-10T22:26:42.597Z",
+        "lastModified": "2022-11-10T20:53:14.953Z",
         "reportTime": "2022-10-10T22:26:36Z",
         "report": {
             "type": "version",
@@ -181,7 +184,8 @@
             }
         },
         "harvester": 1,
-        "is_dirty": true
+        "is_dirty": true,
+        "has_unexpected": false
     }
 },
 {
@@ -191,7 +195,7 @@
         "creator": 1,
         "modifiedBy": null,
         "created": "2022-10-10T22:26:56.912Z",
-        "lastModified": "2022-10-10T22:26:56.912Z",
+        "lastModified": "2022-11-10T20:53:14.954Z",
         "reportTime": "2022-10-10T22:26:46Z",
         "report": {
             "type": "version",
@@ -220,7 +224,8 @@
             }
         },
         "harvester": 2,
-        "is_dirty": false
+        "is_dirty": false,
+        "has_unexpected": false
     }
 },
 {
@@ -230,7 +235,7 @@
         "creator": 1,
         "modifiedBy": null,
         "created": "2022-10-10T22:27:14.124Z",
-        "lastModified": "2022-10-10T22:27:14.124Z",
+        "lastModified": "2022-11-10T20:53:14.954Z",
         "reportTime": "2022-10-10T22:27:08Z",
         "report": {
             "type": "version",
@@ -261,7 +266,55 @@
             }
         },
         "harvester": 2,
-        "is_dirty": true
+        "is_dirty": true,
+        "has_unexpected": false
+    }
+},
+{
+    "model": "harvdeploy.harvesterversionreport",
+    "pk": 7,
+    "fields": {
+        "creator": 1,
+        "modifiedBy": null,
+        "created": "2022-11-10T20:52:50.187Z",
+        "lastModified": "2022-11-10T20:53:14.955Z",
+        "reportTime": "2022-11-10T20:49:55Z",
+        "report": {
+            "type": "version",
+            "data": {
+                "serial_number": "200",
+                "master": {
+                    "version": 1.0,
+                    "dirty": {},
+                    "unexpected": {}
+                },
+                "robot.1": {
+                    "version": 1.0,
+                    "dirty": {},
+                    "unexpected": {}
+                },
+                "stereo.1": {
+                    "version": 1.0,
+                    "dirty": {},
+                    "unexpected": {}
+                },
+                "robot.2": {
+                    "version": 1.0,
+                    "dirty": {},
+                    "unexpected": {}
+                },
+                "stereo.2": {
+                    "version": 1.0,
+                    "dirty": {},
+                    "unexpected": {
+                        "package": "1.1"
+                    }
+                }
+            }
+        },
+        "harvester": 3,
+        "is_dirty": false,
+        "has_unexpected": true
     }
 }
 ]
