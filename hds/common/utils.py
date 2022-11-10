@@ -5,6 +5,7 @@ from rest_framework.views import exception_handler
 
 import logging
 import os
+import sys
 import traceback
 
 
@@ -92,3 +93,8 @@ def custom_exception_handler(exc, context):
         error_status_code = response.status_code
 
     return make_error(errors, error_status_code)
+
+def test_env():
+    if sys.argv[1:2] == ["test"]:
+        return True
+    return False

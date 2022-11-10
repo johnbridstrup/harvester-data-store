@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from .models import Job, JobHostResult, JobResults
 from common.async_metrics import ASYNC_ERROR_COUNTER
 from common.serializers.reportserializer import ReportSerializerBase
-from common.utils import build_frontend_url
+from common.utils import build_frontend_url, test_env
 from harvester.models import Harvester
 from notifications.slack import post_to_slack
 
@@ -31,7 +31,7 @@ FAILED_TO_SEND_FMT = (
 
 JOB_SLACK_CHANNEL = "hds-jobs"
 JOB_SERVER_ADDRESS = os.environ.get("JOB_SERVER_ADDRESS", "http://iot-job-server.cloud.advanced.farm:8000")
-if sys.argv[1:2] == ['test']:
+if test_env():
     JOB_SERVER_ADDRESS = "http://httpbin.org/anything"
 JOB_SUBSYSTEM = "http://localhost:5000"
 JOB_DATETIME_FMT = "%Y-%m-%d %H:%M:%S"
