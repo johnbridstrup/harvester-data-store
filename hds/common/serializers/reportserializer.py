@@ -20,9 +20,12 @@ class ReportSerializerBase(serializers.ModelSerializer):
             },
             "type": {
                 "type": "string",
+            },
+            "serial_number": {
+                "type": ["string", "number"]   
             }
         },
-        "required": ["data", "timestamp"],
+        "required": ["data", "timestamp", "serial_number"],
     }
     REPORT_DATA_PROPERTIES = {}
     REPORT_DATA_REQUIRED = [] # Override these in new report serializers
@@ -54,9 +57,23 @@ class ReportSerializerBase(serializers.ModelSerializer):
             raise serializers.ValidationError(detail={"validation error": err})
 
     @classmethod
-    def extract_timestamp(cls, timestamp):
+    def extract_timestamp(cls, report, key="timestamp"):
         """get POSIX timestamp and return in date format"""
-        return datetime.datetime.fromtimestamp(timestamp).strftime('%Y-%m-%d %H:%M:%S.%f')
+        return datetime.datetime.fromtimestamp(report[key]).strftime('%Y-%m-%d %H:%M:%S.%f')
+
+    @classmethod
+    def get_serial_number(cls, report):
+        try:
+            sn = report["serial_number"]
+        except KeyError:
+            try:
+                sn = report["data"]["serial_number"]
+            except KeyError:
+                ERROR_COUNTER.labels(KeyError.__name__, "Serial number not found!", cls.__name__)
+                logging.error(f"Serial number not found! {cls.__name__}")
+                raise
+            ERROR_COUNTER.labels(KeyError.__name__, "Serial number not at top level", cls.__name__)
+        return int(sn)
 
     def get_harvester(self, harv_id, report, fruit_key="fruit"):
         # must pass in level of report with is_emulator and fruit keys

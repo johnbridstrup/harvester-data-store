@@ -100,9 +100,9 @@ class ErrorReportSerializer(TaggitSerializer, EventSerializerMixin, ReportSerial
             tags = [Tags.INVALIDSCHEMA.value]
 
         report = data.copy()
-        harv_id = int(report['data']['sysmon_report']['serial_number'])
+        harv_id = self.get_serial_number(report)
         harvester = self.get_harvester(harv_id, report['data']['sysmon_report'])
-        reportTime = self.extract_timestamp(report['timestamp'])
+        reportTime = self.extract_timestamp(report)
         githash = report['data'].get('githash') or DEFAULT_UNKNOWN
         gitbranch = report['data'].get('branch_name') or DEFAULT_UNKNOWN
         UUID = report['data'].get("uuid", Event.generate_uuid())
@@ -138,7 +138,7 @@ class ErrorReportSerializer(TaggitSerializer, EventSerializerMixin, ReportSerial
                 robot = sysmon_entry.get('robot_index', index)
                 node = sysmon_entry.get('index', index)
                 code = errdict.get('code', 0)
-                timestamp = cls.extract_timestamp(errdict.get('ts'))
+                timestamp = cls.extract_timestamp(errdict, key="ts")
                 traceback = errdict.get('traceback', NO_TRACEBACK_STR)
                 info = errdict.get('value', NO_VALUE_STR)
                 handled = errdict.get('handled', False)

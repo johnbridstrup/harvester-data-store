@@ -64,7 +64,7 @@ def job_status_update(UUID, results, jobresult_pk, user_pk, url):
             host=host,
             result=hostresult,
             details=result,
-            timestamp=ReportSerializerBase.extract_timestamp(result['ts']),
+            timestamp=ReportSerializerBase.extract_timestamp(result, key="ts"),
             creator=user,
         )
 

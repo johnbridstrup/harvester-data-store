@@ -1,6 +1,7 @@
 {
   "type": "error",
   "timestamp": 1651526862.789323,
+  "serial_number": "011",
   "data": {
     "sysmon_report": {
       "serial_number": "011",

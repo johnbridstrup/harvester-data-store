@@ -74,7 +74,7 @@ class ErrorReportAPITest(HDSAPITestBase):
     def test_create_errorreport_with_invalid_harvester(self):
         """ create error report with invalid harvester """
         data = self.data.copy()
-        data["data"]["sysmon_report"]["serial_number"] = 99
+        data["serial_number"] = 99
         response = self.client.post(f'{self.api_base_url}/errorreports/', data, format='json')
         self.assertEqual(response.status_code, 400)
         self.assertEqual(ErrorReport.objects.count(), 0)
@@ -99,7 +99,7 @@ class ErrorReportAPITest(HDSAPITestBase):
     def test_update_errorreport_with_invalid_data(self):
         """ update error report with invalid data """
         self._post_error_report()
-        self.data["data"]["sysmon_report"]["serial_number"]= "99"
+        self.data["serial_number"]= "99"
         # updating harv_id
         response = self.client.patch(
             f'{self.api_base_url}/errorreports/1/',
@@ -179,7 +179,7 @@ class ErrorReportAPITest(HDSAPITestBase):
             'robot': int(node),
             'traceback': errdict[serv_str]['traceback'],
             'info': errdict[serv_str]['value'],
-            'timestamp': ErrorReportSerializer.extract_timestamp(errdict[serv_str]['ts']),
+            'timestamp': ErrorReportSerializer.extract_timestamp(errdict[serv_str], key="ts"),
             'handled': False
         }
         self.assertDictEqual(errs[0], compare)
