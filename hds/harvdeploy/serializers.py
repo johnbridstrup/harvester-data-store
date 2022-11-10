@@ -54,6 +54,11 @@ class HarvesterVersionReportSerializer(ReportSerializerBase):
         
         return super().create(validated_data)
 
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data["conflicts"] = instance.conflicts
+        return data
+
     def to_internal_value(self, data):
         report = data.copy()
         harv_id = report['data'].get("serial_number")

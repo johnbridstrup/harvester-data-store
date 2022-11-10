@@ -364,3 +364,32 @@ class ReleaseApiTestCase(HDSAPITestBase):
         self.assertEqual(hist_data["count"], 3) # The initial PATCH also introduced a history entry
         for res in hist_data["results"]:
             self.assertEqual(res["harv_id"], self.test_objects["harvester"].harv_id)
+
+    def test_conflicts(self):
+        rel2 = self.release.copy()
+        rel2["version"] = "2.0"
+        self.create_release(release=rel2)
+        self.client.patch(f"{self.api_base_url}/harvesters/1/", data={"release": 1})
+
+        # Conflicts with version 1
+        resp, _ = self.create_version()
+        conflicts = resp.json()["data"]["conflicts"]
+        self.assertNotEqual(len(conflicts), 0)
+        self.assertDictContainsSubset(conflicts, self.versions["data"])
+
+        # No conflicts with version 2
+        resp, _ = self.create_version(versions=self.version2)
+        conflicts = resp.json()["data"]["conflicts"]
+        self.assertEqual(len(conflicts), 0)
+
+        # Version with errors
+        error = {"robot.1": {"error": "Can't connect to robot.1"}}
+        vers2 = self.version2.copy()
+        vers2["data"].update(error)
+
+        resp, _ = self.create_version(versions=vers2)
+        conflicts = resp.json()["data"]["conflicts"]
+        self.assertNotEqual(len(conflicts), 0)
+        self.assertDictEqual(error, conflicts)
+
+        

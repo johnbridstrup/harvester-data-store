@@ -50,3 +50,27 @@ class HarvesterVersionReport(ReportBase):
         # from a harvester is identical to the current version
         # stored for that harvester.
         return incoming_vers == last_vers
+
+    @property
+    def conflicts(self):
+        # Check to see if there are errors or conflicts between the version
+        # and the expected release
+        release = self.harvester.release
+        if release is None:
+            return {"error": "No release"}
+        
+        release_vers = release.version
+        conflicts = {}
+        for hostname, host_report in self.report["data"].items():
+            if not isinstance(host_report, Mapping):
+                continue
+            
+            error = host_report.get("error", None)
+            if error is not None:
+                conflicts[hostname] = host_report
+                continue
+
+            version = host_report.get("version")
+            if str(version) != str(release_vers):
+                conflicts[hostname] = host_report
+        return conflicts
