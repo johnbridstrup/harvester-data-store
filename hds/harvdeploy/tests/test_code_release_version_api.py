@@ -27,8 +27,8 @@ class ReleaseApiTestCase(HDSAPITestBase):
 
         self.versions = {
             "type": "version",
+            "serial_number": self.test_objects["harvester"].harv_id,
             "data": {
-                "serial_number": self.test_objects["harvester"].harv_id,
                 "master": {"version": 1.0, "dirty": {}, "unexpected": {}},
                 "robot.1": {"version": 1.0, "dirty": {}, "unexpected": {}},
                 "stereo.1": {"version": 1.0, "dirty": {}, "unexpected": {}},
@@ -39,8 +39,8 @@ class ReleaseApiTestCase(HDSAPITestBase):
 
         self.version2 = {
             "type": "version",
+            "serial_number": self.test_objects["harvester"].harv_id,
             "data": {
-                "serial_number": self.test_objects["harvester"].harv_id,
                 "master": {"version": 2.0, "dirty": {}, "unexpected": {}},
                 "robot.1": {"version": 2.0, "dirty": {}, "unexpected": {}},
                 "stereo.1": {"version": 2.0, "dirty": {}, "unexpected": {}},
@@ -270,7 +270,7 @@ class ReleaseApiTestCase(HDSAPITestBase):
         )
         resp,_ = self.create_version()
 
-        self.versions['data']['serial_number'] = harv.harv_id
+        self.versions['serial_number'] = harv.harv_id
         resp,_ = self.create_version()
 
         resp = self.client.get(f"{self.api_base_url}/harvversion/")

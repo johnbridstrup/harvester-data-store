@@ -61,7 +61,7 @@ class HarvesterVersionReportSerializer(ReportSerializerBase):
 
     def to_internal_value(self, data):
         report = data.copy()
-        harv_id = report['data'].get("serial_number")
+        harv_id = report.get("serial_number")
         reportTime = self.extract_timestamp(report['timestamp'])
         harv = Harvester.objects.get(harv_id=harv_id)
 
