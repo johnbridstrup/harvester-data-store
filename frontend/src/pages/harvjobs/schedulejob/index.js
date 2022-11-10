@@ -1,5 +1,5 @@
 import { useEffect, lazy, Suspense } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import validator from "@rjsf/validator-ajv8";
 import { toast } from "react-toastify";
@@ -22,6 +22,7 @@ function ScheduleJobView(props) {
   const { harvesters } = useSelector((state) => state.harvester);
   const { jobschemaId } = useParams();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     (async () => {
@@ -73,6 +74,9 @@ function ScheduleJobView(props) {
     const res = await dispatch(createJob(data));
     if (res.payload?.status === SUCCESS) {
       toast.success(res.payload?.message);
+      setTimeout(() => {
+        navigate("/jobscheduler");
+      }, 3000);
     } else {
       toast.error(res?.payload);
     }
