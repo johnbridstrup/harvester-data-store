@@ -16,8 +16,6 @@ from taggit.models import Tag
 from unittest.mock import patch
 from urllib.parse import urlencode
 import datetime
-import json
-import os
 
 
 class ErrorReportAPITest(HDSAPITestBase):
@@ -26,9 +24,7 @@ class ErrorReportAPITest(HDSAPITestBase):
         self.update_user_permissions_all(ErrorReport)
         self.test_objects = self._setup_basic()
 
-        report_json_path = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'report.json')
-        with open(report_json_path) as f:
-            self.data = json.load(f)
+        self._load_report_data()
 
     def _extract_service_node(self, serv_str):
         serv_split = serv_str.split('.')
