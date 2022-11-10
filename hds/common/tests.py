@@ -158,6 +158,7 @@ class HDSAPITestBase(APITestCase):
         if load:
             self._load_report_data()
         resp = self.client.post(f'{self.api_base_url}/errorreports/', self.data, format='json')
+        self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
         return resp.json()
 
     def test_frontend_url(self):

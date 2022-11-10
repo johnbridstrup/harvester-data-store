@@ -438,14 +438,8 @@ class ErrorReportAPITest(HDSAPITestBase):
 
     def test_query_errorreport(self):
         # test the available query strings for errorreport
-        res = self.client.post(
-            f'{self.api_base_url}/errorreports/',
-            self.data,
-            format='json'
-        )
-
-        self.assertEqual(res.status_code, status.HTTP_201_CREATED)
-        res_data = res.json()["data"]
+        res = self._post_error_report()
+        res_data = res["data"]
 
         # query harv_ids associated with report
         harv_id = res_data['harvester']['harv_id']
