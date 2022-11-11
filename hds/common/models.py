@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from enum import Enum
+from taggit.managers import TaggableManager
 
 
 class CommonInfo(models.Model):
@@ -21,6 +22,7 @@ class ReportBase(CommonInfo):
     """ ReportBase Model """
     reportTime = models.DateTimeField(blank=True, null=True)
     report = models.JSONField(blank=True, null=True)
+    tags = TaggableManager()
 
     class Meta:
         abstract = True
