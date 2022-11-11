@@ -1,6 +1,8 @@
 from django.utils.timezone import datetime
 from rest_framework import serializers
+from taggit.serializers import TagListSerializerField, TaggitSerializer
 from .models import HarvesterCodeRelease, HarvesterVersionReport
+from common.models import Tags
 from common.serializers.reportserializer import ReportSerializerBase
 from harvester.models import Fruit, Harvester
 from harvester.serializers.fruitserializer import FruitSerializer
@@ -30,8 +32,37 @@ class HarvesterCodeReleaseSerializer(serializers.ModelSerializer):
         data["fruit"] = FruitSerializer(instance=instance.fruit).data
         return data
 
-class HarvesterVersionReportSerializer(ReportSerializerBase):
-    report_type = "version"
+class HarvesterVersionReportSerializer(TaggitSerializer, ReportSerializerBase):
+    report_type = "version_report"
+    REPORT_DATA_PATTERN_PROPERTIES = {
+        "^(master|((aft-)?(robot|stereo)\\d+))": {
+            "type": "object",
+            "oneOf": [
+                {
+                    "type": "object",
+                    "properties": {
+                        "error": {"type": "string"}
+                    },
+                    "required": ["error"]
+                },
+                {
+                    "type": "object",
+                    "properties": {
+                        "version": {"type": ["string", "number"]},
+                        "type": {"type": "string"},
+                        "project": {"type": "string"},
+                        "dirty": {"type": "object"},
+                        "unexpected": {"type": "object"},
+                        "error": {"type": ["string", "null"]},
+                    },
+                    "required": ["version", "dirty", "unexpected"]
+                }
+            ]
+        }
+    }
+    REPORT_DATA_ALLOW_EXTRA = False
+
+    tags = TagListSerializerField(required=False)
     class Meta:
         model = HarvesterVersionReport
         fields = ('__all__')
@@ -60,9 +91,16 @@ class HarvesterVersionReportSerializer(ReportSerializerBase):
         return data
 
     def to_internal_value(self, data):
+        try:
+            self.validate_incoming_report(data)
+            tags = []
+        except serializers.ValidationError:
+            # try anyway, it has been logged.
+            tags = [Tags.INVALIDSCHEMA.value]
+        
         report = data.copy()
         harv_id = report.get("serial_number")
-        reportTime = self.extract_timestamp(report['timestamp'])
+        reportTime = self.extract_timestamp(report)
         harv = Harvester.objects.get(harv_id=harv_id)
 
         data = {
@@ -71,5 +109,6 @@ class HarvesterVersionReportSerializer(ReportSerializerBase):
             "reportTime": reportTime,
             "is_dirty": self.Meta.model.check_dirty(report['data']),
             "has_unexpected": self.Meta.model.check_unexpected(report['data']),
+            "tags": tags,
         }
         return super().to_internal_value(data)

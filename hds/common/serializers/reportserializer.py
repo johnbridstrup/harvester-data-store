@@ -13,6 +13,7 @@ class ReportSerializerBase(serializers.ModelSerializer):
             "data": {
                 "type": "object",
                 "properties": {},
+                "patternProperties": {},
                 "required": [],     
             },
             "timestamp": {
@@ -27,14 +28,19 @@ class ReportSerializerBase(serializers.ModelSerializer):
         },
         "required": ["data", "timestamp", "serial_number"],
     }
+    # Override these in new report serializers
     REPORT_DATA_PROPERTIES = {}
-    REPORT_DATA_REQUIRED = [] # Override these in new report serializers
+    REPORT_DATA_PATTERN_PROPERTIES = {}
+    REPORT_DATA_REQUIRED = [] 
+    REPORT_DATA_ALLOW_EXTRA = True
 
     @classmethod
     def get_schema(cls):
         schema = cls.REPORT_BASE_SCHEMA
         schema["properties"]["data"]["properties"] = cls.REPORT_DATA_PROPERTIES
+        schema["properties"]["data"]["patternProperties"] = cls.REPORT_DATA_PATTERN_PROPERTIES
         schema["properties"]["data"]["required"] = cls.REPORT_DATA_REQUIRED
+        schema["properties"]["data"]["additionalProperties"] = cls.REPORT_DATA_ALLOW_EXTRA
         return schema
 
     @classmethod

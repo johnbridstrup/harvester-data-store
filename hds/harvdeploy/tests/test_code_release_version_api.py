@@ -30,10 +30,10 @@ class ReleaseApiTestCase(HDSAPITestBase):
             "serial_number": self.test_objects["harvester"].harv_id,
             "data": {
                 "master": {"version": 1.0, "dirty": {}, "unexpected": {}},
-                "robot.1": {"version": 1.0, "dirty": {}, "unexpected": {}},
-                "stereo.1": {"version": 1.0, "dirty": {}, "unexpected": {}},
-                "robot.2": {"version": 1.0, "dirty": {}, "unexpected": {}},
-                "stereo.2": {"version": 1.0, "dirty": {}, "unexpected": {}},
+                "robot01": {"version": 1.0, "dirty": {}, "unexpected": {}},
+                "stereo01": {"version": 1.0, "dirty": {}, "unexpected": {}},
+                "robot02": {"version": 1.0, "dirty": {}, "unexpected": {}},
+                "stereo02": {"version": 1.0, "dirty": {}, "unexpected": {}},
             }
         }
 
@@ -42,10 +42,10 @@ class ReleaseApiTestCase(HDSAPITestBase):
             "serial_number": self.test_objects["harvester"].harv_id,
             "data": {
                 "master": {"version": 2.0, "dirty": {}, "unexpected": {}},
-                "robot.1": {"version": 2.0, "dirty": {}, "unexpected": {}},
-                "stereo.1": {"version": 2.0, "dirty": {}, "unexpected": {}},
-                "robot.2": {"version": 2.0, "dirty": {}, "unexpected": {}},
-                "stereo.2": {"version": 2.0, "dirty": {}, "unexpected": {}},
+                "robot01": {"version": 2.0, "dirty": {}, "unexpected": {}},
+                "stereo01": {"version": 2.0, "dirty": {}, "unexpected": {}},
+                "robot02": {"version": 2.0, "dirty": {}, "unexpected": {}},
+                "stereo02": {"version": 2.0, "dirty": {}, "unexpected": {}},
             }
         }
 
@@ -210,7 +210,7 @@ class ReleaseApiTestCase(HDSAPITestBase):
         self.assertEqual(HarvesterVersionReport.objects.count(), 1)
 
         # Someone has changed a package version.
-        self.versions['data']['robot.1']['dirty']['reverted-package'] = 'bad-version'
+        self.versions['data']['robot01']['dirty']['reverted-package'] = 'bad-version'
         self.create_version()
         self.assertEqual(HarvesterVersionReport.objects.count(), 2)
 
@@ -383,7 +383,7 @@ class ReleaseApiTestCase(HDSAPITestBase):
         self.assertEqual(len(conflicts), 0)
 
         # Version with errors
-        error = {"robot.1": {"error": "Can't connect to robot.1"}}
+        error = {"robot01": {"error": "Can't connect to robot01"}}
         vers2 = self.version2.copy()
         vers2["data"].update(error)
 
