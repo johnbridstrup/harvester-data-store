@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { getHarvId } from "../../../utils/utils";
 import { timeStampFormat } from "../../../utils/utils";
+import { JobStatusHistory } from "../helpers";
 
 function DetailJob(props) {
   const { job, jobresults, jobstatuses } = useSelector(
@@ -107,36 +108,7 @@ function DetailJob(props) {
       </div>
 
       <div className="f-w-600">Job Status</div>
-      <div className="table-responsive mb-4">
-        <table className="table">
-          <thead>
-            <tr>
-              <th>History ID</th>
-              <th>Job Status</th>
-              <th>History Date</th>
-            </tr>
-          </thead>
-          <tbody>
-            {jobstatuses.map((status, _) => (
-              <tr key={status.history_id}>
-                <td>{status.history_id}</td>
-                <td
-                  className={`${
-                    status.jobstatus === "Success"
-                      ? "text-success"
-                      : status.jobstatus === "Pending"
-                      ? "text-warning"
-                      : "text-danger"
-                  } `}
-                >
-                  {status.jobstatus}
-                </td>
-                <td>{moment(status.history_date).format("LLLL")}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <JobStatusHistory jobstatuses={jobstatuses} />
     </>
   );
 }
