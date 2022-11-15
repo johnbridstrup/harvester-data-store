@@ -100,8 +100,8 @@ class HarvesterVersionReportSerializer(TaggitSerializer, ReportSerializerBase):
         
         report = data.copy()
         harv_id = report.get("serial_number")
-        reportTime = self.extract_timestamp(report)
-        harv = Harvester.objects.get(harv_id=harv_id)
+        reportTime = self.extract_timestamp(report, key="timestamp")
+        harv = Harvester.objects.get(harv_id=int(harv_id))
 
         data = {
             "harvester": harv.id,
