@@ -2,7 +2,7 @@ import moment from "moment";
 import { lazy, Suspense, useState } from "react";
 import { useSelector } from "react-redux";
 import { Loader, timeStampFormat } from "../../../utils/utils";
-import { Accordion, LoaderDiv } from "../../styled";
+import { Accordion, JsonDiv, LoaderDiv } from "../../styled";
 const ReactJson = lazy(() => import("@microlink/react-json-view"));
 
 function DetailJobResult(props) {
@@ -15,7 +15,7 @@ function DetailJobResult(props) {
 
   return (
     <>
-      <div className="mb-4">
+      <div className="mb-5">
         <div className="card card-body">
           <div className="row">
             <div className="col-md-3 mb-2">
@@ -43,33 +43,27 @@ function DetailJobResult(props) {
           </div>
         </div>
       </div>
-      <div className="mb-5">
+      <div className="mb-4">
         <div className="f-w-600 mb-3">Host Results</div>
         {jobresult.host_results?.map((host, _) => (
           <div key={host.id}>
-            <div className="table-responsive">
-              <table className="table">
-                <tbody>
-                  <tr
-                    className="tr-hover cursor"
-                    onClick={() => handleHostClick(host)}
-                  >
-                    <td>{timeStampFormat(host.timestamp)}</td>
-                    <td>{host.host}</td>
-                    <td
-                      className={`${
-                        host.result === "Success"
-                          ? "text-success"
-                          : host.result === "Pending"
-                          ? "text-warning"
-                          : "text-danger"
-                      }`}
-                    >
-                      {host.result}
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+            <div
+              className="d-flex border-bottom cursor"
+              onClick={() => handleHostClick(host)}
+            >
+              <div className="flex-5">{timeStampFormat(host.timestamp)}</div>
+              <div className="flex-5">{host.host}</div>
+              <div
+                className={`flex-5 ${
+                  host.result === "Success"
+                    ? "text-success"
+                    : host.result === "Pending"
+                    ? "text-warning"
+                    : "text-danger"
+                }`}
+              >
+                {host.result}
+              </div>
             </div>
             <Accordion obj={detailObj} host={host}>
               <Suspense
@@ -80,7 +74,9 @@ function DetailJobResult(props) {
                 }
               >
                 {detailObj.id === host.id && (
-                  <ReactJson src={detailObj?.details || {}} />
+                  <JsonDiv style={{ height: "20vh" }}>
+                    <ReactJson src={detailObj?.details || {}} />
+                  </JsonDiv>
                 )}
               </Suspense>
             </Accordion>

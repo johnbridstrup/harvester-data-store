@@ -197,4 +197,5 @@ export const Accordion = styled.div`
   position: relative;
   height: ${(props) => (props.obj.id === props.host.id ? "200px" : "0")};
   transition: 0.5s;
+  margin-bottom: 10px;
 `;
