@@ -256,15 +256,15 @@ variable "s3files_queue_url" {
 
 variable "sessclip_queue_url" {
   description = "URL for sessclip queue"
-  type = string
+  type        = string
 }
 
 variable "versions_queue_url" {
   description = "URL for versions queue"
-  type = string
+  type        = string
 }
 
 variable "jobresults_queue_url" {
   description = "URL for jobresults queue"
-  type = string
+  type        = string
 }

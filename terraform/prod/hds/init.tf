@@ -105,7 +105,7 @@ data "aws_security_group" "redis_sg" {
 
 # SQS QUEUES
 locals {
-  bucket                 = "dev-aft-hv-data-lake-prod"
+  bucket                 = "aft-hv-data-lake-prod"
   errorreport_queue_name = "errorreport-queue"
   sessclip_queue_name    = "hds-sessclip-queue"
   file_queue_name        = "hds-files-queue"
@@ -144,13 +144,13 @@ data "aws_iam_policy_document" "poll_queues" {
       "sqs:DeleteMessage"
     ]
     resources = [
-      data.aws_sqs_queue.errorreport_queue.arn, 
-      data.aws_sqs_queue.file_queue.arn, 
+      data.aws_sqs_queue.errorreport_queue.arn,
+      data.aws_sqs_queue.file_queue.arn,
       data.aws_sqs_queue.sessclip_queue.arn,
       data.aws_sqs_queue.versions_queue.arn,
       data.aws_sqs_queue.jobresults_queue.arn,
     ]
-    effect    = "Allow"
+    effect = "Allow"
   }
 
   statement {

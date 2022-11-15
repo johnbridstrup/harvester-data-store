@@ -1,19 +1,18 @@
 locals {
   env                      = "prod"
+  django_debug             = "true"
   dns_name                 = "hdsapi.cloud.advanced.farm"
   frontend_url             = "https://hds.cloud.advanced.farm"
-  file_queue_name          = "hds-file-queue"
-  jobserver_port           = "8000"
   service_port             = "8000"
   service_name             = "hds"
   service_docker_image     = "838860823423.dkr.ecr.us-west-1.amazonaws.com/hds:hds-staging-ce3109b8"
   healthcheck_path         = "/api/v1/healthcheck/"
+  sqs_client_metrics_ports = [9104, 9105, 9106, 9107, 9108]
   hds_superuser_pwd_id     = "hds_superuser_pwd"
-  errorreport_queue_name   = "errorreport-queue"
   enable_prometheus_scrape = true
-  sqs_client_metrics_ports = [9104, 9111]
   service_container_memory = 2048
   service_container_cpu    = 512
+  jobserver_port           = "8000"
 }
 
 resource "random_password" "hds_superuser_pwd" {
@@ -38,59 +37,23 @@ resource "aws_secretsmanager_secret_version" "hds_superuser_pwd" {
   ]
 }
 
-data "aws_sqs_queue" "errorreport_queue" {
-  name = local.errorreport_queue_name
-}
-
-data "aws_sqs_queue" "file_queue" {
-  name = local.file_queue_name
-}
-
-data "aws_s3_bucket" "data-lake" {
-  bucket = "aft-hv-data-lake-prod"
-}
-
-data "aws_iam_policy_document" "poll_queues" {
-  statement {
-    actions = [
-      "sqs:ReceiveMessage",
-      "sqs:DeleteMessage"
-    ]
-    resources = [data.aws_sqs_queue.errorreport_queue.arn, data.aws_sqs_queue.file_queue.arn]
-    effect    = "Allow"
-  }
-
-  statement {
-    actions = [
-      "s3:GetObject",
-      "s3:DeleteObject"
-    ]
-
-    resources = [
-      data.aws_s3_bucket.data-lake.arn,
-      "${data.aws_s3_bucket.data-lake.arn}/*",
-    ]
-  }
-}
-
-
 module "hds" {
-  source                         = "../../module/hds"
-  env                            = local.env
-  service_dns_name               = local.dns_name
-  vpc_id                         = data.aws_vpc.infra_vpc.id
-  service_port                   = local.service_port
-  service_name                   = local.service_name
-  service_docker_image           = local.service_docker_image
-  service_subnets                = data.aws_subnet_ids.priv_subnets.ids
-  load_balancer_subnets          = data.aws_subnet_ids.priv_subnets.ids
-  ecs_cluster_arn                = data.aws_ecs_cluster.hds-cluster.arn
-  enable_prometheus_scrape       = local.enable_prometheus_scrape
-  additional_prometheus_ports    = local.sqs_client_metrics_ports
-  route53_priv_zone_id           = data.aws_route53_zone.private_cloud_zone.id
-  route53_pub_zone_id            = data.aws_route53_zone.cloud_zone.id
-  service_health_check_path      = local.healthcheck_path
-  service_iam_policy_document    = data.aws_iam_policy_document.poll_queues.json
+  source                      = "../../module/hds"
+  env                         = local.env
+  service_dns_name            = local.dns_name
+  vpc_id                      = data.aws_vpc.infra_vpc.id
+  service_port                = local.service_port
+  service_name                = local.service_name
+  service_docker_image        = local.service_docker_image
+  service_subnets             = data.aws_subnet_ids.priv_subnets.ids
+  load_balancer_subnets       = data.aws_subnet_ids.priv_subnets.ids
+  ecs_cluster_arn             = data.aws_ecs_cluster.hds-cluster.arn
+  enable_prometheus_scrape    = local.enable_prometheus_scrape
+  additional_prometheus_ports = local.sqs_client_metrics_ports
+  route53_priv_zone_id        = data.aws_route53_zone.private_cloud_zone.id
+  route53_pub_zone_id         = data.aws_route53_zone.cloud_zone.id
+  service_health_check_path   = local.healthcheck_path
+  service_iam_policy_document = data.aws_iam_policy_document.poll_queues.json
   service_alb_ingress_sg_rules = [
     "80,tcp,${data.aws_security_group.lambda_sg.id},web traffic from lambda",
     "443,tcp,${data.aws_security_group.lambda_sg.id},ssl traffic from lambda",
