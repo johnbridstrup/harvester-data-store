@@ -150,6 +150,7 @@ variable "service_entrypoint" {
 
 variable "service_port" {
   description = "Port of the service to use for forward traffic to."
+  default     = "8000"
   type        = string
 }
 
@@ -163,4 +164,90 @@ variable "additional_prometheus_ports" {
   description = "Additional prometheus ports to scrape, by default only service_port get scraped."
   type        = list(number)
   default     = []
+}
+
+# ENVIRONMENT VARIABLES
+
+variable "db_name" {
+  description = "Name of the database"
+  type        = string
+}
+
+variable "db_pwd" {
+  description = "Database password"
+  type        = string
+}
+
+variable "db_user" {
+  description = "Database username"
+  type        = string
+}
+
+variable "db_port" {
+  description = "Databse port"
+  type        = string
+}
+
+variable "db_host" {
+  description = "Database host address"
+  type        = string
+}
+
+variable "django_debug" {
+  description = "Django debug mode"
+  default     = "true"
+  type        = string
+}
+
+variable "django_db_backend" {
+  description = "Django database backend"
+  default     = "django_prometheus.db.backends.postgresql"
+  type        = string
+}
+
+variable "django_superuser_pwd" {
+  description = "Django superuser password"
+  type        = string
+}
+
+variable "sqs_user_pwd" {
+  description = "SQS user password"
+  type        = string
+}
+
+variable "s3_download" {
+  description = "Enable download files from S3"
+  type        = string
+  default     = "true"
+}
+
+variable "page_caching" {
+  description = "Enable page caching"
+  type        = string
+  default     = "true"
+}
+
+variable "redis_broker_url" {
+  description = "URL of redis cache"
+  type        = string
+}
+
+variable "slack_token" {
+  description = "Slack API token"
+  type        = string
+}
+
+variable "frontend_url" {
+  description = "URL for frontend app"
+  type        = string
+}
+
+variable "errorreport_queue_url" {
+  description = "URL for error report queue"
+  type        = string
+}
+
+variable "s3files_queue_url" {
+  description = "URL for hdsfiles queue"
+  type        = string
 }

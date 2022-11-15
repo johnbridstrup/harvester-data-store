@@ -1,5 +1,6 @@
 locals {
   env                      = "dev"
+  django_debug             = "true"
   dns_name                 = "hdsapi.devcloud.advanced.farm"
   frontend_url             = "https://hds.devcloud.advanced.farm"
   file_queue_name          = "hds-file-queue"
@@ -45,31 +46,6 @@ data "aws_sqs_queue" "file_queue" {
   name = local.file_queue_name
 }
 
-locals {
-  environment_variables = [
-    { "name" : "POSTGRES_NAME", "value" : data.aws_db_instance.postgres.db_name },
-    { "name" : "POSTGRES_PASSWORD", "value" : data.aws_secretsmanager_secret_version.hds_rds_pwd.secret_string },
-    { "name" : "POSTGRES_USER", "value" : data.aws_db_instance.postgres.master_username },
-    { "name" : "DEBUG", "value" : "true" },
-    { "name" : "DJANGO_ALLOWED_HOSTS", "value" : "localhost 127.0.0.1" },
-    { "name" : "SQL_ENGINE", "value" : "django_prometheus.db.backends.postgresql" },
-    { "name" : "SQL_PORT", "value" : data.aws_db_instance.postgres.port },
-    { "name" : "SQL_HOST", "value" : data.aws_db_instance.postgres.address },
-    { "name" : "DJANGO_SUPERUSER_PASSWORD", "value" : aws_secretsmanager_secret_version.hds_superuser_pwd.secret_string },
-    { "name" : "DJANGO_SUPERUSER_USERNAME", "value" : "aft" },
-    { "name" : "DJANGO_SUPERUSER_EMAIL", "value" : "john@advanced.farm" },
-    { "name" : "SQS_USER_PASSWORD", "value" : random_password.sqs_pwd.result },
-    { "name" : "HDS_PORT", "value" : 8000 },
-    { "name" : "ERRORREPORTS_QUEUE_URL", "value" : data.aws_sqs_queue.errorreport_queue.url },
-    { "name" : "S3FILES_QUEUE_URL", "value" : data.aws_sqs_queue.file_queue.url },
-    { "name" : "BROKER_URL", "value" : "redis://${data.aws_elasticache_replication_group.hds_cache.primary_endpoint_address}:6379" },
-    { "name" : "SLACK_TOKEN", "value" : data.aws_secretsmanager_secret_version.slack_token.secret_string },
-    { "name" : "FRONTEND_URL", "value" : local.frontend_url },
-    { "name" : "S3_DOWNLOAD", "value" : "true" },
-    { "name" : "PAGE_CACHING", "value" : "true" },
-  ]
-}
-
 data "aws_s3_bucket" "data-lake" {
   bucket = "dev-aft-hv-data-lake-prod"
 }
@@ -112,7 +88,6 @@ module "hds" {
   additional_prometheus_ports    = local.sqs_client_metrics_ports
   route53_priv_zone_id           = data.aws_route53_zone.private_cloud_zone.id
   route53_pub_zone_id            = data.aws_route53_zone.cloud_zone.id
-  service_environments_variables = local.environment_variables
   service_health_check_path      = local.healthcheck_path
   service_iam_policy_document    = data.aws_iam_policy_document.poll_queues.json
   service_alb_ingress_sg_rules = [
@@ -127,6 +102,19 @@ module "hds" {
   )
   service_container_cpu    = local.service_container_cpu
   service_container_memory = local.service_container_memory
+  db_name                  = data.aws_db_instance.postgres.db_name
+  db_pwd                   = data.aws_secretsmanager_secret_version.hds_rds_pwd.secret_string
+  db_user                  = data.aws_db_instance.postgres.master_username
+  db_port                  = data.aws_db_instance.postgres.port
+  db_host                  = data.aws_db_instance.postgres.address
+  django_debug             = local.django_debug
+  django_superuser_pwd     = aws_secretsmanager_secret_version.hds_superuser_pwd.secret_string
+  sqs_user_pwd             = random_password.sqs_pwd.result
+  redis_broker_url         = "redis://${data.aws_elasticache_replication_group.hds_cache.primary_endpoint_address}:6379"
+  slack_token              = data.aws_secretsmanager_secret_version.slack_token.secret_string
+  frontend_url             = local.frontend_url
+  errorreport_queue_url    = data.aws_sqs_queue.errorreport_queue.url
+  s3files_queue_url        = data.aws_sqs_queue.file_queue.url
 }
 
 resource "aws_security_group_rule" "hds_db_rule" {
