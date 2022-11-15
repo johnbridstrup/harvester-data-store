@@ -9,7 +9,7 @@ locals {
 
 
 module "hds-frontend" {
-  source                    = "../../module/hds"
+  source                    = "../../module/frontend"
   env                       = local.env
   service_dns_name          = local.dns_name
   vpc_id                    = data.aws_vpc.infra_vpc.id
