@@ -3,7 +3,7 @@ import Select from "react-select";
 import { Loader } from "../../utils/utils";
 
 function LocationModal(props) {
-  const { ranch, country, region, mode } = props.fieldData;
+  const { ranch, country, region, mode, siteChannel } = props.fieldData;
   return (
     <div className="col-md-8">
       <div
@@ -89,6 +89,21 @@ function LocationModal(props) {
                         value={props.selectedDistributor}
                         className="multi-select-container"
                         classNamePrefix="select"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div className="row">
+                  <div className="col-md-6">
+                    <div className="form-group">
+                      <label htmlFor="siteChannel">Site Channel</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        name="siteChannel"
+                        value={siteChannel}
+                        required
+                        onChange={props.handleChange}
                       />
                     </div>
                   </div>

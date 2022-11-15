@@ -19,6 +19,7 @@ function ListLocation(props) {
     region: "",
     mode: "add",
     objId: null,
+    siteChannel: "",
   });
   const [selectedDistributor, setSelectedDistributor] = useState(null);
   const { locations, loading } = useSelector((state) => state.location);
@@ -47,6 +48,7 @@ function ListLocation(props) {
     data["country"] = fieldData.country;
     data["region"] = fieldData.region;
     data["objId"] = fieldData.objId;
+    data["site_channel"] = fieldData.siteChannel;
 
     const dispatchObj = {
       add: createLocation,
@@ -66,6 +68,7 @@ function ListLocation(props) {
           region: "",
           mode: "add",
           objId: null,
+          siteChannel: "",
         };
       });
       setSelectedDistributor(null);
@@ -84,6 +87,7 @@ function ListLocation(props) {
           region: "",
           mode: "add",
           objId: null,
+          siteChannel: "",
         };
       });
       setSelectedDistributor(null);
@@ -100,6 +104,7 @@ function ListLocation(props) {
         mode: "edit",
         region: location.region,
         objId: location.id,
+        siteChannel: location.site_channel,
       };
     });
     let distObj = {
