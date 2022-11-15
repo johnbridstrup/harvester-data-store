@@ -13,7 +13,13 @@ class JobView(CreateModelViewSet):
     queryset = Job.objects.all()
     serializer_class = JobSerializer
     permission_classes = (IsAuthenticated,)
-    filterset_fields = ('target__harv_id', 'schema__id', 'schema__version',)
+    filterset_fields = (
+        'target__harv_id',
+        'schema__id',
+        'schema__version',
+        'event__UUID',
+        'jobstatus',
+    )
     ordering = ('-created', )
 
     @action(
