@@ -13,7 +13,7 @@ function ListJobs(props) {
           <Loader size={50} />
         </LoaderDiv>
       ) : (
-        <div className="table-responsive">
+        <div className="table-responsive mb-4">
           <table className="table">
             <thead>
               <tr>
