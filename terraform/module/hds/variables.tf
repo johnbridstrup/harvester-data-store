@@ -242,6 +242,8 @@ variable "frontend_url" {
   type        = string
 }
 
+# SQS QUEUES
+
 variable "errorreport_queue_url" {
   description = "URL for error report queue"
   type        = string
@@ -250,4 +252,19 @@ variable "errorreport_queue_url" {
 variable "s3files_queue_url" {
   description = "URL for hdsfiles queue"
   type        = string
+}
+
+variable "sessclip_queue_url" {
+  description = "URL for sessclip queue"
+  type = string
+}
+
+variable "versions_queue_url" {
+  description = "URL for versions queue"
+  type = string
+}
+
+variable "jobresults_queue_url" {
+  description = "URL for jobresults queue"
+  type = string
 }

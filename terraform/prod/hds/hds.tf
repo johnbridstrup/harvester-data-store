@@ -115,7 +115,10 @@ module "hds" {
   slack_token              = data.aws_secretsmanager_secret_version.slack_token.secret_string
   frontend_url             = local.frontend_url
   errorreport_queue_url    = data.aws_sqs_queue.errorreport_queue.url
+  sessclip_queue_url       = data.aws_sqs_queue.sessclip_queue.url
   s3files_queue_url        = data.aws_sqs_queue.file_queue.url
+  versions_queue_url       = data.aws_sqs_queue.versions_queue.url
+  jobresults_queue_url     = data.aws_sqs_queue.jobresults_queue.url
 }
 
 resource "aws_security_group_rule" "hds_db_rule" {

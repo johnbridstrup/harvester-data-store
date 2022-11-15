@@ -21,4 +21,4 @@ echo "DESTINATION ${DEST}"
 
 echo "CALL sqs_client --queue $URL --destination $DEST --delete --s3-delete --s3-event-payload --headers $HEADERS"
 
-sqs_client --queue $URL --destination $DEST --delete --s3-delete --s3-event-payload --headers "$HEADERS"
+sqs_client --queue $URL --destination $DEST --delete --s3-delete --s3-event-payload --headers "$HEADERS" --prom-port ${2}

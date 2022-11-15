@@ -20,6 +20,9 @@ locals {
     { "name" : "FRONTEND_URL", "value" : var.frontend_url },
     { "name" : "ERRORREPORTS_QUEUE_URL", "value" : var.errorreport_queue_url },
     { "name" : "S3FILES_QUEUE_URL", "value" : var.s3files_queue_url },
+    { "name" : "SESSCLIP_QUEUE_URL", "value" : var.sessclip_queue_url },
+    { "name" : "HARVVERSION_QUEUE_URL", "value" : var.versions_queue_url },
+    { "name" : "JOBRESULTS_QUEUE_URL", "value" : var.jobresults_queue_url },
   ]
 }
 

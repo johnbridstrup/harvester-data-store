@@ -86,3 +86,66 @@ data "aws_security_group" "redis_sg" {
     Name = "hds-redis"
   }
 }
+
+# SQS QUEUES
+locals {
+  bucket                 = "dev-aft-hv-data-lake-prod"
+  errorreport_queue_name = "errorreport-queue"
+  sessclip_queue_name    = "hds-sessclip-queue"
+  file_queue_name        = "hds-files-queue"
+  jobresults_queue_name  = "hds-jobresults-queue"
+  versions_queue_name    = "hds-versions-queue"
+}
+
+data "aws_s3_bucket" "data-lake" {
+  bucket = local.bucket
+}
+
+data "aws_sqs_queue" "errorreport_queue" {
+  name = local.errorreport_queue_name
+}
+
+data "aws_sqs_queue" "sessclip_queue" {
+  name = local.sessclip_queue_name
+}
+
+data "aws_sqs_queue" "file_queue" {
+  name = local.file_queue_name
+}
+
+data "aws_sqs_queue" "versions_queue" {
+  name = local.versions_queue_name
+}
+
+data "aws_sqs_queue" "jobresults_queue" {
+  name = local.jobresults_queue_name
+}
+
+data "aws_iam_policy_document" "poll_queues" {
+  statement {
+    actions = [
+      "sqs:ReceiveMessage",
+      "sqs:DeleteMessage"
+    ]
+    resources = [
+      data.aws_sqs_queue.errorreport_queue.arn, 
+      data.aws_sqs_queue.file_queue.arn, 
+      data.aws_sqs_queue.sessclip_queue.arn,
+      data.aws_sqs_queue.versions_queue.arn,
+      data.aws_sqs_queue.jobresults_queue.arn,
+    ]
+    effect    = "Allow"
+  }
+
+  statement {
+    actions = [
+      "s3:GetObject",
+      "s3:DeleteObject"
+    ]
+
+    resources = [
+      data.aws_s3_bucket.data-lake.arn,
+      "${data.aws_s3_bucket.data-lake.arn}/*",
+    ]
+  }
+}

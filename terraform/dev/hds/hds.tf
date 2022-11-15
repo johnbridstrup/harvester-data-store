@@ -3,13 +3,11 @@ locals {
   django_debug             = "true"
   dns_name                 = "hdsapi.devcloud.advanced.farm"
   frontend_url             = "https://hds.devcloud.advanced.farm"
-  file_queue_name          = "hds-file-queue"
   service_port             = "8000"
   service_name             = "hds"
-  service_docker_image     = "082346306812.dkr.ecr.us-west-1.amazonaws.com/hds:hds-staging-0ae66858"
+  service_docker_image     = "082346306812.dkr.ecr.us-west-1.amazonaws.com/hds:hds-staging-33f282fc"
   healthcheck_path         = "/api/v1/healthcheck/"
-  errorreport_queue_name   = "errorreport-queue"
-  sqs_client_metrics_ports = [9104, 9111]
+  sqs_client_metrics_ports = [9104, 9105, 9106, 9107, 9108]
   hds_superuser_pwd_id     = "hds_superuser_pwd"
   enable_prometheus_scrape = true
   service_container_memory = 2048
@@ -38,58 +36,23 @@ resource "aws_secretsmanager_secret_version" "hds_superuser_pwd" {
   ]
 }
 
-data "aws_sqs_queue" "errorreport_queue" {
-  name = local.errorreport_queue_name
-}
-
-data "aws_sqs_queue" "file_queue" {
-  name = local.file_queue_name
-}
-
-data "aws_s3_bucket" "data-lake" {
-  bucket = "dev-aft-hv-data-lake-prod"
-}
-
-data "aws_iam_policy_document" "poll_queues" {
-  statement {
-    actions = [
-      "sqs:ReceiveMessage",
-      "sqs:DeleteMessage"
-    ]
-    resources = [data.aws_sqs_queue.errorreport_queue.arn, data.aws_sqs_queue.file_queue.arn]
-    effect    = "Allow"
-  }
-
-  statement {
-    actions = [
-      "s3:GetObject",
-      "s3:DeleteObject"
-    ]
-
-    resources = [
-      data.aws_s3_bucket.data-lake.arn,
-      "${data.aws_s3_bucket.data-lake.arn}/*",
-    ]
-  }
-}
-
 module "hds" {
-  source                         = "../../module/hds"
-  env                            = local.env
-  service_dns_name               = local.dns_name
-  vpc_id                         = data.aws_vpc.infra_vpc.id
-  service_port                   = local.service_port
-  service_name                   = local.service_name
-  service_docker_image           = local.service_docker_image
-  service_subnets                = data.aws_subnet_ids.priv_subnets.ids
-  load_balancer_subnets          = data.aws_subnet_ids.priv_subnets.ids
-  ecs_cluster_arn                = data.aws_ecs_cluster.hds-cluster.arn
-  enable_prometheus_scrape       = local.enable_prometheus_scrape
-  additional_prometheus_ports    = local.sqs_client_metrics_ports
-  route53_priv_zone_id           = data.aws_route53_zone.private_cloud_zone.id
-  route53_pub_zone_id            = data.aws_route53_zone.cloud_zone.id
-  service_health_check_path      = local.healthcheck_path
-  service_iam_policy_document    = data.aws_iam_policy_document.poll_queues.json
+  source                      = "../../module/hds"
+  env                         = local.env
+  service_dns_name            = local.dns_name
+  vpc_id                      = data.aws_vpc.infra_vpc.id
+  service_port                = local.service_port
+  service_name                = local.service_name
+  service_docker_image        = local.service_docker_image
+  service_subnets             = data.aws_subnet_ids.priv_subnets.ids
+  load_balancer_subnets       = data.aws_subnet_ids.priv_subnets.ids
+  ecs_cluster_arn             = data.aws_ecs_cluster.hds-cluster.arn
+  enable_prometheus_scrape    = local.enable_prometheus_scrape
+  additional_prometheus_ports = local.sqs_client_metrics_ports
+  route53_priv_zone_id        = data.aws_route53_zone.private_cloud_zone.id
+  route53_pub_zone_id         = data.aws_route53_zone.cloud_zone.id
+  service_health_check_path   = local.healthcheck_path
+  service_iam_policy_document = data.aws_iam_policy_document.poll_queues.json
   service_alb_ingress_sg_rules = [
     "80,tcp,${data.aws_security_group.lambda_sg.id},web traffic from lambda",
     "443,tcp,${data.aws_security_group.lambda_sg.id},ssl traffic from lambda",
@@ -114,7 +77,10 @@ module "hds" {
   slack_token              = data.aws_secretsmanager_secret_version.slack_token.secret_string
   frontend_url             = local.frontend_url
   errorreport_queue_url    = data.aws_sqs_queue.errorreport_queue.url
+  sessclip_queue_url       = data.aws_sqs_queue.sessclip_queue.url
   s3files_queue_url        = data.aws_sqs_queue.file_queue.url
+  versions_queue_url       = data.aws_sqs_queue.versions_queue.url
+  jobresults_queue_url     = data.aws_sqs_queue.jobresults_queue.url
 }
 
 resource "aws_security_group_rule" "hds_db_rule" {
