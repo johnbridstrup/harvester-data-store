@@ -16,9 +16,9 @@ RUN apt update && apt install -y\
     virtualenv
 
 # SQS-client
-COPY debian_packages/aft-sqs-client_0.2-1_all.deb /opt/app/
-RUN dpkg -i /opt/app/aft-sqs-client_0.2-1_all.deb
-RUN rm /opt/app/aft-sqs-client_0.2-1_all.deb
+COPY debian_packages/aft-sqs-client_0.3-1_all.deb /opt/app/
+RUN dpkg -i /opt/app/aft-sqs-client_0.3-1_all.deb
+RUN rm /opt/app/aft-sqs-client_0.3-1_all.deb
 
 
 # copy source and install dependencies
