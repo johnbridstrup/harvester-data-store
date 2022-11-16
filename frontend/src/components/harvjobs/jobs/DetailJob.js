@@ -1,17 +1,32 @@
 import moment from "moment";
+import { useRef } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { getHarvId } from "../../../utils/utils";
 import { timeStampFormat } from "../../../utils/utils";
 import { JobStatusHistory } from "../helpers";
+import { handleDownload } from "../../../utils/services";
+import { DownloadButton } from "../../errorreports/ErrorHelpers";
+import DownloadModal from "../../modals/DownloadModal";
 
 function DetailJob(props) {
   const { job, jobresults, jobstatuses } = useSelector(
     (state) => state.harvjobs
   );
+  const { token } = useSelector((state) => state.auth);
+  const downloadRef = useRef(null);
+
+  const downloadPopUp = () => {
+    downloadRef.current.click();
+  };
+  const download = async (fileObj) => {
+    await handleDownload(fileObj, token);
+  };
+
   return (
     <>
-      <div className="mb-4">
+      <DownloadButton popUp={downloadPopUp} downloadRef={downloadRef} />
+      <div className="mb-4 mt-3">
         <div className="card card-body mb-4">
           <div className="row">
             <div className="col-md-3 mb-2">
@@ -109,6 +124,7 @@ function DetailJob(props) {
 
       <div className="f-w-600">Job Status</div>
       <JobStatusHistory jobstatuses={jobstatuses} />
+      <DownloadModal eventObj={job?.event} handleDownload={download} />
     </>
   );
 }
