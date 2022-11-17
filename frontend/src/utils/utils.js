@@ -524,3 +524,10 @@ export const appendCodeName = (codes = [], exceptioncodes = []) => {
   });
   return arr;
 };
+
+export function handleSelectFactory(setSelectedFunc) {
+  const handleSelect = (newValue, actionMeta) => {
+    setSelectedFunc((current) => newValue);
+  };
+  return handleSelect;
+}
