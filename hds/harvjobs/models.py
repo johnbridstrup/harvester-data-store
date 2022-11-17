@@ -39,7 +39,7 @@ class Job(EventModelMixin, CommonInfo):
     target = models.ForeignKey(Harvester, on_delete=models.CASCADE, related_name="jobs")
     payload = models.JSONField()
     jobstatus = models.CharField(
-        choices=StatusChoices.choices, 
+        choices=StatusChoices.choices,
         default=StatusChoices.PENDING,
         max_length=30,
     )
@@ -53,7 +53,7 @@ class JobResults(EventModelMixin, ReportBase):
     job = models.ForeignKey(Job, on_delete=models.CASCADE, related_name="results", null=True, blank=True)
 
     def __str__(self):
-        return f"{self.job.schema.version} job {self.event.UUID}: {self.status}"
+        return f"{self.job.schema.version} job {self.event.UUID}: {self.job.jobstatus}"
 
 
 class JobHostResult(CommonInfo):
