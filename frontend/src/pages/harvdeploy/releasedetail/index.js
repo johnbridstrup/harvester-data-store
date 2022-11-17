@@ -5,8 +5,12 @@ import DetailReleaseCode from "../../../components/harvdeploy/release/DetailRele
 import Header from "../../../components/layout/header";
 import MainLayout from "../../../components/layout/main";
 import { LoaderDiv } from "../../../components/styled";
-import { getReleaseById } from "../../../features/harvdeploy/harvdeploySlice";
+import {
+  getReleaseById,
+  listTags,
+} from "../../../features/harvdeploy/harvdeploySlice";
 import { Loader } from "../../../utils/utils";
+import "./styles.css";
 
 function ReleaseCodeDetailView(props) {
   const { loading } = useSelector((state) => state.harvdeploy);
@@ -14,7 +18,10 @@ function ReleaseCodeDetailView(props) {
   const { releaseId } = useParams();
   useEffect(() => {
     (async () => {
-      await dispatch(getReleaseById(releaseId));
+      await Promise.all([
+        dispatch(getReleaseById(releaseId)),
+        dispatch(listTags()),
+      ]);
     })();
   }, [releaseId, dispatch]);
 

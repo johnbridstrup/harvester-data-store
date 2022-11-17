@@ -1,0 +1,61 @@
+.tag-container {
+  position: relative;
+}
+
+.chips-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.tag-color {
+  color: var(--color-secondary);
+  cursor: pointer;
+}
+
+.tag-color:hover {
+  color: var(--blue-color);
+}
+
+.chips {
+  padding: 1rem;
+  border-radius: 25px;
+  border: 1px solid var(--bg-third);
+  font-size: 12px;
+}
+
+.apply-tags {
+  position: absolute;
+  top: 40px;
+  left: 0;
+  border: 1px solid var(--bg-third);
+  padding: 0.8rem;
+  width: 100%;
+  z-index: 1;
+  border-radius: 10px;
+  font-size: 13px;
+  background: var(--bg-primary);
+}
+
+.apply-tags input,
+.apply-tags input::placeholder {
+  font-size: 13px;
+}
+
+.apply-label-text {
+  font-size: 14px;
+}
+
+.available-tags {
+  margin: 10px 0 10px 0;
+  max-height: 300px;
+  overflow-y: scroll;
+}
+
+.tags-name {
+  border-bottom: 1px solid var(--border-color);
+  padding: 0.4rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}

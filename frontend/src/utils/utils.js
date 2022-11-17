@@ -537,3 +537,15 @@ export const transformTagsOptions = (tags = []) => {
     return { value: tags, label: tags };
   });
 };
+
+export const transformTags = (tags = [], self = false) => {
+  if (self) {
+    return tags.map((tag, index) => {
+      return { id: uuid(), name: tag, checked: true };
+    });
+  } else {
+    return tags.map((tag, index) => {
+      return { id: uuid(), name: tag, checked: false };
+    });
+  }
+};

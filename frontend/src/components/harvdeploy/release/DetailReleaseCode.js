@@ -10,11 +10,12 @@ import {
 import { queryHarvester } from "../../../features/harvester/harvesterSlice";
 import ScheduleModal from "../../modals/ScheduleModal";
 import { handleReleaseFormSubmit } from "../../../utils/services";
+import Tags from "./Tags";
 
 function DetailReleaseCode(props) {
   const [releaseObj, setReleaseObj] = useState(null);
   const [selectedHarvId, setSelectedHarvId] = useState(null);
-  const { releasecode } = useSelector((state) => state.harvdeploy);
+  const { releasecode, tags } = useSelector((state) => state.harvdeploy);
   const { harvesters } = useSelector((state) => state.harvester);
   const dispatch = useDispatch();
   const modalRef = useRef();
@@ -73,15 +74,20 @@ function DetailReleaseCode(props) {
           </tbody>
         </table>
       </div>
-      <div>
-        <JsonDiv>
-          <ReactJson
-            src={releasecode.release}
-            collapsed={2}
-            thme="monokai"
-            enableClipboard
-          />
-        </JsonDiv>
+      <div className="row">
+        <div className="col-md-8">
+          <JsonDiv>
+            <ReactJson
+              src={releasecode.release}
+              collapsed={2}
+              thme="monokai"
+              enableClipboard
+            />
+          </JsonDiv>
+        </div>
+        <div className="col-md-4">
+          <Tags release={releasecode} allTags={tags} />
+        </div>
       </div>
       <ScheduleModal
         handleSubmit={handleFormSubmit}
