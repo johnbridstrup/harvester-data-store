@@ -2,6 +2,7 @@ import { useState, useEffect, lazy, Suspense, useRef } from "react";
 import { useSelector } from "react-redux";
 import { handleDownload } from "../../utils/services";
 import { Loader, robotInError, timeStampFormat } from "../../utils/utils";
+import { DownloadButton } from "../common";
 import DownloadModal from "../modals/DownloadModal";
 import {
   Container,
@@ -15,7 +16,7 @@ import {
 import ErrorReportDetailTable from "../tables/ErrorReportDetailTable";
 import ServiceTable from "../tables/ServiceTable";
 import TimeTable from "../tables/TimeTable";
-import { DownloadButton, ExceptTabular } from "./ErrorHelpers";
+import { ExceptTabular } from "./ErrorHelpers";
 const ChronyInfoPlot = lazy(() => import("../plotly/ChronyInfoPlot"));
 const ErrorReportJson = lazy(() => import("./ErrorReportJson"));
 

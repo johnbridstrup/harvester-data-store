@@ -5,8 +5,8 @@ import { Link } from "react-router-dom";
 import { getHarvId, timeStampFormat } from "../../../utils/utils";
 import { JobStatusHistory } from "../helpers";
 import { handleDownload } from "../../../utils/services";
-import { DownloadButton } from "../../errorreports/ErrorHelpers";
 import DownloadModal from "../../modals/DownloadModal";
+import { DownloadButton } from "../../common";
 
 function DetailJob(props) {
   const { job, jobresults, jobstatuses } = useSelector(

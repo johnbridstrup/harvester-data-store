@@ -4,24 +4,6 @@ import PropTypes from "prop-types";
 import Select from "react-select";
 import { aggregateOptions } from "../../utils/utils";
 
-export const DownloadButton = (props) => {
-  return (
-    <div className="flex-right mb-2">
-      <span onClick={props.popUp} className="btn btn-default mx-2">
-        Get Files
-      </span>
-      <button
-        ref={props.downloadRef}
-        data-bs-toggle="modal"
-        data-bs-target="#downloadModal"
-        style={{ display: "none" }}
-      >
-        Get Files
-      </button>
-    </div>
-  );
-};
-
 export const HoverTabular = (props) => {
   return (
     <>
@@ -515,11 +497,6 @@ export const FormQuery = (props) => {
       </div>
     </form>
   );
-};
-
-DownloadButton.propTypes = {
-  popUp: PropTypes.func,
-  downloadRef: PropTypes.object,
 };
 
 HoverTabular.propTypes = {
