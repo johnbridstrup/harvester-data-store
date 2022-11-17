@@ -531,3 +531,9 @@ export function handleSelectFactory(setSelectedFunc) {
   };
   return handleSelect;
 }
+
+export const transformTagsOptions = (tags = []) => {
+  return tags.map((tags, index) => {
+    return { value: tags, label: tags };
+  });
+};

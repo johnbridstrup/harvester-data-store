@@ -14,6 +14,13 @@ const getReleaseById = async (token, releaseId) => {
   return response;
 };
 
+const updateRelease = async (data, token) => {
+  let id = data.id;
+  delete data.id;
+  let response = await axiosService.patch(`${RELEASE_URL}${id}/`, token, data);
+  return response;
+};
+
 const paginateRelease = async (url, token) => {
   let response = await axiosService.get(url, token);
   return response;
@@ -40,13 +47,30 @@ const paginateVersion = async (url, token) => {
   return response;
 };
 
+const queryRelease = async (queryObj, token) => {
+  const params = new URLSearchParams(queryObj);
+  const response = await axiosService.get(
+    `${RELEASE_URL}?${params.toString()}`,
+    token
+  );
+  return response;
+};
+
+const listTags = async (token) => {
+  let response = await axiosService.get(`${RELEASE_URL}tags/`, token);
+  return response;
+};
+
 const harvdeployService = {
   listRelease,
   getReleaseById,
+  updateRelease,
   paginateRelease,
   listVersion,
   getVersionById,
   paginateVersion,
+  queryRelease,
+  listTags,
 };
 
 export default harvdeployService;

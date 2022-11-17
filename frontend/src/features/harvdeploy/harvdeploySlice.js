@@ -4,11 +4,13 @@ import harvdeployService from "./harvdeployService";
 
 const initialState = {
   loading: false,
+  editting: false,
   releasecode: {},
   releasecodes: [],
   versions: [],
   version: {},
   errorMsg: null,
+  tags: [],
   pagination: {
     next: null,
     previous: null,
@@ -42,6 +44,22 @@ export const getReleaseById = createAsyncThunk(
         auth: { token },
       } = thunkAPI.getState();
       return await harvdeployService.getReleaseById(token, releaseId);
+    } catch (error) {
+      console.log(error);
+      const message = invalidateCache(error, thunkAPI.dispatch);
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const updateRelease = createAsyncThunk(
+  "harvdeploy/updateRelease",
+  async (data, thunkAPI) => {
+    try {
+      const {
+        auth: { token },
+      } = thunkAPI.getState();
+      return await harvdeployService.updateRelease(data, token);
     } catch (error) {
       console.log(error);
       const message = invalidateCache(error, thunkAPI.dispatch);
@@ -114,6 +132,38 @@ export const paginateVersion = createAsyncThunk(
   }
 );
 
+export const queryRelease = createAsyncThunk(
+  "harvdeploy/queryRelease",
+  async (queryObj, thunkAPI) => {
+    try {
+      const {
+        auth: { token },
+      } = thunkAPI.getState();
+      return await harvdeployService.queryRelease(queryObj, token);
+    } catch (error) {
+      console.log(error);
+      const message = invalidateCache(error, thunkAPI.dispatch);
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const listTags = createAsyncThunk(
+  "harvdeploy/listTags",
+  async (_, thunkAPI) => {
+    try {
+      const {
+        auth: { token },
+      } = thunkAPI.getState();
+      return await harvdeployService.listTags(token);
+    } catch (error) {
+      console.log(error);
+      const message = invalidateCache(error, thunkAPI.dispatch);
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 const harvdeploySlice = createSlice({
   name: "harvdeploy",
   initialState,
@@ -143,6 +193,17 @@ const harvdeploySlice = createSlice({
       })
       .addCase(getReleaseById.rejected, (state, action) => {
         state.loading = false;
+        state.errorMsg = action.payload;
+      })
+      .addCase(updateRelease.pending, (state) => {
+        state.editting = true;
+      })
+      .addCase(updateRelease.fulfilled, (state, action) => {
+        state.editting = false;
+        state.releasecode = action.payload.data;
+      })
+      .addCase(updateRelease.rejected, (state, action) => {
+        state.editting = false;
         state.errorMsg = action.payload;
       })
       .addCase(paginateRelease.pending, (state) => {
@@ -195,6 +256,31 @@ const harvdeploySlice = createSlice({
         state.pagination.previous = action.payload.previous;
       })
       .addCase(paginateVersion.rejected, (state, action) => {
+        state.loading = false;
+        state.errorMsg = action.payload;
+      })
+      .addCase(queryRelease.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(queryRelease.fulfilled, (state, action) => {
+        state.loading = false;
+        state.releasecodes = action.payload.results;
+        state.pagination.count = action.payload.count;
+        state.pagination.next = action.payload.next;
+        state.pagination.previous = action.payload.previous;
+      })
+      .addCase(queryRelease.rejected, (state, action) => {
+        state.loading = true;
+        state.errorMsg = action.payload;
+      })
+      .addCase(listTags.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(listTags.fulfilled, (state, action) => {
+        state.loading = false;
+        state.tags = action.payload.tags;
+      })
+      .addCase(listTags.rejected, (state, action) => {
         state.loading = false;
         state.errorMsg = action.payload;
       });
