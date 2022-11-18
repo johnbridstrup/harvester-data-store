@@ -3,11 +3,13 @@ from harvester.models import Fruit, Harvester
 
 from django.db import models
 from collections.abc import Mapping, Iterable
+from taggit.managers import TaggableManager
 
 class HarvesterCodeRelease(CommonInfo):
     version = models.CharField(max_length=40)
     release = models.JSONField()
     fruit = models.ForeignKey(Fruit, on_delete=models.CASCADE)
+    tags = TaggableManager()
 
     class Meta:
         unique_together = ("version", "fruit")
@@ -25,7 +27,7 @@ class HarvesterVersionReport(ReportBase):
         for v in versions.values():
             if not isinstance(v, Mapping):
                 continue
-            
+
             check = v.get(key, None)
             if isinstance(check, Iterable):
                 if len(check) > 0:
@@ -58,13 +60,13 @@ class HarvesterVersionReport(ReportBase):
         release = self.harvester.release
         if release is None:
             return {"error": "No release"}
-        
+
         release_vers = release.version
         conflicts = {}
         for hostname, host_report in self.report["data"].items():
             if not isinstance(host_report, Mapping):
                 continue
-            
+
             error = host_report.get("error", None)
             if error is not None:
                 conflicts[hostname] = host_report

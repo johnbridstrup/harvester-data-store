@@ -8,7 +8,8 @@ from harvester.models import Fruit, Harvester
 from harvester.serializers.fruitserializer import FruitSerializer
 
 
-class HarvesterCodeReleaseSerializer(serializers.ModelSerializer):
+class HarvesterCodeReleaseSerializer(TaggitSerializer, serializers.ModelSerializer):
+    tags = TagListSerializerField(required=False)
     class Meta:
         model = HarvesterCodeRelease
         fields = ('__all__')
@@ -79,10 +80,10 @@ class HarvesterVersionReportSerializer(TaggitSerializer, ReportSerializerBase):
                 last_vers.lastModified = datetime.now()
                 last_vers.save()
                 return last_vers
-                
+
         except HarvesterVersionReport.DoesNotExist:
             return super().create(validated_data)
-        
+
         return super().create(validated_data)
 
     def to_representation(self, instance):
@@ -97,7 +98,7 @@ class HarvesterVersionReportSerializer(TaggitSerializer, ReportSerializerBase):
         except serializers.ValidationError:
             # try anyway, it has been logged.
             tags = [Tags.INVALIDSCHEMA.value]
-        
+
         report = data.copy()
         harv_id = report.get("serial_number")
         reportTime = self.extract_timestamp(report, key="timestamp")
