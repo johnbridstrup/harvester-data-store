@@ -12,7 +12,7 @@ from common.viewsets import CreateModelViewSet
 class HarvesterView(CreateModelViewSet):
     queryset = Harvester.objects.all()
     serializer_class = HarvesterSerializer
-    filterset_fields = ('harv_id',)
+    filterset_fields = ('harv_id', 'fruit__name')
     ordering = ('-id',)
 
     @action(
