@@ -22,6 +22,7 @@ import { paginateEvent } from "../../features/event/eventSlice";
 import {
   paginateVersion,
   paginateRelease,
+  paginateInstalled,
 } from "../../features/harvdeploy/harvdeploySlice";
 import { mapCurrentOffset } from "../../utils/utils";
 import {
@@ -170,7 +171,12 @@ export const GenericPagination = (props) => {
     location: paginateLocation,
     notification: paginateNotification,
     user: paginateUser,
-    harvdeploy: props.attr ? paginateRelease : paginateVersion,
+    harvdeploy:
+      props.attr === "release"
+        ? paginateRelease
+        : props.attr === "installed"
+        ? paginateInstalled
+        : paginateVersion,
     errorreport: paginateErrorReport,
     harvjobs:
       props.attr === "jobs"

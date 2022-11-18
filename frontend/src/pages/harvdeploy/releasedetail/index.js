@@ -7,6 +7,7 @@ import MainLayout from "../../../components/layout/main";
 import { LoaderDiv } from "../../../components/styled";
 import {
   getReleaseById,
+  installedHarvesters,
   listTags,
 } from "../../../features/harvdeploy/harvdeploySlice";
 import { Loader } from "../../../utils/utils";
@@ -20,6 +21,7 @@ function ReleaseCodeDetailView(props) {
     (async () => {
       await Promise.all([
         dispatch(getReleaseById(releaseId)),
+        dispatch(installedHarvesters(releaseId)),
         dispatch(listTags()),
       ]);
     })();

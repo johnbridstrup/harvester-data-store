@@ -61,6 +61,14 @@ const listTags = async (token) => {
   return response;
 };
 
+const installedHarvesters = async (token, id) => {
+  let response = await axiosService.get(
+    `${RELEASE_URL}${id}/harvesters`,
+    token
+  );
+  return response;
+};
+
 const harvdeployService = {
   listRelease,
   getReleaseById,
@@ -71,6 +79,7 @@ const harvdeployService = {
   paginateVersion,
   queryRelease,
   listTags,
+  installedHarvesters,
 };
 
 export default harvdeployService;

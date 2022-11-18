@@ -11,6 +11,7 @@ const initialState = {
   version: {},
   errorMsg: null,
   tags: [],
+  installed: [],
   pagination: {
     next: null,
     previous: null,
@@ -164,6 +165,38 @@ export const listTags = createAsyncThunk(
   }
 );
 
+export const installedHarvesters = createAsyncThunk(
+  "harvdeploy/installedHarvesters",
+  async (id, thunkAPI) => {
+    try {
+      const {
+        auth: { token },
+      } = thunkAPI.getState();
+      return await harvdeployService.installedHarvesters(token, id);
+    } catch (error) {
+      console.log(error);
+      const message = invalidateCache(error, thunkAPI.dispatch);
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const paginateInstalled = createAsyncThunk(
+  "harvdeploy/paginateInstalled",
+  async (url, thunkAPI) => {
+    try {
+      const {
+        auth: { token },
+      } = thunkAPI.getState();
+      return await harvdeployService.paginateRelease(url, token);
+    } catch (error) {
+      console.log(error);
+      const message = invalidateCache(error, thunkAPI.dispatch);
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 const harvdeploySlice = createSlice({
   name: "harvdeploy",
   initialState,
@@ -281,6 +314,34 @@ const harvdeploySlice = createSlice({
         state.tags = action.payload.tags;
       })
       .addCase(listTags.rejected, (state, action) => {
+        state.loading = false;
+        state.errorMsg = action.payload;
+      })
+      .addCase(installedHarvesters.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(installedHarvesters.fulfilled, (state, action) => {
+        state.loading = false;
+        state.installed = action.payload.results;
+        state.pagination.count = action.payload.count;
+        state.pagination.next = action.payload.next;
+        state.pagination.previous = action.payload.previous;
+      })
+      .addCase(installedHarvesters.rejected, (state, action) => {
+        state.loading = false;
+        state.errorMsg = action.payload;
+      })
+      .addCase(paginateInstalled.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(paginateInstalled.fulfilled, (state, action) => {
+        state.loading = false;
+        state.installed = action.payload.results;
+        state.pagination.count = action.payload.count;
+        state.pagination.next = action.payload.next;
+        state.pagination.previous = action.payload.previous;
+      })
+      .addCase(paginateInstalled.rejected, (state, action) => {
         state.loading = false;
         state.errorMsg = action.payload;
       });

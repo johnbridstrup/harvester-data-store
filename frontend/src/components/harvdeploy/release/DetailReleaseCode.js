@@ -11,11 +11,15 @@ import { queryHarvester } from "../../../features/harvester/harvesterSlice";
 import ScheduleModal from "../../modals/ScheduleModal";
 import { handleReleaseFormSubmit } from "../../../utils/services";
 import Tags from "./Tags";
+import { Link } from "react-router-dom";
+import { GenericPagination } from "../../pagination/Pagination";
 
 function DetailReleaseCode(props) {
   const [releaseObj, setReleaseObj] = useState(null);
   const [selectedHarvId, setSelectedHarvId] = useState(null);
-  const { releasecode, tags } = useSelector((state) => state.harvdeploy);
+  const { releasecode, tags, installed } = useSelector(
+    (state) => state.harvdeploy
+  );
   const { harvesters } = useSelector((state) => state.harvester);
   const dispatch = useDispatch();
   const modalRef = useRef();
@@ -74,7 +78,7 @@ function DetailReleaseCode(props) {
           </tbody>
         </table>
       </div>
-      <div className="row">
+      <div className="row mb-4">
         <div className="col-md-8">
           <JsonDiv>
             <ReactJson
@@ -87,6 +91,42 @@ function DetailReleaseCode(props) {
         </div>
         <div className="col-md-4">
           <Tags release={releasecode} allTags={tags} />
+        </div>
+      </div>
+      <div className="row mb-4">
+        <div className="col-md-8">
+          <div className="f-w-600">Currently Installed Harvesters</div>
+          <div className="table-responsive">
+            <table className="table">
+              <thead>
+                <tr>
+                  <td>ID</td>
+                  <td>Name</td>
+                  <td>HarvID</td>
+                  <td>Fruit</td>
+                  <td>Location</td>
+                  <td>Emulator</td>
+                  <td>ThingName</td>
+                </tr>
+              </thead>
+              <tbody>
+                {installed.map((harv, _) => (
+                  <tr key={harv.id}>
+                    <td>{harv.id}</td>
+                    <td>
+                      <Link to={`/harvesters/${harv.id}`}>{harv.name}</Link>
+                    </td>
+                    <td>{harv.harv_id}</td>
+                    <td>{harv.fruit?.name}</td>
+                    <td>{harv.location?.ranch}</td>
+                    <td>{harv.is_emulator ? "True" : "False"}</td>
+                    <td>{harv.thingName}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <GenericPagination state="harvdeploy" attr="installed" />
         </div>
       </div>
       <ScheduleModal
