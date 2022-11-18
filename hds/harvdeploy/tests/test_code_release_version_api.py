@@ -419,3 +419,44 @@ class ReleaseApiTestCase(HDSAPITestBase):
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         self.assertEqual(len(resp.data["tags"]), 1)
         self.assertCountEqual(self.release["tags"], resp.data["tags"])
+
+    def test_release_installed_harvesters(self):
+        """Test for harvesters with installed release."""
+        resp, _ = self.create_release(self.release)
+
+        self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
+
+        release_obj = HarvesterCodeRelease.objects.get(
+            pk=resp.data["id"]
+        )
+        harvester = self.test_objects["harvester"]
+        harvester.release = release_obj
+        harvester.save()
+        harvester.refresh_from_db()
+
+        resp = self.client.get(
+            f"{self.api_base_url}/release/{release_obj.id}/harvesters/"
+        )
+
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        self.assertEqual(resp.data["data"]["count"], 1)
+        self.assertEqual(
+            resp.data["data"]["results"][0]["harv_id"],
+            harvester.harv_id
+        )
+
+    def test_release_tags_endpoint(self):
+        """Test release tags endpoint."""
+        tags = ["New Tag", "Complete", "Success"]
+        self.release["tags"] = tags
+        resp, _ = self.create_release(self.release)
+
+        self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
+
+        resp = self.client.get(
+            f"{self.api_base_url}/release/tags/"
+        )
+
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(resp.data["data"]["tags"]), 3)
+        self.assertCountEqual(resp.data["data"]["tags"], tags)
