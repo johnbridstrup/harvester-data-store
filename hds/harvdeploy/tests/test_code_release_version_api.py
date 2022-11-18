@@ -21,7 +21,7 @@ class ReleaseApiTestCase(HDSAPITestBase):
             "version": 1.0,
             "master": {},
             "robot": {},
-            "stereo": {}, 
+            "stereo": {},
             "project": self.test_objects["fruit"].name
         }
 
@@ -75,7 +75,7 @@ class ReleaseApiTestCase(HDSAPITestBase):
         )
 
         self.assertEqual(resp.status_code, 200)
-    
+
     def test_get_release_by_id(self):
         self.create_release()
 
@@ -149,8 +149,8 @@ class ReleaseApiTestCase(HDSAPITestBase):
             versions['timestamp'] = time.time()
         else:
             versions['timestamp'] = ts
-        
-        
+
+
         resp = self.client.post(
             f"{self.api_base_url}/harvversion/",
             data=versions,
@@ -284,7 +284,7 @@ class ReleaseApiTestCase(HDSAPITestBase):
             data['results'][0]['harvester'],
             harv.id
         )
-      
+
     ## Integration with Harvester
 
     def test_harv_version_release(self):
@@ -343,7 +343,7 @@ class ReleaseApiTestCase(HDSAPITestBase):
         hist_resp = self.client.get(hist_url)
         hist_data = hist_resp.json()["data"]
         self.assertEqual(hist_data["count"], 2)
-    
+
     def test_release_history(self):
         self.create_release()
         self.client.patch(f"{self.api_base_url}/harvesters/1/", data={"release": 1})
@@ -392,4 +392,30 @@ class ReleaseApiTestCase(HDSAPITestBase):
         self.assertNotEqual(len(conflicts), 0)
         self.assertDictEqual(error, conflicts)
 
-        
+    def test_create_release_with_tags(self):
+        """Test adding release with tags"""
+        self.release["tags"] = ["New Tag", "Complete"]
+        resp, _ = self.create_release(self.release)
+
+        self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(len(resp.data["tags"]), 2)
+        self.assertCountEqual(self.release["tags"], resp.data["tags"])
+
+    def test_modify_release_tags(self):
+        """Test modifying release tags"""
+        self.release["tags"] = ["New Tag", "Complete"]
+        resp, _ = self.create_release(self.release)
+
+        self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(len(resp.data["tags"]), 2)
+        self.assertCountEqual(self.release["tags"], resp.data["tags"])
+
+        self.release["tags"] = ["Errored"]
+        resp = self.client.patch(
+            f"{self.api_base_url}/release/{resp.data['id']}/",
+            self.release,
+            format='json'
+        )
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(resp.data["tags"]), 1)
+        self.assertCountEqual(self.release["tags"], resp.data["tags"])

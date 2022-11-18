@@ -17,14 +17,16 @@ class HarvesterCodeReleaseSerializer(TaggitSerializer, serializers.ModelSerializ
 
     def to_internal_value(self, data):
         release = data.copy()
-        version = data.get('version')
-        fruit_str = data.get('project').lower()
+        version = release.get('version')
+        fruit_str = release.get('project').lower()
+        tags = release.pop('tags', [])
         fruit = Fruit.objects.get(name=fruit_str)
 
         data = {
             'version': version,
             'release': release,
-            'fruit': fruit.id
+            'fruit': fruit.id,
+            'tags': tags
         }
         return super().to_internal_value(data)
 
