@@ -19,7 +19,7 @@ alias setport="source $HDS_ROOT/scripts/set_port.sh"
 alias jobserver="source $HDS_ROOT/scripts/set_jobserver_addr.sh"
 alias hds-logs="docker compose logs web"
 alias db-logs="docker compose logs db"
-alias install-node="$HDS_ROOT/install-node.sh"
+alias install-node="$HDS_ROOT/scripts/install-node.sh"
 alias build="$HDS_ROOT/frontend/build.start.sh"
 
 PORT=$1
@@ -32,10 +32,9 @@ source $HDS_ROOT/scripts/set_jobserver_addr.sh
 
 if [ -d "${HDS_ROOT}/multiproc-tmp" ]
 then
-    rm ${HDS_ROOT}/multiproc-tmp/*
-else
-    mkdir $HDS_ROOT/multiproc-tmp
+    rm -rf ${HDS_ROOT}/multiproc-tmp/
 fi
+mkdir $HDS_ROOT/multiproc-tmp
 
 export PROMETHEUS_MULTIPROC_DIR=$HDS_ROOT/multiproc-tmp
 
