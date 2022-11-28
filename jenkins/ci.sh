@@ -1,6 +1,7 @@
 #!/bin/bash
 echo ""
 echo "Setting up environment"
+export HDS_ROOT=$PWD
 source ./setup-venv.sh
 
 echo ""

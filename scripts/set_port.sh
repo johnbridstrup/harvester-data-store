@@ -42,7 +42,4 @@ else
 fi
 
 export HDS_PORT
-
-echo "Create .env file"
-echo "HDS_PORT=$HDS_PORT" > .env
-echo "  Using port: $HDS_PORT"
+$HDS_ROOT/scripts/set_env.sh

@@ -33,6 +33,7 @@ services:
       - SQL_PORT=5432
       - HDS_ROOT=/opt/app/hds
       - HDS_PORT=${HDS_PORT}
+      - JOB_SERVER_ADDRESS=${JOB_SERVER_ADDRESS}
       - BROKER_URL=redis://redis:6379/0
       - PAGE_CACHING=true
     depends_on:

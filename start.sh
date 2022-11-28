@@ -1,4 +1,6 @@
 #!/bin/bash
+# Start the development virtual environment.
+# No arguments, or one argument which is the django server port.
 
 source venv/bin/activate
 
@@ -14,6 +16,7 @@ alias dcexec="docker compose exec web"
 alias dbexec="docker compose exec db"
 alias HELP="$HDS_ROOT/scripts/help.sh"
 alias setport="source $HDS_ROOT/scripts/set_port.sh"
+alias jobserver="source $HDS_ROOT/scripts/set_jobserver_addr.sh"
 alias hds-logs="docker compose logs web"
 alias db-logs="docker compose logs db"
 alias install-node="$HDS_ROOT/install-node.sh"
@@ -24,7 +27,8 @@ if [ -z $PORT ]
 then
     PORT=8085
 fi
-source $HDS_ROOT/scripts/set_port.sh $PORT
+source $HDS_ROOT/scripts/set_port.sh $PORT > /dev/null
+source $HDS_ROOT/scripts/set_jobserver_addr.sh
 
 if [ -d "${HDS_ROOT}/multiproc-tmp" ]
 then
