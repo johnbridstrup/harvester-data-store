@@ -2,6 +2,12 @@ import moment from "moment";
 import { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
+import { SUCCESS } from "../../../features/base/constants";
+import {
+  listTags,
+  updateRelease,
+} from "../../../features/harvdeploy/harvdeploySlice";
 import { queryHarvester } from "../../../features/harvester/harvesterSlice";
 import { handleReleaseFormSubmit } from "../../../utils/services";
 import {
@@ -9,16 +15,22 @@ import {
   Loader,
   transformHarvOptions,
 } from "../../../utils/utils";
+import ReleaseTagModal from "../../modals/ReleaseTagModal";
 import ScheduleModal from "../../modals/ScheduleModal";
 import { LoaderDiv } from "../../styled";
 
 function ListReleaseCode(props) {
   const [releaseObj, setReleaseObj] = useState(null);
+  const [selectedRelease, setSelectedRelease] = useState(null);
   const [selectedHarvId, setSelectedHarvId] = useState(null);
+  const [fieldData, setFieldData] = useState({
+    tag: "",
+  });
   const { releasecodes, loading } = useSelector((state) => state.harvdeploy);
   const { harvesters } = useSelector((state) => state.harvester);
   const dispatch = useDispatch();
   const modalRef = useRef();
+  const tagRef = useRef(null);
   const harvOptions = transformHarvOptions(harvesters);
 
   const handleFormSubmit = handleReleaseFormSubmit(
@@ -28,10 +40,43 @@ function ListReleaseCode(props) {
   );
   const handleSelect = handleSelectFactory(setSelectedHarvId);
 
+  const handleFieldChange = (e) => {
+    setFieldData((current) => {
+      return { ...current, [e.target.name]: e.target.value };
+    });
+  };
+
   const modalPopUp = async (obj) => {
     setReleaseObj((current) => obj);
     await dispatch(queryHarvester({ fruit__name: obj.fruit?.name }));
     modalRef.current.click();
+  };
+
+  const tagPopup = (obj) => {
+    setSelectedRelease((current) => obj);
+    tagRef.current.click();
+  };
+
+  const handleTagSubmit = async (e) => {
+    e.preventDefault();
+
+    let tags = fieldData.tag.split(/\s*,\s*/);
+    let data = {
+      ...selectedRelease?.release,
+      tags: tags,
+      id: selectedRelease?.id,
+    };
+    const res = await dispatch(updateRelease(data));
+    if (res.payload?.status === SUCCESS) {
+      await dispatch(listTags());
+      toast.success(res.payload?.message);
+      tagRef.current.click();
+      setFieldData((current) => {
+        return { ...current, tag: "" };
+      });
+    } else {
+      toast.error(res.payload);
+    }
   };
 
   return (
@@ -51,6 +96,7 @@ function ListReleaseCode(props) {
                 <th>Created At</th>
                 <th>Updated At</th>
                 <th>Schedule Deployment</th>
+                <th>Add Tags</th>
               </tr>
             </thead>
             <tbody>
@@ -80,6 +126,20 @@ function ListReleaseCode(props) {
                       Schedule
                     </button>
                   </td>
+                  <td>
+                    <span onClick={() => tagPopup(obj)} className="btn btn-sm">
+                      Add Tags
+                    </span>
+                    <button
+                      ref={tagRef}
+                      type="button"
+                      data-bs-toggle="modal"
+                      data-bs-target="#tagModal"
+                      style={{ display: "none" }}
+                    >
+                      Add Tags
+                    </button>
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -91,6 +151,11 @@ function ListReleaseCode(props) {
         harvOptions={harvOptions}
         selectedHarvId={selectedHarvId}
         handleHarvIdSelect={handleSelect}
+      />
+      <ReleaseTagModal
+        handleChange={handleFieldChange}
+        handleSubmit={handleTagSubmit}
+        fieldData={fieldData}
       />
     </>
   );
