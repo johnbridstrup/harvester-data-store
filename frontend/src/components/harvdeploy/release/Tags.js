@@ -4,7 +4,10 @@ import PropTypes from "prop-types";
 import { InputFormControl } from "../../styled";
 import useClickOutside from "../../../hooks/clickOutSide";
 import { transformTags } from "../../../utils/utils";
-import { updateRelease } from "../../../features/harvdeploy/harvdeploySlice";
+import {
+  listTags,
+  updateRelease,
+} from "../../../features/harvdeploy/harvdeploySlice";
 
 function Tags(props) {
   const [fieldData, setFieldData] = useState({
@@ -12,6 +15,7 @@ function Tags(props) {
     tagArr: [],
   });
   const [openModal, setOpenModal] = useState(false);
+  const [createNew, setCreateNew] = useState(false);
   const tagRef = useRef();
   const dispatch = useDispatch();
   const allTags = transformTags(props.allTags);
@@ -64,6 +68,41 @@ function Tags(props) {
       ? allTags.filter((x) => x.name.toLowerCase().includes(e.target.value))
       : allTags;
     setTags((current) => filtered);
+    if (filtered.length === 0) {
+      setCreateNew(true);
+    } else {
+      setCreateNew(false);
+    }
+  };
+
+  const handleTagRemove = async (tag) => {
+    let newTags = [...props.release?.tags];
+    let index = newTags.findIndex((x) => x === tag);
+    newTags.splice(index, 1);
+    let data = {
+      ...props.release?.release,
+      id: props.release?.id,
+      tags: newTags,
+    };
+    await dispatch(updateRelease(data));
+    await dispatch(listTags());
+    setTags((current) => allTags);
+  };
+
+  const handleCreateNewTag = async () => {
+    let data = {
+      ...props.release?.release,
+      id: props.release?.id,
+      tags: [...props.release?.tags, fieldData.tag],
+    };
+    await dispatch(updateRelease(data));
+    await dispatch(listTags());
+    setOpenModal(false);
+    setCreateNew(false);
+    setFieldData((current) => {
+      return { ...current, tag: "" };
+    });
+    setTags((current) => allTags);
   };
 
   return (
@@ -76,7 +115,13 @@ function Tags(props) {
       <div className="chips-wrap">
         {props.release?.tags?.map((x, index) => (
           <span key={index} className="text-secondary chips mx-2 mb-2">
-            {x}
+            <span>{x}</span>{" "}
+            <span className="mx-1">
+              <i
+                onClick={() => handleTagRemove(x)}
+                className="las la-times"
+              ></i>
+            </span>
           </span>
         ))}
       </div>
@@ -112,6 +157,14 @@ function Tags(props) {
                 <span>{x.checked && <i className="las la-times"></i>}</span>
               </div>
             ))}
+            {createNew && (
+              <div
+                onClick={handleCreateNewTag}
+                className="text-secondary tags-name hover2 cursor"
+              >
+                <span className="mx-2">Create new tag "{fieldData.tag}"</span>
+              </div>
+            )}
           </div>
         </div>
       )}
