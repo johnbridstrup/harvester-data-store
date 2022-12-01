@@ -28,6 +28,7 @@ function ListReleaseCode(props) {
   });
   const { releasecodes, loading } = useSelector((state) => state.harvdeploy);
   const { harvesters } = useSelector((state) => state.harvester);
+  const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const modalRef = useRef();
   const tagRef = useRef(null);
@@ -36,6 +37,7 @@ function ListReleaseCode(props) {
   const handleFormSubmit = handleReleaseFormSubmit(
     releaseObj,
     selectedHarvId,
+    user,
     dispatch
   );
   const handleSelect = handleSelectFactory(setSelectedHarvId);

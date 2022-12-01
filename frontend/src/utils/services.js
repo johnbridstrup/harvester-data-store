@@ -17,6 +17,7 @@ export const handleDownload = async (fileObj, token) => {
 export const handleReleaseFormSubmit = (
   releaseObj,
   selectedHarvId,
+  user,
   dispatch
 ) => {
   const handleFormSubmit = async (e) => {
@@ -24,6 +25,11 @@ export const handleReleaseFormSubmit = (
     const data = {
       payload: {},
     };
+
+    if (!user?.is_superuser) {
+      toast.error("Permissions denied!");
+      return;
+    }
 
     if (selectedHarvId && selectedHarvId.hasOwnProperty("value")) {
       data["target"] = selectedHarvId.value;
