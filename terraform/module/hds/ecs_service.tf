@@ -1,3 +1,26 @@
+module "git_info" {
+  source       = "Invicton-Labs/git-info/external"
+
+  // The directory to check
+  working_dir = "../"
+
+  // Whether to fetch from the remote prior to getting the other data
+  fetch = false
+
+  // Whether to pull from the remote
+  pull = false
+
+  // None of these are required because they all default to `true` anyways,
+  // but this shows the options
+  get_commit_hash     = true
+  get_current_branch  = false
+  get_current_tags    = false
+  get_local_branches  = false
+  get_remote_branches = false
+  get_remotes         = false
+  get_tags            = false
+}
+
 locals {
   environment_variables = [
     { "name" : "POSTGRES_NAME", "value" : var.db_name },
@@ -24,6 +47,7 @@ locals {
     { "name" : "HARVVERSION_QUEUE_URL", "value" : var.versions_queue_url },
     { "name" : "JOBRESULTS_QUEUE_URL", "value" : var.jobresults_queue_url },
     { "name" : "MIGRATE", "value" : var.migrate_flag },
+    { "name" : "GITHASH", "value" : module.git_info.commit_hash },
   ]
 }
 
@@ -49,4 +73,8 @@ module "hds_ecs" {
   service_ingress_sg_rules       = var.service_ingress_sg_rules
   service_container_memory       = var.service_container_memory
   service_container_cpu          = var.service_container_cpu
+}
+
+output "git_info" {
+  value = module.git_info
 }

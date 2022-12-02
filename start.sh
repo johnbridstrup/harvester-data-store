@@ -5,6 +5,7 @@
 source venv/bin/activate
 
 export HDS_ROOT="$( git rev-parse --show-toplevel )"
+export GITHASH="$( git rev-parse HEAD )"
 
 alias runserver="$HDS_ROOT/scripts/start-dev-server.sh"
 alias stopserver="docker compose down -v"
