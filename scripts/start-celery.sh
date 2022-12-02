@@ -4,8 +4,13 @@
 set -e
 cd hds
 
-echo "Migrating"
-python manage.py migrate
+RUN_MIGRATIONS=${MIGRATE:-"false"}
+
+if [ "$RUN_MIGRATIONS" = "true" ]
+then
+    echo "Migrating"
+    python manage.py migrate
+fi
 
 echo "Creating Superuser"
 python manage.py initsuperuser

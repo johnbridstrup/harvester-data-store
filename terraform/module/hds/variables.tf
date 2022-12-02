@@ -242,6 +242,12 @@ variable "frontend_url" {
   type        = string
 }
 
+variable "migrate_flag" {
+  description = "Flag to migrate the database on deployment"
+  type        = string
+  default     = "false"
+}
+
 # SQS QUEUES
 
 variable "errorreport_queue_url" {

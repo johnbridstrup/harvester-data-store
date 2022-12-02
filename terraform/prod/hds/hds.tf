@@ -12,6 +12,7 @@ locals {
   enable_prometheus_scrape = true
   service_container_memory = 2048
   service_container_cpu    = 512
+  migrate                  = var.migrate_flag
   jobserver_port           = "8000"
 }
 
@@ -82,6 +83,7 @@ module "hds" {
   s3files_queue_url        = data.aws_sqs_queue.file_queue.url
   versions_queue_url       = data.aws_sqs_queue.versions_queue.url
   jobresults_queue_url     = data.aws_sqs_queue.jobresults_queue.url
+  migrate_flag             = local.migrate
 }
 
 resource "aws_security_group_rule" "hds_db_rule" {
