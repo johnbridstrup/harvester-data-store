@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'django_filters',
     'common',
     'location',
+    'hdsmigrations',
     'errorreport',
     'event',
     'exceptions',
