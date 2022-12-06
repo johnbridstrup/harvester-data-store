@@ -11,9 +11,9 @@ class DTimeFormatter:
         return dt_str
 
     @classmethod
-    def convert_to_datetime(cls, dt_str, tz_str):
+    def convert_to_datetime(cls, dt_str, tz_str, format='%Y%m%dT%H%M%S.%f'):
         tz = pytz.timezone(tz_str)
-        dt = tz.localize(datetime.strptime(dt_str, '%Y%m%dT%H%M%S.%f'))
+        dt = tz.localize(datetime.strptime(dt_str, format))
 
         return dt
 

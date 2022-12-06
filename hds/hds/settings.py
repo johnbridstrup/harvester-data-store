@@ -10,7 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
-import os, sys
+import os, sys, logging
 
 from pathlib import Path
 
@@ -62,6 +62,7 @@ INSTALLED_APPS = [
     'notifications',
     's3file',
     'taggit',
+    'logparser',
 ]
 
 MIDDLEWARE = [
@@ -198,12 +199,28 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
+USES3 = os.environ.get(
+    'USES3', 'false'
+).lower() in ['true', 'True', '1']
+if USES3:
+    AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME')
+    if AWS_STORAGE_BUCKET_NAME is None:
+        logging.error("bucket name was not provided")
+        raise EnvironmentError("bucket name should not be none")
+    AWS_QUERYSTRING_AUTH = False
+    AWS_S3_OBJECT_PARAMETERS = {
+        'CacheControl': 'max-age=86400',
+    }
+
+    STATICFILES_STORAGE = 'hds.storages.StaticStorage'
+    DEFAULT_FILE_STORAGE = 'hds.storages.MediaStorage'
+
 STATIC_URL = '/static/'
+MEDIA_URL = '/media/'
 
 STATIC_ROOT = os.environ.get('STATIC_ROOT', os.path.join(BASE_DIR, 'static/'))
-
-MEDIA_URL = 'media/'
 MEDIA_ROOT = os.environ.get('MEDIA_ROOT', os.path.join(BASE_DIR, 'media/'))
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
@@ -229,3 +246,5 @@ else:
     CELERY_RESULT_BACKEND = 'django-db'
     CELERY_CACHE_BACKEND = 'redis'
     CELERY_BROKER_URL = os.environ.get('BROKER_URL', REDIS_DEFAULT_URL)
+
+FILE_UPLOAD_MAX_MEMORY_SIZE = 300 * 1024 * 1024 # bytes

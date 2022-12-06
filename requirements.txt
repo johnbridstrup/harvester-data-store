@@ -4,10 +4,11 @@ Django==4.0.4
 django-prometheus==2.2.0
 djangorestframework==3.13.1
 django-cors-headers==3.13.0
-django-filter==22.1 
+django-filter==22.1
 django-redis==5.2.0
 django-simple-history==3.1.1
 django-taggit==3.0.0
+django-storages==1.13.1
 flake8==4.0.1
 gunicorn==20.1.0
 jsonschema==4.16.0
@@ -28,3 +29,4 @@ redis==4.3.4
 slack_sdk==3.18.1
 boto3==1.24.61
 moto==4.0.1
+moviepy==1.0.3

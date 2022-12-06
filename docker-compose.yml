@@ -38,6 +38,8 @@ services:
       - PAGE_CACHING=true
       - GITHASH=${GITHASH:-"UNKNOWN"}
       - MIGRATE=true
+      - AWS_STORAGE_BUCKET_NAME=${AWS_STORAGE_BUCKET_NAME}
+      - USES3=${USES3}
     depends_on:
       - db
       - redis
