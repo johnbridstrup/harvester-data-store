@@ -20,7 +20,6 @@ function ListHarvVersion(props) {
                 <th>ID</th>
                 <th>Time</th>
                 <th>Dirty</th>
-                <th>Harvester</th>
                 <th>Created At</th>
                 <th>Updated At</th>
               </tr>
@@ -35,7 +34,6 @@ function ListHarvVersion(props) {
                     </Link>
                   </td>
                   <td>{version.is_dirty ? "True" : "False"}</td>
-                  <td>{version.report?.data?.serial_number}</td>
                   <td>{moment(version.created).format("LLLL")}</td>
                   <td>{moment(version.lastModified).format("LLLL")}</td>
                 </tr>
