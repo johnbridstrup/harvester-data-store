@@ -46,6 +46,9 @@ urlpatterns = [
     path(f'{version}/harvjobs/', include('harvjobs.urls.joburls')),
     path(f'{version}/users/', include('common.urls.userurls')),
     path(f'{version}/healthcheck/', include('healthcheck.urls')),
+    path(f'{version}/logsessions/', include('logparser.urls.logsessionurls')),
+    path(f'{version}/logfiles/', include('logparser.urls.logfileurls')),
+    path(f'{version}/logvideos/', include('logparser.urls.logvideourls')),
     path(
         f'{version}/openapi',
         get_schema_view(
@@ -55,7 +58,7 @@ urlpatterns = [
         ),
         name='openapi-schema'
     ),
-    path('', include('django_prometheus.urls')), #/metrics, etc...        
+    path('', include('django_prometheus.urls')), #/metrics, etc...
 ]
 
 if settings.DEBUG is True:
