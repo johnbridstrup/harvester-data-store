@@ -9,6 +9,7 @@ import harvdeployReducer from "../features/harvdeploy/harvdeploySlice";
 import harvesterReducer from "../features/harvester/harvesterSlice";
 import harvjobReducer from "../features/harvjobs/harvjobSlice";
 import locationReducer from "../features/location/locationSlice";
+import logparserReducer from "../features/logparser/logparserSlice";
 import notificationReducer from "../features/notification/notificationSlice";
 import userReducer from "../features/user/userSlice";
 
@@ -26,6 +27,7 @@ const store = configureStore({
     event: eventReducer,
     harvdeploy: harvdeployReducer,
     harvjobs: harvjobReducer,
+    logparser: logparserReducer,
   },
 });
 
