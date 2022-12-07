@@ -1,0 +1,24 @@
+{
+  "type": "autodiagnostics",
+  "timestamp": 1670436508.5502312,
+  "data": {
+    "serial_no": 1297,
+    "ts": 1670436508.5497868,
+    "min_vac": 40.0,
+    "delta_fing": 0.04,
+    "no_touch_force": 1.1,
+    "max_touch_val": 7.2,
+    "passed_autodiag": true,
+    "_meta": {
+      "name": "picker",
+      "topic": "autodiag_results",
+      "ts": 1670436508.5497963,
+      "index": 2
+    },
+    "robot_id": 2,
+    "finger_open_value": 1.3,
+    "finger_closed_value": 8.6
+  },
+  "serial_number": 11,
+  "uuid": "2115cd5a-765a-11ed-9d09-677a59a17003"
+}

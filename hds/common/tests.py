@@ -154,10 +154,23 @@ class HDSAPITestBase(APITestCase):
         report_path = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'test_data/report.json')
         with open(report_path, 'rb') as f:
             self.data = json.load(f)
+    
+    def _load_autodiag_report(self):
+        report_path = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'test_data/autodiag_report.json')
+        with open(report_path, 'rb') as f:
+            self.ad_data = json.load(f)
+    
     def _post_error_report(self, load=True):
         if load:
             self._load_report_data()
         resp = self.client.post(f'{self.api_base_url}/errorreports/', self.data, format='json')
+        self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
+        return resp.json()
+
+    def _post_autodiag_report(self, load=True):
+        if load:
+            self._load_autodiag_report()
+        resp = self.client.post(f'{self.api_base_url}/autodiagnostics/', self.ad_data, format='json')
         self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
         return resp.json()
 
