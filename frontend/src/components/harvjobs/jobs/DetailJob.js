@@ -1,30 +1,59 @@
 import moment from "moment";
-import { useRef } from "react";
-import { useSelector } from "react-redux";
+import { useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 import { getHarvId, timeStampFormat } from "../../../utils/utils";
-import { JobStatusHistory } from "../helpers";
+import { RightButtonGroup, JobStatusHistory } from "../helpers";
 import { handleDownload } from "../../../utils/services";
 import DownloadModal from "../../modals/DownloadModal";
-import { DownloadButton } from "../../common";
+import ConfirmModal from "../../modals/ConfirmModal";
+import { rescheduleJob } from "../../../features/harvjobs/harvjobSlice";
+import { SUCCESS } from "../../../features/base/constants";
 
 function DetailJob(props) {
+  const [scheduling, setScheduling] = useState(false);
   const { job, jobresults, jobstatuses } = useSelector(
     (state) => state.harvjobs
   );
   const { token } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
   const downloadRef = useRef(null);
+  const confirmRef = useRef(null);
 
   const downloadPopUp = () => {
     downloadRef.current.click();
   };
+
   const download = async (fileObj) => {
     await handleDownload(fileObj, token);
   };
 
+  const confirmPopUp = () => {
+    confirmRef.current.click();
+  };
+
+  const handleReschedule = async () => {
+    setScheduling(true);
+    const res = await dispatch(rescheduleJob(job.id));
+    if (res.payload?.status === SUCCESS) {
+      toast.success(res.payload?.message);
+      confirmPopUp();
+    } else {
+      confirmPopUp();
+      toast.error(res.payload);
+    }
+    setScheduling(false);
+  };
+
   return (
     <>
-      <DownloadButton popUp={downloadPopUp} downloadRef={downloadRef} />
+      <RightButtonGroup
+        downloadRef={downloadRef}
+        popUp={downloadPopUp}
+        confirmPopUp={confirmPopUp}
+        confirmRef={confirmRef}
+      />
       <div className="mb-4 mt-3">
         <div className="card card-body mb-4">
           <div className="row">
@@ -124,6 +153,13 @@ function DetailJob(props) {
       <div className="f-w-600">Job Status</div>
       <JobStatusHistory jobstatuses={jobstatuses} />
       <DownloadModal eventObj={job?.event} handleDownload={download} />
+      <ConfirmModal
+        cancelRequest={confirmPopUp}
+        confirmRef={confirmRef}
+        handleDelete={handleReschedule}
+        msg={"Are you sure you want to reschedule this job"}
+        loading={scheduling}
+      />
     </>
   );
 }

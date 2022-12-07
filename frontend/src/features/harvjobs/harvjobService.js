@@ -128,6 +128,14 @@ const listJobStatus = async (jobId, token) => {
   return response;
 };
 
+const rescheduleJob = async (jobId, token) => {
+  const response = await axiosService.get(
+    `${JOBS_URL}${jobId}/reschedule/`,
+    token
+  );
+  return response;
+};
+
 const harvjobService = {
   listJobTypes,
   getJobTypeById,
@@ -147,6 +155,7 @@ const harvjobService = {
   getJobResultById,
   queryJobResults,
   listJobStatus,
+  rescheduleJob,
 };
 
 export default harvjobService;

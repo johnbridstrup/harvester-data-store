@@ -49,6 +49,35 @@ export const JobStatusHistory = (props) => {
   );
 };
 
+export const RightButtonGroup = (props) => {
+  return (
+    <div className="flex-right mb-2">
+      <span onClick={props.confirmPopUp} className="btn btn-default mx-2">
+        Reschedule
+      </span>
+      <span onClick={props.popUp} className="btn btn-default mx-2">
+        Get Files
+      </span>
+      <button
+        ref={props.downloadRef}
+        data-bs-toggle="modal"
+        data-bs-target="#downloadModal"
+        style={{ display: "none" }}
+      >
+        Get Files
+      </button>
+      <button
+        ref={props.confirmRef}
+        data-bs-toggle="modal"
+        data-bs-target="#confirmModal"
+        style={{ display: "none" }}
+      >
+        Reschedule
+      </button>
+    </div>
+  );
+};
+
 BackButton.propTypes = {
   mb: PropTypes.string,
   mt: PropTypes.string,
@@ -57,6 +86,13 @@ BackButton.propTypes = {
 
 JobStatusHistory.propTypes = {
   jobstatuses: PropTypes.array,
+};
+
+RightButtonGroup.propTypes = {
+  popUp: PropTypes.func,
+  downloadRef: PropTypes.object,
+  confirmRef: PropTypes.object,
+  confirmPopUp: PropTypes.func,
 };
 
 export default BackButton;
