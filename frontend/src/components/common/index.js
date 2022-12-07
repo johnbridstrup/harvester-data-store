@@ -1,4 +1,5 @@
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 
 export const DownloadButton = (props) => {
   return (
@@ -22,3 +23,17 @@ DownloadButton.propTypes = {
   popUp: PropTypes.func,
   downloadRef: PropTypes.object,
 };
+
+export function BackButton(props) {
+  const goBack = (e) => {
+    e.preventDefault();
+    window.history.back();
+  };
+  return (
+    <div className={`${props.mb ? props.mb : ""} ${props.mt ? props.mt : ""}`}>
+      <Link to={``} className="btn" onClick={goBack}>
+        <i className="las la-arrow-left"></i>Back
+      </Link>
+    </div>
+  );
+}

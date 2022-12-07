@@ -80,6 +80,9 @@ const JobHistoryView = lazy(() => import("../pages/harvjobs/jobhistory"));
 const LogSessionListView = lazy(() =>
   import("../pages/logparser/logsession/listview")
 );
+const LogSessionDetailView = lazy(() =>
+  import("../pages/logparser/logsession/detailview")
+);
 
 const BaseRouter = () => {
   return (
@@ -627,6 +630,22 @@ const BaseRouter = () => {
                 }
               >
                 <LogSessionListView />
+              </Suspense>
+            </RequireUser>
+          }
+        />
+        <Route
+          path="/logsession/:sessionId"
+          element={
+            <RequireUser>
+              <Suspense
+                fallback={
+                  <RouteLoader>
+                    <Loader size={50} />
+                  </RouteLoader>
+                }
+              >
+                <LogSessionDetailView />
               </Suspense>
             </RequireUser>
           }
