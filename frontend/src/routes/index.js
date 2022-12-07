@@ -83,6 +83,9 @@ const LogSessionListView = lazy(() =>
 const LogSessionDetailView = lazy(() =>
   import("../pages/logparser/logsession/detailview")
 );
+const LogFileListView = lazy(() =>
+  import("../pages/logparser/logfile/listview")
+);
 
 const BaseRouter = () => {
   return (
@@ -646,6 +649,22 @@ const BaseRouter = () => {
                 }
               >
                 <LogSessionDetailView />
+              </Suspense>
+            </RequireUser>
+          }
+        />
+        <Route
+          path="/logfiles/:sessionId"
+          element={
+            <RequireUser>
+              <Suspense
+                fallback={
+                  <RouteLoader>
+                    <Loader size={50} />
+                  </RouteLoader>
+                }
+              >
+                <LogFileListView />
               </Suspense>
             </RequireUser>
           }

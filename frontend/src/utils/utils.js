@@ -549,3 +549,80 @@ export const transformTags = (tags = [], self = false) => {
     });
   }
 };
+
+export function findClosest(target, arr = []) {
+  /**
+   * this implements the binary search algorithm
+   * to find the closest timestamp from with the
+   * logs timestamp
+   * args
+   *    -> target is the timestamp to find e.g
+   *       1667345034.422079
+   *    -> arr is the array of objects containing
+   *        timestamp, log, and date_time
+   * finds the closest or exact timestamp
+   * return object with timestamp, log and date_time
+   */
+  let n = arr.length;
+
+  if (target <= arr[0]?.timestamp) return arr[0];
+  if (target >= arr[n - 1]?.timestamp) return arr[n - 1];
+
+  let start = 0;
+  let end = n;
+  let mid = 0;
+  while (start < end) {
+    mid = Math.floor((start + end) / 2);
+
+    if (arr[mid]?.timestamp === target) return arr[mid];
+
+    if (target < arr[mid]?.timestamp) {
+      if (mid > 0 && target > arr[mid - 1]?.timestamp) {
+        return getClosest(arr[mid - 1], arr[mid], target);
+      }
+      end = mid;
+    } else {
+      if (mid < n - 1 && target < arr[mid + 1]?.timestamp) {
+        return getClosest(arr[mid], arr[mid + 1], target);
+      }
+      start = mid + 1;
+    }
+  }
+
+  return arr[mid];
+}
+
+function getClosest(a, b, target) {
+  /**
+   * finds the closest timestamp
+   * return the object.
+   *
+   */
+  if (target - a?.timestamp >= b?.timestamp - target) {
+    return b;
+  } else {
+    return a;
+  }
+}
+
+export const transformRobots = (robots = []) => {
+  return robots.map((robot) => {
+    return { label: `robot ${robot}`, value: robot };
+  });
+};
+
+export const getCurrIndex = (currentMarker, data) => {
+  /**
+   * finds the currentindex of log entry matched
+   * from timestamp.
+   *
+   */
+  return new Promise((resolve, reject) => {
+    let closest = findClosest(currentMarker, data.content);
+    let currIndex = data.content?.findIndex(
+      (x) => x.timestamp === closest?.timestamp
+    );
+    currIndex = currIndex > 0 ? currIndex : 0;
+    resolve(currIndex);
+  });
+};
