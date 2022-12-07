@@ -156,7 +156,7 @@ function DetailJob(props) {
       <ConfirmModal
         cancelRequest={confirmPopUp}
         confirmRef={confirmRef}
-        handleDelete={handleReschedule}
+        confirmRequest={handleReschedule}
         msg={"Are you sure you want to reschedule this job"}
         loading={scheduling}
       />

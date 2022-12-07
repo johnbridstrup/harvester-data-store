@@ -243,7 +243,8 @@ function UserProfileDetail(props) {
       <ConfirmModal
         confirmRef={confirmRef}
         cancelRequest={confirmPopUp}
-        handleDelete={handleDeleteNotification}
+        confirmRequest={handleDeleteNotification}
+        msg={"Are you sure you want to delete the selected notification(s)"}
       />
     </>
   );

@@ -68,9 +68,10 @@ function ListNotification(props) {
       />
 
       <ConfirmModal
-        handleDelete={handleDeleteMany}
+        confirmRequest={handleDeleteMany}
         cancelRequest={confirmPopUp}
         confirmRef={confirmRef}
+        msg={"Are you sure you want to delete the selected notification(s)"}
       />
     </>
   );

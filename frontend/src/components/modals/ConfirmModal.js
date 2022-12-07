@@ -36,16 +36,15 @@ function ConfirmModal(props) {
               <div className="modal-body text-center px-5 pb-2">CONFIRM</div>
 
               <div className="modal-body px-5 pb-4">
-                <div>
-                  Are you sure you want to delete the selected notification(s)
-                </div>
+                <div>{props.msg}</div>
                 <div className="text-center">
                   <button
-                    onClick={props.handleDelete}
+                    onClick={props.confirmRequest}
                     className="btn btn-sm btn-danger"
                     type="button"
+                    disabled={props.loading}
                   >
-                    YES
+                    {props.loading ? "loading..." : "YES"}
                   </button>{" "}
                   <button
                     onClick={props.cancelRequest}
@@ -65,9 +64,11 @@ function ConfirmModal(props) {
 }
 
 ConfirmModal.propTypes = {
-  handleDelete: PropTypes.func,
+  confirmRequest: PropTypes.func,
   cancelRequest: PropTypes.func,
   confirmRef: PropTypes.object,
+  msg: PropTypes.string,
+  loading: PropTypes.bool,
 };
 
 export default ConfirmModal;
