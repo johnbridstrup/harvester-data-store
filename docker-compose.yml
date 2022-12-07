@@ -37,6 +37,7 @@ services:
       - BROKER_URL=redis://redis:6379/0
       - PAGE_CACHING=true
       - GITHASH=${GITHASH:-"UNKNOWN"}
+      - MIGRATE=true
     depends_on:
       - db
       - redis

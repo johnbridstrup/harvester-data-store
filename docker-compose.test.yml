@@ -33,6 +33,7 @@ services:
       - HDS_ROOT=/opt/app/hds
       - HDS_PORT=${HDS_PORT}
       - PAGE_CACHING=true
+      - MIGRATE=true
     depends_on:
       - db
     networks:
