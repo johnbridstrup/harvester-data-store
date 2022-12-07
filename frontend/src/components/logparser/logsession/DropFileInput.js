@@ -1,9 +1,17 @@
 import { useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import { SUCCESS } from "../../../features/base/constants";
+import {
+  createLogSession,
+  listLogSession,
+} from "../../../features/logparser/logparserSlice";
 
 function DropFileInput(props) {
   const [fileObj, setFileObj] = useState(null);
-  const loading = false;
+  const { uploading } = useSelector((state) => state.logparser);
   const wrapperRef = useRef(null);
+  const dispatch = useDispatch();
 
   const onDragEnter = () => wrapperRef.current.classList.add("dragover");
 
@@ -23,15 +31,15 @@ function DropFileInput(props) {
     if (fileObj) {
       const formData = new FormData();
       formData.append("zip_upload", fileObj);
-      const config = {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      };
-      console.log(config);
-      console.log("uploading zip file");
+      const res = await dispatch(createLogSession(formData));
+      if (res.payload?.status === SUCCESS) {
+        setFileObj(null);
+        toast.success(res.payload?.message);
+        await dispatch(listLogSession());
+      } else {
+        toast.error(res?.payload);
+      }
     }
-    return;
   };
 
   return (
@@ -51,6 +59,7 @@ function DropFileInput(props) {
           type="file"
           value=""
           accept=".zip"
+          data-testid="fileDropZone"
           onChange={(e) => onFileChange(e.target.files[0])}
         />
       </div>
@@ -71,9 +80,9 @@ function DropFileInput(props) {
             <button
               onClick={handleSubmit}
               className="btn btn-sm btn-primary"
-              disabled={loading}
+              disabled={uploading}
             >
-              {loading ? "uploading.." : "Upload"}
+              {uploading ? "uploading.." : "Upload"}
             </button>
           </div>
         </div>
