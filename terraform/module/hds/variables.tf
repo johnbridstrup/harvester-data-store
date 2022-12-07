@@ -260,6 +260,11 @@ variable "errorreport_queue_url" {
   type        = string
 }
 
+variable "autodiagnostics_queue_url" {
+  description = "URL for autodiagnostics queue"
+  type        = string
+}
+
 variable "s3files_queue_url" {
   description = "URL for hdsfiles queue"
   type        = string

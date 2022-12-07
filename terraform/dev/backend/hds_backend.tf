@@ -2,7 +2,7 @@ locals {
   env          = "dev"
   db_name      = "hdsdb"
   db_root_user = "aft"
-  queue_names  = ["errorreport-queue", "hds-sessclip-queue", "hds-files-queue", "hds-jobresults-queue", "hds-versions-queue"]
+  queue_names  = ["errorreport-queue", "hds-sessclip-queue", "hds-files-queue", "hds-jobresults-queue", "hds-versions-queue", "hds-autodiagnostics-queue"]
 }
 
 module "hds_backend" {

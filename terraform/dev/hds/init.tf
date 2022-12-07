@@ -89,12 +89,13 @@ data "aws_security_group" "redis_sg" {
 
 # SQS QUEUES
 locals {
-  bucket                 = "dev-aft-hv-data-lake-prod"
-  errorreport_queue_name = "errorreport-queue"
-  sessclip_queue_name    = "hds-sessclip-queue"
-  file_queue_name        = "hds-files-queue"
-  jobresults_queue_name  = "hds-jobresults-queue"
-  versions_queue_name    = "hds-versions-queue"
+  bucket                     = "dev-aft-hv-data-lake-prod"
+  errorreport_queue_name     = "errorreport-queue"
+  sessclip_queue_name        = "hds-sessclip-queue"
+  file_queue_name            = "hds-files-queue"
+  jobresults_queue_name      = "hds-jobresults-queue"
+  versions_queue_name        = "hds-versions-queue"
+  autodiagnostics_queue_name = "hds-autodiagnostics-queue"
 }
 
 data "aws_s3_bucket" "data-lake" {
@@ -103,6 +104,10 @@ data "aws_s3_bucket" "data-lake" {
 
 data "aws_sqs_queue" "errorreport_queue" {
   name = local.errorreport_queue_name
+}
+
+data "aws_sqs_queue" "autodiagnostics_queue" {
+  name = local.autodiagnostics_queue_name
 }
 
 data "aws_sqs_queue" "sessclip_queue" {
@@ -128,6 +133,7 @@ data "aws_iam_policy_document" "poll_queues" {
       "sqs:DeleteMessage"
     ]
     resources = [
+      data.aws_sqs_queue.autodiagnostics_queue.arn,
       data.aws_sqs_queue.errorreport_queue.arn,
       data.aws_sqs_queue.file_queue.arn,
       data.aws_sqs_queue.sessclip_queue.arn,
