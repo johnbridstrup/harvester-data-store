@@ -3,19 +3,22 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 from rest_framework.test import APIClient
 from rest_framework.authtoken.models import Token
+from common.viewsets import CreateModelViewSet, ReportModelViewSet
 from django.contrib.auth.models import User, Permission
 from django.contrib.contenttypes.models import ContentType
-from django.urls import reverse
+from django.urls import reverse, resolvers
 from .serializers.userserializer import UserSerializer
 from .models import UserProfile
+from .utils import merge_nested_dict
+from hds.roles import RoleChoices
 from hds.urls import urlpatterns
-from common.models import UserProfile
 from exceptions.models import AFTExceptionCode
 from harvester.models import Fruit, Harvester
 from location.models import Distributor, Location
 from s3file.serializers import S3FileSerializer
 from .utils import build_frontend_url
 import logging
+import unittest
 
 
 # Disable logging in unit tests
@@ -30,13 +33,13 @@ UNAUTHORIZED_CREATE_MSG = 'Unable to authorize user for create action'
 UNAUTHORIZED_UPDATE_MSG = 'Unable to authorize user for update action'
 
 
-def create_user(username, password, **kwargs):
+def create_user(username, password, profile_kwargs = {}, **kwargs):
     user = User.objects.create_user(
         username=username,
         password=password,
         **kwargs
         )
-    UserProfile.objects.create(user=user)
+    UserProfile.objects.create(user=user, **profile_kwargs)
     return user
 
 
@@ -45,10 +48,13 @@ def detail_url(user_id):
 
 
 def get_endpoint(urlpattern):
-    return urlpattern.pattern._route
+    try:
+        return urlpattern.pattern._route
+    except:
+        return str(urlpattern.pattern)
 
 def compare_patterns(keys, urls):
-    ignore = ['admin/', 'api/v1/openapi', 'api/v1/users/', 'prometheus/']
+    ignore = ['admin/', 'api/v1/openapi', 'api/v1/users/', 'prometheus/', '^media/(?P<path>.*)$', '^static/(?P<path>.*)$']
     return all(['/' + u in keys if u not in ignore else True for u in urls])
 
 
@@ -56,10 +62,32 @@ class HDSAPITestBase(APITestCase):
     def setUp(self):
         self.client = APIClient()
         self.user = User.objects.create(username='test_user')
-        self.user_profile = UserProfile.objects.create(user=self.user, slack_id="fake-id")
+        self.set_admin()
+        self.user_profile = UserProfile.objects.create(
+            user=self.user, 
+            slack_id="fake-id", 
+            role=RoleChoices.MANAGER
+        )
         self.token = Token.objects.create(user=self.user)
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
         self.api_base_url = '/api/v1'
+
+    def set_admin(self):
+        self.user.is_superuser = True
+        self.user.save()
+
+    def set_user_role(self, role):
+        """set test user role.
+
+        Sets superuser to False as well
+
+        Args:
+            role (models.TextChoices.Choice): The role to set
+        """
+        self.user.is_superuser = False
+        self.user.save()
+        self.user.profile.role = role.value
+        self.user.profile.save()       
 
     def _setup_basic(self):
         test_objects = {}
@@ -183,12 +211,11 @@ class OpenApiTest(HDSAPITestBase):
     """ Test OpenAPI Schema Generation """
 
     def test_get_schema(self):
-        """ create fruit and assert it exists """
         resp = self.client.get(f'{self.api_base_url}/openapi')
         data = resp.data
         keys = list(data['paths'].keys())
         endpoints = [get_endpoint(p) for p in urlpatterns]
-
+        
         assert compare_patterns(keys, endpoints)
 
         assert data['info']['title'] == "Harvester Data Store"
@@ -225,6 +252,8 @@ class ManageUserTest(HDSAPITestBase):
 
         Raises validation error
         """
+        self.user.is_superuser = False
+        self.user.save()
         res = self.client.post(USERS_URL, self.payload, format='json')
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(
@@ -238,6 +267,8 @@ class ManageUserTest(HDSAPITestBase):
 
         Raise validation error
         """
+        self.user.is_superuser = False
+        self.user.save()
         user = create_user(username='aftuser', password='testpass123')
         self.payload.update({'username': user.username})
         self.payload.pop('password')
@@ -315,3 +346,59 @@ class ManageUserTest(HDSAPITestBase):
         self.user.refresh_from_db()
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertTrue(self.user.check_password(self.payload['new_password']))
+
+class TestUtils(unittest.TestCase):
+    def test_frontend_url(self):
+        url = build_frontend_url('test_endpoint', 1)
+
+        self.assertEqual(url, "http://localhost:3000/test_endpoint/1/")
+
+    def test_merge_nested_basic(self):
+        d1 = {"1": "1", "2": {"3": "3", "4": "4"}, "6": "6"}
+        d2 = {"1": "11", "2": {"3": "3", "4": "44", "5": "5"}}
+
+        exp = {"1": "11", "2": {"3": "3", "4": "44", "5": "5"}, "6": "6"}
+
+        self.assertDictEqual(merge_nested_dict(d1, d2), exp)
+
+    def test_merge_nested_overwrite_none(self):
+        d1 = {"1": "1", "2": {"3": "3", "4": "4"}, "6": "6"}
+        d2 = {"1": "11", "2": None}
+
+        exp = {"1": "11", "2": {}, "6": "6"}
+
+        self.assertDictEqual(merge_nested_dict(d1, d2, overwrite_none=True), exp)
+
+    def test_merged_nested_mismatched_schema(self):
+        d1 = {"1": "1", "2": {"3": "3", "4": "4"}, "6": "6"}
+        d2 = {"1": "11", "2": {"3": "3", "4": "44", "5": "5"}, "6": {"7": "7"}}
+
+        exp = {"1": "11", "2": {"3": "3", "4": "44", "5": "5"}, "6": {"7": "7"}}
+
+        self.assertDictEqual(merge_nested_dict(d1, d2), exp)
+
+
+class TestRoles(HDSAPITestBase):
+    def test_create_model_perms(self):
+        class TestView(CreateModelViewSet):
+            view_permissions_update = {
+                'create': {
+                    RoleChoices.SUPPORT: True
+                }
+            }
+
+        exp = merge_nested_dict(CreateModelViewSet.view_permissions, TestView.view_permissions_update)
+
+        self.assertDictEqual(exp, TestView().view_permissions)
+
+    def test_report_model_perms(self):
+        class TestView(ReportModelViewSet):
+            view_permissions_update = {
+                'create': {
+                    RoleChoices.SUPPORT: True
+                }
+            }
+
+        exp = merge_nested_dict(ReportModelViewSet.view_permissions, TestView.view_permissions_update)
+
+        self.assertDictEqual(exp, TestView().view_permissions)

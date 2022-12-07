@@ -3,6 +3,7 @@ from .models import Notification
 from .serializers import NotificationSerializer
 
 from common.viewsets import CreateModelViewSet
+from hds.roles import RoleChoices
 
 
 class NotificationView(CreateModelViewSet):
@@ -11,3 +12,11 @@ class NotificationView(CreateModelViewSet):
     http_method_names = ['get', 'delete']
     filterset_class = NotificationFilter
     ordering = ('-id',)
+    view_permissions_update = {
+        "create": {
+            RoleChoices.DEVELOPER: True,
+        },
+        "destroy": {
+            RoleChoices.DEVELOPER: True,
+        },
+    }

@@ -1,17 +1,40 @@
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 from rest_framework.decorators import action
-from rest_framework import permissions
 from rest_framework.renderers import JSONRenderer
 from rest_framework.viewsets import ModelViewSet
-from common.utils import make_ok
+from common.utils import make_ok, merge_nested_dict
+from hds.roles import RoleChoices
 from .renderers import HDSJSONRenderer
 
 
 class CreateModelViewSet(ModelViewSet):
     renderer_classes = (HDSJSONRenderer,)
-    permission_classes = (permissions.DjangoModelPermissions,)
     filter_backends = (DjangoFilterBackend, filters.OrderingFilter)
+    view_permissions_update = {}
+    view_permissions = {
+            'create': {
+                'admin': True, # Must whitelist permission below admin for creating
+            },  
+            'list': {
+                RoleChoices.SUPPORT: True,
+                RoleChoices.JENKINS: True,
+            },
+            'retrieve': {
+                RoleChoices.SUPPORT: True,
+                RoleChoices.JENKINS: True,
+            },
+            'destroy': {
+                'admin': True,
+            },
+            'update': {
+                'admin': True,
+            }
+        }
+
+    def __init__(self, **kwargs):
+        self.view_permissions = merge_nested_dict(self.view_permissions, self.view_permissions_update, overwrite_none=True)
+        super().__init__(**kwargs)
 
     def perform_create(self, serializer):
         serializer.save(creator=self.request.user)
@@ -38,6 +61,31 @@ class CreateModelViewSet(ModelViewSet):
 class ReportModelViewSet(CreateModelViewSet):
     """ Viewset for error reports """
     ordering = ('-reportTime',)
+    view_permissions = {
+        'create': {
+            'admin': True,
+            RoleChoices.SQS: True,
+        },  
+        'list': {
+            RoleChoices.SUPPORT: True,
+            RoleChoices.JENKINS: True,
+        },
+        'retrieve': {
+            RoleChoices.SUPPORT: True,
+            RoleChoices.JENKINS: True,
+        },
+        'destroy': {
+            'admin': True,
+        },
+        'update': {
+            'admin': True,
+        },
+        'retrieve,get_schema': {
+            RoleChoices.SUPPORT: True,
+            RoleChoices.JENKINS: True,
+            RoleChoices.SQS: True,
+        },
+    }
     
     @property
     def report_type(self):
@@ -53,4 +101,3 @@ class ReportModelViewSet(CreateModelViewSet):
         schema = self.serializer_class.get_schema()
         msg = f"{self.report_type} schema retrieved"
         return make_ok(msg, schema)
-

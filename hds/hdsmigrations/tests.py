@@ -1,4 +1,5 @@
 from common.tests import HDSAPITestBase
+from hds.roles import RoleChoices
 from django.urls import reverse
 from django.utils.timezone import datetime, timedelta, make_aware
 from unittest.mock import patch
@@ -29,6 +30,7 @@ class HDSMigrationsTestCase(HDSAPITestBase):
         self.url = reverse("hdsmigrations-list")
 
     def test_get_migration_logs(self):
+        self.set_user_role(RoleChoices.MANAGER)
         r = self.client.get(self.url)
         data = r.json()["data"]
 
@@ -46,15 +48,22 @@ class HDSMigrationsTestCase(HDSAPITestBase):
     @patch.dict(os.environ, {"GITHASH": GIT_HASH})
     def test_migrate(self):
         # disallowed for non admin
+        self.set_user_role(RoleChoices.SUPPORT)
         r = self.client.get(f"{self.url}migrate/")
         self.assertEqual(r.status_code, status.HTTP_403_FORBIDDEN)
 
-        # allowed for admin
-        self.user.is_superuser = True
-        self.user.save()
+        # allowed for managers
+        self.set_user_role(RoleChoices.MANAGER)
         r = self.client.get(f"{self.url}migrate/")
         self.assertEqual(r.status_code, status.HTTP_202_ACCEPTED)
         self.assertEqual(MigrationLog.objects.count(), 2)
+
+        # allowed for admin
+        self.set_user_role(RoleChoices.SUPPORT)
+        self.set_admin()
+        r = self.client.get(f"{self.url}migrate/")
+        self.assertEqual(r.status_code, status.HTTP_202_ACCEPTED)
+        self.assertEqual(MigrationLog.objects.count(), 3)
 
         log_id = r.json()["data"]["id"]
         log = MigrationLog.objects.get(id=log_id)

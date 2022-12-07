@@ -7,6 +7,7 @@ from rest_framework.decorators import action
 from rest_framework.renderers import JSONRenderer
 from common.utils import make_ok
 from common.viewsets import CreateModelViewSet
+from hds.roles import RoleChoices
 
 
 class HarvesterView(CreateModelViewSet):
@@ -14,6 +15,20 @@ class HarvesterView(CreateModelViewSet):
     serializer_class = HarvesterSerializer
     filterset_fields = ('harv_id', 'fruit__name')
     ordering = ('-id',)
+    view_permissions_update = {
+        "create": {
+            RoleChoices.DEVELOPER: True,
+        },
+        "destroy": {
+            RoleChoices.DEVELOPER: True,
+        },
+        "update": {
+            RoleChoices.SUPPORT: True, # This should become developer once harvester can update location with GPS
+        },
+        "version_history": {
+            RoleChoices.SUPPORT: True,
+        },
+    }
 
     @action(
         methods=["get"],

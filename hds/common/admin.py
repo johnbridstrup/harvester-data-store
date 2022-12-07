@@ -9,8 +9,8 @@ class UserProfileAdmin(admin.ModelAdmin):
     get_username.short_description = 'user'
     get_username.admin_order_field = 'user__username'
 
-    list_display = ('get_username', 'slack_id')
-    ordering = ('user__username',)
+    list_display = ('get_username', 'slack_id', 'role')
+    ordering = ('user__username', 'role')
     search_fields = ('get_username',)
 
 

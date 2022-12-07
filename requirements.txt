@@ -9,6 +9,7 @@ django-redis==5.2.0
 django-simple-history==3.1.1
 django-taggit==3.0.0
 django-storages==1.13.1
+rest-framework-roles==0.4.1
 flake8==4.0.1
 gunicorn==20.1.0
 jsonschema==4.16.0

@@ -3,6 +3,8 @@ from django.contrib.auth.models import User
 from enum import Enum
 from taggit.managers import TaggableManager
 
+from hds.roles import RoleChoices
+
 
 class CommonInfo(models.Model):
     creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name="%(app_label)s_%(class)s_creator_related")
@@ -31,6 +33,7 @@ class ReportBase(CommonInfo):
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     slack_id = models.CharField(max_length=15, blank=True, null=True)
+    role = models.CharField(max_length=31, choices=RoleChoices.choices, default=RoleChoices.SUPPORT)
 
 
 class Tags(Enum):

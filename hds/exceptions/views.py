@@ -11,11 +11,17 @@ from .serializers import (
 from .tasks import update_exception_codes
 
 from common.viewsets import CreateModelViewSet
+from hds.roles import RoleChoices
 
 
 class AFTExceptionCodeManifestView(CreateModelViewSet):
     queryset = AFTExceptionCodeManifest.objects.all()
     serializer_class = AFTExceptionCodeManifestSerializer
+    view_permissions_update = {
+        'create': {
+            RoleChoices.JENKINS: True,
+        }
+    }
 
     def perform_create(self, serializer):
         super().perform_create(serializer)

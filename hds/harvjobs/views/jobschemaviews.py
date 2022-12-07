@@ -3,6 +3,7 @@ from ..serializers.jobschemaserializer import JobSchemaSerializer
 
 from rest_framework.permissions import DjangoModelPermissions
 from common.viewsets import CreateModelViewSet
+from hds.roles import RoleChoices
 
 
 class JobSchemaView(CreateModelViewSet):
@@ -11,3 +12,12 @@ class JobSchemaView(CreateModelViewSet):
     permission_classes = (DjangoModelPermissions,)
     filterset_fields = ('jobtype__name',)
     ordering = ('-created',)
+    view_permissions_update = {
+        'create': {
+            RoleChoices.JENKINS: True,
+            RoleChoices.MANAGER: True,
+        },
+        'destroy': {
+            RoleChoices.MANAGER: True
+        },
+    }

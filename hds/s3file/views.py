@@ -7,6 +7,7 @@ from rest_framework.decorators import action
 from rest_framework.renderers import BaseRenderer
 from common.viewsets import CreateModelViewSet
 from common.utils import make_ok
+from hds.roles import RoleChoices
 
 import os
 import tempfile
@@ -27,6 +28,14 @@ class S3FileView(CreateModelViewSet):
     queryset = S3File.objects.all()
     serializer_class = S3FileSerializer
     http_method_names = ['get', 'delete', 'post']
+    view_permissions_update = {
+        "create": {
+            RoleChoices.SQS: True,
+        },
+        "destroy": {
+            RoleChoices.MANAGER: True,
+        },
+    }
 
     def perform_create(self, serializer):
         super().perform_create(serializer)

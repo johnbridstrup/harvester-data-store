@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'rest_framework_roles',
     'rest_framework.authtoken',
     'simple_history',
     'corsheaders',
@@ -132,6 +133,10 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'DEFAULT_SCHEMA_CLASS': 'common.schema.HDSAutoSchema',
     'PAGE_SIZE': 10
+}
+
+REST_FRAMEWORK_ROLES = {
+    'roles': 'hds.roles.ROLES',
 }
 
 

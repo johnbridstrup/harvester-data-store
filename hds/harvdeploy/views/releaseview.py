@@ -9,6 +9,7 @@ from harvester.serializers.harvesterserializer import (
 
 from common.viewsets import CreateModelViewSet
 from common.utils import make_ok
+from hds.roles import RoleChoices
 
 
 class HarvesterCodeReleaseView(CreateModelViewSet):
@@ -16,6 +17,41 @@ class HarvesterCodeReleaseView(CreateModelViewSet):
     serializer_class = HarvesterCodeReleaseSerializer
     filterset_class = ReleaseFilter
     ordering = ("-created",)
+    view_permissions_update = {
+        'create': {
+            RoleChoices.JENKINS: True,
+        },
+        'destroy': {
+            RoleChoices.MANAGER: True,
+        },
+        'update': {
+            RoleChoices.DEVELOPER: True,
+        }, # This should handle only updating tags
+        'update_tags': {
+            RoleChoices.DEVELOPER: True,
+        },
+        'harvester_view': {
+            RoleChoices.SUPPORT: True,
+        },
+        'tags_view': {
+            RoleChoices.SUPPORT: True,
+        },
+    }
+
+    @action(
+        methods=["post", "patch"],
+        detail=True,
+        url_path="update_tags",
+        renderer_classes=[JSONRenderer]
+    )
+    def update_tags(self, request, pk=None):
+        obj = self.get_object()
+        data = request.data
+        tags = data.get("tags", [])
+        obj.tags = tags
+        obj.save()
+        serializer = self.get_serializer(obj)
+        return make_ok("Tags updated", response_data=serializer.data)
 
     @action(
         methods=['GET'],

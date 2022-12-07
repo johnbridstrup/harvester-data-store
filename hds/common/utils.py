@@ -1,5 +1,6 @@
 """ utilities and helper functions """
 from .async_metrics import TOTAL_ERROR_COUNTER
+from collections import defaultdict
 from rest_framework.response import Response
 from rest_framework.views import exception_handler
 
@@ -98,3 +99,29 @@ def test_env():
     if sys.argv[1:2] == ["test"]:
         return True
     return False
+
+def merge_nested_dict(d1, d2, overwrite_none=False):
+    """Right merge two nested dicts.
+
+    Args:
+        d1 (dict): Left dict. May have values overwritten.
+        d2 (dict): Right dict. Will retain all values
+        overwrite_none (bool, Optional): Whether to overwrite the entire key if d2 value for key is None
+
+    Returns:
+        dict: Merged dict
+    """
+    d = defaultdict(dict)
+    d.update(d1)
+    for k, v in d2.items():
+        if overwrite_none and (v is None):
+            d[k] = {}
+        elif not isinstance(v, dict):
+            d[k] = v
+        else:
+            try:
+                d.update({k: merge_nested_dict(d[k], v)})
+            except ValueError:
+                # d1 doesn't have a dict at this key, overwrite value with v
+                d[k] = v
+    return dict(d)

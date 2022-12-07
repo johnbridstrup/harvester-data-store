@@ -14,6 +14,7 @@ from ..serializers.errorreportserializer import (
 )
 from common.viewsets import ReportModelViewSet
 from common.utils import make_ok, build_frontend_url
+from hds.roles import RoleChoices
 from notifications.signals import error_report_created
 from notifications.serializers import NotificationSerializer
 from django.utils.decorators import method_decorator
@@ -25,6 +26,14 @@ from rest_framework.renderers import JSONRenderer
 class ErrorReportView(ReportModelViewSet):
     queryset = ErrorReport.objects.all()
     serializer_class = ErrorReportSerializer
+    view_permissions_update = {
+        'pareto': {
+            RoleChoices.SUPPORT: True, #is_whitelisted
+        },
+        'create_notification': {
+            RoleChoices.DEVELOPER: True,
+        },
+    }
 
     def get_serializer_class(self):
         if self.action == 'list':
@@ -47,7 +56,7 @@ class ErrorReportView(ReportModelViewSet):
         methods=['get'],
         url_path='pareto',
         detail=False,
-        renderer_classes=[JSONRenderer]
+        renderer_classes=[JSONRenderer],
     )
     @method_decorator(cache_page(60*20))
     def pareto(self, request):

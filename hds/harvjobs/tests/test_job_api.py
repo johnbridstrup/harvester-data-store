@@ -1,5 +1,6 @@
 from .HarvJobApiTestBase import HarvJobApiTestBase
 from ..models import Job
+from hds.roles import RoleChoices
 
 from rest_framework import status
 from unittest.mock import patch
@@ -27,6 +28,22 @@ class JobApiTestCase(HarvJobApiTestBase):
         self.assertEqual(event_data["UUID"], job_data["event"]["UUID"])
 
         # Assert celery task was called
+        self.assertEqual(task.call_count, 1)
+
+    @patch("harvjobs.views.jobviews.schedule_job.delay")
+    def test_create_job_non_whitelisted(self, task):
+        JOBTYPE_403 = "not-whitelisted"
+        self.create_jobtype(name=JOBTYPE_403)
+        self.create_jobschema(jobtype=JOBTYPE_403)
+        self.set_user_role(RoleChoices.SUPPORT)
+        _, resp = self.create_job(jobtype=JOBTYPE_403)
+
+        self.assertEqual(resp.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(task.call_count, 0)
+
+        self.set_user_role(RoleChoices.MANAGER)
+        _, resp = self.create_job(jobtype=JOBTYPE_403)
+        self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
         self.assertEqual(task.call_count, 1)
 
     def test_missing_required_arg(self):
@@ -97,7 +114,7 @@ class JobApiTestCase(HarvJobApiTestBase):
         self.create_jobtype()
         self.create_jobschema()
         _, job_resp = self.create_job()
-
+        
         self.assertEqual(job_resp.status_code, status.HTTP_201_CREATED)
 
         res = self.client.get(self.reschedule_url(job_resp.data["id"]))

@@ -1,10 +1,11 @@
 """ Test ErrorReport APIs """
 from common.async_metrics import ASYNC_ERROR_COUNTER, TOTAL_ERROR_COUNTER
 from common.metrics import ERROR_COUNTER
-from common.models import Tags
+from common.models import Tags, UserProfile
 from common.tests import HDSAPITestBase, create_user
 from common.reports import DTimeFormatter
 from harvester.models import Harvester
+from hds.roles import RoleChoices
 from event.models import Event
 from exceptions.models import AFTException
 from ..models import ErrorReport, DEFAULT_UNKNOWN
@@ -217,6 +218,7 @@ class ErrorReportAPITest(HDSAPITestBase):
             check_pareto(group, name, val, num)
 
     def test_create_notification(self):
+        self.set_user_role(RoleChoices.MANAGER)
         params = "?harv_ids=100"
         data = {
             "trigger_on": "ErrorReport",
@@ -229,6 +231,14 @@ class ErrorReportAPITest(HDSAPITestBase):
             HTTP_ACCEPT='application/json'
         )
         self.assertEqual(resp.status_code, 200)
+
+        # Disallowed for support
+        self.set_user_role(RoleChoices.SUPPORT)
+        resp = self.client.post(
+            f'{self.api_base_url}/errorreports/createnotification/{params}',
+            data,
+        )
+        self.assertEqual(resp.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_err_report_str(self):
         self._post_error_report()

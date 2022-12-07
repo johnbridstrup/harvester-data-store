@@ -1,18 +1,22 @@
 from ..models import Job
+from ..roles import whitelist
 from ..serializers.jobserializer import JobSerializer, JobHistorySerializer
 from ..tasks import schedule_job
 
 from rest_framework.decorators import action
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.renderers import JSONRenderer
 from common.utils import make_ok
 from common.viewsets import CreateModelViewSet
+from hds.roles import RoleChoices
+
+
+# Whitelists
+is_support_whitelist = whitelist(["sess_clip", "session_scrape", "test"])
 
 
 class JobView(CreateModelViewSet):
     queryset = Job.objects.all()
     serializer_class = JobSerializer
-    permission_classes = (IsAuthenticated,)
     filterset_fields = (
         'target__harv_id',
         'schema__id',
@@ -21,6 +25,16 @@ class JobView(CreateModelViewSet):
         'jobstatus',
     )
     ordering = ('-created', )
+    view_permissions_update = {
+        'create': {
+            RoleChoices.SUPPORT: is_support_whitelist,
+            RoleChoices.MANAGER: True,
+        },
+        'status_history': {
+            RoleChoices.SUPPORT: True,
+            RoleChoices.JENKINS: True,
+        },
+    }
 
     @action(
         methods=["get"],

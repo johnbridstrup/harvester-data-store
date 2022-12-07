@@ -2,13 +2,13 @@ from common.tests import HDSAPITestBase
 from event.models import Event
 from django.urls import reverse
 
-from ..models import JobType, JobSchema, Job, JobResults, JobHostResult
+from hds.roles import RoleChoices
 
 
 class HarvJobApiTestBase(HDSAPITestBase):
     def setUp(self):
         super().setUp()
-        self.DEFAULT_JOBTYPE = "test-job"
+        self.DEFAULT_JOBTYPE = "test"
         self.DEFAULT_SCHEMA_VERSION = "0.1"
         self.DEFAULT_SCHEMA = {
             "type": "object",
@@ -93,11 +93,7 @@ class HarvJobApiTestBase(HDSAPITestBase):
         self.jobresults_detail_url = lambda id_: reverse("jobresults-detail", args=[id_])
 
         self.test_objects = self._setup_basic()
-        self.update_user_permissions_all(JobType)
-        self.update_user_permissions_all(JobSchema)
-        self.update_user_permissions_all(Job)
-        self.update_user_permissions_all(JobResults)
-        self.update_user_permissions_all(JobHostResult)
+        self.set_user_role(RoleChoices.MANAGER)
 
     def create_jobtype(self, name=None):
         name = name or self.DEFAULT_JOBTYPE
@@ -153,6 +149,7 @@ class HarvJobApiTestBase(HDSAPITestBase):
         UUID=None,
         results=None
     ):
+        self.set_admin()
         results = results or self.DEFAULT_RESULT_SUCCESS
         UUID = UUID or Event.generate_uuid()
 
@@ -163,5 +160,5 @@ class HarvJobApiTestBase(HDSAPITestBase):
         }
 
         resp = self.client.post(self.jobresults_url, data=jobresult, format="json")
-
+        self.set_user_role(RoleChoices.MANAGER)
         return jobresult, resp

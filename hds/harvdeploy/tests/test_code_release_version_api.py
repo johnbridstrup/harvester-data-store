@@ -412,13 +412,13 @@ class ReleaseApiTestCase(HDSAPITestBase):
 
         self.release["tags"] = ["Errored"]
         resp = self.client.patch(
-            f"{self.api_base_url}/release/{resp.data['id']}/",
+            f"{self.api_base_url}/release/{resp.data['id']}/update_tags/",
             self.release,
             format='json'
         )
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(resp.data["tags"]), 1)
-        self.assertCountEqual(self.release["tags"], resp.data["tags"])
+        self.assertEqual(len(resp.data["data"]["tags"]), 1)
+        self.assertCountEqual(self.release["tags"], resp.data["data"]["tags"])
 
     def test_release_installed_harvesters(self):
         """Test for harvesters with installed release."""
