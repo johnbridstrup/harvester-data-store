@@ -11,7 +11,7 @@ import { Loader } from "../../../utils/utils";
 import { queryErrorReport } from "../../../features/errorreport/errorreportSlice";
 
 function HarvesterDetailView(props) {
-  const { loading } = useSelector((state) => state.harvester);
+  const { loading, harvester } = useSelector((state) => state.harvester);
   const dispatch = useDispatch();
   const { harvId } = useParams();
 
@@ -26,9 +26,9 @@ function HarvesterDetailView(props) {
     <MainLayout>
       <div className="container">
         <Header
-          title={"HDS Harvesters"}
+          title={"HDS Harvester"}
           className={"display-6 mt-4 mb-4"}
-          reportId={harvId}
+          reportId={String(harvester.harv_id)}
         />
         {loading ? (
           <LoaderDiv>
