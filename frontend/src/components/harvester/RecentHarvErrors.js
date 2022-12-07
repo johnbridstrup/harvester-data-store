@@ -30,9 +30,9 @@ function RecentHarvErrors(props) {
             <tbody>
               {reports.map((report, _) => (
                 <tr key={report.id}>
-                  <td>{report.id}</td>
+                  <td>{report.reportId}</td>
                   <td>
-                    <Link to={`/errorreports/${report.id}`}>
+                    <Link to={`/errorreports/${report.reportId}`}>
                       {timeStampFormat(report.reportTime, timezone)}
                     </Link>
                   </td>
