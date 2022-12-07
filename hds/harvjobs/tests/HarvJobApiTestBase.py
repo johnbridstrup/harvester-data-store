@@ -87,6 +87,7 @@ class HarvJobApiTestBase(HDSAPITestBase):
 
         self.jobs_url = reverse("job-list")
         self.job_detail_urls = lambda id_: reverse("job-detail", args=[id_])
+        self.reschedule_url = lambda id_ : reverse("job-reschedule", args=[id_])
 
         self.jobresults_url = reverse("jobresults-list")
         self.jobresults_detail_url = lambda id_: reverse("jobresults-detail", args=[id_])

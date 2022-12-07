@@ -11,7 +11,7 @@ class JobApiTestCase(HarvJobApiTestBase):
         self.create_jobtype()
         self.create_jobschema()
         _, job_resp = self.create_job()
-        
+
         self.assertEqual(job_resp.status_code, status.HTTP_201_CREATED)
 
         # Assert status is pending
@@ -36,10 +36,10 @@ class JobApiTestCase(HarvJobApiTestBase):
         bad_payload = self.DEFAULT_JOB_PAYLOAD.copy()
         del bad_payload["requiredArg"]
         _, resp = self.create_job(job_payload=bad_payload)
-        
+
         self.assertContains(
-            response=resp, 
-            text="'requiredArg' is a required property", 
+            response=resp,
+            text="'requiredArg' is a required property",
             status_code=status.HTTP_400_BAD_REQUEST
         )
 
@@ -50,7 +50,7 @@ class JobApiTestCase(HarvJobApiTestBase):
         good_payload = self.DEFAULT_JOB_PAYLOAD.copy()
         del good_payload["optionalArg"]
         _, resp = self.create_job(job_payload=good_payload)
-        
+
         self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
 
     def test_invalid_arg_type(self):
@@ -62,8 +62,8 @@ class JobApiTestCase(HarvJobApiTestBase):
         _, resp = self.create_job(job_payload=bad_payload)
 
         self.assertContains(
-            response=resp, 
-            text="Must be string", 
+            response=resp,
+            text="Must be string",
             status_code=status.HTTP_400_BAD_REQUEST
         )
 
@@ -90,3 +90,22 @@ class JobApiTestCase(HarvJobApiTestBase):
         self.assertEqual(event_resp.status_code, status.HTTP_200_OK)
         event_data = event_resp.json()["data"]
         self.assertEqual(event_data["count"], 2)
+
+    @patch("harvjobs.views.jobviews.schedule_job.delay")
+    def test_reschedule_job(self, patched_task):
+        """Test reschedule a job."""
+        self.create_jobtype()
+        self.create_jobschema()
+        _, job_resp = self.create_job()
+
+        self.assertEqual(job_resp.status_code, status.HTTP_201_CREATED)
+
+        res = self.client.get(self.reschedule_url(job_resp.data["id"]))
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(patched_task.call_count, 2)
+        patched_task.assert_called_with(
+            job_resp.data['id'],
+            job_resp.data['target'],
+            job_resp.data['creator']
+        )

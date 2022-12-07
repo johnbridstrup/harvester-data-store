@@ -49,3 +49,18 @@ class JobView(CreateModelViewSet):
 
         schedule_job.delay(job_id, harv_pk, self.request.user.id)
 
+    @action(
+        methods=['GET'],
+        url_path='reschedule',
+        detail=True,
+        renderer_classes=[JSONRenderer]
+    )
+    def reschedule(self, request, pk=None):
+        """reschedule a job."""
+        job = self.get_object()
+
+        schedule_job.delay(job.id, job.target.id, request.user.id)
+
+        serializer = JobSerializer(job)
+
+        return make_ok(f'Job {job.id} rescheduled successfully', serializer.data)
