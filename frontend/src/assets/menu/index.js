@@ -59,6 +59,12 @@ export const menu = [
     description: "Scheduled jobs on the harvesters",
     href: "/jobs",
   },
+  {
+    name: "Aftvplus",
+    icon: "logparser",
+    description: "Log entries captured from harvesters",
+    href: "/logsession",
+  },
 ];
 
 export const adminMenu = [
