@@ -34,6 +34,7 @@ class Job(EventModelMixin, CommonInfo):
         ERROR = "Error"
         FAILERROR = "Failed and errors"
         UNSENT = "Failed to send"
+        CANCELED = "canceled"
 
     schema = models.ForeignKey(JobSchema, on_delete=models.CASCADE, related_name="jobs")
     target = models.ForeignKey(Harvester, on_delete=models.CASCADE, related_name="jobs")
@@ -61,6 +62,8 @@ class JobHostResult(CommonInfo):
         FAIL = "Failed"
         SUCCESS = "Success"
         ERROR = "Error"
+        CANCELED = "canceled"
+
 
     parent = models.ForeignKey(JobResults, on_delete=models.CASCADE, related_name="host_results")
     host = models.CharField(max_length=30)

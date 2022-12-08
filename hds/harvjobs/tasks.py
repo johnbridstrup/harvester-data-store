@@ -47,6 +47,7 @@ def job_status_update(UUID, results, jobresult_pk, user_pk, url):
     status = Job.StatusChoices.SUCCESS
     fails = False
     errors = False
+    canceled = False
 
     for host, result in results.items():
         result_str = result["status"].lower()
@@ -58,6 +59,9 @@ def job_status_update(UUID, results, jobresult_pk, user_pk, url):
         elif result_str == "error":
             hostresult = JobHostResult.JobResult.ERROR
             errors = True
+        elif result_str in ["canceled", "cancelled"]:
+            hostresult = JobHostResult.JobResult.CANCELED
+            canceled = True
         
         JobHostResult.objects.create(
             parent=jobresults,
@@ -68,7 +72,9 @@ def job_status_update(UUID, results, jobresult_pk, user_pk, url):
             creator=user,
         )
 
-    if fails and errors:
+    if canceled:
+        status = Job.StatusChoices.CANCELED
+    elif fails and errors:
         status = Job.StatusChoices.FAILERROR
     elif fails:
         status = Job.StatusChoices.FAIL
