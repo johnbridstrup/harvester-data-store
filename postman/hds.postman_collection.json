@@ -2732,6 +2732,25 @@
 							"body": "{\n    \"status\": \"error\",\n    \"errors\": {\n        \"exception\": \"No Harvester matches the given query.\"\n    }\n}"
 						}
 					]
+				},
+				{
+					"name": "Update Location",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "{{domain}}/harvesters/location/",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"harvesters",
+								"location",
+								""
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -2756,7 +2775,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"type\": \"error\",\n  \"timestamp\": 1641626862.789323,\n  \"data\": {\n    \"sysmon_report\": {\n      \"serial_number\": \"100\",\n      \"sysmon.0\": {\n        \"index\": 0,\n        \"robot_index\": 0,\n        \"services\": {\n          \"drivesys.0\": {\n            \"fsm\": {\n              \"service\": \"drivesys.0\",\n              \"state\": \"run\",\n              \"components\": [\n                \"run\",\n                \"armed\"\n              ],\n              \"ts\": 1651526862.3780782\n            },\n            \"PID\": 20241,\n            \"state\": \"S\",\n            \"created\": 1651525105,\n            \"cpu\": 24.124207190518508,\n            \"mem\": 0.99913466\n          },\n          \"harvester.0\": {\n            \"fsm\": {\n              \"service\": \"harvester.0\",\n              \"state\": \"run\",\n              \"components\": [\n                \"run\",\n                \"error\"\n              ],\n              \"ts\": 1651526861.7799714\n            },\n            \"PID\": 20250,\n            \"state\": \"S\",\n            \"created\": 1651525105,\n            \"cpu\": 24.96301030425531,\n            \"mem\": 1.0295105\n          },\n          \"master_ui.0\": {\n            \"fsm\": {\n              \"service\": \"master_ui.0\",\n              \"state\": \"run\",\n              \"components\": [\n                \"run\",\n                \"estop_disengaged\"\n              ],\n              \"ts\": 1651526862.5589492\n            },\n            \"PID\": 20229,\n            \"state\": \"S\",\n            \"created\": 1651525105,\n            \"cpu\": 6.677345866044339,\n            \"mem\": 0.945043\n          },\n          \"traychg.0\": {\n            \"fsm\": {\n              \"service\": \"traychg.0\",\n              \"state\": \"error\",\n              \"components\": [\n                \"error\",\n                \"terminated\"\n              ],\n              \"ts\": 1651526862.3099246\n            },\n            \"PID\": 20230,\n            \"state\": \"R\",\n            \"created\": 1651525105,\n            \"cpu\": 11.63961802691681,\n            \"mem\": 0.9826442\n          },\n          \"autodrive.0\": {\n            \"fsm\": {\n              \"service\": \"autodrive.0\",\n              \"state\": \"idle\",\n              \"components\": [\n                \"idle\"\n              ],\n              \"ts\": 1651526862.647353\n            },\n            \"PID\": 23619,\n            \"state\": \"S\",\n            \"created\": 1651526838,\n            \"cpu\": 0.45363484624483486,\n            \"mem\": 0.94799215\n          },\n          \"furrow.0\": {\n            \"fsm\": {\n              \"service\": \"furrow.0\",\n              \"state\": \"idle\",\n              \"components\": [\n                \"idle\"\n              ],\n              \"ts\": 1651526862.7239504\n            },\n            \"PID\": 23623,\n            \"state\": \"S\",\n            \"created\": 1651526838,\n            \"cpu\": 0.4989585604701848,\n            \"mem\": 0.94268376\n          },\n          \"logrec.0\": {\n            \"fsm\": {\n              \"service\": \"logrec.0\",\n              \"state\": \"idle\",\n              \"components\": [\n                \"idle\"\n              ],\n              \"ts\": 1651526862.6613626\n            },\n            \"PID\": 23611,\n            \"state\": \"S\",\n            \"created\": 1651526838,\n            \"cpu\": 0.5896342628509535,\n            \"mem\": 0.9460261\n          },\n          \"rcoop.0\": {\n            \"fsm\": {\n              \"service\": \"rcoop.0\",\n              \"state\": \"idle\",\n              \"components\": [\n                \"idle\"\n              ],\n              \"ts\": 1651526862.47056\n            },\n            \"PID\": 23607,\n            \"state\": \"S\",\n            \"created\": 1651526837,\n            \"cpu\": 0.47723708407665255,\n            \"mem\": 0.94661593\n          },\n          \"robotpathstore.0\": {\n            \"fsm\": {\n              \"service\": \"robotpathstore.0\",\n              \"state\": \"idle\",\n              \"components\": [\n                \"idle\",\n                \"run\"\n              ],\n              \"ts\": 1651526862.7092986\n            },\n            \"PID\": 23600,\n            \"state\": \"S\",\n            \"created\": 1651526837,\n            \"cpu\": 0.5639414025547399,\n            \"mem\": 0.9455837\n          }\n        },\n        \"version\": \"+5763793c96\",\n        \"chrony_info\": {\n          \"ref_id\": \"7F7F0101\",\n          \"ref_addr\": \"\",\n          \"stratum\": 10,\n          \"ref_time\": 1651526859.0543234,\n          \"sys_time\": 3.3e-08,\n          \"last_offset\": -0.006872488,\n          \"rms_offset\": 10.106872488,\n          \"frequency\": 55.441,\n          \"residual_freq\": 0,\n          \"skew\": 0,\n          \"root_delay\": 0,\n          \"root_dispersion\": 0,\n          \"update_interval\": 1.9,\n          \"leap_status\": \"Normal\"\n        },\n        \"errors\": {\n          \"traychg.0\": {\n            \"ts\": 1651526861.7674465,\n            \"value\": \"traychgunit.1 Error: No tray detected in collection\",\n            \"traceback\": \"\",\n            \"code\": 9,\n            \"operator_err_type\": \"traychg\"\n          }\n        }\n      },\n      \"sysmon.1\": {\n        \"index\": 1,\n        \"robot_index\": 1,\n        \"errors\": {\n          \"picker.1\": {\n            \"ts\": 1651526861.7674465,\n            \"value\": \"picker errorer\",\n            \"traceback\": \"\",\n            \"code\": 0,\n            \"operator_err_type\": \"traychg\"\n          }\n        },\n        \"services\": {\n          \"gripper.1\": {\n            \"fsm\": {\n              \"service\": \"gripper.1\",\n              \"state\": \"wait_behavior_stopped\",\n              \"components\": [\n                \"wait_behavior_stopped\",\n                \"run\"\n              ],\n              \"ts\": 1651526862.296359\n            },\n            \"PID\": 11451,\n            \"state\": \"S\",\n            \"created\": 1651526837,\n            \"cpu\": 13.80272978766389,\n            \"mem\": 1.9595047\n          },\n          \"logrec.1\": {\n            \"fsm\": {\n              \"service\": \"logrec.1\",\n              \"state\": \"idle\",\n              \"components\": [\n                \"idle\"\n              ],\n              \"ts\": 1651526862.6078136\n            },\n            \"PID\": 11438,\n            \"state\": \"S\",\n            \"created\": 1651526837,\n            \"cpu\": 0.6357326487655672,\n            \"mem\": 1.9224341\n          },\n          \"picker.1\": {\n            \"fsm\": {\n              \"service\": \"picker.1\",\n              \"state\": \"idle\",\n              \"components\": [\n                \"idle\",\n                \"idle\"\n              ],\n              \"ts\": 1651526862.674985\n            },\n            \"PID\": 11426,\n            \"state\": \"S\",\n            \"created\": 1651526836,\n            \"cpu\": 6.3867938135386195,\n            \"mem\": 1.9300178\n          },\n          \"robot.1\": {\n            \"fsm\": {\n              \"service\": \"robot.1\",\n              \"state\": \"idle\",\n              \"components\": [\n                \"idle\",\n                \"parked\"\n              ],\n              \"ts\": 1651526862.691043\n            },\n            \"PID\": 11442,\n            \"state\": \"S\",\n            \"created\": 1651526837,\n            \"cpu\": 1.226517249011379,\n            \"mem\": 1.9290699\n          },\n          \"tracker.1\": {\n            \"fsm\": {\n              \"service\": \"tracker.1\",\n              \"state\": \"idle\",\n              \"components\": [\n                \"idle\"\n              ],\n              \"ts\": 1651526862.7657125\n            },\n            \"PID\": 11430,\n            \"state\": \"S\",\n            \"created\": 1651526837,\n            \"cpu\": 0.5903954424998226,\n            \"mem\": 1.9202387\n          }\n        },\n        \"version\": \"+5763793c96\",\n        \"chrony_info\": {\n          \"ref_id\": \"C0A80102\",\n          \"ref_addr\": \"192.168.1.2\",\n          \"stratum\": 11,\n          \"ref_time\": 1651526813.7666936,\n          \"sys_time\": 1.222e-06,\n          \"last_offset\": -3.1957e-05,\n          \"rms_offset\": 3.0055e-05,\n          \"frequency\": 59.928,\n          \"residual_freq\": -0.012,\n          \"skew\": 0.126,\n          \"root_delay\": 0.000103711,\n          \"root_dispersion\": 6.8944e-05,\n          \"update_interval\": 65.1,\n          \"leap_status\": \"Normal\"\n        }\n      },\n      \"sysmon.5\": {\n        \"index\": 5,\n        \"robot_index\": 1,\n        \"services\": {\n          \"obscore.1\": {\n            \"fsm\": {\n              \"service\": \"obscore.1\",\n              \"state\": \"idle\",\n              \"components\": [\n                \"idle\"\n              ],\n              \"ts\": 1651526862.5829494\n            },\n            \"PID\": 13900,\n            \"state\": \"S\",\n            \"created\": 1651526840,\n            \"cpu\": 19.110977212730305,\n            \"mem\": 13.33334\n          }\n        },\n        \"version\": \"+5763793c96\",\n        \"chrony_info\": {\n          \"ref_id\": \"C0A80102\",\n          \"ref_addr\": \"192.168.1.2\",\n          \"stratum\": 11,\n          \"ref_time\": 1651526811.5236132,\n          \"sys_time\": 5.601e-06,\n          \"last_offset\": -6.057e-06,\n          \"rms_offset\": 0.00536857,\n          \"frequency\": 54.702,\n          \"residual_freq\": 0.004,\n          \"skew\": 0.576,\n          \"root_delay\": 0.001906298,\n          \"root_dispersion\": 7.9546e-05,\n          \"update_interval\": 128.6,\n          \"leap_status\": \"Normal\"\n        }\n      },\n      \"sysmon.2\": {\n        \"index\": 2,\n        \"robot_index\": 2,\n        \"services\": {\n          \"gripper.2\": {\n            \"fsm\": {\n              \"service\": \"gripper.2\",\n              \"state\": \"wait_behavior_stopped\",\n              \"components\": [\n                \"wait_behavior_stopped\",\n                \"run\"\n              ],\n              \"ts\": 1651526862.297273\n            },\n            \"PID\": 11192,\n            \"state\": \"S\",\n            \"created\": 1651526836,\n            \"cpu\": 11.044345898498676,\n            \"mem\": 1.9578164\n          },\n          \"logrec.2\": {\n            \"fsm\": {\n              \"service\": \"logrec.2\",\n              \"state\": \"idle\",\n              \"components\": [\n                \"idle\"\n              ],\n              \"ts\": 1651526862.6790764\n            },\n            \"PID\": 11222,\n            \"state\": \"S\",\n            \"created\": 1651526837,\n            \"cpu\": 0.6241243550002277,\n            \"mem\": 1.9167074\n          },\n          \"picker.2\": {\n            \"fsm\": {\n              \"service\": \"picker.2\",\n              \"state\": \"idle\",\n              \"components\": [\n                \"idle\",\n                \"idle\"\n              ],\n              \"ts\": 1651526862.5792768\n            },\n            \"PID\": 11226,\n            \"state\": \"S\",\n            \"created\": 1651526837,\n            \"cpu\": 6.8208803842233525,\n            \"mem\": 1.918653\n          },\n          \"robot.2\": {\n            \"fsm\": {\n              \"service\": \"robot.2\",\n              \"state\": \"idle\",\n              \"components\": [\n                \"idle\",\n                \"parked\"\n              ],\n              \"ts\": 1651526862.3758438\n            },\n            \"PID\": 11210,\n            \"state\": \"S\",\n            \"created\": 1651526836,\n            \"cpu\": 1.1455400589977114,\n            \"mem\": 1.9264858\n          },\n          \"tracker.2\": {\n            \"fsm\": {\n              \"service\": \"tracker.2\",\n              \"state\": \"idle\",\n              \"components\": [\n                \"idle\"\n              ],\n              \"ts\": 1651526862.7015448\n            },\n            \"PID\": 11206,\n            \"state\": \"S\",\n            \"created\": 1651526836,\n            \"cpu\": 0.5497915072857358,\n            \"mem\": 1.9194512\n          }\n        },\n        \"version\": \"+5763793c96\",\n        \"chrony_info\": {\n          \"ref_id\": \"C0A80102\",\n          \"ref_addr\": \"192.168.1.2\",\n          \"stratum\": 11,\n          \"ref_time\": 1651526811.6820233,\n          \"sys_time\": 1.4881e-05,\n          \"last_offset\": -4.3196e-05,\n          \"rms_offset\": 0.00011021,\n          \"frequency\": 58.745,\n          \"residual_freq\": -0.036,\n          \"skew\": 1.441,\n          \"root_delay\": 0.000271029,\n          \"root_dispersion\": 0.000145498,\n          \"update_interval\": 64.9,\n          \"leap_status\": \"Normal\"\n        }\n      },\n      \"sysmon.6\": {\n        \"index\": 6,\n        \"robot_index\": 2,\n        \"services\": {\n          \"obscore.2\": {\n            \"fsm\": {\n              \"service\": \"obscore.2\",\n              \"state\": \"idle\",\n              \"components\": [\n                \"idle\"\n              ],\n              \"ts\": 1651526862.5971646\n            },\n            \"PID\": 13370,\n            \"state\": \"S\",\n            \"created\": 1651526840,\n            \"cpu\": 19.240779506557296,\n            \"mem\": 13.317834\n          }\n        },\n        \"version\": \"+5763793c96\",\n        \"chrony_info\": {\n          \"ref_id\": \"C0A80102\",\n          \"ref_addr\": \"192.168.1.2\",\n          \"stratum\": 11,\n          \"ref_time\": 1651526742.3862045,\n          \"sys_time\": -3.54e-06,\n          \"last_offset\": 5.3436e-05,\n          \"rms_offset\": 0.000204461,\n          \"frequency\": 43.865,\n          \"residual_freq\": 0.015,\n          \"skew\": 0.667,\n          \"root_delay\": 0.001760268,\n          \"root_dispersion\": 0.000274569,\n          \"update_interval\": 130.1,\n          \"leap_status\": \"Normal\"\n        }\n      },\n      \"sysmon.3\": {\n        \"index\": 3,\n        \"robot_index\": 3,\n        \"services\": {\n          \"gripper.3\": {\n            \"fsm\": {\n              \"service\": \"gripper.3\",\n              \"state\": \"wait_behavior_stopped\",\n              \"components\": [\n                \"wait_behavior_stopped\",\n                \"run\"\n              ],\n              \"ts\": 1651526862.2979255\n            },\n            \"PID\": 11906,\n            \"state\": \"R\",\n            \"created\": 1651526835,\n            \"cpu\": 13.165941559857036,\n            \"mem\": 2.038577\n          },\n          \"logrec.3\": {\n            \"fsm\": {\n              \"service\": \"logrec.3\",\n              \"state\": \"idle\",\n              \"components\": [\n                \"idle\"\n              ],\n              \"ts\": 1651526862.5653963\n            },\n            \"PID\": 11890,\n            \"state\": \"S\",\n            \"created\": 1651526835,\n            \"cpu\": 0.8454237889261249,\n            \"mem\": 2.005299\n          },\n          \"picker.3\": {\n            \"fsm\": {\n              \"service\": \"picker.3\",\n              \"state\": \"idle\",\n              \"components\": [\n                \"idle\",\n                \"idle\"\n              ],\n              \"ts\": 1651526862.6044993\n            },\n            \"PID\": 11895,\n            \"state\": \"S\",\n            \"created\": 1651526835,\n            \"cpu\": 7.526716187379116,\n            \"mem\": 2.0026999\n          },\n          \"robot.3\": {\n            \"fsm\": {\n              \"service\": \"robot.3\",\n              \"state\": \"idle\",\n              \"components\": [\n                \"idle\",\n                \"parked\"\n              ],\n              \"ts\": 1651526862.6030343\n            },\n            \"PID\": 11896,\n            \"state\": \"S\",\n            \"created\": 1651526835,\n            \"cpu\": 1.4491497553385977,\n            \"mem\": 2.0123827\n          },\n          \"tracker.3\": {\n            \"fsm\": {\n              \"service\": \"tracker.3\",\n              \"state\": \"idle\",\n              \"components\": [\n                \"idle\"\n              ],\n              \"ts\": 1651526862.5846052\n            },\n            \"PID\": 11902,\n            \"state\": \"S\",\n            \"created\": 1651526835,\n            \"cpu\": 0.7248383535621931,\n            \"mem\": 2.001324\n          }\n        },\n        \"version\": \"+5763793c96\",\n        \"chrony_info\": {\n          \"ref_id\": \"C0A80102\",\n          \"ref_addr\": \"192.168.1.2\",\n          \"stratum\": 11,\n          \"ref_time\": 1651526822.9255896,\n          \"sys_time\": 1.1031e-05,\n          \"last_offset\": -3.336e-06,\n          \"rms_offset\": 7.4107e-05,\n          \"frequency\": 35.94,\n          \"residual_freq\": -0.016,\n          \"skew\": 1.483,\n          \"root_delay\": 9.549e-05,\n          \"root_dispersion\": 0.000308387,\n          \"update_interval\": 64.4,\n          \"leap_status\": \"Normal\"\n        }\n      },\n      \"sysmon.7\": {\n        \"index\": 7,\n        \"robot_index\": 3,\n        \"services\": {\n          \"obscore.3\": {\n            \"fsm\": {\n              \"service\": \"obscore.3\",\n              \"state\": \"idle\",\n              \"components\": [\n                \"idle\"\n              ],\n              \"ts\": 1651526862.522183\n            },\n            \"PID\": 13059,\n            \"state\": \"S\",\n            \"created\": 1651526840,\n            \"cpu\": 21.15503126790077,\n            \"mem\": 13.363508\n          }\n        },\n        \"version\": \"+5763793c96\",\n        \"chrony_info\": {\n          \"ref_id\": \"C0A80102\",\n          \"ref_addr\": \"192.168.1.2\",\n          \"stratum\": 11,\n          \"ref_time\": 1651526755.073624,\n          \"sys_time\": 0.000187082,\n          \"last_offset\": -0.000226177,\n          \"rms_offset\": 0.033924531,\n          \"frequency\": 49.01,\n          \"residual_freq\": -0.092,\n          \"skew\": 0.19,\n          \"root_delay\": 0.001715322,\n          \"root_dispersion\": 0.000292228,\n          \"update_interval\": 1024.4,\n          \"leap_status\": \"Normal\"\n        }\n      },\n      \"sysmon.4\": {\n        \"index\": 4,\n        \"robot_index\": 4,\n        \"services\": {\n          \"gripper.4\": {\n            \"fsm\": {\n              \"service\": \"gripper.4\",\n              \"state\": \"wait_behavior_stopped\",\n              \"components\": [\n                \"wait_behavior_stopped\",\n                \"run\"\n              ],\n              \"ts\": 1651526862.2972531\n            },\n            \"PID\": 11024,\n            \"state\": \"S\",\n            \"created\": 1651526836,\n            \"cpu\": 11.430601317603687,\n            \"mem\": 1.9610513\n          },\n          \"logrec.4\": {\n            \"fsm\": {\n              \"service\": \"logrec.4\",\n              \"state\": \"idle\",\n              \"components\": [\n                \"idle\"\n              ],\n              \"ts\": 1651526862.5584984\n            },\n            \"PID\": 11011,\n            \"state\": \"S\",\n            \"created\": 1651526836,\n            \"cpu\": 0.6484704297219998,\n            \"mem\": 1.9203385\n          },\n          \"picker.4\": {\n            \"fsm\": {\n              \"service\": \"picker.4\",\n              \"state\": \"idle\",\n              \"components\": [\n                \"idle\",\n                \"idle\"\n              ],\n              \"ts\": 1651526862.6692395\n            },\n            \"PID\": 11036,\n            \"state\": \"S\",\n            \"created\": 1651526836,\n            \"cpu\": 6.44268040225339,\n            \"mem\": 1.9236814\n          },\n          \"robot.4\": {\n            \"fsm\": {\n              \"service\": \"robot.4\",\n              \"state\": \"idle\",\n              \"components\": [\n                \"idle\",\n                \"parked\"\n              ],\n              \"ts\": 1651526862.676731\n            },\n            \"PID\": 11042,\n            \"state\": \"S\",\n            \"created\": 1651526837,\n            \"cpu\": 1.0981312035699224,\n            \"mem\": 1.9290199\n          },\n          \"tracker.4\": {\n            \"fsm\": {\n              \"service\": \"tracker.4\",\n              \"state\": \"idle\",\n              \"components\": [\n                \"idle\"\n              ],\n              \"ts\": 1651526862.7772038\n            },\n            \"PID\": 11018,\n            \"state\": \"S\",\n            \"created\": 1651526836,\n            \"cpu\": 0.4864631258960937,\n            \"mem\": 1.9213364\n          }\n        },\n        \"version\": \"+5763793c96\",\n        \"chrony_info\": {\n          \"ref_id\": \"C0A80102\",\n          \"ref_addr\": \"192.168.1.2\",\n          \"stratum\": 11,\n          \"ref_time\": 1651526800.6424916,\n          \"sys_time\": -3e-09,\n          \"last_offset\": -5.3154e-05,\n          \"rms_offset\": 5.1391e-05,\n          \"frequency\": 59.308,\n          \"residual_freq\": -0.033,\n          \"skew\": 0.236,\n          \"root_delay\": 0.000145052,\n          \"root_dispersion\": 0.000100044,\n          \"update_interval\": 65.3,\n          \"leap_status\": \"Normal\"\n        }\n      },\n      \"sysmon.8\": {\n        \"index\": 8,\n        \"robot_index\": 4,\n        \"services\": {\n          \"obscore.4\": {\n            \"fsm\": {\n              \"service\": \"obscore.4\",\n              \"state\": \"idle\",\n              \"components\": [\n                \"idle\"\n              ],\n              \"ts\": 1651526862.570425\n            },\n            \"PID\": 13451,\n            \"state\": \"S\",\n            \"created\": 1651526840,\n            \"cpu\": 22.27336398941905,\n            \"mem\": 13.380356\n          }\n        },\n        \"version\": \"+5763793c96\",\n        \"chrony_info\": {\n          \"ref_id\": \"C0A80102\",\n          \"ref_addr\": \"192.168.1.2\",\n          \"stratum\": 11,\n          \"ref_time\": 1651526832.268646,\n          \"sys_time\": -1.4604e-05,\n          \"last_offset\": -5.187e-06,\n          \"rms_offset\": 0.003197025,\n          \"frequency\": 51.235,\n          \"residual_freq\": 0.048,\n          \"skew\": 3.167,\n          \"root_delay\": 0.001814319,\n          \"root_dispersion\": 0.000111616,\n          \"update_interval\": 65.1,\n          \"leap_status\": \"Normal\"\n        }\n      }\n    },\n    \"serial_number\": \"011\",\n    \"githash\": \"5763793c96\",\n    \"branch_name\": null\n  }\n}",
+							"raw": "{\n    \"data\": {\n        \"uuid\": \"05175776-5158-11ed-9b0c-78d004272c5a\",\n        \"githash\": \"d3d24eb3d4\",\n        \"branch_name\": null,\n        \"serial_number\": \"001\",\n        \"new_thing\": \"xxxxx\",\n        \"sysmon_report\": {\n            \"new_thing_2\": \"yyyyyy\",\n            \"fruit\": \"strawberry\",\n            \"scene\": \"xxxx\",\n            \"sysmon.0\": {\n                \"index\": 0,\n                \"version\": \"+d3d24eb3d4\",\n                \"services\": {\n                    \"rcoop.0\": {\n                        \"PID\": 3630,\n                        \"cpu\": 0.2421090355414031,\n                        \"fsm\": {\n                            \"ts\": 1666367400.1810873,\n                            \"state\": \"run\",\n                            \"service\": \"rcoop.0\",\n                            \"components\": [\n                                \"run\",\n                                \"wait_tftree\"\n                            ]\n                        },\n                        \"mem\": 1.0687582,\n                        \"state\": \"S\",\n                        \"created\": 1666367318\n                    },\n                    \"furrow.0\": {\n                        \"PID\": 3625,\n                        \"cpu\": 0.6417015741686706,\n                        \"fsm\": {\n                            \"ts\": 1666367399.896443,\n                            \"state\": \"run\",\n                            \"service\": \"furrow.0\",\n                            \"components\": [\n                                \"run\",\n                                \"streaming\"\n                            ]\n                        },\n                        \"mem\": 1.0874606,\n                        \"state\": \"S\",\n                        \"created\": 1666367317\n                    },\n                    \"logrec.0\": {\n                        \"PID\": 3634,\n                        \"cpu\": 0.5097133533463285,\n                        \"fsm\": {\n                            \"ts\": 1666367399.8981314,\n                            \"state\": \"run\",\n                            \"service\": \"logrec.0\",\n                            \"components\": [\n                                \"run\",\n                                \"record\"\n                            ]\n                        },\n                        \"mem\": 1.0847572,\n                        \"state\": \"S\",\n                        \"created\": 1666367318\n                    },\n                    \"traychg.0\": {\n                        \"PID\": 3190,\n                        \"cpu\": 14.635461526998462,\n                        \"fsm\": {\n                            \"ts\": 1666367399.9375715,\n                            \"state\": \"run\",\n                            \"service\": \"traychg.0\",\n                            \"components\": [\n                                \"run\",\n                                \"idle\"\n                            ]\n                        },\n                        \"mem\": 1.1040739,\n                        \"state\": \"S\",\n                        \"created\": 1666367281\n                    },\n                    \"drivesys.0\": {\n                        \"PID\": 3200,\n                        \"cpu\": 28.379311017872634,\n                        \"fsm\": {\n                            \"ts\": 1666367400.087807,\n                            \"state\": \"run\",\n                            \"service\": \"drivesys.0\",\n                            \"components\": [\n                                \"run\",\n                                \"armed\"\n                            ]\n                        },\n                        \"mem\": 1.1152314,\n                        \"state\": \"S\",\n                        \"created\": 1666367281\n                    },\n                    \"autodrive.0\": {\n                        \"PID\": 3620,\n                        \"cpu\": 0.2642355782214404,\n                        \"fsm\": {\n                            \"ts\": 1666367400.0752404,\n                            \"state\": \"wait_ready\",\n                            \"service\": \"autodrive.0\",\n                            \"components\": [\n                                \"wait_ready\",\n                                \"wait_tftree\"\n                            ]\n                        },\n                        \"mem\": 1.0703312,\n                        \"state\": \"S\",\n                        \"created\": 1666367317\n                    },\n                    \"harvester.0\": {\n                        \"PID\": 3186,\n                        \"cpu\": 18.29877564631184,\n                        \"fsm\": {\n                            \"ts\": 1666367400.268561,\n                            \"state\": \"run\",\n                            \"service\": \"harvester.0\",\n                            \"components\": [\n                                \"run\",\n                                \"error\"\n                            ]\n                        },\n                        \"mem\": 1.1480649,\n                        \"state\": \"S\",\n                        \"created\": 1666367281\n                    },\n                    \"master_ui.0\": {\n                        \"PID\": 3182,\n                        \"cpu\": 7.21395378048246,\n                        \"fsm\": {\n                            \"ts\": 1666367400.0360441,\n                            \"state\": \"run\",\n                            \"service\": \"master_ui.0\",\n                            \"components\": [\n                                \"run\",\n                                \"estop_disengaged\"\n                            ]\n                        },\n                        \"mem\": 1.0818573,\n                        \"state\": \"S\",\n                        \"created\": 1666367281\n                    },\n                    \"robotpathstore.0\": {\n                        \"PID\": 3612,\n                        \"cpu\": 0.6039731581190102,\n                        \"fsm\": {\n                            \"ts\": 1666367399.8718555,\n                            \"state\": \"run\",\n                            \"service\": \"robotpathstore.0\",\n                            \"components\": [\n                                \"run\",\n                                \"run\"\n                            ]\n                        },\n                        \"mem\": 1.0747057,\n                        \"state\": \"S\",\n                        \"created\": 1666367317\n                    }\n                },\n                \"chrony_info\": {\n                    \"skew\": 0.598,\n                    \"ref_id\": \"6C3D49F4\",\n                    \"stratum\": 3,\n                    \"ref_addr\": \"108.61.73.244\",\n                    \"ref_time\": 1666367216.5443976,\n                    \"sys_time\": -4e-9,\n                    \"frequency\": 4.255,\n                    \"rms_offset\": 0.001605535,\n                    \"root_delay\": 0.190599263,\n                    \"last_offset\": -0.001605535,\n                    \"leap_status\": \"Normal\",\n                    \"residual_freq\": -558.808,\n                    \"root_dispersion\": 0.146563709,\n                    \"update_interval\": 6.7\n                },\n                \"robot_index\": 0\n            },\n            \"sysmon.1\": {\n                \"index\": 1,\n                \"version\": \"b187e3070b\",\n                \"services\": {\n                    \"robot.1\": {\n                        \"PID\": 3552,\n                        \"cpu\": 3.1416276748083325,\n                        \"fsm\": {\n                            \"ts\": 1666367399.9872453,\n                            \"state\": \"run\",\n                            \"service\": \"robot.1\",\n                            \"components\": [\n                                \"run\",\n                                \"homing\"\n                            ]\n                        },\n                        \"mem\": 2.4085057,\n                        \"state\": \"S\",\n                        \"created\": 1666367318\n                    },\n                    \"logrec.1\": {\n                        \"PID\": 3554,\n                        \"cpu\": 1.1904113769596731,\n                        \"fsm\": {\n                            \"ts\": 1666367399.8706207,\n                            \"state\": \"run\",\n                            \"service\": \"logrec.1\",\n                            \"components\": [\n                                \"run\",\n                                \"record\"\n                            ]\n                        },\n                        \"mem\": 2.3084676,\n                        \"state\": \"S\",\n                        \"created\": 1666367318\n                    },\n                    \"picker.1\": {\n                        \"PID\": 3553,\n                        \"cpu\": 9.450261152949732,\n                        \"fsm\": {\n                            \"ts\": 1666367400.0000763,\n                            \"state\": \"run\",\n                            \"service\": \"picker.1\",\n                            \"components\": [\n                                \"run\",\n                                \"wait_ready\",\n                                \"robot_check\"\n                            ]\n                        },\n                        \"mem\": 2.2913954,\n                        \"state\": \"S\",\n                        \"created\": 1666367318\n                    },\n                    \"gripper.1\": {\n                        \"PID\": 3551,\n                        \"cpu\": 17.230983243795404,\n                        \"fsm\": {\n                            \"ts\": 1666367400.006538,\n                            \"state\": \"run\",\n                            \"service\": \"gripper.1\",\n                            \"components\": [\n                                \"run\",\n                                \"run\"\n                            ]\n                        },\n                        \"mem\": 2.3051553,\n                        \"state\": \"S\",\n                        \"created\": 1666367318\n                    },\n                    \"tracker.1\": {\n                        \"PID\": 3555,\n                        \"cpu\": 0.9572559002286413,\n                        \"fsm\": {\n                            \"ts\": 1666367399.7755415,\n                            \"state\": \"run\",\n                            \"service\": \"tracker.1\",\n                            \"components\": [\n                                \"run\",\n                                \"track\"\n                            ]\n                        },\n                        \"mem\": 2.3914335,\n                        \"state\": \"S\",\n                        \"created\": 1666367318\n                    },\n                    \"canlogger.1\": {\n                        \"PID\": 3550,\n                        \"cpu\": 12.456215441813974,\n                        \"fsm\": {\n                            \"ts\": 1666367399.84609,\n                            \"state\": \"run\",\n                            \"service\": \"canlogger.1\",\n                            \"components\": [\n                                \"run\",\n                                \"active\"\n                            ]\n                        },\n                        \"mem\": 2.284057,\n                        \"state\": \"S\",\n                        \"created\": 1666367318\n                    }\n                },\n                \"chrony_info\": {\n                    \"skew\": 0.029,\n                    \"ref_id\": \"C0A80102\",\n                    \"stratum\": 4,\n                    \"ref_addr\": \"192.168.1.2\",\n                    \"ref_time\": 1666367379.2711623,\n                    \"sys_time\": -0.021924643,\n                    \"frequency\": -17.087,\n                    \"rms_offset\": 0.149501219,\n                    \"root_delay\": 0.000369928,\n                    \"last_offset\": 0.055400003,\n                    \"leap_status\": \"Normal\",\n                    \"residual_freq\": 1056.786,\n                    \"root_dispersion\": 0.26408565,\n                    \"update_interval\": 64.7\n                },\n                \"robot_index\": 1\n            },\n            \"sysmon.2\": {\n                \"index\": 2,\n                \"version\": \"+d3d24eb3d4\",\n                \"services\": {\n                    \"robot.2\": {\n                        \"PID\": 2628,\n                        \"cpu\": 1.8302247246953938,\n                        \"fsm\": {\n                            \"ts\": 1666367399.8286252,\n                            \"state\": \"run\",\n                            \"service\": \"robot.2\",\n                            \"components\": [\n                                \"run\",\n                                \"homing\"\n                            ]\n                        },\n                        \"mem\": 2.3561509,\n                        \"state\": \"S\",\n                        \"created\": 1666367319\n                    },\n                    \"logrec.2\": {\n                        \"PID\": 2629,\n                        \"cpu\": 0.6360590675166298,\n                        \"fsm\": {\n                            \"ts\": 1666367399.7700672,\n                            \"state\": \"run\",\n                            \"service\": \"logrec.2\",\n                            \"components\": [\n                                \"run\",\n                                \"record\"\n                            ]\n                        },\n                        \"mem\": 2.2575622,\n                        \"state\": \"S\",\n                        \"created\": 1666367319\n                    },\n                    \"picker.2\": {\n                        \"PID\": 2617,\n                        \"cpu\": 6.702424309933737,\n                        \"fsm\": {\n                            \"ts\": 1666367399.8495958,\n                            \"state\": \"run\",\n                            \"service\": \"picker.2\",\n                            \"components\": [\n                                \"run\",\n                                \"wait_ready\",\n                                \"robot_check\"\n                            ]\n                        },\n                        \"mem\": 2.230071,\n                        \"state\": \"S\",\n                        \"created\": 1666367318\n                    },\n                    \"gripper.2\": {\n                        \"PID\": 2611,\n                        \"cpu\": 15.582919559763774,\n                        \"fsm\": {\n                            \"ts\": 1666367399.792739,\n                            \"state\": \"run\",\n                            \"service\": \"gripper.2\",\n                            \"components\": [\n                                \"run\",\n                                \"run\"\n                            ]\n                        },\n                        \"mem\": 2.2565143,\n                        \"state\": \"S\",\n                        \"created\": 1666367318\n                    },\n                    \"tracker.2\": {\n                        \"PID\": 2609,\n                        \"cpu\": 0.486999823523016,\n                        \"fsm\": {\n                            \"ts\": 1666367400.1263707,\n                            \"state\": \"run\",\n                            \"service\": \"tracker.2\",\n                            \"components\": [\n                                \"run\",\n                                \"track\"\n                            ]\n                        },\n                        \"mem\": 2.347719,\n                        \"state\": \"S\",\n                        \"created\": 1666367318\n                    }\n                },\n                \"chrony_info\": {\n                    \"skew\": 0.324,\n                    \"ref_id\": \"C0A80102\",\n                    \"stratum\": 4,\n                    \"ref_addr\": \"192.168.1.2\",\n                    \"ref_time\": 1666367365.2231092,\n                    \"sys_time\": 0.023037784,\n                    \"frequency\": 7.779,\n                    \"rms_offset\": 0.153762192,\n                    \"root_delay\": 0.19089511,\n                    \"last_offset\": -0.026291231,\n                    \"leap_status\": \"Normal\",\n                    \"residual_freq\": 1364.983,\n                    \"root_dispersion\": 0.237788811,\n                    \"update_interval\": 64.8\n                },\n                \"robot_index\": 2\n            },\n            \"sysmon.3\": {\n                \"index\": 3,\n                \"errors\": {\n                    \"picker.3\": {\n                        \"ts\": 1666367400.0050237,\n                        \"code\": 0,\n                        \"value\": \"\",\n                        \"handled\": false,\n                        \"traceback\": \"Traceback (most recent call last):\\n  File \\\"/home/aft/master/venv/lib/python3.8/site-packages/twisted/internet/defer.py\\\", line 1445, in _inlineCallbacks\\n    result = current_context.run(g.send, result)\\n  File \\\"/home/aft/_harv-aft-py-packages/aft-py-sb-harv/src/aft_py_sb_harv/picker/pickerrunbehavior.py\\\", line 386, in state_wait_ready\\n    yield self._process_models_update(evt.arg)\\n  File \\\"/home/aft/_harv-aft-py-packages/aft-core/src/aft_core/twisted/twistutils.py\\\", line 65, in unwindGenerator\\n    return _cancellableInlineCallbacks(gen)\\n  File \\\"/home/aft/_harv-aft-py-packages/aft-core/src/aft_core/twisted/twistutils.py\\\", line 76, in _cancellableInlineCallbacks\\n    _inlineCallbacks(None, g, status)\\n--- <exception caught here> ---\\n  File \\\"/home/aft/_harv-aft-py-packages/aft-core/src/aft_core/asm/AsyncStateMachine.py\\\", line 916, in _process_curr_state\\n    result = yield self._stateTransDefer\\n  File \\\"/home/aft/master/venv/lib/python3.8/site-packages/twisted/internet/defer.py\\\", line 662, in _runCallbacks\\n    current.result = callback(current.result, *args, **kw)\\n  File \\\"/home/aft/_harv-aft-py-packages/aft-core/src/aft_core/twisted/twistutils.py\\\", line 179, in trap_cancel\\n    failType = fail.trap(defer.CancelledError, DeferredListError)\\n  File \\\"/home/aft/master/venv/lib/python3.8/site-packages/twisted/python/failure.py\\\", line 450, in trap\\n    self.raiseException()\\n  File \\\"/home/aft/master/venv/lib/python3.8/site-packages/twisted/python/failure.py\\\", line 475, in raiseException\\n    raise self.value.with_traceback(self.tb)\\n  File \\\"/home/aft/_harv-aft-py-packages/aft-py-sb-harv/src/aft_py_sb_harv/picker/pickerrunbehavior.py\\\", line 386, in state_wait_ready\\n    yield self._process_models_update(evt.arg)\\n  File \\\"/home/aft/master/venv/lib/python3.8/site-packages/twisted/internet/defer.py\\\", line 1445, in _inlineCallbacks\\n    result = current_context.run(g.send, result)\\n  File \\\"/home/aft/_harv-aft-py-packages/aft-py-sb-harv/src/aft_py_sb_harv/picker/pickerrunbehavior.py\\\", line 902, in _process_models_update\\n    self.cand_cache.update(msg[CandMessage.TOPIC].get(BERRY_PUB_NAME, []))\\n  File \\\"/home/aft/_harv-aft-py-packages/aft-py-sb-harv/src/aft_py_sb_harv/BerryCandidateCache.py\\\", line 174, in update\\n    super().update(\\n  File \\\"/home/aft/_harv-aft-py-packages/aft-py-sb-harv/src/aft_py_sb_harv/candidatecache.py\\\", line 182, in update\\n    self.update_bed_pos(candList)\\n  File \\\"/home/aft/_harv-aft-py-packages/aft-py-sb-harv/src/aft_py_sb_harv/BerryCandidateCache.py\\\", line 162, in update_bed_pos\\n    super().update_bed_pos(candList, ts)\\n  File \\\"/home/aft/_harv-aft-py-packages/aft-py-sb-harv/src/aft_py_sb_harv/candidatecache.py\\\", line 161, in update_bed_pos\\n    xfrm = self.world_node.calc_transform(self.bed_node, ts)\\n  File \\\"/home/aft/_harv-aft-py-packages/aft-core/src/aft_core/tftree/tftree.py\\\", line 546, in calc_transform\\n    tfSeq = self._seq_to_transforms(nodeSeq, ts, from_initial)\\n  File \\\"/home/aft/_harv-aft-py-packages/aft-core/src/aft_core/tftree/tftree.py\\\", line 688, in _seq_to_transforms\\n    tf = elem.node.get_transform(ts)\\n  File \\\"/home/aft/_harv-aft-py-packages/aft-core/src/aft_core/tftree/tftree.py\\\", line 1160, in get_transform\\n    raise TFTreeNotReadyAtTSException()\\naft_core.tftree.tftree.TFTreeNotReadyAtTSException: \\n\",\n                        \"operator_err_type\": \"software\"\n                    }\n                },\n                \"version\": \"+d3d24eb3d4\",\n                \"services\": {\n                    \"robot.3\": {\n                        \"PID\": 2131,\n                        \"cpu\": 2.3110990366477644,\n                        \"fsm\": {\n                            \"ts\": 1666367399.7746274,\n                            \"state\": \"run\",\n                            \"service\": \"robot.3\",\n                            \"components\": [\n                                \"run\",\n                                \"homing\"\n                            ]\n                        },\n                        \"mem\": 2.365271,\n                        \"state\": \"S\",\n                        \"created\": 1666367316\n                    },\n                    \"logrec.3\": {\n                        \"PID\": 2130,\n                        \"cpu\": 0.8208108196919327,\n                        \"fsm\": {\n                            \"ts\": 1666367399.6635664,\n                            \"state\": \"run\",\n                            \"service\": \"logrec.3\",\n                            \"components\": [\n                                \"run\",\n                                \"record\"\n                            ]\n                        },\n                        \"mem\": 2.243374,\n                        \"state\": \"S\",\n                        \"created\": 1666367316\n                    },\n                    \"picker.3\": {\n                        \"PID\": 2132,\n                        \"cpu\": 9.774364532965157,\n                        \"fsm\": {\n                            \"ts\": 1666367400.0137362,\n                            \"state\": \"error\",\n                            \"service\": \"picker.3\",\n                            \"components\": [\n                                \"error\",\n                                \"terminated\"\n                            ]\n                        },\n                        \"mem\": 2.2216651,\n                        \"state\": \"S\",\n                        \"created\": 1666367316\n                    },\n                    \"gripper.3\": {\n                        \"PID\": 2133,\n                        \"cpu\": 17.59042635651486,\n                        \"fsm\": {\n                            \"ts\": 1666367399.8727565,\n                            \"state\": \"run\",\n                            \"service\": \"gripper.3\",\n                            \"components\": [\n                                \"run\",\n                                \"run\"\n                            ]\n                        },\n                        \"mem\": 2.2585094,\n                        \"state\": \"S\",\n                        \"created\": 1666367316\n                    },\n                    \"tracker.3\": {\n                        \"PID\": 2129,\n                        \"cpu\": 0.5935158577790356,\n                        \"fsm\": {\n                            \"ts\": 1666367399.5824091,\n                            \"state\": \"run\",\n                            \"service\": \"tracker.3\",\n                            \"components\": [\n                                \"run\",\n                                \"track\"\n                            ]\n                        },\n                        \"mem\": 2.3358672,\n                        \"state\": \"S\",\n                        \"created\": 1666367316\n                    }\n                },\n                \"chrony_info\": {\n                    \"skew\": 0.292,\n                    \"ref_id\": \"C0A80102\",\n                    \"stratum\": 4,\n                    \"ref_addr\": \"192.168.1.2\",\n                    \"ref_time\": 1666367362.767058,\n                    \"sys_time\": -0.036412142,\n                    \"frequency\": -9.851,\n                    \"rms_offset\": 0.115879185,\n                    \"root_delay\": 0.191305354,\n                    \"last_offset\": 0.115879185,\n                    \"leap_status\": \"Normal\",\n                    \"residual_freq\": 2259.464,\n                    \"root_dispersion\": 0.257249862,\n                    \"update_interval\": 64.4\n                },\n                \"robot_index\": 3\n            },\n            \"sysmon.4\": {\n                \"index\": 4,\n                \"version\": \"+d3d24eb3d4\",\n                \"services\": {\n                    \"robot.4\": {\n                        \"PID\": 2120,\n                        \"cpu\": 2.2544399258961163,\n                        \"fsm\": {\n                            \"ts\": 1666367399.9886754,\n                            \"state\": \"run\",\n                            \"service\": \"robot.4\",\n                            \"components\": [\n                                \"run\",\n                                \"homing\"\n                            ]\n                        },\n                        \"mem\": 2.3691466,\n                        \"state\": \"S\",\n                        \"created\": 1666367317\n                    },\n                    \"logrec.4\": {\n                        \"PID\": 2124,\n                        \"cpu\": 0.7896822826199309,\n                        \"fsm\": {\n                            \"ts\": 1666367399.8871298,\n                            \"state\": \"run\",\n                            \"service\": \"logrec.4\",\n                            \"components\": [\n                                \"run\",\n                                \"record\"\n                            ]\n                        },\n                        \"mem\": 2.2460263,\n                        \"state\": \"S\",\n                        \"created\": 1666367317\n                    },\n                    \"picker.4\": {\n                        \"PID\": 2122,\n                        \"cpu\": 9.476522016907143,\n                        \"fsm\": {\n                            \"ts\": 1666367399.9963887,\n                            \"state\": \"run\",\n                            \"service\": \"picker.4\",\n                            \"components\": [\n                                \"run\",\n                                \"wait_ready\",\n                                \"robot_check\"\n                            ]\n                        },\n                        \"mem\": 2.2394526,\n                        \"state\": \"S\",\n                        \"created\": 1666367317\n                    },\n                    \"gripper.4\": {\n                        \"PID\": 2121,\n                        \"cpu\": 18.68738856288237,\n                        \"fsm\": {\n                            \"ts\": 1666367399.759507,\n                            \"state\": \"run\",\n                            \"service\": \"gripper.4\",\n                            \"components\": [\n                                \"run\",\n                                \"run\"\n                            ]\n                        },\n                        \"mem\": 2.2611105,\n                        \"state\": \"S\",\n                        \"created\": 1666367317\n                    },\n                    \"tracker.4\": {\n                        \"PID\": 2123,\n                        \"cpu\": 0.5986791085014979,\n                        \"fsm\": {\n                            \"ts\": 1666367399.7846127,\n                            \"state\": \"run\",\n                            \"service\": \"tracker.4\",\n                            \"components\": [\n                                \"run\",\n                                \"track\"\n                            ]\n                        },\n                        \"mem\": 2.3436155,\n                        \"state\": \"S\",\n                        \"created\": 1666367317\n                    }\n                },\n                \"chrony_info\": {\n                    \"skew\": 0.16,\n                    \"ref_id\": \"C0A80102\",\n                    \"stratum\": 4,\n                    \"ref_addr\": \"192.168.1.2\",\n                    \"ref_time\": 1666367363.5620222,\n                    \"sys_time\": -0.000021679,\n                    \"frequency\": -9.015,\n                    \"rms_offset\": 0.163584366,\n                    \"root_delay\": 0.190805078,\n                    \"last_offset\": -0.142278343,\n                    \"leap_status\": \"Normal\",\n                    \"residual_freq\": 722.474,\n                    \"root_dispersion\": 0.186810628,\n                    \"update_interval\": 64.8\n                },\n                \"robot_index\": 4\n            },\n            \"sysmon.5\": {\n                \"index\": 5,\n                \"version\": \"b187e3070b\",\n                \"services\": {\n                    \"obscore.1\": {\n                        \"PID\": 7417,\n                        \"cpu\": 10.865219835008038,\n                        \"fsm\": {\n                            \"ts\": 1666367399.9465857,\n                            \"state\": \"run\",\n                            \"service\": \"obscore.1\",\n                            \"components\": [\n                                \"run\",\n                                \"stream\"\n                            ]\n                        },\n                        \"mem\": 14.395232,\n                        \"state\": \"S\",\n                        \"created\": 1666367323\n                    }\n                },\n                \"chrony_info\": {\n                    \"skew\": 0.462,\n                    \"ref_id\": \"C0A80102\",\n                    \"stratum\": 4,\n                    \"ref_addr\": \"192.168.1.2\",\n                    \"ref_time\": 1666367376.8192244,\n                    \"sys_time\": -0.026324106,\n                    \"frequency\": 2.845,\n                    \"rms_offset\": 0.150121361,\n                    \"root_delay\": 0.193547204,\n                    \"last_offset\": 0.03809214,\n                    \"leap_status\": \"Normal\",\n                    \"residual_freq\": 933.327,\n                    \"root_dispersion\": 0.155728161,\n                    \"update_interval\": 64.8\n                },\n                \"robot_index\": 1\n            },\n            \"sysmon.6\": {\n                \"index\": 6,\n                \"version\": \"+d3d24eb3d4\",\n                \"services\": {\n                    \"obscore.2\": {\n                        \"PID\": 7092,\n                        \"cpu\": 10.520233949470889,\n                        \"fsm\": {\n                            \"ts\": 1666367399.8857512,\n                            \"state\": \"run\",\n                            \"service\": \"obscore.2\",\n                            \"components\": [\n                                \"run\",\n                                \"stream\"\n                            ]\n                        },\n                        \"mem\": 14.418392,\n                        \"state\": \"S\",\n                        \"created\": 1666367323\n                    }\n                },\n                \"chrony_info\": {\n                    \"skew\": 0.703,\n                    \"ref_id\": \"C0A80102\",\n                    \"stratum\": 4,\n                    \"ref_addr\": \"192.168.1.2\",\n                    \"ref_time\": 1666367363.9410458,\n                    \"sys_time\": -0.010873,\n                    \"frequency\": 4.043,\n                    \"rms_offset\": 0.149406642,\n                    \"root_delay\": 0.1930857,\n                    \"last_offset\": 0.011424911,\n                    \"leap_status\": \"Normal\",\n                    \"residual_freq\": 613.17,\n                    \"root_dispersion\": 0.148774356,\n                    \"update_interval\": 64.1\n                },\n                \"robot_index\": 2\n            },\n            \"sysmon.7\": {\n                \"index\": 7,\n                \"version\": \"+d3d24eb3d4\",\n                \"services\": {\n                    \"obscore.3\": {\n                        \"PID\": 4761,\n                        \"cpu\": 10.015688586730095,\n                        \"fsm\": {\n                            \"ts\": 1666367400.1642582,\n                            \"state\": \"run\",\n                            \"service\": \"obscore.3\",\n                            \"components\": [\n                                \"run\",\n                                \"stream\"\n                            ]\n                        },\n                        \"mem\": 14.404327,\n                        \"state\": \"R\",\n                        \"created\": 1666367323\n                    }\n                },\n                \"chrony_info\": {\n                    \"skew\": 1.002,\n                    \"ref_id\": \"C0A80102\",\n                    \"stratum\": 4,\n                    \"ref_addr\": \"192.168.1.2\",\n                    \"ref_time\": 1666367363.401665,\n                    \"sys_time\": -0.015049839,\n                    \"frequency\": -0.56,\n                    \"rms_offset\": 0.011200748,\n                    \"root_delay\": 0.193311617,\n                    \"last_offset\": 0.011200748,\n                    \"leap_status\": \"Normal\",\n                    \"residual_freq\": 823.553,\n                    \"root_dispersion\": 0.155779809,\n                    \"update_interval\": 65.1\n                },\n                \"robot_index\": 3\n            },\n            \"sysmon.8\": {\n                \"index\": 8,\n                \"version\": \"+d3d24eb3d4\",\n                \"services\": {\n                    \"obscore.4\": {\n                        \"PID\": 6951,\n                        \"cpu\": 10.839920547523745,\n                        \"fsm\": {\n                            \"ts\": 1666367399.866241,\n                            \"state\": \"run\",\n                            \"service\": \"obscore.4\",\n                            \"components\": [\n                                \"run\",\n                                \"stream\"\n                            ]\n                        },\n                        \"mem\": 14.441652,\n                        \"state\": \"R\",\n                        \"created\": 1666367323\n                    }\n                },\n                \"chrony_info\": {\n                    \"skew\": 0.937,\n                    \"ref_id\": \"C0A80102\",\n                    \"stratum\": 4,\n                    \"ref_addr\": \"192.168.1.2\",\n                    \"ref_time\": 1666367369.0944934,\n                    \"sys_time\": -0.014883107,\n                    \"frequency\": -1.621,\n                    \"rms_offset\": 0.010668981,\n                    \"root_delay\": 0.193577498,\n                    \"last_offset\": 0.010668981,\n                    \"leap_status\": \"Normal\",\n                    \"residual_freq\": 821.285,\n                    \"root_dispersion\": 0.15495725,\n                    \"update_interval\": 64.5\n                },\n                \"robot_index\": 4\n            },\n            \"is_emulator\": false,\n            \"serial_number\": \"001\"\n        }\n    },\n    \"type\": \"error\",\n    \"githash\": \"d3d24eb3d4\",\n    \"timestamp\": 1666367400.2741811,\n    \"branch_name\": null,\n    \"serial_number\": \"001\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -3357,7 +3376,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{domain}}/errorreports/?ordering=reportTime",
+							"raw": "{{domain}}/errorreports/",
 							"host": [
 								"{{domain}}"
 							],
@@ -3405,10 +3424,151 @@
 									"key": "offset",
 									"value": "1",
 									"disabled": true
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Get All Harvesters - Success",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{admin_token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{domain}}/harvesters/",
+									"host": [
+										"{{domain}}"
+									],
+									"path": [
+										"harvesters",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Tue, 24 May 2022 05:58:44 GMT"
 								},
 								{
-									"key": "ordering",
-									"value": "reportTime"
+									"key": "Server",
+									"value": "WSGIServer/0.2 CPython/3.8.7"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept"
+								},
+								{
+									"key": "Allow",
+									"value": "GET, POST, HEAD, OPTIONS"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Length",
+									"value": "809"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"success\",\n    \"message\": \"Harvesters retrieved successfully\",\n    \"data\": [\n        {\n            \"id\": 1,\n            \"created\": \"2022-04-26T10:07:03.355000Z\",\n            \"lastModified\": \"2022-04-26T10:07:03.355000Z\",\n            \"harv_id\": 100,\n            \"name\": \"Harvester Alpha\",\n            \"creator\": 2,\n            \"modifiedBy\": null,\n            \"fruit\": 1,\n            \"location\": 1\n        },\n        {\n            \"id\": 2,\n            \"created\": \"2022-04-26T10:07:18.334000Z\",\n            \"lastModified\": \"2022-04-26T10:07:18.334000Z\",\n            \"harv_id\": 200,\n            \"name\": \"Harvester Beta\",\n            \"creator\": 2,\n            \"modifiedBy\": null,\n            \"fruit\": 2,\n            \"location\": 2\n        },\n        {\n            \"id\": 3,\n            \"created\": \"2022-04-26T10:07:18.334000Z\",\n            \"lastModified\": \"2022-04-26T10:07:18.334000Z\",\n            \"harv_id\": 11,\n            \"name\": \"aft-harv011\",\n            \"creator\": 2,\n            \"modifiedBy\": null,\n            \"fruit\": 2,\n            \"location\": 2\n        },\n        {\n            \"id\": 4,\n            \"created\": \"2022-05-24T05:52:35.016568Z\",\n            \"lastModified\": \"2022-05-24T05:52:35.016676Z\",\n            \"harv_id\": 900,\n            \"name\": \"Harvester A\",\n            \"creator\": 1,\n            \"modifiedBy\": null,\n            \"fruit\": 1,\n            \"location\": 1\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "Pareto",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{admin_token}}",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{domain}}/errorreports/pareto?harv_ids=200&aggregate_query=robot",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"errorreports",
+								"pareto"
+							],
+							"query": [
+								{
+									"key": "locations",
+									"value": "Ranch A,Ranch B",
+									"disabled": true
+								},
+								{
+									"key": "timestamps",
+									"value": "1651526862.789323",
+									"disabled": true
+								},
+								{
+									"key": "start_time",
+									"value": "1651526862.789323",
+									"disabled": true
+								},
+								{
+									"key": "start_time",
+									"value": "1690529879.789323",
+									"disabled": true
+								},
+								{
+									"key": "end_time",
+									"value": "1651526862.789323",
+									"disabled": true
+								},
+								{
+									"key": "limit",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "offset",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "harv_ids",
+									"value": "200"
+								},
+								{
+									"key": "aggregate_query",
+									"value": "robot"
 								}
 							]
 						}
@@ -3503,13 +3663,13 @@
 							}
 						],
 						"url": {
-							"raw": "{{domain}}/errorreports/2/",
+							"raw": "{{domain}}/errorreports/5044/",
 							"host": [
 								"{{domain}}"
 							],
 							"path": [
 								"errorreports",
-								"2",
+								"5044",
 								""
 							]
 						}
@@ -3658,6 +3818,50 @@
 							"body": "{\n    \"status\": \"success\",\n    \"message\": \"Error report retrieved successfully\",\n    \"data\": {\n        \"id\": 1,\n        \"created\": \"2022-05-27T12:15:14.136384Z\",\n        \"lastModified\": \"2022-05-27T12:15:14.136416Z\",\n        \"reportTime\": \"2022-05-02T21:27:42Z\",\n        \"report\": {\n            \"type\": \"error\",\n            \"timestamp\": 1651526862.789323,\n            \"data\": {\n                \"sysmon_report\": {\n                    \"serial_number\": \"011\",\n                    \"sysmon.0\": {\n                        \"index\": 0,\n                        \"robot_index\": 0,\n                        \"services\": {\n                            \"drivesys.0\": {\n                                \"fsm\": {\n                                    \"service\": \"drivesys.0\",\n                                    \"state\": \"run\",\n                                    \"components\": [\n                                        \"run\",\n                                        \"armed\"\n                                    ],\n                                    \"ts\": 1651526862.3780782\n                                },\n                                \"PID\": 20241,\n                                \"state\": \"S\",\n                                \"created\": 1651525105,\n                                \"cpu\": 24.124207190518508,\n                                \"mem\": 0.99913466\n                            },\n                            \"harvester.0\": {\n                                \"fsm\": {\n                                    \"service\": \"harvester.0\",\n                                    \"state\": \"run\",\n                                    \"components\": [\n                                        \"run\",\n                                        \"error\"\n                                    ],\n                                    \"ts\": 1651526861.7799714\n                                },\n                                \"PID\": 20250,\n                                \"state\": \"S\",\n                                \"created\": 1651525105,\n                                \"cpu\": 24.96301030425531,\n                                \"mem\": 1.0295105\n                            },\n                            \"master_ui.0\": {\n                                \"fsm\": {\n                                    \"service\": \"master_ui.0\",\n                                    \"state\": \"run\",\n                                    \"components\": [\n                                        \"run\",\n                                        \"estop_disengaged\"\n                                    ],\n                                    \"ts\": 1651526862.5589492\n                                },\n                                \"PID\": 20229,\n                                \"state\": \"S\",\n                                \"created\": 1651525105,\n                                \"cpu\": 6.677345866044339,\n                                \"mem\": 0.945043\n                            },\n                            \"traychg.0\": {\n                                \"fsm\": {\n                                    \"service\": \"traychg.0\",\n                                    \"state\": \"error\",\n                                    \"components\": [\n                                        \"error\",\n                                        \"terminated\"\n                                    ],\n                                    \"ts\": 1651526862.3099246\n                                },\n                                \"PID\": 20230,\n                                \"state\": \"R\",\n                                \"created\": 1651525105,\n                                \"cpu\": 11.63961802691681,\n                                \"mem\": 0.9826442\n                            },\n                            \"autodrive.0\": {\n                                \"fsm\": {\n                                    \"service\": \"autodrive.0\",\n                                    \"state\": \"idle\",\n                                    \"components\": [\n                                        \"idle\"\n                                    ],\n                                    \"ts\": 1651526862.647353\n                                },\n                                \"PID\": 23619,\n                                \"state\": \"S\",\n                                \"created\": 1651526838,\n                                \"cpu\": 0.45363484624483486,\n                                \"mem\": 0.94799215\n                            },\n                            \"furrow.0\": {\n                                \"fsm\": {\n                                    \"service\": \"furrow.0\",\n                                    \"state\": \"idle\",\n                                    \"components\": [\n                                        \"idle\"\n                                    ],\n                                    \"ts\": 1651526862.7239504\n                                },\n                                \"PID\": 23623,\n                                \"state\": \"S\",\n                                \"created\": 1651526838,\n                                \"cpu\": 0.4989585604701848,\n                                \"mem\": 0.94268376\n                            },\n                            \"logrec.0\": {\n                                \"fsm\": {\n                                    \"service\": \"logrec.0\",\n                                    \"state\": \"idle\",\n                                    \"components\": [\n                                        \"idle\"\n                                    ],\n                                    \"ts\": 1651526862.6613626\n                                },\n                                \"PID\": 23611,\n                                \"state\": \"S\",\n                                \"created\": 1651526838,\n                                \"cpu\": 0.5896342628509535,\n                                \"mem\": 0.9460261\n                            },\n                            \"rcoop.0\": {\n                                \"fsm\": {\n                                    \"service\": \"rcoop.0\",\n                                    \"state\": \"idle\",\n                                    \"components\": [\n                                        \"idle\"\n                                    ],\n                                    \"ts\": 1651526862.47056\n                                },\n                                \"PID\": 23607,\n                                \"state\": \"S\",\n                                \"created\": 1651526837,\n                                \"cpu\": 0.47723708407665255,\n                                \"mem\": 0.94661593\n                            },\n                            \"robotpathstore.0\": {\n                                \"fsm\": {\n                                    \"service\": \"robotpathstore.0\",\n                                    \"state\": \"idle\",\n                                    \"components\": [\n                                        \"idle\",\n                                        \"run\"\n                                    ],\n                                    \"ts\": 1651526862.7092986\n                                },\n                                \"PID\": 23600,\n                                \"state\": \"S\",\n                                \"created\": 1651526837,\n                                \"cpu\": 0.5639414025547399,\n                                \"mem\": 0.9455837\n                            }\n                        },\n                        \"version\": \"+5763793c96\",\n                        \"chrony_info\": {\n                            \"ref_id\": \"7F7F0101\",\n                            \"ref_addr\": \"\",\n                            \"stratum\": 10,\n                            \"ref_time\": 1651526859.0543234,\n                            \"sys_time\": 3.3e-8,\n                            \"last_offset\": -0.006872488,\n                            \"rms_offset\": 0.006872488,\n                            \"frequency\": 55.441,\n                            \"residual_freq\": 0,\n                            \"skew\": 0,\n                            \"root_delay\": 0,\n                            \"root_dispersion\": 0,\n                            \"update_interval\": 1.9,\n                            \"leap_status\": \"Normal\"\n                        },\n                        \"errors\": {\n                            \"traychg.0\": {\n                                \"ts\": 1651526861.7674465,\n                                \"value\": \"traychgunit.1 Error: No tray detected in collection\",\n                                \"traceback\": \"\",\n                                \"code\": 9,\n                                \"operator_err_type\": \"traychg\"\n                            }\n                        }\n                    },\n                    \"sysmon.1\": {\n                        \"index\": 1,\n                        \"robot_index\": 1,\n                        \"services\": {\n                            \"gripper.1\": {\n                                \"fsm\": {\n                                    \"service\": \"gripper.1\",\n                                    \"state\": \"wait_behavior_stopped\",\n                                    \"components\": [\n                                        \"wait_behavior_stopped\",\n                                        \"run\"\n                                    ],\n                                    \"ts\": 1651526862.296359\n                                },\n                                \"PID\": 11451,\n                                \"state\": \"S\",\n                                \"created\": 1651526837,\n                                \"cpu\": 13.80272978766389,\n                                \"mem\": 1.9595047\n                            },\n                            \"logrec.1\": {\n                                \"fsm\": {\n                                    \"service\": \"logrec.1\",\n                                    \"state\": \"idle\",\n                                    \"components\": [\n                                        \"idle\"\n                                    ],\n                                    \"ts\": 1651526862.6078136\n                                },\n                                \"PID\": 11438,\n                                \"state\": \"S\",\n                                \"created\": 1651526837,\n                                \"cpu\": 0.6357326487655672,\n                                \"mem\": 1.9224341\n                            },\n                            \"picker.1\": {\n                                \"fsm\": {\n                                    \"service\": \"picker.1\",\n                                    \"state\": \"idle\",\n                                    \"components\": [\n                                        \"idle\",\n                                        \"idle\"\n                                    ],\n                                    \"ts\": 1651526862.674985\n                                },\n                                \"PID\": 11426,\n                                \"state\": \"S\",\n                                \"created\": 1651526836,\n                                \"cpu\": 6.3867938135386195,\n                                \"mem\": 1.9300178\n                            },\n                            \"robot.1\": {\n                                \"fsm\": {\n                                    \"service\": \"robot.1\",\n                                    \"state\": \"idle\",\n                                    \"components\": [\n                                        \"idle\",\n                                        \"parked\"\n                                    ],\n                                    \"ts\": 1651526862.691043\n                                },\n                                \"PID\": 11442,\n                                \"state\": \"S\",\n                                \"created\": 1651526837,\n                                \"cpu\": 1.226517249011379,\n                                \"mem\": 1.9290699\n                            },\n                            \"tracker.1\": {\n                                \"fsm\": {\n                                    \"service\": \"tracker.1\",\n                                    \"state\": \"idle\",\n                                    \"components\": [\n                                        \"idle\"\n                                    ],\n                                    \"ts\": 1651526862.7657125\n                                },\n                                \"PID\": 11430,\n                                \"state\": \"S\",\n                                \"created\": 1651526837,\n                                \"cpu\": 0.5903954424998226,\n                                \"mem\": 1.9202387\n                            }\n                        },\n                        \"version\": \"+5763793c96\",\n                        \"chrony_info\": {\n                            \"ref_id\": \"C0A80102\",\n                            \"ref_addr\": \"192.168.1.2\",\n                            \"stratum\": 11,\n                            \"ref_time\": 1651526813.7666936,\n                            \"sys_time\": 0.000001222,\n                            \"last_offset\": -0.000031957,\n                            \"rms_offset\": 0.000030055,\n                            \"frequency\": 59.928,\n                            \"residual_freq\": -0.012,\n                            \"skew\": 0.126,\n                            \"root_delay\": 0.000103711,\n                            \"root_dispersion\": 0.000068944,\n                            \"update_interval\": 65.1,\n                            \"leap_status\": \"Normal\"\n                        }\n                    },\n                    \"sysmon.5\": {\n                        \"index\": 5,\n                        \"robot_index\": 1,\n                        \"services\": {\n                            \"obscore.1\": {\n                                \"fsm\": {\n                                    \"service\": \"obscore.1\",\n                                    \"state\": \"idle\",\n                                    \"components\": [\n                                        \"idle\"\n                                    ],\n                                    \"ts\": 1651526862.5829494\n                                },\n                                \"PID\": 13900,\n                                \"state\": \"S\",\n                                \"created\": 1651526840,\n                                \"cpu\": 19.110977212730305,\n                                \"mem\": 13.33334\n                            }\n                        },\n                        \"version\": \"+5763793c96\",\n                        \"chrony_info\": {\n                            \"ref_id\": \"C0A80102\",\n                            \"ref_addr\": \"192.168.1.2\",\n                            \"stratum\": 11,\n                            \"ref_time\": 1651526811.5236132,\n                            \"sys_time\": 0.000005601,\n                            \"last_offset\": -0.000006057,\n                            \"rms_offset\": 0.00536857,\n                            \"frequency\": 54.702,\n                            \"residual_freq\": 0.004,\n                            \"skew\": 0.576,\n                            \"root_delay\": 0.001906298,\n                            \"root_dispersion\": 0.000079546,\n                            \"update_interval\": 128.6,\n                            \"leap_status\": \"Normal\"\n                        }\n                    },\n                    \"sysmon.2\": {\n                        \"index\": 2,\n                        \"robot_index\": 2,\n                        \"services\": {\n                            \"gripper.2\": {\n                                \"fsm\": {\n                                    \"service\": \"gripper.2\",\n                                    \"state\": \"wait_behavior_stopped\",\n                                    \"components\": [\n                                        \"wait_behavior_stopped\",\n                                        \"run\"\n                                    ],\n                                    \"ts\": 1651526862.297273\n                                },\n                                \"PID\": 11192,\n                                \"state\": \"S\",\n                                \"created\": 1651526836,\n                                \"cpu\": 11.044345898498676,\n                                \"mem\": 1.9578164\n                            },\n                            \"logrec.2\": {\n                                \"fsm\": {\n                                    \"service\": \"logrec.2\",\n                                    \"state\": \"idle\",\n                                    \"components\": [\n                                        \"idle\"\n                                    ],\n                                    \"ts\": 1651526862.6790764\n                                },\n                                \"PID\": 11222,\n                                \"state\": \"S\",\n                                \"created\": 1651526837,\n                                \"cpu\": 0.6241243550002277,\n                                \"mem\": 1.9167074\n                            },\n                            \"picker.2\": {\n                                \"fsm\": {\n                                    \"service\": \"picker.2\",\n                                    \"state\": \"idle\",\n                                    \"components\": [\n                                        \"idle\",\n                                        \"idle\"\n                                    ],\n                                    \"ts\": 1651526862.5792768\n                                },\n                                \"PID\": 11226,\n                                \"state\": \"S\",\n                                \"created\": 1651526837,\n                                \"cpu\": 6.8208803842233525,\n                                \"mem\": 1.918653\n                            },\n                            \"robot.2\": {\n                                \"fsm\": {\n                                    \"service\": \"robot.2\",\n                                    \"state\": \"idle\",\n                                    \"components\": [\n                                        \"idle\",\n                                        \"parked\"\n                                    ],\n                                    \"ts\": 1651526862.3758438\n                                },\n                                \"PID\": 11210,\n                                \"state\": \"S\",\n                                \"created\": 1651526836,\n                                \"cpu\": 1.1455400589977114,\n                                \"mem\": 1.9264858\n                            },\n                            \"tracker.2\": {\n                                \"fsm\": {\n                                    \"service\": \"tracker.2\",\n                                    \"state\": \"idle\",\n                                    \"components\": [\n                                        \"idle\"\n                                    ],\n                                    \"ts\": 1651526862.7015448\n                                },\n                                \"PID\": 11206,\n                                \"state\": \"S\",\n                                \"created\": 1651526836,\n                                \"cpu\": 0.5497915072857358,\n                                \"mem\": 1.9194512\n                            }\n                        },\n                        \"version\": \"+5763793c96\",\n                        \"chrony_info\": {\n                            \"ref_id\": \"C0A80102\",\n                            \"ref_addr\": \"192.168.1.2\",\n                            \"stratum\": 11,\n                            \"ref_time\": 1651526811.6820233,\n                            \"sys_time\": 0.000014881,\n                            \"last_offset\": -0.000043196,\n                            \"rms_offset\": 0.00011021,\n                            \"frequency\": 58.745,\n                            \"residual_freq\": -0.036,\n                            \"skew\": 1.441,\n                            \"root_delay\": 0.000271029,\n                            \"root_dispersion\": 0.000145498,\n                            \"update_interval\": 64.9,\n                            \"leap_status\": \"Normal\"\n                        }\n                    },\n                    \"sysmon.6\": {\n                        \"index\": 6,\n                        \"robot_index\": 2,\n                        \"services\": {\n                            \"obscore.2\": {\n                                \"fsm\": {\n                                    \"service\": \"obscore.2\",\n                                    \"state\": \"idle\",\n                                    \"components\": [\n                                        \"idle\"\n                                    ],\n                                    \"ts\": 1651526862.5971646\n                                },\n                                \"PID\": 13370,\n                                \"state\": \"S\",\n                                \"created\": 1651526840,\n                                \"cpu\": 19.240779506557296,\n                                \"mem\": 13.317834\n                            }\n                        },\n                        \"version\": \"+5763793c96\",\n                        \"chrony_info\": {\n                            \"ref_id\": \"C0A80102\",\n                            \"ref_addr\": \"192.168.1.2\",\n                            \"stratum\": 11,\n                            \"ref_time\": 1651526742.3862045,\n                            \"sys_time\": -0.00000354,\n                            \"last_offset\": 0.000053436,\n                            \"rms_offset\": 0.000204461,\n                            \"frequency\": 43.865,\n                            \"residual_freq\": 0.015,\n                            \"skew\": 0.667,\n                            \"root_delay\": 0.001760268,\n                            \"root_dispersion\": 0.000274569,\n                            \"update_interval\": 130.1,\n                            \"leap_status\": \"Normal\"\n                        }\n                    },\n                    \"sysmon.3\": {\n                        \"index\": 3,\n                        \"robot_index\": 3,\n                        \"services\": {\n                            \"gripper.3\": {\n                                \"fsm\": {\n                                    \"service\": \"gripper.3\",\n                                    \"state\": \"wait_behavior_stopped\",\n                                    \"components\": [\n                                        \"wait_behavior_stopped\",\n                                        \"run\"\n                                    ],\n                                    \"ts\": 1651526862.2979255\n                                },\n                                \"PID\": 11906,\n                                \"state\": \"R\",\n                                \"created\": 1651526835,\n                                \"cpu\": 13.165941559857036,\n                                \"mem\": 2.038577\n                            },\n                            \"logrec.3\": {\n                                \"fsm\": {\n                                    \"service\": \"logrec.3\",\n                                    \"state\": \"idle\",\n                                    \"components\": [\n                                        \"idle\"\n                                    ],\n                                    \"ts\": 1651526862.5653963\n                                },\n                                \"PID\": 11890,\n                                \"state\": \"S\",\n                                \"created\": 1651526835,\n                                \"cpu\": 0.8454237889261249,\n                                \"mem\": 2.005299\n                            },\n                            \"picker.3\": {\n                                \"fsm\": {\n                                    \"service\": \"picker.3\",\n                                    \"state\": \"idle\",\n                                    \"components\": [\n                                        \"idle\",\n                                        \"idle\"\n                                    ],\n                                    \"ts\": 1651526862.6044993\n                                },\n                                \"PID\": 11895,\n                                \"state\": \"S\",\n                                \"created\": 1651526835,\n                                \"cpu\": 7.526716187379116,\n                                \"mem\": 2.0026999\n                            },\n                            \"robot.3\": {\n                                \"fsm\": {\n                                    \"service\": \"robot.3\",\n                                    \"state\": \"idle\",\n                                    \"components\": [\n                                        \"idle\",\n                                        \"parked\"\n                                    ],\n                                    \"ts\": 1651526862.6030343\n                                },\n                                \"PID\": 11896,\n                                \"state\": \"S\",\n                                \"created\": 1651526835,\n                                \"cpu\": 1.4491497553385977,\n                                \"mem\": 2.0123827\n                            },\n                            \"tracker.3\": {\n                                \"fsm\": {\n                                    \"service\": \"tracker.3\",\n                                    \"state\": \"idle\",\n                                    \"components\": [\n                                        \"idle\"\n                                    ],\n                                    \"ts\": 1651526862.5846052\n                                },\n                                \"PID\": 11902,\n                                \"state\": \"S\",\n                                \"created\": 1651526835,\n                                \"cpu\": 0.7248383535621931,\n                                \"mem\": 2.001324\n                            }\n                        },\n                        \"version\": \"+5763793c96\",\n                        \"chrony_info\": {\n                            \"ref_id\": \"C0A80102\",\n                            \"ref_addr\": \"192.168.1.2\",\n                            \"stratum\": 11,\n                            \"ref_time\": 1651526822.9255896,\n                            \"sys_time\": 0.000011031,\n                            \"last_offset\": -0.000003336,\n                            \"rms_offset\": 0.000074107,\n                            \"frequency\": 35.94,\n                            \"residual_freq\": -0.016,\n                            \"skew\": 1.483,\n                            \"root_delay\": 0.00009549,\n                            \"root_dispersion\": 0.000308387,\n                            \"update_interval\": 64.4,\n                            \"leap_status\": \"Normal\"\n                        }\n                    },\n                    \"sysmon.7\": {\n                        \"index\": 7,\n                        \"robot_index\": 3,\n                        \"services\": {\n                            \"obscore.3\": {\n                                \"fsm\": {\n                                    \"service\": \"obscore.3\",\n                                    \"state\": \"idle\",\n                                    \"components\": [\n                                        \"idle\"\n                                    ],\n                                    \"ts\": 1651526862.522183\n                                },\n                                \"PID\": 13059,\n                                \"state\": \"S\",\n                                \"created\": 1651526840,\n                                \"cpu\": 21.15503126790077,\n                                \"mem\": 13.363508\n                            }\n                        },\n                        \"version\": \"+5763793c96\",\n                        \"chrony_info\": {\n                            \"ref_id\": \"C0A80102\",\n                            \"ref_addr\": \"192.168.1.2\",\n                            \"stratum\": 11,\n                            \"ref_time\": 1651526755.073624,\n                            \"sys_time\": 0.000187082,\n                            \"last_offset\": -0.000226177,\n                            \"rms_offset\": 0.033924531,\n                            \"frequency\": 49.01,\n                            \"residual_freq\": -0.092,\n                            \"skew\": 0.19,\n                            \"root_delay\": 0.001715322,\n                            \"root_dispersion\": 0.000292228,\n                            \"update_interval\": 1024.4,\n                            \"leap_status\": \"Normal\"\n                        }\n                    },\n                    \"sysmon.4\": {\n                        \"index\": 4,\n                        \"robot_index\": 4,\n                        \"services\": {\n                            \"gripper.4\": {\n                                \"fsm\": {\n                                    \"service\": \"gripper.4\",\n                                    \"state\": \"wait_behavior_stopped\",\n                                    \"components\": [\n                                        \"wait_behavior_stopped\",\n                                        \"run\"\n                                    ],\n                                    \"ts\": 1651526862.2972531\n                                },\n                                \"PID\": 11024,\n                                \"state\": \"S\",\n                                \"created\": 1651526836,\n                                \"cpu\": 11.430601317603687,\n                                \"mem\": 1.9610513\n                            },\n                            \"logrec.4\": {\n                                \"fsm\": {\n                                    \"service\": \"logrec.4\",\n                                    \"state\": \"idle\",\n                                    \"components\": [\n                                        \"idle\"\n                                    ],\n                                    \"ts\": 1651526862.5584984\n                                },\n                                \"PID\": 11011,\n                                \"state\": \"S\",\n                                \"created\": 1651526836,\n                                \"cpu\": 0.6484704297219998,\n                                \"mem\": 1.9203385\n                            },\n                            \"picker.4\": {\n                                \"fsm\": {\n                                    \"service\": \"picker.4\",\n                                    \"state\": \"idle\",\n                                    \"components\": [\n                                        \"idle\",\n                                        \"idle\"\n                                    ],\n                                    \"ts\": 1651526862.6692395\n                                },\n                                \"PID\": 11036,\n                                \"state\": \"S\",\n                                \"created\": 1651526836,\n                                \"cpu\": 6.44268040225339,\n                                \"mem\": 1.9236814\n                            },\n                            \"robot.4\": {\n                                \"fsm\": {\n                                    \"service\": \"robot.4\",\n                                    \"state\": \"idle\",\n                                    \"components\": [\n                                        \"idle\",\n                                        \"parked\"\n                                    ],\n                                    \"ts\": 1651526862.676731\n                                },\n                                \"PID\": 11042,\n                                \"state\": \"S\",\n                                \"created\": 1651526837,\n                                \"cpu\": 1.0981312035699224,\n                                \"mem\": 1.9290199\n                            },\n                            \"tracker.4\": {\n                                \"fsm\": {\n                                    \"service\": \"tracker.4\",\n                                    \"state\": \"idle\",\n                                    \"components\": [\n                                        \"idle\"\n                                    ],\n                                    \"ts\": 1651526862.7772038\n                                },\n                                \"PID\": 11018,\n                                \"state\": \"S\",\n                                \"created\": 1651526836,\n                                \"cpu\": 0.4864631258960937,\n                                \"mem\": 1.9213364\n                            }\n                        },\n                        \"version\": \"+5763793c96\",\n                        \"chrony_info\": {\n                            \"ref_id\": \"C0A80102\",\n                            \"ref_addr\": \"192.168.1.2\",\n                            \"stratum\": 11,\n                            \"ref_time\": 1651526800.6424916,\n                            \"sys_time\": -3e-9,\n                            \"last_offset\": -0.000053154,\n                            \"rms_offset\": 0.000051391,\n                            \"frequency\": 59.308,\n                            \"residual_freq\": -0.033,\n                            \"skew\": 0.236,\n                            \"root_delay\": 0.000145052,\n                            \"root_dispersion\": 0.000100044,\n                            \"update_interval\": 65.3,\n                            \"leap_status\": \"Normal\"\n                        }\n                    },\n                    \"sysmon.8\": {\n                        \"index\": 8,\n                        \"robot_index\": 4,\n                        \"services\": {\n                            \"obscore.4\": {\n                                \"fsm\": {\n                                    \"service\": \"obscore.4\",\n                                    \"state\": \"idle\",\n                                    \"components\": [\n                                        \"idle\"\n                                    ],\n                                    \"ts\": 1651526862.570425\n                                },\n                                \"PID\": 13451,\n                                \"state\": \"S\",\n                                \"created\": 1651526840,\n                                \"cpu\": 22.27336398941905,\n                                \"mem\": 13.380356\n                            }\n                        },\n                        \"version\": \"+5763793c96\",\n                        \"chrony_info\": {\n                            \"ref_id\": \"C0A80102\",\n                            \"ref_addr\": \"192.168.1.2\",\n                            \"stratum\": 11,\n                            \"ref_time\": 1651526832.268646,\n                            \"sys_time\": -0.000014604,\n                            \"last_offset\": -0.000005187,\n                            \"rms_offset\": 0.003197025,\n                            \"frequency\": 51.235,\n                            \"residual_freq\": 0.048,\n                            \"skew\": 3.167,\n                            \"root_delay\": 0.001814319,\n                            \"root_dispersion\": 0.000111616,\n                            \"update_interval\": 65.1,\n                            \"leap_status\": \"Normal\"\n                        }\n                    }\n                },\n                \"serial_number\": \"011\",\n                \"githash\": \"5763793c96\",\n                \"branch_name\": null\n            }\n        },\n        \"creator\": 1,\n        \"modifiedBy\": null,\n        \"location\": 1,\n        \"harvester\": 1\n    }\n}"
 						}
 					]
+				},
+				{
+					"name": "create notification",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{admin_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"recipients\": [1]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{domain}}/errorreports/createnotification/?harv_ids=11,100&codes=1,2",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"errorreports",
+								"createnotification",
+								""
+							],
+							"query": [
+								{
+									"key": "harv_ids",
+									"value": "11,100"
+								},
+								{
+									"key": "codes",
+									"value": "1,2"
+								}
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -4066,7 +4270,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"distributor\": 1,\n    \"ranch\": \"Ranch 1\",\n    \"country\": \"US\",\n    \"region\": \"Texas\"\n}",
+							"raw": "{\n    \"distributor\": 1,\n    \"ranch\": \"North Pole\",\n    \"country\": \"US\",\n    \"region\": \"Texas\",\n    \"lat\": 90,\n    \"lon\": 0\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -4074,13 +4278,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{domain}}/locations/1/",
+							"raw": "{{domain}}/locations/2/",
 							"host": [
 								"{{domain}}"
 							],
 							"path": [
 								"locations",
-								"1",
+								"2",
 								""
 							]
 						},
@@ -4950,6 +5154,14 @@
 							"body": "{\n    \"status\": \"error\",\n    \"erors\": {\n        \"exception\": \"invalid token\"\n    }\n}"
 						}
 					]
+				},
+				{
+					"name": "New Request",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
 				}
 			]
 		},
@@ -5049,6 +5261,29 @@
 							"body": "{\n    \"status\": \"success\",\n    \"message\": \"Location retrieved successfully\",\n    \"data\": [\n        {\n            \"id\": 1,\n            \"created\": \"2022-04-26T10:05:28.580000Z\",\n            \"lastModified\": \"2022-04-26T10:05:28.580000Z\",\n            \"ranch\": \"Ranch A\",\n            \"country\": \"United States\",\n            \"region\": \"California\",\n            \"creator\": 1,\n            \"modifiedBy\": null,\n            \"distributor\": 1\n        },\n        {\n            \"id\": 2,\n            \"created\": \"2022-04-26T10:05:49.037000Z\",\n            \"lastModified\": \"2022-04-26T10:06:02.486000Z\",\n            \"ranch\": \"Ranch B\",\n            \"country\": \"United States\",\n            \"region\": \"Texas\",\n            \"creator\": 2,\n            \"modifiedBy\": 2,\n            \"distributor\": 1\n        }\n    ]\n}"
 						}
 					]
+				},
+				{
+					"name": "healthcheck",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{admin_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{domain}}/healthcheck",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"healthcheck"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -5133,6 +5368,39 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Post manifest",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{admin_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"version\": 1.0,\n    \"manifest\": [\n        {\n            \"name\": \"AFTBaseException\",\n            \"code\": 0,\n            \"msg\": \"Unknown AFT Exception\",\n            \"cycle\": false,\n            \"team\": \"Unknown\",\n            \"operator_msg\": \"Please cycle the harvester or contact field support if it continues.\"\n        },\n        {\n            \"name\": \"PickerBaseException\",\n            \"code\": 1,\n            \"msg\": \"Unknown Strawberry Picker Exception\",\n            \"cycle\": false,\n            \"team\": \"Unknown\",\n            \"operator_msg\": \"Please cycle the harvester or contact field support if it continues.\"\n        },\n        {\n            \"name\": \"GripperBaseException\",\n            \"code\": 2,\n            \"msg\": \"Unknown Strawberry Gripper Exception\",\n            \"cycle\": false,\n            \"team\": \"Unknown\",\n            \"operator_msg\": \"Gripper error!  Please try cycling the harvester, or contact field support if it continues.\"\n        },\n        {\n            \"name\": \"GophrDeviceException\",\n            \"code\": 3,\n            \"msg\": \"Gophr Device Exception\",\n            \"cycle\": false,\n            \"team\": \"Hardware\",\n            \"operator_msg\": \"Gripper error!  Please try cycling the harvester, or contact field support if it continues.\"\n        },\n        {\n            \"name\": \"NominalTouchForceException\",\n            \"code\": 4,\n            \"msg\": \"Nominal Touch Force Exception\",\n            \"cycle\": false,\n            \"team\": \"Hardware\",\n            \"operator_msg\": \"Gripper error!  Please try cycling the harvester, or contact field support if it continues.\"\n        },\n        {\n            \"name\": \"TBotBaseException\",\n            \"code\": 5,\n            \"msg\": \"Unknown TBot Exception\",\n            \"cycle\": false,\n            \"team\": \"Hardware\",\n            \"operator_msg\": \"Robot error! Please cycle the harvester or contact field support if it continues.\"\n        },\n        {\n            \"name\": \"DistToRabbitException\",\n            \"code\": 6,\n            \"msg\": \"Dist-To-Rabbit Exception\",\n            \"cycle\": false,\n            \"team\": \"Software\",\n            \"operator_msg\": \"Robot error! Please cycle the harvester or contact field support if it continues.\"\n        },\n        {\n            \"name\": \"CameraTimeoutException\",\n            \"code\": 7,\n            \"msg\": \"Camera Time-Out Error\",\n            \"cycle\": false,\n            \"team\": \"Hardware\",\n            \"operator_msg\": \"Camera error! Please try cycling the harvester, or contact field support.\"\n        },\n        {\n            \"name\": \"TraychgBaseException\",\n            \"code\": 8,\n            \"msg\": \"Unknown Strawberry Traychg Exception\",\n            \"cycle\": false,\n            \"team\": \"Hardware\",\n            \"operator_msg\": \"Traychanger error! Please check the traychanger for jams or missing bins.\"\n        },\n        {\n            \"name\": \"CollectionNotAssertedException\",\n            \"code\": 9,\n            \"msg\": \"Collection Not Asserted Exception\",\n            \"cycle\": false,\n            \"team\": \"Hardware\",\n            \"operator_msg\": \"Traychanger error! Please check the traychanger for jams or missing bins.\"\n        },\n        {\n            \"name\": \"ElevatorStillAssertedException\",\n            \"code\": 10,\n            \"msg\": \"Elevator Still Asserted Exception\",\n            \"cycle\": false,\n            \"team\": \"Hardware\",\n            \"operator_msg\": \"Traychanger error! Please check the traychanger for jams or missing bins.\"\n        },\n        {\n            \"name\": \"ElevatorJammedException\",\n            \"code\": 11,\n            \"msg\": \"Elevator Jammed Exception\",\n            \"cycle\": false,\n            \"team\": \"Hardware\",\n            \"operator_msg\": \"Traychanger error! Please check the traychanger for jams or missing bins.\"\n        },\n        {\n            \"name\": \"ElevatorNotAssertedException\",\n            \"code\": 12,\n            \"msg\": \"Elevator Not Asserted Exception\",\n            \"cycle\": false,\n            \"team\": \"Hardware\",\n            \"operator_msg\": \"Traychanger error! Please check the traychanger for jams or missing bins.\"\n        },\n        {\n            \"name\": \"TooManySyncsException\",\n            \"code\": 13,\n            \"msg\": \"Too many syncs in the frame window\",\n            \"cycle\": false,\n            \"team\": \"Software\",\n            \"operator_msg\": \"Please cycle the harvester or contact field support if it continues.\"\n        },\n        {\n            \"name\": \"RangeOfMotionException\",\n            \"code\": 14,\n            \"msg\": \"RangeOfMotion Exception\",\n            \"cycle\": false,\n            \"team\": \"Software\",\n            \"operator_msg\": \"Robot error! Please cycle the harvester or contact field support if it continues.\"\n        },\n        {\n            \"name\": \"SevconControllerException\",\n            \"code\": 15,\n            \"msg\": \"Sevcon Controller Exception\",\n            \"cycle\": false,\n            \"team\": \"Operations\",\n            \"operator_msg\": \"Please cycle the harvester or contact field support if it continues.\"\n        },\n        {\n            \"name\": \"ExtrapolateIntoPastException\",\n            \"code\": 16,\n            \"msg\": \"Extrapolate into the Past Exception\",\n            \"cycle\": false,\n            \"team\": \"Unknown\",\n            \"operator_msg\": \"Please cycle the harvester or contact field support if it continues.\"\n        },\n        {\n            \"name\": \"ExtrapolateIntoFutureException\",\n            \"code\": 17,\n            \"msg\": \"Extrapolate into the Future Exception\",\n            \"cycle\": false,\n            \"team\": \"Unknown\",\n            \"operator_msg\": \"Please cycle the harvester or contact field support if it continues.\"\n        },\n        {\n            \"name\": \"ZmqRequestTimeoutException\",\n            \"code\": 18,\n            \"msg\": \"ZMQ Request Timeout Error\",\n            \"cycle\": false,\n            \"team\": \"Unknown\",\n            \"operator_msg\": \"Please cycle the harvester or contact field support if it continues.\"\n        },\n        {\n            \"name\": \"QueueResponseTimeError\",\n            \"code\": 19,\n            \"msg\": \"Queue Response Time Error\",\n            \"cycle\": false,\n            \"team\": \"Unknown\",\n            \"operator_msg\": \"Please cycle the harvester or contact field support if it continues.\"\n        },\n        {\n            \"name\": \"TraychgInitTimeoutException\",\n            \"code\": 20,\n            \"msg\": \"Timeout Initializing Traychg Exception\",\n            \"cycle\": false,\n            \"team\": \"Hardware\",\n            \"operator_msg\": \"Traychanger error! Please contact field support.\"\n        },\n        {\n            \"name\": \"ErrorInTrayChgControllerException\",\n            \"code\": 21,\n            \"msg\": \"Error in tray chg controller\",\n            \"cycle\": false,\n            \"team\": \"Hardware\",\n            \"operator_msg\": \"Traychanger error! Please contact field support.\"\n        },\n        {\n            \"name\": \"ServoControllerStateErrorException\",\n            \"code\": 22,\n            \"msg\": \"Servo Controller State Error\",\n            \"cycle\": false,\n            \"team\": \"Hardware\",\n            \"operator_msg\": \"Robot error! Please cycle the harvester or contact field support if it continues.\"\n        },\n        {\n            \"name\": \"WristHomingRangeExceedsLimitsException\",\n            \"code\": 23,\n            \"msg\": \"Wrist Homing Range Exceeds Limits\",\n            \"cycle\": false,\n            \"team\": \"Hardware\",\n            \"operator_msg\": \"Gripper error! Please try cycling the harvester. Check the gripper thumb screws or contact field support if it continues.\"\n        },\n        {\n            \"name\": \"TFTreeErrorException\",\n            \"code\": 24,\n            \"msg\": \"TFTree Error\",\n            \"cycle\": false,\n            \"team\": \"Software\",\n            \"operator_msg\": \"Please cycle the harvester or contact field support if it continues.\"\n        },\n        {\n            \"name\": \"TFTreeInvalidException\",\n            \"code\": 25,\n            \"msg\": \"TFTree Invalid\",\n            \"cycle\": false,\n            \"team\": \"Software\",\n            \"operator_msg\": \"Please cycle the harvester or contact field support if it continues.\"\n        },\n        {\n            \"name\": \"DynamicTransformNodeException\",\n            \"code\": 26,\n            \"msg\": \"Dynamic Transform Node\",\n            \"cycle\": false,\n            \"team\": \"Unknown\",\n            \"operator_msg\": \"Please cycle the harvester or contact field support if it continues.\"\n        },\n        {\n            \"name\": \"SynchronousFrameErrorException\",\n            \"code\": 27,\n            \"msg\": \"Synchronous Frame Error\",\n            \"cycle\": false,\n            \"team\": \"Unknown\",\n            \"operator_msg\": \"Please cycle the harvester or contact field support if it continues.\"\n        },\n        {\n            \"name\": \"PathPtInterpIntoPastException\",\n            \"code\": 28,\n            \"msg\": \"Interpolate motionpath path pt before history\",\n            \"cycle\": false,\n            \"team\": \"Hardware\",\n            \"operator_msg\": \"Robot error! Please cycle the harvester or contact field support if it continues.\"\n        },\n        {\n            \"name\": \"LidarBaseException\",\n            \"code\": 29,\n            \"msg\": \"Unknown Strawberry Lidar Exception\",\n            \"cycle\": false,\n            \"team\": \"Hardware\",\n            \"operator_msg\": \"Lidar error! Please cycle the harvester or contact field support if it continues.\"\n        },\n        {\n            \"name\": \"NoValidInitialFurrowException\",\n            \"code\": 30,\n            \"msg\": \"No Valid Initial Furrow\",\n            \"cycle\": false,\n            \"team\": \"Operations\",\n            \"operator_msg\": \"No Furrow detected! Please make sure the harvester is far enough into the furrow.\"\n        },\n        {\n            \"name\": \"PathPlannerBaseException\",\n            \"code\": 31,\n            \"msg\": \"Unknown Path Planner Exception\",\n            \"cycle\": false,\n            \"team\": \"Software\",\n            \"operator_msg\": \"Please cycle the harvester or contact field support if it continues.\"\n        },\n        {\n            \"name\": \"StrawberryPathPlannerException\",\n            \"code\": 32,\n            \"msg\": \"Strawberry Path Planner Exception\",\n            \"cycle\": false,\n            \"team\": \"Software\",\n            \"operator_msg\": \"Please cycle the harvester or contact field support if it continues.\"\n        },\n        {\n            \"name\": \"ApplePathPlannerException\",\n            \"code\": 33,\n            \"msg\": \"Apple Path Planner Exception\",\n            \"cycle\": false,\n            \"team\": \"Software\",\n            \"operator_msg\": \"Please cycle the harvester or contact field support if it continues.\"\n        },\n        {\n            \"name\": \"ServiceActivatorBaseException\",\n            \"code\": 34,\n            \"msg\": \"Service Activator Base Exception\",\n            \"cycle\": false,\n            \"team\": \"Unknown\",\n            \"operator_msg\": \"Service error! Please cycle the harvester or contact field support if it continues.\"\n        },\n        {\n            \"name\": \"ProcessRPCErrorException\",\n            \"code\": 35,\n            \"msg\": \"Process RPC Exception\",\n            \"cycle\": false,\n            \"team\": \"Unknown\",\n            \"operator_msg\": \"Service error! Please cycle the harvester or contact field support if it continues.\"\n        },\n        {\n            \"name\": \"ServiceWaitTransErrorException\",\n            \"code\": 36,\n            \"msg\": \"Service Wait Transition Exception\",\n            \"cycle\": false,\n            \"team\": \"Unknown\",\n            \"operator_msg\": \"Service error! Please cycle the harvester or contact field support if it continues.\"\n        },\n        {\n            \"name\": \"ServiceErrorTransErrorException\",\n            \"code\": 37,\n            \"msg\": \"Service Error Transition Exception\",\n            \"cycle\": false,\n            \"team\": \"Unknown\",\n            \"operator_msg\": \"Service error! Please cycle the harvester or contact field support if it continues.\"\n        },\n        {\n            \"name\": \"RobotNotInRunStateException\",\n            \"code\": 38,\n            \"msg\": \"Robot Not In Run State Exception\",\n            \"cycle\": false,\n            \"team\": \"Hardware\",\n            \"operator_msg\": \"Robot error! Please cycle the harvester or contact field support if it continues.\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{domain}}/exceptioncodemanifests/",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"exceptioncodemanifests",
+								""
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -5152,17 +5420,18 @@
 							{
 								"key": "Accept",
 								"value": "application/json",
-								"type": "text"
+								"type": "text",
+								"disabled": true
 							}
 						],
 						"url": {
-							"raw": "{{domain}}/exceptions/1",
+							"raw": "{{domain}}/exceptions/",
 							"host": [
 								"{{domain}}"
 							],
 							"path": [
 								"exceptions",
-								"1"
+								""
 							]
 						}
 					},
@@ -5247,7 +5516,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"trigger_on\": \"AFTException\",\n    \"criteria_type\": \"aftexceptioncode\",\n    \"criteria_id\": 1,\n    \"recipients\": [1]\n}",
+							"raw": "{\n    \"trigger_on\": \"ErrorReport\",\n    \"recipients\": [1],\n    \"criteria\": {\n        \"harvester__harv_id__in\": [11, 100]\n    }\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -5268,65 +5537,6 @@
 					"response": []
 				},
 				{
-					"name": "triggers",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "{{admin_token}}",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{domain}}/notifications/triggers",
-							"host": [
-								"{{domain}}"
-							],
-							"path": [
-								"notifications",
-								"triggers"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "criteria",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "{{admin_token}}",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{domain}}/notifications/triggers/options?trigger=AFTException&criteria_type=aftexceptioncode",
-							"host": [
-								"{{domain}}"
-							],
-							"path": [
-								"notifications",
-								"triggers",
-								"options"
-							],
-							"query": [
-								{
-									"key": "trigger",
-									"value": "AFTException"
-								},
-								{
-									"key": "criteria_type",
-									"value": "aftexceptioncode"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "delete notification",
 					"request": {
 						"method": "DELETE",
@@ -5338,13 +5548,413 @@
 							}
 						],
 						"url": {
-							"raw": "{{domain}}/notifications/2/",
+							"raw": "{{domain}}/notifications/7/",
 							"host": [
 								"{{domain}}"
 							],
 							"path": [
 								"notifications",
+								"7",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "s3 files",
+			"item": [
+				{
+					"name": "get s3 files",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{admin_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{domain}}/s3files/basic",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"s3files",
+								"basic"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "post s3 event",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{admin_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"Body\": {\n        \"Records\": [\n            {\n                \"s3\": {\n                    \"bucket\": {\n                        \"name\": \"test-bucket\"\n                    },\n                    \"object\": {\n                        \"key\": \"test-object_05175776-5158-11ed-9b0c-78d004272c5a.thing\"\n                    }\n                }\n            }\n        ]\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{domain}}/s3files/",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"s3files",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "post uuid s3 event",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{admin_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{  \n    \"Records\":[  \n       {  \n          \"s3\":{\n             \"bucket\":{  \n                \"name\":\"test-bucket\"  \n             },\n             \"object\":{  \n                \"key\":\"test-object\"\n             }\n          }\n       }\n    ]\n }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{domain}}/s3files/basic",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"s3files",
+								"basic"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "event",
+			"item": [
+				{
+					"name": "get events",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{admin_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{domain}}/events/?limit=50&offset=60",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"events",
+								""
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "50"
+								},
+								{
+									"key": "offset",
+									"value": "60"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "harvdeploy",
+			"item": [
+				{
+					"name": "get releases",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "add release",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{admin_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"master\": {\n    \"packages\": {\n      \"aft-camstream-meta\": \"0.1.1\",\n      \"aft-can-master\": \"1.0-5\",\n      \"aft-can-recorder\": \"0.5-1\",\n      \"aft-chrony-master\": \"0.2-2\",\n      \"aft-core-meta\": \"0.2.1\",\n      \"aft-cred-proxy\": \"0.3-1\",\n      \"aft-debtools\": \"1.6-1\",\n      \"aft-detect-robots\": \"0.2-1\",\n      \"aft-ep-env-sb\": \"2.12-1\",\n      \"aft-fluxbox-conf\": \"1.0-1\",\n      \"aft-harvester-netrules\": \"2.0-4\",\n      \"aft-harvester-networking\": \"2.2-3\",\n      \"aft-harvester-pritunl-config\": \"2.0-1\",\n      \"aft-harvester-ssh-config\": \"0.1-2\",\n      \"aft-iot-agent\": \"2.4-1\",\n      \"aft-iot-uploader\": \"0.2-1\",\n      \"aft-iot-uploader-dir-env\": \"0.2-1\",\n      \"aft-location\": \"1.2-1\",\n      \"aft-logrotate-conf\": \"0.1-3\",\n      \"aft-nexus-harv-keyring\": \"1.5-1\",\n      \"aft-nfs-master\": \"1.0-5\",\n      \"aft-nfs-sync\": \"0.1-4\",\n      \"aft-node-exporter\": \"1.4-1\",\n      \"aft-pkg-cache-client\": \"1.0-1\",\n      \"aft-pkg-cache-server\": \"1.0-1\",\n      \"aft-portal-core\": \"1.1-1\",\n      \"aft-portal-static\": \"1.1-1\",\n      \"aft-rsyslog-conf\": \"0.2-7\",\n      \"aft-sb-code-harv\": \"0.2-1\",\n      \"aft-scheduler\": \"0.2-1\",\n      \"aft-services-core\": \"1.6-1\",\n      \"aft-services-harvester\": \"1.6-1\",\n      \"aft-sessback\": \"1.2-1\",\n      \"aft-setup-venv\": \"2.1-1\",\n      \"aft-snmp-exporter\": \"0.2-1\",\n      \"aft-statsd-exporter\": \"0.2-0\",\n      \"aft-sysarm\": \"0.9-1\",\n      \"aft-sysarm-bin\": \"0.9-1\",\n      \"aft-sysarm-target\": \"0.9-1\",\n      \"aft-sysmon\": \"0.17-1\",\n      \"aft-systemd-conf\": \"1.1-3\",\n      \"aft-tbot-meta\": \"1.0.0\",\n      \"aft-udisks\": \"1.0-11\",\n      \"aft-utils\": \"0.4-1\",\n      \"aft-victoria-agent\": \"1.4-1\",\n      \"aft-wifi-ap\": \"2.0-3\",\n      \"aft-wlan-client\": \"1.0-3\",\n      \"aft-zmq-endpoints\": \"2.12-1\"\n    },\n    \"project\": \"strawberry\",\n    \"type\": \"master\",\n    \"version\": \"20221011.141720\"\n  },\n  \"project\": \"strawberry\",\n  \"robot\": {\n    \"packages\": {\n      \"aft-camstream-meta\": \"0.1.1\",\n      \"aft-can-recorder\": \"0.5-1\",\n      \"aft-can-robot\": \"1.0-5\",\n      \"aft-chrony-robot\": \"0.2-2\",\n      \"aft-core-meta\": \"0.2.1\",\n      \"aft-debtools\": \"1.6-1\",\n      \"aft-ep-env-sb\": \"2.12-1\",\n      \"aft-iot-uploader-dir-env\": \"0.2-1\",\n      \"aft-logrotate-conf\": \"0.1-3\",\n      \"aft-nexus-harv-keyring\": \"1.5-1\",\n      \"aft-nfs-robot\": \"1.0-5\",\n      \"aft-nfs-sync\": \"0.1-4\",\n      \"aft-node-exporter-robot\": \"1.4-1\",\n      \"aft-pkg-cache-client\": \"1.0-1\",\n      \"aft-robot-netrules\": \"1.0-5\",\n      \"aft-robot-networking\": \"2.7-1\",\n      \"aft-sb-code-jet\": \"0.2-1\",\n      \"aft-services-core\": \"1.6-1\",\n      \"aft-services-robot\": \"1.6-1\",\n      \"aft-setup-venv\": \"2.1-1\",\n      \"aft-sysarm-target\": \"0.9-1\",\n      \"aft-sysmon\": \"0.17-1\",\n      \"aft-systemd-conf\": \"1.1-3\",\n      \"aft-tbot-meta\": \"1.0.0\",\n      \"aft-utils\": \"0.4-1\",\n      \"aft-xhci-restart\": \"0.2-2\",\n      \"aft-zmq-endpoints\": \"2.12-1\"\n    },\n    \"project\": \"strawberry\",\n    \"type\": \"robot\",\n    \"version\": \"20221011.141720\"\n  },\n  \"stereo\": {\n    \"packages\": {\n      \"aft-camstream-meta\": \"0.1.1\",\n      \"aft-chrony-robot\": \"0.2-2\",\n      \"aft-core-meta\": \"0.2.1\",\n      \"aft-ep-env-sb\": \"2.12-1\",\n      \"aft-iot-uploader-dir-env\": \"0.2-1\",\n      \"aft-jetson-getty\": \"0.4-1\",\n      \"aft-jetson-networking\": \"1.4-2\",\n      \"aft-jetson-udev\": \"0.4-1\",\n      \"aft-logrotate-conf\": \"0.1-3\",\n      \"aft-nexus-harv-keyring\": \"1.5-1\",\n      \"aft-nfs-robot\": \"1.0-5\",\n      \"aft-nfs-sync\": \"0.1-4\",\n      \"aft-node-exporter-jetson\": \"1.4-1\",\n      \"aft-pkg-cache-client\": \"1.0-1\",\n      \"aft-sb-code-jet\": \"0.2-1\",\n      \"aft-sb-ml-det-class-graph-aarch64\": \"0.2-1\",\n      \"aft-services-core\": \"1.6-1\",\n      \"aft-services-jetson\": \"1.6-1\",\n      \"aft-setup-venv\": \"2.1-1\",\n      \"aft-sysarm-target\": \"0.9-1\",\n      \"aft-sysmon\": \"0.17-1\",\n      \"aft-systemd-conf\": \"1.1-3\",\n      \"aft-utils\": \"0.4-1\",\n      \"aft-zmq-endpoints\": \"2.12-1\"\n    },\n    \"project\": \"strawberry\",\n    \"type\": \"stereo\",\n    \"version\": \"20221011.141720\"\n  },\n  \"version\": \"20221011.141720\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{domain}}/release/",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"release",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "harvjobs",
+			"item": [
+				{
+					"name": "get jobs",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{admin_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{domain}}/harvjobs/2/",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"harvjobs",
 								"2",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get job history",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{admin_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{domain}}/harvjobs/2/",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"harvjobs",
+								"2",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create job",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{admin_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"target\": 9,\n    \"schema_version\": 0.1,\n    \"payload\": {\n        \"run_state\": [\"updating\"],\n        \"targets\": [\n            \"master\"\n        ],\n        \"release\": {\n            \"master\": {\n                \"packages\": {\n                    \"aft-camera-meta\": \"0.1.2\",\n                    \"aft-camstream-meta\": \"0.1.1\",\n                    \"aft-can-logger-master\": \"0.3-1\",\n                    \"aft-can-master\": \"1.0-5\",\n                    \"aft-chrony-master\": \"0.5-1\",\n                    \"aft-core-meta\": \"0.2.1\",\n                    \"aft-cred-proxy\": \"0.3-1\",\n                    \"aft-debtools\": \"1.6-1\",\n                    \"aft-detect-robots\": \"0.2-1\",\n                    \"aft-ep-env-sb\": \"2.13-1\",\n                    \"aft-fluxbox-conf\": \"1.0-1\",\n                    \"aft-harvester-netrules\": \"2.0-4\",\n                    \"aft-harvester-networking\": \"2.2-3\",\n                    \"aft-harvester-pritunl-config\": \"2.0-1\",\n                    \"aft-harvester-ssh-config\": \"0.1-2\",\n                    \"aft-iot-agent\": \"2.4-1\",\n                    \"aft-iot-uploader\": \"0.2-1\",\n                    \"aft-iot-uploader-dir-env\": \"0.2-1\",\n                    \"aft-location\": \"1.2-1\",\n                    \"aft-location-meta\": \"0.1.1\",\n                    \"aft-logrotate-conf\": \"0.1-3\",\n                    \"aft-nexus-harv-keyring\": \"1.5-1\",\n                    \"aft-nfs-master\": \"1.0-5\",\n                    \"aft-nfs-sync\": \"0.1-4\",\n                    \"aft-node-exporter\": \"1.4-1\",\n                    \"aft-pkg-cache-client\": \"1.1-1\",\n                    \"aft-pkg-cache-server\": \"1.1-1\",\n                    \"aft-portal-core\": \"1.1-1\",\n                    \"aft-portal-static\": \"1.1-1\",\n                    \"aft-rsyslog-conf\": \"0.2-7\",\n                    \"aft-sb-code-harv\": \"0.3-1\",\n                    \"aft-scheduler\": \"0.3-1\",\n                    \"aft-scheduler-client\": \"0.3-1\",\n                    \"aft-services-core\": \"1.7-1\",\n                    \"aft-services-harvester\": \"1.7-1\",\n                    \"aft-sessback\": \"1.2-1\",\n                    \"aft-setup-venv\": \"2.1-1\",\n                    \"aft-snmp-exporter\": \"0.2-1\",\n                    \"aft-statsd-exporter\": \"0.2-0\",\n                    \"aft-strawberry-meta-harv\": \"0.1.1\",\n                    \"aft-sysarm\": \"0.9-1\",\n                    \"aft-sysarm-bin\": \"0.9-1\",\n                    \"aft-sysarm-target\": \"0.9-1\",\n                    \"aft-sysmon\": \"0.17-1\",\n                    \"aft-systemd-conf\": \"1.1-3\",\n                    \"aft-tbot-meta\": \"1.0.0\",\n                    \"aft-udisks\": \"1.0-11\",\n                    \"aft-utils\": \"0.4-1\",\n                    \"aft-victoria-agent\": \"1.4-1\",\n                    \"aft-wifi-ap\": \"2.0-3\",\n                    \"aft-wlan-client\": \"1.0-3\",\n                    \"aft-workcell-camera\": \"1.0-1\",\n                    \"aft-zmq-endpoints\": \"2.13-1\"\n                },\n                \"project\": \"strawberry\",\n                \"type\": \"master\",\n                \"version\": \"20221116.090833\"\n            },\n            \"project\": \"strawberry\",\n            \"robot\": {\n                \"packages\": {\n                    \"aft-camera-meta\": \"0.1.2\",\n                    \"aft-camstream-meta\": \"0.1.1\",\n                    \"aft-can-logger-robot\": \"0.3-1\",\n                    \"aft-can-robot\": \"1.0-5\",\n                    \"aft-chrony-robot\": \"0.4-1\",\n                    \"aft-core-meta\": \"0.2.1\",\n                    \"aft-debtools\": \"1.6-1\",\n                    \"aft-ep-env-sb\": \"2.13-1\",\n                    \"aft-iot-uploader-dir-env\": \"0.2-1\",\n                    \"aft-location-meta\": \"0.1.1\",\n                    \"aft-logrotate-conf\": \"0.1-3\",\n                    \"aft-nexus-harv-keyring\": \"1.5-1\",\n                    \"aft-nfs-robot\": \"1.0-5\",\n                    \"aft-nfs-sync\": \"0.1-4\",\n                    \"aft-node-exporter-robot\": \"1.4-1\",\n                    \"aft-pkg-cache-client\": \"1.1-1\",\n                    \"aft-robot-netrules\": \"1.0-5\",\n                    \"aft-robot-networking\": \"2.7-1\",\n                    \"aft-sb-code-harv\": \"0.3-1\",\n                    \"aft-scheduler-client\": \"0.3-1\",\n                    \"aft-services-core\": \"1.7-1\",\n                    \"aft-services-robot\": \"1.7-1\",\n                    \"aft-setup-venv\": \"2.1-1\",\n                    \"aft-strawberry-meta-harv\": \"0.1.1\",\n                    \"aft-sysarm-target\": \"0.9-1\",\n                    \"aft-sysmon\": \"0.17-1\",\n                    \"aft-systemd-conf\": \"1.1-3\",\n                    \"aft-tbot-meta\": \"1.0.0\",\n                    \"aft-utils\": \"0.4-1\",\n                    \"aft-xhci-restart\": \"0.2-2\",\n                    \"aft-zmq-endpoints\": \"2.13-1\"\n                },\n                \"project\": \"strawberry\",\n                \"type\": \"robot\",\n                \"version\": \"20221116.090833\"\n            },\n            \"stereo\": {\n                \"packages\": {\n                    \"aft-camstream-meta\": \"0.1.1\",\n                    \"aft-chrony-robot\": \"0.4-1\",\n                    \"aft-core-meta\": \"0.2.1\",\n                    \"aft-debtools\": \"1.6-1\",\n                    \"aft-ep-env-sb\": \"2.13-1\",\n                    \"aft-iot-uploader-dir-env\": \"0.2-1\",\n                    \"aft-jetson-getty\": \"0.4-1\",\n                    \"aft-jetson-networking\": \"1.4-2\",\n                    \"aft-jetson-udev\": \"0.4-1\",\n                    \"aft-logrotate-conf\": \"0.1-3\",\n                    \"aft-nexus-harv-keyring\": \"1.5-1\",\n                    \"aft-nfs-robot\": \"1.0-5\",\n                    \"aft-nfs-sync\": \"0.1-4\",\n                    \"aft-node-exporter-jetson\": \"1.3-1\",\n                    \"aft-pkg-cache-client\": \"1.1-1\",\n                    \"aft-sb-code-jet\": \"0.3-1\",\n                    \"aft-sb-ml-det-class-graph-aarch64\": \"0.2-1\",\n                    \"aft-scheduler-client\": \"0.3-1\",\n                    \"aft-services-core\": \"1.7-1\",\n                    \"aft-services-jetson\": \"1.7-1\",\n                    \"aft-setup-venv\": \"2.1-1\",\n                    \"aft-strawberry-meta-jet\": \"0.1.1\",\n                    \"aft-sysarm-target\": \"0.9-1\",\n                    \"aft-sysmon\": \"0.17-1\",\n                    \"aft-systemd-conf\": \"1.1-3\",\n                    \"aft-utils\": \"0.4-1\",\n                    \"aft-zmq-endpoints\": \"2.13-1\"\n                },\n                \"project\": \"strawberry\",\n                \"type\": \"stereo\",\n                \"version\": \"20221116.090833\"\n            },\n            \"version\": \"20221116.090833\"\n        }\n    },\n    \"jobtype\": \"install_release\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{domain}}/harvjobs/",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"harvjobs",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "post results",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{admin_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"type\": \"jobresults\",\n  \"timestamp\": 1667604050.267049,\n  \"uuid\": \"44ce3e26-5c97-11ed-996c-0a58a9feac02\",\n  \"data\": {\n    \"aft-robot03\": {\n      \"ts\": 1667604050.203444,\n      \"exit_code\": 0,\n      \"stdout\": \"\",\n      \"stderr\": \"\",\n      \"status\": \"success\"\n    },\n    \"master\": {\n      \"ts\": 1667604050.2599592,\n      \"exit_code\": 0,\n      \"stdout\": \"\",\n      \"stderr\": \"\",\n      \"status\": \"success\"\n    }\n  },\n  \"serial_number\": \"001\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{domain}}/jobresults/",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"jobresults",
+								""
+							],
+							"query": [
+								{
+									"key": "",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get jobtypes",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "migrations",
+			"item": [
+				{
+					"name": "GET migration logs",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{admin_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{domain}}/migrations/",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"migrations",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "migrate",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{admin_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{domain}}/migrations/migrate/",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"migrations",
+								"migrate",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "loggui",
+			"item": [
+				{
+					"name": "get log file",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{admin_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{domain}}/logfiles/1/",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"logfiles",
+								"1",
 								""
 							]
 						}
