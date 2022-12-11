@@ -1,6 +1,97 @@
-# Getting Started with Create React App
+# Getting Started with HDS Frontend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project is the react web interface for all AFT Harvester data.<br/>
+The project is boostrapped by `create-react-app` that automatically configures `webpack`, `babel` in the initial configuration. <br/>
+
+## Project Architecture
+
+The root project dir is the frontend directory.
+All the react code is contained in `src` directory.
+React dependencies listing are contained in `package.json`. <br/>
+Inside the frontend folder we have the following directories
+
+- .husky
+- build --- automatically generate when you run `npm run build`
+- make
+  - dev
+  - prod
+- public
+- src
+- node_modules --- generated when you run `npm install`
+
+## Code style & format
+
+The code style used in the entire project follows [prettier](https://prettier.io/) recommended coding style.
+When commiting your code, a pre-commit script to check && format the code is run automatically.
+
+```
+npm run format
+```
+
+## Available environment variables
+
+create a `.env.local` file and set the following environment variables
+
+```
+REACT_APP_NODE_ENV=development
+REACT_APP_HDS_API_URL=http://localhost:8085
+REACT_APP_HOSTED_URL=http://localhost:3000
+REACT_APP_HDS_PORT=8085
+```
+
+## Running development server
+
+```
+npm install && npm start
+```
+
+## Running production build
+
+```
+source build.start.sh
+```
+
+## Running automated test
+
+Jest is the Test Runner. <br/>
+Testing Library is React Testing Library. (still work in progress to add more test). <br/>
+Likely to use Cypress for e2e testing.
+
+```
+npm test
+```
+
+## Adding a new view/page
+
+- create the new page/view in pages folder, page name corresponds to django apps name not necessary but convenient e.g
+  ```
+  touch src/pages/newpage/index.js
+  touch src/pages/newpage/styles.css
+  ```
+  or
+  ```
+  touch src/pages/newpage/customview/index.js
+  touch src pages/newpage/customview/styles.css
+  ```
+- add the file to routes.js to include the page in react routes
+  **NB if page is prone to make api requests use `lazy` (utilizes code-splitting) to import the file else if the page is just static page use normal `import`**
+- create a component folder for the newpage to properly structure your page component as independent component files e.g
+  ```
+  touch src/components/newpage/Search.js
+  touch src/components/newpage/CardList.js
+  ```
+
+## Build isolated frontend image
+
+```
+docker build -t hds_web_frontend:latest .
+```
+
+## Running isolated docker container
+
+```
+docker run hds_web_frontend:latest --port 3001
+```
 
 ## Available Scripts
 
@@ -8,7 +99,7 @@ In the project directory, you can run:
 
 ### `npm start`
 
-Runs the app in the development mode.\
+Runs the app in the development mode. \
 Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
 The page will reload when you make changes.\
@@ -29,42 +120,21 @@ Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### `npm run eject`
+### `npm run check`
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Checks the coding style if it matches the prettier coding style format.
+In case the format doesn't match it displays the files not formatted correctly.
+In case you only want to check for a single file
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```
+  npx prettier --check src/fileToCheck.js
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### `npm run format`
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+Formats the code in the prettier code format for files that are not formatted.
+In case you only want to format a single file run
 
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+```
+  npx prettier --write src/fileToWrite.js
+```
