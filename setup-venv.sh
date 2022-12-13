@@ -3,6 +3,8 @@
 # Set up the venv
 VENV="./venv"
 
+export HDS_ROOT="$( git rev-parse --show-toplevel )"
+
 if [ ! -d $VENV ]
 then
     echo ""
@@ -49,6 +51,9 @@ docker compose version
 echo "" && echo "Checking if docker is installed properly"
 docker run --name hello-world-container hello-world
 docker rm hello-world-container
+
+echo "" && echo "running install node script"
+source $HDS_ROOT/scripts/install-node.sh
 
 echo "" && echo "Start the development environment with"
 echo "  source start.sh <optional port>"

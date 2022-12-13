@@ -3,6 +3,7 @@
 # No arguments, or one argument which is the django server port.
 
 source venv/bin/activate
+source ~/.bashrc
 
 export HDS_ROOT="$( git rev-parse --show-toplevel )"
 export GITHASH="$( git rev-parse HEAD )"
