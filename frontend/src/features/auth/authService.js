@@ -1,10 +1,10 @@
 import { API_URL } from "../base/constants";
 import { axiosService } from "../base/service";
 
-const LOGIN_URL = `${API_URL}/users/login/`;
-const LOGOUT_URL = `${API_URL}/users/logout/`;
-const USER_PROFILE_URL = `${API_URL}/users/profiles/`;
-const PASSWORD_URL = `${API_URL}/users/change/password/`;
+export const LOGIN_URL = `${API_URL}/users/login/`;
+export const LOGOUT_URL = `${API_URL}/users/logout/`;
+export const USER_PROFILE_URL = `${API_URL}/users/profiles/`;
+export const PASSWORD_URL = `${API_URL}/users/change/password/`;
 
 const login = async (userData) => {
   const res = await axiosService.post(LOGIN_URL, undefined, userData);
