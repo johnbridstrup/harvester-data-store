@@ -5,6 +5,7 @@
 import { rest } from "msw";
 import { LOGIN_URL } from "../features/auth/authService";
 import { NOTIFICATION_URL } from "../features/notification/notificationService";
+import { LOGSESSION_URL } from "../features/logparser/logparserService";
 
 let genericListResponse = {
   status: "success",
@@ -54,5 +55,29 @@ export const login = rest.post(LOGIN_URL, (req, res, ctx) => {
 
 export const userNotification = rest.get(NOTIFICATION_URL, (req, res, ctx) => {
   genericListResponse["message"] = "notification retrieved successfully";
+  return res(ctx.json(genericListResponse));
+});
+
+export const logsession = rest.get(LOGSESSION_URL, (req, res, ctx) => {
+  genericListResponse["message"] = "logsession retrieved successfully";
+  genericListResponse["data"]["results"] = [
+    {
+      id: 1,
+      created: "2022-12-16T12:24:17.459077Z",
+      lastModified: "2022-12-16T12:24:17.623473Z",
+      name: "sessclip",
+      date_time: "2022-11-01T23:23:00Z",
+      zip_file: "http://example.zip",
+      creator: 1,
+      modifiedBy: null,
+      harv: null,
+      logs: {
+        harv_id: null,
+        robots: [],
+        services: [],
+        videos: [],
+      },
+    },
+  ];
   return res(ctx.json(genericListResponse));
 });
