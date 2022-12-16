@@ -1,7 +1,7 @@
 import { API_URL } from "../base/constants";
 import { axiosService } from "../base/service";
 
-const NOTIFICATION_URL = `${API_URL}/notifications/`;
+export const NOTIFICATION_URL = `${API_URL}/notifications/`;
 
 const listNotifications = async (token, limit = 10) => {
   let response = await axiosService.get(

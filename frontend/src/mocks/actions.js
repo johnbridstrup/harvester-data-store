@@ -4,6 +4,24 @@
 
 import { rest } from "msw";
 import { LOGIN_URL } from "../features/auth/authService";
+import { NOTIFICATION_URL } from "../features/notification/notificationService";
+
+let genericListResponse = {
+  status: "success",
+  message: "any retrieved successfully",
+  data: {
+    count: 0,
+    next: null,
+    previous: null,
+    results: [],
+  },
+};
+
+let genericGetResponse = {
+  status: "success",
+  message: "any retrieved successfully",
+  data: {},
+};
 
 export const login = rest.post(LOGIN_URL, (req, res, ctx) => {
   // Persist user's authentication in the localstorage
@@ -32,4 +50,9 @@ export const login = rest.post(LOGIN_URL, (req, res, ctx) => {
     // Respond with a 200 status code
     ctx.status(200)
   );
+});
+
+export const userNotification = rest.get(NOTIFICATION_URL, (req, res, ctx) => {
+  genericListResponse["message"] = "notification retrieved successfully";
+  return res(ctx.json(genericListResponse));
 });

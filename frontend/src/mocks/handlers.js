@@ -2,6 +2,6 @@
  * Defines the mock handlers for api requests
  */
 
-import { login } from "./actions";
+import { login, userNotification } from "./actions";
 
-export const handlers = [login];
+export const handlers = [login, userNotification];
