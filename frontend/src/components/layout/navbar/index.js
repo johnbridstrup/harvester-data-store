@@ -67,7 +67,7 @@ function Navbar(props) {
               <img src={Logo} alt="" />
             </div>
           </Link>
-          {user.is_superuser && (
+          {user?.is_superuser && (
             <div className="external-admin hover1">
               <a href={adminUrl} target="_blank" rel="noreferrer">
                 Admin
