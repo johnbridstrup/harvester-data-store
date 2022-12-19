@@ -74,6 +74,7 @@ const LogSessionDetailView = lazy(() =>
   import("pages/logparser/logsession/detailview")
 );
 const LogFileListView = lazy(() => import("pages/logparser/logfile/listview"));
+const MigrationListView = lazy(() => import("pages/migration/listview"));
 
 const BaseRouter = () => {
   return (
@@ -653,6 +654,22 @@ const BaseRouter = () => {
                 }
               >
                 <LogFileListView />
+              </Suspense>
+            </RequireUser>
+          }
+        />
+        <Route
+          path="/migrations"
+          element={
+            <RequireUser>
+              <Suspense
+                fallback={
+                  <RouteLoader>
+                    <Loader size={50} />
+                  </RouteLoader>
+                }
+              >
+                <MigrationListView />
               </Suspense>
             </RequireUser>
           }

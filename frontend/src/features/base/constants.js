@@ -15,6 +15,7 @@ export const NOTIFY_CATEGORY = {
 export const FULLFILLED_PROMISE = {
   notification: "notification/deleteNotification/fulfilled",
   logout: "auth/logout/fulfilled",
+  migration: "migration/execMigration/fulfilled",
 };
 
 export const REJECTED_PROMISE = {
@@ -22,4 +23,5 @@ export const REJECTED_PROMISE = {
   password: "auth/changePassword/rejected",
   profile: "auth/updateProfile/rejected",
   confirm: "auth/confirmPassword/rejected",
+  migration: "migration/execMigration/rejected",
 };

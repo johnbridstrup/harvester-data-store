@@ -32,6 +32,7 @@ import {
   paginateJobType,
 } from "features/harvjobs/harvjobSlice";
 import { paginateLogSession } from "features/logparser/logparserSlice";
+import { paginateMigration } from "features/migration/migrationSlice";
 
 function Pagination(props) {
   const [pageLimit, setPageLimit] = useState(10);
@@ -188,6 +189,7 @@ export const GenericPagination = (props) => {
         ? paginateJobStatus
         : paginateJobType,
     logparser: paginateLogSession,
+    migration: paginateMigration,
   };
 
   const handlePagination = async (navigation) => {
