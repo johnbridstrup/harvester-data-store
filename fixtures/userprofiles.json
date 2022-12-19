@@ -4,7 +4,8 @@
     "pk": 1,
     "fields": {
         "user": 1,
-        "slack_id": "slack@aft.aft"
+        "slack_id": "slack@aft.aft",
+        "role": "manager"
     }
 },
 {
@@ -12,7 +13,8 @@
     "pk": 2,
     "fields": {
         "user": 2,
-        "slack_id": "slack@not_aft"
+        "slack_id": "slack@not_aft",
+        "role": "support"
     }
 }
 ]
