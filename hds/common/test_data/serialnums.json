@@ -1,0 +1,15 @@
+{
+  "type": "asset-tags",
+  "timestamp": 1674179320.1067276,
+  "data": [
+    { "asset": "arm", "index": 2, "asset-tag": "SA-040", "version": null },
+    { "asset": "arm", "index": 1, "asset-tag": "SA-019", "version": null },
+    { "asset": "gantry", "index": 2, "asset-tag": "ST-058", "version": null },
+    { "asset": "gantry", "index": 1, "asset-tag": "ST-037", "version": null },
+    { "asset": "gripper", "index": 2, "asset-tag": 7, "version": "B01" },
+    { "asset": "gripper", "index": 1, "asset-tag": 13, "version": "B01" },
+    { "asset": "traychanger", "index": 1, "asset-tag": "A1", "version": null },
+    { "asset": "traychanger", "index": 2, "asset-tag": "A2", "version": null }
+  ],
+  "serial_number": "011"
+}

@@ -72,6 +72,7 @@ INSTALLED_APPS = [
     'exceptions',
     'gripreport',
     'harvester',
+    'harvassets',
     'harvdeploy',
     'harvjobs',
     'healthcheck',

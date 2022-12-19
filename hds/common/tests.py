@@ -211,6 +211,11 @@ class HDSAPITestBase(APITestCase):
         report_path = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'test_data/autodiag_report.json')
         with open(report_path, 'rb') as f:
             self.ad_data = json.load(f)
+
+    def _load_asset_report(self):
+        report_path = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'test_data/serialnums.json')
+        with open(report_path, 'rb') as f:
+            self.asset_data = json.load(f)
     
     def _post_error_report(self, load=True):
         if load:
