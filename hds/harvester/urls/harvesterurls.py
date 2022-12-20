@@ -3,7 +3,7 @@ from ..views.harvesterview import HarvesterView
 
 
 router = routers.SimpleRouter()
-router.register(r'', HarvesterView)
+router.register(r'', HarvesterView, basename="harvester")
 
 urlpatterns = [
 ] + router.urls

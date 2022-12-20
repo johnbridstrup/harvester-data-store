@@ -8,6 +8,7 @@ from rest_framework.renderers import JSONRenderer
 from common.utils import make_ok
 from common.viewsets import CreateModelViewSet
 from hds.roles import RoleChoices
+from harvassets.serializers import HarvesterAssetSerializer
 
 
 class HarvesterView(CreateModelViewSet):
@@ -28,6 +29,9 @@ class HarvesterView(CreateModelViewSet):
         "version_history": {
             RoleChoices.SUPPORT: True,
         },
+        "get_assets": {
+            RoleChoices.SUPPORT: True,
+        }
     }
 
     @action(
@@ -49,6 +53,16 @@ class HarvesterView(CreateModelViewSet):
             data = serializer.data
         return make_ok(f"Harvester {harv.harv_id} version history", data)
 
+    @action(
+    methods=["get"],
+    detail=True,
+    url_path="assets",
+    renderer_classes=[JSONRenderer]
+    )
+    def get_assets(self, request, pk=None):
+        harv = self.get_object()
+        assets = [HarvesterAssetSerializer(asset).data for asset in harv.assets.all()]
+        return make_ok(f"Harvester {harv.harv_id} assets retrieved", response_data=assets)
 
 
 class HarvesterHistoryView(CreateModelViewSet):

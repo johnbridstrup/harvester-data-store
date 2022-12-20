@@ -103,3 +103,21 @@ class HarvesterAssetsTestCase(HDSAPITestBase):
 
         r2 = self.client.get(f"{self.asset_url}?asset__name=type1")
         self.assertEqual(r2.json()["data"]["count"], 2)
+
+    def test_get_harvester_assets(self):
+        url = reverse("harvester-detail", args=[1])
+        self.client.post(self.url, self.base_report, format='json')
+
+        r = self.client.get(url)
+        self.assertTrue("assets" in r.json()["data"])
+        
+        assets_url = f"{url}{r.json()['data']['assets']}"
+        r2 = self.client.get(assets_url)
+        data = r2.json()["data"]
+        self.assertEqual(r2.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(data), 1)
+
+        asset = data[0]
+        self.assertEqual(asset["asset"]["name"], "test")
+        self.assertEqual(asset["serial_number"], "33")
+

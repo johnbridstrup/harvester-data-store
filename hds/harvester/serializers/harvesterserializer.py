@@ -1,6 +1,9 @@
 # import serializers
 from rest_framework import serializers
+from rest_framework.decorators import action
+from rest_framework.renderers import JSONRenderer
 
+from common.utils import make_ok
 from harvdeploy.models import HarvesterVersionReport
 from harvdeploy.serializers import HarvesterCodeReleaseSerializer, HarvesterVersionReportSerializer
 from location.serializers.locationserializer import LocationSerializer
@@ -20,6 +23,7 @@ class HarvesterSerializer(serializers.ModelSerializer):
         data['location'] = LocationSerializer(instance.location).data
         data['harvester_history'] = f"/harvesterhistory/?harv_id={instance.harv_id}"
         data['version_history'] = 'versions/'
+        data["assets"] = "assets/"
         if instance.release:
             data['release'] = HarvesterCodeReleaseSerializer(instance.release).data
         else:
