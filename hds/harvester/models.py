@@ -46,3 +46,7 @@ class Harvester(CommonInfo):
             return self.version_history.filter(reportTime__lte=before).latest('reportTime')
         else:
             return self.version_history.latest('reportTime')
+
+    def has_asset(self, asset_type, serial_number):
+        asset_list = self.assets.filter(asset__name=asset_type, serial_number=serial_number)
+        return len(asset_list) >= 1
