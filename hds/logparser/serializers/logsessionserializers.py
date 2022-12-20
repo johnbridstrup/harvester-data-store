@@ -61,7 +61,7 @@ class LogSessionSerializer(TaggitSerializer, serializers.ModelSerializer):
                 file = thezip.filelist[0]
                 harv, date_obj = self.extract_harvester_and_date(file)
                 internal_data["date_time"] = str(date_obj)
-                internal_data["harv_id"] = harv.pk if harv else None
+                internal_data["harv"] = harv.pk if harv else None
             except IndexError:
                 logging.error('Zip file is empty no files found')
 
