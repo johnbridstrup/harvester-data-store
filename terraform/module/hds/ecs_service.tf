@@ -48,6 +48,8 @@ locals {
     { "name" : "JOBRESULTS_QUEUE_URL", "value" : var.jobresults_queue_url },
     { "name" : "MIGRATE", "value" : var.migrate_flag },
     { "name" : "GITHASH", "value" : module.git_info.commit_hash },
+    { "name" : "AWS_STORAGE_BUCKET_NAME", "value": var.s3_bucket },
+    { "name" : "USES3", "value" : "true" },
   ]
 }
 

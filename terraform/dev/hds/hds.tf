@@ -5,13 +5,13 @@ locals {
   frontend_url             = "https://hds.devcloud.advanced.farm"
   service_port             = "8000"
   service_name             = "hds"
-  service_docker_image     = "082346306812.dkr.ecr.us-west-1.amazonaws.com/hds:hds-staging-07fb69a9"
+  service_docker_image     = "082346306812.dkr.ecr.us-west-1.amazonaws.com/hds:hds-staging-8a0f8cbe"
   healthcheck_path         = "/api/v1/healthcheck/"
   sqs_client_metrics_ports = [9104, 9105, 9106, 9107, 9108]
   hds_superuser_pwd_id     = "hds_superuser_pwd"
   enable_prometheus_scrape = true
-  service_container_memory = 2048
-  service_container_cpu    = 512
+  service_container_memory = 4096
+  service_container_cpu    = 2048
   migrate                  = var.migrate_flag
 }
 
@@ -83,6 +83,7 @@ module "hds" {
   versions_queue_url       = data.aws_sqs_queue.versions_queue.url
   jobresults_queue_url     = data.aws_sqs_queue.jobresults_queue.url
   migrate_flag             = local.migrate
+  s3_bucket                = local.bucket
 }
 
 resource "aws_security_group_rule" "hds_db_rule" {

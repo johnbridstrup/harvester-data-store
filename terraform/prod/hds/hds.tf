@@ -10,9 +10,10 @@ locals {
   sqs_client_metrics_ports = [9104, 9105, 9106, 9107, 9108]
   hds_superuser_pwd_id     = "hds_superuser_pwd"
   enable_prometheus_scrape = true
-  service_container_memory = 2048
-  service_container_cpu    = 512
+  service_container_memory = 4096
+  service_container_cpu    = 2048
   migrate                  = var.migrate_flag
+  s3_bucket                = local.bucket
   jobserver_port           = "8000"
 }
 

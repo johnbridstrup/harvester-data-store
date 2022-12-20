@@ -139,8 +139,7 @@ data "aws_iam_policy_document" "poll_queues" {
 
   statement {
     actions = [
-      "s3:GetObject",
-      "s3:DeleteObject"
+      "s3:*"
     ]
 
     resources = [

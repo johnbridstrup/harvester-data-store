@@ -248,6 +248,11 @@ variable "migrate_flag" {
   default     = "false"
 }
 
+variable "s3_bucket" {
+  description = "Name of the S3 bucket for static and media files"
+  type = string
+}
+
 # SQS QUEUES
 
 variable "errorreport_queue_url" {
