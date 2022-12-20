@@ -85,6 +85,7 @@ module "hds" {
   versions_queue_url       = data.aws_sqs_queue.versions_queue.url
   jobresults_queue_url     = data.aws_sqs_queue.jobresults_queue.url
   migrate_flag             = local.migrate
+  s3_bucket                = local.bucket
 }
 
 resource "aws_security_group_rule" "hds_db_rule" {
