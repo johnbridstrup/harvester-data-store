@@ -12,6 +12,7 @@ class HarvesterAssetsTestCase(HDSAPITestBase):
         super().setUp()
         self.test_objects = self._setup_basic()
         self.url = reverse("harvassetreport-list")
+        self.asset_url = reverse("harvassets-list")
         self.update_user_permissions_all(HarvesterAssetReport)
         self.base_report = self.create_report(self.asset())
     
@@ -85,3 +86,20 @@ class HarvesterAssetsTestCase(HDSAPITestBase):
         exp_asset_types = len(set([i["asset"] for i in self.asset_data["data"]]))
         self.assertEqual(HarvesterAssetType.objects.count(), exp_asset_types)
 
+
+    def test_get_assets_basic(self):
+        r = self.client.get(self.asset_url)
+        self.assertEqual(r.status_code, status.HTTP_200_OK)
+
+    def test_get_assets_params(self):
+        types = ["type1", "type1", "type2"]
+        report = self.create_report(
+            *[self.asset(asset=i, serial_number=j) for i, j in zip(types, range(1,4))]
+        )
+        self.client.post(self.url, report, format='json')
+
+        r1 = self.client.get(f"{self.asset_url}?harvester__harv_id=11")
+        self.assertEqual(r1.json()["data"]["count"], 3)
+
+        r2 = self.client.get(f"{self.asset_url}?asset__name=type1")
+        self.assertEqual(r2.json()["data"]["count"], 2)
