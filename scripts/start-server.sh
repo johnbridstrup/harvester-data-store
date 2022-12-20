@@ -13,8 +13,5 @@ mkdir /opt/app/multiproc-tmp
 chown -R www-data:www-data /opt/app/multiproc-tmp/
 export PROMETHEUS_MULTIPROC_DIR=/opt/app/multiproc-tmp
 
-echo "Running collectstatic"
-python manage.py collectstatic --no-input
-
 echo "Starting"
 gunicorn -c /opt/app/hds/gunicorn_conf.py hds.wsgi --user www-data --bind 0.0.0.0:$1 --workers 3

@@ -6,6 +6,10 @@ cd hds
 
 RUN_MIGRATIONS=${MIGRATE:-"false"}
 
+
+echo "Running collectstatic"
+python manage.py collectstatic --no-input
+
 if [ "$RUN_MIGRATIONS" = "true" ]
 then
     echo "Migrating"

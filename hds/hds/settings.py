@@ -207,7 +207,7 @@ if USES3:
     if AWS_STORAGE_BUCKET_NAME is None:
         logging.error("bucket name was not provided")
         raise EnvironmentError("bucket name should not be none")
-    AWS_QUERYSTRING_AUTH = False
+    AWS_QUERYSTRING_AUTH = True
     AWS_S3_OBJECT_PARAMETERS = {
         'CacheControl': 'max-age=86400',
     }
