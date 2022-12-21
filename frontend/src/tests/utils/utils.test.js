@@ -2,7 +2,7 @@
  * Test utils methods in the utils.js file
  */
 
-import { findClosest } from "../../utils/utils";
+import { findClosest, imagePath } from "../../utils/utils";
 
 test("should do binary search for given timestamp", () => {
   let content = [
@@ -48,4 +48,8 @@ test("should do binary search for given timestamp", () => {
   // given target exact match
   closest = findClosest(d, content);
   expect(closest.timestamp).toBe(d);
+});
+
+test("should return full image path", () => {
+  expect(imagePath("cloud")).toBe("http://localhost:3000/icons/cloud.png");
 });

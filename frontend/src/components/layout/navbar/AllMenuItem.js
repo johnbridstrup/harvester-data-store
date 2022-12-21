@@ -1,10 +1,11 @@
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
+import { imagePath } from "utils/utils";
 
 function AllMenuItem(props) {
   return (
     <div className="all-menu-item hover1">
-      <img src={`../../../icons/${props.icon}.png`} alt="menu" />
+      <img src={imagePath(props.icon)} alt="menu" />
       <Link to={props.href} className="all-menu-col">
         <span>{props.name}</span>
         <span>{props.description}</span>

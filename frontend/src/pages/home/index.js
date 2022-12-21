@@ -4,6 +4,7 @@ import MainLayout from "../../components/layout/main";
 import { menu, adminMenu } from "../../assets/menu";
 import "./styles.css";
 import LandingView from "../../components/home";
+import { imagePath } from "utils/utils";
 
 function Home(props) {
   const { user } = useSelector((state) => state.auth);
@@ -26,8 +27,8 @@ function Home(props) {
                 <div className="link-icon-container">
                   <img
                     className="menu-icon"
-                    src={`../../icons/${item.icon}.png`}
-                    alt=""
+                    src={imagePath(item.icon)}
+                    alt={`${item.icon}`}
                   />
                   <span className="link">{item.name}</span>
                 </div>

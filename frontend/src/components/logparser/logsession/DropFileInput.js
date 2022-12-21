@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
+import { imagePath } from "utils/utils";
 import { SUCCESS } from "../../../features/base/constants";
 import {
   createLogSession,
@@ -52,7 +53,7 @@ function DropFileInput(props) {
         onDrop={onDrop}
       >
         <div className="label">
-          <img src={`../../../icons/cloud-upload.png`} alt="" />
+          <img src={imagePath("cloud-upload")} alt="cloud-upload" />
           <p>Drag & Drop your files here</p>
         </div>
         <input
@@ -67,7 +68,7 @@ function DropFileInput(props) {
         <div className="drop-file-preview">
           <p className="title">Ready to upload</p>
           <div className="item">
-            <img src={`../../../icons/file-blank.png`} alt="" />
+            <img src={imagePath("file-blank")} alt="file-blank" />
             <div className="item-info">
               <p>{fileObj.name}</p>
               <p>{fileObj.size}B</p>

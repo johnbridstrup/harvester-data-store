@@ -1,3 +1,4 @@
+import { PROD_ENV } from "features/base/constants";
 import { Oval } from "react-loader-spinner";
 
 export const Loader = ({ size }) => {
@@ -625,4 +626,25 @@ export const getCurrIndex = (currentMarker, data) => {
     currIndex = currIndex > 0 ? currIndex : 0;
     resolve(currIndex);
   });
+};
+
+export const imagePath = (imgName, ext = "png") => {
+  /**
+   * @param {imgName} string
+   *
+   * @param {ext} string optional
+   *
+   * @returns {string} absolute image path
+   *
+   * @example
+   *  imagePath(cloud)
+   *    // => http://localhost:3000/icons/cloud.png
+   */
+  let url;
+  if (process.env.REACT_APP_NODE_ENV === PROD_ENV) {
+    url = process.env.REACT_APP_HOSTED_URL;
+  } else {
+    url = `http://localhost:3000`;
+  }
+  return `${url}/icons/${imgName}.${ext}`;
 };
