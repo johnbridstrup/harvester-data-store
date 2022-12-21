@@ -6,6 +6,7 @@ import { rest } from "msw";
 import { LOGIN_URL } from "features/auth/authService";
 import { NOTIFICATION_URL } from "features/notification/notificationService";
 import { LOGSESSION_URL } from "features/logparser/logparserService";
+import { MIGRATION_URL } from "features/migration/migrationService";
 
 let genericListResponse = {
   status: "success",
@@ -77,6 +78,26 @@ export const logsession = rest.get(LOGSESSION_URL, (req, res, ctx) => {
         services: [],
         videos: [],
       },
+    },
+  ];
+  return res(ctx.json(genericListResponse));
+});
+
+export const listMigrations = rest.get(MIGRATION_URL, (req, res, ctx) => {
+  genericListResponse["message"] = "hdsmigrations retrieved successfully";
+  genericListResponse["data"]["results"] = [
+    {
+      id: 1,
+      created: "2022-12-21T15:08:55.287624Z",
+      lastModified: "2022-12-21T15:08:56.092803Z",
+      result: "success",
+      startTime: "2022-12-21T15:08:55.327949Z",
+      endTime: "2022-12-21T15:08:56.092396Z",
+      output:
+        "Operations to perform:\n  Apply all migrations: admin, auth, authtoken, common, contenttypes, django_celery_results, errorreport, event, exceptions, harvdeploy, harvester, harvjobs, hdsmigrations, location, logparser, notifications, s3file, sessions, taggit\nRunning migrations:\n  No migrations to apply.\n",
+      githash: '"UNKNOWN"',
+      creator: 1,
+      modifiedBy: null,
     },
   ];
   return res(ctx.json(genericListResponse));

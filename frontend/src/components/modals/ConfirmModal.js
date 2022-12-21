@@ -20,6 +20,7 @@ function ConfirmModal(props) {
           aria-labelledby="exampleModalCenterTitle"
           aria-hidden="true"
           style={{ display: "none" }}
+          data-testid="confirmModal"
         >
           <div className="modal-dialog modal-dialog-centered" role="document">
             <div className="modal-content profile-modal">
