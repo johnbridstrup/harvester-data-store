@@ -13,9 +13,8 @@ class NotificationView(CreateModelViewSet):
     filterset_class = NotificationFilter
     ordering = ('-id',)
     view_permissions_update = {
-        "create": {
-            RoleChoices.DEVELOPER: True,
-        },
+        "create": None,
+        "update": None,
         "destroy": {
             RoleChoices.DEVELOPER: True,
         },

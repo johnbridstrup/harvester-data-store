@@ -1,4 +1,5 @@
 import json, os
+from pprint import pprint
 from rest_framework import status
 from rest_framework.test import APITestCase
 from rest_framework.test import APIClient
@@ -6,19 +7,23 @@ from rest_framework.authtoken.models import Token
 from common.viewsets import CreateModelViewSet, ReportModelViewSet
 from django.contrib.auth.models import User, Permission
 from django.contrib.contenttypes.models import ContentType
-from django.urls import reverse, resolvers
+from django.urls import reverse
 from .serializers.userserializer import UserSerializer
 from .models import UserProfile
 from .utils import merge_nested_dict
-from hds.roles import RoleChoices
+from common.viewsets import CreateModelViewSet
+from common.utils import get_url_permissions
+from hds.roles import RoleChoices, ROLES
 from hds.urls import urlpatterns
 from exceptions.models import AFTExceptionCode
 from harvester.models import Fruit, Harvester
 from location.models import Distributor, Location
 from s3file.serializers import S3FileSerializer
 from .utils import build_frontend_url
+from collections import defaultdict
 import logging
 import unittest
+from unittest.mock import MagicMock
 
 
 # Disable logging in unit tests
@@ -206,6 +211,91 @@ class HDSAPITestBase(APITestCase):
         url = build_frontend_url('test_endpoint', 1)
 
         self.assertEqual(url, "http://localhost:3000/test_endpoint/1/")
+
+
+class RolesTest(HDSAPITestBase):
+    IGNORE = ["/api/v1/sessclip/0/mock/"]  # We really need to stop using this sessclip endpoint anyway...
+
+    def test_role_matrix(self):
+        """Test forbidden/allowed endpoints per role.
+
+        This is a fairly confusing test. The idea is get the permissions matrix and test every
+        endpoint with every role, knowing whether we should expect a 403 response or another 
+        response. "Another" response may or may not be 2XX since we will not be sending any
+        correctly formatted data, so we only check for 403/not-403.
+        """
+
+        # We will be checking for actions without permissions defined as well as
+        # for broken permissions.
+        raise_for_undefined_perm = False
+        no_permissions_defined = defaultdict(list)
+        raise_for_broken_perm = False
+        broken_permissions = defaultdict(dict)
+
+        url_permissions = get_url_permissions(urlpatterns)
+        for url, methods, permissions, view in url_permissions:
+            if url in self.IGNORE:
+                continue
+            for http_method, action in methods.copy().items():
+                if http_method not in view().http_method_names:
+                    # Some views don't allow certain methods at all.
+                    # drf-roles doesn't know this.
+                    continue
+                if action not in permissions:
+                    # There are no permissions set for this action
+                    raise_for_undefined_perm = True
+                    no_permissions_defined[view.__name__].append(action)
+                    continue
+
+                kwargs = {}
+                if http_method in ["post", "put", "patch"]:
+                    # send some empty data so client.{post,put,patch} doesn't complain
+                    kwargs = {"data": {}, "format": "json"}
+
+                # Get the appropriate request method
+                requester = getattr(self.client, http_method)
+
+                # Loop through all roles + admin
+                for role in list(RoleChoices) + ['admin']:
+                    if role == 'admin':
+                        self.set_admin()
+                    else:
+                        self.set_user_role(role)
+
+                    response = requester(url, **kwargs)
+                    request = response.wsgi_request
+                    setattr(request, "data", MagicMock()) # whitelist method requires data in the request
+                    for allowed_role, condition in permissions[action].items():
+                        # Go through permission dict for this action, check if role allowed.
+                        is_allowed = ROLES[allowed_role]
+                        if callable(condition):
+                            # There are special conditions in some views
+                            allowed = is_allowed(request, view) and condition(request, view)
+                        else:
+                            allowed = is_allowed(request, view)
+                        if allowed:
+                            # Only one role needs permission
+                            break
+                    # Check allowed vs 403
+                    if (
+                        (allowed and response.status_code == status.HTTP_403_FORBIDDEN) or
+                        (response.status_code != status.HTTP_403_FORBIDDEN and not allowed)
+                    ):
+                        raise_for_broken_perm = True
+                        broken_permissions[(view.__name__, action)][role] = {
+                            "expected_403": not allowed,
+                            "received": response.status_code,
+                        }
+
+        if raise_for_broken_perm:
+            print("\nBROKEN PERMISSIONS")
+            pprint(dict(broken_permissions), indent=4)
+        if raise_for_undefined_perm:
+            print("\nSOME METHODS DON'T HAVE PERMISSIONS DEFINED")
+            pprint(dict(no_permissions_defined), indent=4)
+        if any([raise_for_undefined_perm, raise_for_broken_perm]):
+            assert False, "Role permissions are not properly set."
+
 
 class OpenApiTest(HDSAPITestBase):
     """ Test OpenAPI Schema Generation """

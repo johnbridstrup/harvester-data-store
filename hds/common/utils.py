@@ -1,9 +1,12 @@
 """ utilities and helper functions """
 from .async_metrics import TOTAL_ERROR_COUNTER
 from collections import defaultdict
+from django.urls import resolve, reverse, URLPattern, URLResolver
+from django.urls.exceptions import NoReverseMatch
 from rest_framework.response import Response
 from rest_framework.views import exception_handler
 
+import importlib
 import logging
 import os
 import sys
@@ -125,3 +128,56 @@ def merge_nested_dict(d1, d2, overwrite_none=False):
                 # d1 doesn't have a dict at this key, overwrite value with v
                 d[k] = v
     return dict(d)
+
+## Roles utility functions
+def get_url_permissions(urlpatterns):
+    """Retrieve role permissions per endpoint.
+
+    This method walks through all of the url patterns defined for the api and retrieves:
+       - Their fully qualified URL
+       - The actions available at this endpoint
+       - The view_permissions dictionary for the view class
+       - The view class
+    
+    It will not parse generic API views, only DRF ModelViewSet classes.
+
+    Args:
+        urlpatterns (list): Django urlpatterns from router
+
+    Returns:
+        list: [url (str), actions (list), view_permisions (dict), view (ModelViewSet)]
+    """
+
+    permission_matrix = []
+    for pat in urlpatterns:
+            if isinstance(pat, URLResolver):
+                # Recursively walk through URLResolvers 
+                permission_matrix.extend(get_url_permissions(pat.url_patterns))
+            elif isinstance(pat, URLPattern):
+                try:
+                    actions = pat.callback.actions
+                except:
+                    # There are no actions defined, rest-framework-roles doesn't apply
+                    continue
+                try:
+                    url = reverse(pat.name)
+                    view_func = resolve(url).func
+                except NoReverseMatch:
+                    try:
+                        url = reverse(pat.name, args=[0])
+                        view_func = resolve(url).func
+                    except NoReverseMatch:
+                        logging.warning(f"Skipping {pat.name}: No reverse match")
+                        continue
+                
+                # Import the view class
+                view_mod = importlib.import_module(view_func.__module__)
+                view = getattr(view_mod, view_func.__name__)
+                try:
+                    view_permissions = view().view_permissions
+                except Exception as e:
+                    logging.exception("There are no view permisions for this model")
+                    continue
+                permission_matrix.append((url, actions, view_permissions, view))
+    return permission_matrix
+

@@ -370,6 +370,12 @@ class ErrorReportAPITest(HDSAPITestBase):
     ## Schema validation tests
     @patch("common.serializers.reportserializer.logging")
     def test_create_errorreport_invalid_schema(self, mock_logger):
+        # Get initial counter value, it may have been incremented in other tests
+        msg = "Failed to validate: required"
+        exc = serializers.ValidationError.__name__
+        raised_by = ErrorReportSerializer.__name__
+        counter = ERROR_COUNTER.labels(exc, msg, raised_by)
+        init_ctr = counter._value.get()
         # This tests that we reject error reports that will fail to ingest
         # and make this visible to devs
         self.data['data'] = {}
@@ -377,11 +383,8 @@ class ErrorReportAPITest(HDSAPITestBase):
 
         self.assertEqual(r.status_code, status.HTTP_400_BAD_REQUEST)
 
-        msg = "Failed to validate: required"
-        exc = serializers.ValidationError.__name__
-        raised_by = ErrorReportSerializer.__name__
-        counter = ERROR_COUNTER.labels(exc, msg, raised_by)
-        self.assertEqual(counter._value.get(), 1)
+
+        self.assertEqual(counter._value.get() - init_ctr, 1)
         mock_logger.exception.assert_called_with("'sysmon_report' is a required property")
 
     def test_sysmon_entry_key_invalid(self):

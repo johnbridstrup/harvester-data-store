@@ -34,6 +34,10 @@ class JobView(CreateModelViewSet):
             RoleChoices.SUPPORT: True,
             RoleChoices.JENKINS: True,
         },
+        'reschedule': {
+            RoleChoices.SUPPORT: is_support_whitelist,
+            RoleChoices.MANAGER: True,
+        },
     }
 
     @action(

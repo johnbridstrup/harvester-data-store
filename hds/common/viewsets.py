@@ -29,6 +29,9 @@ class CreateModelViewSet(ModelViewSet):
             },
             'update': {
                 'admin': True,
+            },
+            'partial_update': {
+                'admin': True,
             }
         }
 
@@ -80,7 +83,10 @@ class ReportModelViewSet(CreateModelViewSet):
         'update': {
             'admin': True,
         },
-        'retrieve,get_schema': {
+        'partial_update': {
+            'admin': True,
+        },
+        'get_schema': {
             RoleChoices.SUPPORT: True,
             RoleChoices.JENKINS: True,
             RoleChoices.SQS: True,

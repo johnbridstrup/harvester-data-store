@@ -24,11 +24,14 @@ class MigrationLogView(CreateModelViewSet):
         },
         'retrieve': {
             RoleChoices.DEVELOPER: True,
-        }
+        },
+        'create': None,
+        'destroy': None,
+        'update': None,
     }
 
     @action(
-        methods=['get', 'post'],
+        methods=['get'],
         detail=False,
         url_path='migrate',
         renderer_classes=[JSONRenderer,],

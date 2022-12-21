@@ -35,6 +35,9 @@ class S3FileView(CreateModelViewSet):
         "destroy": {
             RoleChoices.MANAGER: True,
         },
+        "download_mock": {
+            RoleChoices.SUPPORT: True,
+        },
     }
 
     def perform_create(self, serializer):

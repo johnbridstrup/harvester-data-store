@@ -3,7 +3,10 @@
 def whitelist(jobtypes):
     jobtypes = [jt.lower() for jt in jobtypes]
     def is_whitelisted(request, view):
-        if request.data["jobtype"].lower() in jobtypes:
-            return True
+        try:
+            if request.data["jobtype"].lower() in jobtypes:
+                return True
+        except KeyError:
+            return False
         return False
     return is_whitelisted
