@@ -1,16 +1,16 @@
-import MainLayout from "../../../components/layout/main";
-import Header from "../../../components/layout/header";
-import "./styles.css";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
+import MainLayout from "components/layout/main";
+import Header from "components/layout/header";
 import {
   listHarvesterHistory,
   queryHarvHistory,
-} from "../../../features/harvester/harvesterSlice";
-import ListHarvesterHistory from "../../../components/harvester/ListHarvesterHistory";
-import { useLocation } from "react-router-dom";
-import { paramsToObject } from "../../../utils/utils";
-import { GenericPagination } from "../../../components/pagination/Pagination";
+} from "features/harvester/harvesterSlice";
+import ListHarvesterHistory from "components/harvester/ListHarvesterHistory";
+import { paramsToObject } from "utils/utils";
+import { GenericPagination } from "components/pagination/Pagination";
+import "./styles.css";
 
 function HarvesterHistoryListView(props) {
   const dispatch = useDispatch();

@@ -2,7 +2,7 @@
  * Test utils methods in the utils.js file
  */
 
-import { findClosest, imagePath } from "../../utils/utils";
+import { findClosest, imagePath } from "utils/utils";
 
 test("should do binary search for given timestamp", () => {
   let content = [

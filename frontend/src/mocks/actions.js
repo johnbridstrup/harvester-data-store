@@ -3,9 +3,9 @@
  */
 
 import { rest } from "msw";
-import { LOGIN_URL } from "../features/auth/authService";
-import { NOTIFICATION_URL } from "../features/notification/notificationService";
-import { LOGSESSION_URL } from "../features/logparser/logparserService";
+import { LOGIN_URL } from "features/auth/authService";
+import { NOTIFICATION_URL } from "features/notification/notificationService";
+import { LOGSESSION_URL } from "features/logparser/logparserService";
 
 let genericListResponse = {
   status: "success",

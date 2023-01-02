@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
-import { Loader } from "../../../utils/utils";
-import { LoaderDiv } from "../../styled";
+import { Loader } from "utils/utils";
+import { LoaderDiv } from "components/styled";
 import { JobStatusHistory } from "../helpers";
 
 function ListJobHistory(props) {

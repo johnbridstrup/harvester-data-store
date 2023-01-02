@@ -1,24 +1,24 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import MainLayout from "../../../components/layout/main";
-import Header from "../../../components/layout/header";
+import MainLayout from "components/layout/main";
+import Header from "components/layout/header";
 import {
   cacheSelectOptions,
   getJobSchemaById,
   listJobTypes,
   queryJobs,
   resetSelectOptions,
-} from "../../../features/harvjobs/harvjobSlice";
-import { MAX_LIMIT } from "../../../features/base/constants";
+} from "features/harvjobs/harvjobSlice";
+import { MAX_LIMIT } from "features/base/constants";
 import {
   transformJobSchemaOptions,
   transformJobTypeOptions,
-} from "../../../utils/utils";
+} from "utils/utils";
+import harvjobService from "features/harvjobs/harvjobService";
+import JobTypeSelect from "components/harvjobs/jobscheduler/JobTypeSelect";
+import JobSchemaSelect from "components/harvjobs/jobscheduler/JobSchemaSelect";
+import JobScheduled from "components/harvjobs/jobscheduler/JobScheduled";
 import "./styles.css";
-import harvjobService from "../../../features/harvjobs/harvjobService";
-import JobTypeSelect from "../../../components/harvjobs/jobscheduler/JobTypeSelect";
-import JobSchemaSelect from "../../../components/harvjobs/jobscheduler/JobSchemaSelect";
-import JobScheduled from "../../../components/harvjobs/jobscheduler/JobScheduled";
 
 function JobSchedulerView(props) {
   const [selectedJobType, setSelectedJobType] = useState(null);

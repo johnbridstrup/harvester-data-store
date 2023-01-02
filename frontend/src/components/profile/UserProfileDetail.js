@@ -5,15 +5,15 @@ import {
   changePassword,
   confirmPassword,
   updateProfile,
-} from "../../features/auth/authSlice";
+} from "features/auth/authSlice";
 import {
   FULLFILLED_PROMISE,
   NOTIFY_CATEGORY,
   REJECTED_PROMISE,
   SUCCESS,
-} from "../../features/base/constants";
-import notificationService from "../../features/notification/notificationService";
-import { deleteNotification } from "../../features/notification/notificationSlice";
+} from "features/base/constants";
+import notificationService from "features/notification/notificationService";
+import { deleteNotification } from "features/notification/notificationSlice";
 import ConfirmModal from "../modals/ConfirmModal";
 import PasswordModal from "../modals/PasswordModal";
 import ProfileUpdateModal from "../modals/ProfileUpdateModal";

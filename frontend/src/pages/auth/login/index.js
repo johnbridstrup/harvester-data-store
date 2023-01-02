@@ -3,9 +3,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
-import LogoFull from "../../../assets/images/logo_full.png";
-import { login } from "../../../features/auth/authSlice";
-import { Loader } from "../../../utils/utils";
+import LogoFull from "assets/images/logo_full.png";
+import { login } from "features/auth/authSlice";
+import { Loader } from "utils/utils";
 import "./styles.css";
 
 function Login(props) {

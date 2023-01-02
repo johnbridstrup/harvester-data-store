@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import moment from "moment";
 import { Link } from "react-router-dom";
-import { Loader } from "../../utils/utils";
+import { Loader } from "utils/utils";
 import { LoaderDiv } from "../styled";
 
 export const ProfileColLeft = (props) => {

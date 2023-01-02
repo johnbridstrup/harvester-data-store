@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
 import moment from "moment";
 import { useSelector } from "react-redux";
-import { LoaderDiv } from "../../styled";
-import { Loader } from "../../../utils/utils";
+import { LoaderDiv } from "components/styled";
+import { Loader } from "utils/utils";
 
 function LogSessionList(props) {
   const { loading, logsessions } = useSelector((state) => state.logparser);

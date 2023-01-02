@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Select from "react-select";
-import { queryRelease } from "../../../features/harvdeploy/harvdeploySlice";
+import { queryRelease } from "features/harvdeploy/harvdeploySlice";
 import {
   handleSelectFactory,
   transformFruitOptions,
   transformTagsOptions,
-} from "../../../utils/utils";
+} from "utils/utils";
 
 function ReleaseQuery(props) {
   const [selectedFruit, setSelectedFruit] = useState(null);

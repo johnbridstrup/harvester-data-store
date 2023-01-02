@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import Select from "react-select";
-import { Loader } from "../../utils/utils";
+import { Loader } from "utils/utils";
 
 function ScheduleModal(props) {
   return (

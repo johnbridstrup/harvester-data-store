@@ -2,8 +2,8 @@ import { useState } from "react";
 import Select from "react-select";
 import { useSelector, useDispatch } from "react-redux";
 import PropTypes from "prop-types";
-import { handleSelectFactory, transformRobots } from "../../../utils/utils";
-import { queryLogVideo } from "../../../features/logparser/logparserSlice";
+import { handleSelectFactory, transformRobots } from "utils/utils";
+import { queryLogVideo } from "features/logparser/logparserSlice";
 
 function LoadVideo(props) {
   const {

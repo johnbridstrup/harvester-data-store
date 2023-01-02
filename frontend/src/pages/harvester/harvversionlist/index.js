@@ -1,14 +1,14 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import ListHarvVersion from "../../../components/harvester/ListHarvVersion";
-import Header from "../../../components/layout/header";
-import MainLayout from "../../../components/layout/main";
-import { GenericPagination } from "../../../components/pagination/Pagination";
+import ListHarvVersion from "components/harvester/ListHarvVersion";
+import Header from "components/layout/header";
+import MainLayout from "components/layout/main";
+import { GenericPagination } from "components/pagination/Pagination";
 import {
   getHarvesterById,
   listHarvVersion,
-} from "../../../features/harvester/harvesterSlice";
+} from "features/harvester/harvesterSlice";
 import "./styles.css";
 
 function HarvVersionListView(props) {

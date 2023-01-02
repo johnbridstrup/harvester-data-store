@@ -1,12 +1,12 @@
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import MainLayout from "../../../components/layout/main";
-import Header from "../../../components/layout/header";
-import { LoaderDiv } from "../../../components/styled";
-import { Loader } from "../../../utils/utils";
-import { getVersionById } from "../../../features/harvdeploy/harvdeploySlice";
-import DetailVersionReport from "../../../components/harvdeploy/version/DetailVersionReport";
+import MainLayout from "components/layout/main";
+import Header from "components/layout/header";
+import { LoaderDiv } from "components/styled";
+import { Loader } from "utils/utils";
+import { getVersionById } from "features/harvdeploy/harvdeploySlice";
+import DetailVersionReport from "components/harvdeploy/version/DetailVersionReport";
 import "./styles.css";
 
 function VersionReportDetailView(props) {

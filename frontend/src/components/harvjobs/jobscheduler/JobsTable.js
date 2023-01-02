@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-import { getHarvId, getUrl } from "../../../utils/utils";
+import { getHarvId, getUrl } from "utils/utils";
 
 function JobsTable(props) {
   return (

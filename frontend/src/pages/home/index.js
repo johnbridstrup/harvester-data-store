@@ -1,10 +1,10 @@
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
-import MainLayout from "../../components/layout/main";
-import { menu, adminMenu } from "../../assets/menu";
-import "./styles.css";
-import LandingView from "../../components/home";
+import MainLayout from "components/layout/main";
+import { menu, adminMenu } from "assets/menu";
+import LandingView from "components/home";
 import { imagePath } from "utils/utils";
+import "./styles.css";
 
 function Home(props) {
   const { user } = useSelector((state) => state.auth);

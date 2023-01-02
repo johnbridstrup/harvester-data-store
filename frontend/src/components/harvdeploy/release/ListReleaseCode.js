@@ -3,21 +3,14 @@ import { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
-import { SUCCESS } from "../../../features/base/constants";
-import {
-  listTags,
-  updateRelease,
-} from "../../../features/harvdeploy/harvdeploySlice";
-import { queryHarvester } from "../../../features/harvester/harvesterSlice";
-import { handleReleaseFormSubmit } from "../../../utils/services";
-import {
-  handleSelectFactory,
-  Loader,
-  transformHarvOptions,
-} from "../../../utils/utils";
-import ReleaseTagModal from "../../modals/ReleaseTagModal";
-import ScheduleModal from "../../modals/ScheduleModal";
-import { LoaderDiv } from "../../styled";
+import { SUCCESS } from "features/base/constants";
+import { listTags, updateRelease } from "features/harvdeploy/harvdeploySlice";
+import { queryHarvester } from "features/harvester/harvesterSlice";
+import { handleReleaseFormSubmit } from "utils/services";
+import { handleSelectFactory, Loader, transformHarvOptions } from "utils/utils";
+import ReleaseTagModal from "components/modals/ReleaseTagModal";
+import ScheduleModal from "components/modals/ScheduleModal";
+import { LoaderDiv } from "components/styled";
 
 function ListReleaseCode(props) {
   const [releaseObj, setReleaseObj] = useState(null);

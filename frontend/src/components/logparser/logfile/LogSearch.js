@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import PropTypes from "prop-types";
-import { searchLog } from "../../../features/logparser/logparserSlice";
+import { searchLog } from "features/logparser/logparserSlice";
 
 function LogSearch(props) {
   const [search, setSearch] = useState("");

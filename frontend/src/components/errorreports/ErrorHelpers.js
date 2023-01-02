@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { InputFormControl } from "../styled";
 import PropTypes from "prop-types";
 import Select from "react-select";
-import { aggregateOptions } from "../../utils/utils";
+import { aggregateOptions } from "utils/utils";
 
 export const HoverTabular = (props) => {
   return (

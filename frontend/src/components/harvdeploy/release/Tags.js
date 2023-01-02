@@ -1,13 +1,10 @@
 import { useState, useRef } from "react";
 import { useDispatch } from "react-redux";
 import PropTypes from "prop-types";
-import { InputFormControl } from "../../styled";
-import useClickOutside from "../../../hooks/clickOutSide";
-import { transformTags } from "../../../utils/utils";
-import {
-  listTags,
-  updateRelease,
-} from "../../../features/harvdeploy/harvdeploySlice";
+import { InputFormControl } from "components/styled";
+import useClickOutside from "hooks/clickOutSide";
+import { transformTags } from "utils/utils";
+import { listTags, updateRelease } from "features/harvdeploy/harvdeploySlice";
 
 function Tags(props) {
   const [fieldData, setFieldData] = useState({

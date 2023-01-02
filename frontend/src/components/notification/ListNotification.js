@@ -2,13 +2,13 @@ import { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
-import { MAX_LIMIT } from "../../features/base/constants";
+import { MAX_LIMIT } from "features/base/constants";
 import {
   deleteManyNotif,
   listNotifications,
   queryNotification,
-} from "../../features/notification/notificationSlice";
-import { paramsToObject } from "../../utils/utils";
+} from "features/notification/notificationSlice";
+import { paramsToObject } from "utils/utils";
 import ConfirmModal from "../modals/ConfirmModal";
 import NotificationTable from "../tables/NotificationTable";
 

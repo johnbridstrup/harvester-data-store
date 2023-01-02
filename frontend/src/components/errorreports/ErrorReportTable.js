@@ -1,7 +1,7 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, useLocation, Link } from "react-router-dom";
-import { hoverEffect } from "../../features/errorreport/errorreportSlice";
-import { Loader, timeStampFormat } from "../../utils/utils";
+import { hoverEffect } from "features/errorreport/errorreportSlice";
+import { Loader, timeStampFormat } from "utils/utils";
 import { Container, LoaderDiv, SpanTarget, Table, Td } from "../styled";
 
 function ErrorReportTable(props) {

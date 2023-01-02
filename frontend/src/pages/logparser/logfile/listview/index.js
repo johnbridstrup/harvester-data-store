@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
-import Header from "../../../../components/layout/header";
-import MainLayout from "../../../../components/layout/main";
-import LogFileList from "../../../../components/logparser/logfile/LogFileList";
-import { LoaderDiv } from "../../../../components/styled";
+import Header from "components/layout/header";
+import MainLayout from "components/layout/main";
+import LogFileList from "components/logparser/logfile/LogFileList";
+import { LoaderDiv } from "components/styled";
 import {
   getLogFileById,
   getLogSessionById,
-} from "../../../../features/logparser/logparserSlice";
-import { Loader } from "../../../../utils/utils";
+} from "features/logparser/logparserSlice";
+import { Loader } from "utils/utils";
 import "./styles.css";
 
 function LogFileListView(props) {

@@ -1,17 +1,17 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import Logo from "../../../assets/images/advanced_farm_logo_alpha.png";
-import { ArrowDown, Menu, Notification } from "../../../assets/svg";
-import { logout } from "../../../features/auth/authSlice";
+import Logo from "assets/images/advanced_farm_logo_alpha.png";
+import { ArrowDown, Menu, Notification } from "assets/svg";
+import { logout } from "features/auth/authSlice";
 import {
   API_BASE_URL,
   FULLFILLED_PROMISE,
   MAX_LIMIT,
   NOTIFY_CATEGORY,
-} from "../../../features/base/constants";
-import notificationService from "../../../features/notification/notificationService";
-import useClickOutside from "../../../hooks/clickOutSide";
+} from "features/base/constants";
+import notificationService from "features/notification/notificationService";
+import useClickOutside from "hooks/clickOutSide";
 import AllMenu from "./AllMenu";
 import UserMenu from "./UserMenu";
 import "./styles.css";

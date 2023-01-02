@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-import { timeStampFormat } from "../../utils/utils";
+import { timeStampFormat } from "utils/utils";
 
 function ErrorReportDetailTable(props) {
   return (

@@ -1,16 +1,13 @@
-import MainLayout from "../../../../components/layout/main";
-import Header from "../../../../components/layout/header";
-import "./styles.css";
-import ListJobSchemas from "../../../../components/harvjobs/jobschemas/ListJobSchemas";
-import { useDispatch } from "react-redux";
 import { useEffect } from "react";
-import {
-  listJobSchemas,
-  listJobTypes,
-} from "../../../../features/harvjobs/harvjobSlice";
-import { MAX_LIMIT } from "../../../../features/base/constants";
-import { GenericPagination } from "../../../../components/pagination/Pagination";
-import BackButton from "../../../../components/harvjobs/helpers";
+import { useDispatch } from "react-redux";
+import MainLayout from "components/layout/main";
+import Header from "components/layout/header";
+import ListJobSchemas from "components/harvjobs/jobschemas/ListJobSchemas";
+import { listJobSchemas, listJobTypes } from "features/harvjobs/harvjobSlice";
+import { MAX_LIMIT } from "features/base/constants";
+import { GenericPagination } from "components/pagination/Pagination";
+import BackButton from "components/harvjobs/helpers";
+import "./styles.css";
 
 function JobSchemaListVIew(props) {
   const dispatch = useDispatch();

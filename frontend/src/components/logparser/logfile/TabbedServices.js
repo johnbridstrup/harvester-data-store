@@ -7,9 +7,9 @@ import {
   getLogFileById,
   setCurrIndex,
   setMarker,
-} from "../../../features/logparser/logparserSlice";
-import { getCurrIndex } from "../../../utils/utils";
-import { NavTabItem, NavTabs, NavTabSpan } from "../../styled";
+} from "features/logparser/logparserSlice";
+import { getCurrIndex } from "utils/utils";
+import { NavTabItem, NavTabs, NavTabSpan } from "components/styled";
 
 function TabbedServices(props) {
   const [fetching, setFetching] = useState(false);

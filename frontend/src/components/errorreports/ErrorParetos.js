@@ -2,13 +2,8 @@ import { lazy, Suspense, useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useLocation } from "react-router-dom";
 import { useMediaQuery } from "react-responsive";
-import { generatePareto } from "../../features/errorreport/errorreportSlice";
-import {
-  aggregateOptions,
-  Loader,
-  paramsToObject,
-  uuid,
-} from "../../utils/utils";
+import { generatePareto } from "features/errorreport/errorreportSlice";
+import { aggregateOptions, Loader, paramsToObject, uuid } from "utils/utils";
 import { LoaderDiv, SidePane } from "../styled";
 import { ParetoForm, ParetoTabular } from "./ErrorHelpers";
 import { CopyBuildConfig } from "../copytoclipboard/CopyToClipboard";

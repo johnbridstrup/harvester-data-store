@@ -21,20 +21,20 @@ import {
   translateLocOptions,
   translateUserOptions,
   validateQueryObj,
-} from "../../utils/utils";
+} from "utils/utils";
 import {
   cacheParamsObj,
   copyQueryUrl,
   createNotification,
   queryErrorReport,
   timezoneUpdate,
-} from "../../features/errorreport/errorreportSlice";
+} from "features/errorreport/errorreportSlice";
 import { DivTotalReport } from "../styled";
-import timezones from "../../utils/timezones";
+import timezones from "utils/timezones";
 import NotificationModal from "../modals/NotificationModal";
 import { FormQuery } from "./ErrorHelpers";
 import { HoverTabular } from "./ErrorHelpers";
-import { SUCCESS } from "../../features/base/constants";
+import { SUCCESS } from "features/base/constants";
 
 function ErrorReportQuery(props) {
   const [selectedHarvId, setSelectedHarvId] = useState(null);

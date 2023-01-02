@@ -1,8 +1,8 @@
 import moment from "moment";
 import { lazy, Suspense, useState } from "react";
 import { useSelector } from "react-redux";
-import { Loader, timeStampFormat } from "../../../utils/utils";
-import { Accordion, JsonDiv, LoaderDiv } from "../../styled";
+import { Loader, timeStampFormat } from "utils/utils";
+import { Accordion, JsonDiv, LoaderDiv } from "components/styled";
 const ReactJson = lazy(() => import("@microlink/react-json-view"));
 
 function DetailJobResult(props) {

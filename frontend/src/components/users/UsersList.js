@@ -2,13 +2,9 @@ import moment from "moment";
 import { useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
-import { SUCCESS } from "../../features/base/constants";
-import {
-  createUser,
-  listUsers,
-  updateUser,
-} from "../../features/user/userSlice";
-import { Loader } from "../../utils/utils";
+import { SUCCESS } from "features/base/constants";
+import { createUser, listUsers, updateUser } from "features/user/userSlice";
+import { Loader } from "utils/utils";
 import UserModal from "../modals/UserModal";
 import { LoaderDiv } from "../styled";
 

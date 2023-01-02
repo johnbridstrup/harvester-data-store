@@ -1,13 +1,13 @@
 import { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { SUCCESS } from "../../features/base/constants";
+import { SUCCESS } from "features/base/constants";
 import {
   createDistributor,
   listDistributors,
   updateDistributor,
-} from "../../features/distributor/distributorSlice";
-import { Loader } from "../../utils/utils";
+} from "features/distributor/distributorSlice";
+import { Loader } from "utils/utils";
 import DistributorModal from "../modals/DistributorModal";
 import { LoaderDiv } from "../styled";
 import DistributorTable from "../tables/DistributorTable";

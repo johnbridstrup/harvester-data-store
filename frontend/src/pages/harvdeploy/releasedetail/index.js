@@ -1,16 +1,16 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import DetailReleaseCode from "../../../components/harvdeploy/release/DetailReleaseCode";
-import Header from "../../../components/layout/header";
-import MainLayout from "../../../components/layout/main";
-import { LoaderDiv } from "../../../components/styled";
+import DetailReleaseCode from "components/harvdeploy/release/DetailReleaseCode";
+import Header from "components/layout/header";
+import MainLayout from "components/layout/main";
+import { LoaderDiv } from "components/styled";
 import {
   getReleaseById,
   installedHarvesters,
   listTags,
-} from "../../../features/harvdeploy/harvdeploySlice";
-import { Loader } from "../../../utils/utils";
+} from "features/harvdeploy/harvdeploySlice";
+import { Loader } from "utils/utils";
 import "./styles.css";
 
 function ReleaseCodeDetailView(props) {

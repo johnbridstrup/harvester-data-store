@@ -1,13 +1,13 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import BackButton from "../../../../components/harvjobs/helpers";
-import DetailJobTypes from "../../../../components/harvjobs/jobtypes/DetailJobTypes";
-import Header from "../../../../components/layout/header";
-import MainLayout from "../../../../components/layout/main";
-import { LoaderDiv } from "../../../../components/styled";
-import { getJobTypeById } from "../../../../features/harvjobs/harvjobSlice";
-import { Loader } from "../../../../utils/utils";
+import BackButton from "components/harvjobs/helpers";
+import DetailJobTypes from "components/harvjobs/jobtypes/DetailJobTypes";
+import Header from "components/layout/header";
+import MainLayout from "components/layout/main";
+import { LoaderDiv } from "components/styled";
+import { getJobTypeById } from "features/harvjobs/harvjobSlice";
+import { Loader } from "utils/utils";
 import "./styles.css";
 
 function JobTypeDetailView(props) {

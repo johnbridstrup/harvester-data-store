@@ -1,11 +1,11 @@
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import Header from "../../../components/layout/header";
-import MainLayout from "../../../components/layout/main";
+import Header from "components/layout/header";
+import MainLayout from "components/layout/main";
+import { getNotificationById } from "features/notification/notificationSlice";
+import DetailNotification from "components/notification/DetailNotification";
 import "./styles.css";
-import { getNotificationById } from "../../../features/notification/notificationSlice";
-import DetailNotification from "../../../components/notification/DetailNotification";
 
 function NotificationDetail(props) {
   const params = useParams();

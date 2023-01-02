@@ -1,13 +1,13 @@
 import { useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { SUCCESS } from "../../features/base/constants";
+import { SUCCESS } from "features/base/constants";
 import {
   createLocation,
   listLocations,
   updateLocation,
-} from "../../features/location/locationSlice";
-import { Loader, transformDistOptions } from "../../utils/utils";
+} from "features/location/locationSlice";
+import { Loader, transformDistOptions } from "utils/utils";
 import LocationModal from "../modals/LocationModal";
 import { LoaderDiv } from "../styled";
 import LocationTable from "../tables/LocationTable";

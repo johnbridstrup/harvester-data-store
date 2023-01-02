@@ -1,5 +1,5 @@
-import MainLayout from "../../../components/layout/main";
-import UserProfileDetail from "../../../components/profile/UserProfileDetail";
+import MainLayout from "components/layout/main";
+import UserProfileDetail from "components/profile/UserProfileDetail";
 import "./styles.css";
 
 function UserProfileView(props) {

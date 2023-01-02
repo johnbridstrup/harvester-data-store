@@ -2,36 +2,36 @@ import { useState } from "react";
 import PropTypes from "prop-types";
 import { useSelector, useDispatch } from "react-redux";
 import { useLocation } from "react-router-dom";
-import { PROD_ENV } from "../../features/base/constants";
-import { ERROR_REPORT_URL } from "../../features/errorreport/errorreportService";
+import { PROD_ENV } from "features/base/constants";
+import { ERROR_REPORT_URL } from "features/errorreport/errorreportService";
 import {
   cacheParamsObj,
   paginateErrorReport,
-} from "../../features/errorreport/errorreportSlice";
-import { paginateNotification } from "../../features/notification/notificationSlice";
-import { paginateUser } from "../../features/user/userSlice";
+} from "features/errorreport/errorreportSlice";
+import { paginateNotification } from "features/notification/notificationSlice";
+import { paginateUser } from "features/user/userSlice";
 import { InputLimit, PageItem, SpanLimit } from "../styled";
 import {
   paginateHarvester,
   paginateHarvHistory,
   paginateHarvVersion,
-} from "../../features/harvester/harvesterSlice";
-import { paginateLocation } from "../../features/location/locationSlice";
-import { paginateDistributor } from "../../features/distributor/distributorSlice";
-import { paginateEvent } from "../../features/event/eventSlice";
+} from "features/harvester/harvesterSlice";
+import { paginateLocation } from "features/location/locationSlice";
+import { paginateDistributor } from "features/distributor/distributorSlice";
+import { paginateEvent } from "features/event/eventSlice";
 import {
   paginateVersion,
   paginateRelease,
   paginateInstalled,
-} from "../../features/harvdeploy/harvdeploySlice";
-import { mapCurrentOffset } from "../../utils/utils";
+} from "features/harvdeploy/harvdeploySlice";
+import { mapCurrentOffset } from "utils/utils";
 import {
   paginateJob,
   paginateJobResults,
   paginateJobStatus,
   paginateJobType,
-} from "../../features/harvjobs/harvjobSlice";
-import { paginateLogSession } from "../../features/logparser/logparserSlice";
+} from "features/harvjobs/harvjobSlice";
+import { paginateLogSession } from "features/logparser/logparserSlice";
 
 function Pagination(props) {
   const [pageLimit, setPageLimit] = useState(10);

@@ -1,8 +1,8 @@
 import { lazy, Suspense } from "react";
 import PropTypes from "prop-types";
-import { JsonDiv, LoaderDiv } from "../../styled";
+import { JsonDiv, LoaderDiv } from "components/styled";
 import JobsTable from "./JobsTable";
-import { Loader } from "../../../utils/utils";
+import { Loader } from "utils/utils";
 const ReactJson = lazy(() => import("@microlink/react-json-view"));
 
 function JobScheduled(props) {

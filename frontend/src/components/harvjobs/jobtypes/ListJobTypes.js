@@ -1,16 +1,16 @@
 import { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { SUCCESS } from "../../../features/base/constants";
+import { SUCCESS } from "features/base/constants";
 import {
   createJobType,
   listJobTypes,
   updateJobType,
-} from "../../../features/harvjobs/harvjobSlice";
-import { Loader } from "../../../utils/utils";
-import JobTypeModal from "../../modals/JobTypeModal";
-import { LoaderDiv } from "../../styled";
-import JobTypeTable from "../../tables/JobTypeTable";
+} from "features/harvjobs/harvjobSlice";
+import { Loader } from "utils/utils";
+import JobTypeModal from "components/modals/JobTypeModal";
+import { LoaderDiv } from "components/styled";
+import JobTypeTable from "components/tables/JobTypeTable";
 
 function ListJobTypes(props) {
   const [fieldData, setFieldData] = useState({

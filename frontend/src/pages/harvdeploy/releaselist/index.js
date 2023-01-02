@@ -1,16 +1,13 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import ListReleaseCode from "../../../components/harvdeploy/release/ListReleaseCode";
-import ReleaseQuery from "../../../components/harvdeploy/release/ReleaseQuery";
-import Header from "../../../components/layout/header";
-import MainLayout from "../../../components/layout/main";
-import { GenericPagination } from "../../../components/pagination/Pagination";
-import { MAX_LIMIT } from "../../../features/base/constants";
-import { listFruits } from "../../../features/fruit/fruitSlice";
-import {
-  listRelease,
-  listTags,
-} from "../../../features/harvdeploy/harvdeploySlice";
+import ListReleaseCode from "components/harvdeploy/release/ListReleaseCode";
+import ReleaseQuery from "components/harvdeploy/release/ReleaseQuery";
+import Header from "components/layout/header";
+import MainLayout from "components/layout/main";
+import { GenericPagination } from "components/pagination/Pagination";
+import { MAX_LIMIT } from "features/base/constants";
+import { listFruits } from "features/fruit/fruitSlice";
+import { listRelease, listTags } from "features/harvdeploy/harvdeploySlice";
 import "./styles.css";
 
 function ReleaseCodeListView(props) {

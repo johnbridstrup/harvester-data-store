@@ -1,11 +1,11 @@
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
-import MainLayout from "../../../../components/layout/main";
-import Header from "../../../../components/layout/header";
-import DropFileInput from "../../../../components/logparser/logsession/DropFileInput";
-import LogSessionList from "../../../../components/logparser/logsession/LogSessionList";
-import { listLogSession } from "../../../../features/logparser/logparserSlice";
-import { GenericPagination } from "../../../../components/pagination/Pagination";
+import MainLayout from "components/layout/main";
+import Header from "components/layout/header";
+import DropFileInput from "components/logparser/logsession/DropFileInput";
+import LogSessionList from "components/logparser/logsession/LogSessionList";
+import { listLogSession } from "features/logparser/logparserSlice";
+import { GenericPagination } from "components/pagination/Pagination";
 import "./styles.css";
 
 function LogSessionListView(props) {

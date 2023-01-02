@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Select from "react-select";
-import { queryJobs } from "../../../features/harvjobs/harvjobSlice";
-import { transformHarvOptions, statusOptions } from "../../../utils/utils";
-import { InputFormControl } from "../../styled";
+import { queryJobs } from "features/harvjobs/harvjobSlice";
+import { transformHarvOptions, statusOptions } from "utils/utils";
+import { InputFormControl } from "components/styled";
 
 function JobQuery(props) {
   const [fieldData, setFormData] = useState({

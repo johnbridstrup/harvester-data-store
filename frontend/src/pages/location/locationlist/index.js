@@ -1,12 +1,12 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import Header from "../../../components/layout/header";
-import MainLayout from "../../../components/layout/main";
-import ListLocation from "../../../components/location/ListLocation";
-import { GenericPagination } from "../../../components/pagination/Pagination";
-import { MAX_LIMIT } from "../../../features/base/constants";
-import { listDistributors } from "../../../features/distributor/distributorSlice";
-import { listLocations } from "../../../features/location/locationSlice";
+import Header from "components/layout/header";
+import MainLayout from "components/layout/main";
+import ListLocation from "components/location/ListLocation";
+import { GenericPagination } from "components/pagination/Pagination";
+import { MAX_LIMIT } from "features/base/constants";
+import { listDistributors } from "features/distributor/distributorSlice";
+import { listLocations } from "features/location/locationSlice";
 import "./styles.css";
 
 function LocationListView(props) {

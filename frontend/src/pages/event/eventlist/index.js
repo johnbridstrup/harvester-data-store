@@ -1,11 +1,11 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import EventQuery from "../../../components/event/EventQuery";
-import ListEvent from "../../../components/event/ListEvent";
-import Header from "../../../components/layout/header";
-import MainLayout from "../../../components/layout/main";
-import { GenericPagination } from "../../../components/pagination/Pagination";
-import { listEvents } from "../../../features/event/eventSlice";
+import EventQuery from "components/event/EventQuery";
+import ListEvent from "components/event/ListEvent";
+import Header from "components/layout/header";
+import MainLayout from "components/layout/main";
+import { GenericPagination } from "components/pagination/Pagination";
+import { listEvents } from "features/event/eventSlice";
 import "./styles.css";
 
 function EventListView(props) {

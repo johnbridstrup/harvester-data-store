@@ -3,13 +3,13 @@ import { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
-import { getHarvId, timeStampFormat } from "../../../utils/utils";
+import { getHarvId, timeStampFormat } from "utils/utils";
 import { RightButtonGroup, JobStatusHistory } from "../helpers";
-import { handleDownload } from "../../../utils/services";
-import DownloadModal from "../../modals/DownloadModal";
-import ConfirmModal from "../../modals/ConfirmModal";
-import { rescheduleJob } from "../../../features/harvjobs/harvjobSlice";
-import { SUCCESS } from "../../../features/base/constants";
+import { handleDownload } from "utils/services";
+import DownloadModal from "components/modals/DownloadModal";
+import ConfirmModal from "components/modals/ConfirmModal";
+import { rescheduleJob } from "features/harvjobs/harvjobSlice";
+import { SUCCESS } from "features/base/constants";
 
 function DetailJob(props) {
   const [scheduling, setScheduling] = useState(false);

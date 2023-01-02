@@ -1,13 +1,13 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import JobQuery from "../../../../components/harvjobs/jobs/JobQuery";
-import ListJobs from "../../../../components/harvjobs/jobs/ListJobs";
-import Header from "../../../../components/layout/header";
-import MainLayout from "../../../../components/layout/main";
-import { GenericPagination } from "../../../../components/pagination/Pagination";
-import { MAX_LIMIT } from "../../../../features/base/constants";
-import { listHarvesters } from "../../../../features/harvester/harvesterSlice";
-import { listJobs } from "../../../../features/harvjobs/harvjobSlice";
+import JobQuery from "components/harvjobs/jobs/JobQuery";
+import ListJobs from "components/harvjobs/jobs/ListJobs";
+import Header from "components/layout/header";
+import MainLayout from "components/layout/main";
+import { GenericPagination } from "components/pagination/Pagination";
+import { MAX_LIMIT } from "features/base/constants";
+import { listHarvesters } from "features/harvester/harvesterSlice";
+import { listJobs } from "features/harvjobs/harvjobSlice";
 import "./styles.css";
 
 function JobListView(props) {

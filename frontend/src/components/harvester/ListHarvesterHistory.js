@@ -1,7 +1,7 @@
 import moment from "moment";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { getHistoryType, Loader } from "../../utils/utils";
+import { getHistoryType, Loader } from "utils/utils";
 import { LoaderDiv } from "../styled";
 
 function ListHarvesterHistory(props) {

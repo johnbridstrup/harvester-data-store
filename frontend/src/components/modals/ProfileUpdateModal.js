@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { Loader } from "../../utils/utils";
+import { Loader } from "utils/utils";
 
 function ProfileUpdateModal(props) {
   const { first_name, last_name, username, slack_id, email } = props.fieldData;

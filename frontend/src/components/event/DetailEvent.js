@@ -1,7 +1,7 @@
 import moment from "moment";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { handleDownload } from "../../utils/services";
+import { handleDownload } from "utils/services";
 
 function DetailEvent(props) {
   const { event } = useSelector((state) => state.event);

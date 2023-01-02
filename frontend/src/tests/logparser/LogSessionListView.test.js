@@ -1,7 +1,7 @@
 import { act, render, screen, waitFor } from "test-utils/testing-libary-utils";
 import userEvent from "@testing-library/user-event";
 
-import LogSessionListView from "../../pages/logparser/logsession/listview";
+import LogSessionListView from "pages/logparser/logsession/listview";
 
 test("should render the logsession list view", async () => {
   const user = userEvent.setup();

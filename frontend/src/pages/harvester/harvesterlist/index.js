@@ -1,13 +1,13 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import ListHarvester from "../../../components/harvester/ListHarvester";
-import Header from "../../../components/layout/header";
-import MainLayout from "../../../components/layout/main";
-import { GenericPagination } from "../../../components/pagination/Pagination";
-import { MAX_LIMIT } from "../../../features/base/constants";
-import { listFruits } from "../../../features/fruit/fruitSlice";
-import { listHarvesters } from "../../../features/harvester/harvesterSlice";
-import { listLocations } from "../../../features/location/locationSlice";
+import ListHarvester from "components/harvester/ListHarvester";
+import Header from "components/layout/header";
+import MainLayout from "components/layout/main";
+import { GenericPagination } from "components/pagination/Pagination";
+import { MAX_LIMIT } from "features/base/constants";
+import { listFruits } from "features/fruit/fruitSlice";
+import { listHarvesters } from "features/harvester/harvesterSlice";
+import { listLocations } from "features/location/locationSlice";
 import "./styles.css";
 
 function HarvesterListView(props) {

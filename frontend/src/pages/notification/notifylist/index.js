@@ -1,16 +1,16 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useLocation } from "react-router-dom";
-import Header from "../../../components/layout/header";
-import MainLayout from "../../../components/layout/main";
-import ListNotification from "../../../components/notification/ListNotification";
-import { GenericPagination } from "../../../components/pagination/Pagination";
-import { MAX_LIMIT } from "../../../features/base/constants";
+import Header from "components/layout/header";
+import MainLayout from "components/layout/main";
+import ListNotification from "components/notification/ListNotification";
+import { GenericPagination } from "components/pagination/Pagination";
+import { MAX_LIMIT } from "features/base/constants";
 import {
   listNotifications,
   queryNotification,
-} from "../../../features/notification/notificationSlice";
-import { paramsToObject } from "../../../utils/utils";
+} from "features/notification/notificationSlice";
+import { paramsToObject } from "utils/utils";
 import "./styles.css";
 
 function NotificationList(props) {

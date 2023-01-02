@@ -2,7 +2,7 @@ import moment from "moment";
 import { useSelector } from "react-redux";
 import ReactJson from "@microlink/react-json-view";
 import { JsonDiv } from "../styled";
-import { getHistoryType } from "../../utils/utils";
+import { getHistoryType } from "utils/utils";
 
 function DetailHarvesterHistory(props) {
   const { historyObj } = useSelector((state) => state.harvester);

@@ -7,7 +7,7 @@ import {
   transformReportDetail,
   transformSysmonKeys,
   transformSysmonReport,
-} from "../../utils/utils";
+} from "utils/utils";
 import { invalidateCache } from "../auth/authSlice";
 import errorreportService from "./errorreportService";
 

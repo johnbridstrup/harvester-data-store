@@ -1,7 +1,7 @@
 import moment from "moment";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { Loader, timeStampFormat } from "../../utils/utils";
+import { Loader, timeStampFormat } from "utils/utils";
 import { LoaderDiv } from "../styled";
 
 function ListHarvVersion(props) {

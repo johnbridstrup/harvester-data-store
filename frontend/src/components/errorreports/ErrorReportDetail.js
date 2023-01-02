@@ -1,7 +1,7 @@
 import { useState, useEffect, lazy, Suspense, useRef } from "react";
 import { useSelector } from "react-redux";
-import { handleDownload } from "../../utils/services";
-import { Loader, robotInError, timeStampFormat } from "../../utils/utils";
+import { handleDownload } from "utils/services";
+import { Loader, robotInError, timeStampFormat } from "utils/utils";
 import { DownloadButton } from "../common";
 import DownloadModal from "../modals/DownloadModal";
 import {

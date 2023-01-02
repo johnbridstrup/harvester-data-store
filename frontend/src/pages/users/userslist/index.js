@@ -1,10 +1,10 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import Header from "../../../components/layout/header";
-import MainLayout from "../../../components/layout/main";
-import { GenericPagination } from "../../../components/pagination/Pagination";
-import UsersList from "../../../components/users/UsersList";
-import { listUsers } from "../../../features/user/userSlice";
+import Header from "components/layout/header";
+import MainLayout from "components/layout/main";
+import { GenericPagination } from "components/pagination/Pagination";
+import UsersList from "components/users/UsersList";
+import { listUsers } from "features/user/userSlice";
 import "./styles.css";
 
 function UserListView(props) {

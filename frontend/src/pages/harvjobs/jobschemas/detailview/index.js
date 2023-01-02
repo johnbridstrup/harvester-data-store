@@ -1,14 +1,14 @@
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import MainLayout from "../../../../components/layout/main";
-import Header from "../../../../components/layout/header";
-import { getJobSchemaById } from "../../../../features/harvjobs/harvjobSlice";
-import DetailJobSchemas from "../../../../components/harvjobs/jobschemas/DetailJobSchemas";
-import { LoaderDiv } from "../../../../components/styled";
-import { Loader } from "../../../../utils/utils";
+import MainLayout from "components/layout/main";
+import Header from "components/layout/header";
+import { getJobSchemaById } from "features/harvjobs/harvjobSlice";
+import DetailJobSchemas from "components/harvjobs/jobschemas/DetailJobSchemas";
+import { LoaderDiv } from "components/styled";
+import { Loader } from "utils/utils";
+import BackButton from "components/harvjobs/helpers";
 import "./styles.css";
-import BackButton from "../../../../components/harvjobs/helpers";
 
 function JobSchemaDetailView(props) {
   const { loading } = useSelector((state) => state.harvjobs);

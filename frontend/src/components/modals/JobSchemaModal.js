@@ -1,7 +1,7 @@
 import { lazy, Suspense } from "react";
 import PropTypes from "prop-types";
 import Select from "react-select";
-import { Loader } from "../../utils/utils";
+import { Loader } from "utils/utils";
 import { LoaderDiv } from "../styled";
 const CodeEditor = lazy(() => import("@uiw/react-textarea-code-editor"));
 

@@ -1,14 +1,14 @@
-import MainLayout from "../../../components/layout/main";
-import DetailHarvester from "../../../components/harvester/DetailHarvester";
-import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { getHarvesterById } from "../../../features/harvester/harvesterSlice";
-import Header from "../../../components/layout/header";
+import { useDispatch, useSelector } from "react-redux";
+import MainLayout from "components/layout/main";
+import DetailHarvester from "components/harvester/DetailHarvester";
+import { getHarvesterById } from "features/harvester/harvesterSlice";
+import Header from "components/layout/header";
+import { LoaderDiv } from "components/styled";
+import { Loader } from "utils/utils";
+import { queryErrorReport } from "features/errorreport/errorreportSlice";
 import "./styles.css";
-import { LoaderDiv } from "../../../components/styled";
-import { Loader } from "../../../utils/utils";
-import { queryErrorReport } from "../../../features/errorreport/errorreportSlice";
 
 function HarvesterDetailView(props) {
   const { loading, harvester } = useSelector((state) => state.harvester);

@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
-import { handleDownload } from "../../utils/services";
-import { Loader } from "../../utils/utils";
+import { handleDownload } from "utils/services";
+import { Loader } from "utils/utils";
 import { LoaderDiv } from "../styled";
 import EventTable from "../tables/EventTable";
 

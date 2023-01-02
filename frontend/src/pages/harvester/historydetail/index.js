@@ -1,13 +1,13 @@
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import MainLayout from "../../../components/layout/main";
-import Header from "../../../components/layout/header";
-import DetailHarvesterHistory from "../../../components/harvester/DetailHarvesterHistory";
-import { LoaderDiv } from "../../../components/styled";
-import { Loader } from "../../../utils/utils";
+import MainLayout from "components/layout/main";
+import Header from "components/layout/header";
+import DetailHarvesterHistory from "components/harvester/DetailHarvesterHistory";
+import { LoaderDiv } from "components/styled";
+import { Loader } from "utils/utils";
+import { getHarvHistoryById } from "features/harvester/harvesterSlice";
 import "./styles.css";
-import { useEffect } from "react";
-import { getHarvHistoryById } from "../../../features/harvester/harvesterSlice";
 
 function HarvesterHistoryDetailView(props) {
   const { loading } = useSelector((state) => state.harvester);

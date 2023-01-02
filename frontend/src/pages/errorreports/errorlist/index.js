@@ -1,25 +1,25 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useLocation } from "react-router-dom";
-import MainLayout from "../../../components/layout/main";
-import ErrorReportQuery from "../../../components/errorreports/ErrorReportQuery";
-import ErrorReportTable from "../../../components/errorreports/ErrorReportTable";
-import { listHarvesters } from "../../../features/harvester/harvesterSlice";
-import { listLocations } from "../../../features/location/locationSlice";
+import MainLayout from "components/layout/main";
+import ErrorReportQuery from "components/errorreports/ErrorReportQuery";
+import ErrorReportTable from "components/errorreports/ErrorReportTable";
+import { listHarvesters } from "features/harvester/harvesterSlice";
+import { listLocations } from "features/location/locationSlice";
 import {
   copyQueryUrl,
   errorreportListView,
   queryErrorReport,
-} from "../../../features/errorreport/errorreportSlice";
-import Pagination from "../../../components/pagination/Pagination";
+} from "features/errorreport/errorreportSlice";
+import Pagination from "components/pagination/Pagination";
+import { copiedUrl, paramsToObject } from "utils/utils";
+import CopyToClipboard from "components/copytoclipboard/CopyToClipboard";
+import { MAX_LIMIT } from "features/base/constants";
+import { listFruits } from "features/fruit/fruitSlice";
+import { listCodes } from "features/excecode/codeSlice";
+import Header from "components/layout/header";
+import { listUsers } from "features/user/userSlice";
 import "./styles.css";
-import { copiedUrl, paramsToObject } from "../../../utils/utils";
-import CopyToClipboard from "../../../components/copytoclipboard/CopyToClipboard";
-import { MAX_LIMIT } from "../../../features/base/constants";
-import { listFruits } from "../../../features/fruit/fruitSlice";
-import { listCodes } from "../../../features/excecode/codeSlice";
-import Header from "../../../components/layout/header";
-import { listUsers } from "../../../features/user/userSlice";
 
 function ErrorsReportList(props) {
   const dispatch = useDispatch();

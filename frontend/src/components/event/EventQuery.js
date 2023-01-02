@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { queryEvent } from "../../features/event/eventSlice";
+import { queryEvent } from "features/event/eventSlice";
 import { InputFormControl } from "../styled";
 
 function EventQuery(props) {

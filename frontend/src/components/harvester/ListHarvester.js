@@ -1,17 +1,17 @@
 import { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { SUCCESS } from "../../features/base/constants";
+import { SUCCESS } from "features/base/constants";
 import {
   createHarvester,
   listHarvesters,
   updateHarvester,
-} from "../../features/harvester/harvesterSlice";
+} from "features/harvester/harvesterSlice";
 import {
   Loader,
   transformFruitOptions,
   transformLocOptions,
-} from "../../utils/utils";
+} from "utils/utils";
 import HarvesterModal from "../modals/HarvesterModal";
 import { LoaderDiv } from "../styled";
 import HarvesterTable from "../tables/HarvesterTable";

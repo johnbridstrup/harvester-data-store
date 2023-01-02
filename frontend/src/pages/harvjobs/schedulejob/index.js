@@ -3,16 +3,13 @@ import { Link, useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import validator from "@rjsf/validator-ajv8";
 import { toast } from "react-toastify";
-import Header from "../../../components/layout/header";
-import MainLayout from "../../../components/layout/main";
-import {
-  createJob,
-  getJobSchemaById,
-} from "../../../features/harvjobs/harvjobSlice";
-import { JsonDiv, LoaderDiv } from "../../../components/styled";
-import { Loader } from "../../../utils/utils";
-import { listHarvesters } from "../../../features/harvester/harvesterSlice";
-import { MAX_LIMIT, SUCCESS } from "../../../features/base/constants";
+import Header from "components/layout/header";
+import MainLayout from "components/layout/main";
+import { createJob, getJobSchemaById } from "features/harvjobs/harvjobSlice";
+import { JsonDiv, LoaderDiv } from "components/styled";
+import { Loader } from "utils/utils";
+import { listHarvesters } from "features/harvester/harvesterSlice";
+import { MAX_LIMIT, SUCCESS } from "features/base/constants";
 import "./styles.css";
 const ReactJson = lazy(() => import("@microlink/react-json-view"));
 const Form = lazy(() => import("@rjsf/mui"));

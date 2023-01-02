@@ -2,11 +2,11 @@ import { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { imagePath } from "utils/utils";
-import { SUCCESS } from "../../../features/base/constants";
+import { SUCCESS } from "features/base/constants";
 import {
   createLogSession,
   listLogSession,
-} from "../../../features/logparser/logparserSlice";
+} from "features/logparser/logparserSlice";
 
 function DropFileInput(props) {
   const [fileObj, setFileObj] = useState(null);

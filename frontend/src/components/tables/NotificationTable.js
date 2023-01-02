@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-import { Loader } from "../../utils/utils";
+import { Loader } from "utils/utils";
 import { LoaderDiv } from "../styled";
 
 function NotificationTable(props) {

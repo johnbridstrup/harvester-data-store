@@ -1,12 +1,12 @@
 import { useReducer, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import ReactPlayer from "react-player";
-import { NavTabItem, NavTabs, NavTabSpan } from "../../styled";
+import { NavTabItem, NavTabs, NavTabSpan } from "components/styled";
 import LoadVideo from "./LoadVideo";
 import LogSearch from "./LogSearch";
 import TabbedServices from "./TabbedServices";
-import { getCurrIndex } from "../../../utils/utils";
-import { setCurrIndex } from "../../../features/logparser/logparserSlice";
+import { getCurrIndex } from "utils/utils";
+import { setCurrIndex } from "features/logparser/logparserSlice";
 
 const componentState = {
   videoActiveTab: "color",

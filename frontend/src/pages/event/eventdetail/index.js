@@ -1,10 +1,10 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
-import DetailEvent from "../../../components/event/DetailEvent";
-import Header from "../../../components/layout/header";
-import MainLayout from "../../../components/layout/main";
-import { getEventById } from "../../../features/event/eventSlice";
+import DetailEvent from "components/event/DetailEvent";
+import Header from "components/layout/header";
+import MainLayout from "components/layout/main";
+import { getEventById } from "features/event/eventSlice";
 import "./styles.css";
 
 function EventDetailView(props) {

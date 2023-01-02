@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { transformSysmonServices } from "../../utils/utils";
+import { transformSysmonServices } from "utils/utils";
 
 function ServiceTable(props) {
   const services = transformSysmonServices(props.services);

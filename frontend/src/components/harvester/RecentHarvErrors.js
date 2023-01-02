@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { Loader, timeStampFormat } from "../../utils/utils";
+import { Loader, timeStampFormat } from "utils/utils";
 import { GenericPagination } from "../pagination/Pagination";
 import { LoaderDiv } from "../styled";
 

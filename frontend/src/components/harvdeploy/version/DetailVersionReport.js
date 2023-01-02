@@ -1,8 +1,8 @@
 import { useSelector } from "react-redux";
 import moment from "moment";
 import ReactJson from "@microlink/react-json-view";
-import { timeStampFormat } from "../../../utils/utils";
-import { JsonDiv } from "../../styled";
+import { timeStampFormat } from "utils/utils";
+import { JsonDiv } from "components/styled";
 
 function DetailVersionReport(props) {
   const { version } = useSelector((state) => state.harvdeploy);

@@ -1,8 +1,8 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
-import { menu, adminMenu } from "../../../assets/menu";
+import { menu, adminMenu } from "assets/menu";
 import AllMenuItem from "./AllMenuItem";
-import SearchHarvester from "../../home/searchharvester";
+import SearchHarvester from "components/home/searchharvester";
 
 function AllMenu(props) {
   const menus = props.user?.is_superuser ? adminMenu : menu;

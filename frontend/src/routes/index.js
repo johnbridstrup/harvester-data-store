@@ -1,91 +1,79 @@
 import { lazy, Suspense } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { RouteLoader } from "../components/styled";
-import { IsAdminOnly, RequireUser, UserAuth } from "../utils/guards";
-import { Loader } from "../utils/utils";
+import { RouteLoader } from "components/styled";
+import { IsAdminOnly, RequireUser, UserAuth } from "utils/guards";
+import { Loader } from "utils/utils";
 
-import Forbidden from "../pages/403";
-import NotFound from "../pages/404";
-const Login = lazy(() => import("../pages/auth/login"));
+import Forbidden from "pages/403";
+import NotFound from "pages/404";
+const Login = lazy(() => import("pages/auth/login"));
 const DistributorListView = lazy(() =>
-  import("../pages/distributor/distributorlist")
+  import("pages/distributor/distributorlist")
 );
-const ErrorsReportDetail = lazy(() =>
-  import("../pages/errorreports/errordetail")
-);
-const ErrorsReportList = lazy(() => import("../pages/errorreports/errorlist"));
-const ErrorReportPareto = lazy(() =>
-  import("../pages/errorreports/errorpareto")
-);
-const EventDetailView = lazy(() => import("../pages/event/eventdetail"));
-const EventListView = lazy(() => import("../pages/event/eventlist"));
+const ErrorsReportDetail = lazy(() => import("pages/errorreports/errordetail"));
+const ErrorsReportList = lazy(() => import("pages/errorreports/errorlist"));
+const ErrorReportPareto = lazy(() => import("pages/errorreports/errorpareto"));
+const EventDetailView = lazy(() => import("pages/event/eventdetail"));
+const EventListView = lazy(() => import("pages/event/eventlist"));
 const ReleaseCodeDetailView = lazy(() =>
-  import("../pages/harvdeploy/releasedetail")
+  import("pages/harvdeploy/releasedetail")
 );
-const ReleaseCodeListView = lazy(() =>
-  import("../pages/harvdeploy/releaselist")
-);
+const ReleaseCodeListView = lazy(() => import("pages/harvdeploy/releaselist"));
 const VersionReportDetailView = lazy(() =>
-  import("../pages/harvdeploy/versiondetail")
+  import("pages/harvdeploy/versiondetail")
 );
 const VersionReportListView = lazy(() =>
-  import("../pages/harvdeploy/versionlist")
+  import("pages/harvdeploy/versionlist")
 );
 const HarvesterDetailView = lazy(() =>
-  import("../pages/harvester/harvesterdetail")
+  import("pages/harvester/harvesterdetail")
 );
-const HarvesterListView = lazy(() =>
-  import("../pages/harvester/harvesterlist")
-);
+const HarvesterListView = lazy(() => import("pages/harvester/harvesterlist"));
 const HarvVersionListView = lazy(() =>
-  import("../pages/harvester/harvversionlist")
+  import("pages/harvester/harvversionlist")
 );
 const HarvesterHistoryDetailView = lazy(() =>
-  import("../pages/harvester/historydetail")
+  import("pages/harvester/historydetail")
 );
 const HarvesterHistoryListView = lazy(() =>
-  import("../pages/harvester/historylist")
+  import("pages/harvester/historylist")
 );
-const Home = lazy(() => import("../pages/home"));
-const LocationListView = lazy(() => import("../pages/location/locationlist"));
+const Home = lazy(() => import("pages/home"));
+const LocationListView = lazy(() => import("pages/location/locationlist"));
 const NotificationDetail = lazy(() =>
-  import("../pages/notification/notifydetail")
+  import("pages/notification/notifydetail")
 );
-const NotificationList = lazy(() => import("../pages/notification/notifylist"));
-const UserProfileView = lazy(() => import("../pages/profile/profiledetail"));
-const UserListView = lazy(() => import("../pages/users/userslist"));
+const NotificationList = lazy(() => import("pages/notification/notifylist"));
+const UserProfileView = lazy(() => import("pages/profile/profiledetail"));
+const UserListView = lazy(() => import("pages/users/userslist"));
 const JobTypeDetailView = lazy(() =>
-  import("../pages/harvjobs/jobtypes/detailview")
+  import("pages/harvjobs/jobtypes/detailview")
 );
-const JobTypeListView = lazy(() =>
-  import("../pages/harvjobs/jobtypes/listview")
-);
+const JobTypeListView = lazy(() => import("pages/harvjobs/jobtypes/listview"));
 const JobSchemaDetailView = lazy(() =>
-  import("../pages/harvjobs/jobschemas/detailview")
+  import("pages/harvjobs/jobschemas/detailview")
 );
 const JobSchemaListVIew = lazy(() =>
-  import("../pages/harvjobs/jobschemas/listview")
+  import("pages/harvjobs/jobschemas/listview")
 );
-const JobSchedulerView = lazy(() => import("../pages/harvjobs/jobscheduler"));
-const ScheduleJobView = lazy(() => import("../pages/harvjobs/schedulejob"));
-const JobListView = lazy(() => import("../pages/harvjobs/jobs/listview"));
-const JobDetailView = lazy(() => import("../pages/harvjobs/jobs/detailview"));
+const JobSchedulerView = lazy(() => import("pages/harvjobs/jobscheduler"));
+const ScheduleJobView = lazy(() => import("pages/harvjobs/schedulejob"));
+const JobListView = lazy(() => import("pages/harvjobs/jobs/listview"));
+const JobDetailView = lazy(() => import("pages/harvjobs/jobs/detailview"));
 const JobResultListView = lazy(() =>
-  import("../pages/harvjobs/jobresults/listview")
+  import("pages/harvjobs/jobresults/listview")
 );
 const JobResultDetailView = lazy(() =>
-  import("../pages/harvjobs/jobresults/detailview")
+  import("pages/harvjobs/jobresults/detailview")
 );
-const JobHistoryView = lazy(() => import("../pages/harvjobs/jobhistory"));
+const JobHistoryView = lazy(() => import("pages/harvjobs/jobhistory"));
 const LogSessionListView = lazy(() =>
-  import("../pages/logparser/logsession/listview")
+  import("pages/logparser/logsession/listview")
 );
 const LogSessionDetailView = lazy(() =>
-  import("../pages/logparser/logsession/detailview")
+  import("pages/logparser/logsession/detailview")
 );
-const LogFileListView = lazy(() =>
-  import("../pages/logparser/logfile/listview")
-);
+const LogFileListView = lazy(() => import("pages/logparser/logfile/listview"));
 
 const BaseRouter = () => {
   return (

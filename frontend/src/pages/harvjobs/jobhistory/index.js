@@ -1,13 +1,13 @@
-import { useParams } from "react-router-dom";
-import MainLayout from "../../../components/layout/main";
-import Header from "../../../components/layout/header";
-import "./styles.css";
-import { useDispatch } from "react-redux";
 import { useEffect } from "react";
-import { listJobStatus } from "../../../features/harvjobs/harvjobSlice";
-import ListJobHistory from "../../../components/harvjobs/jobhistory/ListJobHistory";
-import { GenericPagination } from "../../../components/pagination/Pagination";
-import BackButton from "../../../components/harvjobs/helpers";
+import { useParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import MainLayout from "components/layout/main";
+import Header from "components/layout/header";
+import { listJobStatus } from "features/harvjobs/harvjobSlice";
+import ListJobHistory from "components/harvjobs/jobhistory/ListJobHistory";
+import { GenericPagination } from "components/pagination/Pagination";
+import BackButton from "components/harvjobs/helpers";
+import "./styles.css";
 
 function JobHistoryView(props) {
   const { jobId } = useParams();

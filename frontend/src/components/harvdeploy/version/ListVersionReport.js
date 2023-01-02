@@ -1,8 +1,8 @@
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import moment from "moment";
-import { Loader, timeStampFormat } from "../../../utils/utils";
-import { LoaderDiv } from "../../styled";
+import { Loader, timeStampFormat } from "utils/utils";
+import { LoaderDiv } from "components/styled";
 
 function ListVersionReport(props) {
   const { versions, loading } = useSelector((state) => state.harvdeploy);

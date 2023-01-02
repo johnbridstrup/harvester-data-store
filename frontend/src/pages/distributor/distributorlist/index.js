@@ -1,10 +1,10 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import ListDistributor from "../../../components/distributor/ListDistributor";
-import Header from "../../../components/layout/header";
-import MainLayout from "../../../components/layout/main";
-import { GenericPagination } from "../../../components/pagination/Pagination";
-import { listDistributors } from "../../../features/distributor/distributorSlice";
+import ListDistributor from "components/distributor/ListDistributor";
+import Header from "components/layout/header";
+import MainLayout from "components/layout/main";
+import { GenericPagination } from "components/pagination/Pagination";
+import { listDistributors } from "features/distributor/distributorSlice";
 import "./styles.css";
 
 function DistributorListView(props) {

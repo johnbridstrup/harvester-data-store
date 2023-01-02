@@ -1,8 +1,8 @@
 import moment from "moment";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { getHarvId, getUrl, Loader } from "../../../utils/utils";
-import { LoaderDiv } from "../../styled";
+import { getHarvId, getUrl, Loader } from "utils/utils";
+import { LoaderDiv } from "components/styled";
 
 function ListJobs(props) {
   const { jobs, loading } = useSelector((state) => state.harvjobs);

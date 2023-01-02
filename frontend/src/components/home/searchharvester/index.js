@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { queryHarvester } from "../../../features/harvester/harvesterSlice";
+import { queryHarvester } from "features/harvester/harvesterSlice";
 import HomeSearch from "./HomeSearch";
 import MenuSearch from "./MenuSearch";
 import "./styles.css";

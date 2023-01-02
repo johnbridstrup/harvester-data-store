@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { Loader } from "../../utils/utils";
+import { Loader } from "utils/utils";
 
 function DistributorModal(props) {
   const { name, mode } = props.fieldData;

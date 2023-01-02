@@ -1,15 +1,15 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, useLocation } from "react-router-dom";
-import { BackButton } from "../../../components/errorreports/ErrorHelpers";
-import ErrorReportDetail from "../../../components/errorreports/ErrorReportDetail";
-import Header from "../../../components/layout/header";
-import MainLayout from "../../../components/layout/main";
-import { LoaderDiv } from "../../../components/styled";
-import { detailErrorReport } from "../../../features/errorreport/errorreportSlice";
-import { listHarvesters } from "../../../features/harvester/harvesterSlice";
-import { listLocations } from "../../../features/location/locationSlice";
-import { Loader, paramsToObject } from "../../../utils/utils";
+import { BackButton } from "components/errorreports/ErrorHelpers";
+import ErrorReportDetail from "components/errorreports/ErrorReportDetail";
+import Header from "components/layout/header";
+import MainLayout from "components/layout/main";
+import { LoaderDiv } from "components/styled";
+import { detailErrorReport } from "features/errorreport/errorreportSlice";
+import { listHarvesters } from "features/harvester/harvesterSlice";
+import { listLocations } from "features/location/locationSlice";
+import { Loader, paramsToObject } from "utils/utils";
 import "./styles.css";
 
 function ErrorsReportDetail(props) {

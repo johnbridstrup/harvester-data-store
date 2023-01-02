@@ -2,17 +2,14 @@ import moment from "moment";
 import { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import ReactJson from "@microlink/react-json-view";
-import { JsonDiv } from "../../styled";
-import {
-  handleSelectFactory,
-  transformHarvOptions,
-} from "../../../utils/utils";
-import { queryHarvester } from "../../../features/harvester/harvesterSlice";
-import ScheduleModal from "../../modals/ScheduleModal";
-import { handleReleaseFormSubmit } from "../../../utils/services";
+import { JsonDiv } from "components/styled";
+import { handleSelectFactory, transformHarvOptions } from "utils/utils";
+import { queryHarvester } from "features/harvester/harvesterSlice";
+import ScheduleModal from "components/modals/ScheduleModal";
+import { handleReleaseFormSubmit } from "utils/services";
 import Tags from "./Tags";
 import { Link } from "react-router-dom";
-import { GenericPagination } from "../../pagination/Pagination";
+import { GenericPagination } from "components/pagination/Pagination";
 
 function DetailReleaseCode(props) {
   const [releaseObj, setReleaseObj] = useState(null);
