@@ -607,9 +607,25 @@ function getClosest(a, b, target) {
 }
 
 export const transformRobots = (robots = []) => {
-  return robots.map((robot) => {
-    return { label: `robot ${robot}`, value: robot };
+  /**
+   * transforms robot array to required obj shape
+   * excludes robot 0
+   *
+   * @param {robots} Array of numbers
+   *
+   * @returns Array of object
+   *
+   * @example
+   *    robots = [0, 3]
+   *      // => [{label: 'robot 3', value: 3}]
+   */
+  const robotArr = [];
+  robots.forEach((robot) => {
+    if (robot !== 0) {
+      robotArr.push({ label: `robot ${robot}`, value: robot });
+    }
   });
+  return robotArr;
 };
 
 export const getCurrIndex = (currentMarker, data) => {

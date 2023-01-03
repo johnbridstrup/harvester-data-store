@@ -2,7 +2,7 @@
  * Test utils methods in the utils.js file
  */
 
-import { findClosest, imagePath } from "utils/utils";
+import { findClosest, imagePath, transformRobots } from "utils/utils";
 
 test("should do binary search for given timestamp", () => {
   let content = [
@@ -52,4 +52,15 @@ test("should do binary search for given timestamp", () => {
 
 test("should return full image path", () => {
   expect(imagePath("cloud")).toBe("http://localhost:3000/icons/cloud.png");
+});
+
+test("should transform robots to required shape", () => {
+  // expected input
+  let robots = [0, 3, 4];
+  // expected output
+  let output = [
+    { label: "robot 3", value: 3 },
+    { label: "robot 4", value: 4 },
+  ];
+  expect(transformRobots(robots)).toMatchObject(output);
 });

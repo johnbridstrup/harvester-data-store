@@ -11,10 +11,7 @@ function LoadVideo(props) {
     logsession,
   } = useSelector((state) => state.logparser);
   const option = { label: `harv id ${harv_id}`, value: harv_id };
-  const [selectedRobot, setSelectedRobot] = useState({
-    label: "robot 0",
-    value: 0,
-  });
+  const [selectedRobot, setSelectedRobot] = useState(null);
   const [selectedHarv, setSelectedHarv] = useState(option);
   const [fetching, setFetching] = useState(false);
   const dispatch = useDispatch();
@@ -51,7 +48,7 @@ function LoadVideo(props) {
           defaultValue={selectedRobot}
           value={selectedRobot}
           onChange={handleRobotSelect}
-          placeholder="robot id e.g 0"
+          placeholder="robot id e.g 1"
           className="load-video"
         />
       </div>

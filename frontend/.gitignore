@@ -17,6 +17,7 @@ nosetests.xml
 coverage.xml
 *.cover
 .hypothesis/
+__snapshots__
 
 # production
 /build
