@@ -4,7 +4,7 @@ FROM node:16.16.0-slim as buildStage
 RUN mkdir -p /react/app/
 COPY public/ /react/app/public/
 COPY src/ /react/app/src/
-COPY package-lock.json package.json /react/app/
+COPY package-lock.json package.json jsconfig.json /react/app/
 WORKDIR /react/app
 RUN npm ci --omit=dev --ignore-scripts
 
