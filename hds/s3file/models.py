@@ -5,9 +5,9 @@ import logging
 
 
 class S3File(EventModelMixin, CommonInfo):
-    bucket = models.CharField(max_length=40)
-    key = models.CharField(max_length=80)
-    filetype = models.CharField(max_length=40)
+    bucket = models.CharField(max_length=255)
+    key = models.CharField(max_length=255)
+    filetype = models.CharField(max_length=255)
 
     def __str__(self) -> str:
         return f"{self.filetype}: {self.bucket}/{self.key}"
