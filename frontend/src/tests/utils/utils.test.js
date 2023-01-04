@@ -7,6 +7,7 @@ import {
   imagePath,
   transformRobots,
   sortServices,
+  uniqueVideoTabs,
 } from "utils/utils";
 
 test("should do binary search for given timestamp", () => {
@@ -96,4 +97,48 @@ test("should sort services (alpha) and robot (num)", () => {
     a.display > b.display ? 1 : b.display > a.display ? -1 : 0
   );
   expect(sortServices(input)).toMatchObject(sorted);
+});
+
+test("should return unique video tabs (category)", () => {
+  let input = [
+    {
+      id: 1,
+      category: "color",
+      robot: 0,
+    },
+    {
+      id: 2,
+      category: "color",
+      robot: 0,
+    },
+    {
+      id: 3,
+      category: "right-cellcam",
+      robot: 2,
+    },
+    {
+      id: 4,
+      category: "left-cellcam",
+      robot: 4,
+    },
+  ];
+  let expected = [
+    {
+      id: 2,
+      category: "color",
+      robot: 0,
+    },
+    {
+      id: 3,
+      category: "right-cellcam",
+      robot: 2,
+    },
+    {
+      id: 4,
+      category: "left-cellcam",
+      robot: 4,
+    },
+  ];
+  expect(uniqueVideoTabs(input)).toHaveLength(expected.length);
+  expect(uniqueVideoTabs(input)).toMatchObject(expected);
 });

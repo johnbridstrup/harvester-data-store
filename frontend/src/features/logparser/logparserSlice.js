@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { sortServices } from "utils/utils";
+import { uniqueVideoTabs } from "utils/utils";
 import { invalidateCache } from "../auth/authSlice";
 import logparserService from "./logparserService";
 
@@ -191,7 +192,7 @@ const logparserSlice = createSlice({
         state.internal.services = sortServices(payload.logs?.services || []);
         state.internal.robots = payload.logs?.robots || [];
         state.internal.harv_id = payload.logs?.harv_id;
-        state.internal.videos = payload.logs?.videos || [];
+        state.internal.videos = uniqueVideoTabs(payload.logs?.videos || []);
       })
       .addCase(getLogSessionById.rejected, (state, action) => {
         state.loading = false;

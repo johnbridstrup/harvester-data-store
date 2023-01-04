@@ -682,3 +682,22 @@ export const sortServices = (services = []) => {
     a.display > b.display ? 1 : b.display > a.display ? -1 : 0
   );
 };
+
+export const uniqueVideoTabs = (categories = []) => {
+  /**
+   * Get unique video categories for the 3 video types
+   * i. "Robot",
+   * ii. "Workcell right",
+   * iii. "Workcell left"
+   *
+   * @param {categories} Array
+   *
+   * @returns Array of video object
+   */
+
+  let key = "category";
+  let arrayUniqueByKey = [
+    ...new Map(categories.map((item) => [item[key], item])).values(),
+  ];
+  return arrayUniqueByKey;
+};
