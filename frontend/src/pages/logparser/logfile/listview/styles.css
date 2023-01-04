@@ -71,8 +71,34 @@
   background: #d4d6da3a;
 }
 
+.p-top {
+  padding-top: 1rem;
+}
+
 .embed-responsive video {
   object-fit: cover !important;
+}
+
+.no-video {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  height: 320px;
+}
+
+.img-unvailable {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+}
+
+.in-progress {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  height: 400px;
 }
 
 @media (max-width: 376px) {

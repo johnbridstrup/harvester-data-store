@@ -5,7 +5,7 @@ import { NavTabItem, NavTabs, NavTabSpan } from "components/styled";
 import LoadVideo from "./LoadVideo";
 import LogSearch from "./LogSearch";
 import TabbedServices from "./TabbedServices";
-import { getCurrIndex } from "utils/utils";
+import { getCurrIndex, imagePath } from "utils/utils";
 import { setCurrIndex } from "features/logparser/logparserSlice";
 
 const componentState = {
@@ -65,7 +65,6 @@ function LogFileList(props) {
     }
   };
 
-  let defaultVideoUrl = "https://media.w3.org/2010/05/bunny/movie.mp4";
   const playbackRate = state.playbackRate === 0 ? 0.5 : state.playbackRate;
 
   return (
@@ -90,22 +89,33 @@ function LogFileList(props) {
                     </NavTabItem>
                   ))}
                 </NavTabs>
-                <div style={{ paddingTop: "1rem" }}>
-                  <div className="embed-responsive embed-responsive-16by9">
-                    <ReactPlayer
-                      controls
-                      config={{ file: { forceVideo: true } }}
-                      url={logvideo.video_avi || defaultVideoUrl}
-                      width="100%"
-                      height="320px"
-                      ref={videoRef}
-                      playbackRate={playbackRate}
-                      onProgress={(state) => {
-                        handleOnProgress(state);
-                      }}
-                    />
+                {logvideo.video_avi ? (
+                  <div className="p-top">
+                    <div className="embed-responsive embed-responsive-16by9">
+                      <ReactPlayer
+                        controls
+                        config={{ file: { forceVideo: true } }}
+                        url={logvideo.video_avi}
+                        width="100%"
+                        height="320px"
+                        ref={videoRef}
+                        playbackRate={playbackRate}
+                        onProgress={(state) => {
+                          handleOnProgress(state);
+                        }}
+                      />
+                    </div>
                   </div>
-                </div>
+                ) : (
+                  <div className="no-video p-top">
+                    <img
+                      className="img-unvailable"
+                      src={imagePath("novideo")}
+                      alt="novideo"
+                    />
+                    <p>Video Unavailable</p>
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -127,6 +137,14 @@ function LogFileList(props) {
                     </NavTabSpan>
                   </NavTabItem>
                 </NavTabs>
+                <div className="in-progress p-top">
+                  <img
+                    className="img-unvailable"
+                    src={imagePath("inprogress")}
+                    alt="inprogress"
+                  />
+                  <p>Feature currently unavailable</p>
+                </div>
               </div>
             </div>
           </div>
