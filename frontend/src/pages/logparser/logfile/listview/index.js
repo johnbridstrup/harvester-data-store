@@ -8,6 +8,7 @@ import { LoaderDiv } from "components/styled";
 import {
   getLogFileById,
   getLogSessionById,
+  queryLogVideo,
 } from "features/logparser/logparserSlice";
 import { Loader } from "utils/utils";
 import "./styles.css";
@@ -23,6 +24,7 @@ function LogFileListView(props) {
       const res = await dispatch(getLogSessionById(sessionId));
       let logId = res.payload?.logs?.services[0]?.id;
       await dispatch(getLogFileById(logId));
+      await dispatch(queryLogVideo({ log_session_id: logId }));
       setFetching(false);
     })();
   }, [dispatch, sessionId]);

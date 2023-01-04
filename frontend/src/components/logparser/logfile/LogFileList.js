@@ -6,10 +6,10 @@ import LoadVideo from "./LoadVideo";
 import LogSearch from "./LogSearch";
 import TabbedServices from "./TabbedServices";
 import { getCurrIndex, imagePath } from "utils/utils";
-import { setCurrIndex } from "features/logparser/logparserSlice";
+import { queryLogVideo, setCurrIndex } from "features/logparser/logparserSlice";
 
 const componentState = {
-  videoActiveTab: "color",
+  videoActiveTab: "",
   serviceActiveTab: "",
   playbackRate: 1,
 };
@@ -42,13 +42,19 @@ function LogFileList(props) {
     internal: { videos },
     logvideo,
     logfile,
+    logsession,
   } = useSelector((state) => state.logparser);
   const videoRef = useRef(null);
   const virtuoso = useRef(null);
   const dispatch = useDispatch();
 
-  const handleVideTabChange = (tab) => {
+  const handleVideTabChange = async (tab) => {
     dispatchAction({ type: "ON_VIDEO_TAB_CHANGE", payload: tab });
+    let queryObj = {
+      category: tab,
+      log_session_id: logsession.id,
+    };
+    await dispatch(queryLogVideo(queryObj));
   };
 
   const handleOnProgress = async (state) => {
