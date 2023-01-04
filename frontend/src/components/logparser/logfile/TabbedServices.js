@@ -67,10 +67,10 @@ function TabbedServices(props) {
           <NavTabItem key={i}>
             <NavTabSpan
               activetab={props.activeTab}
-              navto={`${x.service}.${x.robot}`}
+              navto={`${x.display}`}
               onClick={() => handleTabChange(x)}
             >
-              {`${x.service}.${x.robot}`}
+              {`${x.display}`}
             </NavTabSpan>
           </NavTabItem>
         ))}

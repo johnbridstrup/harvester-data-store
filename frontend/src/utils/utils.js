@@ -664,3 +664,21 @@ export const imagePath = (imgName, ext = "png") => {
   }
   return `${url}/icons/${imgName}.${ext}`;
 };
+
+export const sortServices = (services = []) => {
+  /**
+   * transform services and
+   * sorts alphabetically then numerically (ascending order)
+   *
+   * @param {services} Array
+   *
+   * @returns Array of objects
+   */
+
+  let servicesArr = services.map((x) => {
+    return { ...x, display: `${x.service}.${x.robot}` };
+  });
+  return servicesArr.sort((a, b) =>
+    a.display > b.display ? 1 : b.display > a.display ? -1 : 0
+  );
+};

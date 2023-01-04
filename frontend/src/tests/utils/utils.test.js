@@ -2,7 +2,12 @@
  * Test utils methods in the utils.js file
  */
 
-import { findClosest, imagePath, transformRobots } from "utils/utils";
+import {
+  findClosest,
+  imagePath,
+  transformRobots,
+  sortServices,
+} from "utils/utils";
 
 test("should do binary search for given timestamp", () => {
   let content = [
@@ -63,4 +68,32 @@ test("should transform robots to required shape", () => {
     { label: "robot 4", value: 4 },
   ];
   expect(transformRobots(robots)).toMatchObject(output);
+});
+
+test("should sort services (alpha) and robot (num)", () => {
+  let input = [
+    {
+      id: 1,
+      service: "picker",
+      robot: 3,
+      display: "picker.3",
+    },
+    {
+      id: 2,
+      service: "logrec",
+      robot: 0,
+      display: "logrec.0",
+    },
+    {
+      id: 3,
+      service: "logrec",
+      robot: 3,
+      display: "logrec.3",
+    },
+  ];
+  // sorts in ascending order (aplhanumric characters)
+  let sorted = input.sort((a, b) =>
+    a.display > b.display ? 1 : b.display > a.display ? -1 : 0
+  );
+  expect(sortServices(input)).toMatchObject(sorted);
 });
