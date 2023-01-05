@@ -17,6 +17,7 @@ function TabbedServices(props) {
     logfile,
     currentMarker,
     currentIndex,
+    logvideo,
     internal: { services },
   } = useSelector((state) => state.logparser);
 
@@ -42,8 +43,22 @@ function TabbedServices(props) {
     }, 100);
   };
 
-  const handleLineClick = (index, log) => {
+  const seekToSeconds = (seconds) => {
+    return new Promise((resolve, reject) => {
+      props.videoRef?.current?.seekTo(seconds, "seconds");
+      resolve(seconds);
+    });
+  };
+
+  const handleLineClick = async (index, log) => {
     dispatch(setMarker({ index, log }));
+    if (logvideo?.meta?.length && logvideo.meta[0]) {
+      let wholeSeconds = Math.floor(log.timestamp - logvideo.meta[0].ts);
+      if (wholeSeconds < 0) {
+        wholeSeconds = 0;
+      }
+      await seekToSeconds(wholeSeconds);
+    }
   };
 
   const clearSelection = () => {
@@ -107,6 +122,7 @@ TabbedServices.propTypes = {
   dispatchAction: PropTypes.func,
   activeTab: PropTypes.string,
   virtuoso: PropTypes.object,
+  videoRef: PropTypes.object,
 };
 
 export default TabbedServices;

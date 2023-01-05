@@ -164,6 +164,7 @@ function LogFileList(props) {
             activeTab={state.serviceActiveTab}
             dispatchAction={dispatchAction}
             virtuoso={virtuoso}
+            videoRef={videoRef}
           />
         </div>
       </div>
