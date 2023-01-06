@@ -24,7 +24,7 @@ function LogFileListView(props) {
       const res = await dispatch(getLogSessionById(sessionId));
       let logId = res.payload?.logs?.services[0]?.id;
       await dispatch(getLogFileById(logId));
-      await dispatch(queryLogVideo({ log_session_id: logId }));
+      await dispatch(queryLogVideo({ log_session_id: sessionId }));
       setFetching(false);
     })();
   }, [dispatch, sessionId]);

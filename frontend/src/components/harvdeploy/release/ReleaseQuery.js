@@ -44,7 +44,7 @@ function ReleaseQuery(props) {
               <Select
                 isSearchable
                 isClearable
-                placeholder="200"
+                placeholder="strawberry"
                 options={fruitOptions}
                 name="strawberry"
                 onChange={handleFruitSelect}
