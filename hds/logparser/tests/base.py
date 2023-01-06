@@ -1,10 +1,14 @@
 """
 Base Test class for logparser api.
 """
+import tempfile
+
 from datetime import datetime
+from django.test import TestCase
 from django.utils.timezone import make_aware
 from django.urls import reverse
 from common.tests import HDSAPITestBase
+from ..beat import get_dir_size, EXTRACTS_SIZE_GAUGE
 from ..models import LogSession, LogFile, LogVideo
 
 
@@ -61,3 +65,31 @@ class LogBaseTestCase(HDSAPITestBase):
           log_session=self.create_log_session(),
           creator=self.user
         )
+
+      
+class BeatTestCase(TestCase):
+  def setUp(self):
+    super().setUp()
+    self.temp_dir = tempfile.TemporaryDirectory()
+    self.test_str = "hello"
+    self.str_bytes = len(self.test_str.encode('utf-8'))
+
+  def tearDown(self):
+    self.temp_dir.cleanup()
+    super().tearDown()
+
+  def _write_str(self, file):
+    with open(file, "w") as f:
+      f.write(self.test_str)
+
+  def test_dir_size(self):
+    temp_dir = self.temp_dir.name
+    temp_file = tempfile.NamedTemporaryFile(dir=temp_dir)
+    self._write_str(temp_file.name)
+    with open(temp_file.name, "w") as f:
+      f.write(self.test_str)
+
+    dir_bytes = get_dir_size(temp_dir)
+    self.assertEqual(dir_bytes, self.str_bytes)
+
+    print(EXTRACTS_SIZE_GAUGE._value.get())

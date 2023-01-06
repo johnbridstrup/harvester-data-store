@@ -32,4 +32,5 @@ export PROMETHEUS_MULTIPROC_DIR=/opt/app/multiproc-tmp
 
 cd /opt/app/hds/
 
+celery -A hds beat -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler &
 celery -A hds worker -l INFO
