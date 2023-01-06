@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'simple_history',
     'corsheaders',
     'django_prometheus',
+    'django_celery_beat',
     'django_celery_results',
     'django_filters',
     'autodiagnostics',
