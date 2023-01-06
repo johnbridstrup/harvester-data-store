@@ -22,8 +22,8 @@
   flex: 0.2;
 }
 
-.nav-icon-prog span {
-  margin: 0 0.5rem;
+.nav-icon-prog input {
+  width: 80%;
 }
 
 .nav-search {
@@ -142,6 +142,10 @@
     padding: 5px 0;
   }
   .nav-icon-prog {
+    width: 100%;
+  }
+
+  .nav-icon-prog input {
     width: 100%;
   }
 

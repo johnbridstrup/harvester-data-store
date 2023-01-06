@@ -98,24 +98,13 @@ function LogSearch(props) {
       </div>
       <div className="nav-body">
         <div className="nav-icon-prog">
-          <span>
-            <i className="las la-folder-open"></i>
-          </span>
-          <span>
-            <i className="las la-play"></i>
-          </span>
-          <span>
-            <i className="las la-stop"></i>
-          </span>
-          <span>
-            <input
-              type="range"
-              value={props.rate}
-              min={0}
-              max={2}
-              onChange={handleRateChange}
-            />
-          </span>
+          <input
+            type="range"
+            value={props.rate}
+            min={0}
+            max={2}
+            onChange={handleRateChange}
+          />
         </div>
         <div className="nav-search">
           <div className="find-bar">
