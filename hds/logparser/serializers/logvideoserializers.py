@@ -11,8 +11,10 @@ from rest_framework import serializers
 from logparser.models import LogVideo, LogSession
 
 
-extract_dir = lambda filename: os.path.join(
-    settings.MEDIA_ROOT, "extracts", os.path.splitext(filename)[0]
+EXTRACT_DIR = os.path.join(settings.MEDIA_ROOT, "extracts")
+
+extract_filepath = lambda filename: os.path.join(
+    EXTRACT_DIR, os.path.splitext(filename)[0]
 )
 
 
@@ -36,7 +38,7 @@ class LogVideoSerializer(serializers.ModelSerializer):
 
     @staticmethod
     def clean_dir(filename:str):
-        shutil.rmtree(extract_dir(filename))
+        shutil.rmtree(extract_filepath(filename))
 
     @staticmethod
     def extract_robot_category(file):
@@ -75,7 +77,7 @@ class LogVideoSerializer(serializers.ModelSerializer):
     def extract_video_log(cls, thezip, zip_obj_id, file):
         robot, category = cls.extract_robot_category(file)
         log_session = LogSession.objects.get(pk=zip_obj_id)
-        video_file = thezip.extract(file, extract_dir(thezip.filename))
+        video_file = thezip.extract(file, extract_filepath(thezip.filename))
         mp4_file_path = f'{video_file.split(".")[0]}.mp4'
         mp4_file_name = f'{file.filename.split(".")[0]}.mp4'
         try:
