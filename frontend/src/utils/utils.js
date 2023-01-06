@@ -701,3 +701,17 @@ export const uniqueVideoTabs = (categories = []) => {
   ];
   return arrayUniqueByKey;
 };
+
+/**
+ * Finds and return index of the log else returns 0
+ *
+ * @param {array} content array of objects
+ *
+ * @param {object} obj - log object
+ *
+ * @returns {number} Index
+ */
+export const findLogIndex = (content = [], obj = {}) => {
+  let objIndex = content.findIndex((item) => item.timestamp === obj.timestamp);
+  return objIndex > 0 ? objIndex : 0;
+};

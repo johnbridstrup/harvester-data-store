@@ -75,7 +75,11 @@ function LogFileList(props) {
 
   return (
     <div>
-      <LogSearch rate={state.playbackRate} dispatchAction={dispatchAction} />
+      <LogSearch
+        rate={state.playbackRate}
+        dispatchAction={dispatchAction}
+        virtuoso={virtuoso}
+      />
       <div className="row mb-4">
         <div className="col-md-6">
           <LoadVideo category={state.videoActiveTab} />

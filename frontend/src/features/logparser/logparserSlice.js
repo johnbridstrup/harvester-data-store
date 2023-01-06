@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { sortServices } from "utils/utils";
+import { findLogIndex, sortServices } from "utils/utils";
 import { uniqueVideoTabs } from "utils/utils";
 import { invalidateCache } from "../auth/authSlice";
 import logparserService from "./logparserService";
@@ -19,6 +19,12 @@ const initialState = {
     services: [],
     robots: [],
     videos: [],
+    search: {
+      searchText: null,
+      content: [],
+      currentIndex: null,
+      countIndex: 0,
+    },
   },
   errorMsg: null,
   pagination: {
@@ -154,16 +160,53 @@ const logparserSlice = createSlice({
       state.currentIndex = action.payload;
     },
     searchLog: (state, action) => {
-      let cloned = JSON.parse(JSON.stringify(state.logfile));
       if (action.payload) {
         let filtered = state.oglogfile.content?.filter((x) =>
           x.log_message.toLowerCase().includes(action.payload.toLowerCase())
         );
-        cloned.content = filtered;
+        let objIndex = findLogIndex(state.oglogfile.content, filtered[0]);
+        state.internal.search.searchText = action.payload;
+        state.internal.search.currentIndex = objIndex;
+        state.internal.search.countIndex = 0;
+        state.internal.search.content = filtered;
+        state.currentIndex = objIndex;
       } else {
-        cloned.content = state.oglogfile.content;
+        state.internal.search.currentIndex = null;
+        state.internal.search.countIndex = 0;
+        state.internal.search.content = [];
       }
-      state.logfile = cloned;
+    },
+    scrollUpIndex: (state) => {
+      let current = state.internal.search.countIndex - 1;
+      if (
+        state.internal.search.searchText &&
+        state.internal.search.content[current]
+      ) {
+        let obj = state.internal.search.content[current];
+        let objIndex = findLogIndex(state.oglogfile.content, obj);
+        state.internal.search.currentIndex = objIndex;
+        state.internal.search.countIndex = current;
+        state.currentIndex = objIndex;
+      }
+    },
+    scrollDownIndex: (state) => {
+      let current = state.internal.search.countIndex + 1;
+      if (
+        state.internal.search.searchText &&
+        state.internal.search.content[current]
+      ) {
+        let obj = state.internal.search.content[current];
+        let objIndex = findLogIndex(state.oglogfile.content, obj);
+        state.internal.search.currentIndex = objIndex;
+        state.internal.search.countIndex = current;
+        state.currentIndex = objIndex;
+      }
+    },
+    clearSearch: (state) => {
+      state.internal.search.searchText = null;
+      state.internal.search.currentIndex = null;
+      state.internal.search.countIndex = 0;
+      state.internal.search.content = [];
     },
   },
   extraReducers: (builder) => {
@@ -249,6 +292,13 @@ const logparserSlice = createSlice({
   },
 });
 
-export const { setMarker, clearMarker, searchLog, setCurrIndex } =
-  logparserSlice.actions;
+export const {
+  setMarker,
+  clearMarker,
+  searchLog,
+  setCurrIndex,
+  scrollUpIndex,
+  scrollDownIndex,
+  clearSearch,
+} = logparserSlice.actions;
 export default logparserSlice.reducer;

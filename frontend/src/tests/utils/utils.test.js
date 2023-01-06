@@ -8,6 +8,7 @@ import {
   transformRobots,
   sortServices,
   uniqueVideoTabs,
+  findLogIndex,
 } from "utils/utils";
 
 test("should do binary search for given timestamp", () => {
@@ -141,4 +142,25 @@ test("should return unique video tabs (category)", () => {
   ];
   expect(uniqueVideoTabs(input)).toHaveLength(expected.length);
   expect(uniqueVideoTabs(input)).toMatchObject(expected);
+});
+
+test("should return the index of logs", () => {
+  let input = [
+    {
+      timestamp: 1,
+      log_message:
+        "[20220208T105000.014] [DEBUG] [autodrive.beh.fsm] -- Vpos: 99715.06447550641",
+      log_date: new Date(),
+    },
+    {
+      timestamp: 2,
+      log_message:
+        "[20220208T105000.014] [DEBUG] [autodrive.beh.fsm] -- Vpos: 99715.06447550641",
+      log_date: new Date(),
+    },
+  ];
+  let expectedObj = input[1];
+
+  expect(findLogIndex(input, expectedObj)).toBe(1);
+  expect(findLogIndex(input, {})).toBe(0);
 });
