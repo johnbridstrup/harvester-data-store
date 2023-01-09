@@ -1,10 +1,11 @@
 import zipfile
-from celery import shared_task, Task
+from celery import chord, shared_task, Task
+from collections import defaultdict
 from django.core.cache import cache
 from common.utils import build_frontend_url
 from notifications.slack import post_to_slack
 from .serializers.logfileserializers import LogFileSerializer
-from .serializers.logvideoserializers import LogVideoSerializer
+from .serializers.logvideoserializers import LogVideoSerializer, extract_filepath, EXTRACT_DIR
 from .serializers.logsessionserializers import (
     LogSessionSerializer,
     LogSession
@@ -57,21 +58,51 @@ def async_upload_zip_file(_id):
     zip_file = cache.get(log_session.name)
     LogSessionSerializer.async_zip_upload(_id, zip_file)
 
+@shared_task
+def extract_video_meta(vid_dict, _id):
+    avi_info = vid_dict['avi']
+    meta_info = vid_dict['meta']
+    LogVideoSerializer.extract_video_log(avi_info['filename'], avi_info['filepath'], _id)
+    LogVideoSerializer.extract_meta_json_data(meta_info['filepath'], meta_info['filename'])
+
+@shared_task
+def clean_dir(dir_name):
+    LogVideoSerializer.clean_dir(dir_name)
+    return f"{dir_name} Cleaned"
 
 @shared_task(base=CallbackTask)
 def perform_extraction(_id):
     log_session = LogSession.objects.get(id=_id)
     zip_file = cache.get(log_session.name)
     async_upload_zip_file.delay(_id)
+
+    vid_meta_pairs = defaultdict(dict)
     with zipfile.ZipFile(zip_file) as thezip:
+        zipfile_name = thezip.filename
+        extr_dir = extract_filepath(zipfile_name)
         for file in thezip.filelist:
             if file.filename.endswith(".log") or file.filename.endswith(".dump"):
                 LogFileSerializer.extract_log_file(thezip, _id, file)
             if file.filename.endswith(".avi"):
-                LogVideoSerializer.extract_video_log(thezip, _id, file)
-
-    with zipfile.ZipFile(zip_file) as thezip:
-        for file in thezip.filelist:
+                extr_filepath = thezip.extract(file, extr_dir)
+                basename = file.filename.split('.')[0]
+                vid_meta_pairs[basename]['avi'] = {
+                    "filepath": extr_filepath,
+                    "filename": file.filename,
+                }
             if file.filename.endswith(".json"):
-                LogVideoSerializer.extract_meta_json_data(thezip, file)
-        LogVideoSerializer.clean_dir(thezip.filename)
+                extr_filepath = thezip.extract(file, extr_dir)
+                basename = file.filename.split('.')[0]
+                vid_meta_pairs[basename]['meta'] = {
+                    "filepath": extr_filepath,
+                    "filename": file.filename,
+                }
+    
+    # Create video extraction task signatures
+    tasks = [extract_video_meta.si(vid_dict, _id) for vid_dict in vid_meta_pairs.values()]
+    # Create clean_dir callback signature
+    callback = clean_dir.si(zipfile_name)
+    # Execute tasks -> callback as Celery chord
+    chord(tasks, callback).delay()
+
+    return "Extracting Videos"
