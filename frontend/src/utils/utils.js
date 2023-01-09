@@ -551,19 +551,24 @@ export const transformTags = (tags = [], self = false) => {
   }
 };
 
+/**
+ * This implements the binary search algorithm
+ * to find the closest timestamp from the
+ * logs timestamp
+ * @param {number} target
+ *
+ * @param {array} arr array of log entries
+ *
+ *    => target is the timestamp to find e.g
+ *       1667345034.422079
+ *
+ *    => arr is the array of log objects containing
+ *        timestamp, log_message, and log_date
+ * finds the closest or exact timestamp
+ *
+ * @returns {object} log object
+ */
 export function findClosest(target, arr = []) {
-  /**
-   * this implements the binary search algorithm
-   * to find the closest timestamp from with the
-   * logs timestamp
-   * args
-   *    -> target is the timestamp to find e.g
-   *       1667345034.422079
-   *    -> arr is the array of objects containing
-   *        timestamp, log, and date_time
-   * finds the closest or exact timestamp
-   * return object with timestamp, log and date_time
-   */
   let n = arr.length;
 
   if (target <= arr[0]?.timestamp) return arr[0];
@@ -593,12 +598,18 @@ export function findClosest(target, arr = []) {
   return arr[mid];
 }
 
+/**
+ * Finds the closest timestamp
+ * return the object.
+ *
+ * @param {object} a log object
+ *
+ * @param {object} b log object
+ *
+ * @param {number} target timestamp
+ *
+ */
 function getClosest(a, b, target) {
-  /**
-   * finds the closest timestamp
-   * return the object.
-   *
-   */
   if (target - a?.timestamp >= b?.timestamp - target) {
     return b;
   } else {
@@ -606,19 +617,19 @@ function getClosest(a, b, target) {
   }
 }
 
+/**
+ * Transforms robot array to required obj shape
+ * excludes robot 0
+ *
+ * @param {array} robots - array of numbers
+ *
+ * @returns {array} Array of object
+ *
+ * @example
+ *    robots = [0, 3]
+ *      // => [{label: 'robot 3', value: 3}]
+ */
 export const transformRobots = (robots = []) => {
-  /**
-   * transforms robot array to required obj shape
-   * excludes robot 0
-   *
-   * @param {robots} Array of numbers
-   *
-   * @returns Array of object
-   *
-   * @example
-   *    robots = [0, 3]
-   *      // => [{label: 'robot 3', value: 3}]
-   */
   const robotArr = [];
   robots.forEach((robot) => {
     if (robot !== 0) {
@@ -628,12 +639,18 @@ export const transformRobots = (robots = []) => {
   return robotArr;
 };
 
+/**
+ * Finds the currentIndex of log entry matched
+ * from timestamp.
+ *
+ * @param {number} currentMarker
+ *
+ * @param {array} data
+ *
+ * @returns {number} index
+ *
+ */
 export const getCurrIndex = (currentMarker, data) => {
-  /**
-   * finds the currentindex of log entry matched
-   * from timestamp.
-   *
-   */
   return new Promise((resolve, reject) => {
     let closest = findClosest(currentMarker, data.content);
     let currIndex = data.content?.findIndex(
@@ -644,18 +661,18 @@ export const getCurrIndex = (currentMarker, data) => {
   });
 };
 
+/**
+ * @param {string} imgName
+ *
+ * @param {string} ext optional
+ *
+ * @returns {string} absolute image path
+ *
+ * @example
+ *  imagePath(cloud)
+ *    // => http://localhost:3000/icons/cloud.png
+ */
 export const imagePath = (imgName, ext = "png") => {
-  /**
-   * @param {imgName} string
-   *
-   * @param {ext} string optional
-   *
-   * @returns {string} absolute image path
-   *
-   * @example
-   *  imagePath(cloud)
-   *    // => http://localhost:3000/icons/cloud.png
-   */
   let url;
   if (process.env.REACT_APP_NODE_ENV === PROD_ENV) {
     url = process.env.REACT_APP_HOSTED_URL;
@@ -665,16 +682,15 @@ export const imagePath = (imgName, ext = "png") => {
   return `${url}/icons/${imgName}.${ext}`;
 };
 
+/**
+ * Transform services and
+ * sorts alphabetically then numerically (ascending order)
+ *
+ * @param {array} services array of objects
+ *
+ * @returns {array} Array of objects
+ */
 export const sortServices = (services = []) => {
-  /**
-   * transform services and
-   * sorts alphabetically then numerically (ascending order)
-   *
-   * @param {services} Array
-   *
-   * @returns Array of objects
-   */
-
   let servicesArr = services.map((x) => {
     return { ...x, display: `${x.service}.${x.robot}` };
   });
@@ -683,18 +699,17 @@ export const sortServices = (services = []) => {
   );
 };
 
+/**
+ * Get unique video categories for the 3 video types
+ * i. "Robot",
+ * ii. "Workcell right",
+ * iii. "Workcell left"
+ *
+ * @param {array} categories array of objects
+ *
+ * @returns {array} Array of video object
+ */
 export const uniqueVideoTabs = (categories = []) => {
-  /**
-   * Get unique video categories for the 3 video types
-   * i. "Robot",
-   * ii. "Workcell right",
-   * iii. "Workcell left"
-   *
-   * @param {categories} Array
-   *
-   * @returns Array of video object
-   */
-
   let key = "category";
   let arrayUniqueByKey = [
     ...new Map(categories.map((item) => [item[key], item])).values(),
