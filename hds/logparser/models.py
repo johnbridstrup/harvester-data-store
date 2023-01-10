@@ -1,22 +1,12 @@
-import os
 from django.db import models
-from django.conf import settings
 from taggit.models import TaggedItemBase
 from taggit.managers import TaggableManager
 from common.models import CommonInfo
+from common.utils import media_upload_path
 from harvester.models import Harvester
-from s3file.models import S3File
 
 
 TIMEZONE="US/Pacific"
-
-
-def media_upload_path(instance, filename):
-    """save media file to custom path."""
-    username = instance.creator.username
-    if settings.USES3:
-        return os.path.join("uploads", username, filename)
-    return f"uploads/{filename}"
 
 
 class LogSession(CommonInfo):

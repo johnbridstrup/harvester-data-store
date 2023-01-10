@@ -1,6 +1,7 @@
 """ utilities and helper functions """
 from .async_metrics import TOTAL_ERROR_COUNTER
 from collections import defaultdict
+from django.conf import settings
 from django.urls import resolve, reverse, URLPattern, URLResolver
 from django.urls.exceptions import NoReverseMatch
 from rest_framework.response import Response
@@ -12,6 +13,19 @@ import os
 import sys
 import traceback
 
+def media_upload_path(instance, filename, username=None):
+    """save media file to custom path."""
+    if settings.USES3:
+        if username is not None:
+            subdir = username
+        else:
+            try:
+                subdir = instance.creator.username
+            except AttributeError:
+                subdir = "general"
+
+        return os.path.join("uploads", subdir, filename)
+    return f"uploads/{filename}"
 
 def build_frontend_url(endpoint, _id=None):
     frontend_url = os.environ.get("FRONTEND_URL", "http://localhost:3000")
