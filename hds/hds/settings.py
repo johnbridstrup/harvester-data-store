@@ -14,6 +14,18 @@ import os, sys, logging
 
 from pathlib import Path
 
+# UTILS
+# These must be defined here otherwise we get issues with app modules being loaded too soon
+def check_env(env_var, default=False):
+    """Check if env flag is set to true"""
+    val = os.environ.get(env_var)
+    if val is None:
+        return default
+    else:
+        return val.lower() in ['true', '1']
+
+# SETTINGS
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 PROJECT_DIR = Path(__file__).resolve().parent.parent.parent
@@ -26,7 +38,7 @@ PROJECT_DIR = Path(__file__).resolve().parent.parent.parent
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY','django-insecure-rzr+x&83_l1%9sc-hj)!7i8!^*^s&(+5v1v8vehxoyd5(8f_%x')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG', 'true').lower() not in ['false', '0']
+DEBUG = check_env('DEBUG', default=True)
 FRONTEND_PORT = os.environ.get('FRONTEND_PORT', '3000')
 
 ALLOWED_HOSTS = ['*']
@@ -158,7 +170,8 @@ DATABASES = {
 # Cache
 REDIS_DEFAULT_URL = 'redis://localhost:6379'
 
-if os.environ.get("PAGE_CACHING", "false") == "false":
+PAGE_CACHING = check_env("PAGE_CACHING")
+if not PAGE_CACHING:
     CACHES = {
         'default': {
             'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
@@ -206,9 +219,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
-USES3 = os.environ.get(
-    'USES3', 'false'
-).lower() in ['true', 'True', '1']
+USES3 = check_env("USES3")
 if USES3:
     AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME')
     if AWS_STORAGE_BUCKET_NAME is None:
