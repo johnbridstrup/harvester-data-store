@@ -40,6 +40,14 @@ mkdir $HDS_ROOT/multiproc-tmp
 
 export PROMETHEUS_MULTIPROC_DIR=$HDS_ROOT/multiproc-tmp
 
+# create media directory if it does not exist, chown if it does
+if [ -d "${HDS_ROOT}/hds/media" ]
+then
+    sudo chown $USER:$USER ${HDS_ROOT}/hds/media
+else
+    mkdir -p ${HDS_ROOT}/hds/media
+fi
+
 echo ""
 echo "You are in the Harvester Data Store development environment"
 echo "  - Start the server with runserver"
