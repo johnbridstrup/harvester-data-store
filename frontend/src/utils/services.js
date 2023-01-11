@@ -2,12 +2,10 @@ import { toast } from "react-toastify";
 import { SUCCESS } from "features/base/constants";
 import harvjobService from "features/harvjobs/harvjobService";
 import { createJob } from "features/harvjobs/harvjobSlice";
-import s3FileService from "features/s3file/s3fileService";
 
 export const handleDownload = async (fileObj, token) => {
-  const s3fileUrl = await s3FileService.s3FileDownload(fileObj.url, token);
   const link = document.createElement("a");
-  link.href = s3fileUrl;
+  link.href = fileObj.url;
   link.setAttribute("target", `_blank`);
   link.setAttribute("rel", "noopener");
   document.body.appendChild(link);

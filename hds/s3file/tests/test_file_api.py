@@ -1,9 +1,10 @@
+import tempfile, uuid
+from urllib.parse import urljoin
+
 from common.tests import HDSAPITestBase
+from django.conf import settings
 from errorreport.models import ErrorReport
 from ..models import S3File
-from ..serializers import S3FileSerializer
-import os
-import json
 
 
 class S3FileTestCase(HDSAPITestBase):
@@ -11,13 +12,20 @@ class S3FileTestCase(HDSAPITestBase):
         super().setUp()
         self.update_user_permissions_all(ErrorReport)
         self.update_user_permissions_all(S3File)
-        self._setup_s3file()
 
     def test_create_s3file(self):
-        resp = self.create_s3file()
-        
+        resp = self.create_s3file("test")
         self.assertEqual(resp.status_code, 201)
         self.assertEqual(resp.json()['data']['event']['UUID'], self.uuid)
+
+        exp_url = urljoin(
+            "http://testserver/",
+            urljoin(settings.MEDIA_URL, f"{self.filetype}_{self.uuid}")
+        )
+        self.assertEqual(
+            resp.json()['data']['file'],
+            exp_url
+        )
 
         # Assert initial tag applied
         data = resp.json()["data"]
@@ -28,8 +36,22 @@ class S3FileTestCase(HDSAPITestBase):
         data = resp.json()["data"]
         self.assertIn(self.filetype, data["tags"])
 
+    def test_download_file(self):
+        UUID = str(uuid.uuid1())
+        os.makedirs(settings.MEDIA_ROOT, exist_ok=True)
+        with tempfile.NamedTemporaryFile(dir=settings.MEDIA_ROOT, suffix=f"_{UUID}") as f:
+            fname = f.name.split('/')[-1]
+            resp = self.create_s3file(fname, has_uuid=True)
+            
+            url = resp.json()["data"]["file"]
+            resp = self.client.get(url)
+            self.assertEqual(
+                resp.get('Content-Disposition'),
+                f'inline; filename="{fname}"'
+            )
+
     def test_link_to_report(self):
-        file_resp = self.create_s3file()
+        file_resp = self.create_s3file("test")
         self._setup_basic()
         self._load_report_data()
         self.data['data']['uuid'] = self.uuid

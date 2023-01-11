@@ -5,9 +5,8 @@ from event.models import Event
 
 class S3FileTestCase(TestCase):
     """ Test S3File model """
-    BUCKET = "test_bucket"
-    KEY = "test_key"
-    FILETYPE = "test_file"
+    FILE = "test_file"
+    FILETYPE = "test_filetype"
     UUID = Event.generate_uuid()
 
     @classmethod
@@ -17,13 +16,13 @@ class S3FileTestCase(TestCase):
         event = Event.objects.create(creator=creator, UUID=cls.UUID)
         S3File.objects.create(
             creator=creator, 
-            bucket=cls.BUCKET,
-            key=cls.KEY,
+            file=cls.FILE,
             filetype=cls.FILETYPE,
+            key=cls.FILE,
             event=event,
         )
 
     def test_s3file_str(self):
         """ check if created fruit exits """
         file = S3File.objects.get(event__UUID=self.UUID)
-        self.assertEqual(str(file), f"{file.filetype}: {file.bucket}/{file.key}")
+        self.assertEqual(str(file), file.file)

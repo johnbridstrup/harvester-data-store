@@ -40,7 +40,7 @@ class CreateModelViewSet(ModelViewSet):
         super().__init__(**kwargs)
 
     def perform_create(self, serializer):
-        serializer.save(creator=self.request.user)
+        return serializer.save(creator=self.request.user)
 
     @classmethod
     def build_generic_query(cls, request):

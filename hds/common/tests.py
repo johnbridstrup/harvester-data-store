@@ -1,4 +1,4 @@
-import json, os
+import json, os, uuid
 from pprint import pprint
 from rest_framework import status
 from rest_framework.test import APITestCase
@@ -131,16 +131,6 @@ class HDSAPITestBase(APITestCase):
             self.user.user_permissions.add(perm)
         self.user = User.objects.get(id=1)
 
-    def _setup_s3file(self):
-        event_json_path = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'test_data/test_file_event.json')
-        with open(event_json_path, 'r') as f:
-            self.s3event = json.load(f)
-            # SQS client sends the event as a string in the 'Body' key
-            self.s3event = {'Body': json.dumps(self.s3event)}
-
-        self.bucket, self.key = S3FileSerializer.get_bucket_key(self.s3event)
-        self.filetype, self.uuid = S3FileSerializer.get_filetype_uuid(self.key)
-
     def create_fruit_object(self, name):
         return Fruit.objects.create(name=name, creator=self.user)
 
@@ -175,7 +165,28 @@ class HDSAPITestBase(APITestCase):
             'creator': creator
         })
 
-    def create_s3file(self):
+    @staticmethod
+    def create_s3event(key, has_uuid=False):
+        if not has_uuid:
+            UUID = str(uuid.uuid1())
+            full_key = f"{key}_{UUID}"
+        else:
+            full_key = key
+        event = {  
+            "Records":[{  
+                    "s3":{
+                        "bucket":{  
+                            "name":"test-bucket"  
+                        },
+                        "object":{"key": full_key}
+                    }
+                }]
+            }
+        
+        return {"Body": json.dumps(event)}, *S3FileSerializer.get_filetype_uuid(full_key)
+
+    def create_s3file(self, key, has_uuid=False):
+        self.s3event, self.filetype, self.uuid = self.create_s3event(key, has_uuid=has_uuid)
         resp = self.client.post(
             f"{self.api_base_url}/s3files/",
             data=self.s3event,

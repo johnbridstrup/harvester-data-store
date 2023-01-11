@@ -30,9 +30,10 @@ class EventApiTestCase(HDSAPITestBase):
         self.assertEqual(resp.json()["data"]["count"], 1)
 
     def test_event_tags(self):
-        self._setup_s3file()
-        r=self._post_error_report()
-        r=self.create_s3file()
+        data = self._post_error_report()
+        UUID = data["data"]["event"]["UUID"]
+        key = f"test_{UUID}"
+        r=self.create_s3file(key, has_uuid=True)
 
         r = self.client.get(self.tags_endpoint)
         self.assertEqual(r.status_code, status.HTTP_200_OK)

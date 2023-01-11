@@ -36,7 +36,6 @@ locals {
     { "name" : "DJANGO_SUPERUSER_EMAIL", "value" : "john@advanced.farm" },
     { "name" : "SQS_USER_PASSWORD", "value" : var.sqs_user_pwd },
     { "name" : "HDS_PORT", "value" : var.service_port },
-    { "name" : "S3_DOWNLOAD", "value" : var.s3_download },
     { "name" : "PAGE_CACHING", "value" : var.page_caching },
     { "name" : "BROKER_URL", "value" : var.redis_broker_url },
     { "name" : "SLACK_TOKEN", "value" : var.slack_token },

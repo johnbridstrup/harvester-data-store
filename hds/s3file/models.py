@@ -1,35 +1,22 @@
 from django.db import models
 from common.models import CommonInfo
+from common.utils import media_upload_path
 from event.models import EventModelMixin
-import logging
+
+from urllib.parse import urljoin
 
 
 class S3File(EventModelMixin, CommonInfo):
-    bucket = models.CharField(max_length=255)
-    key = models.CharField(max_length=255)
+    file = models.FileField(upload_to=media_upload_path, blank=True, null=True)
     filetype = models.CharField(max_length=255)
+    key = models.CharField(max_length=255, null=True, blank=True)
 
     def __str__(self) -> str:
-        return f"{self.filetype}: {self.bucket}/{self.key}"
+        return str(self.file)
 
-    def generate_download_link(self):
-        # Only import when this function is called.
-        # This avoids a lot of error output locally without credentials.
-        from .s3 import s3_client
-        from botocore.exceptions import ClientError
-        params = {
-            "Bucket": self.bucket,
-            "Key": self.key,
-        }
-
-        try:
-            resp = s3_client.generate_presigned_url(
-                'get_object',
-                Params=params,
-                ExpiresIn=300,
-            )
-        except ClientError as e:
-            logging.error(e)
-            return None
-
-        return resp
+    def url(self, request):
+        if any([x in self.file.url for x in ["http://", "https://"]]):
+            return self.file.url
+        if request is not None:
+            url = urljoin(urljoin("http://" + request.get_host(), "/api/v1/"), self.file.url)
+            return url

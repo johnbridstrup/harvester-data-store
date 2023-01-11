@@ -215,12 +215,6 @@ variable "sqs_user_pwd" {
   type        = string
 }
 
-variable "s3_download" {
-  description = "Enable download files from S3"
-  type        = string
-  default     = "true"
-}
-
 variable "page_caching" {
   description = "Enable page caching"
   type        = string

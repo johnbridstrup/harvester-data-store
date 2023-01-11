@@ -40,7 +40,7 @@ class EventSerializer(serializers.ModelSerializer):
         ]
 
         # Connect related files here
-        s3files = [{'url': f'/s3files/{f.id}/', 'filetype': f.filetype} for f in instance.s3file_set.all()]
+        s3files = [{'url': f.url(self.context.get('request', None)), 'filetype': f.filetype} for f in instance.s3file_set.all()]
         data['related_files'] = [
             *s3files,
         ]
