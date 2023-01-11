@@ -10,6 +10,7 @@ import {
 } from "features/logparser/logparserSlice";
 import { getCurrIndex } from "utils/utils";
 import { NavTabItem, NavTabs, NavTabSpan } from "components/styled";
+import { LogHighlighter } from "../helpers";
 
 function TabbedServices(props) {
   const [fetching, setFetching] = useState(false);
@@ -99,16 +100,15 @@ function TabbedServices(props) {
             ref={props.virtuoso}
             itemContent={(index, log) => {
               return (
-                <div
+                <LogHighlighter
                   key={index}
-                  onClick={() => handleLineClick(index, log)}
+                  handleClick={handleLineClick}
                   className={`content ${
                     currentIndex === index ? "marked-bg" : ""
                   }`}
-                  id={index}
-                >
-                  {log.log_message}
-                </div>
+                  log={log}
+                  logIndex={index}
+                />
               );
             }}
           />

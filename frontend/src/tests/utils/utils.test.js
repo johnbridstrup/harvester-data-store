@@ -9,6 +9,7 @@ import {
   sortServices,
   uniqueVideoTabs,
   findLogIndex,
+  logContent,
 } from "utils/utils";
 
 test("should do binary search for given timestamp", () => {
@@ -163,4 +164,16 @@ test("should return the index of logs", () => {
 
   expect(findLogIndex(input, expectedObj)).toBe(1);
   expect(findLogIndex(input, {})).toBe(0);
+});
+
+test("should match and return log message into 4 parts", () => {
+  let logMessage =
+    "[20220208T105000.014] [DEBUG] [autodrive.beh.fsm] -- Vpos: 99715.06447550641";
+  let output = {
+    timestamp: "20220208T105000.014",
+    log_level: "DEBUG",
+    service: "autodrive.beh.fsm",
+    log: "-- Vpos: 99715.06447550641",
+  };
+  expect(logContent(logMessage)).toMatchObject(output);
 });

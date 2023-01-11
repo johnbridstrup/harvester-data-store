@@ -1,4 +1,8 @@
-import { PROD_ENV } from "features/base/constants";
+import {
+  LOG_MSG_PATTERN,
+  LOG_STR_PATTERN,
+  PROD_ENV,
+} from "features/base/constants";
 import { Oval } from "react-loader-spinner";
 
 export const Loader = ({ size }) => {
@@ -729,4 +733,30 @@ export const uniqueVideoTabs = (categories = []) => {
 export const findLogIndex = (content = [], obj = {}) => {
   let objIndex = content.findIndex((item) => item.timestamp === obj.timestamp);
   return objIndex > 0 ? objIndex : 0;
+};
+
+/**
+ * Match pattern for log message
+ *
+ * @param {string} logMessage
+ * @returns {object} log object
+ */
+export const logContent = (logMessage = "") => {
+  let logObj = {};
+
+  let wholeMatch = logMessage.match(LOG_STR_PATTERN);
+  if (wholeMatch) {
+    let splittedArr = wholeMatch[0].split(" ");
+
+    logObj["timestamp"] = splittedArr[0].replace("[", "").replace("]", "");
+    logObj["log_level"] = splittedArr[1].replace("[", "").replace("]", "");
+    logObj["service"] = splittedArr[2].replace("[", "").replace("]", "");
+  }
+
+  let logMatch = logMessage.match(LOG_MSG_PATTERN);
+  if (logMatch) {
+    logObj["log"] = logMatch[0];
+  }
+
+  return logObj;
 };
