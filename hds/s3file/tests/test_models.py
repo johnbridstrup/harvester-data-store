@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
-from ..models import S3File
+from ..models import S3File, SessClip
 from event.models import Event
 
 class S3FileTestCase(TestCase):
@@ -26,3 +26,8 @@ class S3FileTestCase(TestCase):
         """ check if created fruit exits """
         file = S3File.objects.get(event__UUID=self.UUID)
         self.assertEqual(str(file), file.file)
+
+    def test_create_sessclip(self):
+        s3file = S3File.objects.get(event__UUID=self.UUID)
+        sessclip = SessClip.objects.create(file=s3file)
+        self.assertEqual(s3file, sessclip.file)

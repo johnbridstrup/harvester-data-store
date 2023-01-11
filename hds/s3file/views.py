@@ -1,5 +1,6 @@
-from .models import S3File
+from .models import S3File, SessClip
 from .serializers import S3FileSerializer
+from .signals import sessclip_uploaded
 from event.signals import update_event_tag
 
 from common.viewsets import CreateModelViewSet
@@ -26,3 +27,13 @@ class S3FileView(CreateModelViewSet):
         filetype = serializer.data["filetype"]
         event_id = serializer.data["event"]["id"]
         update_event_tag.send(sender=S3File, event_id=event_id, tag=filetype)
+        return inst
+
+
+class SessClipView(S3FileView):
+    def perform_create(self, serializer):
+        inst = super().perform_create(serializer)
+        event_id = serializer.data["event"]["id"]
+        sessclip_uploaded.send(sender=SessClip, s3file_id=inst.id)
+        update_event_tag.send(sender=SessClip, event_id=event_id, tag="sessclip")
+        return inst

@@ -20,3 +20,33 @@ class S3File(EventModelMixin, CommonInfo):
         if request is not None:
             url = urljoin(urljoin("http://" + request.get_host(), "/api/v1/"), self.file.url)
             return url
+
+class S3FileMixin(models.Model):
+    file = models.OneToOneField(S3File, on_delete=models.CASCADE)
+    class Meta:
+        abstract = True
+
+    @property
+    def file_url(self):
+        return self.file.file.url
+    
+    @property
+    def creator(self):
+        return self.file.creator
+
+    @property
+    def created(self):
+        return self.file.created
+
+    @property
+    def modifiedBy(self):
+        return self.file.modifiedBy
+
+    @property
+    def lastModified(self):
+        return self.file.lastModified
+
+
+class SessClip(S3FileMixin, models.Model):
+    def __str__(self):
+        return f"sessclip: {str(self.file.file)}"

@@ -4,7 +4,7 @@ from urllib.parse import urljoin
 from common.tests import HDSAPITestBase
 from django.conf import settings
 from errorreport.models import ErrorReport
-from ..models import S3File
+from ..models import S3File, SessClip
 
 
 class S3FileTestCase(HDSAPITestBase):
@@ -67,3 +67,7 @@ class S3FileTestCase(HDSAPITestBase):
         expect_tags = [S3File.__name__, self.filetype, ErrorReport.__name__]
         for tag in expect_tags:
             self.assertIn(tag, event_data["tags"])
+
+    def test_create_sessclip(self):
+        self.create_s3file("test", endpoint="sessclip")
+        self.assertEqual(SessClip.objects.count(), 1)

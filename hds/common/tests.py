@@ -185,10 +185,10 @@ class HDSAPITestBase(APITestCase):
         
         return {"Body": json.dumps(event)}, *S3FileSerializer.get_filetype_uuid(full_key)
 
-    def create_s3file(self, key, has_uuid=False):
+    def create_s3file(self, key, has_uuid=False, endpoint="s3files"):
         self.s3event, self.filetype, self.uuid = self.create_s3event(key, has_uuid=has_uuid)
         resp = self.client.post(
-            f"{self.api_base_url}/s3files/",
+            f"{self.api_base_url}/{endpoint}/",
             data=self.s3event,
             format='json'
         )

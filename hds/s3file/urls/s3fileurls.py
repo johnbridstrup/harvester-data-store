@@ -1,5 +1,5 @@
 from rest_framework import routers
-from .views import S3FileView
+from ..views import S3FileView
 
 
 router = routers.SimpleRouter()
