@@ -45,14 +45,12 @@ class LogSessionSerializer(TaggitSerializer, serializers.ModelSerializer):
     class Meta:
         model = LogSession
         fields = ('__all__')
-        read_only_fields = ['id']
+        read_only_fields = ['id', 'creator']
 
     def to_internal_value(self, data):
         zip_data = data.copy()
         zip_file = zip_data.get("zip_upload")
         internal_data = {}
-        creator = self.context.get("request").user.id
-        internal_data["creator"] = creator
         with zipfile.ZipFile(zip_file) as thezip:
             filename = f'{thezip.filename}-{uuid.uuid4()}'
             internal_data["name"] = filename
