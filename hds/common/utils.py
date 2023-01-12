@@ -13,6 +13,10 @@ import os
 import sys
 import traceback
 
+def get_key(file):
+    """return full key of s3 file"""
+    return os.path.join(file.storage.location, file.name)
+
 def media_upload_path(instance, filename, username=None):
     """save media file to custom path."""
     if settings.USES3:

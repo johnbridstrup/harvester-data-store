@@ -4,6 +4,7 @@ from taggit.managers import TaggableManager
 from common.models import CommonInfo
 from common.utils import media_upload_path
 from harvester.models import Harvester
+from s3file.models import SessClip
 
 
 TIMEZONE="US/Pacific"
@@ -13,11 +14,16 @@ class LogSession(CommonInfo):
     name = models.CharField(max_length=255, unique=True)
     date_time = models.DateTimeField(blank=True, null=True)
     harv = models.ForeignKey(Harvester, on_delete=models.SET_NULL, blank=True, null=True)
-    zip_file = models.FileField(upload_to=media_upload_path, blank=True, null=True)
+    _zip_file = models.OneToOneField(SessClip, blank=True, null=True, on_delete=models.CASCADE)
     tags = TaggableManager(through='LogTag')
 
     def __str__(self):
         return self.name
+
+    @property
+    def zip_file(self):
+        # Access the file field of the related S3File
+        return self._zip_file.file.file
 
 
 class LogFile(CommonInfo):

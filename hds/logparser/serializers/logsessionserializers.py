@@ -9,6 +9,8 @@ from common.async_metrics import ASYNC_ERROR_COUNTER, ASYNC_UPLOAD_COUNTER
 from common.reports import DTimeFormatter
 from harvester.models import Harvester
 from logparser.models import LogSession, LogFile, TIMEZONE, LogVideo
+from s3file.models import SessClip
+from s3file.serializers import DirectUploadSerializer
 
 
 class VideoSerializer(serializers.ModelSerializer):
@@ -132,15 +134,23 @@ class LogSessionSerializer(TaggitSerializer, serializers.ModelSerializer):
         return harv, date_obj
 
     @staticmethod
-    def async_zip_upload(_id, thezip):
+    def async_zip_upload(_id, thezip, filename, user_id):
         """upload zip file to s3 bucket."""
         try:
             log_session = LogSession.objects.get(id=_id)
-            serializer = LogSessionUploadSerializer(
-                instance=log_session, data={'zip_file': thezip}
-            )
+            data = {
+                    "key": filename,
+                    "file": thezip,
+                    "filetype": "sessclip",
+                    "creator": user_id,
+                }
+            serializer = DirectUploadSerializer(data=data)
             serializer.is_valid(raise_exception=True)
-            serializer.save()
+            s3file = serializer.save()
+            sessclip = SessClip.objects.create(file=s3file)
+            log_session._zip_file = sessclip
+            log_session.save()
+
         except LogSession.DoesNotExist:
             ASYNC_ERROR_COUNTER.labels(
                 'async_zip_upload',
