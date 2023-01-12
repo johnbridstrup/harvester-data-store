@@ -9,8 +9,10 @@ from django.core.cache import cache
 from django.core.files.uploadedfile import InMemoryUploadedFile
 import moviepy.editor as moviepy
 from common.async_metrics import ASYNC_ERROR_COUNTER
+from common.utils import media_upload_path
 from rest_framework import serializers
 from logparser.models import LogVideo, LogSession
+from s3file.serializers import DirectUploadSerializer
 
 
 EXTRACT_DIR = os.path.join(settings.MEDIA_ROOT, "extracts")
@@ -31,12 +33,12 @@ class LogVideoUploadSerializer(serializers.ModelSerializer):
 
 class LogVideoSerializer(serializers.ModelSerializer):
     """Serializer for log video model"""
+    video_avi = serializers.FileField()
 
     class Meta:
         model = LogVideo
         fields = ('__all__')
         ready_only_fields = ['id']
-
 
     @staticmethod
     def clean_dir(filename:str):
@@ -82,24 +84,31 @@ class LogVideoSerializer(serializers.ModelSerializer):
         mp4_file_path = f'{filepath.split(".")[0]}.mp4'
         mp4_file_name = f'{filename.split(".")[0]}.mp4'
         try:
-            log_vid_obj = LogVideo(
-                file_name=filename,
-                log_session=log_session,
-                creator=log_session.creator,
-                robot=robot,
-                category=category
-            )
-            log_vid_obj.save()
             stream = moviepy.VideoFileClip(filepath)
             stream.write_videofile(mp4_file_path)
             file_size = os.path.getsize(mp4_file_path)
             with open(mp4_file_path, "rb") as fh:
                 in_mem_upload = InMemoryUploadedFile(fh, field_name="video_avi", name=mp4_file_name, size=file_size, content_type="video/x-msvideo", charset=None)
-                serializer = LogVideoUploadSerializer(instance=log_vid_obj, data={'video_avi':in_mem_upload})
+                data = {
+                    "key": media_upload_path(log_session, mp4_file_name),
+                    "filetype": "mp4",
+                    "file": in_mem_upload,
+                    "creator": log_session.creator.id,
+                }
+                serializer = DirectUploadSerializer(data=data)
                 serializer.is_valid(raise_exception=True)
-                serializer.save()
+                s3file = serializer.save()
+                log_vid_obj = LogVideo(
+                    file_name=filename,
+                    log_session=log_session,
+                    creator=log_session.creator,
+                    robot=robot,
+                    category=category,
+                    _video_avi=s3file,
+                )
+                log_vid_obj.save()
                 in_mem_upload.close()
-            
+
         except Exception as e:
             ASYNC_ERROR_COUNTER.labels(
                 'extract_video_log',

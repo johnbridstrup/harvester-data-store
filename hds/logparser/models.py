@@ -4,7 +4,7 @@ from taggit.managers import TaggableManager
 from common.models import CommonInfo
 from common.utils import media_upload_path
 from harvester.models import Harvester
-from s3file.models import SessClip
+from s3file.models import S3File, SessClip
 
 
 TIMEZONE="US/Pacific"
@@ -43,7 +43,11 @@ class LogVideo(CommonInfo):
     category = models.CharField(max_length=100)
     meta = models.JSONField(default=list)
     log_session = models.ForeignKey(LogSession, on_delete=models.CASCADE, related_name="logvideo")
-    video_avi = models.FileField(upload_to=media_upload_path, blank=True, null=True)
+    _video_avi = models.OneToOneField(S3File, blank=True, null=True, on_delete=models.CASCADE)
+
+    @property
+    def video_avi(self):
+        return self._video_avi.file
 
     def __str__(self):
         return self.file_name

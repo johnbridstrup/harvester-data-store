@@ -8,6 +8,8 @@ from django.test import TestCase
 from django.utils.timezone import make_aware
 from django.urls import reverse
 from common.tests import HDSAPITestBase
+from event.models import Event
+from s3file.models import S3File
 from ..beat import get_dir_size, EXTRACTS_SIZE_GAUGE
 from ..models import LogSession, LogFile, LogVideo
 
@@ -53,17 +55,30 @@ class LogBaseTestCase(HDSAPITestBase):
           service="logrec",
           robot=2,
           log_session=self.create_log_session(),
-          creator=self.user
+          creator=self.user,
         )
 
     def create_log_video(self):
         """create log video object."""
+        event = Event.objects.create(
+          UUID=Event.generate_uuid(),
+          tags=["test"],
+          creator=self.user,
+        )
+        s3file = S3File.objects.create(
+          key="test",
+          file="test",
+          filetype="test",
+          creator=self.user,
+          event=event,
+        )
         return LogVideo.objects.create(
           file_name="20220208105000_005_02_color_1",
           robot=2,
           category="color",
           log_session=self.create_log_session(),
-          creator=self.user
+          creator=self.user,
+          _video_avi=s3file,
         )
 
       
