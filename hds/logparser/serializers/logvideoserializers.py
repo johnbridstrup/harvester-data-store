@@ -26,7 +26,7 @@ class LogVideoUploadSerializer(serializers.ModelSerializer):
     class Meta:
       model = LogVideo
       fields = ['video_avi']
-      ready_only_fields = ['id']
+      read_only_fields = ['id']
 
 
 class LogVideoSerializer(serializers.ModelSerializer):
