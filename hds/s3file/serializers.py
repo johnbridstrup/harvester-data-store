@@ -39,3 +39,19 @@ class S3FileSerializer(EventSerializerMixin, serializers.ModelSerializer):
         }
 
         return super().to_internal_value(data)
+
+
+class DirectUploadSerializer(EventSerializerMixin, serializers.ModelSerializer):
+    file = serializers.FileField()
+    class Meta:
+        model = S3File
+        fields = ('__all__')
+
+    def save(self, **kwargs):
+        inst = super().save(**kwargs)
+        if inst.key is None:
+            inst.key = inst.file.path
+            inst.save()
+        
+        return inst
+ 

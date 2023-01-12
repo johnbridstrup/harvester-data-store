@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from rest_framework import serializers
 from taggit.serializers import TagListSerializerField
 from .models import Event
@@ -58,7 +59,11 @@ class EventSerializerMixin(serializers.Serializer):
         
     def to_internal_value(self, data):
         UUID = data.pop("UUID", Event.generate_uuid())
-        creator = self.context['request'].user
+        try:
+            creator = self.context['request'].user
+        except (KeyError, AttributeError):
+            creator_id = data["creator"]
+            creator = User.objects.get(id=creator_id)
         try:
             event = Event.objects.get(UUID=UUID)
         except Event.DoesNotExist:

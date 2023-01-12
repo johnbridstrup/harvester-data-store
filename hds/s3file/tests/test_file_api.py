@@ -1,10 +1,20 @@
-import tempfile, uuid
+import os, tempfile, uuid
+from contextlib import contextmanager
 from urllib.parse import urljoin
 
 from common.tests import HDSAPITestBase
 from django.conf import settings
+from django.core.files.uploadedfile import InMemoryUploadedFile
 from errorreport.models import ErrorReport
 from ..models import S3File, SessClip
+from ..serializers import DirectUploadSerializer
+
+@contextmanager
+def remove_after(fp):
+    try:
+        yield 
+    finally:
+        os.remove(fp)
 
 
 class S3FileTestCase(HDSAPITestBase):
@@ -12,6 +22,11 @@ class S3FileTestCase(HDSAPITestBase):
         super().setUp()
         self.update_user_permissions_all(ErrorReport)
         self.update_user_permissions_all(S3File)
+
+    @staticmethod
+    def _rm_file(filename):
+        full_path = os.path.join(settings.MEDIA_ROOT, "uploads", filename)
+        os.remove(full_path)
 
     def test_create_s3file(self):
         resp = self.create_s3file("test")
@@ -49,6 +64,54 @@ class S3FileTestCase(HDSAPITestBase):
                 resp.get('Content-Disposition'),
                 f'inline; filename="{fname}"'
             )
+
+    def test_upload_file_ser(self):
+        with tempfile.NamedTemporaryFile() as tf:
+            with open(tf.name, 'rb') as f:
+                file = InMemoryUploadedFile(
+                    file=f,
+                    field_name="test",
+                    name="test",
+                    content_type="test/test",
+                    size=8,
+                    charset="UTF-8",
+                )
+                fname = f.name.split('/')[-1]
+                data = {
+                    "key": fname,
+                    "file": file,
+                    "filetype": "test",
+                    "creator": self.user.id,
+                }
+                full_path = os.path.join(settings.MEDIA_ROOT, "uploads", "test")
+                with remove_after(full_path):
+                    file_upload = DirectUploadSerializer(data=data)
+                    file_upload.is_valid()
+                    file_upload.save()
+                    self.assertEqual(S3File.objects.count(), 1)
+
+    def test_file_ser_no_key(self):
+        with tempfile.NamedTemporaryFile() as tf:
+            with open(tf.name, 'rb') as f:
+                file = InMemoryUploadedFile(
+                    file=f,
+                    field_name="test",
+                    name="test",
+                    content_type="test/test",
+                    size=8,
+                    charset="UTF-8",
+                )
+                data = {
+                    "file": file,
+                    "filetype": "test",
+                    "creator": self.user.id,
+                }
+                full_path = os.path.join(settings.MEDIA_ROOT, "uploads", "test")
+                with remove_after(full_path):
+                    file_upload = DirectUploadSerializer(data=data)
+                    file_upload.is_valid()
+                    inst = file_upload.save()
+                    self.assertEqual(inst.key, full_path)
 
     def test_link_to_report(self):
         file_resp = self.create_s3file("test")
