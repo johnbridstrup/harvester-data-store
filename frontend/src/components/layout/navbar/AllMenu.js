@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { menu, adminMenu } from "assets/menu";
 import AllMenuItem from "./AllMenuItem";
 import SearchHarvester from "components/home/searchharvester";
+import { darkThemeClass } from "utils/utils";
 
 function AllMenu(props) {
   const menus = props.user?.is_superuser ? adminMenu : menu;
@@ -16,13 +17,17 @@ function AllMenu(props) {
       : menus;
     setSearched((current) => filtered);
   };
+  const allmenu = darkThemeClass("dt-all-menu", props.theme);
+  const allleft = darkThemeClass("dt-all-left", props.theme);
+  const icontheme = darkThemeClass("dt-icon-dark", props.theme);
+
   return (
-    <div className="all-menu">
+    <div className={`all-menu ${allmenu}`}>
       <div className="all-menu-header">Menu</div>
       <div className="all-menu-wrap scrollbar">
-        <div className="all-left">
+        <div className={`all-left ${allleft}`}>
           <div className="all-menu-search">
-            <i className="las la-search"></i>
+            <i className={`las la-search ${icontheme}`}></i>
             <input
               type="text"
               name="search"
@@ -42,6 +47,7 @@ function AllMenu(props) {
                 description={item.description}
                 icon={item.icon}
                 href={item.href}
+                theme={props.theme}
               />
             ))}
           </div>
@@ -53,6 +59,7 @@ function AllMenu(props) {
 
 AllMenu.propTypes = {
   user: PropTypes.object,
+  theme: PropTypes.string,
 };
 
 export default AllMenu;

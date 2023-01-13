@@ -38,3 +38,9 @@ export const LOG_LEVEL = {
   CRITICAL: "CRITICAL",
   INFO: "INFO",
 };
+
+export const THEME_MODES = {
+  AUTO_THEME: "auto",
+  LIGHT_THEME: "light",
+  DARK_THEME: "dark",
+};

@@ -2,6 +2,7 @@ import {
   LOG_MSG_PATTERN,
   LOG_STR_PATTERN,
   PROD_ENV,
+  THEME_MODES,
 } from "features/base/constants";
 import { Oval } from "react-loader-spinner";
 
@@ -818,4 +819,23 @@ export const buildQueryObj = (
     queryObj["handled"] = fieldData.handled;
   }
   return queryObj;
+};
+
+/**
+ * Check if the browser default theme is dark
+ *
+ * @returns {boolean} boolean
+ */
+export const isBrowserDefaultDark = () => {
+  return window.matchMedia("(prefers-color-scheme: dark)").matches;
+};
+
+/**
+ * Evaluate for dark theme className
+ * @param {string} className
+ * @param {string} theme
+ * @returns {string} string
+ */
+export const darkThemeClass = (className, theme) => {
+  return theme === THEME_MODES.DARK_THEME ? className : "";
 };

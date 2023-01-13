@@ -1,10 +1,19 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
 import Logo from "assets/images/advanced_farm_logo_alpha.png";
-import { ArrowDown, Menu, Notification } from "assets/svg";
+import {
+  ArrowDown,
+  Menu,
+  Notification,
+  LightMode,
+  AutoMode,
+  DarkMode,
+} from "assets/svg";
 import { logout } from "features/auth/authSlice";
 import {
+  THEME_MODES,
   FULLFILLED_PROMISE,
   MAX_LIMIT,
   NOTIFY_CATEGORY,
@@ -14,17 +23,22 @@ import useClickOutside from "hooks/clickOutSide";
 import AllMenu from "./AllMenu";
 import UserMenu from "./UserMenu";
 import AdminMenu from "./AdminMenu";
+import ThemeMode from "./ThemeMode";
+import { darkThemeClass } from "utils/utils";
 import "./styles.css";
 
 function Navbar(props) {
   const [showAllMenu, setshowAllMenu] = useState(false);
   const [showUserMenu, setshowUserMenu] = useState(false);
   const [showAdminMenu, setshowAdminMenu] = useState(false);
+  const [showThemeMenu, setshowThemeMenu] = useState(false);
   const [count, setCount] = useState(0);
   const { user, token } = useSelector((state) => state.auth);
+  const { theme } = useSelector((state) => state.home);
   const dispatch = useDispatch();
   const allMenuRef = useRef();
   const userMenuRef = useRef();
+  const themeMenuRef = useRef(null);
   const adminMenuRef = useRef(null);
 
   useClickOutside(allMenuRef, () => {
@@ -35,6 +49,9 @@ function Navbar(props) {
   });
   useClickOutside(adminMenuRef, () => {
     setshowAdminMenu(false);
+  });
+  useClickOutside(themeMenuRef, () => {
+    setshowThemeMenu(false);
   });
 
   const fetchNotification = useCallback(() => {
@@ -62,8 +79,21 @@ function Navbar(props) {
     }
   };
 
+  const ThemeSVG =
+    theme === THEME_MODES.AUTO_THEME ? (
+      <AutoMode />
+    ) : theme === THEME_MODES.LIGHT_THEME ? (
+      <LightMode />
+    ) : theme === THEME_MODES.DARK_THEME ? (
+      <DarkMode />
+    ) : (
+      <LightMode />
+    );
+  const headerdt = darkThemeClass("header-dark-theme", theme);
+  const profilebg = darkThemeClass("dt-profile-bg", theme);
+
   return (
-    <header>
+    <header className={`${headerdt}`}>
       <div className="container-fluid header">
         <div className="header-left">
           <Link to="/" className="header-logo">
@@ -87,14 +117,17 @@ function Navbar(props) {
                 <div onClick={() => setshowAdminMenu((prev) => !prev)}>
                   <ArrowDown />
                 </div>
-                {showAdminMenu && <AdminMenu />}
+                {showAdminMenu && <AdminMenu theme={theme} />}
               </div>
             </div>
           )}
         </div>
         <div className="header-middle"></div>
         <div className="header-right">
-          <Link to="/users/profile/me" className="profile-link hover1">
+          <Link
+            to="/users/profile/me"
+            className={`profile-link hover1 ${profilebg}`}
+          >
             <img
               src="https://bootdey.com/img/Content/avatar/avatar7.png"
               alt=""
@@ -108,12 +141,20 @@ function Navbar(props) {
             <div onClick={() => setshowAllMenu((prev) => !prev)}>
               <Menu />
             </div>
-            {showAllMenu && <AllMenu user={user} />}
+            {showAllMenu && <AllMenu user={user} theme={theme} />}
           </div>
           <Link to="/notifications" className="circle-icon hover1">
             <Notification />
             <div className="right-notification">{count}</div>
           </Link>
+          <div className="circle-icon hover1" ref={themeMenuRef}>
+            <div onClick={() => setshowThemeMenu((prev) => !prev)}>
+              {ThemeSVG}
+            </div>
+            {showThemeMenu && (
+              <ThemeMode handleChange={props.handleThemeChange} theme={theme} />
+            )}
+          </div>
           <div
             className={`circle-icon hover1 ${showUserMenu && "active-header"}`}
             ref={userMenuRef}
@@ -121,7 +162,9 @@ function Navbar(props) {
             <div onClick={() => setshowUserMenu((prev) => !prev)}>
               <ArrowDown />
             </div>
-            {showUserMenu && <UserMenu user={user} logout={handleLogout} />}
+            {showUserMenu && (
+              <UserMenu user={user} logout={handleLogout} theme={theme} />
+            )}
           </div>
         </div>
       </div>
@@ -129,6 +172,9 @@ function Navbar(props) {
   );
 }
 
-Navbar.propTypes = {};
+Navbar.propTypes = {
+  theme: PropTypes.string,
+  handleThemeChange: PropTypes.func,
+};
 
 export default Navbar;

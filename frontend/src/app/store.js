@@ -13,6 +13,7 @@ import logparserReducer from "features/logparser/logparserSlice";
 import notificationReducer from "features/notification/notificationSlice";
 import userReducer from "features/user/userSlice";
 import migrationReducer from "features/migration/migrationSlice";
+import homeReducer from "features/home/homeSlice";
 
 const store = configureStore({
   reducer: {
@@ -30,6 +31,7 @@ const store = configureStore({
     harvjobs: harvjobReducer,
     logparser: logparserReducer,
     migration: migrationReducer,
+    home: homeReducer,
   },
 });
 

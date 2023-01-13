@@ -10,9 +10,12 @@
   --bg-third: #e4e6eb;
   --color-primary: #050505;
   --color-secondary: #65676b;
-  --dark-bg-primary: #18191a;
+  --color-white: #fff;
+  /* --dark-bg-primary: #18191a; */
+  --dark-bg-primary: #1b1b1b;
   --dark-bg-secondary: #242526;
   --dark-bg-third: #3a3b3c;
+  --dark-bg-mild: #343434;
   --dark-color-primary: #242526;
   --dark-color-secondary: #b0b3b8;
   --blue-color: #1876f2;
@@ -37,6 +40,19 @@ body {
 
 a {
   text-decoration: none;
+}
+
+.dark-theme {
+  background-color: var(--dark-bg-primary);
+  color: var(--color-white);
+}
+
+.color-dark {
+  color: var(--dark-color-primary);
+}
+
+.color-white {
+  color: var(--color-white);
 }
 
 .admin-route {

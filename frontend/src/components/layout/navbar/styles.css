@@ -214,13 +214,13 @@ header {
   flex-direction: column;
 }
 
-.all-menu-col span:first-of-type {
+.all-menu-col-first {
   font-size: 14px;
   font-weight: 500;
   color: var(--color-primary);
 }
 
-.all-menu-col span:last-of-type {
+.all-menu-col-last {
   font-size: 12px;
   color: #65676b;
   width: 95%;
@@ -319,6 +319,75 @@ header {
 .active-header svg {
   fill: var(--blue-color);
 }
+
+/* Theme Mode */
+.theme-mode {
+  position: absolute;
+  top: 100%;
+  right: -100% !important;
+  width: 180px;
+  border-radius: 5px;
+  background: var(--bg-primary);
+  box-shadow: 2px 2px 2px 2px var(--shadow-1);
+  user-select: none;
+  padding: 10px;
+}
+
+.header-dark-theme {
+  background: var(--dark-bg-primary);
+  border-bottom: 0.1px solid var(--bg-third);
+}
+
+.theme-groups {
+  padding: 0.3rem 0.5rem;
+  border-radius: 5px;
+}
+
+.dt-link-color {
+  color: var(--color-white) !important;
+}
+
+.dt-link-color:hover {
+  color: var(--color-secondary) !important;
+}
+
+.dt-span-color {
+  color: var(--color-white);
+}
+
+.dt-span-color:hover {
+  color: var(--color-primary);
+}
+
+.dt-profile-bg {
+  background: var(--bg-secondary);
+}
+
+.dt-theme-mode,
+.dt-user-menu,
+.dt-all-menu {
+  background-color: var(--dark-bg-mild);
+  color: var(--color-white);
+  border: 1px solid var(--color-secondary);
+}
+
+.dt-small-circle {
+  background: var(--dark-bg-mild);
+}
+
+.dt-all-left {
+  background: var(--dark-bg-primary);
+}
+
+.dt-icon-dark {
+  color: var(--dark-bg-mild);
+}
+
+.img-white {
+  color: var(--color-white) !important;
+}
+
+/* Theme Mode */
 
 @media (max-width: 505px) {
   .all-menu {
