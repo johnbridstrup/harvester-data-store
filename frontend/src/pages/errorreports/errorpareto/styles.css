@@ -27,11 +27,12 @@
 
 .plot-div {
   position: relative;
+  margin-bottom: 5px;
 }
 
 .delete-icon {
   position: absolute;
-  top: 0;
+  top: 10px;
   left: 50px;
   width: 40px;
   height: 40px;
@@ -43,6 +44,10 @@
   border: 1px solid #f0f0f0;
   padding: 0.5rem;
   cursor: pointer;
+}
+
+.dt-delete-icon {
+  background: var(--dark-bg-third);
 }
 
 @media (min-width: 892px) {

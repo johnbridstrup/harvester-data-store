@@ -2,9 +2,9 @@ import moment from "moment";
 import { useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
-import { SUCCESS } from "features/base/constants";
+import { SUCCESS, THEME_MODES } from "features/base/constants";
 import { createUser, listUsers, updateUser } from "features/user/userSlice";
-import { Loader } from "utils/utils";
+import { darkThemeClass, Loader } from "utils/utils";
 import UserModal from "../modals/UserModal";
 import { LoaderDiv } from "../styled";
 
@@ -22,8 +22,10 @@ function UsersList(props) {
     objId: null,
   });
   const { users, loading } = useSelector((state) => state.user);
+  const { theme } = useSelector((state) => state.home);
   const userRef = useRef();
   const dispatch = useDispatch();
+  const tabledt = darkThemeClass("dt-table", theme);
 
   const handleFieldChange = (e) => {
     if (e.target.name === "is_staff") {
@@ -59,7 +61,9 @@ function UsersList(props) {
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     if (fieldData.password !== fieldData.password2) {
-      toast.error("passwords do not match!");
+      toast.error("passwords do not match!", {
+        theme: theme === THEME_MODES.AUTO_THEME ? "colored" : theme,
+      });
       return;
     }
     const dispatchObj = {
@@ -74,10 +78,14 @@ function UsersList(props) {
     const res = await dispatch(dispatchObj[fieldData.mode](data));
     if (res?.payload?.status === SUCCESS) {
       await dispatch(listUsers());
-      toast.success(res?.payload?.message);
+      toast.success(res?.payload?.message, {
+        theme: theme === THEME_MODES.AUTO_THEME ? "colored" : theme,
+      });
       modalPopUp();
     } else {
-      toast.error(res?.payload);
+      toast.error(res?.payload, {
+        theme: theme === THEME_MODES.AUTO_THEME ? "colored" : theme,
+      });
     }
   };
 
@@ -121,8 +129,8 @@ function UsersList(props) {
           <Loader size={50} />
         </LoaderDiv>
       ) : (
-        <div className="table-responsive">
-          <table className="table">
+        <div className="table-responsive mb-2">
+          <table className={`table ${tabledt}`}>
             <thead>
               <tr>
                 <th>Username</th>
@@ -167,6 +175,7 @@ function UsersList(props) {
         handleChange={handleFieldChange}
         handleSubmit={handleFormSubmit}
         loading={false}
+        theme={theme}
       />
     </>
   );

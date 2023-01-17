@@ -1,8 +1,10 @@
 import PropTypes from "prop-types";
 import Select from "react-select";
-import { Loader } from "utils/utils";
+import { darkThemeClass, Loader, selectDarkStyles } from "utils/utils";
 
 function ScheduleModal(props) {
+  const modal = darkThemeClass("dt-modal-content", props.theme);
+  const customStyles = modal ? selectDarkStyles : {};
   return (
     <div className="col-md-8">
       <div
@@ -10,20 +12,22 @@ function ScheduleModal(props) {
         id="scheduleModal"
         tabIndex={-1}
         role="dialog"
-        aria-labelledby="exampleModalCenterTitle"
+        aria-labelledby="modal-center"
         aria-hidden="true"
         style={{ display: "none" }}
       >
         <div className="modal-dialog modal-dialog-centered" role="document">
-          <div className="modal-content profile-modal">
+          <div className={`modal-content ${modal}`}>
             <div className="text-right">
               <button
                 type="button"
-                className="btn closeModalBtn"
+                className="btn"
                 data-bs-dismiss="modal"
-                aria-label="Close"
+                aria-label="close"
               >
-                <span className="las la-times"></span>
+                <span
+                  className={`las la-times ${modal && "text-white"}`}
+                ></span>
               </button>
             </div>
             <div className="modal-body text-center px-5 pb-2">
@@ -42,11 +46,13 @@ function ScheduleModal(props) {
                         placeholder="200"
                         options={props.harvOptions}
                         name="harv_id"
+                        id="harv_id"
                         onChange={props.handleHarvIdSelect}
                         defaultValue={props.selectedHarvId}
                         value={props.selectedHarvId}
                         className="multi-select-container"
                         classNamePrefix="select"
+                        styles={customStyles}
                       />
                     </div>
                   </div>
@@ -74,6 +80,7 @@ ScheduleModal.propTypes = {
   harvOptions: PropTypes.array,
   selectedHarvId: PropTypes.object,
   handleHarvIdSelect: PropTypes.func,
+  theme: PropTypes.string,
 };
 
 export default ScheduleModal;

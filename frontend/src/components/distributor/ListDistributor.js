@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { SUCCESS } from "features/base/constants";
+import { SUCCESS, THEME_MODES } from "features/base/constants";
 import {
   createDistributor,
   listDistributors,
@@ -19,6 +19,7 @@ function ListDistributor(props) {
     objId: null,
   });
   const { distributors, loading } = useSelector((state) => state.distributor);
+  const { theme } = useSelector((state) => state.home);
   const distributorRef = useRef();
   const dispatch = useDispatch();
 
@@ -50,7 +51,9 @@ function ListDistributor(props) {
     const res = await dispatch(dispatchObj[fieldData.mode](data));
     if (res.payload?.status === SUCCESS) {
       await dispatch(listDistributors());
-      toast.success(res?.payload?.message);
+      toast.success(res?.payload?.message, {
+        theme: theme === THEME_MODES.AUTO_THEME ? "colored" : theme,
+      });
       addPopUp();
       setFieldData((current) => {
         return { ...current, name: "", mode: "add", objId: "" };
@@ -88,12 +91,14 @@ function ListDistributor(props) {
         <DistributorTable
           distributors={distributors}
           handleDistUpdateClick={handleDistUpdateClick}
+          theme={theme}
         />
       )}
       <DistributorModal
         fieldData={fieldData}
         handleChange={handleFieldChange}
         handleSubmit={handleFormSubmit}
+        theme={theme}
       />
     </>
   );

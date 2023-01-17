@@ -2,7 +2,12 @@ import { useState } from "react";
 import Select from "react-select";
 import { useSelector, useDispatch } from "react-redux";
 import PropTypes from "prop-types";
-import { handleSelectFactory, transformRobots } from "utils/utils";
+import {
+  darkThemeClass,
+  handleSelectFactory,
+  selectDarkStyles,
+  transformRobots,
+} from "utils/utils";
 import { queryLogVideo } from "features/logparser/logparserSlice";
 
 function LoadVideo(props) {
@@ -10,6 +15,7 @@ function LoadVideo(props) {
     internal: { robots, harv_id },
     logsession,
   } = useSelector((state) => state.logparser);
+  const { theme } = useSelector((state) => state.home);
   const option = { label: `harv id ${harv_id}`, value: harv_id };
   const [selectedRobot, setSelectedRobot] = useState(null);
   const [selectedHarv, setSelectedHarv] = useState(option);
@@ -20,6 +26,8 @@ function LoadVideo(props) {
 
   const robotOptions = transformRobots(robots);
   const harvOptions = [option];
+  const btn = darkThemeClass("btn-dark", theme);
+  const customStyles = btn ? selectDarkStyles : {};
 
   const loadLogVideo = async () => {
     let queryObj = {};
@@ -50,6 +58,7 @@ function LoadVideo(props) {
           onChange={handleRobotSelect}
           placeholder="robot id e.g 1"
           className="load-video"
+          styles={customStyles}
         />
       </div>
       <div className="col-md-4">
@@ -63,10 +72,11 @@ function LoadVideo(props) {
           onChange={handleHarvSelect}
           placeholder="harvester e.g 11"
           className="load-video"
+          styles={customStyles}
         />
       </div>
       <div className="col-md-4">
-        <span onClick={loadLogVideo} className="btn">
+        <span onClick={loadLogVideo} className={`btn ${btn}`}>
           {fetching ? "loading..." : "Load Video"}
         </span>
       </div>

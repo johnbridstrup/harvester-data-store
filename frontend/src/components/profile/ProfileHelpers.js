@@ -1,12 +1,13 @@
 import PropTypes from "prop-types";
 import moment from "moment";
 import { Link } from "react-router-dom";
-import { Loader } from "utils/utils";
+import { darkThemeClass, Loader } from "utils/utils";
 import { LoaderDiv } from "../styled";
 
 export const ProfileColLeft = (props) => {
+  const cardtheme = darkThemeClass("dt-card-theme", props.theme);
   return (
-    <div className="card">
+    <div className={`card ${cardtheme}`}>
       <div className="card-body">
         <div className="d-flex flex-column align-items-center text-center">
           <img
@@ -44,8 +45,9 @@ export const ProfileColLeft = (props) => {
 };
 
 export const ProfileColRight = (props) => {
+  const cardtheme = darkThemeClass("dt-card-theme", props.theme);
   return (
-    <div className="card mb-3">
+    <div className={`card mb-3 ${cardtheme}`}>
       <div className="card-body">
         <div className="row">
           <div className="col-sm-3">
@@ -110,8 +112,10 @@ export const ProfileColRight = (props) => {
 
 export const ChangePassword = (props) => {
   const { current_password, new_password, confirm_password } = props.fieldData;
+  const cardtheme = darkThemeClass("dt-card-theme", props.theme);
+  const inputdark = darkThemeClass("dt-form-control", props.theme);
   return (
-    <div className="card mt-3">
+    <div className={`card mt-3 ${cardtheme}`}>
       <div className="card-body">
         <form onSubmit={props.handleSubmit}>
           <div>
@@ -125,7 +129,8 @@ export const ChangePassword = (props) => {
             <input
               type="password"
               name="current_password"
-              className="form-control"
+              className={`form-control ${inputdark}`}
+              id="current_password"
               required
               value={current_password}
               onChange={props.handleChange}
@@ -136,7 +141,8 @@ export const ChangePassword = (props) => {
             <input
               type="password"
               name="new_password"
-              className="form-control"
+              className={`form-control ${inputdark}`}
+              id="new_password"
               required
               value={new_password}
               onChange={props.handleChange}
@@ -147,7 +153,8 @@ export const ChangePassword = (props) => {
             <input
               type="password"
               name="confirm_password"
-              className="form-control"
+              className={`form-control ${inputdark}`}
+              id="confirm_password"
               required
               value={confirm_password}
               onChange={props.handleChange}
@@ -165,8 +172,10 @@ export const ChangePassword = (props) => {
 };
 
 export const Notifications = (props) => {
+  const cardtheme = darkThemeClass("dt-card-theme", props.theme);
+  const btn = darkThemeClass("btn-dark", props.theme);
   return (
-    <div className="card h-100">
+    <div className={`card h-100 ${cardtheme}`}>
       <div className="card-body">
         <h6 className="d-flex align-items-center mb-3">
           <i className="las la-bell size-2x mx-2"></i>
@@ -195,7 +204,7 @@ export const Notifications = (props) => {
                   <div className="mb-2 mt-2">
                     <button
                       onClick={() => props.confirmDel(notifyObj)}
-                      className="btn btn-sm text-danger"
+                      className={`btn btn-sm text-danger ${btn}`}
                     >
                       Del
                     </button>
@@ -221,6 +230,7 @@ export const Notifications = (props) => {
 
 ProfileColLeft.propTypes = {
   user: PropTypes.object,
+  theme: PropTypes.string,
 };
 
 ProfileColRight.propTypes = {
@@ -229,6 +239,7 @@ ProfileColRight.propTypes = {
   profileRef: PropTypes.object,
   passwordModalPopUp: PropTypes.func,
   passwordRef: PropTypes.object,
+  theme: PropTypes.string,
 };
 
 ChangePassword.propTypes = {
@@ -236,6 +247,7 @@ ChangePassword.propTypes = {
   handleChange: PropTypes.func,
   handleSubmit: PropTypes.func,
   loading: PropTypes.bool,
+  theme: PropTypes.string,
 };
 
 Notifications.propTypes = {
@@ -246,4 +258,5 @@ Notifications.propTypes = {
   confirmDel: PropTypes.func,
   count: PropTypes.number.isRequired,
   loading: PropTypes.bool.isRequired,
+  theme: PropTypes.string,
 };

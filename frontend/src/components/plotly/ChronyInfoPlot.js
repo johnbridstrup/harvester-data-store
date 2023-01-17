@@ -5,6 +5,9 @@ function ChronyInfoPlot(props) {
   const red = "rgb(230, 2, 2)";
   const yellow = "rgb(227, 220, 5)";
   const green = "rgb(72, 191, 8)";
+  const paper_bgcolor = props.theme === "dark" ? "#343434" : "#fff";
+  const plot_bgcolor = props.theme === "dark" ? "#343434" : "#fff";
+  const color = props.theme === "dark" ? "#fff" : "#444";
 
   const labels = ["Last Offset", "RMS Offset"];
 
@@ -23,6 +26,11 @@ function ChronyInfoPlot(props) {
       type: "log",
       range: [-10, 1.5],
       title: "seconds",
+    },
+    paper_bgcolor: paper_bgcolor,
+    plot_bgcolor: plot_bgcolor,
+    font: {
+      color: color,
     },
   };
 
@@ -80,6 +88,7 @@ function ChronyInfoPlot(props) {
 ChronyInfoPlot.propTypes = {
   chronyInfo: PropTypes.object,
   robot: PropTypes.string,
+  theme: PropTypes.string,
 };
 
 export default ChronyInfoPlot;

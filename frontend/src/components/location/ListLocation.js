@@ -24,6 +24,7 @@ function ListLocation(props) {
   const [selectedDistributor, setSelectedDistributor] = useState(null);
   const { locations, loading } = useSelector((state) => state.location);
   const { distributors } = useSelector((state) => state.distributor);
+  const { theme } = useSelector((state) => state.home);
   const distributorOptions = transformDistOptions(distributors);
   const dispatch = useDispatch();
   const locationRef = useRef();
@@ -138,6 +139,7 @@ function ListLocation(props) {
         <LocationTable
           locations={locations}
           handleLocUpdateClick={handleLocUpdateClick}
+          theme={theme}
         />
       )}
       <LocationModal
@@ -147,6 +149,7 @@ function ListLocation(props) {
         handleSubmit={handleFormSubmit}
         handleDistrSelect={handleDistrSelect}
         selectedDistributor={selectedDistributor}
+        theme={theme}
       />
     </>
   );

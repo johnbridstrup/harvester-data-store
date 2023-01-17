@@ -1,13 +1,14 @@
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-import { timeStampFormat } from "utils/utils";
+import { darkThemeClass, timeStampFormat } from "utils/utils";
 
 function ErrorReportDetailTable(props) {
+  const tabledt = darkThemeClass("dt-table", props.theme);
   return (
     <div className="row">
       <div className="col">
         <div className="table-responsive">
-          <table className="table">
+          <table className={`table ${tabledt}`}>
             <thead>
               <tr>
                 <th>Time</th>
@@ -48,6 +49,7 @@ function ErrorReportDetailTable(props) {
 ErrorReportDetailTable.propTypes = {
   reportObj: PropTypes.object,
   timezone: PropTypes.string,
+  theme: PropTypes.string,
 };
 
 export default ErrorReportDetailTable;

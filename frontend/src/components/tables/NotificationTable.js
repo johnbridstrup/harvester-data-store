@@ -1,9 +1,11 @@
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-import { Loader } from "utils/utils";
+import { darkThemeClass, Loader } from "utils/utils";
 import { LoaderDiv } from "../styled";
 
 function NotificationTable(props) {
+  const tabledt = darkThemeClass("dt-table", props.theme);
+  const rowdt = darkThemeClass("dt-row", props.theme);
   return (
     <div className="table-responsive">
       {props.loading ? (
@@ -11,7 +13,7 @@ function NotificationTable(props) {
           <Loader size={50} />
         </LoaderDiv>
       ) : (
-        <table className="table">
+        <table className={`table ${tabledt}`}>
           <thead>
             <tr>
               <th>Trigger On</th>
@@ -33,7 +35,7 @@ function NotificationTable(props) {
           </thead>
           <tbody>
             {props.notifications.map((notif, _) => (
-              <tr key={notif.id} className="tr-hover">
+              <tr key={notif.id} className={`tr-hover ${rowdt}`}>
                 <td>
                   <Link
                     to={`/notifications/${notif.id}`}
@@ -70,6 +72,7 @@ NotificationTable.propTypes = {
   handleChange: PropTypes.func,
   checkedNotif: PropTypes.array,
   loading: PropTypes.bool,
+  theme: PropTypes.string,
 };
 
 export default NotificationTable;

@@ -1,8 +1,8 @@
 import { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { imagePath } from "utils/utils";
-import { SUCCESS } from "features/base/constants";
+import { darkThemeClass, imagePath } from "utils/utils";
+import { SUCCESS, THEME_MODES } from "features/base/constants";
 import {
   createLogSession,
   listLogSession,
@@ -11,6 +11,7 @@ import {
 function DropFileInput(props) {
   const [fileObj, setFileObj] = useState(null);
   const { uploading } = useSelector((state) => state.logparser);
+  const { theme } = useSelector((state) => state.home);
   const wrapperRef = useRef(null);
   const dispatch = useDispatch();
 
@@ -35,19 +36,26 @@ function DropFileInput(props) {
       const res = await dispatch(createLogSession(formData));
       if (res.payload?.status === SUCCESS) {
         setFileObj(null);
-        toast.success(res.payload?.message);
+        toast.success(res.payload?.message, {
+          theme: theme === THEME_MODES.AUTO_THEME ? "colored" : theme,
+        });
         await dispatch(listLogSession());
       } else {
-        toast.error(res?.payload);
+        toast.error(res?.payload, {
+          theme: theme === THEME_MODES.AUTO_THEME ? "colored" : theme,
+        });
       }
     }
   };
 
+  const dragtheme = darkThemeClass("dt-drag-n-drop", theme);
+  const fileinput = darkThemeClass("dt-drop-file-input", theme);
+
   return (
-    <div className="drag-n-drop">
+    <div className={`drag-n-drop ${dragtheme}`}>
       <div
         ref={wrapperRef}
-        className="drop-file-input"
+        className={`drop-file-input ${fileinput}`}
         onDragEnter={onDragEnter}
         onDragLeave={onDragLeave}
         onDrop={onDrop}
@@ -66,7 +74,9 @@ function DropFileInput(props) {
       </div>
       {fileObj && (
         <div className="drop-file-preview">
-          <p className="title">Ready to upload</p>
+          <p className={`title ${dragtheme && "text-white"}`}>
+            Ready to upload
+          </p>
           <div className="item">
             <img src={imagePath("file-blank")} alt="file-blank" />
             <div className="item-info">

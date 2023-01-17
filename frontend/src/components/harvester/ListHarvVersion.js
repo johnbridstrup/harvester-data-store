@@ -1,11 +1,14 @@
 import moment from "moment";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { Loader, timeStampFormat } from "utils/utils";
+import { darkThemeClass, Loader, timeStampFormat } from "utils/utils";
 import { LoaderDiv } from "../styled";
 
 function ListHarvVersion(props) {
   const { harvversion, loading } = useSelector((state) => state.harvester);
+  const { theme } = useSelector((state) => state.home);
+  const tabledt = darkThemeClass("dt-table", theme);
+
   return (
     <div className="mb-4">
       <div className="table-responsive">
@@ -14,7 +17,7 @@ function ListHarvVersion(props) {
             <Loader size={50} />
           </LoaderDiv>
         ) : (
-          <table className="table">
+          <table className={`table ${tabledt}`}>
             <thead>
               <tr>
                 <th>ID</th>

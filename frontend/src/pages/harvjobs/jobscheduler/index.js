@@ -30,6 +30,7 @@ function JobSchedulerView(props) {
     jobs,
     internal: { jtype, schema },
   } = useSelector((state) => state.harvjobs);
+  const { theme } = useSelector((state) => state.home);
   const dispatch = useDispatch();
   const jobtypeOptions = transformJobTypeOptions(jobtypes);
 
@@ -98,6 +99,7 @@ function JobSchedulerView(props) {
               jobtypeOptions={jobtypeOptions}
               handleJobTypeSelect={handleJobTypeSelect}
               selectedJobType={selectedJobType}
+              theme={theme}
             />
           </div>
           <div className="col-lg-9 col-md-8 col-sm-12">
@@ -105,11 +107,12 @@ function JobSchedulerView(props) {
               schemaOptions={schemaOptions}
               handleJobSchemaSelect={handleJobSchemaSelect}
               selectedJobSchema={selectedJobSchema}
+              theme={theme}
             />
           </div>
         </div>
         <div className="row mb-4">
-          <JobScheduled jobs={jobs} jobschema={jobschema} />
+          <JobScheduled jobs={jobs} jobschema={jobschema} theme={theme} />
         </div>
       </div>
     </MainLayout>

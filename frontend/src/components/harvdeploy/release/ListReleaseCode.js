@@ -3,11 +3,16 @@ import { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
-import { SUCCESS } from "features/base/constants";
+import { SUCCESS, THEME_MODES } from "features/base/constants";
 import { listTags, updateRelease } from "features/harvdeploy/harvdeploySlice";
 import { queryHarvester } from "features/harvester/harvesterSlice";
 import { handleReleaseFormSubmit } from "utils/services";
-import { handleSelectFactory, Loader, transformHarvOptions } from "utils/utils";
+import {
+  darkThemeClass,
+  handleSelectFactory,
+  Loader,
+  transformHarvOptions,
+} from "utils/utils";
 import ReleaseTagModal from "components/modals/ReleaseTagModal";
 import ScheduleModal from "components/modals/ScheduleModal";
 import { LoaderDiv } from "components/styled";
@@ -22,6 +27,7 @@ function ListReleaseCode(props) {
   const { releasecodes, loading } = useSelector((state) => state.harvdeploy);
   const { harvesters } = useSelector((state) => state.harvester);
   const { user } = useSelector((state) => state.auth);
+  const { theme } = useSelector((state) => state.home);
   const dispatch = useDispatch();
   const modalRef = useRef();
   const tagRef = useRef(null);
@@ -64,15 +70,22 @@ function ListReleaseCode(props) {
     const res = await dispatch(updateRelease(data));
     if (res.payload?.status === SUCCESS) {
       await dispatch(listTags());
-      toast.success(res.payload?.message);
+      toast.success(res.payload?.message, {
+        theme: THEME_MODES.AUTO_THEME ? "colored" : theme,
+      });
       tagRef.current.click();
       setFieldData((current) => {
         return { ...current, tag: "" };
       });
     } else {
-      toast.error(res.payload);
+      toast.error(res.payload, {
+        theme: THEME_MODES.AUTO_THEME ? "colored" : theme,
+      });
     }
   };
+
+  const tabledt = darkThemeClass("dt-table", theme);
+  const btn = darkThemeClass("btn-dark", theme);
 
   return (
     <>
@@ -82,7 +95,7 @@ function ListReleaseCode(props) {
             <Loader size={50} />
           </LoaderDiv>
         ) : (
-          <table className="table">
+          <table className={`table ${tabledt}`}>
             <thead>
               <tr>
                 <th>ID</th>
@@ -107,7 +120,7 @@ function ListReleaseCode(props) {
                   <td>
                     <span
                       onClick={() => modalPopUp(obj)}
-                      className="btn btn-sm"
+                      className={`btn btn-sm ${btn}`}
                     >
                       Schedule
                     </span>
@@ -122,7 +135,10 @@ function ListReleaseCode(props) {
                     </button>
                   </td>
                   <td>
-                    <span onClick={() => tagPopup(obj)} className="btn btn-sm">
+                    <span
+                      onClick={() => tagPopup(obj)}
+                      className={`btn btn-sm ${btn}`}
+                    >
                       Add Tags
                     </span>
                     <button
@@ -146,11 +162,13 @@ function ListReleaseCode(props) {
         harvOptions={harvOptions}
         selectedHarvId={selectedHarvId}
         handleHarvIdSelect={handleSelect}
+        theme={theme}
       />
       <ReleaseTagModal
         handleChange={handleFieldChange}
         handleSubmit={handleTagSubmit}
         fieldData={fieldData}
+        theme={theme}
       />
     </>
   );

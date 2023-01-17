@@ -1,9 +1,11 @@
 import PropTypes from "prop-types";
+import { darkThemeClass } from "utils/utils";
 
 function TimeTable(props) {
+  const tabledt = darkThemeClass("dt-table", props.theme);
   return (
     <div className="table-responsive">
-      <table className="table table-bordered">
+      <table className={`table table-bordered ${tabledt}`}>
         <tbody>
           <tr>
             <th scope="col">System Time</th>
@@ -21,6 +23,7 @@ function TimeTable(props) {
 
 TimeTable.propTypes = {
   sysmonObj: PropTypes.object,
+  theme: PropTypes.string,
 };
 
 export default TimeTable;

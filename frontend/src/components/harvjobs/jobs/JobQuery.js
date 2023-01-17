@@ -2,8 +2,13 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Select from "react-select";
 import { queryJobs } from "features/harvjobs/harvjobSlice";
-import { transformHarvOptions, statusOptions } from "utils/utils";
+import {
+  transformHarvOptions,
+  statusOptions,
+  selectDarkStyles,
+} from "utils/utils";
 import { InputFormControl } from "components/styled";
+import { THEME_MODES } from "features/base/constants";
 
 function JobQuery(props) {
   const [fieldData, setFormData] = useState({
@@ -12,6 +17,7 @@ function JobQuery(props) {
   const [selectedHarvId, setSelectedHarvId] = useState(null);
   const [selectedStatus, setSelectedStatus] = useState(null);
   const { harvesters } = useSelector((state) => state.harvester);
+  const { theme } = useSelector((state) => state.home);
   const harvesterOptions = transformHarvOptions(harvesters);
   const dispatch = useDispatch();
 
@@ -46,6 +52,8 @@ function JobQuery(props) {
     await dispatch(queryJobs(queryObj));
   };
 
+  const customStyles = theme === THEME_MODES.DARK_THEME ? selectDarkStyles : {};
+
   return (
     <form onSubmit={handleFormQuerySubmit}>
       <div className="row mb-4">
@@ -55,6 +63,8 @@ function JobQuery(props) {
             <InputFormControl
               type="text"
               name="uuid"
+              id="uuid"
+              theme={theme}
               value={fieldData.uuid}
               onChange={handleFieldChange}
               placeholder="ee402ab2-5627-11ed-ab3a-75f85fa65d8d"
@@ -68,14 +78,17 @@ function JobQuery(props) {
             <label>Harv ID</label>
             <Select
               isSearchable
+              isClearable
               placeholder="11"
               options={harvesterOptions}
               name="harv_id"
+              id="harv_id"
               onChange={handleHarvestSelect}
               defaultValue={selectedHarvId}
               value={selectedHarvId}
               className="multi-select-container"
               classNamePrefix="select"
+              styles={customStyles}
             />
           </div>
         </div>
@@ -86,14 +99,17 @@ function JobQuery(props) {
             <label>Job Status</label>
             <Select
               isSearchable
+              isClearable
               placeholder="Success"
               options={statusOptions}
               name="jobstatus"
+              id="jobstatus"
               onChange={handleStatusSelect}
               defaultValue={selectedStatus}
               value={selectedStatus}
               className="multi-select-container"
               classNamePrefix="select"
+              styles={customStyles}
             />
           </div>
         </div>

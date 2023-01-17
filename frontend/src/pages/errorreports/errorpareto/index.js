@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 import { BackButton } from "components/errorreports/ErrorHelpers";
 import ErrorParetos from "components/errorreports/ErrorParetos";
@@ -15,6 +15,7 @@ import { MAX_LIMIT } from "features/base/constants";
 import "./styles.css";
 
 function ErrorReportPareto(props) {
+  const { theme } = useSelector((state) => state.home);
   const dispatch = useDispatch();
   const { search } = useLocation();
   const paramsObj = paramsToObject(search);
@@ -34,7 +35,7 @@ function ErrorReportPareto(props) {
   return (
     <MainLayout>
       <div className="container">
-        <BackButton paramsObj={paramsObj} />
+        <BackButton paramsObj={paramsObj} theme={theme} />
         <Header title={"Error Pareto"} className={"display-6 mb-4"} />
         <ErrorParetos />
       </div>

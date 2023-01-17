@@ -201,6 +201,33 @@ a {
   margin-top: 80px;
 }
 
+.dt-card-theme {
+  background: var(--dark-bg-mild);
+  color: var(--color-white);
+}
+
+.dt-home-card-theme {
+  background: var(--dark-bg-mild);
+  color: var(--color-secondary);
+}
+
+.dt-table {
+  color: var(--color-white);
+}
+
+.dt-row:hover {
+  background-color: inherit;
+}
+
+.dt-modal-content {
+  background-color: var(--dark-bg-mild);
+}
+
+.dt-form-control {
+  color: var(--color-white);
+  background-color: #212529;
+}
+
 @media (max-width: 768px) {
   .custom-multiselect-control {
     width: 100% !important;

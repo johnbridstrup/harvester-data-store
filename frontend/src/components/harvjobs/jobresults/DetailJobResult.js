@@ -1,13 +1,15 @@
 import moment from "moment";
 import { lazy, Suspense, useState } from "react";
 import { useSelector } from "react-redux";
-import { Loader, timeStampFormat } from "utils/utils";
+import { darkThemeClass, Loader, timeStampFormat } from "utils/utils";
 import { Accordion, JsonDiv, LoaderDiv } from "components/styled";
 const ReactJson = lazy(() => import("@microlink/react-json-view"));
 
 function DetailJobResult(props) {
   const [detailObj, setDetailObj] = useState({});
   const { jobresult } = useSelector((state) => state.harvjobs);
+  const { theme } = useSelector((state) => state.home);
+  const cardtheme = darkThemeClass("dt-card-theme", theme);
 
   const handleHostClick = (obj) => {
     setDetailObj((current) => obj);
@@ -16,7 +18,7 @@ function DetailJobResult(props) {
   return (
     <>
       <div className="mb-5">
-        <div className="card card-body">
+        <div className={`card card-body ${cardtheme}`}>
           <div className="row">
             <div className="col-md-3 mb-2">
               <div className="f-w-600">ID</div>
@@ -75,7 +77,10 @@ function DetailJobResult(props) {
               >
                 {detailObj.id === host.id && (
                   <JsonDiv style={{ height: "20vh" }}>
-                    <ReactJson src={detailObj?.details || {}} />
+                    <ReactJson
+                      src={detailObj?.details || {}}
+                      theme={cardtheme ? "monokai" : "monokaii"}
+                    />
                   </JsonDiv>
                 )}
               </Suspense>

@@ -2,3 +2,9 @@
   background: #f4f4f4;
   border: 1px solid #ccc;
 }
+
+.tabular {
+  flex: 0.5;
+  border: 1px solid #ccc;
+  padding: 5px;
+}

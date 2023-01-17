@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { queryEvent } from "features/event/eventSlice";
 import { InputFormControl } from "../styled";
 
 function EventQuery(props) {
   const [uuid, setUUID] = useState("");
+  const { theme } = useSelector((state) => state.home);
   const dispatch = useDispatch();
 
   const handleFieldChange = (e) => {
@@ -30,7 +31,9 @@ function EventQuery(props) {
           <InputFormControl
             type="text"
             name="uuid"
+            id="uuid"
             value={uuid}
+            theme={theme}
             onChange={handleFieldChange}
             placeholder="68b3aab6-24c9-11ed-bb17-f9799c718175"
           />

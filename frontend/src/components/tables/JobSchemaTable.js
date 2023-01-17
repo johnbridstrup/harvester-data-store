@@ -1,11 +1,13 @@
 import moment from "moment";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
+import { darkThemeClass } from "utils/utils";
 
 function JobSchemaTable(props) {
+  const tabledt = darkThemeClass("dt-table", props.theme);
   return (
     <div className="table-responsive">
-      <table className="table">
+      <table className={`table ${tabledt}`}>
         <thead>
           <tr>
             <th>ID</th>
@@ -45,6 +47,7 @@ function JobSchemaTable(props) {
 JobSchemaTable.propTypes = {
   jobschemas: PropTypes.array,
   handleJSUpdateClick: PropTypes.func,
+  theme: PropTypes.string,
 };
 
 export default JobSchemaTable;

@@ -1,5 +1,5 @@
 import { useEffect, lazy, Suspense } from "react";
-import { Link, useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import validator from "@rjsf/validator-ajv8";
 import { toast } from "react-toastify";
@@ -9,7 +9,8 @@ import { createJob, getJobSchemaById } from "features/harvjobs/harvjobSlice";
 import { JsonDiv, LoaderDiv } from "components/styled";
 import { Loader } from "utils/utils";
 import { listHarvesters } from "features/harvester/harvesterSlice";
-import { MAX_LIMIT, SUCCESS } from "features/base/constants";
+import { MAX_LIMIT, SUCCESS, THEME_MODES } from "features/base/constants";
+import BackButton from "components/harvjobs/helpers";
 import "./styles.css";
 const ReactJson = lazy(() => import("@microlink/react-json-view"));
 const Form = lazy(() => import("@rjsf/mui"));
@@ -17,6 +18,7 @@ const Form = lazy(() => import("@rjsf/mui"));
 function ScheduleJobView(props) {
   const { jobschema } = useSelector((state) => state.harvjobs);
   const { harvesters } = useSelector((state) => state.harvester);
+  const { theme } = useSelector((state) => state.home);
   const { jobschemaId } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -83,11 +85,7 @@ function ScheduleJobView(props) {
     <MainLayout>
       <div className="container">
         <Header title={"HDS Schedule Job"} className={`display-6 mt-4 mb-4`} />
-        <div className="mt-3 mb-5">
-          <Link className="btn" to={`/jobscheduler`}>
-            <i className="las la-arrow-left"></i> Back
-          </Link>
-        </div>
+        <BackButton theme={theme} mb={"mb-4"} />
         <div className="row mb-4">
           <div className="col-md-6">
             <JsonDiv style={{ height: "75vh" }}>
@@ -98,11 +96,18 @@ function ScheduleJobView(props) {
                   </LoaderDiv>
                 }
               >
-                <ReactJson src={schema} collapsed={4} enableClipboard />
+                <ReactJson
+                  src={schema}
+                  collapsed={4}
+                  enableClipboard
+                  theme={
+                    theme === THEME_MODES.DARK_THEME ? "monokai" : "monokaii"
+                  }
+                />
               </Suspense>
             </JsonDiv>
           </div>
-          <div className="col-md-6">
+          <div className="col-md-6 form-custom-theme">
             <Suspense
               fallback={
                 <LoaderDiv>

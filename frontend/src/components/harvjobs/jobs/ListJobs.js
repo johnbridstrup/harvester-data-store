@@ -1,11 +1,13 @@
 import moment from "moment";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { getHarvId, getUrl, Loader } from "utils/utils";
+import { darkThemeClass, getHarvId, getUrl, Loader } from "utils/utils";
 import { LoaderDiv } from "components/styled";
 
 function ListJobs(props) {
   const { jobs, loading } = useSelector((state) => state.harvjobs);
+  const { theme } = useSelector((state) => state.home);
+  const tabledt = darkThemeClass("dt-table", theme);
   return (
     <>
       {loading ? (
@@ -14,7 +16,7 @@ function ListJobs(props) {
         </LoaderDiv>
       ) : (
         <div className="table-responsive mb-4">
-          <table className="table">
+          <table className={`table ${tabledt}`}>
             <thead>
               <tr>
                 <th>ID</th>

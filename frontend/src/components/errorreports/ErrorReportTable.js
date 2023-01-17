@@ -1,7 +1,7 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import { hoverEffect } from "features/errorreport/errorreportSlice";
-import { Loader, timeStampFormat } from "utils/utils";
+import { darkThemeClass, Loader, timeStampFormat } from "utils/utils";
 import { Container, LoaderDiv, SpanTarget, Table, Td } from "../styled";
 
 function ErrorReportTable(props) {
@@ -11,6 +11,7 @@ function ErrorReportTable(props) {
     timezone,
     internal: { searchObj },
   } = useSelector((state) => state.errorreport);
+  const { theme } = useSelector((state) => state.home);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { search } = useLocation();
@@ -29,6 +30,9 @@ function ErrorReportTable(props) {
     dispatch(hoverEffect({ obj, type: target.toUpperCase() }));
   };
 
+  const tabledt = darkThemeClass("dt-table", theme);
+  const rowdt = darkThemeClass("dt-row", theme);
+
   return (
     <Container className="table-responsive">
       {loading ? (
@@ -36,7 +40,7 @@ function ErrorReportTable(props) {
           <Loader size={50} />
         </LoaderDiv>
       ) : (
-        <Table className="table">
+        <Table className={`table ${tabledt}`}>
           <thead>
             <tr>
               <th>ID</th>
@@ -51,7 +55,7 @@ function ErrorReportTable(props) {
           </thead>
           <tbody className="report-tbody">
             {reports.map((report, index) => (
-              <tr key={report.reportId} className="tr-hover cursor">
+              <tr key={report.reportId} className={`tr-hover cursor ${rowdt}`}>
                 <td>
                   <Link
                     to={`/errorreports/${report.reportId}`}

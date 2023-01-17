@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import { queryHarvester } from "features/harvester/harvesterSlice";
 import HomeSearch from "./HomeSearch";
 import MenuSearch from "./MenuSearch";
+import { THEME_MODES } from "features/base/constants";
 import "./styles.css";
 
 function SearchHarvester(props) {
@@ -33,7 +34,9 @@ function SearchHarvester(props) {
       let harvId = res.payload?.results[0]?.id;
       navigate(`/harvesters/${harvId}?harv_id=${search}`);
     } else {
-      toast.error("searched harvester does not exist");
+      toast.error("searched harvester does not exist", {
+        theme: props.theme === THEME_MODES.AUTO_THEME ? "colored" : props.theme,
+      });
     }
   };
 
@@ -45,6 +48,7 @@ function SearchHarvester(props) {
         handleChange={handleChange}
         handleKeyDown={handleKeyDown}
         handleSearch={handleSearch}
+        theme={props.theme}
       />
     ) : (
       <></>
@@ -55,6 +59,7 @@ function SearchHarvester(props) {
 
 SearchHarvester.propTypes = {
   component: PropTypes.string.isRequired,
+  theme: PropTypes.string,
 };
 
 export default SearchHarvester;

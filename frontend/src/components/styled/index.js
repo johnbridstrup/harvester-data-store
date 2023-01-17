@@ -57,8 +57,8 @@ export const InputFormControl = styled.input`
   font-size: 1rem;
   font-weight: 400;
   line-height: 1.5;
-  color: #212529;
-  background-color: #fff;
+  color: ${(props) => (props.theme === "dark" ? "#fff" : "#212529")};
+  background-color: ${(props) => (props.theme === "dark" ? "#212529" : "#fff")};
   background-clip: padding-box;
   border: 1px solid #ced4da;
   -webkit-appearance: none;
@@ -130,9 +130,15 @@ export const NavTabSpan = styled.span`
   cursor: pointer;
 
   color: ${(props) =>
-    props.activetab === props.navto ? "#495057" : "rgba(0,0,0,.5)"};
+    props.theme === "dark"
+      ? "#fff"
+      : props.activetab === props.navto
+      ? "#495057"
+      : "rgba(0,0,0,.5)"};
   background-color: ${(props) =>
-    props.activetab === props.navto
+    props.activetab === props.navto && props.theme === "dark"
+      ? "#343434"
+      : props.activetab === props.navto
       ? props.activetab === props.robocolor
         ? "#FF7276"
         : "#fff"
@@ -172,8 +178,17 @@ export const SpanTarget = styled.span`
 
 export const NavMainTabSpan = styled(NavTabSpan)`
   color: ${(props) =>
-    props.activetab === props.navto ? "#495057" : "rgba(0,0,0,.5)"};
-  background-color: ${(props) => (props.errored === true ? "#FF7276" : "")};
+    props.theme === "dark"
+      ? "#fff"
+      : props.activetab === props.navto
+      ? "#495057"
+      : "rgba(0,0,0,.5)"};
+  background-color: ${(props) =>
+    props.errored === true
+      ? "#FF7276"
+      : props.theme === "dark"
+      ? "#343434"
+      : ""};
   border-color: ${(props) =>
     props.activetab === props.navto ? "#dee2e6 #dee2e6 #fff" : ""};
 

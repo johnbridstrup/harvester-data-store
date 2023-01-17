@@ -7,6 +7,7 @@ import EventTable from "../tables/EventTable";
 function ListEvent(props) {
   const { events, loading } = useSelector((state) => state.event);
   const { token } = useSelector((state) => state.auth);
+  const { theme } = useSelector((state) => state.home);
 
   const handleDownloadFiles = async (fileObj) => {
     await handleDownload(fileObj, token);
@@ -19,7 +20,11 @@ function ListEvent(props) {
           <Loader size={50} />
         </LoaderDiv>
       ) : (
-        <EventTable events={events} handleDownload={handleDownloadFiles} />
+        <EventTable
+          events={events}
+          handleDownload={handleDownloadFiles}
+          theme={theme}
+        />
       )}
     </>
   );

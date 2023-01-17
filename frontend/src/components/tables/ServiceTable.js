@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { transformSysmonServices } from "utils/utils";
+import { darkThemeClass, transformSysmonServices } from "utils/utils";
 
 function ServiceTable(props) {
   const services = transformSysmonServices(props.services);
@@ -11,9 +11,10 @@ function ServiceTable(props) {
       return "";
     }
   };
+  const tabledt = darkThemeClass("dt-table", props.theme);
   return (
     <div className="table-responsive">
-      <table className="table">
+      <table className={`table ${tabledt}`}>
         <thead>
           <tr>
             <th>Service</th>
@@ -39,6 +40,7 @@ function ServiceTable(props) {
 ServiceTable.propTypes = {
   services: PropTypes.object,
   errors: PropTypes.array,
+  theme: PropTypes.string,
 };
 
 export default ServiceTable;

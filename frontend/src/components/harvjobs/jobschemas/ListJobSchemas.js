@@ -24,6 +24,7 @@ function ListJobSchemas(props) {
   const { jobschemas, jobtypes, loading } = useSelector(
     (state) => state.harvjobs
   );
+  const { theme } = useSelector((state) => state.home);
   const jobSchemaRef = useRef();
   const dispatch = useDispatch();
   const jobtypeOptions = transformJobTypeOptions(jobtypes);
@@ -137,6 +138,7 @@ function ListJobSchemas(props) {
         <JobSchemaTable
           jobschemas={jobschemas}
           handleJSUpdateClick={handleJSUpdateClick}
+          theme={theme}
         />
       )}
       <JobSchemaModal
@@ -146,6 +148,7 @@ function ListJobSchemas(props) {
         handleJobTypeSelect={handleJobTypeSelect}
         selectedJobType={selectedJobType}
         jobtypeOptions={jobtypeOptions}
+        theme={theme}
       />
     </>
   );

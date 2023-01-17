@@ -16,6 +16,7 @@ function ListNotification(props) {
   const [checkedNotif, setCheckedNotif] = useState([]);
   const { user, token } = useSelector((state) => state.auth);
   const { notifications, loading } = useSelector((state) => state.notification);
+  const { theme } = useSelector((state) => state.home);
   const dispatch = useDispatch();
   const confirmRef = useRef();
   const { search } = useLocation();
@@ -65,6 +66,7 @@ function ListNotification(props) {
         handleChange={handleChange}
         handleDeleteMany={confirmPopUp}
         loading={loading}
+        theme={theme}
       />
 
       <ConfirmModal
@@ -72,6 +74,7 @@ function ListNotification(props) {
         cancelRequest={confirmPopUp}
         confirmRef={confirmRef}
         msg={"Are you sure you want to delete the selected notification(s)"}
+        theme={theme}
       />
     </>
   );

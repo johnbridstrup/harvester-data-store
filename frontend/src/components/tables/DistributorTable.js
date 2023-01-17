@@ -1,10 +1,13 @@
 import moment from "moment";
 import PropTypes from "prop-types";
+import { darkThemeClass } from "utils/utils";
 
 function DistributorTable(props) {
+  const tabledt = darkThemeClass("dt-table", props.theme);
+  const rowdt = darkThemeClass("dt-row", props.theme);
   return (
     <div className="table-responsive">
-      <table className="table">
+      <table className={`table ${tabledt}`}>
         <thead>
           <tr>
             <th>ID</th>
@@ -16,7 +19,7 @@ function DistributorTable(props) {
         </thead>
         <tbody>
           {props.distributors?.map((distributor, _) => (
-            <tr key={distributor.id} className="tr-hover">
+            <tr key={distributor.id} className={`tr-hover ${rowdt}`}>
               <td>{distributor.id}</td>
               <td>{distributor.name}</td>
               <td>{moment(distributor.created).format("LLLL")}</td>
@@ -40,6 +43,7 @@ function DistributorTable(props) {
 DistributorTable.propTypes = {
   distributors: PropTypes.array,
   handleDistUpdateClick: PropTypes.func,
+  theme: PropTypes.string,
 };
 
 export default DistributorTable;

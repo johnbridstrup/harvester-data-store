@@ -12,6 +12,7 @@ import "./styles.css";
 
 function JobTypeDetailView(props) {
   const { loading } = useSelector((state) => state.harvjobs);
+  const { theme } = useSelector((state) => state.home);
   const { jobtypeId } = useParams();
   const dispatch = useDispatch();
 
@@ -29,7 +30,7 @@ function JobTypeDetailView(props) {
           className={`display-6 mt-4 mb-4`}
           reportId={jobtypeId}
         />
-        <BackButton mb={"mb-4"} />
+        <BackButton mb={"mb-4"} theme={theme} />
         {loading ? (
           <LoaderDiv>
             <Loader size={50} />

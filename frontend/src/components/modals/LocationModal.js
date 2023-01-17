@@ -1,9 +1,13 @@
 import PropTypes from "prop-types";
 import Select from "react-select";
-import { Loader } from "utils/utils";
+import { darkThemeClass, Loader, selectDarkStyles } from "utils/utils";
 
 function LocationModal(props) {
   const { ranch, country, region, mode, siteChannel } = props.fieldData;
+  const modal = darkThemeClass("dt-modal-content", props.theme);
+  const inputdark = darkThemeClass("dt-form-control", props.theme);
+  const customStyles = modal ? selectDarkStyles : {};
+
   return (
     <div className="col-md-8">
       <div
@@ -11,20 +15,22 @@ function LocationModal(props) {
         id="locationModal"
         tabIndex={-1}
         role="dialog"
-        aria-labelledby="exampleModalCenterTitle"
+        aria-labelledby="modal-center"
         aria-hidden="true"
         style={{ display: "none" }}
       >
         <div className="modal-dialog modal-dialog-centered" role="document">
-          <div className="modal-content profile-modal">
+          <div className={`modal-content ${modal}`}>
             <div className="text-right">
               <button
                 type="button"
-                className="btn closeModalBtn"
+                className="btn"
                 data-bs-dismiss="modal"
-                aria-label="Close"
+                aria-label="close"
               >
-                <span className="las la-times"></span>
+                <span
+                  className={`las la-times ${modal && "text-white"}`}
+                ></span>
               </button>
             </div>
             <div className="modal-body text-center px-5 pb-2">
@@ -39,8 +45,9 @@ function LocationModal(props) {
                       <label htmlFor="ranch">Ranch</label>
                       <input
                         type="text"
-                        className="form-control"
+                        className={`form-control ${inputdark}`}
                         name="ranch"
+                        id="ranch"
                         value={ranch}
                         required
                         onChange={props.handleChange}
@@ -52,8 +59,9 @@ function LocationModal(props) {
                       <label htmlFor="country">Country</label>
                       <input
                         type="text"
-                        className="form-control"
+                        className={`form-control ${inputdark}`}
                         name="country"
+                        id="country"
                         value={country}
                         required
                         onChange={props.handleChange}
@@ -67,7 +75,8 @@ function LocationModal(props) {
                       <label htmlFor="region">Region</label>
                       <input
                         type="text"
-                        className="form-control"
+                        className={`form-control ${inputdark}`}
+                        id="region"
                         name="region"
                         value={region}
                         required
@@ -84,11 +93,13 @@ function LocationModal(props) {
                         placeholder="distributor"
                         options={props.distributorOptions}
                         name="distributor"
+                        id="distributor"
                         onChange={props.handleDistrSelect}
                         defaultValue={props.selectedDistributor}
                         value={props.selectedDistributor}
                         className="multi-select-container"
                         classNamePrefix="select"
+                        styles={customStyles}
                       />
                     </div>
                   </div>
@@ -99,8 +110,9 @@ function LocationModal(props) {
                       <label htmlFor="siteChannel">Site Channel</label>
                       <input
                         type="text"
-                        className="form-control"
+                        className={`form-control ${inputdark}`}
                         name="siteChannel"
+                        id="siteChannel"
                         value={siteChannel}
                         required
                         onChange={props.handleChange}
@@ -139,6 +151,7 @@ LocationModal.propTypes = {
   distributorOptions: PropTypes.array,
   selectedDistributor: PropTypes.object,
   handleDistrSelect: PropTypes.func,
+  theme: PropTypes.string,
 };
 
 export default LocationModal;

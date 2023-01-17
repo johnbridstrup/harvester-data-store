@@ -1,11 +1,12 @@
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-import { getHarvId, getUrl } from "utils/utils";
+import { darkThemeClass, getHarvId, getUrl } from "utils/utils";
 
 function JobsTable(props) {
+  const tabledt = darkThemeClass("dt-table", props.theme);
   return (
     <div className="table-responsive">
-      <table className="table">
+      <table className={`table ${tabledt}`}>
         <thead>
           <tr>
             <td>ID</td>
@@ -47,6 +48,7 @@ function JobsTable(props) {
 
 JobsTable.propTypes = {
   jobs: PropTypes.array,
+  theme: PropTypes.string,
 };
 
 export default JobsTable;

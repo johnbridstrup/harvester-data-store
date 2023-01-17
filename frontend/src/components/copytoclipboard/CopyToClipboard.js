@@ -2,10 +2,12 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 import PropTypes from "prop-types";
 import { ClipboardDiv } from "../styled";
+import { darkThemeClass } from "utils/utils";
 
 function CopyToClipboard(props) {
   const [copied, setCopied] = useState(false);
   const { queryUrl } = useSelector((state) => state.errorreport);
+  const { theme } = useSelector((state) => state.home);
   const copy = async (text) => {
     try {
       await navigator.clipboard.writeText(text);
@@ -26,9 +28,10 @@ function CopyToClipboard(props) {
       await copy(public_url + "/errorreports");
     }
   };
+  const btn = darkThemeClass("btn-dark", theme);
   return (
     <ClipboardDiv>
-      <button onClick={copyURL} className="btn">
+      <button onClick={copyURL} className={`btn ${btn}`}>
         {copied ? (
           <span className="las la-check-double text-success">copied</span>
         ) : (
@@ -41,6 +44,7 @@ function CopyToClipboard(props) {
 
 export const CopyBuildConfig = (props) => {
   const [copied, setCopied] = useState(false);
+  const btn = darkThemeClass("btn-dark", props.theme);
   const copy = async (text) => {
     try {
       await navigator.clipboard.writeText(text);
@@ -66,7 +70,7 @@ export const CopyBuildConfig = (props) => {
   };
 
   return (
-    <button onClick={buildConfig} className="btn mx-2">
+    <button onClick={buildConfig} className={`btn mx-2 ${btn}`}>
       {copied ? (
         <span className="las la-check-double text-success">copied</span>
       ) : (
@@ -79,6 +83,7 @@ export const CopyBuildConfig = (props) => {
 CopyBuildConfig.propTypes = {
   paretoArr: PropTypes.array,
   paramsObj: PropTypes.object,
+  theme: PropTypes.string,
 };
 
 CopyToClipboard.propTypes = {};

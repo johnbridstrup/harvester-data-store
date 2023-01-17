@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import MainLayout from "components/layout/main";
 import Header from "components/layout/header";
 import ListJobSchemas from "components/harvjobs/jobschemas/ListJobSchemas";
@@ -10,6 +10,7 @@ import BackButton from "components/harvjobs/helpers";
 import "./styles.css";
 
 function JobSchemaListVIew(props) {
+  const { theme } = useSelector((state) => state.home);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -24,7 +25,7 @@ function JobSchemaListVIew(props) {
     <MainLayout>
       <div className="container">
         <Header title={"HDS Job Schemas"} className={`display-6 mt-4 mb-4`} />
-        <BackButton />
+        <BackButton theme={theme} />
         <ListJobSchemas />
         <GenericPagination state="harvjobs" />
       </div>

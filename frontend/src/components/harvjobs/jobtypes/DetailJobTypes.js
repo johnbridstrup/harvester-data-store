@@ -1,11 +1,14 @@
 import moment from "moment";
 import { useSelector } from "react-redux";
+import { darkThemeClass } from "utils/utils";
 
 function DetailJobTypes(props) {
   const { jobtype } = useSelector((state) => state.harvjobs);
+  const { theme } = useSelector((state) => state.home);
+  const cardtheme = darkThemeClass("dt-card-theme", theme);
   return (
     <div className="mb-4">
-      <div className="card card-body mb-4">
+      <div className={`card card-body mb-4 ${cardtheme}`}>
         <div className="row">
           <div className="col-md-3 mb-2">
             <div className="f-w-600">ID</div>

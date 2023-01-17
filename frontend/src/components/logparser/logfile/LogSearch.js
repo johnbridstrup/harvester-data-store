@@ -7,6 +7,7 @@ import {
   scrollUpIndex,
   scrollDownIndex,
 } from "features/logparser/logparserSlice";
+import { darkThemeClass } from "utils/utils";
 
 function LogSearch(props) {
   const [search, setSearch] = useState("");
@@ -20,8 +21,11 @@ function LogSearch(props) {
       search: { currentIndex, content, countIndex, searchText },
     },
   } = useSelector((state) => state.logparser);
+  const { theme } = useSelector((state) => state.home);
   const dispatch = useDispatch();
   const currIndex = content.length > 0 ? countIndex + 1 : countIndex;
+  const inputdark = darkThemeClass("dt-log-search", theme);
+  const btn = darkThemeClass("btn-dark", theme);
 
   const handleKeyDown = async (e) => {
     if (e.key === "Enter") {
@@ -129,6 +133,7 @@ function LogSearch(props) {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 onKeyDown={handleKeyDown}
+                className={`${inputdark}`}
               />
               <span>
                 {currIndex}/{content.length}
@@ -137,18 +142,18 @@ function LogSearch(props) {
             <div className="find-bar-icons">
               <span
                 onClick={() => scrollToLogIndex("up")}
-                className={`btn ${borderEffect.up && "bordered-btn"}`}
+                className={`btn ${borderEffect.up && "bordered-btn"} ${btn}`}
               >
                 <i className="las la-arrow-up"></i>
               </span>
               <span
                 onClick={() => scrollToLogIndex("down")}
-                className={`btn ${borderEffect.down && "bordered-btn"}`}
+                className={`btn ${borderEffect.down && "bordered-btn"} ${btn}`}
               >
                 <i className="las la-arrow-down"></i>
               </span>
               <span
-                className={`btn ${borderEffect.exit && "bordered-btn"}`}
+                className={`btn ${borderEffect.exit && "bordered-btn"} ${btn}`}
                 onClick={exitSearch}
               >
                 <i className="las la-times"></i>

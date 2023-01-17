@@ -4,15 +4,18 @@ import Select from "react-select";
 import { queryRelease } from "features/harvdeploy/harvdeploySlice";
 import {
   handleSelectFactory,
+  selectDarkStyles,
   transformFruitOptions,
   transformTagsOptions,
 } from "utils/utils";
+import { THEME_MODES } from "features/base/constants";
 
 function ReleaseQuery(props) {
   const [selectedFruit, setSelectedFruit] = useState(null);
   const [selectedTag, setSelectTag] = useState(null);
   const { tags } = useSelector((state) => state.harvdeploy);
   const { fruits } = useSelector((state) => state.fruit);
+  const { theme } = useSelector((state) => state.home);
   const dispatch = useDispatch();
   const fruitOptions = transformFruitOptions(fruits);
   const tagOptions = transformTagsOptions(tags);
@@ -34,6 +37,8 @@ function ReleaseQuery(props) {
     await dispatch(queryRelease(queryObj));
   };
 
+  const customStyles = theme === THEME_MODES.DARK_THEME ? selectDarkStyles : {};
+
   return (
     <div>
       <form onSubmit={handleFormQuerySubmit}>
@@ -47,11 +52,13 @@ function ReleaseQuery(props) {
                 placeholder="strawberry"
                 options={fruitOptions}
                 name="strawberry"
+                id="strawberry"
                 onChange={handleFruitSelect}
                 defaultValue={selectedFruit}
                 value={selectedFruit}
                 className="multi-select-container"
                 classNamePrefix="select"
+                styles={customStyles}
               />
             </div>
           </div>
@@ -66,11 +73,13 @@ function ReleaseQuery(props) {
                 placeholder="Invalid"
                 options={tagOptions}
                 name="tags"
+                id="tags"
                 onChange={handleTagSelect}
                 defaultValue={selectedTag}
                 value={selectedTag}
                 className="multi-select-container"
                 classNamePrefix="select"
+                styles={customStyles}
               />
             </div>
           </div>

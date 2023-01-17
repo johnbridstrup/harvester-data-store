@@ -1,17 +1,25 @@
 import { useNavigate } from "react-router-dom";
-import { InputFormControl } from "../styled";
 import PropTypes from "prop-types";
 import Select from "react-select";
-import { aggregateOptions } from "utils/utils";
+import { InputFormControl } from "../styled";
+import {
+  aggregateOptions,
+  darkThemeClass,
+  selectDarkStyles,
+} from "utils/utils";
 
 export const HoverTabular = (props) => {
+  const bg = darkThemeClass("bg-dark", props.theme);
+  const style = bg
+    ? { border: "1px solid #ccc" }
+    : { background: "#f4f4f4", border: "1px solid #ccc" };
   return (
     <>
       {props.hoverObj?.type === "HARVESTER" && (
         <div>
           <div className="d-flex">
-            <div className="tabular bg-gray">Property</div>
-            <div className="tabular bg-gray">Value</div>
+            <div className={`tabular bg-gray ${bg}`}>Property</div>
+            <div className={`tabular bg-gray ${bg}`}>Value</div>
           </div>
           <div className="d-flex">
             <div className="tabular">Harv ID</div>
@@ -37,8 +45,8 @@ export const HoverTabular = (props) => {
       {props.hoverObj?.type === "LOCATION" && (
         <div>
           <div className="d-flex">
-            <div className="tabular bg-gray">Property</div>
-            <div className="tabular bg-gray">Value</div>
+            <div className={`tabular bg-gray ${bg}`}>Property</div>
+            <div className={`tabular bg-gray ${bg}`}>Value</div>
           </div>
           <div className="d-flex">
             <div className="tabular">Ranch</div>
@@ -63,18 +71,12 @@ export const HoverTabular = (props) => {
 
       {props.hoverObj?.type === "CODE" && (
         <div className="table-responsive">
-          <table className="table">
+          <table className={`table ${bg && "dt-table"}`}>
             <thead>
               <tr>
-                <th style={{ background: "#f4f4f4", border: "1px solid #ccc" }}>
-                  Code
-                </th>
-                <th style={{ background: "#f4f4f4", border: "1px solid #ccc" }}>
-                  Exception
-                </th>
-                <th style={{ background: "#f4f4f4", border: "1px solid #ccc" }}>
-                  Service
-                </th>
+                <th style={style}>Code</th>
+                <th style={style}>Exception</th>
+                <th style={style}>Service</th>
               </tr>
             </thead>
             <tbody>
@@ -100,28 +102,28 @@ export const HoverTabular = (props) => {
 };
 
 export const ExceptTabular = (props) => {
+  const bg = darkThemeClass("bg-dark", props.theme);
   return (
     <div>
       <div className="d-flex">
-        <div className="tabular bg-gray">Exception</div>
-        <div className="tabular bg-gray">Timestamp</div>
+        <div className={`tabular bg-gray ${bg}`}>Exception</div>
+        <div className={`tabular bg-gray ${bg}`}>Timestamp</div>
       </div>
-      {
-        <div className="d-flex">
-          <div className="tabular">{props.exceptName}</div>
-          <div className="tabular">{props.timestamp}</div>
-        </div>
-      }
+      <div className="d-flex">
+        <div className="tabular">{props.exceptName}</div>
+        <div className="tabular">{props.timestamp}</div>
+      </div>
     </div>
   );
 };
 
 export const ParetoTabular = (props) => {
+  const bg = darkThemeClass("bg-dark", props.theme);
   return (
     <div>
       <div className="d-flex">
-        <div className="tabular bg-gray">Property</div>
-        <div className="tabular bg-gray">Value</div>
+        <div className={`tabular bg-gray ${bg}`}>Property</div>
+        <div className={`tabular bg-gray ${bg}`}>Value</div>
       </div>
       {props.paramsObj?.harv_ids && (
         <div className="d-flex">
@@ -211,9 +213,10 @@ export const BackButton = (props) => {
     let params = new URLSearchParams(props.paramsObj);
     navigate(`/errorreports/?${params.toString()}`);
   };
+  const btn = darkThemeClass("btn-dark", props.theme);
   return (
     <div className="mt-4 mb-4">
-      <span className="btn btn-default" onClick={goBack}>
+      <span className={`btn btn-default ${btn}`} onClick={goBack}>
         <i className="las la-arrow-left"></i> Back
       </span>
     </div>
@@ -239,7 +242,11 @@ export const GenericFormField = (props) => {
     timezoneOptions,
     handleTimezoneSelect,
     selectedTimezone,
+    theme,
   } = props;
+  const dark = darkThemeClass("dark-theme", theme);
+  const customStyles = dark ? selectDarkStyles : {};
+
   return (
     <>
       <div className="row mb-4 mt-2">
@@ -258,6 +265,7 @@ export const GenericFormField = (props) => {
               defaultValue={selectedHarvId}
               className="multi-select-container"
               classNamePrefix="select"
+              styles={customStyles}
             />
           </div>
         </div>
@@ -276,6 +284,7 @@ export const GenericFormField = (props) => {
               value={selectedLocation}
               className="multi-select-container"
               classNamePrefix="select"
+              styles={customStyles}
             />
           </div>
         </div>
@@ -296,6 +305,7 @@ export const GenericFormField = (props) => {
               value={selectedFruit}
               className="multi-select-container"
               classNamePrefix="select"
+              styles={customStyles}
             />
           </div>
         </div>
@@ -314,6 +324,7 @@ export const GenericFormField = (props) => {
               value={selectedCode}
               className="multi-select-container"
               classNamePrefix="select"
+              styles={customStyles}
             />
           </div>
         </div>
@@ -329,6 +340,7 @@ export const GenericFormField = (props) => {
               value={fieldData?.traceback}
               onChange={handleFieldChange}
               placeholder="traceback string"
+              theme={theme}
             />
           </div>
         </div>
@@ -342,6 +354,7 @@ export const GenericFormField = (props) => {
               value={fieldData?.generic}
               onChange={handleFieldChange}
               placeholder="field__lookup=x, column_lookup=y"
+              theme={theme}
             />
           </div>
         </div>
@@ -435,6 +448,7 @@ export const GenericFormField = (props) => {
               value={fieldData?.start_time}
               onChange={handleFieldChange}
               placeholder="YYYYMMDDHHmmSS"
+              theme={theme}
             />
           </div>
         </div>
@@ -448,6 +462,7 @@ export const GenericFormField = (props) => {
               value={fieldData?.end_time}
               onChange={handleFieldChange}
               placeholder="YYYYMMDDHHmmSS"
+              theme={theme}
             />
           </div>
         </div>
@@ -465,6 +480,7 @@ export const GenericFormField = (props) => {
               value={selectedTimezone}
               className="multi-select-container"
               classNamePrefix="select"
+              styles={customStyles}
             />
           </div>
         </div>
@@ -474,6 +490,8 @@ export const GenericFormField = (props) => {
 };
 
 export const ParetoForm = (props) => {
+  const dark = darkThemeClass("dark-theme", props.theme);
+  const customStyles = dark ? selectDarkStyles : {};
   return (
     <div className="mb-4">
       <form onSubmit={props.handleSubmit}>
@@ -511,6 +529,7 @@ export const ParetoForm = (props) => {
                 value={props.selectedAggregate}
                 className="multi-select-container"
                 classNamePrefix="select"
+                styles={customStyles}
               />
             </div>
           </div>
@@ -569,11 +588,13 @@ export const FormQuery = (props) => {
 
 HoverTabular.propTypes = {
   hoverObj: PropTypes.object,
+  theme: PropTypes.string,
 };
 
 ExceptTabular.propTypes = {
   exceptName: PropTypes.string,
   timestamp: PropTypes.string,
+  theme: PropTypes.string,
 };
 
 ParetoForm.propTypes = {
@@ -594,17 +615,19 @@ ParetoForm.propTypes = {
   selectedCode: PropTypes.array,
   timezoneOptions: PropTypes.array,
   handleTimezoneSelect: PropTypes.func,
-  selectedTimezone: PropTypes.array,
+  selectedTimezone: PropTypes.object,
   fieldData: PropTypes.object,
   handleFieldChange: PropTypes.func,
 };
 
 ParetoTabular.propTypes = {
   paramsObj: PropTypes.object,
+  theme: PropTypes.string,
 };
 
 BackButton.propTypes = {
   paramsObj: PropTypes.object,
+  theme: PropTypes.string,
 };
 
 FormQuery.propTypes = {
@@ -623,12 +646,13 @@ FormQuery.propTypes = {
   selectedCode: PropTypes.array,
   timezoneOptions: PropTypes.array,
   handleTimezoneSelect: PropTypes.func,
-  selectedTimezone: PropTypes.array,
+  selectedTimezone: PropTypes.object,
   handleGenPareto: PropTypes.func,
   handleModalPopUp: PropTypes.func,
   notifyRef: PropTypes.object,
   fieldData: PropTypes.object,
   handleFieldChange: PropTypes.func,
+  theme: PropTypes.string,
 };
 
 GenericFormField.propTypes = {
@@ -646,7 +670,8 @@ GenericFormField.propTypes = {
   selectedCode: PropTypes.array,
   timezoneOptions: PropTypes.array,
   handleTimezoneSelect: PropTypes.func,
-  selectedTimezone: PropTypes.array,
+  selectedTimezone: PropTypes.object,
   fieldData: PropTypes.object,
   handleFieldChange: PropTypes.func,
+  theme: PropTypes.string,
 };

@@ -5,11 +5,12 @@ import SchemaTabsView from "./SchemaTabsView";
 
 function DetailHarvester(props) {
   const { harvester } = useSelector((state) => state.harvester);
+  const { theme } = useSelector((state) => state.home);
   return (
     <>
-      <HarvesterDetailTable harvester={harvester} />
+      <HarvesterDetailTable harvester={harvester} theme={theme} />
       <RecentHarvErrors />
-      <SchemaTabsView harvester={harvester} />
+      <SchemaTabsView harvester={harvester} theme={theme} />
     </>
   );
 }

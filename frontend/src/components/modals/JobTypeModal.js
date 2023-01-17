@@ -1,8 +1,10 @@
 import PropTypes from "prop-types";
-import { Loader } from "utils/utils";
+import { darkThemeClass, Loader } from "utils/utils";
 
 function JobTypeModal(props) {
   const { name, mode } = props.fieldData;
+  const modal = darkThemeClass("dt-modal-content", props.theme);
+  const inputdark = darkThemeClass("dt-form-control", props.theme);
   return (
     <div className="col-md-8">
       <div
@@ -10,20 +12,22 @@ function JobTypeModal(props) {
         id="jobTypeModal"
         tabIndex={-1}
         role="dialog"
-        aria-labelledby="exampleModalCenterTitle"
+        aria-labelledby="modal-center"
         aria-hidden="true"
         style={{ display: "none" }}
       >
         <div className="modal-dialog modal-dialog-centered" role="document">
-          <div className="modal-content profile-modal">
+          <div className={`modal-content ${modal}`}>
             <div className="text-right">
               <button
                 type="button"
-                className="btn closeModalBtn"
+                className="btn"
                 data-bs-dismiss="modal"
-                aria-label="Close"
+                aria-label="close"
               >
-                <span className="las la-times"></span>
+                <span
+                  className={`las la-times ${modal && "text-white"}`}
+                ></span>
               </button>
             </div>
             <div className="modal-body text-center px-5 pb-2">
@@ -38,8 +42,9 @@ function JobTypeModal(props) {
                       <label htmlFor="name">Name</label>
                       <input
                         type="text"
-                        className="form-control"
+                        className={`form-control ${inputdark}`}
                         name="name"
+                        id="name"
                         value={name}
                         required
                         onChange={props.handleChange}
@@ -75,6 +80,7 @@ JobTypeModal.propTypes = {
   fieldData: PropTypes.object,
   handleSubmit: PropTypes.func,
   loading: PropTypes.bool,
+  theme: PropTypes.string,
 };
 
 export default JobTypeModal;

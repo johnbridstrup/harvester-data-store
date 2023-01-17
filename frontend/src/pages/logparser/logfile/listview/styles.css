@@ -56,6 +56,15 @@
   background: var(--light-blue-color);
 }
 
+.marked-dark-bg {
+  background: var(--dark-bg-mild);
+}
+
+.bg-hover:hover {
+  background: var(--dark-bg-mild);
+  color: var(--color-secondary);
+}
+
 .current-marker {
   display: flex;
   align-items: center;
@@ -134,6 +143,11 @@
 
 .bordered-btn {
   border: 1px solid var(--blue-color);
+}
+
+.dt-log-search {
+  background: inherit;
+  color: var(--color-white);
 }
 
 @media (max-width: 376px) {

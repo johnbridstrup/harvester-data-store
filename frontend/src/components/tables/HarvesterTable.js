@@ -1,10 +1,13 @@
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
+import { darkThemeClass } from "utils/utils";
 
 function HarvesterTable(props) {
+  const tabledt = darkThemeClass("dt-table", props.theme);
+  const rowdt = darkThemeClass("dt-row", props.theme);
   return (
     <div className="table-responsive mb-4">
-      <table className="table">
+      <table className={`table ${tabledt}`}>
         <thead>
           <tr>
             <th>ID</th>
@@ -20,7 +23,7 @@ function HarvesterTable(props) {
         </thead>
         <tbody>
           {props.harvesters?.map((harvester, _) => (
-            <tr key={harvester.id} className="tr-hover">
+            <tr key={harvester.id} className={`tr-hover ${rowdt}`}>
               <td>{harvester.id}</td>
               <td>
                 <Link to={`/harvesters/${harvester.id}`}>{harvester.name}</Link>
@@ -60,6 +63,7 @@ function HarvesterTable(props) {
 HarvesterTable.propTypes = {
   harvesters: PropTypes.array,
   handleHarvUpdateClick: PropTypes.func,
+  theme: PropTypes.string,
 };
 
 export default HarvesterTable;

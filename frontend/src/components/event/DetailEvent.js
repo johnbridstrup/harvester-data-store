@@ -2,18 +2,22 @@ import moment from "moment";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { handleDownload } from "utils/services";
+import { darkThemeClass } from "utils/utils";
 
 function DetailEvent(props) {
   const { event } = useSelector((state) => state.event);
   const { token } = useSelector((state) => state.auth);
+  const { theme } = useSelector((state) => state.home);
 
   const handleDownloadFiles = async (fileObj) => {
     await handleDownload(fileObj, token);
   };
 
+  const cardtheme = darkThemeClass("dt-card-theme", theme);
+
   return (
     <>
-      <div className="card">
+      <div className={`card ${cardtheme}`}>
         <div className="card-body">
           <div className="row mb-4">
             <div className="col-md-4">

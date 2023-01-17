@@ -2,10 +2,12 @@ import { Link } from "react-router-dom";
 import moment from "moment";
 import { useSelector } from "react-redux";
 import { LoaderDiv } from "components/styled";
-import { Loader } from "utils/utils";
+import { darkThemeClass, Loader } from "utils/utils";
 
 function LogSessionList(props) {
   const { loading, logsessions } = useSelector((state) => state.logparser);
+  const { theme } = useSelector((state) => state.home);
+  const tabledt = darkThemeClass("dt-table", theme);
   return (
     <div className="table-responsive mb-4">
       {loading ? (
@@ -13,7 +15,7 @@ function LogSessionList(props) {
           <Loader size={50} />
         </LoaderDiv>
       ) : (
-        <table className="table">
+        <table className={`table ${tabledt}`}>
           <thead>
             <tr>
               <th>ID</th>

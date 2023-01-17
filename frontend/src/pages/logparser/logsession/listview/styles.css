@@ -105,3 +105,11 @@
 .drop-file-preview .item-del {
   opacity: 1;
 }
+
+.dt-drag-n-drop {
+  background-color: var(--dark-bg-mild);
+}
+
+.dt-drop-file-input {
+  background-color: #292929;
+}

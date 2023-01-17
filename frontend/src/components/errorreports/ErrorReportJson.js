@@ -2,6 +2,7 @@ import { useState } from "react";
 import PropTypes from "prop-types";
 import ReactJson from "@microlink/react-json-view";
 import { JsonDiv } from "../styled";
+import { darkThemeClass } from "utils/utils";
 
 function ErrorReportJson(props) {
   const [toggleOpen, setToggleOpen] = useState(false);
@@ -26,13 +27,15 @@ function ErrorReportJson(props) {
     link.click();
   };
 
+  const btn = darkThemeClass("btn-dark", props.theme);
+
   return (
     <>
       <div>
-        <span onClick={handleOpenJson} className="btn btn-default">
+        <span onClick={handleOpenJson} className={`btn btn-default ${btn}`}>
           {toggleOpen ? "Hide" : "Show"} JSON <i className="las la-code"></i>
         </span>
-        <span onClick={exportJson} className="btn btn-default mx-2">
+        <span onClick={exportJson} className={`btn btn-default mx-2 ${btn}`}>
           Download <i className="las la-download"></i>
         </span>
       </div>
@@ -42,7 +45,7 @@ function ErrorReportJson(props) {
             <ReactJson
               src={props.reportObj?.report}
               collapsed={3}
-              thme="monokai"
+              theme={btn ? "monokai" : "monokaii"}
               enableClipboard
             />
           </JsonDiv>
@@ -54,6 +57,7 @@ function ErrorReportJson(props) {
 
 ErrorReportJson.propTypes = {
   reportObj: PropTypes.object,
+  theme: PropTypes.string,
 };
 
 export default ErrorReportJson;

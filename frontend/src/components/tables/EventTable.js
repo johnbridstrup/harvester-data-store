@@ -1,11 +1,14 @@
 import PropTypes from "prop-types";
 import moment from "moment";
 import { Link } from "react-router-dom";
+import { darkThemeClass } from "utils/utils";
 
 function EventTable(props) {
+  const tabledt = darkThemeClass("dt-table", props.theme);
+
   return (
     <div className="table-responsive">
-      <table className="table">
+      <table className={`table ${tabledt}`}>
         <thead>
           <tr>
             <th>ID</th>
@@ -52,6 +55,7 @@ function EventTable(props) {
 EventTable.propTypes = {
   events: PropTypes.array.isRequired,
   handleDownload: PropTypes.func,
+  theme: PropTypes.string,
 };
 
 export default EventTable;

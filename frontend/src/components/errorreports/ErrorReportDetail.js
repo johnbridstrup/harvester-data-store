@@ -49,6 +49,7 @@ function ErrorReportDetail(props) {
     },
   } = useSelector((state) => state.errorreport);
   const { token } = useSelector((state) => state.auth);
+  const { theme } = useSelector((state) => state.home);
   const exceptObj = exceptions[activeTab.exception];
   const downloadRef = useRef();
 
@@ -125,8 +126,16 @@ function ErrorReportDetail(props) {
 
   return (
     <>
-      <DownloadButton popUp={downloadPopUp} downloadRef={downloadRef} />
-      <ErrorReportDetailTable reportObj={reportobj} timezone={timezone} />
+      <DownloadButton
+        popUp={downloadPopUp}
+        downloadRef={downloadRef}
+        theme={theme}
+      />
+      <ErrorReportDetailTable
+        reportObj={reportobj}
+        timezone={timezone}
+        theme={theme}
+      />
       <div className="row">
         <div className="col-md-7">
           <Container>
@@ -137,6 +146,7 @@ function ErrorReportDetail(props) {
                     onClick={() => handleTabChange(key, "exception", undefined)}
                     activetab={activeTab.exception}
                     navto={key}
+                    theme={theme}
                   >
                     {key}
                   </NavTabSpan>
@@ -154,6 +164,7 @@ function ErrorReportDetail(props) {
                       }
                       activetab={activeTab.traceback}
                       navto={"Traceback"}
+                      theme={theme}
                     >
                       Traceback
                     </NavTabSpan>
@@ -165,6 +176,7 @@ function ErrorReportDetail(props) {
                       }
                       activetab={activeTab.traceback}
                       navto={"Info"}
+                      theme={theme}
                     >
                       Info
                     </NavTabSpan>
@@ -173,6 +185,7 @@ function ErrorReportDetail(props) {
                 <ExceptTabular
                   exceptName={exceptObj.code.name}
                   timestamp={timeStampFormat(exceptObj.timestamp, timezone)}
+                  theme={theme}
                 />
                 <pre
                   style={{
@@ -204,6 +217,7 @@ function ErrorReportDetail(props) {
                     robocolor={robocolor.main}
                     navto={key.robot}
                     errored={key.error}
+                    theme={theme}
                   >
                     {key.robot}
                   </NavMainTabSpan>
@@ -221,6 +235,7 @@ function ErrorReportDetail(props) {
                     activetab={activeTab.subtabs}
                     robocolor={robocolor.arm}
                     navto={`NUC`}
+                    theme={theme}
                   >
                     NUC
                   </NavTabSpan>
@@ -233,6 +248,7 @@ function ErrorReportDetail(props) {
                     activetab={activeTab.subtabs}
                     robocolor={robocolor.arm}
                     navto={`JETSON`}
+                    theme={theme}
                   >
                     JETSON
                   </NavTabSpan>
@@ -255,16 +271,21 @@ function ErrorReportDetail(props) {
                           <ChronyInfoPlot
                             robot="Master"
                             chronyInfo={sysmonObj.sysmonObj?.chrony_info}
+                            theme={theme}
                           />
                         </Suspense>
                       </div>
                       <div className="col-xl-12 col-md-12 col-sm-12">
-                        <TimeTable sysmonObj={sysmonObj.sysmonObj} />
+                        <TimeTable
+                          sysmonObj={sysmonObj.sysmonObj}
+                          theme={theme}
+                        />
                       </div>
                     </div>
                     <ServiceTable
                       services={sysmonObj.sysmonObj?.services}
                       errors={erroredservices}
+                      theme={theme}
                     />
                   </Container>
                 )
@@ -282,16 +303,18 @@ function ErrorReportDetail(props) {
                           <ChronyInfoPlot
                             robot="Robot"
                             chronyInfo={subTabObj?.chrony_info}
+                            theme={theme}
                           />
                         </Suspense>
                       </div>
                       <div className="col-xl-12 col-md-12 col-sm-12">
-                        <TimeTable sysmonObj={subTabObj} />
+                        <TimeTable sysmonObj={subTabObj} theme={theme} />
                       </div>
                     </div>
                     <ServiceTable
                       services={subTabObj?.services}
                       errors={erroredservices}
+                      theme={theme}
                     />
                   </Container>
                 )}
@@ -306,12 +329,13 @@ function ErrorReportDetail(props) {
             </LoaderDiv>
           }
         >
-          <ErrorReportJson reportObj={reportobj} />
+          <ErrorReportJson reportObj={reportobj} theme={theme} />
         </Suspense>
       </Container>
       <DownloadModal
         eventObj={reportobj?.event}
         handleDownload={handleDownloadFiles}
+        theme={theme}
       />
     </>
   );

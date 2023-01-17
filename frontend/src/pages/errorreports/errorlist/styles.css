@@ -15,3 +15,7 @@
 .bg-gray {
   background: #f0f0f0;
 }
+
+.bg-dark {
+  background: var(--dark-bg-mild);
+}

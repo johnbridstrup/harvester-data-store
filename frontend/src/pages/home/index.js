@@ -3,19 +3,22 @@ import { useSelector } from "react-redux";
 import MainLayout from "components/layout/main";
 import { menu, adminMenu } from "assets/menu";
 import LandingView from "components/home";
-import { imagePath } from "utils/utils";
+import { darkThemeClass, imagePath } from "utils/utils";
 import "./styles.css";
 
 function Home(props) {
   const { user } = useSelector((state) => state.auth);
+  const { theme } = useSelector((state) => state.home);
   const menus = user.is_superuser ? adminMenu : menu;
+  const cardtheme = darkThemeClass("dt-home-card-theme", theme);
+
   return (
     <MainLayout>
       <div className="container">
         <div className="mb-5">
           <h2 className="display-4">Welcome to HDS</h2>
         </div>
-        <LandingView />
+        <LandingView theme={theme} />
         <div className="row mb-4">
           {menus.map((item, index) => (
             <Link
@@ -23,7 +26,7 @@ function Home(props) {
               key={index}
               className="col-md-4 link-secondary mt-4"
             >
-              <div className="card card-body hover1">
+              <div className={`card card-body hover1 ${cardtheme}`}>
                 <div className="link-icon-container">
                   <img
                     className="menu-icon"

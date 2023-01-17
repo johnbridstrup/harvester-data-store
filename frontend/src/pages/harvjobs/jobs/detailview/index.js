@@ -18,6 +18,7 @@ function JobDetailView(props) {
   const { jobId } = useParams();
   const dispatch = useDispatch();
   const { loading } = useSelector((state) => state.harvjobs);
+  const { theme } = useSelector((state) => state.home);
 
   useEffect(() => {
     (async () => {
@@ -39,7 +40,7 @@ function JobDetailView(props) {
           className={`display-6 mt-4 mb-4`}
           reportId={jobId}
         />
-        <BackButton mb={"mb-4"} />
+        <BackButton mb={"mb-4"} theme={theme} />
         {loading ? (
           <LoaderDiv>
             <Loader size={50} />

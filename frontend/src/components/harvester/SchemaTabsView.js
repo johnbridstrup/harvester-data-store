@@ -2,6 +2,7 @@ import { useEffect, useReducer } from "react";
 import PropTypes from "prop-types";
 import ReactJson from "@microlink/react-json-view";
 import { Container, JsonDiv, NavTabItem, NavTabs, NavTabSpan } from "../styled";
+import { THEME_MODES } from "features/base/constants";
 
 const initialState = {
   activetab: "release",
@@ -45,6 +46,7 @@ function SchemaTabsView(props) {
               onClick={() => handleTabChange("release", release)}
               activetab={activetab}
               navto={"release"}
+              theme={props.theme}
             >
               Release
             </NavTabSpan>
@@ -54,6 +56,7 @@ function SchemaTabsView(props) {
               onClick={() => handleTabChange("version", version)}
               activetab={activetab}
               navto={"version"}
+              theme={props.theme}
             >
               Version
             </NavTabSpan>
@@ -61,7 +64,14 @@ function SchemaTabsView(props) {
         </NavTabs>
       </Container>
       <JsonDiv>
-        <ReactJson src={schema ? schema : {}} collapsed={3} enableClipboard />
+        <ReactJson
+          src={schema ? schema : {}}
+          collapsed={3}
+          enableClipboard
+          theme={
+            props.theme === THEME_MODES.DARK_THEME ? "monokai" : "monokaii"
+          }
+        />
       </JsonDiv>
     </div>
   );
@@ -69,6 +79,7 @@ function SchemaTabsView(props) {
 
 SchemaTabsView.propTypes = {
   harvester: PropTypes.object.isRequired,
+  theme: PropTypes.string,
 };
 
 export default SchemaTabsView;

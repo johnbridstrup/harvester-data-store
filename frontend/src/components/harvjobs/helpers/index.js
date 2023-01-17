@@ -1,15 +1,17 @@
 import moment from "moment";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
+import { darkThemeClass } from "utils/utils";
 
 function BackButton(props) {
+  const btn = darkThemeClass("btn-dark", props.theme);
   const goBack = (e) => {
     e.preventDefault();
     window.history.back();
   };
   return (
     <div className={`${props.mb ? props.mb : ""} ${props.mt ? props.mt : ""}`}>
-      <Link to={``} className="btn" onClick={goBack}>
+      <Link to={``} className={`btn ${btn}`} onClick={goBack}>
         <i className="las la-arrow-left"></i>Back
       </Link>
     </div>
@@ -17,9 +19,10 @@ function BackButton(props) {
 }
 
 export const JobStatusHistory = (props) => {
+  const tabledt = darkThemeClass("dt-table", props.theme);
   return (
     <div className="table-responsive">
-      <table className="table">
+      <table className={`table ${tabledt}`}>
         <thead>
           <tr>
             <th>Status History</th>
@@ -50,12 +53,16 @@ export const JobStatusHistory = (props) => {
 };
 
 export const RightButtonGroup = (props) => {
+  const btn = darkThemeClass("btn-dark", props.theme);
   return (
     <div className="flex-right mb-2">
-      <span onClick={props.confirmPopUp} className="btn btn-default mx-2">
+      <span
+        onClick={props.confirmPopUp}
+        className={`btn btn-default mx-2 ${btn}`}
+      >
         Reschedule
       </span>
-      <span onClick={props.popUp} className="btn btn-default mx-2">
+      <span onClick={props.popUp} className={`btn btn-default mx-2 ${btn}`}>
         Get Files
       </span>
       <button
@@ -82,10 +89,12 @@ BackButton.propTypes = {
   mb: PropTypes.string,
   mt: PropTypes.string,
   route: PropTypes.string,
+  theme: PropTypes.string,
 };
 
 JobStatusHistory.propTypes = {
   jobstatuses: PropTypes.array,
+  theme: PropTypes.string,
 };
 
 RightButtonGroup.propTypes = {
@@ -93,6 +102,7 @@ RightButtonGroup.propTypes = {
   downloadRef: PropTypes.object,
   confirmRef: PropTypes.object,
   confirmPopUp: PropTypes.func,
+  theme: PropTypes.string,
 };
 
 export default BackButton;

@@ -24,7 +24,7 @@ import {
   paginateRelease,
   paginateInstalled,
 } from "features/harvdeploy/harvdeploySlice";
-import { mapCurrentOffset } from "utils/utils";
+import { darkThemeClass, mapCurrentOffset } from "utils/utils";
 import {
   paginateJob,
   paginateJobResults,
@@ -40,6 +40,7 @@ function Pagination(props) {
     queryUrl,
     pagination: { next, previous },
   } = useSelector((state) => state.errorreport);
+  const { theme } = useSelector((state) => state.home);
   const dispatch = useDispatch();
   const { search } = useLocation();
 
@@ -83,6 +84,8 @@ function Pagination(props) {
     dispatch(cacheParamsObj(paramsObj || {}));
   };
 
+  const btn = darkThemeClass("btn-dark", theme);
+
   return (
     <div>
       <section className="d-flex justify-content-center align-items-center mb-5">
@@ -113,7 +116,10 @@ function Pagination(props) {
                 value={pageLimit}
                 onChange={(e) => handleOnLimitChange(e.target.value)}
               />
-              <SpanLimit className="btn btn-sm" onClick={handleOnLimitSubmit}>
+              <SpanLimit
+                className={`btn btn-sm ${btn}`}
+                onClick={handleOnLimitSubmit}
+              >
                 Go
               </SpanLimit>
             </PageItem>

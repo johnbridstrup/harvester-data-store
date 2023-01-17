@@ -1,7 +1,10 @@
 import PropTypes from "prop-types";
 import Select from "react-select";
+import { darkThemeClass, selectDarkStyles } from "utils/utils";
 
 function NotificationModal(props) {
+  const modal = darkThemeClass("dt-modal-content", props.theme);
+  const customStyles = modal ? selectDarkStyles : {};
   return (
     <div className="col-md-8">
       <div
@@ -14,14 +17,14 @@ function NotificationModal(props) {
         style={{ display: "none" }}
       >
         <div className="modal-dialog modal-dialog-centered" role="document">
-          <div className="modal-content profile-modal">
+          <div className={`modal-content ${modal}`}>
             <div
               className="text-right"
               style={{ display: "flex", justifyContent: "flex-end" }}
             >
               <button
                 type="button"
-                className="btn closeModalBtn"
+                className={`btn`}
                 data-bs-dismiss="modal"
                 aria-label="Close"
               >
@@ -46,6 +49,7 @@ function NotificationModal(props) {
                   value={props.selectedRecipient}
                   className="multi-select-container"
                   classNamePrefix="select"
+                  styles={customStyles}
                 />
               </div>
               <div className="form-group text-center mt-4 mb-4">
@@ -69,6 +73,7 @@ NotificationModal.propTypes = {
   handleRecipientSelect: PropTypes.func,
   selectedRecipient: PropTypes.array,
   handleSubmit: PropTypes.func,
+  theme: PropTypes.string,
 };
 
 export default NotificationModal;

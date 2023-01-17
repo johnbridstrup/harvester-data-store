@@ -7,6 +7,7 @@ import {
   aggregateOptions,
   appendCodeName,
   buildQueryObj,
+  darkThemeClass,
   handleSelectFactory,
   Loader,
   paramsToObject,
@@ -46,6 +47,7 @@ function ErrorParetos(props) {
   const { locations } = useSelector((state) => state.location);
   const { fruits } = useSelector((state) => state.fruit);
   const { exceptioncodes } = useSelector((state) => state.exceptioncode);
+  const { theme } = useSelector((state) => state.home);
   const harvesterOptions = transformHarvOptions(harvesters);
   const locationOptions = transformLocOptions(locations);
   const timezoneOptions = transformTzOptions(timezones);
@@ -240,6 +242,9 @@ function ErrorParetos(props) {
       ? "col-md-6"
       : "col-md-12";
 
+  const icon = darkThemeClass("dt-delete-icon", theme);
+  const btn = darkThemeClass("btn-dark", theme);
+
   return (
     <div>
       <ParetoForm
@@ -263,17 +268,22 @@ function ErrorParetos(props) {
         selectedLocation={selectedLocation}
         selectedTimezone={selectedTimezone}
         timezoneOptions={timezoneOptions}
+        theme={theme}
       />
       <div className="mb-2">
-        <span onClick={handleSideClick} className="btn cursor">
+        <span onClick={handleSideClick} className={`btn cursor ${btn}`}>
           {open ? "Hide" : "Show"} Parameters
         </span>
-        <CopyBuildConfig paramsObj={paramsObj} paretoArr={paretoArr} />
+        <CopyBuildConfig
+          paramsObj={paramsObj}
+          paretoArr={paretoArr}
+          theme={theme}
+        />
       </div>
       <div className="sidenav">
         <SidePane open={open}>
           <div className="sidecontent">
-            {open && <ParetoTabular paramsObj={paramsObj} />}
+            {open && <ParetoTabular paramsObj={paramsObj} theme={theme} />}
           </div>
         </SidePane>
       </div>
@@ -296,11 +306,12 @@ function ErrorParetos(props) {
                   xlabels={obj.paretos.xlabels}
                   ydata={obj.paretos.ydata}
                   chart_title={obj.chart_title}
+                  theme={theme}
                 />
               </Suspense>
               <span
                 onClick={() => handleDeletePareto(obj)}
-                className="delete-icon"
+                className={`delete-icon ${icon}`}
               >
                 <i className="las la-times"></i>
               </span>

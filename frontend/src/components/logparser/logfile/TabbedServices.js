@@ -8,9 +8,10 @@ import {
   setCurrIndex,
   setMarker,
 } from "features/logparser/logparserSlice";
-import { getCurrIndex } from "utils/utils";
+import { darkThemeClass, getCurrIndex } from "utils/utils";
 import { NavTabItem, NavTabs, NavTabSpan } from "components/styled";
 import { LogHighlighter } from "../helpers";
+import { THEME_MODES } from "features/base/constants";
 
 function TabbedServices(props) {
   const [fetching, setFetching] = useState(false);
@@ -21,6 +22,7 @@ function TabbedServices(props) {
     logvideo,
     internal: { services },
   } = useSelector((state) => state.logparser);
+  const { theme } = useSelector((state) => state.home);
 
   const dispatch = useDispatch();
   const content = logfile.content || [];
@@ -66,6 +68,15 @@ function TabbedServices(props) {
     dispatch(clearMarker());
   };
 
+  const markedBackground = (index) => {
+    return currentIndex === index && theme === THEME_MODES.DARK_THEME
+      ? "marked-dark-bg"
+      : currentIndex === index
+      ? "marked-bg"
+      : "";
+  };
+  const bg = darkThemeClass("bg-hover", theme);
+
   return (
     <div>
       {currentMarker && (
@@ -85,6 +96,7 @@ function TabbedServices(props) {
               activetab={props.activeTab}
               navto={`${x.display}`}
               onClick={() => handleTabChange(x)}
+              theme={theme}
             >
               {`${x.display}`}
             </NavTabSpan>
@@ -103,9 +115,7 @@ function TabbedServices(props) {
                 <LogHighlighter
                   key={index}
                   handleClick={handleLineClick}
-                  className={`content ${
-                    currentIndex === index ? "marked-bg" : ""
-                  }`}
+                  className={`content ${bg} ${markedBackground(index)}`}
                   log={log}
                   logIndex={index}
                 />

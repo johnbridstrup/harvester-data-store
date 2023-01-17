@@ -29,7 +29,7 @@ import timezones from "utils/timezones";
 import NotificationModal from "../modals/NotificationModal";
 import { FormQuery } from "./ErrorHelpers";
 import { HoverTabular } from "./ErrorHelpers";
-import { SUCCESS } from "features/base/constants";
+import { SUCCESS, THEME_MODES } from "features/base/constants";
 
 function ErrorReportQuery(props) {
   const [selectedHarvId, setSelectedHarvId] = useState(null);
@@ -55,6 +55,7 @@ function ErrorReportQuery(props) {
   const { fruits } = useSelector((state) => state.fruit);
   const { exceptioncodes } = useSelector((state) => state.exceptioncode);
   const { users } = useSelector((state) => state.user);
+  const { theme } = useSelector((state) => state.home);
   const harvesterOptions = transformHarvOptions(harvesters);
   const locationOptions = transformLocOptions(locations);
   const timezoneOptions = transformTzOptions(timezones);
@@ -214,7 +215,8 @@ function ErrorReportQuery(props) {
       let isValid = validateQueryObj(queryObj);
       if (!isValid) {
         toast.error(
-          "You must include at least one query to create a notification"
+          "You must include at least one query to create a notification",
+          { theme: theme === THEME_MODES.AUTO_THEME ? "colored" : theme }
         );
       } else {
         queryObj["recipients"] = recipients;
@@ -222,10 +224,14 @@ function ErrorReportQuery(props) {
         delete queryObj["end_time"];
         const res = await dispatch(createNotification(queryObj));
         if (res?.payload?.status === SUCCESS) {
-          toast.success(res?.payload?.message);
+          toast.success(res?.payload?.message, {
+            theme: theme === THEME_MODES.AUTO_THEME ? "colored" : theme,
+          });
           handleModalPopUp();
         } else {
-          toast.error(res?.payload);
+          toast.error(res?.payload, {
+            theme: theme === THEME_MODES.AUTO_THEME ? "colored" : theme,
+          });
         }
       }
     }
@@ -267,6 +273,7 @@ function ErrorReportQuery(props) {
               selectedLocation={selectedLocation}
               selectedTimezone={selectedTimezone}
               timezoneOptions={timezoneOptions}
+              theme={theme}
             />
           </div>
         </div>
@@ -275,7 +282,7 @@ function ErrorReportQuery(props) {
             <span>Total Report</span>
             <span>{count}</span>
           </DivTotalReport>
-          <HoverTabular hoverObj={hovered} />
+          <HoverTabular hoverObj={hovered} theme={theme} />
         </div>
       </div>
       <NotificationModal

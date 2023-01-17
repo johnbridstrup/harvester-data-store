@@ -1,0 +1,5 @@
+.form-custom-theme {
+  background: var(--bg-secondary);
+  color: var(--color-secondary);
+  border-radius: 5px;
+}

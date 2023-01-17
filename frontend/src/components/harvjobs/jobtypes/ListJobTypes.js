@@ -19,6 +19,7 @@ function ListJobTypes(props) {
     objId: null,
   });
   const { jobtypes, loading } = useSelector((state) => state.harvjobs);
+  const { theme } = useSelector((state) => state.home);
   const jobTypeRef = useRef();
   const dispatch = useDispatch();
 
@@ -92,12 +93,14 @@ function ListJobTypes(props) {
         <JobTypeTable
           jobtypes={jobtypes}
           handleJTUpdateClick={handleJTUpdateClick}
+          theme={theme}
         />
       )}
       <JobTypeModal
         fieldData={fieldData}
         handleChange={handleFieldChange}
         handleSubmit={handleFormSubmit}
+        theme={theme}
       />
     </>
   );

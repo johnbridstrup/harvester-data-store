@@ -44,6 +44,7 @@ function LogFileList(props) {
     logfile,
     logsession,
   } = useSelector((state) => state.logparser);
+  const { theme } = useSelector((state) => state.home);
   const videoRef = useRef(null);
   const virtuoso = useRef(null);
   const dispatch = useDispatch();
@@ -93,6 +94,7 @@ function LogFileList(props) {
                         activetab={state.videoActiveTab}
                         navto={vid.category}
                         onClick={() => handleVideTabChange(vid.category)}
+                        theme={theme}
                       >
                         {vid.category.toUpperCase()}
                       </NavTabSpan>
@@ -134,7 +136,11 @@ function LogFileList(props) {
               <div style={{ height: "400px" }}>
                 <NavTabs>
                   <NavTabItem>
-                    <NavTabSpan activetab={"Table"} navto={"Table"}>
+                    <NavTabSpan
+                      activetab={"Table"}
+                      navto={"Table"}
+                      theme={theme}
+                    >
                       Table
                     </NavTabSpan>
                   </NavTabItem>
@@ -142,6 +148,7 @@ function LogFileList(props) {
                     <NavTabSpan
                       activetab={"Gripper Plot"}
                       navto={"Gripper Plot"}
+                      theme={theme}
                     >
                       Gripper Plot
                     </NavTabSpan>

@@ -3,7 +3,11 @@ import { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import ReactJson from "@microlink/react-json-view";
 import { JsonDiv } from "components/styled";
-import { handleSelectFactory, transformHarvOptions } from "utils/utils";
+import {
+  darkThemeClass,
+  handleSelectFactory,
+  transformHarvOptions,
+} from "utils/utils";
 import { queryHarvester } from "features/harvester/harvesterSlice";
 import ScheduleModal from "components/modals/ScheduleModal";
 import { handleReleaseFormSubmit } from "utils/services";
@@ -19,6 +23,7 @@ function DetailReleaseCode(props) {
   );
   const { harvesters } = useSelector((state) => state.harvester);
   const { user } = useSelector((state) => state.auth);
+  const { theme } = useSelector((state) => state.home);
   const dispatch = useDispatch();
   const modalRef = useRef();
   const harvOptions = transformHarvOptions(harvesters);
@@ -37,10 +42,13 @@ function DetailReleaseCode(props) {
     modalRef.current.click();
   };
 
+  const tabledt = darkThemeClass("dt-table", theme);
+  const btn = darkThemeClass("btn-dark", theme);
+
   return (
     <>
       <div className="table-responsive">
-        <table className="table">
+        <table className={`table ${tabledt}`}>
           <thead>
             <tr>
               <td>Version</td>
@@ -59,7 +67,7 @@ function DetailReleaseCode(props) {
               <td>
                 <span
                   onClick={() => modalPopUp(releasecode)}
-                  className="btn btn-sm"
+                  className={`btn btn-sm ${btn}`}
                 >
                   Schedule
                 </span>
@@ -83,7 +91,7 @@ function DetailReleaseCode(props) {
             <ReactJson
               src={releasecode.release}
               collapsed={2}
-              thme="monokai"
+              theme={tabledt ? "monokai" : "monokaii"}
               enableClipboard
             />
           </JsonDiv>
@@ -95,8 +103,8 @@ function DetailReleaseCode(props) {
       <div className="row mb-4">
         <div className="col-md-8">
           <div className="f-w-600">Currently Installed Harvesters</div>
-          <div className="table-responsive">
-            <table className="table">
+          <div className="table-responsive mb-2">
+            <table className={`table ${tabledt}`}>
               <thead>
                 <tr>
                   <td>ID</td>
@@ -133,6 +141,7 @@ function DetailReleaseCode(props) {
         harvOptions={harvOptions}
         selectedHarvId={selectedHarvId}
         handleHarvIdSelect={handleSelect}
+        theme={theme}
       />
     </>
   );

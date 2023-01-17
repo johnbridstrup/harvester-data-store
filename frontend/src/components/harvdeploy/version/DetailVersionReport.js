@@ -1,15 +1,18 @@
 import { useSelector } from "react-redux";
 import moment from "moment";
 import ReactJson from "@microlink/react-json-view";
-import { timeStampFormat } from "utils/utils";
+import { darkThemeClass, timeStampFormat } from "utils/utils";
 import { JsonDiv } from "components/styled";
 
 function DetailVersionReport(props) {
   const { version } = useSelector((state) => state.harvdeploy);
   const { timezone } = useSelector((state) => state.errorreport);
+  const { theme } = useSelector((state) => state.home);
+  const cardtheme = darkThemeClass("dt-card-theme", theme);
+
   return (
     <div className="mb-4">
-      <div className="card card-body mb-4">
+      <div className={`card card-body mb-4 ${cardtheme}`}>
         <div className="row">
           <div className="col-md-3 mb-2">
             <div className="f-w-600">ID</div>
@@ -43,6 +46,7 @@ function DetailVersionReport(props) {
           src={version.report ? version.report : {}}
           collapsed={3}
           enableClipboard
+          theme={cardtheme ? "monokai" : "monokaii"}
         />
       </JsonDiv>
     </div>

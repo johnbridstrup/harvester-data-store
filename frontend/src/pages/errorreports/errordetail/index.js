@@ -14,6 +14,7 @@ import "./styles.css";
 
 function ErrorsReportDetail(props) {
   const { loading } = useSelector((state) => state.errorreport);
+  const { theme } = useSelector((state) => state.home);
   const params = useParams();
   const dispatch = useDispatch();
   const { search } = useLocation();
@@ -33,7 +34,7 @@ function ErrorsReportDetail(props) {
     <MainLayout>
       <div className="container">
         <div>
-          <BackButton paramsObj={paramsObj} />
+          <BackButton paramsObj={paramsObj} theme={theme} />
           <Header
             title={"HDS Prototype: Error Reports"}
             className={"display-6 mb-4"}

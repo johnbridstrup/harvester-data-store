@@ -11,6 +11,7 @@ import {
   NOTIFY_CATEGORY,
   REJECTED_PROMISE,
   SUCCESS,
+  THEME_MODES,
 } from "features/base/constants";
 import notificationService from "features/notification/notificationService";
 import { deleteNotification } from "features/notification/notificationSlice";
@@ -45,6 +46,7 @@ function UserProfileDetail(props) {
   const [isRecipient, setIsRecipient] = useState([]);
   const [loading, setLoading] = useState(false);
   const { user, token } = useSelector((state) => state.auth);
+  const { theme } = useSelector((state) => state.home);
   const dispatch = useDispatch();
   const profileRef = useRef();
   const passwordRef = useRef();
@@ -123,19 +125,27 @@ function UserProfileDetail(props) {
     };
     const res = await dispatch(updateProfile(data));
     if (res.payload?.status === SUCCESS) {
-      toast.success(res.payload?.message);
+      toast.success(res.payload?.message, {
+        theme: theme === THEME_MODES.AUTO_THEME ? "colored" : theme,
+      });
       profileModalPopUp();
     } else if (res.type === REJECTED_PROMISE.profile) {
-      toast.error(res?.payload);
+      toast.error(res?.payload, {
+        theme: theme === THEME_MODES.AUTO_THEME ? "colored" : theme,
+      });
     } else {
-      toast.error("something went wrong. please try again");
+      toast.error("something went wrong. please try again", {
+        theme: theme === THEME_MODES.AUTO_THEME ? "colored" : theme,
+      });
     }
   };
 
   const handlePasswordSubmit = async (e) => {
     e.preventDefault();
     if (fieldData.new_password !== fieldData.confirm_password) {
-      toast.error("passwords do not match!");
+      toast.error("passwords do not match!", {
+        theme: theme === THEME_MODES.AUTO_THEME ? "colored" : theme,
+      });
     } else {
       const data = {
         current_password: fieldData.current_password,
@@ -143,11 +153,17 @@ function UserProfileDetail(props) {
       };
       const res = await dispatch(changePassword(data));
       if (res.payload?.status === SUCCESS) {
-        toast.success(res.payload?.data?.message);
+        toast.success(res.payload?.data?.message, {
+          theme: theme === THEME_MODES.AUTO_THEME ? "colored" : theme,
+        });
       } else if (res.type === REJECTED_PROMISE.password) {
-        toast.error(res?.payload);
+        toast.error(res?.payload, {
+          theme: theme === THEME_MODES.AUTO_THEME ? "colored" : theme,
+        });
       } else {
-        toast.error("something went wrong try again later");
+        toast.error("something went wrong try again later", {
+          theme: theme === THEME_MODES.AUTO_THEME ? "colored" : theme,
+        });
       }
     }
   };
@@ -155,11 +171,15 @@ function UserProfileDetail(props) {
   const handleDeleteNotification = async () => {
     const res = await dispatch(deleteNotification(notifObj.id));
     if (res.type === FULLFILLED_PROMISE.notification) {
-      toast.success("Notification deleted successfully");
+      toast.success("Notification deleted successfully", {
+        theme: theme === THEME_MODES.AUTO_THEME ? "colored" : theme,
+      });
       fetchNotification();
       confirmPopUp(null);
     } else {
-      toast.error("Could not delete the specified notification");
+      toast.error("Could not delete the specified notification", {
+        theme: theme === THEME_MODES.AUTO_THEME ? "colored" : theme,
+      });
     }
   };
 
@@ -176,7 +196,9 @@ function UserProfileDetail(props) {
         profileModalPopUp();
       }, 1000);
     } else {
-      toast.error("could not authenticate with the given credentials");
+      toast.error("could not authenticate with the given credentials", {
+        theme: theme === THEME_MODES.AUTO_THEME ? "colored" : theme,
+      });
     }
   };
 
@@ -189,11 +211,12 @@ function UserProfileDetail(props) {
     <>
       <div className="row gutters-sm mt-5">
         <div className="col-md-4 mb-3">
-          <ProfileColLeft user={user} />
+          <ProfileColLeft user={user} theme={theme} />
           <ChangePassword
             fieldData={fieldData}
             handleChange={handleFieldChange}
             handleSubmit={handlePasswordSubmit}
+            theme={theme}
           />
         </div>
         <div className="col-md-8">
@@ -203,6 +226,7 @@ function UserProfileDetail(props) {
             profileRef={profileRef}
             passwordModalPopUp={passwordModalPopUp}
             passwordRef={passwordRef}
+            theme={theme}
           />
 
           <div className="row gutters-sm">
@@ -214,6 +238,7 @@ function UserProfileDetail(props) {
                 confirmDel={confirmPopUp}
                 count={created.length}
                 loading={loading}
+                theme={theme}
               />
             </div>
             <div className="col-sm-6 mb-3">
@@ -224,6 +249,7 @@ function UserProfileDetail(props) {
                 confirmDel={confirmPopUp}
                 count={isRecipient.length}
                 loading={loading}
+                theme={theme}
               />
             </div>
           </div>
@@ -234,17 +260,20 @@ function UserProfileDetail(props) {
         handleChange={handleFieldChange}
         handleSubmit={handleProfileSubmit}
         loading={false}
+        theme={theme}
       />
       <PasswordModal
         password={fieldData.password}
         handleChange={handleFieldChange}
         handleSubmit={handleConfirmPassword}
+        theme={theme}
       />
       <ConfirmModal
         confirmRef={confirmRef}
         cancelRequest={confirmPopUp}
         confirmRequest={handleDeleteNotification}
         msg={"Are you sure you want to delete the selected notification(s)"}
+        theme={theme}
       />
     </>
   );

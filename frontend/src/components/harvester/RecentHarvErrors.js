@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { Loader, timeStampFormat } from "utils/utils";
+import { darkThemeClass, Loader, timeStampFormat } from "utils/utils";
 import { GenericPagination } from "../pagination/Pagination";
 import { LoaderDiv } from "../styled";
 
@@ -8,6 +8,8 @@ function RecentHarvErrors(props) {
   const { reports, timezone, loading } = useSelector(
     (state) => state.errorreport
   );
+  const { theme } = useSelector((state) => state.home);
+  const tabledt = darkThemeClass("dt-table", theme);
 
   return (
     <>
@@ -18,7 +20,7 @@ function RecentHarvErrors(props) {
             <Loader size={25} />
           </LoaderDiv>
         ) : (
-          <table className="table">
+          <table className={`table ${tabledt}`}>
             <thead>
               <tr>
                 <th>ID</th>

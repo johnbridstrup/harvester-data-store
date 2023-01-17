@@ -3,7 +3,7 @@ import { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
-import { getHarvId, timeStampFormat } from "utils/utils";
+import { darkThemeClass, getHarvId, timeStampFormat } from "utils/utils";
 import { RightButtonGroup, JobStatusHistory } from "../helpers";
 import { handleDownload } from "utils/services";
 import DownloadModal from "components/modals/DownloadModal";
@@ -17,6 +17,7 @@ function DetailJob(props) {
     (state) => state.harvjobs
   );
   const { token } = useSelector((state) => state.auth);
+  const { theme } = useSelector((state) => state.home);
   const dispatch = useDispatch();
   const downloadRef = useRef(null);
   const confirmRef = useRef(null);
@@ -46,6 +47,9 @@ function DetailJob(props) {
     setScheduling(false);
   };
 
+  const cardtheme = darkThemeClass("dt-card-theme", theme);
+  const tabledt = darkThemeClass("dt-table", theme);
+
   return (
     <>
       <RightButtonGroup
@@ -53,9 +57,10 @@ function DetailJob(props) {
         popUp={downloadPopUp}
         confirmPopUp={confirmPopUp}
         confirmRef={confirmRef}
+        theme={theme}
       />
       <div className="mb-4 mt-3">
-        <div className="card card-body mb-4">
+        <div className={`card card-body mb-4 ${cardtheme}`}>
           <div className="row">
             <div className="col-md-3 mb-2">
               <div className="f-w-600">ID</div>
@@ -105,7 +110,7 @@ function DetailJob(props) {
 
       <div className="f-w-600">Job Results</div>
       <div className="table-responsive">
-        <table className="table">
+        <table className={`table ${tabledt}`}>
           <thead>
             <tr>
               <th>ID</th>
@@ -151,14 +156,19 @@ function DetailJob(props) {
       </div>
 
       <div className="f-w-600">Job Status</div>
-      <JobStatusHistory jobstatuses={jobstatuses} />
-      <DownloadModal eventObj={job?.event} handleDownload={download} />
+      <JobStatusHistory jobstatuses={jobstatuses} theme={theme} />
+      <DownloadModal
+        eventObj={job?.event}
+        handleDownload={download}
+        theme={theme}
+      />
       <ConfirmModal
         cancelRequest={confirmPopUp}
         confirmRef={confirmRef}
         confirmRequest={handleReschedule}
         msg={"Are you sure you want to reschedule this job"}
         loading={scheduling}
+        theme={theme}
       />
     </>
   );

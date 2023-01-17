@@ -5,6 +5,7 @@ import { JobStatusHistory } from "../helpers";
 
 function ListJobHistory(props) {
   const { jobstatuses, loading } = useSelector((state) => state.harvjobs);
+  const { theme } = useSelector((state) => state.home);
   return (
     <>
       {loading ? (
@@ -12,7 +13,7 @@ function ListJobHistory(props) {
           <Loader size={50} />
         </LoaderDiv>
       ) : (
-        <JobStatusHistory jobstatuses={jobstatuses} />
+        <JobStatusHistory jobstatuses={jobstatuses} theme={theme} />
       )}
     </>
   );

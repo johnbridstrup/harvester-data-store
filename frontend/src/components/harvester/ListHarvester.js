@@ -28,6 +28,7 @@ function ListHarvester(props) {
   const { harvesters, loading } = useSelector((state) => state.harvester);
   const { fruits } = useSelector((state) => state.fruit);
   const { locations } = useSelector((state) => state.location);
+  const { theme } = useSelector((state) => state.home);
   const fruitOptions = transformFruitOptions(fruits, true);
   const locationOptions = transformLocOptions(locations, true);
   const dispatch = useDispatch();
@@ -130,6 +131,7 @@ function ListHarvester(props) {
         <HarvesterTable
           harvesters={harvesters}
           handleHarvUpdateClick={handleHarvUpdateClick}
+          theme={theme}
         />
       )}
       <HarvesterModal
@@ -142,6 +144,7 @@ function ListHarvester(props) {
         locationOptions={locationOptions}
         selectedLocation={selectedLocation}
         handleLocSelect={handleLocationSelect}
+        theme={theme}
       />
     </>
   );

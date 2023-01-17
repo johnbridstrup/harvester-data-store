@@ -1,11 +1,13 @@
 import moment from "moment";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { getHistoryType, Loader } from "utils/utils";
+import { darkThemeClass, getHistoryType, Loader } from "utils/utils";
 import { LoaderDiv } from "../styled";
 
 function ListHarvesterHistory(props) {
   const { historys, loading } = useSelector((state) => state.harvester);
+  const { theme } = useSelector((state) => state.home);
+  const tabledt = darkThemeClass("dt-table", theme);
   return (
     <div className="mb-4">
       <div className="table-responsive">
@@ -14,7 +16,7 @@ function ListHarvesterHistory(props) {
             <Loader size={50} />
           </LoaderDiv>
         ) : (
-          <table className="table">
+          <table className={`table ${tabledt}`}>
             <thead>
               <tr>
                 <th>ID</th>

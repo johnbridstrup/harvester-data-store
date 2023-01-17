@@ -12,6 +12,7 @@ import "./styles.css";
 
 function LogSessionDetailView(props) {
   const { loading } = useSelector((state) => state.logparser);
+  const { theme } = useSelector((state) => state.home);
   const { sessionId } = useParams();
   const dispatch = useDispatch();
 
@@ -29,7 +30,7 @@ function LogSessionDetailView(props) {
           reportId={sessionId}
           className={"display-4 mb-4"}
         />
-        <BackButton />
+        <BackButton theme={theme} />
         {loading ? (
           <LoaderDiv>
             <Loader size={50} />

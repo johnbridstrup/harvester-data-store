@@ -839,3 +839,16 @@ export const isBrowserDefaultDark = () => {
 export const darkThemeClass = (className, theme) => {
   return theme === THEME_MODES.DARK_THEME ? className : "";
 };
+
+export const selectDarkStyles = {
+  option: (defaultStyles, state) => ({
+    ...defaultStyles,
+    color: state.isSelected ? "#212529" : "#fff",
+    backgroundColor: state.isFocused ? "#a0a0a0" : "#212529",
+  }),
+  control: (defaultStyles) => ({
+    ...defaultStyles,
+    backgroundColor: "#212529",
+  }),
+  singleValue: (defaultStyles) => ({ ...defaultStyles, color: "#fff" }),
+};

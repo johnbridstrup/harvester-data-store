@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 import BackButton from "components/harvjobs/helpers";
 import ListJobResults from "components/harvjobs/jobresults/ListJobResults";
@@ -14,6 +14,7 @@ import { paramsToObject } from "utils/utils";
 import "./styles.css";
 
 function JobResultListView(props) {
+  const { theme } = useSelector((state) => state.home);
   const { search } = useLocation();
   const dispatch = useDispatch();
 
@@ -32,7 +33,7 @@ function JobResultListView(props) {
     <MainLayout>
       <div className="container">
         <Header title={"HDS Job Results"} className={`display-6 mt-4 mb-4`} />
-        <BackButton mb={"mb-4"} />
+        <BackButton mb={"mb-4"} theme={theme} />
         <ListJobResults />
         <GenericPagination state="harvjobs" attr="jobresults" />
       </div>
