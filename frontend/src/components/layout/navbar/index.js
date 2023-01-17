@@ -5,7 +5,6 @@ import Logo from "assets/images/advanced_farm_logo_alpha.png";
 import { ArrowDown, Menu, Notification } from "assets/svg";
 import { logout } from "features/auth/authSlice";
 import {
-  API_BASE_URL,
   FULLFILLED_PROMISE,
   MAX_LIMIT,
   NOTIFY_CATEGORY,
@@ -14,23 +13,28 @@ import notificationService from "features/notification/notificationService";
 import useClickOutside from "hooks/clickOutSide";
 import AllMenu from "./AllMenu";
 import UserMenu from "./UserMenu";
+import AdminMenu from "./AdminMenu";
 import "./styles.css";
 
 function Navbar(props) {
   const [showAllMenu, setshowAllMenu] = useState(false);
   const [showUserMenu, setshowUserMenu] = useState(false);
+  const [showAdminMenu, setshowAdminMenu] = useState(false);
   const [count, setCount] = useState(0);
   const { user, token } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const allMenuRef = useRef();
   const userMenuRef = useRef();
-  const adminUrl = process.env.REACT_APP_ADMIN_URL || `${API_BASE_URL}/admin`;
+  const adminMenuRef = useRef(null);
 
   useClickOutside(allMenuRef, () => {
     setshowAllMenu(false);
   });
   useClickOutside(userMenuRef, () => {
     setshowUserMenu(false);
+  });
+  useClickOutside(adminMenuRef, () => {
+    setshowAdminMenu(false);
   });
 
   const fetchNotification = useCallback(() => {
@@ -68,10 +72,23 @@ function Navbar(props) {
             </div>
           </Link>
           {user?.is_superuser && (
-            <div className="external-admin hover1">
-              <a href={adminUrl} target="_blank" rel="noreferrer">
+            <div className="admin-menu-wrap" ref={adminMenuRef}>
+              <div
+                onClick={() => setshowAdminMenu((prev) => !prev)}
+                className="text-secondary cursor"
+              >
                 Admin
-              </a>
+              </div>
+              <div
+                className={`circle-icon hover1 ${
+                  showAdminMenu && "active-header"
+                }`}
+              >
+                <div onClick={() => setshowAdminMenu((prev) => !prev)}>
+                  <ArrowDown />
+                </div>
+                {showAdminMenu && <AdminMenu />}
+              </div>
             </div>
           )}
         </div>

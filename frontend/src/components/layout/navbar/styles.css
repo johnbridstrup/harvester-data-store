@@ -22,6 +22,10 @@ header {
   padding: 5px 1rem;
 }
 
+.header-logo {
+  margin-right: 1rem;
+}
+
 .circle {
   width: 40px;
   height: 40px;
@@ -38,18 +42,31 @@ header {
   object-fit: contain;
 }
 
-.external-admin {
-  width: 70px;
-  border-radius: 8px;
-  padding: 0.5rem;
+/* Admin Menu */
+.admin-menu-wrap {
   display: flex;
   align-items: center;
-  justify-content: center;
+  gap: 5px;
 }
 
-.external-admin a {
+.admin-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 200px;
+  border-radius: 10px;
+  background: var(--bg-primary);
+  box-shadow: 2px 2px 2px 2px var(--shadow-1);
+  user-select: none;
+  padding: 10px;
+}
+
+.admin-menu-link {
+  padding: 1rem;
   color: var(--color-secondary);
 }
+
+/* Admin Menu */
 
 .header-right {
   display: flex;
@@ -333,5 +350,11 @@ header {
   }
   .all-menu {
     left: -12.9rem;
+  }
+  .admin-menu {
+    left: -100px;
+  }
+  .header-logo {
+    margin-right: 0;
   }
 }
