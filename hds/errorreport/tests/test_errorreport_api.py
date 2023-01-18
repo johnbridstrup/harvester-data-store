@@ -197,6 +197,13 @@ class ErrorReportAPITest(HDSAPITestBase):
         compare['handled'] = True
         self.assertDictEqual(errs[0], compare)
 
+        # Primary error
+        excs = AFTException.objects.filter(report=report)
+        self.assertEqual(sum([e.primary for e in excs]), 1) # one primary error
+
+        primary = excs.filter(primary=True).get()
+        self.assertTrue(all([primary.timestamp <= e.timestamp for e in excs])) # primary is first
+
     def test_generate_pareto(self):
         pareto_groups = ["code__code", "code__name", "service", "report__harvester__harv_id"]
         pareto_names = ["code", "exception", "service", "harvester"]
