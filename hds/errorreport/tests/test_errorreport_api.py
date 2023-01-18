@@ -45,7 +45,7 @@ class ErrorReportAPITest(HDSAPITestBase):
         self.assertEqual(ErrorReport.objects.count(), 1)
 
         # Assert exception created
-        self.assertEqual(AFTException.objects.count(), 1)
+        self.assertEqual(AFTException.objects.count(), 3)
 
         # Assert event created
         self.assertEqual(Event.objects.count(), 1)
@@ -139,7 +139,9 @@ class ErrorReportAPITest(HDSAPITestBase):
             data,
             format='json'
         )
-        data['data']['sysmon_report']['sysmon.0']['errors']['traychg.0']['handled'] = True
+        for d in data['data']['sysmon_report']['sysmon.0']['errors'].values():
+            d['handled'] = True
+
         self.client.post(
             f'{self.api_base_url}/errorreports/',
             data,
@@ -187,7 +189,7 @@ class ErrorReportAPITest(HDSAPITestBase):
 
         # Handled error
         data = self.data.copy()
-        data['data']['sysmon_report']['sysmon.0']['errors']['traychg.0']['handled'] = True
+        data['data']['sysmon_report']['sysmon.0']['errors'][serv_str]['handled'] = True
         self.client.post(f'{self.api_base_url}/errorreports/', data, format='json')
         report = ErrorReport.objects.get(id=2)
         errs = ErrorReportSerializer._extract_exception_data(report)
@@ -198,7 +200,8 @@ class ErrorReportAPITest(HDSAPITestBase):
     def test_generate_pareto(self):
         pareto_groups = ["code__code", "code__name", "service", "report__harvester__harv_id"]
         pareto_names = ["code", "exception", "service", "harvester"]
-        pareto_name_vals = ["0", "AFTBaseException", "traychg", "11"]
+        pareto_name_vals = ["0", "AFTBaseException", "harvester", "11"]
+        pareto_counts = [15, 15, 5, 15]
         num = 5
         for _ in range(num):
             self.client.post(f'{self.api_base_url}/errorreports/', self.data, format='json', HTTP_ACCEPT='application/json')
@@ -214,8 +217,8 @@ class ErrorReportAPITest(HDSAPITestBase):
             self.assertEqual(rdata['data'][0]['count'], count)
             self.assertEqual(rdata['data'][0][name], name_val)
 
-        for group, name, val in zip(pareto_groups, pareto_names, pareto_name_vals):
-            check_pareto(group, name, val, num)
+        for group, name, val, count in zip(pareto_groups, pareto_names, pareto_name_vals, pareto_counts):
+            check_pareto(group, name, val, count)
 
     def test_create_notification(self):
         self.set_user_role(RoleChoices.MANAGER)

@@ -168,8 +168,22 @@
           "leap_status": "Normal"
         },
         "errors": {
-          "traychg.0": {
+          "harvester.0": {
+            "ts": 1651526851.7674465,
+            "value": "traychgunit.1 Error: No tray detected in collection",
+            "traceback": "",
+            "code": 0,
+            "operator_err_type": "traychg"
+          },
+          "masterui.0": {
             "ts": 1651526861.7674465,
+            "value": "traychgunit.1 Error: No tray detected in collection",
+            "traceback": "",
+            "code": 0,
+            "operator_err_type": "traychg"
+          },
+          "traychg.0": {
+            "ts": 1651526841.7674465,
             "value": "traychgunit.1 Error: No tray detected in collection",
             "traceback": "",
             "code": 0,

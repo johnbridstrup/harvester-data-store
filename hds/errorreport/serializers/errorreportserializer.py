@@ -9,6 +9,7 @@ from event.models import Event
 from event.serializers import EventSerializerMixin
 from exceptions.models import AFTException, AFTExceptionCode
 from exceptions.serializers import AFTExceptionSerializer
+from exceptions.utils import sort_exceptions
 from collections.abc import Mapping
 from rest_framework import serializers
 from taggit.serializers import TagListSerializerField, TaggitSerializer
@@ -166,13 +167,18 @@ class ErrorReportSerializer(TaggitSerializer, EventSerializerMixin, ReportSerial
             creator = user
         else:
             creator = report.creator
+
+        exceptions = []
         if errors is not None:
             for error in errors:
                 error['report'] = report
                 error['timestamp'] = error['timestamp']
                 error['code'] = AFTExceptionCode.objects.get(code=error['code'])
-                AFTException.objects.create(**error, creator=creator)
-
+                exceptions.append(AFTException.objects.create(**error, creator=creator, primary=False))
+            
+            sorted_excs = sort_exceptions(exceptions)
+            sorted_excs[0].primary = True
+            sorted_excs[0].save()
 
     class Meta:
         model = ErrorReport
