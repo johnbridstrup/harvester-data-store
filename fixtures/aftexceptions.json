@@ -1,57 +1,12 @@
 [
 {
-    "model": "exceptions.aftexceptioncode",
-    "pk": 1,
-    "fields": {
-        "creator": 1,
-        "modifiedBy": null,
-        "created": "2022-07-22T00:55:01.887Z",
-        "lastModified": "2022-07-22T00:55:01.887Z",
-        "code": 9,
-        "name": "TextException",
-        "msg": "",
-        "team": "Test team",
-        "cycle": false
-    }
-},
-{
-    "model": "exceptions.aftexceptioncode",
-    "pk": 2,
-    "fields": {
-        "creator": 1,
-        "modifiedBy": null,
-        "created": "2022-07-22T16:59:37.819Z",
-        "lastModified": "2022-07-22T16:59:37.819Z",
-        "code": 0,
-        "name": "AFTBaseException",
-        "msg": "test",
-        "team": "aft",
-        "cycle": false
-    }
-},
-{
-    "model": "exceptions.aftexceptioncode",
-    "pk": 3,
-    "fields": {
-        "creator": 1,
-        "modifiedBy": null,
-        "created": "2022-08-26T16:57:19.839Z",
-        "lastModified": "2022-08-26T16:57:19.839Z",
-        "code": 2,
-        "name": "ExceptionallyLongExceptionNameError",
-        "msg": "",
-        "team": "Best team",
-        "cycle": false
-    }
-},
-{
     "model": "exceptions.aftexception",
     "pk": 1,
     "fields": {
         "creator": 1,
         "modifiedBy": null,
         "created": "2022-08-25T22:58:18.221Z",
-        "lastModified": "2022-08-25T22:58:18.221Z",
+        "lastModified": "2023-01-18T19:42:16.850Z",
         "code": 1,
         "service": "traychg",
         "node": 0,
@@ -60,7 +15,8 @@
         "info": "traychgunit.1 Error: No tray detected in collection",
         "timestamp": "2022-05-02T21:27:41.767Z",
         "report": 1,
-        "handled": false
+        "handled": false,
+        "primary": true
     }
 },
 {
@@ -70,7 +26,7 @@
         "creator": 1,
         "modifiedBy": null,
         "created": "2022-08-25T22:58:41.782Z",
-        "lastModified": "2022-08-25T22:58:41.782Z",
+        "lastModified": "2023-01-18T19:42:16.852Z",
         "code": 1,
         "service": "traychg",
         "node": 0,
@@ -79,7 +35,8 @@
         "info": "traychgunit.1 Error: No tray detected in collection",
         "timestamp": "2022-05-02T21:27:41.767Z",
         "report": 2,
-        "handled": false
+        "handled": false,
+        "primary": true
     }
 },
 {
@@ -89,7 +46,7 @@
         "creator": 1,
         "modifiedBy": null,
         "created": "2022-08-25T22:58:43.838Z",
-        "lastModified": "2022-08-25T22:58:43.838Z",
+        "lastModified": "2023-01-18T19:42:16.854Z",
         "code": 1,
         "service": "traychg",
         "node": 0,
@@ -98,7 +55,8 @@
         "info": "traychgunit.1 Error: No tray detected in collection",
         "timestamp": "2022-05-02T21:27:41.767Z",
         "report": 3,
-        "handled": false
+        "handled": false,
+        "primary": true
     }
 },
 {
@@ -108,7 +66,7 @@
         "creator": 1,
         "modifiedBy": null,
         "created": "2022-08-25T22:59:47.914Z",
-        "lastModified": "2022-08-25T22:59:47.914Z",
+        "lastModified": "2023-01-18T19:42:16.855Z",
         "code": 1,
         "service": "traychg",
         "node": 0,
@@ -117,7 +75,8 @@
         "info": "traychgunit.1 Error: No tray detected in collection",
         "timestamp": "2022-05-02T21:27:41.767Z",
         "report": 4,
-        "handled": false
+        "handled": false,
+        "primary": true
     }
 },
 {
@@ -127,7 +86,7 @@
         "creator": 1,
         "modifiedBy": null,
         "created": "2022-08-25T22:59:57.040Z",
-        "lastModified": "2022-08-25T22:59:57.040Z",
+        "lastModified": "2023-01-18T19:42:16.856Z",
         "code": 1,
         "service": "traychg",
         "node": 0,
@@ -136,7 +95,8 @@
         "info": "traychgunit.1 Error: No tray detected in collection",
         "timestamp": "2022-05-02T21:27:41.767Z",
         "report": 5,
-        "handled": false
+        "handled": false,
+        "primary": true
     }
 },
 {
@@ -146,7 +106,7 @@
         "creator": 1,
         "modifiedBy": null,
         "created": "2022-10-14T16:18:26.657Z",
-        "lastModified": "2022-10-14T16:18:26.657Z",
+        "lastModified": "2023-01-18T19:42:16.857Z",
         "code": 2,
         "service": "drivesys",
         "node": 0,
@@ -155,7 +115,8 @@
         "info": "Sevcon Controller Error",
         "timestamp": "2022-09-20T03:56:40.896Z",
         "report": 6,
-        "handled": true
+        "handled": true,
+        "primary": true
     }
 },
 {
@@ -174,7 +135,8 @@
         "info": "Sevcon Controller Error",
         "timestamp": "2022-09-20T03:56:40.896Z",
         "report": 6,
-        "handled": false
+        "handled": false,
+        "primary": false
     }
 }
 ]

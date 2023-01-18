@@ -1,6 +1,7 @@
 from django.db import models
 from common.models import ReportBase
 from event.models import EventModelMixin
+from exceptions.utils import sort_exceptions
 from location.models import Location
 from harvester.models import Harvester
 
@@ -15,7 +16,8 @@ class ErrorReport(EventModelMixin, ReportBase):
     gitbranch = models.CharField(max_length=50, default=DEFAULT_UNKNOWN)
 
     def __str__(self):
-        excs = [f"\n\t{str(exc)}" for exc in self.exceptions.all()]
+        excs = sort_exceptions(self.exceptions.all())
+        excs = [f"\n\t{str(exc)}" for exc in excs]
         return (
             f"*Error on Harvester {self.harvester.harv_id}*\n"
             f"ts: {self.reportTime}\n"

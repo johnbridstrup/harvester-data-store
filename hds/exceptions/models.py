@@ -53,10 +53,14 @@ class AFTException(CommonInfo):
     timestamp = models.DateTimeField(blank=True, null=True)
     report = models.ForeignKey(ErrorReport, on_delete=models.SET_NULL, null=True, related_name="exceptions")
     handled = models.BooleanField(default=False)
+    primary = models.BooleanField(null=True, blank=True)
 
     def __str__(self):
+        handled_str = "unhandled"
+        primary_str = "unknown"
         if self.handled:
             handled_str = "handled"
-        else:
-            handled_str = "unhandled"
-        return f"{self.service}.{self.robot}: {self.code.name} ({handled_str})"
+        if self.primary is not None:
+            primary_str = "Primary" if self.primary else "Secondary"
+        
+        return f"{self.service}.{self.robot} {handled_str} error: {self.code.name} ({primary_str})"

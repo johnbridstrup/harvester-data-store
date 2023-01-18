@@ -3794,9 +3794,16 @@
                                 "operator_err_type": null
                             },
                             "harvester.0": {
-                                "ts": 1663646200.8968048,
+                                "ts": 1663646210.8968048,
                                 "code": 0,
                                 "value": "Sevcon Controller Error",
+                                "traceback": "",
+                                "operator_err_type": null
+                            },
+                            "traychg.0": {
+                                "ts": 1663646190.8968048,
+                                "code": 0,
+                                "value": "Tray error",
                                 "traceback": "",
                                 "operator_err_type": null
                             }
