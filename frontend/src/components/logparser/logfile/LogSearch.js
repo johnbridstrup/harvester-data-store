@@ -13,6 +13,7 @@ function LogSearch(props) {
   const [borderEffect, setBorderEffect] = useState({
     up: false,
     down: false,
+    exit: false,
   });
   const {
     internal: {
@@ -67,6 +68,7 @@ function LogSearch(props) {
   const exitSearch = () => {
     setSearch("");
     dispatch(clearSearch());
+    borderVisual("exit");
   };
 
   const borderVisual = (direction, ignore = false) => {
@@ -86,6 +88,15 @@ function LogSearch(props) {
       setTimeout(() => {
         setBorderEffect((current) => {
           return { ...current, down: false };
+        });
+      }, 100);
+    } else if (direction === "exit" && !ignore) {
+      setBorderEffect((current) => {
+        return { ...current, exit: true };
+      });
+      setTimeout(() => {
+        setBorderEffect((current) => {
+          return { ...current, exit: false };
         });
       }, 100);
     } else {
@@ -136,8 +147,11 @@ function LogSearch(props) {
               >
                 <i className="las la-arrow-down"></i>
               </span>
-              <span>
-                <i onClick={exitSearch} className="las la-times"></i>
+              <span
+                className={`btn ${borderEffect.exit && "bordered-btn"}`}
+                onClick={exitSearch}
+              >
+                <i className="las la-times"></i>
               </span>
             </div>
           </div>
