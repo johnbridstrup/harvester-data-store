@@ -1,5 +1,5 @@
 from .metrics import PARETO_QUERY_TIMER
-from common.reports import DTimeFormatter
+from common.reports import DTimeFormatter, DEFAULT_TZ
 from common.viewsets import ReportModelViewSet
 from exceptions.models import AFTException
 
@@ -20,7 +20,7 @@ def build_list_filter(request):
         """
         listfilter = {}
         # get query timezone
-        tz = request.query_params.get('tz', 'US/Pacific')
+        tz = request.query_params.get('tz', DEFAULT_TZ)
 
         # get harv_ids fromrequest and filter queryset for harvester ids
         if 'harv_ids' in request.query_params:
@@ -78,6 +78,11 @@ def build_list_filter(request):
         if 'handled' in request.query_params:
             handled = bool(int(request.query_params['handled']))
             listfilter['exceptions__handled'] = handled
+
+        # Primary exceptions flag
+        if 'exceptions__primary' in request.query_params:
+            primary = request.query_params['exceptions__primary'].lower() in ['1', 'true']
+            listfilter['exceptions__primary'] = primary
 
         # update listfilter with generic query dict
         listfilter.update(ReportModelViewSet.build_generic_query(request))

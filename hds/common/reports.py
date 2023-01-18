@@ -2,6 +2,8 @@ from datetime import datetime
 import pytz
 
 
+DEFAULT_TZ = "US/Pacific"
+
 class DTimeFormatter:
     @classmethod
     def fill_dt_with_zeros(cls, dt_str):
@@ -33,6 +35,6 @@ class DTimeFormatter:
             tz=pytz.utc
         )
         date_str = date_obj.astimezone(tz=pytz.timezone(
-            'US/Pacific'
+            DEFAULT_TZ
         )).strftime('%Y%m%dT%H%M%S.%f')
         return date_str

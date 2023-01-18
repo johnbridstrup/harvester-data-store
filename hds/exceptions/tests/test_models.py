@@ -34,7 +34,7 @@ class ExceptionTestBase(TestCase):
                 code=code['code'], 
                 name=code['name'],
                 msg=code['msg'],
-                cycle=code['cycle']
+                cycle=code['cycle'],
             )
 
 class AFTExceptionCodeTestCase(ExceptionTestBase):
@@ -76,7 +76,8 @@ class AFTExceptionTestCase(ExceptionTestBase):
             robot=cls.NODE,
             info=cls.INFO,
             traceback=cls.TRACEBACK,
-            timestamp=cls.TIMESTAMP
+            timestamp=cls.TIMESTAMP,
+            primary=True,
         )
 
     def test_exceptions(self):

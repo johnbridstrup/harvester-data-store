@@ -1,3 +1,4 @@
+from .filters import AFTExceptionFilter
 from .models import (
     AFTExceptionCode,
     AFTExceptionCodeManifest, 
@@ -36,3 +37,4 @@ class AFTExceptionCodeView(CreateModelViewSet):
 class AFTExceptionView(CreateModelViewSet):
     queryset = AFTException.objects.all()
     serializer_class = AFTExceptionSerializer
+    filterset_class = AFTExceptionFilter
