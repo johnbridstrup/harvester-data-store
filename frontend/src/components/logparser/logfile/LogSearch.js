@@ -24,11 +24,14 @@ function LogSearch(props) {
 
   const handleKeyDown = async (e) => {
     if (e.key === "Enter") {
-      if (searchText) {
-        await scrollToLogIndex("down", true);
-      } else {
+      if (search !== searchText) {
+        dispatch(clearSearch());
         dispatch(searchLog(search));
         await scrollToIndex();
+      } else if (searchText) {
+        await scrollToLogIndex("down", true);
+      } else {
+        return;
       }
     }
   };
