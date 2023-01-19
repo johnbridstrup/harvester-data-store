@@ -211,11 +211,11 @@ class HDSAPITestBase(APITestCase):
         self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
         return resp.json()
 
-    def _post_autodiag_report(self, load=True):
+    def _post_autodiag_report(self, load=True, resp_status=status.HTTP_201_CREATED):
         if load:
             self._load_autodiag_report()
         resp = self.client.post(f'{self.api_base_url}/autodiagnostics/', self.ad_data, format='json')
-        self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(resp.status_code, resp_status)
         return resp.json()
 
     def test_frontend_url(self):

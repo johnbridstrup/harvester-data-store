@@ -4,6 +4,7 @@ from rest_framework import status
 from common.tests import HDSAPITestBase
 
 from .models import AutodiagnosticsReport
+from .views import MAGIC_GRIPPER_MSG
 
 
 class AutodiagnosticsApiTestCase(HDSAPITestBase):
@@ -38,9 +39,19 @@ class AutodiagnosticsApiTestCase(HDSAPITestBase):
         r_harv12 = self.client.get(f"{self.url}?harvester__harv_id=12")
         self.assertEqual(r_harv12.json()["data"]["count"], 0)
 
-        r_sn1297 = self.client.get(f"{self.url}?gripper_sn=1297")
-        self.assertEqual(r_sn1297.json()["data"]["count"], 1)
+        r_sn1298 = self.client.get(f"{self.url}?gripper_sn=1298")
+        self.assertEqual(r_sn1298.json()["data"]["count"], 1)
 
         r_sn1299 = self.client.get(f"{self.url}?gripper_sn=1299")
         self.assertEqual(r_sn1299.json()["data"]["count"], 0)
+
+    def test_magic_gripper(self):
+        self._load_autodiag_report()
+        self.ad_data['data']['serial_no'] = 1297
+        r_json = self._post_autodiag_report(load=False, resp_status=status.HTTP_200_OK)
+        self.assertEqual(r_json['data'], MAGIC_GRIPPER_MSG)
+
+        r = self.client.get(self.url)
+        data = r.json()["data"]
+        self.assertEqual(data["count"], 0)
         

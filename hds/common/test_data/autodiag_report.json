@@ -2,7 +2,7 @@
   "type": "autodiagnostics",
   "timestamp": 1670436508.5502312,
   "data": {
-    "serial_no": 1297,
+    "serial_no": 1298,
     "ts": 1670436508.5497868,
     "min_vac": 40.0,
     "delta_fing": 0.04,
