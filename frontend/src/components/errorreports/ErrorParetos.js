@@ -56,9 +56,15 @@ function ErrorParetos(props) {
   };
 
   const handleFieldChange = (e) => {
-    setFieldData((current) => {
-      return { ...current, primary: e.target.checked };
-    });
+    if (e.target.name === "primary") {
+      setFieldData((current) => {
+        return { ...current, primary: e.target.checked };
+      });
+    } else {
+      setFieldData((current) => {
+        return { ...current, [e.target.name]: e.target.value };
+      });
+    }
   };
 
   const paretoApiReq = async (aggregateObj) => {

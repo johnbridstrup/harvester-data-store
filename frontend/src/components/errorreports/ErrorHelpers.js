@@ -116,56 +116,6 @@ export const ExceptTabular = (props) => {
   );
 };
 
-export const ParetoForm = (props) => {
-  const { primary } = props.fieldData;
-  return (
-    <div className="mb-4">
-      <form onSubmit={props.handleSubmit}>
-        <div className="row mb-3">
-          <div className="col">
-            <div className="form-check">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                id="primary"
-                checked={primary}
-                onChange={props.handleFieldChange}
-              />
-              <label className="form-check-label" htmlFor="primary">
-                Primary Only
-              </label>
-            </div>
-          </div>
-        </div>
-        <div className="row mb-3">
-          <div className="col">
-            <div className="form-group">
-              <label htmlFor="aggregate_query">Group By</label>
-              <Select
-                isSearchable
-                isClearable
-                placeholder="code__name"
-                options={aggregateOptions}
-                name="aggregate_query"
-                onChange={props.handleChange}
-                defaultValue={props.selectedAggregate}
-                value={props.selectedAggregate}
-                className="multi-select-container"
-                classNamePrefix="select"
-              />
-            </div>
-          </div>
-        </div>
-        <div className="text-center">
-          <button type="submit" className="btn btn-primary">
-            Build Chart
-          </button>
-        </div>
-      </form>
-    </div>
-  );
-};
-
 export const ParetoTabular = (props) => {
   return (
     <div>
@@ -246,9 +196,8 @@ export const BackButton = (props) => {
   );
 };
 
-export const FormQuery = (props) => {
+export const GenericFormField = (props) => {
   const {
-    handleFormQuerySubmit,
     harvesterOptions,
     handleHarvestSelect,
     selectedHarvId,
@@ -261,17 +210,14 @@ export const FormQuery = (props) => {
     codeOptions,
     handleCodeSelect,
     selectedCode,
+    fieldData,
+    handleFieldChange,
     timezoneOptions,
     handleTimezoneSelect,
     selectedTimezone,
-    handleGenPareto,
-    handleModalPopUp,
-    notifyRef,
-    fieldData,
-    handleFieldChange,
   } = props;
   return (
-    <form onSubmit={handleFormQuerySubmit}>
+    <>
       <div className="row mb-4 mt-2">
         <div className="col-md-6">
           <div className="form-group">
@@ -282,6 +228,7 @@ export const FormQuery = (props) => {
               placeholder="1,2,3,..."
               options={harvesterOptions}
               name="harv_ids"
+              id="harv_ids"
               onChange={handleHarvestSelect}
               value={selectedHarvId}
               defaultValue={selectedHarvId}
@@ -299,6 +246,7 @@ export const FormQuery = (props) => {
               placeholder="ranch1, ranch2, ..."
               options={locationOptions}
               name="locations"
+              id="locations"
               onChange={handleLocationSelect}
               defaultValue={selectedLocation}
               value={selectedLocation}
@@ -318,6 +266,7 @@ export const FormQuery = (props) => {
               placeholder="strawberry"
               options={fruitOptions}
               name="fruit"
+              id="fruit"
               onChange={handleFruitSelect}
               defaultValue={selectedFruit}
               value={selectedFruit}
@@ -335,6 +284,7 @@ export const FormQuery = (props) => {
               placeholder="1,2,3,..."
               options={codeOptions}
               name="code"
+              id="code"
               onChange={handleCodeSelect}
               defaultValue={selectedCode}
               value={selectedCode}
@@ -351,7 +301,8 @@ export const FormQuery = (props) => {
             <InputFormControl
               type="text"
               name="traceback"
-              value={fieldData.traceback}
+              id="traceback"
+              value={fieldData?.traceback}
               onChange={handleFieldChange}
               placeholder="traceback string"
             />
@@ -363,7 +314,8 @@ export const FormQuery = (props) => {
             <InputFormControl
               type="text"
               name="generic"
-              value={fieldData.generic}
+              id="generic"
+              value={fieldData?.generic}
               onChange={handleFieldChange}
               placeholder="field__lookup=x, column_lookup=y"
             />
@@ -373,34 +325,37 @@ export const FormQuery = (props) => {
       <div className="row mb-4">
         <div className="col-md-6">
           <div className="form-check">
-            <label htmlFor="emulator">Emulator</label>
+            <label htmlFor="emulator_1">Emulator</label>
             <input
               type="radio"
               name="is_emulator"
               value="1"
-              checked={fieldData.is_emulator === "1"}
+              id="emulator_1"
+              checked={fieldData?.is_emulator === "1"}
               onChange={handleFieldChange}
               className="form-check-input"
             />
           </div>
           <div className="form-check">
-            <label htmlFor="emulator">Harvesters</label>
+            <label htmlFor="emulator_0">Harvesters</label>
             <input
               type="radio"
               name="is_emulator"
               value="0"
-              checked={fieldData.is_emulator === "0"}
+              id="emulator_0"
+              checked={fieldData?.is_emulator === "0"}
               onChange={handleFieldChange}
               className="form-check-input"
             />
           </div>
           <div className="form-check">
-            <label htmlFor="emulator">All</label>
+            <label htmlFor="emulator_all">All</label>
             <input
               type="radio"
               name="is_emulator"
               value=""
-              checked={fieldData.is_emulator === ""}
+              id="emulator_all"
+              checked={fieldData?.is_emulator === ""}
               onChange={handleFieldChange}
               className="form-check-input"
             />
@@ -408,34 +363,37 @@ export const FormQuery = (props) => {
         </div>
         <div className="col-md-6">
           <div className="form-check">
-            <label htmlFor="handled">Handled</label>
+            <label htmlFor="handled_1">Handled</label>
             <input
               type="radio"
               name="handled"
               value="1"
-              checked={fieldData.handled === "1"}
+              id="handled_1"
+              checked={fieldData?.handled === "1"}
               onChange={handleFieldChange}
               className="form-check-input"
             />
           </div>
           <div className="form-check">
-            <label htmlFor="handled">Unhandled</label>
+            <label htmlFor="handled_0">Unhandled</label>
             <input
               type="radio"
               name="handled"
               value="0"
-              checked={fieldData.handled === "0"}
+              id="handled_0"
+              checked={fieldData?.handled === "0"}
               onChange={handleFieldChange}
               className="form-check-input"
             />
           </div>
           <div className="form-check">
-            <label htmlFor="handled">All</label>
+            <label htmlFor="handled_all">All</label>
             <input
               type="radio"
               name="handled"
               value=""
-              checked={fieldData.handled === ""}
+              id="handled_all"
+              checked={fieldData?.handled === ""}
               onChange={handleFieldChange}
               className="form-check-input"
             />
@@ -449,7 +407,8 @@ export const FormQuery = (props) => {
             <InputFormControl
               type="text"
               name="start_time"
-              value={fieldData.start_time}
+              id="start_time"
+              value={fieldData?.start_time}
               onChange={handleFieldChange}
               placeholder="YYYYMMDDHHmmSS"
             />
@@ -461,7 +420,8 @@ export const FormQuery = (props) => {
             <InputFormControl
               type="text"
               name="end_time"
-              value={fieldData.end_time}
+              id="end_time"
+              value={fieldData?.end_time}
               onChange={handleFieldChange}
               placeholder="YYYYMMDDHHmmSS"
             />
@@ -475,6 +435,7 @@ export const FormQuery = (props) => {
               placeholder="US/Pacific"
               options={timezoneOptions}
               name="tz"
+              id="tz"
               onChange={handleTimezoneSelect}
               defaultValue={selectedTimezone}
               value={selectedTimezone}
@@ -484,6 +445,72 @@ export const FormQuery = (props) => {
           </div>
         </div>
       </div>
+    </>
+  );
+};
+
+export const ParetoForm = (props) => {
+  return (
+    <div className="mb-4">
+      <form onSubmit={props.handleSubmit}>
+        <GenericFormField {...props} />
+        <div className="row mb-3">
+          <div className="col">
+            <div className="form-check">
+              <input
+                className="form-check-input"
+                type="checkbox"
+                id="primary"
+                name="primary"
+                checked={props.fieldData?.primary}
+                onChange={props.handleFieldChange}
+              />
+              <label className="form-check-label" htmlFor="primary">
+                Primary Only
+              </label>
+            </div>
+          </div>
+        </div>
+        <div className="row mb-3">
+          <div className="col">
+            <div className="form-group">
+              <label htmlFor="aggregate_query">Group By</label>
+              <Select
+                isSearchable
+                isClearable
+                placeholder="code__name"
+                options={aggregateOptions}
+                name="aggregate_query"
+                id="aggregate_query"
+                onChange={props.handleChange}
+                defaultValue={props.selectedAggregate}
+                value={props.selectedAggregate}
+                className="multi-select-container"
+                classNamePrefix="select"
+              />
+            </div>
+          </div>
+        </div>
+        <div className="text-center ">
+          <button type="submit" className="btn btn-primary">
+            Build Chart
+          </button>
+        </div>
+      </form>
+    </div>
+  );
+};
+
+export const FormQuery = (props) => {
+  const {
+    handleFormQuerySubmit,
+    handleGenPareto,
+    handleModalPopUp,
+    notifyRef,
+  } = props;
+  return (
+    <form onSubmit={handleFormQuerySubmit}>
+      <GenericFormField {...props} />
       <div className="form-group">
         <button type="submit" className="btn btn-primary btn-md">
           Submit
@@ -529,8 +556,23 @@ ParetoForm.propTypes = {
   handleChange: PropTypes.func,
   handleSubmit: PropTypes.func,
   selectedAggregate: PropTypes.object,
-  handleFieldChange: PropTypes.func,
+  harvesterOptions: PropTypes.array,
+  handleHarvestSelect: PropTypes.func,
+  selectedHarvId: PropTypes.array,
+  locationOptions: PropTypes.array,
+  handleLocationSelect: PropTypes.func,
+  selectedLocation: PropTypes.array,
+  fruitOptions: PropTypes.array,
+  handleFruitSelect: PropTypes.func,
+  selectedFruit: PropTypes.array,
+  codeOptions: PropTypes.array,
+  handleCodeSelect: PropTypes.func,
+  selectedCode: PropTypes.array,
+  timezoneOptions: PropTypes.array,
+  handleTimezoneSelect: PropTypes.func,
+  selectedTimezone: PropTypes.array,
   fieldData: PropTypes.object,
+  handleFieldChange: PropTypes.func,
 };
 
 ParetoTabular.propTypes = {
@@ -561,6 +603,26 @@ FormQuery.propTypes = {
   handleGenPareto: PropTypes.func,
   handleModalPopUp: PropTypes.func,
   notifyRef: PropTypes.object,
+  fieldData: PropTypes.object,
+  handleFieldChange: PropTypes.func,
+};
+
+GenericFormField.propTypes = {
+  harvesterOptions: PropTypes.array,
+  handleHarvestSelect: PropTypes.func,
+  selectedHarvId: PropTypes.array,
+  locationOptions: PropTypes.array,
+  handleLocationSelect: PropTypes.func,
+  selectedLocation: PropTypes.array,
+  fruitOptions: PropTypes.array,
+  handleFruitSelect: PropTypes.func,
+  selectedFruit: PropTypes.array,
+  codeOptions: PropTypes.array,
+  handleCodeSelect: PropTypes.func,
+  selectedCode: PropTypes.array,
+  timezoneOptions: PropTypes.array,
+  handleTimezoneSelect: PropTypes.func,
+  selectedTimezone: PropTypes.array,
   fieldData: PropTypes.object,
   handleFieldChange: PropTypes.func,
 };
