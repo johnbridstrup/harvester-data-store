@@ -222,6 +222,7 @@ function ErrorReportQuery(props) {
 
   const handleGenPareto = async () => {
     let queryObj = buildQueryObj();
+    queryObj["exceptions__primary"] = true;
     let params = new URLSearchParams(queryObj);
     pushState(queryObj, true);
     let routeto = `/errorreports/view/pareto/?aggregate_query=code__name&${params.toString()}`;
