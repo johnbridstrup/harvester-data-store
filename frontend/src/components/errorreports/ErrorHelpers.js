@@ -117,9 +117,26 @@ export const ExceptTabular = (props) => {
 };
 
 export const ParetoForm = (props) => {
+  const { primary } = props.fieldData;
   return (
     <div className="mb-4">
       <form onSubmit={props.handleSubmit}>
+        <div className="row mb-3">
+          <div className="col">
+            <div className="form-check">
+              <input
+                className="form-check-input"
+                type="checkbox"
+                id="primary"
+                checked={primary}
+                onChange={props.handleFieldChange}
+              />
+              <label className="form-check-label" htmlFor="primary">
+                Primary Only
+              </label>
+            </div>
+          </div>
+        </div>
         <div className="row mb-3">
           <div className="col">
             <div className="form-group">
@@ -139,7 +156,7 @@ export const ParetoForm = (props) => {
             </div>
           </div>
         </div>
-        <div className="text-center ">
+        <div className="text-center">
           <button type="submit" className="btn btn-primary">
             Build Chart
           </button>
@@ -512,6 +529,8 @@ ParetoForm.propTypes = {
   handleChange: PropTypes.func,
   handleSubmit: PropTypes.func,
   selectedAggregate: PropTypes.object,
+  handleFieldChange: PropTypes.func,
+  fieldData: PropTypes.object,
 };
 
 ParetoTabular.propTypes = {

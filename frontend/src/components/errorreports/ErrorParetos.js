@@ -13,6 +13,9 @@ function ErrorParetos(props) {
   const [open, setOpen] = useState(false);
   const [selectedAggregate, setSelectedAggregate] = useState(null);
   const [paretoArr, setParetoArr] = useState([]);
+  const [fieldData, setFieldData] = useState({
+    primary: true,
+  });
   const { paretos, loading } = useSelector((state) => state.errorreport);
   const dispatch = useDispatch();
   const { search } = useLocation();
@@ -52,11 +55,16 @@ function ErrorParetos(props) {
     setSelectedAggregate((current) => newValue);
   };
 
-  const paretoApiReq = async (aggregate_query) => {
-    const option = aggregateOptions.find((x, i) => x.value === aggregate_query);
+  const handleFieldChange = (e) => {
+    setFieldData((current) => {
+      return { ...current, primary: e.target.checked };
+    });
+  };
+
+  const paretoApiReq = async (aggregateObj) => {
+    const option = aggregateOptions.find((x, i) => x.value === aggregateObj.aggregate_query);
     let chart_title = option?.label;
-    paramsObj["aggregate_query"] = aggregate_query;
-    const res = await dispatch(generatePareto(paramsObj));
+    const res = await dispatch(generatePareto(aggregateObj));
     if (res.type === "errorreport/generatePareto/fulfilled") {
       const dataArr = res?.payload.slice();
       dataArr.sort((a, b) =>
@@ -71,7 +79,7 @@ function ErrorParetos(props) {
       let paretoObj = {
         id: uuid(),
         paretos: { xlabels, ydata },
-        aggregate_query,
+        aggregate_query: aggregateObj.aggregate_query,
         chart_title,
       };
       let arr = paretoArr.slice();
@@ -85,13 +93,15 @@ function ErrorParetos(props) {
 
   const handleBuildPareto = async (e) => {
     e.preventDefault();
-    let aggregate_query;
     if (selectedAggregate && selectedAggregate.hasOwnProperty("value")) {
-      aggregate_query = selectedAggregate.value;
+      paramsObj["aggregate_query"] = selectedAggregate.value;
     } else {
-      aggregate_query = "code__name";
+      paramsObj["aggregate_query"] = "code__name";
     }
-    await paretoApiReq(aggregate_query);
+    if (fieldData.primary) {
+      paramsObj["exceptions__primary"] = fieldData.primary;
+    }
+    await paretoApiReq(paramsObj);
   };
 
   const handleDeletePareto = (chart) => {
@@ -118,6 +128,8 @@ function ErrorParetos(props) {
         handleChange={handleChange}
         handleSubmit={handleBuildPareto}
         selectedAggregate={selectedAggregate}
+        fieldData={fieldData}
+        handleFieldChange={handleFieldChange}
       />
       <div className="mb-2">
         <span onClick={handleSideClick} className="btn cursor">
