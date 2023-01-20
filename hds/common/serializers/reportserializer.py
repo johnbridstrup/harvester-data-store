@@ -1,6 +1,8 @@
 from rest_framework import serializers
 from common.metrics import ERROR_COUNTER
 from harvester.models import Harvester
+from event.models import Event
+from event.serializers import EventSerializerMixin
 import datetime
 import jsonschema
 import logging
@@ -68,6 +70,14 @@ class ReportSerializerBase(serializers.ModelSerializer):
         return datetime.datetime.fromtimestamp(report[key]).strftime('%Y-%m-%d %H:%M:%S.%f')
 
     @classmethod
+    def extract_uuid(cls, report):
+        try:
+            UUID = report["uuid"]
+        except KeyError:
+            UUID = report["data"].get("uuid", Event.generate_uuid())
+        return UUID
+
+    @classmethod
     def get_serial_number(cls, report):
         try:
             sn = report["serial_number"]
@@ -81,6 +91,22 @@ class ReportSerializerBase(serializers.ModelSerializer):
             ERROR_COUNTER.labels(KeyError.__name__, "Serial number not at top level", cls.__name__)
         return int(sn)
 
+    @classmethod
+    def extract_basic(cls, report, fruit_key="fruit"):
+        reportTime = cls.extract_timestamp(report)
+        UUID = cls.extract_uuid(report)
+        harv_id = cls.get_serial_number(report)
+        harv = cls.get_harvester(harv_id, report, fruit_key=fruit_key)
+        data = {
+            "report": report,
+            "reportTime": reportTime,
+            "UUID": UUID,
+            "harvester": harv.id,
+            "location": harv.location.id,
+        }
+        return data
+
+    @classmethod
     def get_harvester(self, harv_id, report, fruit_key="fruit"):
         # must pass in level of report with is_emulator and fruit keys
         is_emulator = report.get("is_emulator", False)

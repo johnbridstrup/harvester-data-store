@@ -102,16 +102,11 @@ class HarvesterVersionReportSerializer(TaggitSerializer, ReportSerializerBase):
             tags = [Tags.INVALIDSCHEMA.value]
 
         report = data.copy()
-        harv_id = report.get("serial_number")
-        reportTime = self.extract_timestamp(report, key="timestamp")
-        harv = Harvester.objects.get(harv_id=int(harv_id))
+        data = self.extract_basic(report)
 
-        data = {
-            "harvester": harv.id,
-            "report": report,
-            "reportTime": reportTime,
+        data.update({
             "is_dirty": self.Meta.model.check_dirty(report['data']),
             "has_unexpected": self.Meta.model.check_unexpected(report['data']),
             "tags": tags,
-        }
+        })
         return super().to_internal_value(data)

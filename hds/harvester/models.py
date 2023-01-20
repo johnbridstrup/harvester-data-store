@@ -21,6 +21,10 @@ class Harvester(CommonInfo):
     history = HistoricalRecords()
     thingName = models.CharField(max_length=20, null=True, blank=True)
 
+    @property
+    def version_history(self):
+        return self.harvesterversionreport_set
+
     def save(self, *args, **kwargs):
         if self.is_emulator:
             try:

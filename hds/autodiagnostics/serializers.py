@@ -26,23 +26,15 @@ class AutodiagnosticsReportSerializer(TaggitSerializer, EventSerializerMixin, Re
             tags = [Tags.INVALIDSCHEMA.value]
         
         report = data.copy()
-        reportTime = self.extract_timestamp(data)
-        UUID = data.get('uuid', Event.generate_uuid())
-        harv_id = self.get_serial_number(report)
-        harv = self.get_harvester(harv_id, report)
+        data = self.extract_basic(data)
         result = report["data"].get("passed_autodiag")
         robot_id = report["data"].get("robot_id")
         gripper_sn = report["data"].get("serial_no")
 
-        data = {
-            "report": report,
-            "reportTime": reportTime,
-            "UUID": UUID,
-            "harvester": harv.id,
-            "location": harv.location.id,
+        data.update({
             "result": result,
             "robot": robot_id,
             "gripper_sn": gripper_sn,
             "tags": tags,
-        }
+        })
         return super().to_internal_value(data)

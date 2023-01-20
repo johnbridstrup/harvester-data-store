@@ -1,5 +1,6 @@
-from common.models import CommonInfo, ReportBase
-from harvester.models import Fruit, Harvester
+from common.models import CommonInfo
+from common.reports import ReportBase
+from harvester.models import Fruit
 
 from django.db import models
 from collections.abc import Mapping, Iterable
@@ -16,7 +17,6 @@ class HarvesterCodeRelease(CommonInfo):
 
 
 class HarvesterVersionReport(ReportBase):
-    harvester = models.ForeignKey(Harvester, on_delete=models.CASCADE, related_name="version_history")
     is_dirty = models.BooleanField()
     has_unexpected = models.BooleanField(default=False)
 

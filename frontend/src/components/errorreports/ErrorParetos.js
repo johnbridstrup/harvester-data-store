@@ -62,7 +62,9 @@ function ErrorParetos(props) {
   };
 
   const paretoApiReq = async (aggregateObj) => {
-    const option = aggregateOptions.find((x, i) => x.value === aggregateObj.aggregate_query);
+    const option = aggregateOptions.find(
+      (x, i) => x.value === aggregateObj.aggregate_query
+    );
     let chart_title = option?.label;
     const res = await dispatch(generatePareto(aggregateObj));
     if (res.type === "errorreport/generatePareto/fulfilled") {

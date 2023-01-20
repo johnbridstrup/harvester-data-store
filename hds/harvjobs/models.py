@@ -1,4 +1,5 @@
-from common.models import CommonInfo, ReportBase
+from common.models import CommonInfo
+from common.reports import ReportBase
 from event.models import EventModelMixin
 from harvester.models import Harvester
 

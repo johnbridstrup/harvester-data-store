@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
 from enum import Enum
-from taggit.managers import TaggableManager
 
 from hds.roles import RoleChoices
 
@@ -18,17 +17,6 @@ class CommonInfo(models.Model):
 
     class Meta:
         abstract = True
-
-
-class ReportBase(CommonInfo):
-    """ ReportBase Model """
-    reportTime = models.DateTimeField(blank=True, null=True)
-    report = models.JSONField(blank=True, null=True)
-    tags = TaggableManager()
-
-    class Meta:
-        abstract = True
-
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')

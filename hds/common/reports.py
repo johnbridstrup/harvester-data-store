@@ -1,8 +1,27 @@
 from datetime import datetime
 import pytz
 
+from django.db import models
+from taggit.managers import TaggableManager
+
+from harvester.models import Harvester, Location
+from .models import CommonInfo
+
 
 DEFAULT_TZ = "US/Pacific"
+
+
+class ReportBase(CommonInfo):
+    """ ReportBase Model """
+    location = models.ForeignKey(Location, on_delete=models.SET_NULL, null=True, blank=True)
+    harvester = models.ForeignKey(Harvester, on_delete=models.CASCADE, null=True, blank=True)
+    reportTime = models.DateTimeField(blank=True, null=True)
+    report = models.JSONField(blank=True, null=True)
+    tags = TaggableManager()
+
+    class Meta:
+        abstract = True
+
 
 class DTimeFormatter:
     @classmethod

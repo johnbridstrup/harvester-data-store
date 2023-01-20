@@ -21,17 +21,13 @@ class JobResultsSerializer(EventSerializerMixin, ReportSerializerBase):
 
     def to_internal_value(self, data):
         report = data.copy()
-        reportTime = self.extract_timestamp(data)
-        UUID = data['uuid']
+        data = self.extract_basic(report)
         try:
-            job = Job.objects.get(event__UUID=UUID).id
+            job = Job.objects.get(event__UUID=data["UUID"]).id
         except Job.DoesNotExist:
             job = None
 
-        data = {
-            "report": report,
-            "reportTime": reportTime,
+        data.update({
             "job": job,
-            "UUID": UUID,
-        }
+        })
         return super().to_internal_value(data)
