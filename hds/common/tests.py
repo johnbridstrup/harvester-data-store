@@ -1,4 +1,5 @@
 import json, os, uuid
+from time import time
 from pprint import pprint
 from rest_framework import status
 from rest_framework.test import APITestCase
@@ -16,6 +17,7 @@ from common.utils import get_url_permissions
 from hds.roles import RoleChoices, ROLES
 from hds.urls import urlpatterns
 from exceptions.models import AFTExceptionCode
+from event.models import Event
 from harvester.models import Fruit, Harvester
 from location.models import Distributor, Location
 from s3file.serializers import S3FileSerializer
@@ -120,6 +122,12 @@ class HDSAPITestBase(APITestCase):
             'cycle': False,
             'creator': self.user
         })
+        test_objects["dummy_report"] = {
+            "timestamp": time(),
+            "UUID": Event.generate_uuid(),
+            "serial_number": test_objects["harvester"].harv_id,
+            "data": {"hello": "there"}
+        }
 
         return test_objects
 

@@ -70,6 +70,7 @@ INSTALLED_APPS = [
     'errorreport',
     'event',
     'exceptions',
+    'gripreport',
     'harvester',
     'harvdeploy',
     'harvjobs',
