@@ -177,6 +177,30 @@ export const ParetoTabular = (props) => {
           <div className="tabular">{props.paramsObj.generic}</div>
         </div>
       )}
+      {props.paramsObj?.is_emulator && (
+        <div className="d-flex">
+          <div className="tabular">Is Emulator</div>
+          <div className="tabular">{props.paramsObj.is_emulator}</div>
+        </div>
+      )}
+      {props.paramsObj?.handled && (
+        <div className="d-flex">
+          <div className="tabular">Handled</div>
+          <div className="tabular">{props.paramsObj.handled}</div>
+        </div>
+      )}
+      {props.paramsObj?.aggregate_query && (
+        <div className="d-flex">
+          <div className="tabular">Group By</div>
+          <div className="tabular">{props.paramsObj.aggregate_query}</div>
+        </div>
+      )}
+      {props.paramsObj?.exceptions__primary && (
+        <div className="d-flex">
+          <div className="tabular">Primary Only</div>
+          <div className="tabular">{props.paramsObj.exceptions__primary}</div>
+        </div>
+      )}
     </div>
   );
 };
@@ -482,7 +506,7 @@ export const ParetoForm = (props) => {
                 options={aggregateOptions}
                 name="aggregate_query"
                 id="aggregate_query"
-                onChange={props.handleChange}
+                onChange={props.handleAggreSelect}
                 defaultValue={props.selectedAggregate}
                 value={props.selectedAggregate}
                 className="multi-select-container"
@@ -553,7 +577,7 @@ ExceptTabular.propTypes = {
 };
 
 ParetoForm.propTypes = {
-  handleChange: PropTypes.func,
+  handleAggreSelect: PropTypes.func,
   handleSubmit: PropTypes.func,
   selectedAggregate: PropTypes.object,
   harvesterOptions: PropTypes.array,
