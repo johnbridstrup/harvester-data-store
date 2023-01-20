@@ -10,6 +10,7 @@ import {
   uniqueVideoTabs,
   findLogIndex,
   logContent,
+  buildQueryObj,
 } from "utils/utils";
 
 test("should do binary search for given timestamp", () => {
@@ -176,4 +177,37 @@ test("should match and return log message into 4 parts", () => {
     log: "-- Vpos: 99715.06447550641",
   };
   expect(logContent(logMessage)).toMatchObject(output);
+});
+
+test("should build query object", () => {
+  let fieldData = {
+    is_emulator: "0",
+    traceback: "traceback",
+    generic: "generic=generic",
+    handled: "0",
+  };
+  let selectedHarvId = [{ label: "11", value: 11 }];
+  let selectedLocation = [{ label: "Ranch A", value: "Ranch A" }];
+  let selectedTimezone = { label: "US/Pacific", value: "US/Pacific" };
+  let selectedFruit = [{ label: "strawberry", value: "strawberry" }];
+  let selectedCode = [{ label: "0", value: "0" }];
+
+  let queryObj = buildQueryObj(
+    fieldData,
+    selectedHarvId,
+    selectedLocation,
+    selectedTimezone,
+    selectedFruit,
+    selectedCode
+  );
+  let expected = {
+    is_emulator: "0",
+    traceback: "traceback",
+    generic: "generic=generic",
+    handled: "0",
+    harv_ids: [11],
+    locations: ["Ranch A"],
+    tz: "US/Pacific",
+  };
+  expect(queryObj).toMatchObject(expected);
 });

@@ -6,20 +6,15 @@ import { generatePareto } from "features/errorreport/errorreportSlice";
 import {
   aggregateOptions,
   appendCodeName,
-  extractDateFromString,
+  buildQueryObj,
   handleSelectFactory,
   Loader,
   paramsToObject,
-  timeStampFormat,
   transformCodeOptions,
   transformFruitOptions,
   transformHarvOptions,
   transformLocOptions,
   transformTzOptions,
-  translateCodeOptions,
-  translateFruitOptions,
-  translateHarvOptions,
-  translateLocOptions,
   uuid,
 } from "utils/utils";
 import timezones from "utils/timezones";
@@ -206,51 +201,16 @@ function ErrorParetos(props) {
     }
   };
 
-  const buildQueryObj = () => {
-    let queryObj = {};
-    if (fieldData.start_time) {
-      queryObj["start_time"] = timeStampFormat(
-        extractDateFromString(fieldData.start_time)
-      );
-    }
-    if (fieldData.end_time) {
-      queryObj["end_time"] = timeStampFormat(
-        extractDateFromString(fieldData.end_time)
-      );
-    }
-    if (selectedHarvId && selectedHarvId.length > 0) {
-      queryObj["harv_ids"] = translateHarvOptions(selectedHarvId);
-    }
-    if (selectedLocation && selectedLocation.length > 0) {
-      queryObj["locations"] = translateLocOptions(selectedLocation);
-    }
-    if (selectedTimezone && selectedTimezone.hasOwnProperty("value")) {
-      queryObj["tz"] = selectedTimezone.value;
-    }
-    if (selectedFruit && selectedFruit.length > 0) {
-      queryObj["fruits"] = translateFruitOptions(selectedFruit);
-    }
-    if (selectedCode && selectedCode.length > 0) {
-      queryObj["codes"] = translateCodeOptions(selectedCode);
-    }
-    if (fieldData.traceback) {
-      queryObj["traceback"] = fieldData.traceback;
-    }
-    if (fieldData.generic) {
-      queryObj["generic"] = fieldData.generic;
-    }
-    if (fieldData.is_emulator) {
-      queryObj["is_emulator"] = fieldData.is_emulator;
-    }
-    if (fieldData.handled) {
-      queryObj["handled"] = fieldData.handled;
-    }
-    return queryObj;
-  };
-
   const handleBuildPareto = async (e) => {
     e.preventDefault();
-    let queryObj = buildQueryObj();
+    let queryObj = buildQueryObj(
+      fieldData,
+      selectedHarvId,
+      selectedLocation,
+      selectedTimezone,
+      selectedFruit,
+      selectedCode
+    );
     if (selectedAggregate && selectedAggregate.hasOwnProperty("value")) {
       queryObj["aggregate_query"] = selectedAggregate.value;
     } else {

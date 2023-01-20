@@ -4,21 +4,16 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import {
   appendCodeName,
+  buildQueryObj,
   copiedUrl,
-  extractDateFromString,
   paramsToObject,
   pushState,
-  timeStampFormat,
   transformCodeOptions,
   transformFruitOptions,
   transformHarvOptions,
   transformLocOptions,
   transformTzOptions,
   transformUserOptions,
-  translateCodeOptions,
-  translateFruitOptions,
-  translateHarvOptions,
-  translateLocOptions,
   translateUserOptions,
   validateQueryObj,
 } from "utils/utils";
@@ -169,51 +164,16 @@ function ErrorReportQuery(props) {
     });
   };
 
-  const buildQueryObj = () => {
-    let queryObj = {};
-    if (fieldData.start_time) {
-      queryObj["start_time"] = timeStampFormat(
-        extractDateFromString(fieldData.start_time)
-      );
-    }
-    if (fieldData.end_time) {
-      queryObj["end_time"] = timeStampFormat(
-        extractDateFromString(fieldData.end_time)
-      );
-    }
-    if (selectedHarvId && selectedHarvId.length > 0) {
-      queryObj["harv_ids"] = translateHarvOptions(selectedHarvId);
-    }
-    if (selectedLocation && selectedLocation.length > 0) {
-      queryObj["locations"] = translateLocOptions(selectedLocation);
-    }
-    if (selectedTimezone && selectedTimezone.hasOwnProperty("value")) {
-      queryObj["tz"] = selectedTimezone.value;
-    }
-    if (selectedFruit && selectedFruit.length > 0) {
-      queryObj["fruits"] = translateFruitOptions(selectedFruit);
-    }
-    if (selectedCode && selectedCode.length > 0) {
-      queryObj["codes"] = translateCodeOptions(selectedCode);
-    }
-    if (fieldData.traceback) {
-      queryObj["traceback"] = fieldData.traceback;
-    }
-    if (fieldData.generic) {
-      queryObj["generic"] = fieldData.generic;
-    }
-    if (fieldData.is_emulator) {
-      queryObj["is_emulator"] = fieldData.is_emulator;
-    }
-    if (fieldData.handled) {
-      queryObj["handled"] = fieldData.handled;
-    }
-    return queryObj;
-  };
-
   const handleFormQuerySubmit = async (e) => {
     e.preventDefault();
-    let queryObj = buildQueryObj();
+    let queryObj = buildQueryObj(
+      fieldData,
+      selectedHarvId,
+      selectedLocation,
+      selectedTimezone,
+      selectedFruit,
+      selectedCode
+    );
     await dispatch(queryErrorReport(queryObj));
     dispatch(copyQueryUrl(copiedUrl(queryObj)));
     dispatch(cacheParamsObj(queryObj));
@@ -221,7 +181,14 @@ function ErrorReportQuery(props) {
   };
 
   const handleGenPareto = async () => {
-    let queryObj = buildQueryObj();
+    let queryObj = buildQueryObj(
+      fieldData,
+      selectedHarvId,
+      selectedLocation,
+      selectedTimezone,
+      selectedFruit,
+      selectedCode
+    );
     queryObj["exceptions__primary"] = true;
     let params = new URLSearchParams(queryObj);
     pushState(queryObj, true);
@@ -234,7 +201,14 @@ function ErrorReportQuery(props) {
   };
 
   const handleNotificationCreate = async () => {
-    let queryObj = buildQueryObj();
+    let queryObj = buildQueryObj(
+      fieldData,
+      selectedHarvId,
+      selectedLocation,
+      selectedTimezone,
+      selectedFruit,
+      selectedCode
+    );
     if (selectedRecipient && selectedRecipient.length > 0) {
       let recipients = translateUserOptions(selectedRecipient);
       let isValid = validateQueryObj(queryObj);
