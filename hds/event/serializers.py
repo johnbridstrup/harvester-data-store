@@ -13,28 +13,27 @@ class EventSerializer(serializers.ModelSerializer):
         fields = ('__all__')
         read_only_fields = ('creator',)
 
+    @staticmethod
+    def _related_object_list(obj_set, endpoint, object):
+        return [
+            {
+                'url': f'/{endpoint}/{obj.id}/',
+                'object': object,
+            } 
+        for obj in obj_set.all()]
+
     def to_representation(self, instance):
         data = super().to_representation(instance)
 
         # Connect related objects here
-        error_reports = [
-            {
-                'url': f'/errorreports/{rep.id}/', 
-                'object': 'Error Report'
-            } for rep in instance.errorreport_set.all()
-        ]
+        error_reports = self._related_object_list(instance.errorreport_set, 'errorreports', 'Error Report')
 
-        jobs = [
-            {
-                'url': f'/jobs/{rep.id}/', 
-                'object': 'Job'
-            } for rep in instance.job_set.all()
-        ] + [
-            {
-                'url': f'/jobstatus/{rep.id}/', 
-                'object': 'Job Status'
-            } for rep in instance.jobresults_set.all()
-        ]
+        jobs = self._related_object_list(
+            instance.job_set, 'jobs', 'Job'
+        ) + self._related_object_list(
+            instance.jobresults_set, 'jobstatus', 'Job Status'
+        )
+
         data['related_objects'] = [
             *error_reports,
             *jobs,
