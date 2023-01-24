@@ -34,9 +34,12 @@ class EventSerializer(serializers.ModelSerializer):
             instance.jobresults_set, 'jobstatus', 'Job Status'
         )
 
+        grip_reports = self._related_object_list(instance.gripreport_set, 'gripreports', 'Grip Report')
+
         data['related_objects'] = [
             *error_reports,
             *jobs,
+            *grip_reports,
         ]
 
         # Connect related files here
