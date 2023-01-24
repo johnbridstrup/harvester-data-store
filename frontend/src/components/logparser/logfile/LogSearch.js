@@ -116,13 +116,17 @@ function LogSearch(props) {
       </div>
       <div className="nav-body">
         <div className="nav-icon-prog">
+          <label htmlFor="playback">Playback Rate</label>
           <input
             type="range"
             value={props.rate}
-            min={0}
-            max={2}
+            min={0.5}
+            max={2.5}
+            step={0.5}
+            id="playback"
             onChange={handleRateChange}
           />
+          <span>{props.rate}x</span>
         </div>
         <div className="nav-search">
           <div className="find-bar">
