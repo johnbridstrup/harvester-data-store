@@ -106,7 +106,9 @@ class ErrorReportSerializer(TaggitSerializer, EventSerializerMixin, ReportSerial
         reportTime = self.extract_timestamp(report)
         githash = report['data'].get('githash') or DEFAULT_UNKNOWN
         gitbranch = report['data'].get('branch_name') or DEFAULT_UNKNOWN
-        UUID = report['data'].get("uuid", Event.generate_uuid())
+        UUID = report['data'].get("uuid", None)
+        if UUID is None:
+            UUID = Event.generate_uuid()
         data = {
             'harvester': harvester.id,
             'location': harvester.location.id,

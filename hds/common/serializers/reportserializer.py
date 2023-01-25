@@ -74,7 +74,9 @@ class ReportSerializerBase(serializers.ModelSerializer):
         try:
             UUID = report["uuid"]
         except KeyError:
-            UUID = report["data"].get("uuid", Event.generate_uuid())
+            UUID = report["data"].get("uuid", None)
+        if UUID is None:
+            UUID = Event.generate_uuid()
         return UUID
 
     @classmethod
