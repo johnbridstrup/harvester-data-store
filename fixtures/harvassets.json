@@ -1,0 +1,326 @@
+[
+{
+    "model": "harvassets.harvesterassettype",
+    "pk": 1,
+    "fields": {
+        "creator": 1,
+        "modifiedBy": null,
+        "created": "2023-01-25T23:35:13.455Z",
+        "lastModified": "2023-01-25T23:35:13.455Z",
+        "name": "arm"
+    }
+},
+{
+    "model": "harvassets.harvesterassettype",
+    "pk": 2,
+    "fields": {
+        "creator": 1,
+        "modifiedBy": null,
+        "created": "2023-01-25T23:35:13.486Z",
+        "lastModified": "2023-01-25T23:35:13.486Z",
+        "name": "gantry"
+    }
+},
+{
+    "model": "harvassets.harvesterassettype",
+    "pk": 3,
+    "fields": {
+        "creator": 1,
+        "modifiedBy": null,
+        "created": "2023-01-25T23:35:13.515Z",
+        "lastModified": "2023-01-25T23:35:13.515Z",
+        "name": "gripper"
+    }
+},
+{
+    "model": "harvassets.harvesterassettype",
+    "pk": 4,
+    "fields": {
+        "creator": 1,
+        "modifiedBy": null,
+        "created": "2023-01-25T23:35:13.545Z",
+        "lastModified": "2023-01-25T23:35:13.545Z",
+        "name": "traychanger"
+    }
+},
+{
+    "model": "harvassets.historicalharvesterasset",
+    "pk": 1,
+    "fields": {
+        "id": 1,
+        "created": "2023-01-25T23:35:13.462Z",
+        "lastModified": "2023-01-25T23:35:13.462Z",
+        "index": 2,
+        "serial_number": "SA-040",
+        "version": null,
+        "creator": 1,
+        "modifiedBy": null,
+        "asset": 1,
+        "harvester": 3,
+        "history_date": "2023-01-25T23:35:13.467Z",
+        "history_change_reason": null,
+        "history_type": "+",
+        "history_user": null
+    }
+},
+{
+    "model": "harvassets.historicalharvesterasset",
+    "pk": 2,
+    "fields": {
+        "id": 2,
+        "created": "2023-01-25T23:35:13.474Z",
+        "lastModified": "2023-01-25T23:35:13.474Z",
+        "index": 1,
+        "serial_number": "SA-019",
+        "version": null,
+        "creator": 1,
+        "modifiedBy": null,
+        "asset": 1,
+        "harvester": 3,
+        "history_date": "2023-01-25T23:35:13.480Z",
+        "history_change_reason": null,
+        "history_type": "+",
+        "history_user": null
+    }
+},
+{
+    "model": "harvassets.historicalharvesterasset",
+    "pk": 3,
+    "fields": {
+        "id": 3,
+        "created": "2023-01-25T23:35:13.491Z",
+        "lastModified": "2023-01-25T23:35:13.491Z",
+        "index": 2,
+        "serial_number": "ST-058",
+        "version": null,
+        "creator": 1,
+        "modifiedBy": null,
+        "asset": 2,
+        "harvester": 3,
+        "history_date": "2023-01-25T23:35:13.496Z",
+        "history_change_reason": null,
+        "history_type": "+",
+        "history_user": null
+    }
+},
+{
+    "model": "harvassets.historicalharvesterasset",
+    "pk": 4,
+    "fields": {
+        "id": 4,
+        "created": "2023-01-25T23:35:13.503Z",
+        "lastModified": "2023-01-25T23:35:13.503Z",
+        "index": 1,
+        "serial_number": "ST-037",
+        "version": null,
+        "creator": 1,
+        "modifiedBy": null,
+        "asset": 2,
+        "harvester": 3,
+        "history_date": "2023-01-25T23:35:13.508Z",
+        "history_change_reason": null,
+        "history_type": "+",
+        "history_user": null
+    }
+},
+{
+    "model": "harvassets.historicalharvesterasset",
+    "pk": 5,
+    "fields": {
+        "id": 5,
+        "created": "2023-01-25T23:35:13.520Z",
+        "lastModified": "2023-01-25T23:35:13.520Z",
+        "index": 2,
+        "serial_number": "7",
+        "version": "B01",
+        "creator": 1,
+        "modifiedBy": null,
+        "asset": 3,
+        "harvester": 3,
+        "history_date": "2023-01-25T23:35:13.525Z",
+        "history_change_reason": null,
+        "history_type": "+",
+        "history_user": null
+    }
+},
+{
+    "model": "harvassets.historicalharvesterasset",
+    "pk": 6,
+    "fields": {
+        "id": 6,
+        "created": "2023-01-25T23:35:13.534Z",
+        "lastModified": "2023-01-25T23:35:13.534Z",
+        "index": 1,
+        "serial_number": "13",
+        "version": "B01",
+        "creator": 1,
+        "modifiedBy": null,
+        "asset": 3,
+        "harvester": 3,
+        "history_date": "2023-01-25T23:35:13.539Z",
+        "history_change_reason": null,
+        "history_type": "+",
+        "history_user": null
+    }
+},
+{
+    "model": "harvassets.historicalharvesterasset",
+    "pk": 7,
+    "fields": {
+        "id": 7,
+        "created": "2023-01-25T23:35:13.551Z",
+        "lastModified": "2023-01-25T23:35:13.551Z",
+        "index": 1,
+        "serial_number": "A1",
+        "version": null,
+        "creator": 1,
+        "modifiedBy": null,
+        "asset": 4,
+        "harvester": 3,
+        "history_date": "2023-01-25T23:35:13.559Z",
+        "history_change_reason": null,
+        "history_type": "+",
+        "history_user": null
+    }
+},
+{
+    "model": "harvassets.historicalharvesterasset",
+    "pk": 8,
+    "fields": {
+        "id": 8,
+        "created": "2023-01-25T23:35:13.573Z",
+        "lastModified": "2023-01-25T23:35:13.573Z",
+        "index": 2,
+        "serial_number": "A2",
+        "version": null,
+        "creator": 1,
+        "modifiedBy": null,
+        "asset": 4,
+        "harvester": 3,
+        "history_date": "2023-01-25T23:35:13.595Z",
+        "history_change_reason": null,
+        "history_type": "+",
+        "history_user": null
+    }
+},
+{
+    "model": "harvassets.harvesterasset",
+    "pk": 1,
+    "fields": {
+        "creator": 1,
+        "modifiedBy": null,
+        "created": "2023-01-25T23:35:13.462Z",
+        "lastModified": "2023-01-25T23:35:13.462Z",
+        "asset": 1,
+        "harvester": 3,
+        "index": 2,
+        "serial_number": "SA-040",
+        "version": null
+    }
+},
+{
+    "model": "harvassets.harvesterasset",
+    "pk": 2,
+    "fields": {
+        "creator": 1,
+        "modifiedBy": null,
+        "created": "2023-01-25T23:35:13.474Z",
+        "lastModified": "2023-01-25T23:35:13.474Z",
+        "asset": 1,
+        "harvester": 3,
+        "index": 1,
+        "serial_number": "SA-019",
+        "version": null
+    }
+},
+{
+    "model": "harvassets.harvesterasset",
+    "pk": 3,
+    "fields": {
+        "creator": 1,
+        "modifiedBy": null,
+        "created": "2023-01-25T23:35:13.491Z",
+        "lastModified": "2023-01-25T23:35:13.491Z",
+        "asset": 2,
+        "harvester": 3,
+        "index": 2,
+        "serial_number": "ST-058",
+        "version": null
+    }
+},
+{
+    "model": "harvassets.harvesterasset",
+    "pk": 4,
+    "fields": {
+        "creator": 1,
+        "modifiedBy": null,
+        "created": "2023-01-25T23:35:13.503Z",
+        "lastModified": "2023-01-25T23:35:13.503Z",
+        "asset": 2,
+        "harvester": 3,
+        "index": 1,
+        "serial_number": "ST-037",
+        "version": null
+    }
+},
+{
+    "model": "harvassets.harvesterasset",
+    "pk": 5,
+    "fields": {
+        "creator": 1,
+        "modifiedBy": null,
+        "created": "2023-01-25T23:35:13.520Z",
+        "lastModified": "2023-01-25T23:35:13.520Z",
+        "asset": 3,
+        "harvester": 3,
+        "index": 2,
+        "serial_number": "7",
+        "version": "B01"
+    }
+},
+{
+    "model": "harvassets.harvesterasset",
+    "pk": 6,
+    "fields": {
+        "creator": 1,
+        "modifiedBy": null,
+        "created": "2023-01-25T23:35:13.534Z",
+        "lastModified": "2023-01-25T23:35:13.534Z",
+        "asset": 3,
+        "harvester": 3,
+        "index": 1,
+        "serial_number": "13",
+        "version": "B01"
+    }
+},
+{
+    "model": "harvassets.harvesterasset",
+    "pk": 7,
+    "fields": {
+        "creator": 1,
+        "modifiedBy": null,
+        "created": "2023-01-25T23:35:13.551Z",
+        "lastModified": "2023-01-25T23:35:13.551Z",
+        "asset": 4,
+        "harvester": 3,
+        "index": 1,
+        "serial_number": "A1",
+        "version": null
+    }
+},
+{
+    "model": "harvassets.harvesterasset",
+    "pk": 8,
+    "fields": {
+        "creator": 1,
+        "modifiedBy": null,
+        "created": "2023-01-25T23:35:13.573Z",
+        "lastModified": "2023-01-25T23:35:13.573Z",
+        "asset": 4,
+        "harvester": 3,
+        "index": 2,
+        "serial_number": "A2",
+        "version": null
+    }
+}
+]
