@@ -1,3 +1,4 @@
+from copy import deepcopy
 from rest_framework import serializers
 from common.metrics import ERROR_COUNTER
 from harvester.models import Harvester
@@ -36,18 +37,27 @@ class ReportSerializerBase(serializers.ModelSerializer):
     REPORT_DATA_REQUIRED = [] 
     REPORT_DATA_ALLOW_EXTRA = True
 
-    @classmethod
-    def get_schema(cls):
-        schema = cls.REPORT_BASE_SCHEMA
-        schema["properties"]["data"]["properties"] = cls.REPORT_DATA_PROPERTIES
-        schema["properties"]["data"]["patternProperties"] = cls.REPORT_DATA_PATTERN_PROPERTIES
-        schema["properties"]["data"]["required"] = cls.REPORT_DATA_REQUIRED
-        schema["properties"]["data"]["additionalProperties"] = cls.REPORT_DATA_ALLOW_EXTRA
+    @property
+    def data_schema(self):
+        raise NotImplementedError
+    
+    def get_schema(self):
+        schema = deepcopy(self.REPORT_BASE_SCHEMA)        
+        try:
+            schema["properties"]["data"] = self.data_schema
+            return schema
+        except NotImplementedError:
+            pass
+       
+        # This should be deprecated in favor of only using DATA_SCHEMA
+        schema["properties"]["data"]["properties"] = self.REPORT_DATA_PROPERTIES
+        schema["properties"]["data"]["patternProperties"] = self.REPORT_DATA_PATTERN_PROPERTIES
+        schema["properties"]["data"]["required"] = self.REPORT_DATA_REQUIRED
+        schema["properties"]["data"]["additionalProperties"] = self.REPORT_DATA_ALLOW_EXTRA
         return schema
 
-    @classmethod
-    def validate_incoming_report(cls, data):
-        schema = cls.get_schema()
+    def validate_incoming_report(self, data):
+        schema = self.get_schema()
         try:
             jsonschema.validate(data, schema)
         except jsonschema.ValidationError as e:
@@ -58,9 +68,8 @@ class ReportSerializerBase(serializers.ModelSerializer):
                 }
             else:
                 err = str(e.message)
-            
             msg = f"Failed to validate: {e.validator}"       
-            ERROR_COUNTER.labels(serializers.ValidationError.__name__, msg, cls.__name__).inc()
+            ERROR_COUNTER.labels(serializers.ValidationError.__name__, msg, self.__class__.__name__).inc()
             logging.exception(err)
             raise serializers.ValidationError(detail={"validation error": err})
 

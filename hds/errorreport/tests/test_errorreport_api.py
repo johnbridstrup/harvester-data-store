@@ -452,7 +452,7 @@ class ErrorReportAPITest(HDSAPITestBase):
 
         self.assertDictEqual(
             data,
-            ErrorReportSerializer.get_schema()
+            ErrorReportSerializer().get_schema()
         )
 
     def test_query_errorreport(self):

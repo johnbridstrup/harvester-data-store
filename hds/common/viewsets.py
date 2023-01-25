@@ -104,6 +104,6 @@ class ReportModelViewSet(CreateModelViewSet):
         renderer_classes=[JSONRenderer,]
     )
     def get_schema(self, request):
-        schema = self.serializer_class.get_schema()
+        schema = self.serializer_class().get_schema()
         msg = f"{self.report_type} schema retrieved"
         return make_ok(msg, schema)
