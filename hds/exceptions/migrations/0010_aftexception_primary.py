@@ -16,8 +16,9 @@ def get_primary_errors(apps, schema_editor):
         logging.info(f"Page {page}")
         for report in paginator.page(page).object_list:
             excs = sort_exceptions(report.exceptions.all())
-            excs[0].primary = True
-            excs[0].save()
+            if len(excs) > 0:
+                excs[0].primary = True
+                excs[0].save()
 
 class Migration(migrations.Migration):
 
