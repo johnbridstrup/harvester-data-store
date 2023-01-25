@@ -125,6 +125,9 @@ function UserProfileDetail(props) {
     };
     const res = await dispatch(updateProfile(data));
     if (res.payload?.status === SUCCESS) {
+      setFieldData((current) => {
+        return { ...current, password: "" };
+      });
       toast.success(res.payload?.message, {
         theme: theme === THEME_MODES.AUTO_THEME ? "colored" : theme,
       });
@@ -153,9 +156,20 @@ function UserProfileDetail(props) {
       };
       const res = await dispatch(changePassword(data));
       if (res.payload?.status === SUCCESS) {
+        setFieldData((current) => {
+          return {
+            ...current,
+            current_password: "",
+            new_password: "",
+            confirm_password: "",
+          };
+        });
         toast.success(res.payload?.data?.message, {
           theme: theme === THEME_MODES.AUTO_THEME ? "colored" : theme,
         });
+        setTimeout(() => {
+          window.location.reload();
+        }, 5000);
       } else if (res.type === REJECTED_PROMISE.password) {
         toast.error(res?.payload, {
           theme: theme === THEME_MODES.AUTO_THEME ? "colored" : theme,
