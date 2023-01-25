@@ -18,9 +18,10 @@ class SlackError(Exception):
     # if an exception is ever raised (channel not found, for instance).
     pass
 
-def post_to_slack(message, channel='hds-test'):
+def post_to_slack(message, channel='hds-test', client=None):
     if TOKEN:
-        client = WebClient(token=TOKEN)
+        if client is None:
+            client = WebClient(token=TOKEN)
         try:
             if isinstance(message, Mapping):
                 client.chat_postMessage(**message)
@@ -32,4 +33,25 @@ def post_to_slack(message, channel='hds-test'):
         return "Posted to slack"
     
     ASYNC_ERROR_COUNTER.labels("post_to_slack", "none", "no_token").inc()
+    return "No slack token"
+
+def upload_file(filename, title, content, channel='hds-test', client=None):
+    if TOKEN:
+        if client is None:
+            client = WebClient(token=TOKEN)
+        try:
+            file = client.files_upload(
+                title=title,
+                filename=filename,
+                content=content,
+            )
+            file_url = file.get("file").get("permalink")
+            msg = f"ASSET MANIFEST: {file_url}"
+            post_to_slack(msg, channel, client=client)
+        except SlackApiError as e:
+            ASYNC_ERROR_COUNTER.labels("upload_file", "SlackApiError", e.response['error']).inc()
+            raise SlackError(e.response['error'])
+        return "Posted to slack"
+    
+    ASYNC_ERROR_COUNTER.labels("upload_file", "none", "no_token").inc()
     return "No slack token"

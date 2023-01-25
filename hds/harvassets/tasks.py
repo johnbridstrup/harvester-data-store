@@ -1,10 +1,16 @@
+import json
+import tempfile
+from datetime import datetime
+from collections import defaultdict
 from celery import shared_task
 from django.contrib.auth.models import User
 from django.utils import timezone
 
 from harvester.models import Harvester
+from notifications.slack import upload_file
 
 from .models import HarvesterAssetReport, HarvesterAssetType, HarvesterAsset
+from .serializers import HarvesterAssetSerializer
 
 
 @shared_task
@@ -52,3 +58,37 @@ def extract_assets(report_id, user_id, harv_pk):
     
     # All report information is extracted. Delete the report.
     report_obj.delete()
+
+def compile_asset_report():
+    report = defaultdict(lambda: defaultdict(list))
+    assets = HarvesterAsset.objects.all()
+    for asset in assets:
+        if asset.harvester is None:
+            report["unused"][asset.asset.name].append(
+                {
+                    "serial number": asset.serial_number,
+                    "index": asset.index,
+                }
+            )
+            continue
+        report[f"Harvester {asset.harvester.harv_id}"][asset.asset.name].append(
+            {
+                "serial number": asset.serial_number,
+                "index": asset.index,
+            }
+        )
+    
+    # defaultdict is not serializable
+    for k, v in report.items():
+        report[k] = dict(v)
+    return dict(report)
+
+@shared_task
+def send_asset_manifest():
+    report = compile_asset_report()
+    r = upload_file(
+        filename=f"asset_manifest_{datetime.now()}.txt",
+        title="Asset Manifest",
+        content=json.dumps(report, indent=4)
+    )
+    return r

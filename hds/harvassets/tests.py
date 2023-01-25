@@ -5,6 +5,7 @@ from rest_framework import status
 from common.tests import HDSAPITestBase
 
 from .models import HarvesterAssetReport, HarvesterAsset, HarvesterAssetType
+from .tasks import compile_asset_report
 
 
 class HarvesterAssetsTestCase(HDSAPITestBase):
@@ -121,3 +122,15 @@ class HarvesterAssetsTestCase(HDSAPITestBase):
         self.assertEqual(asset["asset"]["name"], "test")
         self.assertEqual(asset["serial_number"], "33")
 
+    def test_compile_report(self):
+        self._load_asset_report()
+        self.client.post(self.url, self.asset_data, format='json')
+
+        report = compile_asset_report()
+        
+        harv_key = f"Harvester {self.test_objects['harvester'].harv_id}"
+        self.assertIn(harv_key, report)
+        for asset in self.asset_data["data"]:
+            self.assertIn(asset["asset"], report[harv_key])
+            self.assertTrue([str(asset["asset-tag"]) == d["serial number"] for d in report[harv_key][asset["asset"]]])
+            self.assertTrue([int(asset["index"]) == d["index"] for d in report[harv_key][asset["asset"]]])
