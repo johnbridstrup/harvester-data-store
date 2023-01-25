@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 
 import LogoFull from "assets/images/logo_full.png";
 import { login } from "features/auth/authSlice";
+import { persistCSRFToken } from "features/base/service";
 import { Loader } from "utils/utils";
 import "./styles.css";
 
@@ -25,6 +26,7 @@ function Login(props) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    await persistCSRFToken();
     const res = await dispatch(login(loginData));
     if (res.type === "auth/login/fulfilled") {
       navigate("/");
