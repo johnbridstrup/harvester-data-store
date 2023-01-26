@@ -7,7 +7,7 @@ from urllib.parse import urljoin
 
 
 class S3File(EventModelMixin, CommonInfo):
-    file = models.FileField(upload_to=media_upload_path, blank=True, null=True)
+    file = models.FileField(upload_to=media_upload_path, blank=True, null=True, max_length=500)
     filetype = models.CharField(max_length=255)
     key = models.CharField(max_length=255, null=True, blank=True)
 

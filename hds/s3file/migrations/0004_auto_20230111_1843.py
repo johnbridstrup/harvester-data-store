@@ -3,7 +3,9 @@
 import logging
 
 from django.core.paginator import Paginator
-from django.db import migrations
+from django.db import migrations, models
+
+import common.utils
 
 def update_file_key(apps, schema_editor):
     S3File = apps.get_model('s3file', 'S3File')
@@ -24,6 +26,12 @@ class Migration(migrations.Migration):
         ('s3file', '0003_s3file_file'),
     ]
 
+    # This alter field needed to be added here after dev account migration already happened
     operations = [
+        migrations.AlterField(
+            model_name='s3file',
+            name='file',
+            field=models.FileField(blank=True, max_length=500, null=True, upload_to=common.utils.media_upload_path),
+        ),
         migrations.RunPython(update_file_key),
     ]
