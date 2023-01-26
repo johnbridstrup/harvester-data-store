@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import {
   buildQueryObj,
   copiedUrl,
+  handleSelectFactory,
   mapParamsObject,
   paramsToObject,
   pushState,
@@ -81,30 +82,15 @@ function ErrorReportQuery(props) {
     );
   }, [search, exceptioncodes]);
 
-  const handleHarvestSelect = (newValue, actionMeta) => {
-    setSelectedHarvId((current) => newValue);
-  };
-
-  const handleLocationSelect = (newValue, actionMeta) => {
-    setSelectedLocation((current) => newValue);
-  };
-
+  const handleHarvestSelect = handleSelectFactory(setSelectedHarvId);
+  const handleLocationSelect = handleSelectFactory(setSelectedLocation);
   const handleTimezoneSelect = (newValue, actionMeta) => {
     setSelectedTimezone((current) => newValue);
     dispatch(timezoneUpdate(newValue.value));
   };
-
-  const handleFruitSelect = (newValue, actionMeta) => {
-    setSelectedFruit((current) => newValue);
-  };
-
-  const handleCodeSelect = (newValue, actionMeta) => {
-    setSelectedCode((current) => newValue);
-  };
-
-  const handleRecipientSelect = (newValue, actionMeta) => {
-    setSelectedRecipient((current) => newValue);
-  };
+  const handleFruitSelect = handleSelectFactory(setSelectedFruit);
+  const handleCodeSelect = handleSelectFactory(setSelectedCode);
+  const handleRecipientSelect = handleSelectFactory(setSelectedRecipient);
 
   const handleFieldChange = (e) => {
     setFieldData((current) => {
