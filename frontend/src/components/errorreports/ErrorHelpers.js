@@ -586,6 +586,39 @@ export const FormQuery = (props) => {
   );
 };
 
+export const RightButtonGroup = (props) => {
+  const btn = darkThemeClass("btn-dark", props.theme);
+  return (
+    <div className="flex-right mb-2">
+      <span
+        onClick={props.createNotifPopUp}
+        className={`btn btn-default mx-2 ${btn}`}
+      >
+        Create Notification
+      </span>
+      <span onClick={props.popUp} className={`btn btn-default mx-2 ${btn}`}>
+        Get Files
+      </span>
+      <button
+        ref={props.downloadRef}
+        data-bs-toggle="modal"
+        data-bs-target="#downloadModal"
+        style={{ display: "none" }}
+      >
+        Get Files
+      </button>
+      <button
+        ref={props.createNotifRef}
+        data-bs-toggle="modal"
+        data-bs-target="#createNotifModal"
+        style={{ display: "none" }}
+      >
+        Create Notification
+      </button>
+    </div>
+  );
+};
+
 HoverTabular.propTypes = {
   hoverObj: PropTypes.object,
   theme: PropTypes.string,
@@ -673,5 +706,13 @@ GenericFormField.propTypes = {
   selectedTimezone: PropTypes.object,
   fieldData: PropTypes.object,
   handleFieldChange: PropTypes.func,
+  theme: PropTypes.string,
+};
+
+RightButtonGroup.propTypes = {
+  popUp: PropTypes.func,
+  downloadRef: PropTypes.object,
+  createNotifRef: PropTypes.object,
+  createNotifPopUp: PropTypes.func,
   theme: PropTypes.string,
 };

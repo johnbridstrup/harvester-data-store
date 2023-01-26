@@ -1,15 +1,16 @@
 import PropTypes from "prop-types";
 import Select from "react-select";
+import { GenericFormField } from "../errorreports/ErrorHelpers";
 import { darkThemeClass, selectDarkStyles } from "utils/utils";
 
-function NotificationModal(props) {
+function CreateNotifModal(props) {
   const modal = darkThemeClass("dt-modal-content", props.theme);
   const customStyles = modal ? selectDarkStyles : {};
   return (
     <div className="col-md-8">
       <div
         className="modal fade"
-        id="notificationModal"
+        id="createNotifModal"
         tabIndex={-1}
         role="dialog"
         aria-labelledby="modal-center"
@@ -26,7 +27,7 @@ function NotificationModal(props) {
                 type="button"
                 className={`btn`}
                 data-bs-dismiss="modal"
-                aria-label="Close"
+                aria-label="close"
               >
                 <span
                   className={`las la-times ${modal && "text-white"}`}
@@ -38,6 +39,7 @@ function NotificationModal(props) {
             </div>
 
             <div className="modal-body px-5 pb-4">
+              <GenericFormField {...props} />
               <div className="form-group">
                 <label htmlFor="recipients">Select Recipients</label>
                 <Select
@@ -70,12 +72,29 @@ function NotificationModal(props) {
   );
 }
 
-NotificationModal.propTypes = {
+CreateNotifModal.propTypes = {
   usersOptions: PropTypes.array,
   handleRecipientSelect: PropTypes.func,
   selectedRecipient: PropTypes.array,
   handleSubmit: PropTypes.func,
+  harvesterOptions: PropTypes.array,
+  handleHarvestSelect: PropTypes.func,
+  selectedHarvId: PropTypes.array,
+  locationOptions: PropTypes.array,
+  handleLocationSelect: PropTypes.func,
+  selectedLocation: PropTypes.array,
+  fruitOptions: PropTypes.array,
+  handleFruitSelect: PropTypes.func,
+  selectedFruit: PropTypes.array,
+  codeOptions: PropTypes.array,
+  handleCodeSelect: PropTypes.func,
+  selectedCode: PropTypes.array,
+  timezoneOptions: PropTypes.array,
+  handleTimezoneSelect: PropTypes.func,
+  selectedTimezone: PropTypes.object,
+  fieldData: PropTypes.object,
+  handleFieldChange: PropTypes.func,
   theme: PropTypes.string,
 };
 
-export default NotificationModal;
+export default CreateNotifModal;

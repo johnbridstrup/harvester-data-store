@@ -1,8 +1,25 @@
 import { useState, useEffect, lazy, Suspense, useRef } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
+import { toast } from "react-toastify";
 import { handleDownload } from "utils/services";
-import { Loader, robotInError, timeStampFormat } from "utils/utils";
-import { DownloadButton } from "../common";
+import {
+  buildQueryObj,
+  handleSelectFactory,
+  Loader,
+  mapParamsObject,
+  paramsToObject,
+  robotInError,
+  timeStampFormat,
+  transformCodeOptions,
+  transformFruitOptions,
+  transformHarvOptions,
+  transformLocOptions,
+  transformTzOptions,
+  transformUserOptions,
+  translateUserOptions,
+  validateQueryObj,
+} from "utils/utils";
 import DownloadModal from "../modals/DownloadModal";
 import {
   Container,
@@ -16,7 +33,16 @@ import {
 import ErrorReportDetailTable from "../tables/ErrorReportDetailTable";
 import ServiceTable from "../tables/ServiceTable";
 import TimeTable from "../tables/TimeTable";
-import { ExceptTabular } from "./ErrorHelpers";
+import { ExceptTabular, RightButtonGroup } from "./ErrorHelpers";
+import CreateNotifModal from "../modals/CreateNotifModal";
+import timezones from "utils/timezones";
+import { listHarvesters } from "features/harvester/harvesterSlice";
+import { listLocations } from "features/location/locationSlice";
+import { listFruits } from "features/fruit/fruitSlice";
+import { listCodes } from "features/excecode/codeSlice";
+import { listUsers } from "features/user/userSlice";
+import { MAX_LIMIT, SUCCESS, THEME_MODES } from "features/base/constants";
+import { createNotification } from "features/errorreport/errorreportSlice";
 const ChronyInfoPlot = lazy(() => import("../plotly/ChronyInfoPlot"));
 const ErrorReportJson = lazy(() => import("./ErrorReportJson"));
 
@@ -50,8 +76,40 @@ function ErrorReportDetail(props) {
   } = useSelector((state) => state.errorreport);
   const { token } = useSelector((state) => state.auth);
   const { theme } = useSelector((state) => state.home);
+  const { harvesters } = useSelector((state) => state.harvester);
+  const { locations } = useSelector((state) => state.location);
+  const { fruits } = useSelector((state) => state.fruit);
+  const { exceptioncodes } = useSelector((state) => state.exceptioncode);
+  const { users } = useSelector((state) => state.user);
+
+  const [selectedHarvId, setSelectedHarvId] = useState(null);
+  const [selectedLocation, setSelectedLocation] = useState(null);
+  const [selectedTimezone, setSelectedTimezone] = useState(null);
+  const [selectedFruit, setSelectedFruit] = useState(null);
+  const [selectedCode, setSelectedCode] = useState(null);
+  const [selectedRecipient, setSelectedRecipient] = useState(null);
+  const [fieldData, setFieldData] = useState({
+    start_time: "",
+    end_time: "",
+    traceback: "",
+    generic: "",
+    is_emulator: "0",
+    handled: "",
+    primary: true,
+  });
+
   const exceptObj = exceptions[activeTab.exception];
+  const dispatch = useDispatch();
+  const { search } = useLocation();
   const downloadRef = useRef();
+  const createNotifRef = useRef();
+
+  const harvesterOptions = transformHarvOptions(harvesters);
+  const locationOptions = transformLocOptions(locations);
+  const timezoneOptions = transformTzOptions(timezones);
+  const fruitOptions = transformFruitOptions(fruits);
+  const codeOptions = transformCodeOptions(exceptioncodes);
+  const usersOptions = transformUserOptions(users);
 
   useEffect(() => {
     setSysmonReport((current) => sysmonreport);
@@ -124,11 +182,81 @@ function ErrorReportDetail(props) {
     await handleDownload(fileObj, token);
   };
 
+  const createNotifPopUp = async () => {
+    const paramsObj = paramsToObject(search);
+    mapParamsObject(
+      paramsObj,
+      exceptioncodes,
+      setSelectedHarvId,
+      setSelectedLocation,
+      setSelectedFruit,
+      setSelectedCode,
+      setFieldData,
+      setSelectedTimezone
+    );
+    createNotifRef.current.click();
+    await Promise.all([
+      dispatch(listHarvesters(MAX_LIMIT)),
+      dispatch(listLocations(MAX_LIMIT)),
+      dispatch(listFruits(MAX_LIMIT)),
+      dispatch(listCodes(MAX_LIMIT)),
+      dispatch(listUsers(MAX_LIMIT)),
+    ]);
+  };
+
+  const handleFieldChange = (e) => {
+    setFieldData((current) => {
+      return { ...current, [e.target.name]: e.target.value };
+    });
+  };
+  const handleCreateNotification = async () => {
+    let queryObj = buildQueryObj(
+      fieldData,
+      selectedHarvId,
+      selectedLocation,
+      selectedTimezone,
+      selectedFruit,
+      selectedCode
+    );
+    delete queryObj["start_time"];
+    delete queryObj["end_time"];
+    if (selectedRecipient && selectedRecipient.length > 0) {
+      queryObj["recipients"] = translateUserOptions(selectedRecipient);
+    }
+    let isValid = validateQueryObj(queryObj);
+    if (!isValid) {
+      toast.error(
+        "You must include at least one query to create a notification",
+        { theme: theme === THEME_MODES.AUTO_THEME ? "colored" : theme }
+      );
+      return;
+    }
+    const res = await dispatch(createNotification(queryObj));
+    if (res?.payload?.status === SUCCESS) {
+      toast.success(res?.payload?.message, {
+        theme: theme === THEME_MODES.AUTO_THEME ? "colored" : theme,
+      });
+      createNotifRef.current.click();
+    } else {
+      toast.error(res?.payload, {
+        theme: theme === THEME_MODES.AUTO_THEME ? "colored" : theme,
+      });
+    }
+  };
+  const handleHarvestSelect = handleSelectFactory(setSelectedHarvId);
+  const handleLocationSelect = handleSelectFactory(setSelectedLocation);
+  const handleTimezoneSelect = handleSelectFactory(setSelectedTimezone);
+  const handleFruitSelect = handleSelectFactory(setSelectedFruit);
+  const handleCodeSelect = handleSelectFactory(setSelectedCode);
+  const handleRecipientSelect = handleSelectFactory(setSelectedRecipient);
+
   return (
     <>
-      <DownloadButton
-        popUp={downloadPopUp}
+      <RightButtonGroup
+        createNotifPopUp={createNotifPopUp}
+        createNotifRef={createNotifRef}
         downloadRef={downloadRef}
+        popUp={downloadPopUp}
         theme={theme}
       />
       <ErrorReportDetailTable
@@ -336,6 +464,30 @@ function ErrorReportDetail(props) {
         eventObj={reportobj?.event}
         handleDownload={handleDownloadFiles}
         theme={theme}
+      />
+      <CreateNotifModal
+        codeOptions={codeOptions}
+        fieldData={fieldData}
+        fruitOptions={fruitOptions}
+        handleCodeSelect={handleCodeSelect}
+        handleFieldChange={handleFieldChange}
+        handleFruitSelect={handleFruitSelect}
+        handleHarvestSelect={handleHarvestSelect}
+        handleLocationSelect={handleLocationSelect}
+        handleRecipientSelect={handleRecipientSelect}
+        handleSubmit={handleCreateNotification}
+        handleTimezoneSelect={handleTimezoneSelect}
+        harvesterOptions={harvesterOptions}
+        locationOptions={locationOptions}
+        selectedCode={selectedCode}
+        selectedFruit={selectedFruit}
+        selectedHarvId={selectedHarvId}
+        selectedLocation={selectedLocation}
+        selectedRecipient={selectedRecipient}
+        selectedTimezone={selectedTimezone}
+        theme={theme}
+        timezoneOptions={timezoneOptions}
+        usersOptions={usersOptions}
       />
     </>
   );
