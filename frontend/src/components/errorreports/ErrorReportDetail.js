@@ -2,12 +2,14 @@ import { useState, useEffect, lazy, Suspense, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
+import Editor from "@monaco-editor/react";
 import { handleDownload } from "utils/services";
 import {
   buildQueryObj,
   handleSelectFactory,
   Loader,
   mapParamsObject,
+  monacoOptions,
   paramsToObject,
   robotInError,
   timeStampFormat,
@@ -315,19 +317,17 @@ function ErrorReportDetail(props) {
                   timestamp={timeStampFormat(exceptObj.timestamp, timezone)}
                   theme={theme}
                 />
-                <pre
-                  style={{
-                    height: "400px",
-                    whiteSpace: "break-spaces",
-                    marginTop: "2rem",
-                  }}
-                >
-                  <code className="language-python">
-                    {activeTab.traceback === "Traceback"
+                <Editor
+                  height="90vh"
+                  language="python"
+                  value={
+                    activeTab.traceback === "Traceback"
                       ? exceptObj.traceback
-                      : exceptObj.info}
-                  </code>
-                </pre>
+                      : exceptObj.info
+                  }
+                  theme={theme === THEME_MODES.DARK_THEME ? "vs-dark" : "light"}
+                  options={{ ...monacoOptions, readOnly: true }}
+                />
               </TabContent>
             )}
           </Container>

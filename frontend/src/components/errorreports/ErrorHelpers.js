@@ -104,7 +104,7 @@ export const HoverTabular = (props) => {
 export const ExceptTabular = (props) => {
   const bg = darkThemeClass("bg-dark", props.theme);
   return (
-    <div>
+    <div className="mb-3">
       <div className="d-flex">
         <div className={`tabular bg-gray ${bg}`}>Exception</div>
         <div className={`tabular bg-gray ${bg}`}>Timestamp</div>
