@@ -5,11 +5,11 @@ import { useMediaQuery } from "react-responsive";
 import { generatePareto } from "features/errorreport/errorreportSlice";
 import {
   aggregateOptions,
-  appendCodeName,
   buildQueryObj,
   darkThemeClass,
   handleSelectFactory,
   Loader,
+  mapParamsObject,
   paramsToObject,
   transformCodeOptions,
   transformFruitOptions,
@@ -83,69 +83,16 @@ function ErrorParetos(props) {
     let arr = [paretoObj];
     setParetoArr((current) => arr);
 
-    if (paramsObj.harv_ids) {
-      let harv_ids = paramsObj.harv_ids.split(",").map((harv_id, index) => {
-        return { value: Number(harv_id), label: Number(harv_id) };
-      });
-      setSelectedHarvId((current) => harv_ids);
-    }
-    if (paramsObj.locations) {
-      let locations = paramsObj.locations.split(",").map((loc, index) => {
-        return { value: loc, label: loc };
-      });
-      setSelectedLocation((current) => locations);
-    }
-    if (paramsObj.fruits) {
-      let fruits = paramsObj.fruits.split(",").map((fruit, index) => {
-        return { value: fruit, label: fruit };
-      });
-      setSelectedFruit((current) => fruits);
-    }
-    if (paramsObj.codes) {
-      let codes = paramsObj.codes.split(",");
-      let codenames = appendCodeName(codes, exceptioncodes);
-      setSelectedCode((current) => codenames);
-    }
-    if (paramsObj.traceback) {
-      setFieldData((current) => {
-        return { ...current, traceback: paramsObj.traceback };
-      });
-    }
-    if (paramsObj.start_time) {
-      setFieldData((current) => {
-        return {
-          ...current,
-          start_time: paramsObj.start_time,
-        };
-      });
-    }
-    if (paramsObj.end_time) {
-      setFieldData((current) => {
-        return {
-          ...current,
-          end_time: paramsObj.end_time,
-        };
-      });
-    }
-    if (paramsObj.tz) {
-      let tzObj = { value: paramsObj.tz, label: paramsObj.tz };
-      setSelectedTimezone((current) => tzObj);
-    }
-    if (paramsObj.generic) {
-      setFieldData((current) => {
-        return { ...current, generic: paramsObj.generic };
-      });
-    }
-    if (paramsObj.is_emulator) {
-      setFieldData((current) => {
-        return { ...current, is_emulator: paramsObj.is_emulator };
-      });
-    }
-    if (paramsObj.handled) {
-      setFieldData((current) => {
-        return { ...current, handled: paramsObj.handled };
-      });
-    }
+    mapParamsObject(
+      paramsObj,
+      exceptioncodes,
+      setSelectedHarvId,
+      setSelectedLocation,
+      setSelectedFruit,
+      setSelectedCode,
+      setFieldData,
+      setSelectedTimezone
+    );
   }, [search, paretos, exceptioncodes]);
 
   const handleHarvestSelect = handleSelectFactory(setSelectedHarvId);
