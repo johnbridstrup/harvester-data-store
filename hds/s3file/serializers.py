@@ -50,7 +50,7 @@ class DirectUploadSerializer(EventSerializerMixin, serializers.ModelSerializer):
     def save(self, **kwargs):
         inst = super().save(**kwargs)
         if inst.key is None:
-            inst.key = inst.file.path
+            inst.key = inst.file.name
             inst.save()
         
         return inst

@@ -107,11 +107,14 @@ class S3FileTestCase(HDSAPITestBase):
                     "creator": self.user.id,
                 }
                 full_path = os.path.join(settings.MEDIA_ROOT, "uploads", "test")
+                key = os.path.join("uploads", "test")
                 with remove_after(full_path):
                     file_upload = DirectUploadSerializer(data=data)
                     file_upload.is_valid()
                     inst = file_upload.save()
-                    self.assertEqual(inst.key, full_path)
+                    self.assertEqual(inst.file.path, full_path)
+                    self.assertEqual(inst.key, key)
+                    self.assertEqual(inst.file.name, key)
 
     def test_link_to_report(self):
         file_resp = self.create_s3file("test")
