@@ -1,4 +1,3 @@
-from celery import shared_task
 from collections import defaultdict
 
 from .models import Notification
@@ -6,10 +5,11 @@ from .slack import post_to_slack, Emojis
 from django.apps import apps
 from django.core.exceptions import FieldError
 from common.async_metrics import ASYNC_ERROR_COUNTER
+from common.celery import monitored_shared_task
 from exceptions.models import AFTExceptionCode
 
 
-@shared_task
+@monitored_shared_task
 def check_notifications(app_label, model_name, instance_id, url):
     notifications = Notification.objects.filter(trigger_on=model_name)
     model = apps.get_model(app_label=app_label, model_name=model_name)
@@ -30,12 +30,12 @@ def check_notifications(app_label, model_name, instance_id, url):
 
     return f"{num_notifications} notifications sent"
 
-@shared_task
+@monitored_shared_task
 def post_to_slack_task(message, channel='hds-test'):
     r = post_to_slack(message, channel)
     return r
 
-@shared_task
+@monitored_shared_task
 def notify_operator_task(report_id):
     ErrorReport = apps.get_model('errorreport', 'errorreport')
     report_inst = ErrorReport.objects.get(id=report_id)

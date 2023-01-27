@@ -1,6 +1,7 @@
 import zipfile
 from celery import chord, shared_task, Task
 from collections import defaultdict
+from common.celery import monitored_shared_task
 from django.core.cache import cache
 from common.utils import build_frontend_url
 from notifications.slack import post_to_slack
@@ -52,25 +53,25 @@ class CallbackTask(Task):
         )
         self._create_post_message(content, self.slack_id)
 
-@shared_task
+@monitored_shared_task
 def async_upload_zip_file(_id):
     log_session = LogSession.objects.get(id=_id)
     zip_file = cache.get(log_session.name)
     LogSessionSerializer.async_zip_upload(_id, zip_file, log_session.name, log_session.creator.id)
 
-@shared_task
+@monitored_shared_task
 def extract_video_meta(vid_dict, _id):
     avi_info = vid_dict['avi']
     meta_info = vid_dict['meta']
     LogVideoSerializer.extract_video_log(avi_info['filename'], avi_info['filepath'], _id)
     LogVideoSerializer.extract_meta_json_data(meta_info['filepath'], meta_info['filename'])
 
-@shared_task
+@monitored_shared_task
 def clean_dir(dir_name):
     LogVideoSerializer.clean_dir(dir_name)
     return f"{dir_name} Cleaned"
 
-@shared_task(base=CallbackTask)
+@monitored_shared_task(base=CallbackTask)
 def perform_extraction(_id):
     log_session = LogSession.objects.get(id=_id)
     zip_file = cache.get(log_session.name)

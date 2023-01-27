@@ -1,12 +1,12 @@
+from common.celery import monitored_shared_task
 from .models import AFTExceptionCode, AFTExceptionCodeManifest
 from .serializers import AFTExceptionCodeSerializer
 
-from celery import shared_task
 from django.contrib.auth.models import User
 from django.utils.timezone import datetime
 
 
-@shared_task
+@monitored_shared_task
 def update_exception_codes(manifest_id, user_id):
     manifest_inst = AFTExceptionCodeManifest.objects.get(id=manifest_id)
     user = User.objects.get(id=user_id)

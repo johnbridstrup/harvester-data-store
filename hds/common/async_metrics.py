@@ -1,6 +1,7 @@
 from prometheus_client import (
     CollectorRegistry,
     Counter,
+    Histogram,
     multiprocess,
     REGISTRY
 )
@@ -35,4 +36,18 @@ ASYNC_UPLOAD_COUNTER = Counter(
     "Upload size on asynchronous tasks",
     labelnames=['task', 'zipname'],
     registry=prometheus_get_registry()
+)
+
+ASYNC_TASK_TIMER = Histogram(
+    "hds_async_task_timer",
+    "Celery task runtime histogram",
+    labelnames=['task'],
+    registry=prometheus_get_registry(),
+)
+
+ASYNC_TASK_COUNTER = Counter(
+    "hds_async_task_exec_counter",
+    "Number of times each task has executed",
+    labelnames=["task"],
+    registry=prometheus_get_registry(),
 )

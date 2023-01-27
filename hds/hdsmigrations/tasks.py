@@ -1,8 +1,8 @@
 from sys import stderr, stdout
 from .models import MigrationLog
+from common.celery import monitored_shared_task
 from common.utils import test_env
 
-from celery import shared_task
 from django.core.management import call_command
 from django.utils.timezone import datetime, make_aware
 from io import StringIO
@@ -12,7 +12,7 @@ import logging, traceback
 
 TEST_OUTPUT = "We faked a migration"
 
-@shared_task
+@monitored_shared_task
 def execute_migrations(id):
     log = MigrationLog.objects.get(id=id)
     try:

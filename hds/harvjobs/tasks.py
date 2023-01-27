@@ -1,9 +1,8 @@
-from celery import shared_task
 import logging, json
 from django.contrib.auth.models import User
 
 from .models import Job, JobHostResult, JobResults
-from common.async_metrics import ASYNC_ERROR_COUNTER
+from common.celery import monitored_shared_task
 from common.serializers.reportserializer import ReportSerializerBase
 from common.utils import build_frontend_url, test_env
 from harvester.models import Harvester
@@ -38,7 +37,7 @@ JOB_DATETIME_FMT = "%Y-%m-%d %H:%M:%S"
 MAX_RETRIES = 4
 
 
-@shared_task
+@monitored_shared_task
 def job_status_update(UUID, results, jobresult_pk, user_pk, url):
     job = Job.objects.get(event__UUID=UUID)
     harv = Harvester.objects.get(id=job.target.id)
@@ -96,7 +95,7 @@ def job_status_update(UUID, results, jobresult_pk, user_pk, url):
 
     return f"Job {UUID} complete. Status: {status}"
 
-@shared_task
+@monitored_shared_task
 def schedule_job(job_id, harv_pk, user_pk):
     # eventually this will send the payload to the job server
     job = Job.objects.get(id=job_id)
@@ -135,11 +134,6 @@ def schedule_job(job_id, harv_pk, user_pk):
         return f"Job {job.event.UUID} sent to server."
 
     except Exception as err:
-        ASYNC_ERROR_COUNTER.labels(
-            "schedule_job",
-            err.__class__.__name__,
-            "Failed to schedule job",
-        )
         job.jobstatus = Job.StatusChoices.UNSENT
         job.save()
         url = build_frontend_url("jobs", _id=job_id)
@@ -153,5 +147,4 @@ def schedule_job(job_id, harv_pk, user_pk):
         if job.creator.profile.slack_id is not None:
             msg += f"<@{job.creator.profile.slack_id}>"
         post_to_slack(msg, channel=JOB_SLACK_CHANNEL)
-        logging.exception("Failed to schedule job.")
-        return f"Job {job.event.UUID} failed to send"
+        raise
