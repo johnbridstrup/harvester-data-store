@@ -6,7 +6,7 @@ from .models import S3File, SessClip
 class S3FileAdmin(admin.ModelAdmin):
     list_display = ('created', 'filetype', 'event')
     ordering = ('created', 'filetype')
-    search_fields = ('fieltype', 'created')
+    search_fields = ('filetype', 'created')
 
 
 class SessClipAdmin(admin.ModelAdmin):
