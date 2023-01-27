@@ -12,5 +12,5 @@ class StaticStorage(S3Boto3Storage):
 
 class MediaStorage(S3Boto3Storage):
     bucket_name = bucket_name
-    location = 'media'
+    location = '' # We can't use 'media' here, since harvesters upload files to different root prefixes
     file_overwrite = False
