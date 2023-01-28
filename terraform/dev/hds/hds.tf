@@ -5,7 +5,7 @@ locals {
   frontend_url             = "https://hds.devcloud.advanced.farm"
   service_port             = "8000"
   service_name             = "hds"
-  service_docker_image     = "082346306812.dkr.ecr.us-west-1.amazonaws.com/hds:hds-staging-0737d3ee"
+  service_docker_image     = "082346306812.dkr.ecr.us-west-1.amazonaws.com/hds:hds-staging-5c8d8b92"
   healthcheck_path         = "/api/v1/healthcheck/"
   sqs_client_metrics_ports = [9104, 9105, 9106, 9107, 9108, 9109]
   hds_superuser_pwd_id     = "hds_superuser_pwd"
@@ -85,24 +85,6 @@ module "hds" {
   jobresults_queue_url      = data.aws_sqs_queue.jobresults_queue.url
   migrate_flag              = local.migrate
   s3_bucket                 = local.bucket
-}
-
-resource "aws_security_group_rule" "hds_db_rule" {
-  type                     = "ingress"
-  from_port                = data.aws_db_instance.postgres.port
-  to_port                  = data.aws_db_instance.postgres.port
-  protocol                 = "tcp"
-  source_security_group_id = module.hds.service_security_group_id
-  security_group_id        = data.aws_security_group.hdsdb_sg.id
-}
-
-resource "aws_security_group_rule" "hds_redis_rule" {
-  type                     = "ingress"
-  from_port                = data.aws_elasticache_replication_group.hds_cache.port
-  to_port                  = data.aws_elasticache_replication_group.hds_cache.port
-  protocol                 = "tcp"
-  source_security_group_id = module.hds.service_security_group_id
-  security_group_id        = data.aws_security_group.redis_sg.id
 }
 
 output "broker" {

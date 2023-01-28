@@ -60,12 +60,6 @@ data "aws_security_group" "lambda_sg" {
   }
 }
 
-data "aws_security_group" "hdsdb_sg" {
-  tags = {
-    Name = "hdsdb"
-  }
-}
-
 data "aws_security_group" "pritunl_sg" {
   tags = {
     Name = "pritunl-vpn"
@@ -79,12 +73,6 @@ data "aws_security_group" "prom_scrape_sg" {
 
 data "aws_elasticache_replication_group" "hds_cache" {
   replication_group_id = "hds-cache"
-}
-
-data "aws_security_group" "redis_sg" {
-  tags = {
-    Name = "hds-redis"
-  }
 }
 
 # SQS QUEUES
