@@ -25,6 +25,7 @@ urlpatterns = [
     path('', include('common.urls.landingurls')),
     path('admin/', admin.site.urls),
     path(f'{version}/autodiagnostics/', include('autodiagnostics.urls')),
+    path(f'{version}/aftconfigs/', include('aftconfigs.urls')),
     path(f'{version}/fruits/', include('harvester.urls.fruiturls')),
     path(f'{version}/harvesters/', include('harvester.urls.harvesterurls')),
     path(f'{version}/harvesterhistory/', include('harvester.urls.harvesterhistoryurls')),
