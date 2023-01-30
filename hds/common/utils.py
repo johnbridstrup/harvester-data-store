@@ -28,7 +28,7 @@ def media_upload_path(instance, filename, username=None):
             except AttributeError:
                 subdir = "general"
 
-        return os.path.join("uploads", subdir, filename)
+        return os.path.join("media", "uploads", subdir, filename)
     return f"uploads/{filename}"
 
 def build_frontend_url(endpoint, _id=None):
