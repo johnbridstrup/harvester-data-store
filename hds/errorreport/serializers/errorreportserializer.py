@@ -179,8 +179,9 @@ class ErrorReportSerializer(TaggitSerializer, EventSerializerMixin, ReportSerial
                 exceptions.append(AFTException.objects.create(**error, creator=creator, primary=False))
             
             sorted_excs = sort_exceptions(exceptions)
-            sorted_excs[0].primary = True
-            sorted_excs[0].save()
+            if len(sorted_excs) > 0:
+                sorted_excs[0].primary = True
+                sorted_excs[0].save()
 
     class Meta:
         model = ErrorReport
