@@ -12,7 +12,7 @@ class HarvesterAssetReportView(ReportModelViewSet):
     def perform_create(self, serializer):
         super().perform_create(serializer)
         data = serializer.data
-        extract_assets.delay(data['id'], data['creator'], data['harvester']['id'])
+        extract_assets.delay(data['id'])
 
 
 class HarvesterAssetView(CreateModelViewSet):
