@@ -1,6 +1,9 @@
 from copy import deepcopy
 from rest_framework import serializers
+from common.async_metrics import ASYNC_ERROR_COUNTER
 from common.metrics import ERROR_COUNTER
+from common.models import Tags
+from common.reports import ReportBase
 from harvester.models import Harvester
 from event.models import Event
 from event.serializers import EventSerializerMixin
@@ -133,3 +136,21 @@ class ReportSerializerBase(serializers.ModelSerializer):
             harv = Harvester.objects.get(harv_id=harv_id)
         
         return harv
+
+    @classmethod
+    def extract(cls, report_obj: ReportBase):
+        raise NotImplementedError(f"extract method not implemented for {cls.__name__}")
+
+    @classmethod
+    def extract_report(cls, report_id, *args, **kwargs):
+        model = cls.Meta.model
+        report_obj = model.objects.get(id=report_id)
+        try:
+            cls.extract(report_obj, *args, **kwargs)
+        except Exception as e:
+            exc = type(e).__name__
+            ASYNC_ERROR_COUNTER.labels("report_extraction", exc, f"{cls.__name__}").inc()
+            report_obj.tags.add(Tags.INCOMPLETE.value) 
+            report_obj.save()
+            
+            logging.exception(f"{exc} while extracting {cls.__name__}")

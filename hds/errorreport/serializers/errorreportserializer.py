@@ -163,7 +163,7 @@ class ErrorReportSerializer(TaggitSerializer, EventSerializerMixin, ReportSerial
         return errors
 
     @classmethod
-    def create_exceptions(cls, report, user=None):
+    def extract(cls, report, user=None):
         errors = cls._extract_exception_data(report)
         if user:
             creator = user
