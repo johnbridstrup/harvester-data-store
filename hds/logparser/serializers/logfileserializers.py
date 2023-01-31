@@ -51,7 +51,7 @@ class LogFileSerializer(serializers.ModelSerializer):
         return date_obj
 
     @staticmethod
-    def extract_service_robot(file):
+    def extract_service_robot(filename):
         """
         extract service and robot from file name
 
@@ -64,8 +64,8 @@ class LogFileSerializer(serializers.ModelSerializer):
 
         robot_pattern = re.compile(r'_\d{2}_')
         service_pattern = re.compile(r'[a-z]+(_[a-z]+)?')
-        robot_match = robot_pattern.search(file.filename)
-        service_match = service_pattern.search(file.filename)
+        robot_match = robot_pattern.search(filename)
+        service_match = service_pattern.search(filename)
 
         if robot_match is not None:
             robot = int(robot_match.group(0).replace("_", ""))
@@ -76,7 +76,7 @@ class LogFileSerializer(serializers.ModelSerializer):
                 "Failed robot pattern match"
             ).inc()
             logging.error(
-                f"could not match robot id on file {file.filename}"
+                f"could not match robot id on file {filename}"
             )
         if service_match is not None:
             service = service_match.group(0)
@@ -86,7 +86,7 @@ class LogFileSerializer(serializers.ModelSerializer):
                 AttributeError.__name__,
                 "Failed service pattern match"
             ).inc()
-            logging.error(f"could not match service on file {file.filename}")
+            logging.error(f"could not match service on file {filename}")
         return service, robot
 
     @classmethod
@@ -128,6 +128,8 @@ class LogFileSerializer(serializers.ModelSerializer):
                     continue
                 
                 entry = entry.rstrip().strip("\n")
+                if len(entry) == 0:
+                    continue
                 
                 try:
                     content_dict = create_content_dict(entry)
@@ -140,10 +142,12 @@ class LogFileSerializer(serializers.ModelSerializer):
                 entry = entry + line
         
         # append the last line
-        try:
-            content.append(create_content_dict(entry))
-        except:
-            cls._report_date_match_fail(entry)
+        entry = entry.rstrip().strip("\n")
+        if len(entry) != 0:
+            try:
+                content.append(create_content_dict(entry))
+            except DateMatchError:
+                cls._report_date_match_fail(entry)
         return content
 
     @classmethod
@@ -156,7 +160,7 @@ class LogFileSerializer(serializers.ModelSerializer):
         appends the dict to content_list and saves the model.
 
         """
-        service, robot = cls.extract_service_robot(file)
+        service, robot = cls.extract_service_robot(file.filename)
         
         log_session = LogSession.objects.get(pk=zip_obj_id)
         log_file = LogFile(

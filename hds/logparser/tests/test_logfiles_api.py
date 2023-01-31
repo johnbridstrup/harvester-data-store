@@ -1,3 +1,4 @@
+import os
 from rest_framework import status
 from .base import LogBaseTestCase
 from ..serializers.logfileserializers import LogFileSerializer
@@ -39,3 +40,11 @@ class LogFileTestCase(LogBaseTestCase):
             content = LogFileSerializer._extract_lines(f, 'test', 'test')
 
         self.assertEqual(numlines, len(content))
+
+    def test_robot_service_extr(self):
+        _, filename = os.path.split(self.logpath)
+        _, _, robot_str, serv_str = filename.split('.')[0].split('_')
+
+        service, robot = LogFileSerializer.extract_service_robot(filename)
+        self.assertEqual(service, serv_str)
+        self.assertEqual(robot, int(robot_str))
