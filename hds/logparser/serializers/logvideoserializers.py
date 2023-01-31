@@ -17,10 +17,9 @@ from s3file.serializers import DirectUploadSerializer
 
 EXTRACT_DIR = os.path.join(settings.MEDIA_ROOT, "extracts")
 
-extract_filepath = lambda filename: os.path.join(
-    EXTRACT_DIR, os.path.splitext(filename)[0]
-)
-
+def extract_filepath(filename):
+    os.makedirs(EXTRACT_DIR, exist_ok=True)
+    return os.path.join(EXTRACT_DIR, os.path.splitext(filename)[0])
 
 class LogVideoUploadSerializer(serializers.ModelSerializer):
     """Serializer for video upload"""
