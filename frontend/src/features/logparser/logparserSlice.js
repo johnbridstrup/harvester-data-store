@@ -208,6 +208,16 @@ const logparserSlice = createSlice({
       state.internal.search.countIndex = 0;
       state.internal.search.content = [];
     },
+    tabChangeSearch: (state) => {
+      let searchText = state.internal.search.searchText;
+      if (searchText) {
+        let filtered = state.oglogfile.content?.filter((x) =>
+          x.log_message.toLowerCase().includes(searchText.toLowerCase())
+        );
+        state.internal.search.countIndex = 0;
+        state.internal.search.content = filtered;
+      }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -300,5 +310,6 @@ export const {
   scrollUpIndex,
   scrollDownIndex,
   clearSearch,
+  tabChangeSearch,
 } = logparserSlice.actions;
 export default logparserSlice.reducer;

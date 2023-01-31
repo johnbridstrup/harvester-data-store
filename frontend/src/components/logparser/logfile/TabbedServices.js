@@ -7,6 +7,7 @@ import {
   getLogFileById,
   setCurrIndex,
   setMarker,
+  tabChangeSearch,
 } from "features/logparser/logparserSlice";
 import { darkThemeClass, getCurrIndex } from "utils/utils";
 import { NavTabItem, NavTabs, NavTabSpan } from "components/styled";
@@ -37,8 +38,9 @@ function TabbedServices(props) {
     setFetching(false);
     let currentIndex = await getCurrIndex(currentMarker, res.payload);
     dispatch(setCurrIndex(currentIndex));
+    dispatch(tabChangeSearch());
     setTimeout(() => {
-      props.virtuoso.current.scrollToIndex({
+      props.virtuoso?.current?.scrollToIndex({
         index: currentIndex,
         align: "start",
         behavior: "auto",
