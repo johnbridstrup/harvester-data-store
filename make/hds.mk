@@ -15,4 +15,9 @@ push:
 	docker push $(AWS_ACCOUNT_ID).dkr.ecr.$(AWS_REGION).amazonaws.com/hds:$(NAME)-$(SHA)
 
 clean:
-	rm -f $(HDS_ROOT)/hds/.sqstoken; rm $(HDS_ROOT)/hds/db.sqlite3; find $(HDS_ROOT) -type f -name 'dump.rdb' -delete
+	-rm -f $(HDS_ROOT)/hds/.sqstoken; 
+	-rm $(HDS_ROOT)/hds/db.sqlite3; 
+	-rm -rf $(HDS_ROOT)/hds/media/extracts/*;
+	-rm -rf $(HDS_ROOT)/hds/media/uploads/*;
+	-rm -rf $(HDS_ROOT)/hds/uploads/*;
+	-find $(HDS_ROOT) -type f -name 'dump.rdb' -delete
