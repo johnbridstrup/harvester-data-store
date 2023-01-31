@@ -1,0 +1,10 @@
+[20230131T131250.181] [INFO] [robot.beh.fsm] -- TABW: [-16.546 -68.963 -67.584   3.252] POS: [ -58.41   511.358 -490.763   12.095]
+[20230131T131250.256] [DEBUG] [robot.beh.fsm] -- In Position: True
+[20230131T131250.257] [DEBUG] [robot.beh.fsm] -- In Coordsys Position: True
+[20230131T131250.280] [INFO] [robot.beh.fsm] -- Building new path with pos: [ -38.04   406.33  -490.54     0.213], vel:[0 0 0], wpts: [(Pos: [-360.67  -170.    -414.34    12.222], Spd: 2000.000, RotSpd: 205.714, Tol: 20.000, sysid: None, uuid: 64qQ6N2AzPt7m4yhKsZsUJ, ts: None, simultaneous: True, strict: True)]
+[20230131T131250.285] [DEBUG] [robot.beh.fsm] -- Calculated path: MotionPath start: 1675199570.140465, len: 607.06, rot_deg: 0.00, time: 0.639, num_pts: 6
+[20230131T131250.289] [DEBUG] [robot.beh.fsm] -- Calculated stretched path: MotionPath start: 1675199570.140465, len: 607.06, rot_deg: 0.00, time: 0.639, num_pts: 7
+[20230131T131250.289] [DEBUG] [robot.beh.fsm] -- last_sync_ts: 1675199570.278933 start_ts: 1675199568.8785887
+[20230131T131250.291] [DEBUG] [robot.beh.fsm] -- Generating 32 servo positions
+[20230131T131250.291] [INFO] [robot.beh.fsm] -- Flipped buffer!
+[20230131T131250.292] [DEBUG] [robot.beh.fsm] -- In Position: False
