@@ -7,6 +7,12 @@ from common.reports import DTimeFormatter
 from logparser.models import TIMEZONE
 from .logsessionserializers import LogSessionBaseSerializer
 
+LOG_DATE_PATTERN = re.compile(r'\[\d{8}T\d{6}.\d{3}\]')
+
+
+class DateMatchError(Exception):
+    pass
+
 
 class LogFileSerializer(serializers.ModelSerializer):
     """Serializer for log file model."""
@@ -85,6 +91,63 @@ class LogFileSerializer(serializers.ModelSerializer):
         return service, robot
 
     @classmethod
+    def _report_date_match_fail(cls, entry):
+        ASYNC_ERROR_COUNTER.labels(
+            'extract_log_file',
+            DateMatchError.__name__,
+            "Failed date pattern match"
+        ).inc()
+        logging.error(f'No match for the line {entry}')
+    
+    @classmethod
+    def _extract_lines(cls, file_iter, service, robot):
+        def create_content_dict(msg):
+            date_obj = cls.convert_to_datetime(entry)
+            if date_obj is None:
+                raise DateMatchError("Failed to match date")
+            return {
+                'service': service,
+                'robot': robot,
+                'timestamp': date_obj.timestamp(),
+                'log_date': str(date_obj),
+                'log_message': msg,
+            }
+        
+        content = []
+        first = True
+        entry = ""
+        for line in file_iter:
+            try:
+                line = line.decode("ascii")
+            except AttributeError:
+                pass
+
+            if LOG_DATE_PATTERN.match(line):
+                if first:
+                    first = False
+                    entry = line
+                    continue
+                
+                entry = entry.rstrip().strip("\n")
+                
+                try:
+                    content_dict = create_content_dict(entry)
+                except DateMatchError:
+                    cls._report_date_match_fail(entry)
+                    continue
+                content.append(content_dict)
+                entry = line
+            else:
+                entry = entry + line
+        
+        # append the last line
+        try:
+            content.append(create_content_dict(entry))
+        except:
+            cls._report_date_match_fail(entry)
+        return content
+
+    @classmethod
     def extract_log_file(cls, thezip, zip_obj_id, file):
         """
         extract file content and save to model by
@@ -95,7 +158,7 @@ class LogFileSerializer(serializers.ModelSerializer):
 
         """
         service, robot = cls.extract_service_robot(file)
-        date_pattern = re.compile(r'\[\d{8}T\d{6}.\d{3}\]')
+        
         log_session = LogSession.objects.get(pk=zip_obj_id)
         log_file = LogFile(
           file_name=file.filename,
@@ -107,35 +170,7 @@ class LogFileSerializer(serializers.ModelSerializer):
         content = []
 
         with thezip.open(file, "r") as file_iter:
-            first = True
-            entry = ""
-            for line in file_iter:
-                line = line.decode("ascii")
-                if date_pattern.match(line):
-                    if first:
-                        first = False
-                        entry = line
-                        continue
-                    entry = entry.rstrip().strip("\n")
-                    content_dict = {
-                    'service': service,
-                    'robot': robot,
-                    }
-                    date_obj = cls.convert_to_datetime(entry)
-                    if date_obj is None:
-                        ASYNC_ERROR_COUNTER.labels(
-                            'extract_log_file',
-                            AttributeError.__name__,
-                            "Failed date pattern match"
-                        ).inc()
-                        logging.error(f'No match for the line {entry}')
-                        continue
-                    content_dict["timestamp"] = date_obj.timestamp()
-                    content_dict["log_date"] = str(date_obj)
-                    content_dict["log_message"] = entry
-                    content.append(content_dict)
-                    entry = line
-                else:
-                    entry = entry + line
+            content = cls._extract_lines(file_iter, service, robot)
+            
         log_file.content = content
         log_file.save()

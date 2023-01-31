@@ -1,5 +1,6 @@
 from rest_framework import status
 from .base import LogBaseTestCase
+from ..serializers.logfileserializers import LogFileSerializer
 
 
 class LogFileTestCase(LogBaseTestCase):
@@ -21,3 +22,11 @@ class LogFileTestCase(LogBaseTestCase):
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(res.data["file_name"], log.file_name)
 
+    def test_logfile_extract(self):
+        with open(self.logpath, 'r') as f:
+            numlines = len(f.readlines())
+
+        with open(self.logpath, 'r') as f:
+            content = LogFileSerializer._extract_lines(f, 'test', 'test')
+
+        self.assertEqual(numlines, len(content))

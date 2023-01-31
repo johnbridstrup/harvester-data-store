@@ -231,6 +231,14 @@ class HDSAPITestBase(APITestCase):
         self.assertEqual(resp.status_code, resp_status)
         return resp.json()
 
+    @property
+    def logpath(self):
+        return os.path.join(os.path.abspath(os.path.dirname(__file__)), 'test_data/20230131131250_010_03_robot.log')
+
+    @property
+    def canpath(self):
+        return os.path.join(os.path.abspath(os.path.dirname(__file__)), 'test_data/20230131131250_010_03_CAN.dump')
+
     def test_frontend_url(self):
         url = build_frontend_url('test_endpoint', 1)
 
