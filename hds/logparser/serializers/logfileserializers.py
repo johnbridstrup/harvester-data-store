@@ -33,12 +33,11 @@ class LogFileSerializer(serializers.ModelSerializer):
         return datetime object or None.
 
         """
-        pattern = re.compile(r'\d{8}T\d{6}.[0-9]+')
-        matches = pattern.search(line_str)
+        matches = LOG_DATE_PATTERN.search(line_str)
         date_obj = None
         if matches:
             date_obj = DTimeFormatter.convert_to_datetime(
-              matches.group(0),
+              matches.group(0)[1:-1],
               TIMEZONE,
               format='%Y%m%dT%H%M%S.%f'
             )
