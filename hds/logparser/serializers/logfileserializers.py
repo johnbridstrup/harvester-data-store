@@ -7,7 +7,7 @@ from common.reports import DTimeFormatter
 from logparser.models import TIMEZONE
 from .logsessionserializers import LogSessionBaseSerializer
 
-LOG_DATE_PATTERN = re.compile(r'\[\d{8}T\d{6}.\d{3}\]')
+LOG_DATE_PATTERN = re.compile(r'\[\d{8}T\d{6}.[0-9]+\]')
 
 
 class DateMatchError(Exception):
@@ -33,7 +33,7 @@ class LogFileSerializer(serializers.ModelSerializer):
         return datetime object or None.
 
         """
-        pattern = re.compile(r'\d{8}T\d{6}.\d{3}')
+        pattern = re.compile(r'\d{8}T\d{6}.[0-9]+')
         matches = pattern.search(line_str)
         date_obj = None
         if matches:

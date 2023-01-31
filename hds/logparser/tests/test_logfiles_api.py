@@ -30,3 +30,12 @@ class LogFileTestCase(LogBaseTestCase):
             content = LogFileSerializer._extract_lines(f, 'test', 'test')
 
         self.assertEqual(numlines, len(content))
+
+    def test_candump_extract(self):
+        with open(self.canpath, 'r') as f:
+            numlines = len(f.readlines())
+
+        with open(self.canpath, 'r') as f:
+            content = LogFileSerializer._extract_lines(f, 'test', 'test')
+
+        self.assertEqual(numlines, len(content))
