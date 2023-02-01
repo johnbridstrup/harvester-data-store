@@ -11,6 +11,7 @@ import {
   findLogIndex,
   logContent,
   buildQueryObj,
+  transformExceptions,
 } from "utils/utils";
 
 test("should do binary search for given timestamp", () => {

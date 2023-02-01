@@ -3,7 +3,7 @@ import {
   getExceptionKeys,
   getServicesInError,
   transformErrorReport,
-  transformExceptionObj,
+  transformExceptions,
   transformReportDetail,
   transformSysmonKeys,
   transformSysmonReport,
@@ -28,7 +28,6 @@ const initialState = {
   queryUrl: null,
   paretos: [],
   transformed: {
-    exceptionkeys: [],
     sysmonkeys: [],
     sysmonreport: {},
     reportobj: {},
@@ -211,7 +210,6 @@ const errorreportSlice = createSlice({
         let exceptionskeys = getExceptionKeys(report?.exceptions);
         state.transformed.reportobj = transformReportDetail(report);
         state.transformed.sysmonreport = sysreport;
-        state.transformed.exceptionkeys = exceptionskeys;
         let services = getServicesInError(exceptionskeys, sysreport);
         state.transformed.erroredservices = services;
         state.transformed.sysmonkeys = transformSysmonKeys(
@@ -219,7 +217,7 @@ const errorreportSlice = createSlice({
           services,
           sysreport
         );
-        state.transformed.exceptions = transformExceptionObj(report.exceptions);
+        state.transformed.exceptions = transformExceptions(report.exceptions);
       })
       .addCase(detailErrorReport.rejected, (state, action) => {
         state.loading = false;

@@ -27,12 +27,25 @@ export const transformLocOptions = (locations = [], includeID = false) => {
   });
 };
 
-const extractServiceCodes = (exceptions = []) => {
+/**
+ * Extract service and codes from exception array
+ * @param {Array} exceptions
+ * @returns
+ */
+export const extractServiceCodes = (exceptions = []) => {
   let services = [];
   let codes = [];
+  /**
+   * If exception is primary (*) is added to service & code
+   * @param {Boolean} primary
+   * @returns {string}
+   */
+  function checkPrimary(primary) {
+    return primary ? "*" : "";
+  }
   exceptions.forEach((exec) => {
-    services.push(`${exec.service}.${exec.robot}`);
-    codes.push(exec.code.code);
+    services.push(`${exec.service}.${exec.robot}${checkPrimary(exec.primary)}`);
+    codes.push(`${exec.code.code}${checkPrimary(exec.primary)}`);
   });
   return { services, codes };
 };
@@ -194,6 +207,22 @@ export const transformExceptionObj = (exceptions = []) => {
     exceptObj[`${obj.service}.${obj.robot}: ${obj.code.code}`] = obj;
   });
   return exceptObj;
+};
+
+/**
+ * Transform exception array into required array of objects
+ * @param {Array} exceptions
+ * @returns {Array} exceptions
+ */
+export const transformExceptions = (exceptions = []) => {
+  let exceptArr = [];
+  exceptions.forEach((obj) => {
+    exceptArr.push({
+      exec_label: `${obj.service}.${obj.robot}: ${obj.code.code}`,
+      ...obj,
+    });
+  });
+  return exceptArr;
 };
 
 export const transformSysmonReport = (sysmonReport = {}) => {

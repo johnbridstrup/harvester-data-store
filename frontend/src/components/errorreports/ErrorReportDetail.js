@@ -70,7 +70,6 @@ function ErrorReportDetail(props) {
     transformed: {
       sysmonreport,
       sysmonkeys,
-      exceptionkeys,
       reportobj,
       erroredservices,
       exceptions,
@@ -100,7 +99,9 @@ function ErrorReportDetail(props) {
     primary: true,
   });
 
-  const exceptObj = exceptions[activeTab.exception];
+  const exceptObj = exceptions.find(
+    (x, i) => x.exec_label === activeTab.exception
+  );
   const dispatch = useDispatch();
   const { search } = useLocation();
   const downloadRef = useRef();
@@ -270,15 +271,18 @@ function ErrorReportDetail(props) {
         <div className="col-md-7">
           <Container>
             <NavTabs>
-              {exceptionkeys.map((key, index) => (
-                <NavTabItem key={index}>
+              {exceptions.map((exec, _) => (
+                <NavTabItem key={exec.id}>
                   <NavTabSpan
-                    onClick={() => handleTabChange(key, "exception", undefined)}
+                    onClick={() =>
+                      handleTabChange(exec.exec_label, "exception", undefined)
+                    }
                     activetab={activeTab.exception}
-                    navto={key}
+                    navto={exec.exec_label}
                     theme={theme}
                   >
-                    {key}
+                    {exec.exec_label}
+                    {exec.primary && <sup className="text-danger">*</sup>}
                   </NavTabSpan>
                 </NavTabItem>
               ))}
