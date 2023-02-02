@@ -438,6 +438,23 @@ export const GenericFormField = (props) => {
         </div>
       </div>
       <div className="row mb-4">
+        <div className="col">
+          <div className="form-check">
+            <input
+              className="form-check-input"
+              type="checkbox"
+              id="primary"
+              name="primary"
+              checked={fieldData?.primary === true}
+              onChange={handleFieldChange}
+            />
+            <label className="form-check-label" htmlFor="primary">
+              Primary Only
+            </label>
+          </div>
+        </div>
+      </div>
+      <div className="row mb-4">
         <div className="col-md-4">
           <div className="form-group">
             <label htmlFor="start_time">Start Time</label>
@@ -496,23 +513,6 @@ export const ParetoForm = (props) => {
     <div className="mb-4">
       <form onSubmit={props.handleSubmit}>
         <GenericFormField {...props} />
-        <div className="row mb-3">
-          <div className="col">
-            <div className="form-check">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                id="primary"
-                name="primary"
-                checked={props.fieldData?.primary}
-                onChange={props.handleFieldChange}
-              />
-              <label className="form-check-label" htmlFor="primary">
-                Primary Only
-              </label>
-            </div>
-          </div>
-        </div>
         <div className="row mb-3">
           <div className="col">
             <div className="form-group">

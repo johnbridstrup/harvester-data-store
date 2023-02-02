@@ -46,6 +46,7 @@ function ErrorReportQuery(props) {
     generic: "",
     is_emulator: "0",
     handled: "",
+    primary: true,
   });
   const {
     pagination: { count },
@@ -93,8 +94,10 @@ function ErrorReportQuery(props) {
   const handleRecipientSelect = handleSelectFactory(setSelectedRecipient);
 
   const handleFieldChange = (e) => {
+    let name = e.target.name;
+    let value = name === "primary" ? e.target.checked : e.target.value;
     setFieldData((current) => {
-      return { ...current, [e.target.name]: e.target.value };
+      return { ...current, [name]: value };
     });
   };
 

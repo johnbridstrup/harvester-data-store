@@ -194,6 +194,7 @@ test("should build query object", () => {
     traceback: "traceback",
     generic: "generic=generic",
     handled: "0",
+    primary: true,
   };
   let selectedHarvId = [{ label: "11", value: 11 }];
   let selectedLocation = [{ label: "Ranch A", value: "Ranch A" }];
@@ -217,6 +218,7 @@ test("should build query object", () => {
     harv_ids: [11],
     locations: ["Ranch A"],
     tz: "US/Pacific",
+    exceptions__primary: true,
   };
   expect(queryObj).toMatchObject(expected);
 });

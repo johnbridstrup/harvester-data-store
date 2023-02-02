@@ -890,6 +890,9 @@ export const buildQueryObj = (
   if (fieldData.handled) {
     queryObj["handled"] = fieldData.handled;
   }
+  if (fieldData.primary) {
+    queryObj["exceptions__primary"] = fieldData.primary;
+  }
   return queryObj;
 };
 
@@ -1007,6 +1010,11 @@ export const mapParamsObject = (
   if (paramsObj.handled) {
     setFieldData((current) => {
       return { ...current, handled: paramsObj.handled };
+    });
+  }
+  if (paramsObj.exceptions__primary) {
+    setFieldData((current) => {
+      return { ...current, primary: Boolean(paramsObj.exceptions__primary) };
     });
   }
 };
