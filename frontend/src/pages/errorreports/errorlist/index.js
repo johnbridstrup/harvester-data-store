@@ -8,7 +8,6 @@ import { listHarvesters } from "features/harvester/harvesterSlice";
 import { listLocations } from "features/location/locationSlice";
 import {
   copyQueryUrl,
-  errorreportListView,
   queryErrorReport,
 } from "features/errorreport/errorreportSlice";
 import Pagination from "components/pagination/Pagination";
@@ -43,7 +42,7 @@ function ErrorsReportList(props) {
       })();
     } else {
       (async () => {
-        await dispatch(errorreportListView());
+        await dispatch(queryErrorReport({ is_emulator: 0 }));
       })();
     }
     return () => {};
