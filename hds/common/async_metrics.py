@@ -34,7 +34,7 @@ TOTAL_ERROR_COUNTER = Counter(
 ASYNC_UPLOAD_COUNTER = Counter(
     "hds_async_upload",
     "Upload size on asynchronous tasks",
-    labelnames=['task', 'zipname'],
+    labelnames=['filetype'],
     registry=prometheus_get_registry()
 )
 

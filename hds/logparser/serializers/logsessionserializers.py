@@ -158,12 +158,3 @@ class LogSessionSerializer(TaggitSerializer, serializers.ModelSerializer):
                 "Logsession does not exist"
             ).inc()
             logging.info(f"log session with id {_id} does not exist")
-
-        # get zip size that is being uploaded
-        with zipfile.ZipFile(thezip) as zp:
-            size = sum([zinfo.file_size for zinfo in zp.filelist])
-            zip_kb = float(size) / 1000  # KB
-            ASYNC_UPLOAD_COUNTER.labels(
-                'async_zip_upload',
-                zp.filename
-            ).inc(zip_kb)
