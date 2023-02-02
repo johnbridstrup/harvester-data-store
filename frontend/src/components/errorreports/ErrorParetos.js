@@ -103,15 +103,11 @@ function ErrorParetos(props) {
   const handleAggreSelect = handleSelectFactory(setSelectedAggregate);
 
   const handleFieldChange = (e) => {
-    if (e.target.name === "primary") {
-      setFieldData((current) => {
-        return { ...current, primary: e.target.checked };
-      });
-    } else {
-      setFieldData((current) => {
-        return { ...current, [e.target.name]: e.target.value };
-      });
-    }
+    let name = e.target.name;
+    let value = name === "primary" ? e.target.checked : e.target.value;
+    setFieldData((current) => {
+      return { ...current, [name]: value };
+    });
   };
 
   const handleSideClick = () => {
