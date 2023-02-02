@@ -7,11 +7,11 @@ source ./setup-venv.sh
 echo ""
 echo "Find open port"
 
-source ./scripts/set_port.sh 
+source ./scripts/set_port.sh
 
 echo ""
 echo "Spinning up test server"
-sudo docker compose -f docker-compose.test.yml up -d --build 
+sudo docker compose -f docker-compose.test.yml up -d --build --force-recreate
 sleep 10 # Ensure spin-up before curl
 
 echo ""
