@@ -1,8 +1,20 @@
 import PropTypes from "prop-types";
-import { darkThemeClass, transformSysmonServices } from "utils/utils";
+import { useMemo } from "react";
+import {
+  darkThemeClass,
+  transformErroredServices,
+  transformSysmonServices,
+} from "utils/utils";
 
 function ServiceTable(props) {
-  const services = transformSysmonServices(props.services);
+  const services = useMemo(
+    () => transformSysmonServices(props.services),
+    [props.services]
+  );
+  const erroredservices = useMemo(
+    () => transformErroredServices(props.errors),
+    [props.errors]
+  );
   const evaluateColor = (services = [], errors = []) => {
     const found = services.some((service) => errors.includes(service));
     if (found) {
@@ -25,7 +37,7 @@ function ServiceTable(props) {
         </thead>
         <tbody>
           {services.map((service, index) => (
-            <tr key={index} className={evaluateColor(service, props.errors)}>
+            <tr key={index} className={evaluateColor(service, erroredservices)}>
               {service.map((obj, index) => (
                 <td key={index}>{obj}</td>
               ))}

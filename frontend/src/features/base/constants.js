@@ -44,3 +44,5 @@ export const THEME_MODES = {
   LIGHT_THEME: "light",
   DARK_THEME: "dark",
 };
+
+export const MASTER_ROBOT = 0;

@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import {
-  getExceptionKeys,
   getServicesInError,
   transformErrorReport,
   transformExceptions,
@@ -207,17 +206,17 @@ const errorreportSlice = createSlice({
         let sysreport = transformSysmonReport(
           report.report?.data?.sysmon_report
         );
-        let exceptionskeys = getExceptionKeys(report?.exceptions);
+        let exceptions = transformExceptions(report.exceptions);
         state.transformed.reportobj = transformReportDetail(report);
         state.transformed.sysmonreport = sysreport;
-        let services = getServicesInError(exceptionskeys, sysreport);
+        let services = getServicesInError(exceptions, sysreport);
         state.transformed.erroredservices = services;
         state.transformed.sysmonkeys = transformSysmonKeys(
           Object.keys(sysreport),
           services,
           sysreport
         );
-        state.transformed.exceptions = transformExceptions(report.exceptions);
+        state.transformed.exceptions = exceptions;
       })
       .addCase(detailErrorReport.rejected, (state, action) => {
         state.loading = false;

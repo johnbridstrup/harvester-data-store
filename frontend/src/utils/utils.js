@@ -1,6 +1,7 @@
 import {
   LOG_MSG_PATTERN,
   LOG_STR_PATTERN,
+  MASTER_ROBOT,
   PROD_ENV,
   THEME_MODES,
 } from "features/base/constants";
@@ -225,6 +226,11 @@ export const transformExceptions = (exceptions = []) => {
   return exceptArr;
 };
 
+/**
+ * Transform sysmon report object
+ * @param {object} sysmonReport
+ * @returns
+ */
 export const transformSysmonReport = (sysmonReport = {}) => {
   const sysReport = {};
   let masterIndex = 0;
@@ -262,6 +268,11 @@ export const transformSysmonReport = (sysmonReport = {}) => {
   return sysReport;
 };
 
+/**
+ * Transform sysmon services
+ * @param {object} sysmon
+ * @returns
+ */
 export const transformSysmonServices = (sysmon = {}) => {
   const sysmonArr = [];
   for (const [key, value] of Object.entries(sysmon)) {
@@ -335,19 +346,25 @@ export const objNotEmpty = (obj) => {
   return Object.keys(obj).length > 0;
 };
 
-export const getServicesInError = (exceptionsKeys = [], sysmonReport = {}) => {
+/**
+ * Get services in error state
+ * @param {Array} exceptions
+ * @param {object} sysmonReport
+ * @returns
+ */
+export const getServicesInError = (exceptions = [], sysmonReport = {}) => {
   let errors = [];
-  for (let i = 0; i < exceptionsKeys.length; i++) {
-    let dotAny = exceptionsKeys[i].split(":")[0].split(".")[1];
-    let service = exceptionsKeys[i].split(":")[0];
-    let robotIndex = `Robot ${dotAny}`;
-    if (dotAny === "0") {
+  for (let i = 0; i < exceptions.length; i++) {
+    let robotNumber = exceptions[i].robot;
+    let service = `${exceptions[i].service}.${exceptions[i].robot}`;
+    let robotIndex = `Robot ${robotNumber}`;
+    if (Number(robotNumber) === MASTER_ROBOT) {
       if (sysmonReport["Master"]) {
-        errors.push(service);
+        errors.push({ service, robot: robotNumber });
       }
     } else {
       if (sysmonReport[robotIndex]) {
-        errors.push(service);
+        errors.push({ service, robot: robotNumber });
       }
     }
   }
@@ -358,16 +375,22 @@ export const getExceptionKeys = (exceptions = []) => {
   return Object.keys(transformExceptionObj(exceptions));
 };
 
-export const robotInError = (exceptionKey, sysmonReport) => {
+/**
+ * Get the robot in error
+ * @param {object} exception
+ * @param {object} sysmonReport
+ * @returns
+ */
+export const robotInError = (exception, sysmonReport) => {
   let robot = {};
-  let dotAny = exceptionKey.split(":")[0].split(".")[1];
+  let robotNumber = exception.robot;
   robot["error"] = true;
-  if (dotAny === "0") {
+  if (Number(robotNumber) === MASTER_ROBOT) {
     robot["robot"] = "Master";
     robot["arm"] = null;
   } else {
-    let robotIndex = `Robot ${dotAny}`;
-    let service = exceptionKey.split(":")[0];
+    let robotIndex = `Robot ${robotNumber}`;
+    let service = `${exception.service}.${exception.robot}`;
     robot["robot"] = robotIndex;
     if (sysmonReport[robotIndex]["NUC"]["services"][service]) {
       robot["arm"] = "NUC";
@@ -378,6 +401,13 @@ export const robotInError = (exceptionKey, sysmonReport) => {
   return robot;
 };
 
+/**
+ * Transform sysmon keys
+ * @param {Array} sysmonkeys
+ * @param {Array} services
+ * @param {object} sysmon
+ * @returns
+ */
 export const transformSysmonKeys = (
   sysmonkeys = [],
   services = [],
@@ -403,6 +433,19 @@ export const transformSysmonKeys = (
     }
   });
   return resultKeys;
+};
+
+/**
+ * Transform errored services into required shape
+ *
+ * @param {Array} errors
+ * @example
+ *    input = [{'service': 'harvester.0', 'robot': 0}]
+ *    output = [harvester.0]
+ * @returns {Array} services
+ */
+export const transformErroredServices = (errors = []) => {
+  return errors.map((x, i) => x.service);
 };
 
 export const pushState = (queryObj, pareto = false) => {

@@ -127,8 +127,9 @@ function ErrorReportDetail(props) {
 
   const handleTabChange = (tab, category, obj) => {
     if (category === "exception") {
+      if (!(tab instanceof Object)) return;
       setActiveTab((current) => {
-        return { ...current, exception: tab };
+        return { ...current, exception: tab.exec_label };
       });
       let robot = robotInError(tab, sysmonReport);
       setTimeout(() => {
@@ -275,7 +276,7 @@ function ErrorReportDetail(props) {
                 <NavTabItem key={exec.id}>
                   <NavTabSpan
                     onClick={() =>
-                      handleTabChange(exec.exec_label, "exception", undefined)
+                      handleTabChange(exec, "exception", undefined)
                     }
                     activetab={activeTab.exception}
                     navto={exec.exec_label}

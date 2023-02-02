@@ -12,7 +12,15 @@ import {
   logContent,
   buildQueryObj,
   transformExceptions,
+  transformSysmonReport,
+  transformSysmonServices,
+  getServicesInError,
+  robotInError,
+  transformSysmonKeys,
+  transformErroredServices,
+  extractServiceCodes,
 } from "utils/utils";
+import errorreport from "test-utils/test-data/errorreport.json";
 
 test("should do binary search for given timestamp", () => {
   let content = [
@@ -211,4 +219,97 @@ test("should build query object", () => {
     tz: "US/Pacific",
   };
   expect(queryObj).toMatchObject(expected);
+});
+
+describe("error report transformation block scope", () => {
+  const sysmondata = errorreport.report.data.sysmon_report;
+  function _getexceptions() {
+    return transformExceptions(errorreport.exceptions);
+  }
+  function _getsysreport() {
+    return transformSysmonReport(sysmondata);
+  }
+  function _erroredservices() {
+    return getServicesInError(_getexceptions(), _getsysreport());
+  }
+
+  test("should transform exceptions into required array obj", () => {
+    let received = errorreport.exceptions;
+    let expected = _getexceptions();
+    expect(expected.length).toBeGreaterThan(0);
+    expect(transformExceptions(received)).toMatchObject(expected);
+  });
+
+  test("should transform sysmon report into required obj", () => {
+    let expected = _getsysreport();
+    expect(transformSysmonReport(sysmondata)).toMatchObject(expected);
+    expect(transformSysmonReport(sysmondata)).toHaveProperty("Master");
+    expect(transformSysmonReport(sysmondata)).toHaveProperty("Robot 1");
+  });
+
+  test("should transform sysmon services into required array", () => {
+    let sysreport = _getsysreport();
+    let services = transformSysmonServices(sysreport["Master"].services);
+    expect(services).toHaveLength(8);
+  });
+
+  test("should return all services in error", () => {
+    let erroredservices = _erroredservices();
+    let expected = [
+      { service: "drivesys.0", robot: 0 },
+      { service: "harvester.0", robot: 0 },
+    ];
+    expect(erroredservices).toHaveLength(2);
+    expect(erroredservices).toMatchObject(expected);
+  });
+
+  test("should get single robot in error", () => {
+    let sysreport = _getsysreport();
+    let exceptions = _getexceptions();
+    let roboerror = robotInError(exceptions[0], sysreport);
+    let expected = {
+      error: true,
+      robot: "Master",
+      arm: null,
+    };
+    expect(roboerror).toMatchObject(expected);
+  });
+
+  test("should transform sysmon keys to required shape", () => {
+    let sysreport = _getsysreport();
+    let erroredservices = _erroredservices();
+    let syskeys = transformSysmonKeys(
+      Object.keys(sysreport),
+      erroredservices,
+      sysreport
+    );
+    let expected = [
+      { robot: "Master", error: true, arm: null },
+      { robot: "Robot 1", error: false, arm: undefined },
+      { robot: "Robot 2", error: false, arm: undefined },
+      { robot: "Robot 3", error: false, arm: undefined },
+      { robot: "Robot 4", error: false, arm: undefined },
+      { robot: "Robot 5", error: false, arm: undefined },
+      { robot: "Robot 6", error: false, arm: undefined },
+    ];
+    expect(syskeys).toHaveLength(7);
+    expect(syskeys).toMatchObject(expected);
+  });
+
+  test("should transform errored services into required shape", () => {
+    let erroredservices = _erroredservices();
+    let output = transformErroredServices(erroredservices);
+    let expected = ["drivesys.0", "harvester.0"];
+    expect(erroredservices.length).toBe(output.length);
+    expect(output).toMatchObject(expected);
+  });
+
+  test("should extract service and codes from exception array", () => {
+    let output = extractServiceCodes(_getexceptions());
+    let expected = {
+      services: ["drivesys.0*", "harvester.0"],
+      codes: ["0*", "0"],
+    };
+    expect(output).toMatchObject(expected);
+  });
 });
