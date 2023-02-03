@@ -5,6 +5,7 @@ from harvdeploy.serializers import HarvesterVersionReportSerializer
 
 from rest_framework.decorators import action
 from rest_framework.renderers import JSONRenderer
+from aftconfigs.serializers import ConfigReportSerializer
 from common.utils import make_ok
 from common.viewsets import CreateModelViewSet
 from hds.roles import RoleChoices
@@ -31,7 +32,10 @@ class HarvesterView(CreateModelViewSet):
         },
         "get_assets": {
             RoleChoices.SUPPORT: True,
-        }
+        },
+        "latest_config": {
+            RoleChoices.SUPPORT: True,
+        },
     }
 
     @action(
@@ -63,6 +67,19 @@ class HarvesterView(CreateModelViewSet):
         harv = self.get_object()
         assets = [HarvesterAssetSerializer(asset).data for asset in harv.assets.all()]
         return make_ok(f"Harvester {harv.harv_id} assets retrieved", response_data=assets)
+    
+    @action(
+        methods=["get"],
+        detail=True,
+        url_path="config",
+        renderer_classes=[JSONRenderer]
+    )
+    def latest_config(self, request, pk=None):
+        harv = self.get_object()
+        conf_report = harv.configreport_set.latest()
+        data = ConfigReportSerializer(conf_report).data
+        
+        return make_ok(f"Harvester {harv.harv_id} config", data)
 
 
 class HarvesterHistoryView(CreateModelViewSet):

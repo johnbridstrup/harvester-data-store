@@ -24,6 +24,7 @@ class HarvesterSerializer(serializers.ModelSerializer):
         data['harvester_history'] = f"/harvesterhistory/?harv_id={instance.harv_id}"
         data['version_history'] = 'versions/'
         data["assets"] = "assets/"
+        data['config'] = 'config/'
         if instance.release:
             data['release'] = HarvesterCodeReleaseSerializer(instance.release).data
         else:
