@@ -20,8 +20,11 @@ data "aws_vpc" "infra_vpc" {
   }
 }
 
-data "aws_subnet_ids" "priv_subnets" {
-  vpc_id = data.aws_vpc.infra_vpc.id
+data "aws_subnets" "priv_subnets" {
+  filter {
+    name   = "vpc-id"
+    values = [data.aws_vpc.infra_vpc.id]
+  }
 
   tags = {
     Type = "private"
@@ -46,16 +49,9 @@ data "aws_route53_zone" "private_cloud_zone" {
   private_zone = true
 }
 
-data "aws_secretsmanager_secret_version" "hds_rds_pwd" {
-  secret_id = "hds_rds_pwd"
-}
 
-data "aws_secretsmanager_secret_version" "slack_token" {
-  secret_id = "hds-slack-token"
-}
-
-data "aws_secretsmanager_secret_version" "django_secret_key" {
-  secret_id = "hds_django_secret"
+data "aws_secretsmanager_secret_version" "service_secrets" {
+  secret_id = "hds-secret"
 }
 
 data "aws_security_group" "lambda_sg" {
