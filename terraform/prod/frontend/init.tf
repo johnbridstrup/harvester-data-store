@@ -20,16 +20,15 @@ data "aws_vpc" "infra_vpc" {
   }
 }
 
-data "aws_subnet_ids" "priv_subnets" {
-  vpc_id = data.aws_vpc.infra_vpc.id
+data "aws_subnets" "priv_subnets" {
+  filter {
+    name   = "vpc-id"
+    values = [data.aws_vpc.infra_vpc.id]
+  }
 
   tags = {
     Type = "private"
   }
-}
-
-data "aws_db_instance" "postgres" {
-  db_instance_identifier = "hdsdb"
 }
 
 data "aws_ecs_cluster" "hds-cluster" {
@@ -46,19 +45,9 @@ data "aws_route53_zone" "private_cloud_zone" {
   private_zone = true
 }
 
-data "aws_secretsmanager_secret_version" "hds_rds_pwd" {
-  secret_id = "hds_rds_pwd"
-}
-
 data "aws_security_group" "lambda_sg" {
   tags = {
     Name = "errorreport"
-  }
-}
-
-data "aws_security_group" "hdsdb_sg" {
-  tags = {
-    Name = "hdsdb"
   }
 }
 
