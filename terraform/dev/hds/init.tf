@@ -49,12 +49,8 @@ data "aws_route53_zone" "private_cloud_zone" {
   private_zone = true
 }
 
-data "aws_secretsmanager_secret_version" "hds_rds_pwd" {
-  secret_id = "hds_rds_pwd"
-}
-
-data "aws_secretsmanager_secret_version" "slack_token" {
-  secret_id = "dev_slack_token"
+data "aws_secretsmanager_secret_version" "service_secrets" {
+  secret_id = "hds-secret"
 }
 
 data "aws_security_group" "lambda_sg" {
