@@ -16,7 +16,6 @@ locals {
   jobserver_port           = "8000"
 }
 
-
 resource "random_password" "sqs_pwd" {
   length  = 16
   special = false
