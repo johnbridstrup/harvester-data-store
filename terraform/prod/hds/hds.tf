@@ -64,12 +64,12 @@ module "hds" {
   frontend_url              = local.frontend_url
   errorreport_queue_url     = data.aws_sqs_queue.errorreport_queue.url
   autodiagnostics_queue_url = data.aws_sqs_queue.autodiagnostics_queue.url
-  sessclip_queue_url       = data.aws_sqs_queue.sessclip_queue.url
-  s3files_queue_url        = data.aws_sqs_queue.file_queue.url
-  versions_queue_url       = data.aws_sqs_queue.versions_queue.url
-  jobresults_queue_url     = data.aws_sqs_queue.jobresults_queue.url
-  migrate_flag             = local.migrate
-  s3_bucket                = local.bucket
+  sessclip_queue_url        = data.aws_sqs_queue.sessclip_queue.url
+  s3files_queue_url         = data.aws_sqs_queue.file_queue.url
+  versions_queue_url        = data.aws_sqs_queue.versions_queue.url
+  jobresults_queue_url      = data.aws_sqs_queue.jobresults_queue.url
+  migrate_flag              = local.migrate
+  s3_bucket                 = local.bucket
 }
 
 resource "aws_security_group_rule" "hds_jobserver_rule" {
