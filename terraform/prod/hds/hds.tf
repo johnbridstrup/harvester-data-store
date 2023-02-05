@@ -71,12 +71,3 @@ module "hds" {
   migrate_flag              = local.migrate
   s3_bucket                 = local.bucket
 }
-
-resource "aws_security_group_rule" "hds_jobserver_rule" {
-  type                     = "ingress"
-  from_port                = local.jobserver_port
-  to_port                  = local.jobserver_port
-  protocol                 = "tcp"
-  source_security_group_id = module.hds.service_security_group_id
-  security_group_id        = data.aws_security_group.jobserver_sg.id
-}
