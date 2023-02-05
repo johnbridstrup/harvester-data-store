@@ -20,8 +20,11 @@ data "aws_vpc" "infra_vpc" {
   }
 }
 
-data "aws_subnet_ids" "priv_subnets" {
-  vpc_id = data.aws_vpc.infra_vpc.id
+data "aws_subnets" "priv_subnets" {
+  filter {
+    name   = "vpc-id"
+    values = [data.aws_vpc.infra_vpc.id]
+  }
 
   tags = {
     Type = "private"

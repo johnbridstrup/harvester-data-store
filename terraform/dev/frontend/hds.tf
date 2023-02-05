@@ -16,8 +16,8 @@ module "hds-frontend" {
   service_port              = local.service_port
   service_name              = local.service_name
   service_docker_image      = local.service_docker_image
-  service_subnets           = data.aws_subnet_ids.priv_subnets.ids
-  load_balancer_subnets     = data.aws_subnet_ids.priv_subnets.ids
+  service_subnets           = data.aws_subnets.priv_subnets.ids
+  load_balancer_subnets     = data.aws_subnets.priv_subnets.ids
   ecs_cluster_arn           = data.aws_ecs_cluster.hds-cluster.arn
   route53_priv_zone_id      = data.aws_route53_zone.private_cloud_zone.id
   route53_pub_zone_id       = data.aws_route53_zone.cloud_zone.id
