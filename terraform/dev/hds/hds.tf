@@ -45,8 +45,8 @@ module "hds" {
   service_port                = local.service_port
   service_name                = local.service_name
   service_docker_image        = local.service_docker_image
-  service_subnets             = data.aws_subnet_ids.priv_subnets.ids
-  load_balancer_subnets       = data.aws_subnet_ids.priv_subnets.ids
+  service_subnets             = data.aws_subnets.priv_subnets.ids
+  load_balancer_subnets       = data.aws_subnets.priv_subnets.ids
   ecs_cluster_arn             = data.aws_ecs_cluster.hds-cluster.arn
   enable_prometheus_scrape    = local.enable_prometheus_scrape
   additional_prometheus_ports = local.sqs_client_metrics_ports
