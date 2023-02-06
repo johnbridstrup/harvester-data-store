@@ -8,6 +8,10 @@ export const CSRF_URL = `${API_URL}/users/csrf/`;
 export const MAX_LIMIT = 10000;
 export const PROD_ENV = "production";
 export const SUCCESS = "success";
+export const status = {
+  HTTP_401_UNAUTHORIZED: "Request failed with status code 401",
+  HTTP_403_FORBIDDED: "Request failed with status code 403",
+};
 export const NOTIFY_CATEGORY = {
   created: "created",
   isRecipient: "is_recipient",

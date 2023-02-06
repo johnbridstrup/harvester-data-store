@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { status } from "../base/constants";
 import authService from "./authService";
 
 const isAuthenticated =
@@ -56,12 +57,16 @@ export const invalidateCache = (error, dispatch) => {
     (error.response && error.response.data && error.response.data.message) ||
     error.message ||
     error.toString();
-  if (message === "Request failed with status code 401") {
+  if (
+    message === status.HTTP_401_UNAUTHORIZED ||
+    message === status.HTTP_403_FORBIDDED
+  ) {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     localStorage.removeItem("isAuthenticated");
     localStorage.removeItem("csrftoken");
     dispatch(reset());
+    window.location.href = "/login";
   }
   return message;
 };
@@ -125,6 +130,19 @@ export const confirmPassword = createAsyncThunk(
     }
   }
 );
+
+export const authListener = createAsyncThunk("auth", async (_, thunkAPI) => {
+  try {
+    const {
+      auth: { token, user },
+    } = thunkAPI.getState();
+    return await authService.authListener(user?.id, token);
+  } catch (error) {
+    console.log(error);
+    const message = invalidateCache(error, thunkAPI.dispatch);
+    return thunkAPI.rejectWithValue(message);
+  }
+});
 
 export const authSlice = createSlice({
   name: "auth",

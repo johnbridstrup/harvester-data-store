@@ -48,11 +48,20 @@ const confirmPassword = async (userData) => {
   return res;
 };
 
+const authListener = async (userId, token) => {
+  const response = await axiosService.get(
+    `${USER_PROFILE_URL}${userId}/`,
+    token
+  );
+  return response;
+};
+
 const authService = {
   login,
   logout,
   update,
   changePassword,
   confirmPassword,
+  authListener,
 };
 export default authService;
