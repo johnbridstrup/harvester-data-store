@@ -23,13 +23,10 @@ export const login = createAsyncThunk("auth/login", async (user, thunkAPI) => {
     return await authService.login(user);
   } catch (error) {
     console.log(error);
-    const message =
-      (error.response && error.response.data && error.response.data.message) ||
-      error.message ||
-      error.toString();
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     localStorage.removeItem("isAuthenticated");
+    const message = invalidateCache(error, thunkAPI.dispatch);
     return thunkAPI.rejectWithValue(message);
   }
 });
@@ -41,12 +38,7 @@ export const logout = createAsyncThunk(
       return await authService.logout(tokenData);
     } catch (error) {
       console.log(error);
-      const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        error.toString();
+      const message = invalidateCache(error, thunkAPI.dispatch);
       return thunkAPI.rejectWithValue(message);
     }
   }
@@ -81,12 +73,7 @@ export const updateProfile = createAsyncThunk(
       return await authService.update(userData.userId, token, userData);
     } catch (error) {
       console.log(error);
-      const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        error.toString();
+      const message = invalidateCache(error, thunkAPI.dispatch);
       return thunkAPI.rejectWithValue(message);
     }
   }
@@ -102,12 +89,7 @@ export const changePassword = createAsyncThunk(
       return await authService.changePassword(token, userData);
     } catch (error) {
       console.log(error);
-      const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        error.toString();
+      const message = invalidateCache(error, thunkAPI.dispatch);
       return thunkAPI.rejectWithValue(message);
     }
   }
@@ -120,12 +102,7 @@ export const confirmPassword = createAsyncThunk(
       return await authService.confirmPassword(userData);
     } catch (error) {
       console.log(error);
-      const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        error.toString();
+      const message = invalidateCache(error, thunkAPI.dispatch);
       return thunkAPI.rejectWithValue(message);
     }
   }
