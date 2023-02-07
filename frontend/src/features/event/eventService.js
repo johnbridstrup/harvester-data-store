@@ -1,7 +1,7 @@
 import { API_URL } from "../base/constants";
 import { axiosService } from "../base/service";
 
-const EVENTS_URL = `${API_URL}/events/`;
+export const EVENTS_URL = `${API_URL}/events/`;
 
 const listEvents = async (token, limit = 10) => {
   let response = await axiosService.get(`${EVENTS_URL}?limit=${limit}`, token);
@@ -27,11 +27,17 @@ const queryEvent = async (paramsObj, token) => {
   return response;
 };
 
+const getEventTags = async (token) => {
+  let response = await axiosService.get(`${EVENTS_URL}tags/`, token);
+  return response;
+};
+
 const eventService = {
   listEvents,
   getEventById,
   paginateEvent,
   queryEvent,
+  getEventTags,
 };
 
 export default eventService;

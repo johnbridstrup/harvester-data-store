@@ -6,6 +6,7 @@ const initialState = {
   loading: false,
   event: {},
   events: [],
+  tags: [],
   errorMsg: null,
   pagination: {
     next: null,
@@ -80,6 +81,22 @@ export const queryEvent = createAsyncThunk(
   }
 );
 
+export const getEventTags = createAsyncThunk(
+  "event/getEventTags",
+  async (_, thunkAPI) => {
+    try {
+      const {
+        auth: { token },
+      } = thunkAPI.getState();
+      return await eventService.getEventTags(token);
+    } catch (error) {
+      console.log(error);
+      const message = invalidateCache(error, thunkAPI.dispatch);
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 const eventSlice = createSlice({
   name: "event",
   initialState,
@@ -136,6 +153,17 @@ const eventSlice = createSlice({
         state.pagination.previous = action.payload.previous;
       })
       .addCase(queryEvent.rejected, (state, action) => {
+        state.loading = false;
+        state.errorMsg = action.payload;
+      })
+      .addCase(getEventTags.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getEventTags.fulfilled, (state, action) => {
+        state.loading = false;
+        state.tags = action.payload.tags;
+      })
+      .addCase(getEventTags.rejected, (state, action) => {
         state.loading = false;
         state.errorMsg = action.payload;
       });

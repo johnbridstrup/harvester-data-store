@@ -14,6 +14,7 @@ import notificationReducer from "features/notification/notificationSlice";
 import userReducer from "features/user/userSlice";
 import migrationReducer from "features/migration/migrationSlice";
 import homeReducer from "features/home/homeSlice";
+import s3fileReducer from "features/s3file/s3fileSlice";
 
 const store = configureStore({
   reducer: {
@@ -32,6 +33,7 @@ const store = configureStore({
     logparser: logparserReducer,
     migration: migrationReducer,
     home: homeReducer,
+    s3file: s3fileReducer,
   },
 });
 
