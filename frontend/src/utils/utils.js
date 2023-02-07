@@ -613,9 +613,14 @@ export function handleSelectFactory(setSelectedFunc) {
   return handleSelect;
 }
 
+/**
+ * Transform tags into required arrays
+ * @param {Array} tags
+ * @returns
+ */
 export const transformTagsOptions = (tags = []) => {
-  return tags.map((tags, index) => {
-    return { value: tags, label: tags };
+  return tags.map((tag, index) => {
+    return { value: tag, label: tag };
   });
 };
 
