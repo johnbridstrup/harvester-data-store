@@ -65,6 +65,12 @@ export const menu = [
     description: "Log entries captured from harvesters",
     href: "/logsession",
   },
+  {
+    name: "S3Files",
+    icon: "awss3",
+    description: "Files uploaded to aws s3 bucket",
+    href: "/s3files",
+  },
 ];
 
 export const adminMenu = [
