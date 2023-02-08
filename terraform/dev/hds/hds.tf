@@ -5,9 +5,9 @@ locals {
   frontend_url             = "https://hds.devcloud.advanced.farm"
   service_port             = "8000"
   service_name             = "hds"
-  service_docker_image     = "082346306812.dkr.ecr.us-west-1.amazonaws.com/hds:hds-staging-ac3245ef"
+  service_docker_image     = "082346306812.dkr.ecr.us-west-1.amazonaws.com/hds:hds-staging-38fb4197"
   healthcheck_path         = "/api/v1/healthcheck/"
-  sqs_client_metrics_ports = [9104, 9105, 9106, 9107, 9108, 9109]
+  sqs_client_metrics_ports = [9104]
   enable_prometheus_scrape = true
   service_container_memory = 4096
   service_container_cpu    = 2048
