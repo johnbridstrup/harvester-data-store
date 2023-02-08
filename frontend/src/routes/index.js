@@ -1,5 +1,5 @@
 import { lazy, Suspense } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import { RouteLoader } from "components/styled";
 import { IsAdminOnly, RequireUser, UserAuth } from "utils/guards";
 import { Loader } from "utils/utils";
@@ -79,14 +79,142 @@ const MigrationDetailView = lazy(() => import("pages/migration/detailview"));
 const S3FileListView = lazy(() => import("pages/s3files/listview"));
 const S3FileDetailView = lazy(() => import("pages/s3files/detailview"));
 
-const BaseRouter = () => {
+const BaseRoutes = () => {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <RequireUser>
+    <Routes>
+      <Route
+        path="/"
+        element={
+          <RequireUser>
+            <Suspense
+              fallback={
+                <RouteLoader>
+                  <Loader size={50} />
+                </RouteLoader>
+              }
+            >
+              <Home />
+            </Suspense>
+          </RequireUser>
+        }
+      />
+      <Route
+        path="/login"
+        element={
+          <UserAuth>
+            <Suspense
+              fallback={
+                <RouteLoader>
+                  <Loader size={50} />
+                </RouteLoader>
+              }
+            >
+              <Login />
+            </Suspense>
+          </UserAuth>
+        }
+      />
+      <Route
+        path="/errorreports"
+        element={
+          <RequireUser>
+            <Suspense
+              fallback={
+                <RouteLoader>
+                  <Loader size={50} />
+                </RouteLoader>
+              }
+            >
+              <ErrorsReportList />
+            </Suspense>
+          </RequireUser>
+        }
+      />
+      <Route
+        path="/errorreports/view/pareto"
+        element={
+          <RequireUser>
+            <Suspense
+              fallback={
+                <RouteLoader>
+                  <Loader size={50} />
+                </RouteLoader>
+              }
+            >
+              <ErrorReportPareto />
+            </Suspense>
+          </RequireUser>
+        }
+      />
+      <Route
+        path="/errorreports/:reportId"
+        element={
+          <RequireUser>
+            <Suspense
+              fallback={
+                <RouteLoader>
+                  <Loader size={50} />
+                </RouteLoader>
+              }
+            >
+              <ErrorsReportDetail />
+            </Suspense>
+          </RequireUser>
+        }
+      />
+      <Route
+        path="/users/profile/me"
+        element={
+          <RequireUser>
+            <Suspense
+              fallback={
+                <RouteLoader>
+                  <Loader size={50} />
+                </RouteLoader>
+              }
+            >
+              <UserProfileView />
+            </Suspense>
+          </RequireUser>
+        }
+      />
+      <Route
+        path="/notifications"
+        element={
+          <RequireUser>
+            <Suspense
+              fallback={
+                <RouteLoader>
+                  <Loader size={50} />
+                </RouteLoader>
+              }
+            >
+              <NotificationList />
+            </Suspense>
+          </RequireUser>
+        }
+      />
+      <Route
+        path="/notifications/:notifyId"
+        element={
+          <RequireUser>
+            <Suspense
+              fallback={
+                <RouteLoader>
+                  <Loader size={50} />
+                </RouteLoader>
+              }
+            >
+              <NotificationDetail />
+            </Suspense>
+          </RequireUser>
+        }
+      />
+      <Route
+        path="/users"
+        element={
+          <RequireUser>
+            <IsAdminOnly>
               <Suspense
                 fallback={
                   <RouteLoader>
@@ -94,649 +222,519 @@ const BaseRouter = () => {
                   </RouteLoader>
                 }
               >
-                <Home />
+                <UserListView />
               </Suspense>
-            </RequireUser>
-          }
-        />
-        <Route
-          path="/login"
-          element={
-            <UserAuth>
-              <Suspense
-                fallback={
-                  <RouteLoader>
-                    <Loader size={50} />
-                  </RouteLoader>
-                }
-              >
-                <Login />
-              </Suspense>
-            </UserAuth>
-          }
-        />
-        <Route
-          path="/errorreports"
-          element={
-            <RequireUser>
-              <Suspense
-                fallback={
-                  <RouteLoader>
-                    <Loader size={50} />
-                  </RouteLoader>
-                }
-              >
-                <ErrorsReportList />
-              </Suspense>
-            </RequireUser>
-          }
-        />
-        <Route
-          path="/errorreports/view/pareto"
-          element={
-            <RequireUser>
-              <Suspense
-                fallback={
-                  <RouteLoader>
-                    <Loader size={50} />
-                  </RouteLoader>
-                }
-              >
-                <ErrorReportPareto />
-              </Suspense>
-            </RequireUser>
-          }
-        />
-        <Route
-          path="/errorreports/:reportId"
-          element={
-            <RequireUser>
-              <Suspense
-                fallback={
-                  <RouteLoader>
-                    <Loader size={50} />
-                  </RouteLoader>
-                }
-              >
-                <ErrorsReportDetail />
-              </Suspense>
-            </RequireUser>
-          }
-        />
-        <Route
-          path="/users/profile/me"
-          element={
-            <RequireUser>
-              <Suspense
-                fallback={
-                  <RouteLoader>
-                    <Loader size={50} />
-                  </RouteLoader>
-                }
-              >
-                <UserProfileView />
-              </Suspense>
-            </RequireUser>
-          }
-        />
-        <Route
-          path="/notifications"
-          element={
-            <RequireUser>
-              <Suspense
-                fallback={
-                  <RouteLoader>
-                    <Loader size={50} />
-                  </RouteLoader>
-                }
-              >
-                <NotificationList />
-              </Suspense>
-            </RequireUser>
-          }
-        />
-        <Route
-          path="/notifications/:notifyId"
-          element={
-            <RequireUser>
-              <Suspense
-                fallback={
-                  <RouteLoader>
-                    <Loader size={50} />
-                  </RouteLoader>
-                }
-              >
-                <NotificationDetail />
-              </Suspense>
-            </RequireUser>
-          }
-        />
-        <Route
-          path="/users"
-          element={
-            <RequireUser>
-              <IsAdminOnly>
-                <Suspense
-                  fallback={
-                    <RouteLoader>
-                      <Loader size={50} />
-                    </RouteLoader>
-                  }
-                >
-                  <UserListView />
-                </Suspense>
-              </IsAdminOnly>
-            </RequireUser>
-          }
-        />
-        <Route
-          path="/harvesters"
-          element={
-            <RequireUser>
-              <Suspense
-                fallback={
-                  <RouteLoader>
-                    <Loader size={50} />
-                  </RouteLoader>
-                }
-              >
-                <HarvesterListView />
-              </Suspense>
-            </RequireUser>
-          }
-        />
-        <Route
-          path="/harvesters/:harvId"
-          element={
-            <RequireUser>
-              <Suspense
-                fallback={
-                  <RouteLoader>
-                    <Loader size={50} />
-                  </RouteLoader>
-                }
-              >
-                <HarvesterDetailView />
-              </Suspense>
-            </RequireUser>
-          }
-        />
-        <Route
-          path="/harvesters/:harvId/versions"
-          element={
-            <RequireUser>
-              <Suspense
-                fallback={
-                  <RouteLoader>
-                    <Loader size={50} />
-                  </RouteLoader>
-                }
-              >
-                <HarvVersionListView />
-              </Suspense>
-            </RequireUser>
-          }
-        />
-        <Route
-          path="/harvesterhistory"
-          element={
-            <RequireUser>
-              <Suspense
-                fallback={
-                  <RouteLoader>
-                    <Loader size={50} />
-                  </RouteLoader>
-                }
-              >
-                <HarvesterHistoryListView />
-              </Suspense>
-            </RequireUser>
-          }
-        />
-        <Route
-          path="/harvesterhistory/:historyId"
-          element={
-            <RequireUser>
-              <Suspense
-                fallback={
-                  <RouteLoader>
-                    <Loader size={50} />
-                  </RouteLoader>
-                }
-              >
-                <HarvesterHistoryDetailView />
-              </Suspense>
-            </RequireUser>
-          }
-        />
-        <Route
-          path="/locations"
-          element={
-            <RequireUser>
-              <Suspense
-                fallback={
-                  <RouteLoader>
-                    <Loader size={50} />
-                  </RouteLoader>
-                }
-              >
-                <LocationListView />
-              </Suspense>
-            </RequireUser>
-          }
-        />
-        <Route
-          path="/distributors"
-          element={
-            <RequireUser>
-              <Suspense
-                fallback={
-                  <RouteLoader>
-                    <Loader size={50} />
-                  </RouteLoader>
-                }
-              >
-                <DistributorListView />
-              </Suspense>
-            </RequireUser>
-          }
-        />
-        <Route
-          path="/events"
-          element={
-            <RequireUser>
-              <Suspense
-                fallback={
-                  <RouteLoader>
-                    <Loader size={50} />
-                  </RouteLoader>
-                }
-              >
-                <EventListView />
-              </Suspense>
-            </RequireUser>
-          }
-        />
-        <Route
-          path="/events/:eventId"
-          element={
-            <RequireUser>
-              <Suspense
-                fallback={
-                  <RouteLoader>
-                    <Loader size={50} />
-                  </RouteLoader>
-                }
-              >
-                <EventDetailView />
-              </Suspense>
-            </RequireUser>
-          }
-        />
-        <Route
-          path="/release"
-          element={
-            <RequireUser>
-              <Suspense
-                fallback={
-                  <RouteLoader>
-                    <Loader size={50} />
-                  </RouteLoader>
-                }
-              >
-                <ReleaseCodeListView />
-              </Suspense>
-            </RequireUser>
-          }
-        />
-        <Route
-          path="/release/:releaseId"
-          element={
-            <RequireUser>
-              <Suspense
-                fallback={
-                  <RouteLoader>
-                    <Loader size={50} />
-                  </RouteLoader>
-                }
-              >
-                <ReleaseCodeDetailView />
-              </Suspense>
-            </RequireUser>
-          }
-        />
-        <Route
-          path="/harvversion"
-          element={
-            <RequireUser>
-              <Suspense
-                fallback={
-                  <RouteLoader>
-                    <Loader size={50} />
-                  </RouteLoader>
-                }
-              >
-                <VersionReportListView />
-              </Suspense>
-            </RequireUser>
-          }
-        />
-        <Route
-          path="/harvversion/:versionId"
-          element={
-            <RequireUser>
-              <Suspense
-                fallback={
-                  <RouteLoader>
-                    <Loader size={50} />
-                  </RouteLoader>
-                }
-              >
-                <VersionReportDetailView />
-              </Suspense>
-            </RequireUser>
-          }
-        />
-        <Route
-          path="/jobtypes"
-          element={
-            <RequireUser>
-              <Suspense
-                fallback={
-                  <RouteLoader>
-                    <Loader size={50} />
-                  </RouteLoader>
-                }
-              >
-                <JobTypeListView />
-              </Suspense>
-            </RequireUser>
-          }
-        />
-        <Route
-          path="/jobtypes/:jobtypeId"
-          element={
-            <RequireUser>
-              <Suspense
-                fallback={
-                  <RouteLoader>
-                    <Loader size={50} />
-                  </RouteLoader>
-                }
-              >
-                <JobTypeDetailView />
-              </Suspense>
-            </RequireUser>
-          }
-        />
-        <Route
-          path="/jobschemas"
-          element={
-            <RequireUser>
-              <Suspense
-                fallback={
-                  <RouteLoader>
-                    <Loader size={50} />
-                  </RouteLoader>
-                }
-              >
-                <JobSchemaListVIew />
-              </Suspense>
-            </RequireUser>
-          }
-        />
-        <Route
-          path="/jobschemas/:jobschemaId"
-          element={
-            <RequireUser>
-              <Suspense
-                fallback={
-                  <RouteLoader>
-                    <Loader size={50} />
-                  </RouteLoader>
-                }
-              >
-                <JobSchemaDetailView />
-              </Suspense>
-            </RequireUser>
-          }
-        />
-        <Route
-          path="/jobscheduler"
-          element={
-            <RequireUser>
-              <Suspense
-                fallback={
-                  <RouteLoader>
-                    <Loader size={50} />
-                  </RouteLoader>
-                }
-              >
-                <JobSchedulerView />
-              </Suspense>
-            </RequireUser>
-          }
-        />
-        <Route
-          path="/schedulejob/:jobschemaId"
-          element={
-            <RequireUser>
-              <Suspense
-                fallback={
-                  <RouteLoader>
-                    <Loader size={50} />
-                  </RouteLoader>
-                }
-              >
-                <ScheduleJobView />
-              </Suspense>
-            </RequireUser>
-          }
-        />
-        <Route
-          path="/jobs"
-          element={
-            <RequireUser>
-              <Suspense
-                fallback={
-                  <RouteLoader>
-                    <Loader size={50} />
-                  </RouteLoader>
-                }
-              >
-                <JobListView />
-              </Suspense>
-            </RequireUser>
-          }
-        />
-        <Route
-          path="/jobs/:jobId"
-          element={
-            <RequireUser>
-              <Suspense
-                fallback={
-                  <RouteLoader>
-                    <Loader size={50} />
-                  </RouteLoader>
-                }
-              >
-                <JobDetailView />
-              </Suspense>
-            </RequireUser>
-          }
-        />
-        <Route
-          path="/jobresults"
-          element={
-            <RequireUser>
-              <Suspense
-                fallback={
-                  <RouteLoader>
-                    <Loader size={50} />
-                  </RouteLoader>
-                }
-              >
-                <JobResultListView />
-              </Suspense>
-            </RequireUser>
-          }
-        />
-        <Route
-          path="/jobresults/:jobresultId"
-          element={
-            <RequireUser>
-              <Suspense
-                fallback={
-                  <RouteLoader>
-                    <Loader size={50} />
-                  </RouteLoader>
-                }
-              >
-                <JobResultDetailView />
-              </Suspense>
-            </RequireUser>
-          }
-        />
-        <Route
-          path="/jobstatus/:jobId"
-          element={
-            <RequireUser>
-              <Suspense
-                fallback={
-                  <RouteLoader>
-                    <Loader size={50} />
-                  </RouteLoader>
-                }
-              >
-                <JobHistoryView />
-              </Suspense>
-            </RequireUser>
-          }
-        />
-        <Route
-          path="/logsession"
-          element={
-            <RequireUser>
-              <Suspense
-                fallback={
-                  <RouteLoader>
-                    <Loader size={50} />
-                  </RouteLoader>
-                }
-              >
-                <LogSessionListView />
-              </Suspense>
-            </RequireUser>
-          }
-        />
-        <Route
-          path="/logsession/:sessionId"
-          element={
-            <RequireUser>
-              <Suspense
-                fallback={
-                  <RouteLoader>
-                    <Loader size={50} />
-                  </RouteLoader>
-                }
-              >
-                <LogSessionDetailView />
-              </Suspense>
-            </RequireUser>
-          }
-        />
-        <Route
-          path="/logfiles/:sessionId"
-          element={
-            <RequireUser>
-              <Suspense
-                fallback={
-                  <RouteLoader>
-                    <Loader size={50} />
-                  </RouteLoader>
-                }
-              >
-                <LogFileListView />
-              </Suspense>
-            </RequireUser>
-          }
-        />
-        <Route
-          path="/migrations"
-          element={
-            <RequireUser>
-              <Suspense
-                fallback={
-                  <RouteLoader>
-                    <Loader size={50} />
-                  </RouteLoader>
-                }
-              >
-                <MigrationListView />
-              </Suspense>
-            </RequireUser>
-          }
-        />
-        <Route
-          path="/migrations/:migrationId"
-          element={
-            <RequireUser>
-              <Suspense
-                fallback={
-                  <RouteLoader>
-                    <Loader size={50} />
-                  </RouteLoader>
-                }
-              >
-                <MigrationDetailView />
-              </Suspense>
-            </RequireUser>
-          }
-        />
-        <Route
-          path="/s3files"
-          element={
-            <RequireUser>
-              <Suspense
-                fallback={
-                  <RouteLoader>
-                    <Loader size={50} />
-                  </RouteLoader>
-                }
-              >
-                <S3FileListView />
-              </Suspense>
-            </RequireUser>
-          }
-        />
-        <Route
-          path="/s3files/:s3fileId"
-          element={
-            <RequireUser>
-              <Suspense
-                fallback={
-                  <RouteLoader>
-                    <Loader size={50} />
-                  </RouteLoader>
-                }
-              >
-                <S3FileDetailView />
-              </Suspense>
-            </RequireUser>
-          }
-        />
-        <Route
-          path="/forbidden"
-          element={
-            <RequireUser>
-              <Forbidden />
-            </RequireUser>
-          }
-        />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-    </BrowserRouter>
+            </IsAdminOnly>
+          </RequireUser>
+        }
+      />
+      <Route
+        path="/harvesters"
+        element={
+          <RequireUser>
+            <Suspense
+              fallback={
+                <RouteLoader>
+                  <Loader size={50} />
+                </RouteLoader>
+              }
+            >
+              <HarvesterListView />
+            </Suspense>
+          </RequireUser>
+        }
+      />
+      <Route
+        path="/harvesters/:harvId"
+        element={
+          <RequireUser>
+            <Suspense
+              fallback={
+                <RouteLoader>
+                  <Loader size={50} />
+                </RouteLoader>
+              }
+            >
+              <HarvesterDetailView />
+            </Suspense>
+          </RequireUser>
+        }
+      />
+      <Route
+        path="/harvesters/:harvId/versions"
+        element={
+          <RequireUser>
+            <Suspense
+              fallback={
+                <RouteLoader>
+                  <Loader size={50} />
+                </RouteLoader>
+              }
+            >
+              <HarvVersionListView />
+            </Suspense>
+          </RequireUser>
+        }
+      />
+      <Route
+        path="/harvesterhistory"
+        element={
+          <RequireUser>
+            <Suspense
+              fallback={
+                <RouteLoader>
+                  <Loader size={50} />
+                </RouteLoader>
+              }
+            >
+              <HarvesterHistoryListView />
+            </Suspense>
+          </RequireUser>
+        }
+      />
+      <Route
+        path="/harvesterhistory/:historyId"
+        element={
+          <RequireUser>
+            <Suspense
+              fallback={
+                <RouteLoader>
+                  <Loader size={50} />
+                </RouteLoader>
+              }
+            >
+              <HarvesterHistoryDetailView />
+            </Suspense>
+          </RequireUser>
+        }
+      />
+      <Route
+        path="/locations"
+        element={
+          <RequireUser>
+            <Suspense
+              fallback={
+                <RouteLoader>
+                  <Loader size={50} />
+                </RouteLoader>
+              }
+            >
+              <LocationListView />
+            </Suspense>
+          </RequireUser>
+        }
+      />
+      <Route
+        path="/distributors"
+        element={
+          <RequireUser>
+            <Suspense
+              fallback={
+                <RouteLoader>
+                  <Loader size={50} />
+                </RouteLoader>
+              }
+            >
+              <DistributorListView />
+            </Suspense>
+          </RequireUser>
+        }
+      />
+      <Route
+        path="/events"
+        element={
+          <RequireUser>
+            <Suspense
+              fallback={
+                <RouteLoader>
+                  <Loader size={50} />
+                </RouteLoader>
+              }
+            >
+              <EventListView />
+            </Suspense>
+          </RequireUser>
+        }
+      />
+      <Route
+        path="/events/:eventId"
+        element={
+          <RequireUser>
+            <Suspense
+              fallback={
+                <RouteLoader>
+                  <Loader size={50} />
+                </RouteLoader>
+              }
+            >
+              <EventDetailView />
+            </Suspense>
+          </RequireUser>
+        }
+      />
+      <Route
+        path="/release"
+        element={
+          <RequireUser>
+            <Suspense
+              fallback={
+                <RouteLoader>
+                  <Loader size={50} />
+                </RouteLoader>
+              }
+            >
+              <ReleaseCodeListView />
+            </Suspense>
+          </RequireUser>
+        }
+      />
+      <Route
+        path="/release/:releaseId"
+        element={
+          <RequireUser>
+            <Suspense
+              fallback={
+                <RouteLoader>
+                  <Loader size={50} />
+                </RouteLoader>
+              }
+            >
+              <ReleaseCodeDetailView />
+            </Suspense>
+          </RequireUser>
+        }
+      />
+      <Route
+        path="/harvversion"
+        element={
+          <RequireUser>
+            <Suspense
+              fallback={
+                <RouteLoader>
+                  <Loader size={50} />
+                </RouteLoader>
+              }
+            >
+              <VersionReportListView />
+            </Suspense>
+          </RequireUser>
+        }
+      />
+      <Route
+        path="/harvversion/:versionId"
+        element={
+          <RequireUser>
+            <Suspense
+              fallback={
+                <RouteLoader>
+                  <Loader size={50} />
+                </RouteLoader>
+              }
+            >
+              <VersionReportDetailView />
+            </Suspense>
+          </RequireUser>
+        }
+      />
+      <Route
+        path="/jobtypes"
+        element={
+          <RequireUser>
+            <Suspense
+              fallback={
+                <RouteLoader>
+                  <Loader size={50} />
+                </RouteLoader>
+              }
+            >
+              <JobTypeListView />
+            </Suspense>
+          </RequireUser>
+        }
+      />
+      <Route
+        path="/jobtypes/:jobtypeId"
+        element={
+          <RequireUser>
+            <Suspense
+              fallback={
+                <RouteLoader>
+                  <Loader size={50} />
+                </RouteLoader>
+              }
+            >
+              <JobTypeDetailView />
+            </Suspense>
+          </RequireUser>
+        }
+      />
+      <Route
+        path="/jobschemas"
+        element={
+          <RequireUser>
+            <Suspense
+              fallback={
+                <RouteLoader>
+                  <Loader size={50} />
+                </RouteLoader>
+              }
+            >
+              <JobSchemaListVIew />
+            </Suspense>
+          </RequireUser>
+        }
+      />
+      <Route
+        path="/jobschemas/:jobschemaId"
+        element={
+          <RequireUser>
+            <Suspense
+              fallback={
+                <RouteLoader>
+                  <Loader size={50} />
+                </RouteLoader>
+              }
+            >
+              <JobSchemaDetailView />
+            </Suspense>
+          </RequireUser>
+        }
+      />
+      <Route
+        path="/jobscheduler"
+        element={
+          <RequireUser>
+            <Suspense
+              fallback={
+                <RouteLoader>
+                  <Loader size={50} />
+                </RouteLoader>
+              }
+            >
+              <JobSchedulerView />
+            </Suspense>
+          </RequireUser>
+        }
+      />
+      <Route
+        path="/schedulejob/:jobschemaId"
+        element={
+          <RequireUser>
+            <Suspense
+              fallback={
+                <RouteLoader>
+                  <Loader size={50} />
+                </RouteLoader>
+              }
+            >
+              <ScheduleJobView />
+            </Suspense>
+          </RequireUser>
+        }
+      />
+      <Route
+        path="/jobs"
+        element={
+          <RequireUser>
+            <Suspense
+              fallback={
+                <RouteLoader>
+                  <Loader size={50} />
+                </RouteLoader>
+              }
+            >
+              <JobListView />
+            </Suspense>
+          </RequireUser>
+        }
+      />
+      <Route
+        path="/jobs/:jobId"
+        element={
+          <RequireUser>
+            <Suspense
+              fallback={
+                <RouteLoader>
+                  <Loader size={50} />
+                </RouteLoader>
+              }
+            >
+              <JobDetailView />
+            </Suspense>
+          </RequireUser>
+        }
+      />
+      <Route
+        path="/jobresults"
+        element={
+          <RequireUser>
+            <Suspense
+              fallback={
+                <RouteLoader>
+                  <Loader size={50} />
+                </RouteLoader>
+              }
+            >
+              <JobResultListView />
+            </Suspense>
+          </RequireUser>
+        }
+      />
+      <Route
+        path="/jobresults/:jobresultId"
+        element={
+          <RequireUser>
+            <Suspense
+              fallback={
+                <RouteLoader>
+                  <Loader size={50} />
+                </RouteLoader>
+              }
+            >
+              <JobResultDetailView />
+            </Suspense>
+          </RequireUser>
+        }
+      />
+      <Route
+        path="/jobstatus/:jobId"
+        element={
+          <RequireUser>
+            <Suspense
+              fallback={
+                <RouteLoader>
+                  <Loader size={50} />
+                </RouteLoader>
+              }
+            >
+              <JobHistoryView />
+            </Suspense>
+          </RequireUser>
+        }
+      />
+      <Route
+        path="/logsession"
+        element={
+          <RequireUser>
+            <Suspense
+              fallback={
+                <RouteLoader>
+                  <Loader size={50} />
+                </RouteLoader>
+              }
+            >
+              <LogSessionListView />
+            </Suspense>
+          </RequireUser>
+        }
+      />
+      <Route
+        path="/logsession/:sessionId"
+        element={
+          <RequireUser>
+            <Suspense
+              fallback={
+                <RouteLoader>
+                  <Loader size={50} />
+                </RouteLoader>
+              }
+            >
+              <LogSessionDetailView />
+            </Suspense>
+          </RequireUser>
+        }
+      />
+      <Route
+        path="/logfiles/:sessionId"
+        element={
+          <RequireUser>
+            <Suspense
+              fallback={
+                <RouteLoader>
+                  <Loader size={50} />
+                </RouteLoader>
+              }
+            >
+              <LogFileListView />
+            </Suspense>
+          </RequireUser>
+        }
+      />
+      <Route
+        path="/migrations"
+        element={
+          <RequireUser>
+            <Suspense
+              fallback={
+                <RouteLoader>
+                  <Loader size={50} />
+                </RouteLoader>
+              }
+            >
+              <MigrationListView />
+            </Suspense>
+          </RequireUser>
+        }
+      />
+      <Route
+        path="/migrations/:migrationId"
+        element={
+          <RequireUser>
+            <Suspense
+              fallback={
+                <RouteLoader>
+                  <Loader size={50} />
+                </RouteLoader>
+              }
+            >
+              <MigrationDetailView />
+            </Suspense>
+          </RequireUser>
+        }
+      />
+      <Route
+        path="/s3files"
+        element={
+          <RequireUser>
+            <Suspense
+              fallback={
+                <RouteLoader>
+                  <Loader size={50} />
+                </RouteLoader>
+              }
+            >
+              <S3FileListView />
+            </Suspense>
+          </RequireUser>
+        }
+      />
+      <Route
+        path="/s3files/:s3fileId"
+        element={
+          <RequireUser>
+            <Suspense
+              fallback={
+                <RouteLoader>
+                  <Loader size={50} />
+                </RouteLoader>
+              }
+            >
+              <S3FileDetailView />
+            </Suspense>
+          </RequireUser>
+        }
+      />
+      <Route
+        path="/forbidden"
+        element={
+          <RequireUser>
+            <Forbidden />
+          </RequireUser>
+        }
+      />
+      <Route path="*" element={<NotFound />} />
+    </Routes>
   );
 };
 
-export default BaseRouter;
+export default BaseRoutes;
