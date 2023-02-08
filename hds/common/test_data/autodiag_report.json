@@ -20,5 +20,6 @@
     "finger_closed_value": 8.6
   },
   "serial_number": 11,
-  "uuid": "2115cd5a-765a-11ed-9d09-677a59a17003"
+  "uuid": "2115cd5a-765a-11ed-9d09-677a59a17003",
+  "pick_session_uuid": "2225cd5a-765a-11ed-9d09-677a59a17003"
 }

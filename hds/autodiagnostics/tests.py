@@ -2,6 +2,7 @@ from django.urls import reverse
 from rest_framework import status
 
 from common.tests import HDSAPITestBase
+from event.models import Event, PickSession
 
 from .models import AutodiagnosticsReport
 from .views import MAGIC_GRIPPER_MSG
@@ -54,4 +55,9 @@ class AutodiagnosticsApiTestCase(HDSAPITestBase):
         r = self.client.get(self.url)
         data = r.json()["data"]
         self.assertEqual(data["count"], 0)
+
+    def test_event_and_picksess_created(self):
+        self._post_autodiag_report()
+        self.assertEqual(Event.objects.count(), 1)
+        self.assertEqual(PickSession.objects.count(), 1)
         
