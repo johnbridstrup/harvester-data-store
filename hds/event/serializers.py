@@ -96,6 +96,7 @@ class PickSessionSerializer(TaggedUUIDSerializerBase):
         return [
             ("errorreport", "errorreports", "Error Report"),
             ("autodiagnosticsreport", "autodiagnostics", "Autodiagnostics Report"),
+            ("gripreport", "gripreports", "Grip Report"),
         ]
 
     def has_related_files(self) -> bool:
