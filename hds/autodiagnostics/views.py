@@ -1,5 +1,6 @@
 from .models import AutodiagnosticsReport
 from .serializers import AutodiagnosticsReportSerializer
+from .tasks import extract_autodiag_run
 
 from common.utils import make_ok
 from common.viewsets import ReportModelViewSet
@@ -27,3 +28,8 @@ class AutodiagnosticsReportView(ReportModelViewSet):
         if gripper_sn == MAGIC_GRIPPER_SN:
             return Response(MAGIC_GRIPPER_MSG)
         return super().create(request, *args, **kwargs)
+
+    def perform_create(self, serializer):
+        super().perform_create(serializer)
+        data = serializer.data
+        extract_autodiag_run.delay(data["id"])

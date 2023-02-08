@@ -12,6 +12,10 @@ import jsonschema
 import logging
 
 
+class ExtractionError(Exception):
+    pass
+
+
 class ReportSerializerBase(serializers.ModelSerializer):
     REPORT_BASE_SCHEMA = {
         "type": "object",
@@ -77,9 +81,13 @@ class ReportSerializerBase(serializers.ModelSerializer):
             raise serializers.ValidationError(detail={"validation error": err})
 
     @classmethod
-    def extract_timestamp(cls, report, key="timestamp"):
+    def extract_timestamp(cls, report, key="timestamp", pop=False):
         """get POSIX timestamp and return in date format"""
-        return datetime.datetime.fromtimestamp(report[key]).strftime('%Y-%m-%d %H:%M:%S.%f')
+        if pop:
+            ts = report.pop(key)
+        else:
+            ts = report[key]
+        return datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S.%f')
 
     @classmethod
     def extract_uuid(cls, report, key="uuid"):

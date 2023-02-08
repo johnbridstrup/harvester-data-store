@@ -2,10 +2,22 @@ from rest_framework import serializers
 from taggit.serializers import TaggitSerializer
 
 from common.models import Tags
-from common.serializers.reportserializer import ReportSerializerBase
+from common.reports import ReportBase
+from common.serializers.reportserializer import ExtractionError, ReportSerializerBase
 from event.serializers import PickSessionSerializerMixin
+from harvassets.models import HarvesterAsset, HarvesterAssetType
 
-from .models import AutodiagnosticsReport
+from .models import AutodiagnosticsReport, AutodiagnosticsRun
+
+
+GRIPPER_ASSET_NAME = "gripper"
+
+
+class AutodiagnosticsRunSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AutodiagnosticsRun
+        fields = ('__all__')
+        read_only_fields = ('creator',)
 
 
 class AutodiagnosticsReportSerializer(TaggitSerializer, PickSessionSerializerMixin, ReportSerializerBase):
@@ -39,3 +51,82 @@ class AutodiagnosticsReportSerializer(TaggitSerializer, PickSessionSerializerMix
             "pick_session_uuid": pick_session_uuid,
         })
         return super().to_internal_value(data)
+    
+    @classmethod
+    def extract(cls, report_obj: ReportBase):
+        creator = report_obj.creator
+        report = report_obj.report
+        data = report.get("data")
+        if data is None:
+            report.tags.add(Tags.INCOMPLETE.value)
+            raise ExtractionError(f"Autodiagnostics report {report_obj.id} has no data")
+        
+        # Retrieve or create gripper HarvesterAssetType.
+        # We can do this regardless of whether we can extract the actual gripper asset
+        try:
+            gripper_asset_type = HarvesterAssetType.objects.get(name=GRIPPER_ASSET_NAME)
+        except HarvesterAssetType.DoesNotExist:
+            gripper_asset_type = HarvesterAssetType(creator=creator, name=GRIPPER_ASSET_NAME)
+            gripper_asset_type.save()
+
+        # Get gripper serial number
+        gripper_sn = data.pop("serial_no", None)
+        if gripper_sn is None:
+            gripper_sn = data.pop("serial_number", None)
+            if gripper_sn is None:
+                raise ExtractionError(f"No gripper serial number in autodiag report {report_obj.id}")
+        
+        # Get robot ID
+        robot_id = data.pop("robot_id", None)
+        if robot_id is None:
+            raise ExtractionError(f"No robot ID in autodiag report {report_obj.id}")
+
+        # Retrieve or create the gripper HarvesterAsset
+        try:
+            gripper = HarvesterAsset.objects.get(asset=gripper_asset_type, serial_number=gripper_sn)
+        except HarvesterAsset.DoesNotExist:
+            gripper = HarvesterAsset(
+                asset=gripper_asset_type,
+                serial_number=gripper_sn,
+                index=robot_id,
+                creator=creator
+            )
+        gripper.harvester = report_obj.harvester
+        gripper.save()
+
+        # Create HarvesterAutodiagnosticsRun
+        autodiag_run = {}
+
+        # Basic
+        autodiag_run["gripper"] = gripper
+        autodiag_run["robot_id"] = robot_id
+        autodiag_run["creator"] = creator
+        autodiag_run["report"] = report_obj
+        autodiag_run["run_timestamp"] = cls.extract_timestamp(data, "ts", pop=True)
+
+        # Boolean results
+        autodiag_run["result"] = data.pop("passed_autodiag") # This and the following are the only guaranteed non-null
+        autodiag_run["ball_found_result"] = data.pop("passed_autodiag_ball_found")
+        autodiag_run["template_match_result"] = data.pop("passed_autodiag_template_match", None)
+
+        # Threshold values
+        autodiag_run["min_vac"] = data.pop("min_vac", None)
+        autodiag_run["finger_open_value"] = data.pop("finger_open_value", None)
+        autodiag_run["finger_closed_value"] = data.pop("finger_closed_value", None)
+        autodiag_run["finger_delta"] = data.pop("delta_fing", None)
+        autodiag_run["nominal_touch_force"] = data.pop("no_touch_force", None)
+        autodiag_run["max_touch_force"] = data.pop("max_touch_val")
+        autodiag_run["template_match_y_error"] = data.pop("tm_y_error", None)
+
+        # Sensor curves
+        autodiag_run["sensors"] = data.pop("sensors", {})
+
+        # Create and save    
+        run = AutodiagnosticsRun(**autodiag_run)
+        run.save()
+
+        # Update report with any leftover additional data
+        report['data'] = data
+        report_obj.report = report
+        report_obj.save()
+        return "Extracted Autodiagnostics Run"

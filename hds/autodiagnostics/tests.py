@@ -3,8 +3,9 @@ from rest_framework import status
 
 from common.tests import HDSAPITestBase
 from event.models import Event, PickSession
+from harvassets.models import HarvesterAssetType, HarvesterAsset
 
-from .models import AutodiagnosticsReport
+from .models import AutodiagnosticsReport, AutodiagnosticsRun
 from .views import MAGIC_GRIPPER_MSG
 
 
@@ -60,4 +61,23 @@ class AutodiagnosticsApiTestCase(HDSAPITestBase):
         self._post_autodiag_report()
         self.assertEqual(Event.objects.count(), 1)
         self.assertEqual(PickSession.objects.count(), 1)
+    def test_extract_basic(self):
+        self._post_autodiag_report()
+        self.assertEqual(AutodiagnosticsRun.objects.count(), 1)
+        self.assertEqual(HarvesterAssetType.objects.count(), 1)
+        self.assertEqual(HarvesterAsset.objects.count(), 1)
+
+    def test_extract_values(self):
+        self._post_autodiag_report()
+        report = AutodiagnosticsReport.objects.get()
+        run = AutodiagnosticsRun.objects.get()
+        gripper = run.gripper
+
+        self.assertEqual(report, run.report)
+        self.assertEqual(int(gripper.serial_number), int(self.ad_data['data']['serial_no']))
+        self.assertEqual(self.ad_data['data']['min_vac'], run.min_vac)
+        self.assertDictEqual(run.sensors, self.ad_data['data']['sensors'])
+
+        self.assertNotEqual(self.ad_data['data'], report.report['data'])
+        self.assertDictContainsSubset(report.report['data'], self.ad_data['data'])
         
