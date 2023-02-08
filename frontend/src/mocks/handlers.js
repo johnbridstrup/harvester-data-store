@@ -21,5 +21,5 @@ export const handlers = [
   getMigration,
   listS3Files,
   getS3File,
-  eventTags
+  eventTags,
 ];

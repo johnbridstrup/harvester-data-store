@@ -2,6 +2,8 @@
   "type": "error",
   "timestamp": 1651526862.789323,
   "serial_number": "011",
+  "uuid": "2225cd5a-765a-11ed-9d09-677a59a17113",
+  "pick_session_uuid": "2225cd5a-765a-11ed-9d09-677a59a17003",
   "data": {
     "sysmon_report": {
       "serial_number": "011",

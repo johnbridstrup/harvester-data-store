@@ -6,7 +6,7 @@ from ..models import ErrorReport, DEFAULT_UNKNOWN
 from harvester.serializers.harvesterserializer import HarvesterSerializer
 from location.serializers.locationserializer import LocationSerializer
 from event.models import Event
-from event.serializers import EventSerializerMixin
+from event.serializers import PickSessionSerializerMixin
 from exceptions.models import AFTException, AFTExceptionCode
 from exceptions.serializers import AFTExceptionSerializer
 from exceptions.utils import sort_exceptions
@@ -23,7 +23,7 @@ FAILED_SPLIT_MSG = "Failed to split into service and index"
 EXC_EXT_FAIL_MSG = "Error extracting exceptions"
 
 
-class ErrorReportSerializer(TaggitSerializer, EventSerializerMixin, ReportSerializerBase):
+class ErrorReportSerializer(TaggitSerializer, PickSessionSerializerMixin, ReportSerializerBase):
     """Serializer for the ErrorReport model"""
     report_type = "error"
     
@@ -107,6 +107,7 @@ class ErrorReportSerializer(TaggitSerializer, EventSerializerMixin, ReportSerial
         githash = report['data'].get('githash') or DEFAULT_UNKNOWN
         gitbranch = report['data'].get('branch_name') or DEFAULT_UNKNOWN
         UUID = report['data'].get("uuid", None)
+        pick_session_uuid = self.extract_uuid(report, "pick_session_uuid")
         if UUID is None:
             UUID = Event.generate_uuid()
         data = {
@@ -118,6 +119,7 @@ class ErrorReportSerializer(TaggitSerializer, EventSerializerMixin, ReportSerial
             'githash': githash,
             'gitbranch': gitbranch,
             'tags': tags,
+            'pick_session_uuid': pick_session_uuid,
         }
         return super().to_internal_value(data)
 

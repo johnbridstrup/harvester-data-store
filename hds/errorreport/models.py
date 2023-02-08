@@ -1,12 +1,12 @@
 from django.db import models
 from common.reports import ReportBase
-from event.models import EventModelMixin
+from event.models import PickSessionModelMixin
 from exceptions.utils import sort_exceptions
 
 DEFAULT_UNKNOWN = "unknown"
 
 
-class ErrorReport(EventModelMixin, ReportBase):
+class ErrorReport(PickSessionModelMixin, ReportBase):
     """ ErrorReport Model """
     githash = models.CharField(max_length=20, default=DEFAULT_UNKNOWN)
     gitbranch = models.CharField(max_length=50, default=DEFAULT_UNKNOWN)

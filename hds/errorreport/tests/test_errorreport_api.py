@@ -6,7 +6,7 @@ from common.tests import HDSAPITestBase, create_user
 from common.reports import DTimeFormatter
 from harvester.models import Harvester
 from hds.roles import RoleChoices
-from event.models import Event
+from event.models import Event, PickSession
 from exceptions.models import AFTException
 from ..models import ErrorReport, DEFAULT_UNKNOWN
 from ..serializers.errorreportserializer import ErrorReportSerializer, FAILED_SPLIT_MSG
@@ -71,6 +71,11 @@ class ErrorReportAPITest(HDSAPITestBase):
         r = self.client.post(f'{self.api_base_url}/errorreports/', self.data, format='json', HTTP_ACCEPT='application/json')
 
         self.assertEqual(UUID, r.json()['data']['event']['UUID'])
+
+    def test_event_and_picksess_created(self):
+        self._post_error_report()
+        self.assertEqual(Event.objects.count(), 1)
+        self.assertEqual(PickSession.objects.count(), 1)
 
     def test_create_errorreport_with_invalid_harvester(self):
         """ create error report with invalid harvester """
