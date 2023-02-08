@@ -29,3 +29,13 @@ autodiag:
   destination: !ENV http://localhost:${HDS_PORT}/api/v1/autodiagnostics/
   s3-event-payload: true
   s3-delete: true
+configs:
+  queue: !ENV ${AFTCONFIGS_QUEUE_URL}
+  destination: !ENV http://localhost:${HDS_PORT}/api/v1/aftconfigs/
+  s3-event-payload: true
+  s3-delete: true
+grip_reports:
+  queue: !ENV ${GRIPREPORT_QUEUE_URL}
+  destination: !ENV http://localhost:${HDS_PORT}/api/v1/gripreports/
+  s3-event-payload: true
+  s3-delete: true

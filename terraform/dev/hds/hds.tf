@@ -65,6 +65,8 @@ module "hds" {
   s3files_queue_url         = data.aws_sqs_queue.file_queue.url
   versions_queue_url        = data.aws_sqs_queue.versions_queue.url
   jobresults_queue_url      = data.aws_sqs_queue.jobresults_queue.url
+  config_queue_url          = data.aws_sqs_queue.configs_queue.url
+  grip_queue_url            = data.aws_sqs_queue.grip_queue.url
   migrate_flag              = local.migrate
   s3_bucket                 = local.bucket
 }

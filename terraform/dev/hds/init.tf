@@ -83,6 +83,9 @@ locals {
   jobresults_queue_name      = "hds-jobresults-queue"
   versions_queue_name        = "hds-versions-queue"
   autodiagnostics_queue_name = "hds-autodiagnostics-queue"
+  configs_queue_name         = "hds-config-queue"
+  grip_queue_name            = "hds-gripreport-queue"
+
 }
 
 data "aws_s3_bucket" "data-lake" {
@@ -113,6 +116,14 @@ data "aws_sqs_queue" "jobresults_queue" {
   name = local.jobresults_queue_name
 }
 
+data "aws_sqs_queue" "configs_queue" {
+  name = local.configs_queue_name
+}
+
+data "aws_sqs_queue" "grip_queue" {
+  name = local.grip_queue_name
+}
+
 data "aws_iam_policy_document" "poll_queues" {
   statement {
     actions = [
@@ -126,6 +137,8 @@ data "aws_iam_policy_document" "poll_queues" {
       data.aws_sqs_queue.sessclip_queue.arn,
       data.aws_sqs_queue.versions_queue.arn,
       data.aws_sqs_queue.jobresults_queue.arn,
+      data.aws_sqs_queue.configs_queue.arn,
+      data.aws_sqs_queue.grip_queue.arn,
     ]
     effect = "Allow"
   }

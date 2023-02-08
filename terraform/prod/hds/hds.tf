@@ -7,7 +7,7 @@ locals {
   service_name             = "hds"
   service_docker_image     = "838860823423.dkr.ecr.us-west-1.amazonaws.com/hds:hds-staging-63d3896"
   healthcheck_path         = "/api/v1/healthcheck/"
-  sqs_client_metrics_ports = [9104, 9105, 9106, 9107, 9108, 9109]
+  sqs_client_metrics_ports = [9104, 9105, 9106, 9107, 9108, 9109, 9110]
   enable_prometheus_scrape = true
   service_container_memory = 4096
   service_container_cpu    = 2048
@@ -67,6 +67,8 @@ module "hds" {
   s3files_queue_url         = data.aws_sqs_queue.file_queue.url
   versions_queue_url        = data.aws_sqs_queue.versions_queue.url
   jobresults_queue_url      = data.aws_sqs_queue.jobresults_queue.url
+  config_queue_url          = data.aws_sqs_queue.configs_queue.url
+  grip_queue_url            = data.aws_sqs_queue.grip_queue.url
   migrate_flag              = local.migrate
   s3_bucket                 = local.bucket
 }

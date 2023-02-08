@@ -244,7 +244,7 @@ variable "migrate_flag" {
 
 variable "s3_bucket" {
   description = "Name of the S3 bucket for static and media files"
-  type = string
+  type        = string
 }
 
 # SQS QUEUES
@@ -276,5 +276,15 @@ variable "versions_queue_url" {
 
 variable "jobresults_queue_url" {
   description = "URL for jobresults queue"
+  type        = string
+}
+
+variable "grip_queue_url" {
+  description = "URL for grip report queue"
+  type        = string
+}
+
+variable "config_queue_url" {
+  description = "URL for grip report queue"
   type        = string
 }

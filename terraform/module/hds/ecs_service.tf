@@ -46,10 +46,11 @@ locals {
     { "name" : "SESSCLIP_QUEUE_URL", "value" : var.sessclip_queue_url },
     { "name" : "HARVVERSION_QUEUE_URL", "value" : var.versions_queue_url },
     { "name" : "JOBRESULTS_QUEUE_URL", "value" : var.jobresults_queue_url },
+    { "name" : "AFTCONFIGS_QUEUE_URL", "value" : var.config_queue_url },
+    { "name" : "GRIPREPORT_QUEUE_URL", "value" : var.grip_queue_url },
     { "name" : "MIGRATE", "value" : var.migrate_flag },
     { "name" : "GITHASH", "value" : module.git_info.commit_hash },
-    { "name" : "AWS_STORAGE_BUCKET_NAME", "value": var.s3_bucket },
-    { "name" : "HDS_API_ROOT", "value" : var.service_dns_name },
+    { "name" : "AWS_STORAGE_BUCKET_NAME", "value" : var.s3_bucket },
     { "name" : "USES3", "value" : "true" },
   ]
 }
