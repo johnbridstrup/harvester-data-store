@@ -60,6 +60,15 @@ class Event(TaggedUUIDModelFactory('Event')):
     """
     pass
 
+
+class PickSession(TaggedUUIDModelFactory('PickSession')):
+    """Abstraction of "pick sessions" so we can link reports that occur
+    at different times during picking to each other. 
+
+    E.g.; grip and autodiagnostics reports.
+    """
+    pass
+
     
 class EventModelMixin(models.Model):
     """Mixin class for models that are associated with events.
@@ -69,6 +78,18 @@ class EventModelMixin(models.Model):
     @property
     def event_uuid(self):
         return self.event.UUID
+
+    class Meta:
+        abstract = True
+
+
+class PickSessionModelMixin(EventModelMixin): # PickSession object uploads are ALSO events
+    # Must allow blank/null due to existing reports in database.
+    pick_session = models.ForeignKey(PickSession, on_delete=models.CASCADE, null=True, blank=True)
+
+    @property
+    def pick_session_uuid(self):
+        return self.pick_session.UUID
 
     class Meta:
         abstract = True

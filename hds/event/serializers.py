@@ -2,7 +2,7 @@ from collections import Iterable
 from django.contrib.auth.models import User
 from rest_framework import serializers
 from taggit.serializers import TagListSerializerField
-from .models import Event
+from .models import Event, PickSession
 
 import logging
 
@@ -86,6 +86,23 @@ class EventSerializer(TaggedUUIDSerializerBase):
         return True
 
 
+class PickSessionSerializer(TaggedUUIDSerializerBase):
+    class Meta:
+        model = PickSession
+        fields = ('__all__')
+        read_only_fields = ('creator',)
+
+    def related_objects(self):
+        return [
+            ("errorreport", "errorreports", "Error Report"),
+            ("gripreport", "gripreports", "Grip Report"),
+            ("autodiagnosticsreport", "autodiagnostics", "Autodiagnostics Report"),
+        ]
+
+    def has_related_files(self) -> bool:
+        return False
+
+
 class EventSerializerMixin(serializers.Serializer):
     # Automatically serialize events in responses
     def to_representation(self, instance):
@@ -99,5 +116,17 @@ class EventSerializerMixin(serializers.Serializer):
         data['event'] = TaggedUUIDSerializerBase.get_or_create_uuid_tagged_obj(self, data, Event, "UUID")
         return super().to_internal_value(data)
 
-    
+
+class PickSessionSerializerMixin(EventSerializerMixin): # Pick session uploads are also events
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+
+        pick_session = PickSessionSerializer(instance=instance.pick_session)
+        data['pick_session'] = pick_session.data
+        return data
+
+    def to_internal_value(self, data):
+        data['pick_session'] = TaggedUUIDSerializerBase.get_or_create_uuid_tagged_obj(self, data, PickSession, "pick_session_uuid")
+
+        return super().to_internal_value(data)
     
