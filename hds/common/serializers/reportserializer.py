@@ -82,12 +82,12 @@ class ReportSerializerBase(serializers.ModelSerializer):
         return datetime.datetime.fromtimestamp(report[key]).strftime('%Y-%m-%d %H:%M:%S.%f')
 
     @classmethod
-    def extract_uuid(cls, report):
+    def extract_uuid(cls, report, key="uuid"):
         try:
-            UUID = report["uuid"]
+            UUID = report[key]
         except KeyError:
             try:
-                UUID = report["data"].get("uuid", None)
+                UUID = report["data"].get(key, None)
             except AttributeError: # some reports have lists in data key
                 UUID = Event.generate_uuid()
         if UUID is None:
