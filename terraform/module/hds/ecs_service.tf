@@ -49,6 +49,7 @@ locals {
     { "name" : "MIGRATE", "value" : var.migrate_flag },
     { "name" : "GITHASH", "value" : module.git_info.commit_hash },
     { "name" : "AWS_STORAGE_BUCKET_NAME", "value": var.s3_bucket },
+    { "name" : "HDS_API_ROOT", "value" : var.service_dns_name },
     { "name" : "USES3", "value" : "true" },
   ]
 }

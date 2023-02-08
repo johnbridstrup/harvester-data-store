@@ -19,9 +19,9 @@ RUN apt update && apt install -y\
     && rm -rf /var/lib/apt/lists/*
 
 # SQS-client
-COPY debian_packages/aft-sqs-client_0.3-1_all.deb /opt/app/
-RUN dpkg -i /opt/app/aft-sqs-client_0.3-1_all.deb
-RUN rm /opt/app/aft-sqs-client_0.3-1_all.deb
+COPY debian_packages/aft-sqs-client_1.0-1_all.deb /opt/app/
+RUN dpkg -i /opt/app/aft-sqs-client_1.0-1_all.deb
+RUN rm /opt/app/aft-sqs-client_1.0-1_all.deb
 
 # Install pip packages
 COPY requirements.txt /opt/app/
@@ -29,6 +29,7 @@ RUN pip install -r requirements.txt --no-cache-dir
 
 # Copy source, scripts and configs
 COPY scripts/ /opt/app/scripts/
+COPY sqs.yml /opt/app/sqs.yml
 COPY supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY hds /opt/app/hds/
 
