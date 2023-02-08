@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import PropTypes from "prop-types";
 import { ClipboardDiv } from "../styled";
 import { darkThemeClass } from "utils/utils";
+import { API_URL } from "features/base/constants";
 
 function CopyToClipboard(props) {
   const [copied, setCopied] = useState(false);
@@ -23,9 +24,7 @@ function CopyToClipboard(props) {
     if (typeof queryUrl === "string" && queryUrl.length > 0) {
       await copy(queryUrl);
     } else {
-      let public_url =
-        process.env.REACT_APP_HOSTED_URL || "http://localhost:3000";
-      await copy(public_url + "/errorreports");
+      await copy(API_URL + "/errorreports");
     }
   };
   const btn = darkThemeClass("btn-dark", theme);

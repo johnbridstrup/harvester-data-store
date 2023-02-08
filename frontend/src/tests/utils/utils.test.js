@@ -19,8 +19,10 @@ import {
   transformSysmonKeys,
   transformErroredServices,
   extractServiceCodes,
+  copiedUrl,
 } from "utils/utils";
 import errorreport from "test-utils/test-data/errorreport.json";
+import { API_URL } from "features/base/constants";
 
 test("should do binary search for given timestamp", () => {
   let content = [
@@ -314,4 +316,14 @@ describe("error report transformation block scope", () => {
     };
     expect(output).toMatchObject(expected);
   });
+});
+
+test("should return api url with query string", () => {
+  let queryObj = {
+    harv_ids: [11],
+    locations: ["Ranch A"],
+  };
+  let expected = `${API_URL}/errorreports/?harv_ids=11&locations=Ranch+A`;
+
+  expect(copiedUrl(queryObj)).toBe(expected);
 });

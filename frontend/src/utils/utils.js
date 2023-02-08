@@ -1,4 +1,5 @@
 import {
+  API_URL,
   LOG_MSG_PATTERN,
   LOG_STR_PATTERN,
   MASTER_ROBOT,
@@ -186,12 +187,14 @@ export const paramsToObject = (params) => {
   return result;
 };
 
+/**
+ * return the api url with optional query string
+ * @param {object} paramsObj
+ * @returns {String}
+ */
 export const copiedUrl = (paramsObj) => {
-  const port = process.env.REACT_APP_FRONTEND_PORT || 3000;
-  const public_url =
-    process.env.REACT_APP_HOSTED_URL || `http://localhost:${port}`;
   const searchParams = new URLSearchParams(paramsObj);
-  return `${public_url}/errorreports/?${searchParams.toString()}`;
+  return `${API_URL}/errorreports/?${searchParams.toString()}`;
 };
 
 export const transformReportDetail = (report = {}) => {
