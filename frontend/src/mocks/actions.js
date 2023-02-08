@@ -7,6 +7,8 @@ import { LOGIN_URL } from "features/auth/authService";
 import { NOTIFICATION_URL } from "features/notification/notificationService";
 import { LOGSESSION_URL } from "features/logparser/logparserService";
 import { MIGRATION_URL } from "features/migration/migrationService";
+import { S3FILE_URL } from "features/s3file/s3fileService";
+import { EVENTS_URL } from "features/event/eventService";
 
 let genericListResponse = {
   status: "success",
@@ -101,4 +103,87 @@ export const listMigrations = rest.get(MIGRATION_URL, (req, res, ctx) => {
     },
   ];
   return res(ctx.json(genericListResponse));
+});
+
+export const listS3Files = rest.get(S3FILE_URL, (req, res, ctx) => {
+  genericListResponse["message"] = "s3file retrieved successfully";
+  genericListResponse["data"]["results"] = [
+    {
+      id: 1,
+      created: "2022-08-26T22:29:25.915000Z",
+      lastModified: "2023-02-07T12:45:26.388466Z",
+      file: "http://localhost:8085/media/fake",
+      filetype: "fake",
+      key: "fake",
+      creator: 1,
+      modifiedBy: null,
+      event: {
+        id: 3,
+        tags: [],
+        created: "2022-08-25T22:58:43.804000Z",
+        lastModified: "2022-08-25T22:58:43.804000Z",
+        UUID: "77f6a03c-24c9-11ed-bb17-f9799c718175",
+        creator: 1,
+        modifiedBy: null,
+        related_objects: [
+          {
+            url: "/errorreports/3/",
+            object: "Error Report",
+          },
+        ],
+        related_files: [
+          {
+            url: null,
+            filetype: "fake",
+          },
+        ],
+      },
+    },
+  ];
+
+  return res(ctx.json(genericListResponse));
+});
+
+export const getS3File = rest.get(`${S3FILE_URL}:s3fileId`, (req, res, ctx) => {
+  genericGetResponse["message"] = "s3file retrieved successfully";
+  genericGetResponse["data"] = {
+    id: 1,
+    created: "2022-08-26T22:29:25.915000Z",
+    lastModified: "2023-02-07T12:45:26.388466Z",
+    file: "http://localhost:8085/media/fake",
+    filetype: "fake",
+    key: "fake",
+    creator: 1,
+    modifiedBy: null,
+    event: {
+      id: 3,
+      tags: [],
+      created: "2022-08-25T22:58:43.804000Z",
+      lastModified: "2022-08-25T22:58:43.804000Z",
+      UUID: "77f6a03c-24c9-11ed-bb17-f9799c718175",
+      creator: 1,
+      modifiedBy: null,
+      related_objects: [
+        {
+          url: "/errorreports/3/",
+          object: "Error Report",
+        },
+      ],
+      related_files: [
+        {
+          url: null,
+          filetype: "fake",
+        },
+      ],
+    },
+  };
+  return res(ctx.json(genericGetResponse));
+});
+
+export const eventTags = rest.get(`${EVENTS_URL}tags`, (req, res, ctx) => {
+  genericGetResponse["message"] = "Event tags";
+  genericGetResponse["data"] = {
+    tags: ["Incomplete", "Invalid", "Unset"],
+  };
+  return res(ctx.json(genericGetResponse));
 });
