@@ -97,13 +97,34 @@ export const listMigrations = rest.get(MIGRATION_URL, (req, res, ctx) => {
       endTime: "2022-12-21T15:08:56.092396Z",
       output:
         "Operations to perform:\n  Apply all migrations: admin, auth, authtoken, common, contenttypes, django_celery_results, errorreport, event, exceptions, harvdeploy, harvester, harvjobs, hdsmigrations, location, logparser, notifications, s3file, sessions, taggit\nRunning migrations:\n  No migrations to apply.\n",
-      githash: '"UNKNOWN"',
+      githash: "UNKNOWN",
       creator: 1,
       modifiedBy: null,
     },
   ];
   return res(ctx.json(genericListResponse));
 });
+
+export const getMigration = rest.get(
+  `${MIGRATION_URL}:migrationId`,
+  (req, res, ctx) => {
+    genericGetResponse["message"] = "migration retrieved successfully";
+    genericGetResponse["data"] = {
+      id: 1,
+      created: "2022-12-21T15:08:55.287624Z",
+      lastModified: "2022-12-21T15:08:56.092803Z",
+      result: "success",
+      startTime: "2022-12-21T15:08:55.327949Z",
+      endTime: "2022-12-21T15:08:56.092396Z",
+      output:
+        "Operations to perform:\n  Apply all migrations: admin, auth, authtoken, common, contenttypes, django_celery_results, errorreport, event, exceptions, harvdeploy, harvester, harvjobs, hdsmigrations, location, logparser, notifications, s3file, sessions, taggit\nRunning migrations:\n  No migrations to apply.\n",
+      githash: "UNKNOWN",
+      creator: 1,
+      modifiedBy: null,
+    };
+    return res(ctx.json(genericGetResponse));
+  }
+);
 
 export const listS3Files = rest.get(S3FILE_URL, (req, res, ctx) => {
   genericListResponse["message"] = "s3file retrieved successfully";

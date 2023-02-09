@@ -10,6 +10,7 @@ import {
   listS3Files,
   getS3File,
   eventTags,
+  getMigration,
 } from "./actions";
 
 export const handlers = [
@@ -17,6 +18,7 @@ export const handlers = [
   userNotification,
   logsession,
   listMigrations,
+  getMigration,
   listS3Files,
   getS3File,
   eventTags

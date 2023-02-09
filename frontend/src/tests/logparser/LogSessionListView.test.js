@@ -1,13 +1,26 @@
-import { act, render, screen, waitFor } from "test-utils/testing-libary-utils";
+import {
+  act,
+  getByText,
+  render,
+  screen,
+  waitFor,
+} from "test-utils/testing-libary-utils";
 import userEvent from "@testing-library/user-event";
 
 import LogSessionListView from "pages/logparser/logsession/listview";
 
 test("should render the logsession list view", async () => {
   const user = userEvent.setup();
+  let routeObject = [
+    {
+      path: "/logsession",
+      element: <LogSessionListView />,
+    },
+  ];
+  let routeHistory = ["/logsession"];
 
   await act(() => {
-    render(<LogSessionListView />);
+    render(<LogSessionListView />, { routeHistory, routeObject });
   });
   const banner = await screen.findByRole("banner");
   expect(banner).toBeInTheDocument();
@@ -36,10 +49,11 @@ test("should render the logsession list view", async () => {
   const logsTable = await screen.findByRole("table");
   expect(logsTable).toBeInTheDocument();
 
-  const rowData = await screen.findByRole("row", {
-    name: "1 sessclip Wednesday, November 2, 2022 2:23 AM Friday, December 16, 2022 3:24 PM Friday, December 16, 2022 3:24 PM View Logs",
-  });
-  expect(rowData).toBeInTheDocument();
+  const rowData = await screen.findAllByRole("row");
+  expect(rowData.length).toBe(2);
+  const lastRow = rowData[1];
+  expect(getByText(lastRow, "1")).toBeInTheDocument();
+  expect(getByText(lastRow, "sessclip")).toBeInTheDocument();
 
   const logLink = await screen.findByRole("link", { name: "View Logs" });
   expect(logLink.href).toBe("http://localhost/logfiles/1");

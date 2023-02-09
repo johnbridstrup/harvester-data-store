@@ -1,13 +1,20 @@
 import { act } from "react-dom/test-utils";
-import { render, screen } from "test-utils/testing-libary-utils";
+import { getByText, render, screen } from "test-utils/testing-libary-utils";
 import userEvent from "@testing-library/user-event";
 import MigrationListView from "pages/migration/listview";
 
 test("should render migrationlog list view", async () => {
   const user = userEvent.setup();
+  let routeObject = [
+    {
+      path: "/migrations",
+      element: <MigrationListView />,
+    },
+  ];
+  let routeHistory = ["/migrations"];
 
   await act(() => {
-    render(<MigrationListView />);
+    render(<MigrationListView />, { routeHistory, routeObject });
   });
 
   const banner = await screen.findByRole("banner");
@@ -26,6 +33,13 @@ test("should render migrationlog list view", async () => {
 
   const logsTable = await screen.findByRole("table");
   expect(logsTable).toBeInTheDocument();
+
+  const rowData = await screen.findAllByRole("row");
+  expect(rowData.length).toBe(2);
+  const lastRow = rowData[1];
+  expect(getByText(lastRow, "1")).toBeInTheDocument();
+  expect(getByText(lastRow, "success")).toBeInTheDocument();
+  expect(getByText(lastRow, "UNKNOWN")).toBeInTheDocument();
 
   const link = await screen.findByRole("link", { name: "success" });
   expect(link).toBeInTheDocument();

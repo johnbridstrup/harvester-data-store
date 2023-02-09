@@ -1,12 +1,26 @@
 import { act } from "react-dom/test-utils";
-import { render, screen } from "test-utils/testing-libary-utils";
-import MigrationDetail from "components/migration/MigrationDetail";
+import { getByText, render, screen } from "test-utils/testing-libary-utils";
+import MigrationDetailView from "pages/migration/detailview";
 
-test("should render the migrationlog detail component", async () => {
+test("should render the migration log detail view", async () => {
+  let routeObject = [
+    {
+      path: "/migrations/:migrationId",
+      element: <MigrationDetailView />,
+    },
+  ];
+  let routeHistory = ["/migrations/1"];
+
   await act(() => {
-    render(<MigrationDetail />);
+    render(<MigrationDetailView />, { routeHistory, routeObject });
   });
 
-  const detailComponent = await screen.getByTestId("detailComponent");
+  const header = screen.getByText("HDS Migration Log 1");
+  expect(header).toBeInTheDocument();
+
+  const detailComponent = screen.getByTestId("detailComponent");
   expect(detailComponent).toBeInTheDocument();
+  expect(getByText(detailComponent, "1")).toBeInTheDocument();
+  expect(getByText(detailComponent, "success")).toBeInTheDocument();
+  expect(getByText(detailComponent, "UNKNOWN")).toBeInTheDocument();
 });
