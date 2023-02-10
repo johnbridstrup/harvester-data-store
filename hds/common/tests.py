@@ -139,13 +139,20 @@ class HDSAPITestBase(APITestCase):
             self.user.user_permissions.add(perm)
         self.user = User.objects.get(id=1)
 
-    def create_fruit_object(self, name):
+    def create_fruit_object(self, name=None):
+        name = name or "strawberry"
         return Fruit.objects.create(name=name, creator=self.user)
 
     def create_distributor_object(self, name):
+        name = name or "test"
         return Distributor.objects.create(name=name, creator=self.user)
 
-    def create_location_object(self, distributor, ranch, country, region, creator):
+    def create_location_object(self, distributor=None, ranch=None, country=None, region=None, creator=None):
+        distributor = distributor or self.create_distributor_object()
+        ranch = ranch or "test ranch"
+        country = country or "USA"
+        region = region or "Philadelphia"
+        creator = creator or self.user
         return Location.objects.create(**{
             "distributor": distributor,
             "ranch": ranch,
@@ -154,7 +161,13 @@ class HDSAPITestBase(APITestCase):
             'creator': creator
         })
 
-    def create_harvester_object(self, harv_id, fruit, location, name, creator):
+    def create_harvester_object(self, harv_id, fruit=None, location=None, name=None, creator=None):
+        creator = None or self.user
+        fruit = fruit or self.create_fruit_object()
+        location = location or self.create_location_object()
+        name = name or "test-harv"
+        creator = creator or self.user
+
         return Harvester.objects.create(**{
             'harv_id': harv_id,
             'fruit': fruit,
