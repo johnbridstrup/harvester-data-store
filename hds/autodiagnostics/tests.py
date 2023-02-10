@@ -83,6 +83,13 @@ class AutodiagnosticsApiTestCase(HDSAPITestBase):
         self.assertNotEqual(self.ad_data['data'], report.report['data'])
         self.assertDictContainsSubset(report.report['data'], self.ad_data['data'])
 
+    def test_run_data(self):
+        init_resp_data = self._post_autodiag_report()
+        self.assertIsNone(init_resp_data['data']['run_data'])
+        r = self.client.get(self.url)
+        data = r.json()['data']['results'][0]
+        self.assertIsNotNone(data['run_data'])
+
     def test_get_runs(self):
         self._post_autodiag_report()
         r = self.client.get(self.run_url)

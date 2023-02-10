@@ -21,6 +21,7 @@ class AutodiagnosticsRunSerializer(serializers.ModelSerializer):
 
 
 class AutodiagnosticsReportSerializer(TaggitSerializer, PickSessionSerializerMixin, ReportSerializerBase):
+    run_data = AutodiagnosticsRunSerializer(read_only=True)
     class Meta:
         model = AutodiagnosticsReport
         fields = ('__all__')
