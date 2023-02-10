@@ -819,24 +819,32 @@ export const findLogIndex = (content = [], obj = {}) => {
 /**
  * Match pattern for log message
  *
- * @param {string} logMessage
+ * @param {String} logMessage
+ * @param {String} ext
  * @returns {object} log object
  */
-export const logContent = (logMessage = "") => {
+export const logContent = (logMessage = "", ext = ".log") => {
   let logObj = {};
+  let splittedArr;
 
-  let wholeMatch = logMessage.match(LOG_STR_PATTERN);
-  if (wholeMatch) {
-    let splittedArr = wholeMatch[0].split(" ");
-
+  if (ext === ".log") {
+    let wholeMatch = logMessage.match(LOG_STR_PATTERN);
+    if (wholeMatch) {
+      splittedArr = wholeMatch[0].split(" ");
+      logObj["timestamp"] = splittedArr[0].replace("[", "").replace("]", "");
+      logObj["log_level"] = splittedArr[1].replace("[", "").replace("]", "");
+      logObj["service"] = splittedArr[2].replace("[", "").replace("]", "");
+    }
+    let logMatch = logMessage.match(LOG_MSG_PATTERN);
+    if (logMatch) {
+      logObj["log"] = logMatch[0];
+    }
+  } else if (ext === ".dump") {
+    splittedArr = logMessage.split("  ");
     logObj["timestamp"] = splittedArr[0].replace("[", "").replace("]", "");
-    logObj["log_level"] = splittedArr[1].replace("[", "").replace("]", "");
-    logObj["service"] = splittedArr[2].replace("[", "").replace("]", "");
-  }
-
-  let logMatch = logMessage.match(LOG_MSG_PATTERN);
-  if (logMatch) {
-    logObj["log"] = logMatch[0];
+    logObj["log_level"] = splittedArr[1];
+    logObj["service"] = splittedArr[2];
+    logObj["log"] = splittedArr[3];
   }
 
   return logObj;

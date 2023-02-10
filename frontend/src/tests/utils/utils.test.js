@@ -179,15 +179,23 @@ test("should return the index of logs", () => {
 });
 
 test("should match and return log message into 4 parts", () => {
-  let logMessage =
+  let logMsg =
     "[20220208T105000.014] [DEBUG] [autodrive.beh.fsm] -- Vpos: 99715.06447550641";
-  let output = {
+  let dumpMsg = "[20230131T131313.522260]  rcan0  282  0B 00 00 00 3B F5 FF FF";
+  let output1 = {
     timestamp: "20220208T105000.014",
     log_level: "DEBUG",
     service: "autodrive.beh.fsm",
     log: "-- Vpos: 99715.06447550641",
   };
-  expect(logContent(logMessage)).toMatchObject(output);
+  let output2 = {
+    timestamp: "20230131T131313.522260",
+    log_level: "rcan0",
+    service: "282",
+    log: "0B 00 00 00 3B F5 FF FF",
+  };
+  expect(logContent(logMsg, ".log")).toMatchObject(output1);
+  expect(logContent(dumpMsg, ".dump")).toMatchObject(output2);
 });
 
 test("should build query object", () => {

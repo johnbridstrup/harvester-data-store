@@ -5,7 +5,10 @@ import { logContent } from "utils/utils";
 
 export const LogHighlighter = (props) => {
   const { logIndex, log, handleClick, className } = props;
-  const logObj = useMemo(() => logContent(log.log_message), [log.log_message]);
+  const logObj = useMemo(
+    () => logContent(log.log_message, log.logfile_type),
+    [log.log_message, log.logfile_type]
+  );
   let levelClassName =
     logObj.log_level === LOG_LEVEL.DEBUG
       ? "text-primary"
