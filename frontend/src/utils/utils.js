@@ -1102,3 +1102,12 @@ export const monacoOptions = {
 export const getAftConfigKeys = (config = {}) => {
   return Object.keys(config);
 };
+
+/**
+ * sleep for given miliseconds
+ * @param {Number} ms
+ * @returns
+ */
+export const sleep = (ms = 100) => {
+  return new Promise((resolve, reject) => setTimeout(resolve, ms));
+};
