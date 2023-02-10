@@ -20,6 +20,7 @@ import {
   transformErroredServices,
   extractServiceCodes,
   copiedUrl,
+  getAftConfigKeys,
 } from "utils/utils";
 import errorreport from "test-utils/test-data/errorreport.json";
 import { API_URL } from "features/base/constants";
@@ -334,4 +335,22 @@ test("should return api url with query string", () => {
   let expected = `${API_URL}/errorreports/?harv_ids=11&locations=Ranch+A`;
 
   expect(copiedUrl(queryObj)).toBe(expected);
+});
+
+describe("aftconfig transformation block scope", () => {
+  test("should transform config report keys into arrays", () => {
+    let config = {
+      0: {
+        overlay_diff: "diff",
+      },
+      1: {
+        overlay_diff: "diff",
+      },
+      2: {
+        overlay_diff: "diff",
+      },
+    };
+    let expected = ["0", "1", "2"];
+    expect(getAftConfigKeys(config)).toMatchObject(expected);
+  });
 });

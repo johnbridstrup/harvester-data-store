@@ -11,6 +11,8 @@ import {
   getS3File,
   eventTags,
   getMigration,
+  getHarvester,
+  listErrorReport,
 } from "./actions";
 
 export const handlers = [
@@ -22,4 +24,6 @@ export const handlers = [
   listS3Files,
   getS3File,
   eventTags,
+  getHarvester,
+  listErrorReport,
 ];

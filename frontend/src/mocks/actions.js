@@ -9,6 +9,8 @@ import { LOGSESSION_URL } from "features/logparser/logparserService";
 import { MIGRATION_URL } from "features/migration/migrationService";
 import { S3FILE_URL } from "features/s3file/s3fileService";
 import { EVENTS_URL } from "features/event/eventService";
+import { HARVESTERS_URL } from "features/harvester/harvesterService";
+import { ERROR_REPORT_URL } from "features/errorreport/errorreportService";
 
 let genericListResponse = {
   status: "success",
@@ -207,4 +209,162 @@ export const eventTags = rest.get(`${EVENTS_URL}tags`, (req, res, ctx) => {
     tags: ["Incomplete", "Invalid", "Unset"],
   };
   return res(ctx.json(genericGetResponse));
+});
+
+export const getHarvester = rest.get(
+  `${HARVESTERS_URL}:harvId`,
+  (req, res, ctx) => {
+    genericGetResponse["message"] = "harvester retrieved successfully";
+    genericGetResponse["data"] = {
+      id: 3,
+      created: "2022-04-26T10:07:18.334000Z",
+      lastModified: "2022-04-26T10:07:18.334000Z",
+      harv_id: 11,
+      name: "aft-harv011",
+      is_emulator: false,
+      thingName: null,
+      creator: 2,
+      modifiedBy: null,
+      fruit: {
+        name: "apple",
+      },
+      location: {
+        ranch: "Ranch B",
+      },
+      release: null,
+      harvester_history: "/harvesterhistory/?harv_id=11",
+      version_history: "versions/",
+      assets: "assets/",
+      config: "config/",
+      version: {
+        id: 2,
+        tags: [],
+        created: "2022-10-10T22:25:59.922000Z",
+        lastModified: "2022-11-10T20:53:14.953000Z",
+        reportTime: null,
+        report: {
+          data: {
+            master: {
+              dirty: {},
+              version: 1.0,
+            },
+            "robot.1": {
+              dirty: {},
+              version: 1.0,
+            },
+            "robot.2": {
+              dirty: {},
+              version: 1.0,
+            },
+            "stereo.1": {
+              dirty: {},
+              version: 1.0,
+            },
+            "stereo.2": {
+              dirty: {
+                dirty: "package",
+              },
+              version: 1.0,
+            },
+            serial_number: "011",
+          },
+          type: "version",
+        },
+        is_dirty: true,
+        has_unexpected: false,
+        creator: 1,
+        modifiedBy: null,
+        location: null,
+        harvester: 3,
+        conflicts: {
+          error: "No release",
+        },
+      },
+    };
+    return res(ctx.json(genericGetResponse));
+  }
+);
+
+export const listErrorReport = rest.get(ERROR_REPORT_URL, (req, res, ctx) => {
+  genericListResponse["message"] = "errorreport retrieved successfully";
+  genericListResponse["data"]["results"] = [
+    {
+      id: 6,
+      reportTime: "2022-09-20T03:56:52.933000Z",
+      harvester: {
+        harv_id: 11,
+      },
+      location: {
+        ranch: "Ranch B",
+      },
+      gitbranch: "unknown",
+      githash: "unknown",
+      event: 6,
+      exceptions: [
+        {
+          id: 6,
+          created: "2022-10-14T16:18:26.657000Z",
+          lastModified: "2023-01-18T19:42:16.857000Z",
+          service: "drivesys",
+          node: 0,
+          robot: 0,
+          traceback: "",
+          info: "Sevcon Controller Error",
+          timestamp: "2022-09-20T03:56:40.896000Z",
+          handled: true,
+          primary: true,
+          creator: 1,
+          modifiedBy: null,
+          code: {
+            id: 2,
+            created: "2022-07-22T16:59:37.819000Z",
+            lastModified: "2022-07-22T16:59:37.819000Z",
+            code: 0,
+            name: "AFTBaseException",
+            msg: "test",
+            team: "aft",
+            cycle: false,
+            operator_msg: "Please cycle the harvester",
+            creator: 1,
+            modifiedBy: null,
+            manifest: null,
+          },
+          report: 6,
+        },
+        {
+          id: 7,
+          created: "2022-10-14T16:18:26.663000Z",
+          lastModified: "2022-10-14T16:18:26.663000Z",
+          service: "harvester",
+          node: 0,
+          robot: 0,
+          traceback: "",
+          info: "Sevcon Controller Error",
+          timestamp: "2022-09-20T03:56:40.896000Z",
+          handled: false,
+          primary: false,
+          creator: 1,
+          modifiedBy: null,
+          code: {
+            id: 2,
+            created: "2022-07-22T16:59:37.819000Z",
+            lastModified: "2022-07-22T16:59:37.819000Z",
+            code: 0,
+            name: "AFTBaseException",
+            msg: "test",
+            team: "aft",
+            cycle: false,
+            operator_msg: "Please cycle the harvester",
+            creator: 1,
+            modifiedBy: null,
+            manifest: null,
+          },
+          report: 6,
+        },
+      ],
+      tags: [],
+    },
+  ];
+
+  return res(ctx.json(genericListResponse));
 });
