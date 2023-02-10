@@ -1,4 +1,4 @@
-import re
+import re, os
 import logging
 from rest_framework import serializers
 from logparser.models import LogFile, LogSession
@@ -97,9 +97,9 @@ class LogFileSerializer(serializers.ModelSerializer):
             "Failed date pattern match"
         ).inc()
         logging.error(f'No match for the line {entry}')
-    
+
     @classmethod
-    def _extract_lines(cls, file_iter, service, robot):
+    def _extract_lines(cls, file_iter, service, robot, ext):
         def create_content_dict(msg):
             date_obj = cls.convert_to_datetime(entry)
             if date_obj is None:
@@ -108,10 +108,11 @@ class LogFileSerializer(serializers.ModelSerializer):
                 'service': service,
                 'robot': robot,
                 'timestamp': date_obj.timestamp(),
+                'logfile_type': ext,
                 'log_date': str(date_obj),
                 'log_message': msg,
             }
-        
+
         content = []
         first = True
         entry = ""
@@ -126,11 +127,11 @@ class LogFileSerializer(serializers.ModelSerializer):
                     first = False
                     entry = line
                     continue
-                
+
                 entry = entry.rstrip().strip("\n")
                 if len(entry) == 0:
                     continue
-                
+
                 try:
                     content_dict = create_content_dict(entry)
                 except DateMatchError:
@@ -140,7 +141,7 @@ class LogFileSerializer(serializers.ModelSerializer):
                 entry = line
             else:
                 entry = entry + line
-        
+
         # append the last line
         entry = entry.rstrip().strip("\n")
         if len(entry) != 0:
@@ -161,7 +162,7 @@ class LogFileSerializer(serializers.ModelSerializer):
 
         """
         service, robot = cls.extract_service_robot(file.filename)
-        
+
         log_session = LogSession.objects.get(pk=zip_obj_id)
         log_file = LogFile(
           file_name=file.filename,
@@ -171,9 +172,10 @@ class LogFileSerializer(serializers.ModelSerializer):
           robot=robot
         )
         content = []
+        _, ext = os.path.splitext(file.filename)
 
         with thezip.open(file, "r") as file_iter:
-            content = cls._extract_lines(file_iter, service, robot)
-            
+            content = cls._extract_lines(file_iter, service, robot, ext)
+
         log_file.content = content
         log_file.save()

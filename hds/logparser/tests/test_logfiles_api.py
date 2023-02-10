@@ -28,7 +28,7 @@ class LogFileTestCase(LogBaseTestCase):
             numlines = len(f.readlines())
 
         with open(self.logpath, 'r') as f:
-            content = LogFileSerializer._extract_lines(f, 'test', 'test')
+            content = LogFileSerializer._extract_lines(f, 'test', 'test', '.test')
 
         self.assertEqual(numlines, len(content))
 
@@ -37,7 +37,7 @@ class LogFileTestCase(LogBaseTestCase):
             numlines = len(f.readlines())
 
         with open(self.canpath, 'r') as f:
-            content = LogFileSerializer._extract_lines(f, 'test', 'test')
+            content = LogFileSerializer._extract_lines(f, 'test', 'test', '.test')
 
         self.assertEqual(numlines, len(content))
 
