@@ -1,6 +1,7 @@
 from django.urls import reverse
 from rest_framework import status
 
+from common.reports import DTimeFormatter
 from common.tests import HDSAPITestBase
 from event.models import Event, PickSession
 from harvassets.models import HarvesterAssetType, HarvesterAsset
@@ -15,6 +16,7 @@ class AutodiagnosticsApiTestCase(HDSAPITestBase):
         self.test_objects = self._setup_basic()
         self.update_user_permissions_all(AutodiagnosticsReport)
         self.url = reverse("autodiagnostics-list")
+        self.run_url = reverse("autodiagnosticsrun-list")
     
     def test_basic(self):
         self._post_autodiag_report()
@@ -80,4 +82,94 @@ class AutodiagnosticsApiTestCase(HDSAPITestBase):
 
         self.assertNotEqual(self.ad_data['data'], report.report['data'])
         self.assertDictContainsSubset(report.report['data'], self.ad_data['data'])
+
+    def test_get_runs(self):
+        self._post_autodiag_report()
+        r = self.client.get(self.run_url)
+        self.assertEqual(r.status_code, status.HTTP_200_OK)
+
+        r = self.client.get(f"{self.run_url}1/")
+        self.assertEqual(r.status_code, status.HTTP_200_OK)
+
+    def test_filter_gripper_sn(self):
+        self._post_autodiag_report()
+        self.ad_data['data']['serial_no'] = "23"
+        self._post_autodiag_report(load=False)
+        self.ad_data['data']['serial_no'] = "77"
+        self._post_autodiag_report(load=False)
+        r_all = self.client.get(self.run_url)
+        self.assertEqual(r_all.json()['data']['count'], 3)
+        r = self.client.get(f"{self.run_url}?gripper_sns=23,77")
+        self.assertEqual(r.json()['data']['count'], 2)
+
+    def test_filter_harv_id(self):
+        self.create_harvester_object(harv_id=101)
+        self.create_harvester_object(harv_id=201)
+        self._post_autodiag_report()
+        self.ad_data['serial_number'] = "101"
+        self._post_autodiag_report(load=False)
+        self.ad_data['serial_number'] = "201"
+        self._post_autodiag_report(load=False)
+        r_all = self.client.get(self.run_url)
+
+        self.assertEqual(r_all.json()['data']['count'], 3)
+        r = self.client.get(f"{self.run_url}?harv_ids=101,201")
+        self.assertEqual(r.json()['data']['count'], 2)
+
+    def test_filter_result(self):
+        self._post_autodiag_report()
+        self.ad_data['data']['passed_autodiag'] = False
+        self._post_autodiag_report(load=False)
+
+        r_all = self.client.get(self.run_url)
+        self.assertEqual(r_all.json()['data']['count'], 2)
         
+        r = self.client.get(f"{self.run_url}?result=True")
+        self.assertEqual(r.json()['data']['count'], 1)
+
+    def test_filter_datetime_range(self):
+        self._post_autodiag_report()
+        rep1_ts = self.ad_data['data']['ts']
+
+        self.ad_data['data']['ts'] += 1000
+        self._post_autodiag_report(load=False)
+        rep2_ts = self.ad_data['data']['ts']
+        
+        r_all = self.client.get(self.run_url)
+        self.assertEqual(r_all.json()['data']['count'], 2)
+
+        # Check gets first report
+        start_dt_str = DTimeFormatter.localize_to_tz(rep1_ts-100)
+        end_dt_str = DTimeFormatter.localize_to_tz(rep2_ts-100)
+        r2 = self.client.get(f"{self.run_url}?datetime_range={start_dt_str},{end_dt_str}")
+        self.assertEqual(r2.json()['data']['count'], 1)
+        self.assertEqual(r2.json()['data']['results'][0]['id'], 1)
+
+        # Check gets second report
+        start_dt_str = DTimeFormatter.localize_to_tz(rep1_ts+100)
+        end_dt_str = DTimeFormatter.localize_to_tz(rep2_ts+100)
+        r2 = self.client.get(f"{self.run_url}?datetime_range={start_dt_str},{end_dt_str}")
+        self.assertEqual(r2.json()['data']['count'], 1)
+        self.assertEqual(r2.json()['data']['results'][0]['id'], 2)
+
+    def test_filter_tmpl_match_result(self):
+        self._post_autodiag_report()
+        self.ad_data['data']['passed_autodiag_template_match'] = False
+        self._post_autodiag_report(load=False)
+
+        r_all = self.client.get(self.run_url)
+        self.assertEqual(r_all.json()['data']['count'], 2)
+        
+        r = self.client.get(f"{self.run_url}?template_match_result=True")
+        self.assertEqual(r.json()['data']['count'], 1)
+
+    def test_filter_ball_found_result(self):
+        self._post_autodiag_report()
+        self.ad_data['data']['passed_autodiag_ball_found'] = False
+        self._post_autodiag_report(load=False)
+
+        r_all = self.client.get(self.run_url)
+        self.assertEqual(r_all.json()['data']['count'], 2)
+        
+        r = self.client.get(f"{self.run_url}?ball_found_result=True")
+        self.assertEqual(r.json()['data']['count'], 1)

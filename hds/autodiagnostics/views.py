@@ -1,9 +1,10 @@
-from .models import AutodiagnosticsReport
-from .serializers import AutodiagnosticsReportSerializer
+from .filters import AutodiagnosticsRunFilter
+from .models import AutodiagnosticsReport, AutodiagnosticsRun
+from .serializers import AutodiagnosticsReportSerializer, AutodiagnosticsRunSerializer
 from .tasks import extract_autodiag_run
 
 from common.utils import make_ok
-from common.viewsets import ReportModelViewSet
+from common.viewsets import CreateModelViewSet, ReportModelViewSet
 
 from rest_framework.response import Response
 
@@ -33,3 +34,8 @@ class AutodiagnosticsReportView(ReportModelViewSet):
         super().perform_create(serializer)
         data = serializer.data
         extract_autodiag_run.delay(data["id"])
+
+class AutodiagnosticsRunView(CreateModelViewSet):
+    queryset = AutodiagnosticsRun.objects.all()
+    serializer_class = AutodiagnosticsRunSerializer
+    filterset_class = AutodiagnosticsRunFilter

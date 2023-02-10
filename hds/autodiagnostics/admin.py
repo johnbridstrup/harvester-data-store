@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import AutodiagnosticsReport
+from .models import AutodiagnosticsReport, AutodiagnosticsRun
 
 
 class AutodiagnosticsReportAdmin(admin.ModelAdmin):
@@ -8,4 +8,10 @@ class AutodiagnosticsReportAdmin(admin.ModelAdmin):
     search_fields = ('location__ranch', 'harvester__name', 'creator__username',)
 
 
+class AutodiagnosticsRunAdmin(admin.ModelAdmin):
+    list_display = ('run_timestamp', 'result',)
+    ordering = ('-run_timestamp',)
+
+
 admin.site.register(AutodiagnosticsReport, AutodiagnosticsReportAdmin)
+admin.site.register(AutodiagnosticsRun, AutodiagnosticsRunAdmin)

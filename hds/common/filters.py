@@ -5,12 +5,16 @@ from common.reports import DTimeFormatter, DEFAULT_TZ
 
 
 class ListFilter(Filter):
+    def __init__(self, field_type=str, field_name=None, lookup_expr=None, *, label=None, method=None, distinct=False, exclude=False, **kwargs):
+        self.field_type = field_type
+        super().__init__(field_name, lookup_expr, label=label, method=method, distinct=distinct, exclude=exclude, **kwargs)
+    
     def filter(self, qs, value):
         if not value:
             return qs
         
         self.lookup_expr = "in"
-        values = value.split(',')
+        values = [self.field_type(v) for v in value.split(',')]
         return super().filter(qs, values)
 
 

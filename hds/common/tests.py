@@ -143,7 +143,7 @@ class HDSAPITestBase(APITestCase):
         name = name or "strawberry"
         return Fruit.objects.create(name=name, creator=self.user)
 
-    def create_distributor_object(self, name):
+    def create_distributor_object(self, name=None):
         name = name or "test"
         return Distributor.objects.create(name=name, creator=self.user)
 

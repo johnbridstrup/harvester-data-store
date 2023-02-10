@@ -1,5 +1,5 @@
 from rest_framework import routers
-from .views import AutodiagnosticsReportView
+from ..views import AutodiagnosticsReportView
 
 
 router = routers.SimpleRouter()
