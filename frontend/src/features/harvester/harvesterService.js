@@ -1,8 +1,8 @@
 import { API_URL } from "../base/constants";
 import { axiosService } from "../base/service";
 
-const HARVESTERS_URL = `${API_URL}/harvesters/`;
-const HARVESTER_HISTORY_URL = `${API_URL}/harvesterhistory/`;
+export const HARVESTERS_URL = `${API_URL}/harvesters/`;
+export const HARVESTER_HISTORY_URL = `${API_URL}/harvesterhistory/`;
 
 const listHarvesters = async (token, limit = 10) => {
   let response = await axiosService.get(

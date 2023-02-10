@@ -1093,3 +1093,12 @@ export const monacoOptions = {
   wordWrapMinified: true,
   wrappingIndent: "none",
 };
+
+/**
+ * Get Config Report Keys from config object
+ * @param {object} config
+ * @returns
+ */
+export const getAftConfigKeys = (config = {}) => {
+  return Object.keys(config);
+};
