@@ -1,4 +1,4 @@
-from .serializers import EventSerializer
+from .serializers import EventSerializer, PickSessionSerializer
 
 from rest_framework.decorators import action
 from rest_framework.renderers import JSONRenderer
@@ -36,3 +36,7 @@ class TaggedUUIDViewBase(CreateModelViewSet):
 
 class EventView(TaggedUUIDViewBase):
     serializer_class = EventSerializer    
+
+
+class PickSessionView(TaggedUUIDViewBase):
+    serializer_class = PickSessionSerializer
