@@ -32,7 +32,7 @@ urlpatterns = [
     path(f'{version}/locations/', include('location.urls.locationurls')),
     path(f'{version}/distributors/', include('location.urls.distributorurls')),
     path(f'{version}/errorreports/', include('errorreport.urls')),
-    path(f'{version}/events/', include('event.urls')),
+    path(f'{version}/events/', include('event.urls.eventurls')),
     path(f'{version}/exceptioncodes/', include('exceptions.urls.exceptioncodeurls')),
     path(f'{version}/exceptioncodemanifests/', include('exceptions.urls.exceptioncodemanifesturls')),
     path(f'{version}/exceptions/', include('exceptions.urls.exceptionurls')),

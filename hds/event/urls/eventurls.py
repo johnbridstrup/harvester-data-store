@@ -1,5 +1,5 @@
 from rest_framework import routers
-from .views import EventView
+from ..views import EventView
 
 
 router = routers.SimpleRouter()
