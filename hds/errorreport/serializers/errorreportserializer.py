@@ -50,9 +50,6 @@ class ErrorReportSerializer(TaggitSerializer, PickSessionSerializerMixin, Report
                         "chrony_info": {"type": "object"},
                     },
                 },
-                # Match "info_<any word>"
-                # This allows new info to be added in a controlled way
-                "info_\S*": {"type": ["string", "number", "object"]},
             },
             # These properties have already been hard-coded elsewhere
             # and are used explicitly by hds
@@ -63,9 +60,6 @@ class ErrorReportSerializer(TaggitSerializer, PickSessionSerializerMixin, Report
                 "serial_number": {"type": ["number", "string"]}
             },
             "required": ["serial_number"],
-            # The below requires new additions to either be added to 
-            # HDS first or contain "info_"
-            "additionalProperties": False, 
         },
         "uuid": {
             "type": "string",

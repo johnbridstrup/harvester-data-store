@@ -44,7 +44,7 @@ class HarvesterVersionReportSerializer(TaggitSerializer, ReportSerializerBase):
                 {
                     "type": "object",
                     "properties": {
-                        "error": {"type": "string"}
+                        "error": {"type": ["string", "null"]}
                     },
                     "required": ["error"]
                 },

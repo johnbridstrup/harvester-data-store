@@ -413,14 +413,7 @@ class ErrorReportAPITest(HDSAPITestBase):
             format='json'
         )
 
-        # This won't fail to create, we can actually handle sysmon_0 now
-        self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
-
-        resp_data = resp.json()['data']
-        self.assertIn("tags", resp_data)
-        self.assertIn(Tags.INVALIDSCHEMA.value, resp_data['tags'])
-
-        # It will however fail if the timestamp isn't there
+        # It will fail if the timestamp isn't there
         del data['timestamp']
         resp = self.client.post(
             f'{self.api_base_url}/errorreports/',
