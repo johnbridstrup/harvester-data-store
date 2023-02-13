@@ -1,4 +1,3 @@
-from .models import Event
 from .serializers import EventSerializer
 
 from rest_framework.decorators import action
@@ -8,10 +7,8 @@ from common.viewsets import CreateModelViewSet
 from hds.roles import RoleChoices
 
 
-class EventView(CreateModelViewSet):
-    queryset = Event.objects.all()
-    serializer_class = EventSerializer
-    filterset_fields = ('UUID',)
+class TaggedUUIDViewBase(CreateModelViewSet):
+    filterset_fields = ("UUID",)
     ordering = ('-id',)
     view_permissions_update = {
         'get_tags': {
@@ -21,10 +18,8 @@ class EventView(CreateModelViewSet):
     }
 
     def get_queryset(self):
-        filter_dict = {}
-        if "UUID" in self.request.query_params:
-            filter_dict['UUID'] = self.request.query_params.get("UUID")
-        return self.queryset.filter(**filter_dict).order_by('-id').distinct()
+        model = self.serializer_class.Meta.model
+        return model.objects.all()
 
     @action(
         methods=["get"],
@@ -33,6 +28,11 @@ class EventView(CreateModelViewSet):
         renderer_classes=[JSONRenderer]
     )
     def get_tags(self, request):
-        queryset = Event.tags.all().values_list("name")
+        model = self.serializer_class.Meta.model
+        queryset = model.tags.all().values_list("name")
         tags = [tag[0] for tag in queryset]
         return make_ok("Event tags", {"tags": tags})
+
+
+class EventView(TaggedUUIDViewBase):
+    serializer_class = EventSerializer    
