@@ -36,6 +36,14 @@ export function BackButton(props) {
   );
 }
 
+export const HarvesterLink = (props) => {
+  return (
+    <Link to={`/harvesters/${props.harvester?.id}`}>
+      {props.harvester?.harv_id}
+    </Link>
+  );
+};
+
 DownloadButton.propTypes = {
   popUp: PropTypes.func,
   downloadRef: PropTypes.object,
@@ -44,4 +52,8 @@ DownloadButton.propTypes = {
 
 BackButton.propTypes = {
   theme: PropTypes.string,
+};
+
+HarvesterLink.propTypes = {
+  harvester: PropTypes.object,
 };

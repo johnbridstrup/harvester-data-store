@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
+import { HarvesterLink } from "components/common";
 import { darkThemeClass, timeStampFormat } from "utils/utils";
 
 function ErrorReportDetailTable(props) {
@@ -26,7 +27,9 @@ function ErrorReportDetailTable(props) {
                 <td>
                   {timeStampFormat(props.reportObj?.reportTime, props.timezone)}
                 </td>
-                <td>{props.reportObj?.harvester?.harv_id}</td>
+                <td>
+                  <HarvesterLink harvester={props.reportObj?.harvester} />
+                </td>
                 <td>{props.reportObj?.location?.ranch}</td>
                 <td>{props.reportObj?.code}</td>
                 <td>{props.reportObj?.service}</td>
