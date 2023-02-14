@@ -1,5 +1,13 @@
 [
 {
+    "model": "event.eventtag",
+    "pk": 1,
+    "fields": {
+        "tag": 1,
+        "content_object": 9
+    }
+},
+{
     "model": "event.event",
     "pk": 1,
     "fields": {
@@ -85,6 +93,36 @@
         "created": "2022-08-25T22:58:18.199Z",
         "lastModified": "2022-08-25T22:58:18.199Z",
         "UUID": "68b3aab6-24c9-12ed-bb17-f9799c718175"
+    }
+},
+{
+    "model": "event.event",
+    "pk": 9,
+    "fields": {
+        "creator": 1,
+        "modifiedBy": null,
+        "created": "2023-02-14T19:23:23.574Z",
+        "lastModified": "2023-02-14T19:23:23.574Z",
+        "UUID": "2115cd5a-765a-11ed-9d09-677a59a17003"
+    }
+},
+{
+    "model": "event.picksessiontag",
+    "pk": 1,
+    "fields": {
+        "tag": 1,
+        "content_object": 1
+    }
+},
+{
+    "model": "event.picksession",
+    "pk": 1,
+    "fields": {
+        "creator": 1,
+        "modifiedBy": null,
+        "created": "2023-02-14T19:23:23.547Z",
+        "lastModified": "2023-02-14T19:23:23.547Z",
+        "UUID": "2225cd5a-765a-11ed-9d09-677a59a17003"
     }
 }
 ]

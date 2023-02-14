@@ -204,6 +204,66 @@
     }
 },
 {
+    "model": "harvassets.historicalharvesterasset",
+    "pk": 9,
+    "fields": {
+        "id": 9,
+        "created": "2023-02-14T18:12:03.719Z",
+        "lastModified": "2023-02-14T18:12:03.719Z",
+        "index": 1,
+        "serial_number": "1298",
+        "version": null,
+        "creator": 1,
+        "modifiedBy": null,
+        "asset": 3,
+        "harvester": null,
+        "history_date": "2023-02-14T18:12:03.725Z",
+        "history_change_reason": null,
+        "history_type": "+",
+        "history_user": null
+    }
+},
+{
+    "model": "harvassets.historicalharvesterasset",
+    "pk": 10,
+    "fields": {
+        "id": 9,
+        "created": "2023-02-14T19:23:23.699Z",
+        "lastModified": "2023-02-14T19:23:23.699Z",
+        "index": 1,
+        "serial_number": "1298",
+        "version": null,
+        "creator": 1,
+        "modifiedBy": null,
+        "asset": 3,
+        "harvester": null,
+        "history_date": "2023-02-14T19:23:23.708Z",
+        "history_change_reason": null,
+        "history_type": "+",
+        "history_user": null
+    }
+},
+{
+    "model": "harvassets.historicalharvesterasset",
+    "pk": 11,
+    "fields": {
+        "id": 9,
+        "created": "2023-02-14T19:23:23.699Z",
+        "lastModified": "2023-02-14T19:30:16.962Z",
+        "index": 1,
+        "serial_number": "1298",
+        "version": null,
+        "creator": 1,
+        "modifiedBy": null,
+        "asset": 3,
+        "harvester": 3,
+        "history_date": "2023-02-14T19:30:16.963Z",
+        "history_change_reason": null,
+        "history_type": "~",
+        "history_user": 1
+    }
+},
+{
     "model": "harvassets.harvesterasset",
     "pk": 1,
     "fields": {
@@ -320,6 +380,21 @@
         "harvester": 3,
         "index": 2,
         "serial_number": "A2",
+        "version": null
+    }
+},
+{
+    "model": "harvassets.harvesterasset",
+    "pk": 9,
+    "fields": {
+        "creator": 1,
+        "modifiedBy": null,
+        "created": "2023-02-14T19:23:23.699Z",
+        "lastModified": "2023-02-14T19:30:16.962Z",
+        "asset": 3,
+        "harvester": 3,
+        "index": 1,
+        "serial_number": "1298",
         "version": null
     }
 }
