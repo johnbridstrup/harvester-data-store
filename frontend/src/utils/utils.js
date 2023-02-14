@@ -1111,3 +1111,99 @@ export const getAftConfigKeys = (config = {}) => {
 export const sleep = (ms = 100) => {
   return new Promise((resolve, reject) => setTimeout(resolve, ms));
 };
+
+/**
+ * Sorts the sensors array by timestamp
+ * @param {Array} arr
+ * @returns
+ */
+const sortByTimestamp = (arr = []) => {
+  return arr.sort((a, b) => a.ts - b.ts);
+};
+
+/**
+ *  revert back the sensors to original data structure
+ *  and perform necessary calculations
+ * @param {Array} sortedSensors
+ * @returns
+ */
+const revertOgShapeAndCalculate = (sortedSensors = []) => {
+  const originalFormat = new Map();
+  const t0 = sortedSensors[0]?.ts;
+
+  for (const sensor of sortedSensors) {
+    const values = originalFormat.get(sensor.state) || [];
+    values.push(sensor);
+    originalFormat.set(sensor.state, values);
+  }
+
+  const obj = {
+    values: [],
+    states: [],
+    timestamps: [],
+    ts_interval: [],
+  };
+
+  for (const [state, values] of originalFormat) {
+    for (const value of values) {
+      obj.states.push(state);
+      obj.values.push(value.value);
+      obj.timestamps.push(+(value.ts - t0).toFixed(7));
+    }
+    const diff = +(values[values.length - 1]?.ts - values[0]?.ts).toFixed(7);
+    const x0 = +(values[0].ts - t0).toFixed(7);
+    obj.ts_interval.push({
+      state,
+      x0,
+      diff,
+    });
+  }
+
+  for (let i = 0; i < obj.ts_interval.length; i++) {
+    if (obj.ts_interval[i + 1]) {
+      obj.ts_interval[i].x1 = obj.ts_interval[i + 1].x0;
+    } else {
+      obj.ts_interval[i].x1 = obj.ts_interval[i].x0 + obj.ts_interval[i].diff;
+    }
+    obj.ts_interval[i].max = Math.ceil(Math.max(...obj.values));
+    obj.ts_interval[i].min = Math.floor(Math.min(...obj.values));
+  }
+
+  return obj;
+};
+
+/**
+ * Transform sensors data object into required state
+ * @param {object} sensors
+ * @returns
+ */
+export const transformSensors = (sensors = {}) => {
+  const toSensorArray = (key, value, prop) => {
+    return value.reduce((acc, [ts, values]) => {
+      if (values[prop]) {
+        acc.push({ state: key, ts, value: values[prop] });
+      }
+      return acc;
+    }, []);
+  };
+
+  const sensorArrays = Object.entries(sensors).reduce(
+    (acc, [key, value]) => {
+      acc.touch.push(...toSensorArray(key, value, "touch"));
+      acc.vacuum.push(...toSensorArray(key, value, "vac"));
+      acc.finger.push(...toSensorArray(key, value, "finger"));
+      return acc;
+    },
+    { touch: [], vacuum: [], finger: [] }
+  );
+
+  const touch = revertOgShapeAndCalculate(sortByTimestamp(sensorArrays.touch));
+  const vacuum = revertOgShapeAndCalculate(
+    sortByTimestamp(sensorArrays.vacuum)
+  );
+  const finger = revertOgShapeAndCalculate(
+    sortByTimestamp(sensorArrays.finger)
+  );
+
+  return { touch, vacuum, finger };
+};
