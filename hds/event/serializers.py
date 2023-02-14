@@ -1,4 +1,3 @@
-from collections import Iterable
 from django.contrib.auth.models import User
 from rest_framework import serializers
 from taggit.serializers import TagListSerializerField
@@ -16,7 +15,7 @@ class TaggedUUIDSerializerBase(serializers.ModelSerializer):
     def has_related_files(self) -> bool:
         raise NotImplementedError(f"Must define has_related_files property for {self.__class__}")
 
-    
+
     def to_representation(self, instance):
         data = super().to_representation(instance)
         objs = []
@@ -31,7 +30,7 @@ class TaggedUUIDSerializerBase(serializers.ModelSerializer):
                 *s3files,
             ]
         return data
-    
+
     def _validate_related_obj_format(self):
         for rel_obj in self.related_objects():
             assert len(rel_obj) == 3, "Related object defintion should match [(model name, endpoint, type for response), ...]."
@@ -42,7 +41,7 @@ class TaggedUUIDSerializerBase(serializers.ModelSerializer):
             {
                 'url': f'/{endpoint}/{obj.id}/',
                 'object': object,
-            } 
+            }
         for obj in obj_set.all()]
 
     @staticmethod
@@ -61,10 +60,10 @@ class TaggedUUIDSerializerBase(serializers.ModelSerializer):
         try:
             obj.tags.add(called_by.Meta.model.__name__)
         except AttributeError:
-            # The serializer either doesn't have a Meta class or a 
+            # The serializer either doesn't have a Meta class or a
             # model associated with it.
             logging.exception(f"No Meta or model in {called_by.__class__.__name__}")
-        
+
         return obj.id
 
 
@@ -73,7 +72,7 @@ class EventSerializer(TaggedUUIDSerializerBase):
         model = Event
         fields = ('__all__')
         read_only_fields = ('creator',)
-    
+
     def related_objects(self):
         return [
             ("errorreport", "errorreports", "Error Report"),
@@ -81,7 +80,7 @@ class EventSerializer(TaggedUUIDSerializerBase):
             ("job", "jobs", "Job"),
             ("jobresults", "jobstatus", "Job Status"),
         ]
-    
+
     def has_related_files(self) -> bool:
         return True
 
@@ -107,11 +106,11 @@ class EventSerializerMixin(serializers.Serializer):
     # Automatically serialize events in responses
     def to_representation(self, instance):
         data = super().to_representation(instance)
-        
+
         event = EventSerializer(instance=instance.event)
         data['event'] = event.data
         return data
-        
+
     def to_internal_value(self, data):
         data['event'] = TaggedUUIDSerializerBase.get_or_create_uuid_tagged_obj(self, data, Event, "UUID")
         return super().to_internal_value(data)
@@ -129,4 +128,3 @@ class PickSessionSerializerMixin(EventSerializerMixin): # Pick session uploads a
         data['pick_session'] = TaggedUUIDSerializerBase.get_or_create_uuid_tagged_obj(self, data, PickSession, "pick_session_uuid")
 
         return super().to_internal_value(data)
-    
