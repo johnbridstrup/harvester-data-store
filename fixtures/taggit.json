@@ -1,0 +1,10 @@
+[
+{
+    "model": "taggit.tag",
+    "pk": 1,
+    "fields": {
+        "name": "AutodiagnosticsReport",
+        "slug": "autodiagnosticsreport"
+    }
+}
+]
