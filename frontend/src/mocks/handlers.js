@@ -13,6 +13,7 @@ import {
   getMigration,
   getHarvester,
   listErrorReport,
+  getErrorReport,
 } from "./actions";
 
 export const handlers = [
@@ -26,4 +27,5 @@ export const handlers = [
   eventTags,
   getHarvester,
   listErrorReport,
+  getErrorReport,
 ];

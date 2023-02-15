@@ -11,6 +11,7 @@ import { S3FILE_URL } from "features/s3file/s3fileService";
 import { EVENTS_URL } from "features/event/eventService";
 import { HARVESTERS_URL } from "features/harvester/harvesterService";
 import { ERROR_REPORT_URL } from "features/errorreport/errorreportService";
+import errorreport from "test-utils/test-data/errorreport.json";
 
 let genericListResponse = {
   status: "success",
@@ -287,84 +288,15 @@ export const getHarvester = rest.get(
 
 export const listErrorReport = rest.get(ERROR_REPORT_URL, (req, res, ctx) => {
   genericListResponse["message"] = "errorreport retrieved successfully";
-  genericListResponse["data"]["results"] = [
-    {
-      id: 6,
-      reportTime: "2022-09-20T03:56:52.933000Z",
-      harvester: {
-        harv_id: 11,
-      },
-      location: {
-        ranch: "Ranch B",
-      },
-      gitbranch: "unknown",
-      githash: "unknown",
-      event: 6,
-      exceptions: [
-        {
-          id: 6,
-          created: "2022-10-14T16:18:26.657000Z",
-          lastModified: "2023-01-18T19:42:16.857000Z",
-          service: "drivesys",
-          node: 0,
-          robot: 0,
-          traceback: "",
-          info: "Sevcon Controller Error",
-          timestamp: "2022-09-20T03:56:40.896000Z",
-          handled: true,
-          primary: true,
-          creator: 1,
-          modifiedBy: null,
-          code: {
-            id: 2,
-            created: "2022-07-22T16:59:37.819000Z",
-            lastModified: "2022-07-22T16:59:37.819000Z",
-            code: 0,
-            name: "AFTBaseException",
-            msg: "test",
-            team: "aft",
-            cycle: false,
-            operator_msg: "Please cycle the harvester",
-            creator: 1,
-            modifiedBy: null,
-            manifest: null,
-          },
-          report: 6,
-        },
-        {
-          id: 7,
-          created: "2022-10-14T16:18:26.663000Z",
-          lastModified: "2022-10-14T16:18:26.663000Z",
-          service: "harvester",
-          node: 0,
-          robot: 0,
-          traceback: "",
-          info: "Sevcon Controller Error",
-          timestamp: "2022-09-20T03:56:40.896000Z",
-          handled: false,
-          primary: false,
-          creator: 1,
-          modifiedBy: null,
-          code: {
-            id: 2,
-            created: "2022-07-22T16:59:37.819000Z",
-            lastModified: "2022-07-22T16:59:37.819000Z",
-            code: 0,
-            name: "AFTBaseException",
-            msg: "test",
-            team: "aft",
-            cycle: false,
-            operator_msg: "Please cycle the harvester",
-            creator: 1,
-            modifiedBy: null,
-            manifest: null,
-          },
-          report: 6,
-        },
-      ],
-      tags: [],
-    },
-  ];
-
+  genericListResponse["data"]["results"] = [errorreport];
   return res(ctx.json(genericListResponse));
 });
+
+export const getErrorReport = rest.get(
+  `${ERROR_REPORT_URL}:reportId`,
+  (req, res, ctx) => {
+    genericGetResponse["message"] = "errorreport retrieved successfully";
+    genericGetResponse["data"] = errorreport;
+    return res(ctx.json(genericGetResponse));
+  }
+);
