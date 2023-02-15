@@ -78,6 +78,9 @@ const MigrationListView = lazy(() => import("pages/migration/listview"));
 const MigrationDetailView = lazy(() => import("pages/migration/detailview"));
 const S3FileListView = lazy(() => import("pages/s3files/listview"));
 const S3FileDetailView = lazy(() => import("pages/s3files/detailview"));
+const AutodiagnosticListView = lazy(() =>
+  import("pages/autodiagnostics/listview")
+);
 
 const BaseRoutes = () => {
   return (
@@ -720,6 +723,22 @@ const BaseRoutes = () => {
               }
             >
               <S3FileDetailView />
+            </Suspense>
+          </RequireUser>
+        }
+      />
+      <Route
+        path="/autodiagnostics"
+        element={
+          <RequireUser>
+            <Suspense
+              fallback={
+                <RouteLoader>
+                  <Loader size={50} />
+                </RouteLoader>
+              }
+            >
+              <AutodiagnosticListView />
             </Suspense>
           </RequireUser>
         }

@@ -71,6 +71,12 @@ export const menu = [
     description: "Files uploaded to aws s3 bucket",
     href: "/s3files",
   },
+  {
+    name: "Autodiagnostics",
+    icon: "autodiag",
+    description: "Auto-diagnostic report from harvesters",
+    href: "/autodiagnostics",
+  },
 ];
 
 export const adminMenu = [
