@@ -31,7 +31,7 @@ function HarvVersionListView(props) {
         <Header
           title={"HDS Harvester Version"}
           className={"display-6 mt-4 mb-4"}
-          reportId={harvester.harv_id}
+          reportId={String(harvester.harv_id)}
         />
         <ListHarvVersion />
         <GenericPagination state="harvester" attr="harvversion" />
