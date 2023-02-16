@@ -52,6 +52,8 @@ DownloadButton.propTypes = {
 
 BackButton.propTypes = {
   theme: PropTypes.string,
+  mb: PropTypes.string,
+  mt: PropTypes.string,
 };
 
 HarvesterLink.propTypes = {
