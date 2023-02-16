@@ -81,6 +81,9 @@ const S3FileDetailView = lazy(() => import("pages/s3files/detailview"));
 const AutodiagnosticListView = lazy(() =>
   import("pages/autodiagnostics/listview")
 );
+const AutodiagnosticDetailView = lazy(() =>
+  import("pages/autodiagnostics/detailview")
+);
 
 const BaseRoutes = () => {
   return (
@@ -739,6 +742,22 @@ const BaseRoutes = () => {
               }
             >
               <AutodiagnosticListView />
+            </Suspense>
+          </RequireUser>
+        }
+      />
+      <Route
+        path="/autodiagnostics/:reportId"
+        element={
+          <RequireUser>
+            <Suspense
+              fallback={
+                <RouteLoader>
+                  <Loader size={50} />
+                </RouteLoader>
+              }
+            >
+              <AutodiagnosticDetailView />
             </Suspense>
           </RequireUser>
         }

@@ -1207,3 +1207,17 @@ export const transformSensors = (sensors = {}) => {
 
   return { touch, vacuum, finger };
 };
+
+/**
+ * Convert string to Title case
+ * @param {String} str
+ * @param {String} separator
+ * @returns {String} str
+ */
+export const titleCase = (str, separator = " ") => {
+  str = str.toLowerCase().split(separator);
+  for (var i = 0; i < str.length; i++) {
+    str[i] = str[i].charAt(0).toUpperCase() + str[i].slice(1);
+  }
+  return str.join(" ");
+};
