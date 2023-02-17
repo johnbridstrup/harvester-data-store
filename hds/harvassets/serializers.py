@@ -1,5 +1,3 @@
-import logging
-from django.utils import timezone
 from rest_framework import serializers
 from taggit.serializers import TaggitSerializer, TagListSerializerField
 
@@ -7,7 +5,6 @@ from common.models import Tags
 from common.reports import ReportBase
 from common.serializers.reportserializer import ReportSerializerBase
 from event.serializers import EventSerializerMixin
-from harvester.models import Harvester
 from harvester.serializers.harvesterserializer import HarvesterSerializer
 
 from .models import HarvesterAssetReport, HarvesterAssetType, HarvesterAsset
