@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 from simple_history.models import HistoricalRecords
 
 from common.models import CommonInfo
@@ -18,6 +19,15 @@ class HarvesterAssetType(CommonInfo):
     def __str__(self):
         return self.name
 
+    @staticmethod
+    def get_or_create(asset_type, user):
+        try:
+            asset_type_obj = HarvesterAssetType.objects.get(name=asset_type)
+        except HarvesterAssetType.DoesNotExist:
+            # create asset type and asset, then continue loop
+            asset_type_obj = HarvesterAssetType.objects.create(creator=user, name=asset_type)
+        return asset_type_obj
+
 
 class HarvesterAsset(CommonInfo):
     history = HistoricalRecords()
@@ -29,3 +39,29 @@ class HarvesterAsset(CommonInfo):
 
     class Meta:
         unique_together = ('asset', 'serial_number',)
+
+    @staticmethod
+    def update_or_create_and_get(asset_type_obj, harv, index, serial_number, user, version=None):
+        try:
+            asset_obj = HarvesterAsset.objects.get(asset=asset_type_obj, serial_number=serial_number)
+            asset_obj.harvester = harv
+            asset_obj.index = index
+            asset_obj.lastModified = timezone.now()
+            asset_obj.modifiedBy = user
+            if version is not None:
+                asset_obj.version = version
+            asset_obj.save()
+        
+        except HarvesterAsset.DoesNotExist:
+            asset = {
+                "harvester": harv,
+                "index": index,
+                "serial_number": serial_number,
+                "asset": asset_type_obj,
+                "creator": user,
+            }
+            if version is not None:
+                asset["version"] = version
+            asset_obj = HarvesterAsset.objects.create(**asset)
+        return asset_obj
+        

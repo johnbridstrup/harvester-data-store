@@ -66,11 +66,7 @@ class AutodiagnosticsReportSerializer(TaggitSerializer, PickSessionSerializerMix
         
         # Retrieve or create gripper HarvesterAssetType.
         # We can do this regardless of whether we can extract the actual gripper asset
-        try:
-            gripper_asset_type = HarvesterAssetType.objects.get(name=GRIPPER_ASSET_NAME)
-        except HarvesterAssetType.DoesNotExist:
-            gripper_asset_type = HarvesterAssetType(creator=creator, name=GRIPPER_ASSET_NAME)
-            gripper_asset_type.save()
+        gripper_asset_type = HarvesterAssetType.get_or_create(GRIPPER_ASSET_NAME, creator)
 
         # Get gripper serial number
         gripper_sn = data.pop("serial_no", None)
@@ -84,18 +80,14 @@ class AutodiagnosticsReportSerializer(TaggitSerializer, PickSessionSerializerMix
         if robot_id is None:
             raise ExtractionError(f"No robot ID in autodiag report {report_obj.id}")
 
-        # Retrieve or create the gripper HarvesterAsset
-        try:
-            gripper = HarvesterAsset.objects.get(asset=gripper_asset_type, serial_number=gripper_sn)
-        except HarvesterAsset.DoesNotExist:
-            gripper = HarvesterAsset(
-                asset=gripper_asset_type,
-                serial_number=gripper_sn,
-                index=robot_id,
-                creator=creator
-            )
-        gripper.harvester = report_obj.harvester
-        gripper.save()
+        # Update or create the gripper HarvesterAsset
+        gripper = HarvesterAsset.update_or_create_and_get(
+            gripper_asset_type, 
+            report_obj.harvester,
+            robot_id,
+            gripper_sn,
+            creator,
+        )
 
         # Create HarvesterAutodiagnosticsRun
         autodiag_run = {}
