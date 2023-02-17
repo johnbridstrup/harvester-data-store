@@ -62,6 +62,7 @@ class AutodiagnosticsReportSerializer(TaggitSerializer, PickSessionSerializerMix
         data = report.get("data")
         if data is None:
             report.tags.add(Tags.INCOMPLETE.value)
+            report.save()
             raise ExtractionError(f"Autodiagnostics report {report_obj.id} has no data")
         
         # Retrieve or create gripper HarvesterAssetType.
@@ -73,11 +74,17 @@ class AutodiagnosticsReportSerializer(TaggitSerializer, PickSessionSerializerMix
         if gripper_sn is None:
             gripper_sn = data.pop("serial_number", None)
             if gripper_sn is None:
+                report.tags.add(Tags.INCOMPLETE.value)
+                report.tags.add(Tags.MISSINGVALUE.value)
+                report.save()
                 raise ExtractionError(f"No gripper serial number in autodiag report {report_obj.id}")
         
         # Get robot ID
         robot_id = data.pop("robot_id", None)
         if robot_id is None:
+            report.tags.add(Tags.INCOMPLETE.value)
+            report.tags.add(Tags.MISSINGVALUE.value)
+            report.save()
             raise ExtractionError(f"No robot ID in autodiag report {report_obj.id}")
 
         # Update or create the gripper HarvesterAsset

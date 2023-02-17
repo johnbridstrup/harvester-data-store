@@ -31,3 +31,4 @@ class Tags(Enum):
     INCOMPLETE = "incomplete"
     INVALID = "invalid"
     INVALIDSCHEMA = "invalid schema"
+    MISSINGVALUE = "missing value"
