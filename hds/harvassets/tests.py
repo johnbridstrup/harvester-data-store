@@ -95,15 +95,23 @@ class HarvesterAssetsTestCase(HDSAPITestBase):
     def test_get_assets_params(self):
         types = ["type1", "type1", "type2"]
         report = self.create_report(
-            *[self.asset(asset=i, serial_number=j) for i, j in zip(types, range(1,4))]
+            *[self.asset(asset=i, serial_number=j, index=j) for i, j in zip(types, range(1,4))]
         )
         self.client.post(self.url, report, format='json')
 
         r1 = self.client.get(f"{self.asset_url}?harvester__harv_id=11")
         self.assertEqual(r1.json()["data"]["count"], 3)
 
+        new_report = self.create_report(
+            *[self.asset(asset=i, serial_number=j+3, index=j) for i, j in zip(types, range(1,4))]
+        )
+        self.client.post(self.url, new_report, format='json')
+
+        r1 = self.client.get(f"{self.asset_url}?harvester__harv_id=11")
+        self.assertEqual(r1.json()["data"]["count"], 3)
+
         r2 = self.client.get(f"{self.asset_url}?asset__name=type1")
-        self.assertEqual(r2.json()["data"]["count"], 2)
+        self.assertEqual(r2.json()["data"]["count"], 4)
 
     def test_get_harvester_assets(self):
         url = reverse("harvester-detail", args=[1])

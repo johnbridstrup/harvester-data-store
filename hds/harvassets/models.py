@@ -40,8 +40,18 @@ class HarvesterAsset(CommonInfo):
     class Meta:
         unique_together = ('asset', 'serial_number',)
 
-    @staticmethod
-    def update_or_create_and_get(asset_type_obj, harv, index, serial_number, user, version=None):
+    def clear_harv(self):
+        self.harvester = None
+        self.save()
+
+    @classmethod
+    def update_or_create_and_get(cls, asset_type_obj, harv, index, serial_number, user, version=None):
+        # Clear asset of this type at this index on this harv.
+        # We have to consider there being multiple for now, it can be changed later.
+        exist_at_index = cls.objects.filter(asset=asset_type_obj, harvester=harv, index=index)
+        for existing in exist_at_index:
+            existing.clear_harv()
+
         try:
             asset_obj = HarvesterAsset.objects.get(asset=asset_type_obj, serial_number=serial_number)
             asset_obj.harvester = harv

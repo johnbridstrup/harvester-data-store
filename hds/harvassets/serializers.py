@@ -75,15 +75,6 @@ class HarvesterAssetReportSerializer(TaggitSerializer, EventSerializerMixin, Rep
         user = report_obj.creator
         harv = report_obj.harvester
         asset_list = report_obj.report["data"]
-        
-        # First, clear the harvesters existing assets
-        try:
-            exist_assests = harv.assets.all()
-            for exist_asset_obj in exist_assests:
-                exist_asset_obj.harvester = None
-                exist_asset_obj.save()
-        except AttributeError:
-            pass
 
         for asset in asset_list:
             asset_type = asset.pop("asset")
