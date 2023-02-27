@@ -12,6 +12,11 @@ import { EVENTS_URL } from "features/event/eventService";
 import { HARVESTERS_URL } from "features/harvester/harvesterService";
 import { ERROR_REPORT_URL } from "features/errorreport/errorreportService";
 import errorreport from "test-utils/test-data/errorreport.json";
+import { AUTODIAG_REPORT_URL } from "features/autodiagnostics/autodiagnosticService";
+import autodiagnostic from "test-utils/test-data/autodiagnostic.json";
+import harvester from "test-utils/test-data/harvester.json";
+import { LOCATION_URL } from "features/location/locationService";
+import location from "test-utils/test-data/location.json";
 
 let genericListResponse = {
   status: "success",
@@ -297,6 +302,36 @@ export const getErrorReport = rest.get(
   (req, res, ctx) => {
     genericGetResponse["message"] = "errorreport retrieved successfully";
     genericGetResponse["data"] = errorreport;
+    return res(ctx.json(genericGetResponse));
+  }
+);
+
+export const listAutodiagReport = rest.get(
+  AUTODIAG_REPORT_URL,
+  (req, res, ctx) => {
+    genericListResponse["message"] = "autodiagnostics retrieved successfully";
+    genericListResponse["data"]["results"] = [autodiagnostic];
+    return res(ctx.json(genericListResponse));
+  }
+);
+
+export const listHarvesters = rest.get(HARVESTERS_URL, (req, res, ctx) => {
+  genericListResponse["message"] = "harvesters retrieved successfully";
+  genericListResponse["data"]["results"] = [harvester];
+  return res(ctx.json(genericListResponse));
+});
+
+export const listLocations = rest.get(LOCATION_URL, (req, res, ctx) => {
+  genericListResponse["message"] = "locations retrieved successfully";
+  genericListResponse["data"]["results"] = [location];
+  return res(ctx.json(genericListResponse));
+});
+
+export const getAutodiagReport = rest.get(
+  `${AUTODIAG_REPORT_URL}:reportId`,
+  (req, res, ctx) => {
+    genericGetResponse["message"] = "autodiagnostics retrieved successfully";
+    genericGetResponse["data"] = autodiagnostic;
     return res(ctx.json(genericGetResponse));
   }
 );

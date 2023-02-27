@@ -21,9 +21,12 @@ import {
   extractServiceCodes,
   copiedUrl,
   getAftConfigKeys,
+  transformSensors,
+  titleCase,
 } from "utils/utils";
 import errorreport from "test-utils/test-data/errorreport.json";
 import { API_URL } from "features/base/constants";
+import autodiagnostic from "test-utils/test-data/autodiagnostic.json";
 
 test("should do binary search for given timestamp", () => {
   let content = [
@@ -353,4 +356,121 @@ describe("aftconfig transformation block scope", () => {
     let expected = ["0", "1", "2"];
     expect(getAftConfigKeys(config)).toMatchObject(expected);
   });
+});
+
+describe("autodiagnostics transformation block scope", () => {
+  const sensorData = {
+    sensor1: [
+      [1, { touch: 1, vac: 2, finger: 3 }],
+      [2, { touch: 2, vac: 4, finger: 6 }],
+    ],
+    sensor2: [
+      [3, { touch: 3, vac: 6, finger: 9 }],
+      [4, { touch: 4, vac: 8, finger: 12 }],
+    ],
+  };
+
+  const expectedOutput = {
+    touch: {
+      values: [1, 2, 3, 4],
+      states: ["sensor1", "sensor1", "sensor2", "sensor2"],
+      timestamps: [0, 1, 2, 3],
+      ts_interval: [
+        { state: "sensor1", x0: 0, diff: 1, x1: 2, max: 4, min: 1 },
+        { state: "sensor2", x0: 2, diff: 1, x1: 3, max: 4, min: 1 },
+      ],
+    },
+    vacuum: {
+      values: [2, 4, 6, 8],
+      states: ["sensor1", "sensor1", "sensor2", "sensor2"],
+      timestamps: [0, 1, 2, 3],
+      ts_interval: [
+        { state: "sensor1", x0: 0, diff: 1, x1: 2, max: 8, min: 2 },
+        { state: "sensor2", x0: 2, diff: 1, x1: 3, max: 8, min: 2 },
+      ],
+    },
+    finger: {
+      values: [3, 6, 9, 12],
+      states: ["sensor1", "sensor1", "sensor2", "sensor2"],
+      timestamps: [0, 1, 2, 3],
+      ts_interval: [
+        { state: "sensor1", x0: 0, diff: 1, x1: 2, max: 12, min: 3 },
+        { state: "sensor2", x0: 2, diff: 1, x1: 3, max: 12, min: 3 },
+      ],
+    },
+  };
+
+  test("should transform the sensors data into required shape", () => {
+    let output = transformSensors(autodiagnostic.run_data.sensors);
+    expect(Object.keys(output)).toHaveLength(3);
+    expect(output).toHaveProperty("touch");
+    expect(output).toHaveProperty("vacuum");
+    expect(output).toHaveProperty("finger");
+    expect(output.finger.values).toHaveLength(30);
+    expect(output.vacuum.values).toHaveLength(30);
+    expect(output.touch.values).toHaveLength(30);
+  });
+
+  test("should transform the sensor data into expected format", () => {
+    expect(transformSensors(sensorData)).toMatchObject(expectedOutput);
+  });
+
+  test("should handle empty input", () => {
+    expect(transformSensors()).toMatchObject({
+      touch: { values: [], states: [], timestamps: [], ts_interval: [] },
+      vacuum: { values: [], states: [], timestamps: [], ts_interval: [] },
+      finger: { values: [], states: [], timestamps: [], ts_interval: [] },
+    });
+  });
+
+  test("should handle missing properties in sensor readings", () => {
+    const sensorDataWithMissingProps = {
+      state1: [
+        [1, { touch: 1, vac: 2 }],
+        [2, { touch: 2, vac: 4, finger: 6 }],
+      ],
+      state2: [
+        [3, { touch: 3, vac: 6, finger: 9 }],
+        [4, { touch: 4, vac: 8 }],
+      ],
+    };
+
+    const expectedOutput = {
+      touch: {
+        values: [1, 2, 3, 4],
+        states: ["state1", "state1", "state2", "state2"],
+        timestamps: [0, 1, 2, 3],
+        ts_interval: [
+          { state: "state1", x0: 0, diff: 1, x1: 2, max: 4, min: 1 },
+          { state: "state2", x0: 2, diff: 1, x1: 3, max: 4, min: 1 },
+        ],
+      },
+      vacuum: {
+        values: [2, 4, 6, 8],
+        states: ["state1", "state1", "state2", "state2"],
+        timestamps: [0, 1, 2, 3],
+        ts_interval: [
+          { state: "state1", x0: 0, diff: 1, x1: 2, max: 8, min: 2 },
+          { state: "state2", x0: 2, diff: 1, x1: 3, max: 8, min: 2 },
+        ],
+      },
+      finger: {
+        values: [6, 9],
+        states: ["state1", "state2"],
+        timestamps: [0, 1],
+        ts_interval: [
+          { state: "state1", x0: 0, diff: 0, x1: 1, max: 9, min: 6 },
+          { state: "state2", x0: 1, diff: 0, x1: 1, max: 9, min: 6 },
+        ],
+      },
+    };
+
+    expect(transformSensors(sensorDataWithMissingProps)).toMatchObject(
+      expectedOutput
+    );
+  });
+});
+
+test("should return the title case of str", () => {
+  expect(titleCase("hds autodiagnostic")).toBe("Hds Autodiagnostic");
 });

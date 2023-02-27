@@ -1,0 +1,19 @@
+{
+  "id": 1,
+  "created": "2022-04-26T10:05:28.580000Z",
+  "lastModified": "2022-04-26T10:05:28.580000Z",
+  "ranch": "Ranch A",
+  "country": "United States",
+  "region": "California",
+  "site_channel": "harvs-dev",
+  "creator": 1,
+  "modifiedBy": null,
+  "distributor": {
+    "id": 1,
+    "created": "2022-04-26T10:05:04.151000Z",
+    "lastModified": "2022-04-26T10:05:04.151000Z",
+    "name": "Distributor 1",
+    "creator": 1,
+    "modifiedBy": null
+  }
+}

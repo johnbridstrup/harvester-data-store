@@ -14,6 +14,10 @@ import {
   getHarvester,
   listErrorReport,
   getErrorReport,
+  listAutodiagReport,
+  listHarvesters,
+  listLocations,
+  getAutodiagReport,
 } from "./actions";
 
 export const handlers = [
@@ -28,4 +32,8 @@ export const handlers = [
   getHarvester,
   listErrorReport,
   getErrorReport,
+  listAutodiagReport,
+  listHarvesters,
+  listLocations,
+  getAutodiagReport,
 ];
