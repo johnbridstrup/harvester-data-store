@@ -1,3 +1,4 @@
+import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import Select from "react-select";
@@ -6,7 +7,9 @@ import {
   aggregateOptions,
   darkThemeClass,
   selectDarkStyles,
+  imagePath,
 } from "utils/utils";
+import useClickOutside from "hooks/clickOutSide";
 
 export const HoverTabular = (props) => {
   const bg = darkThemeClass("bg-dark", props.theme);
@@ -223,6 +226,66 @@ export const BackButton = (props) => {
   );
 };
 
+export const GenericLabel = (props) => {
+  const {
+    htmlFor,
+    field,
+    labelRef,
+    labelText,
+    toggleOpen,
+    open,
+    model,
+    attr,
+    content,
+    example,
+    extras,
+    theme,
+  } = props;
+  const labelTheme = darkThemeClass("bg-dark", theme);
+
+  return (
+    <label
+      htmlFor={htmlFor}
+      className={`label-docs ${
+        (field === "harv" || field === "ranch") && open ? "mt-open" : ""
+      }`}
+    >
+      {labelText}{" "}
+      <span className="label-img" onClick={() => toggleOpen(field)}>
+        <img src={imagePath("quest")} alt="" />
+      </span>
+      {open && (
+        <>
+          <div className={`help-text scrollbar ${labelTheme}`} ref={labelRef}>
+            <span className="help-text-header">
+              {model} <code style={{ color: "#242526" }}>{attr}</code>
+            </span>
+            <span className="help-text-content">
+              {content}{" "}
+              {field === "generic"
+                ? "Example query would be something like "
+                : "e.g"}{" "}
+              <code>{example}</code>{" "}
+              {extras ? (
+                <span>
+                  {extras.info}
+                  <code>{extras.code}</code>
+                </span>
+              ) : (
+                "e.t.c.."
+              )}
+            </span>
+            <a href="/docs" className="help-text-content">
+              View docs
+            </a>
+          </div>
+          <div className="help-arrow-down"></div>
+        </>
+      )}
+    </label>
+  );
+};
+
 export const GenericFormField = (props) => {
   const {
     harvesterOptions,
@@ -246,13 +309,55 @@ export const GenericFormField = (props) => {
   } = props;
   const dark = darkThemeClass("dark-theme", theme);
   const customStyles = dark ? selectDarkStyles : {};
+  const labelRef = useRef(null);
+
+  const [fieldObj, setFieldObj] = useState({
+    harv: false,
+    ranch: false,
+    fruit: false,
+    code: false,
+    traceback: false,
+    generic: false,
+  });
+
+  useClickOutside(labelRef, () => {
+    setFieldObj((current) => {
+      return {
+        ...current,
+        harv: false,
+        ranch: false,
+        fruit: false,
+        code: false,
+        traceback: false,
+        generic: false,
+      };
+    });
+  });
+
+  const toggleOpen = (label) => {
+    setFieldObj((current) => {
+      return { ...current, [label]: !current[label] };
+    });
+  };
 
   return (
     <>
       <div className="row mb-4 mt-2">
         <div className="col-md-6">
           <div className="form-group">
-            <label htmlFor="harv_ids">Harv IDS</label>
+            <GenericLabel
+              htmlFor="harv_ids"
+              labelText="Harv IDS"
+              model="Harvester"
+              attr="harv_id"
+              content="This is the serial number attached to each harvester"
+              example="11, 100"
+              field="harv"
+              labelRef={labelRef}
+              open={fieldObj.harv}
+              toggleOpen={toggleOpen}
+              theme={theme}
+            />
             <Select
               isMulti
               isSearchable
@@ -271,7 +376,19 @@ export const GenericFormField = (props) => {
         </div>
         <div className="col-md-6">
           <div className="form-group">
-            <label htmlFor="locations">Ranches</label>
+            <GenericLabel
+              htmlFor="locations"
+              labelText="Ranches"
+              model="Location"
+              attr="ranch"
+              content="This is the ranch in which the harvester operates in"
+              example="Ranch A, Ranch B"
+              field="ranch"
+              labelRef={labelRef}
+              open={fieldObj.ranch}
+              toggleOpen={toggleOpen}
+              theme={theme}
+            />
             <Select
               isMulti
               isSearchable
@@ -292,7 +409,19 @@ export const GenericFormField = (props) => {
       <div className="row mb-4">
         <div className="col-md-6">
           <div className="form-group">
-            <label htmlFor="fruit">Fruit</label>
+            <GenericLabel
+              htmlFor="fruit"
+              labelText="Fruit"
+              model="Fruit"
+              attr="name"
+              content="This is the fruit being picked by harvester (project-specific)"
+              example="apple, strawberry"
+              open={fieldObj.fruit}
+              field="fruit"
+              labelRef={labelRef}
+              toggleOpen={toggleOpen}
+              theme={theme}
+            />
             <Select
               isMulti
               isSearchable
@@ -311,7 +440,19 @@ export const GenericFormField = (props) => {
         </div>
         <div className="col-md-6">
           <div className="form-group">
-            <label htmlFor="code">Code</label>
+            <GenericLabel
+              htmlFor="code"
+              labelText="Code"
+              model="AFTExceptionCode"
+              attr="code"
+              content="This is the code for the execption generated"
+              example="0, 9"
+              field="code"
+              labelRef={labelRef}
+              open={fieldObj.code}
+              toggleOpen={toggleOpen}
+              theme={theme}
+            />
             <Select
               isMulti
               isSearchable
@@ -332,7 +473,19 @@ export const GenericFormField = (props) => {
       <div className="row mb-4">
         <div className="col-md-6">
           <div className="form-group">
-            <label htmlFor="traceback">Traceback</label>
+            <GenericLabel
+              htmlFor="traceback"
+              labelText="Traceback"
+              model="AFTException"
+              attr="traceback"
+              content="This is the exception traceback string logged"
+              example="ot/emu/emuRobotServ.py, line 112, in _move"
+              field="traceback"
+              labelRef={labelRef}
+              open={fieldObj.traceback}
+              toggleOpen={toggleOpen}
+              theme={theme}
+            />
             <InputFormControl
               type="text"
               name="traceback"
@@ -346,7 +499,21 @@ export const GenericFormField = (props) => {
         </div>
         <div className="col-md-6">
           <div className="form-group">
-            <label htmlFor="generic">Generic LookUp</label>
+            <GenericLabel
+              htmlFor="generic"
+              labelText="Generic LookUp"
+              content="This is user coded django model lookup expressions or queries."
+              example="harvester__harv_id=11, location__ranch=Ranch A"
+              extras={{
+                info: "This will translate to ",
+                code: "ErrorReport.objects.filter(harvester__harv_id=11, location__ranch=Ranch A)",
+              }}
+              field="generic"
+              labelRef={labelRef}
+              open={fieldObj.generic}
+              toggleOpen={toggleOpen}
+              theme={theme}
+            />
             <InputFormControl
               type="text"
               name="generic"
@@ -714,5 +881,20 @@ RightButtonGroup.propTypes = {
   downloadRef: PropTypes.object,
   createNotifRef: PropTypes.object,
   createNotifPopUp: PropTypes.func,
+  theme: PropTypes.string,
+};
+
+GenericLabel.propTypes = {
+  htmlFor: PropTypes.string,
+  labelText: PropTypes.string,
+  model: PropTypes.string,
+  attr: PropTypes.string,
+  content: PropTypes.string,
+  example: PropTypes.string,
+  open: PropTypes.bool,
+  toggleOpen: PropTypes.func,
+  labelRef: PropTypes.object,
+  field: PropTypes.string,
+  extras: PropTypes.object,
   theme: PropTypes.string,
 };

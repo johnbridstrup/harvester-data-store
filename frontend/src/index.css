@@ -228,6 +228,63 @@ a {
   background-color: #212529;
 }
 
+/* Documentation Label */
+.label-docs {
+  position: relative;
+  margin-bottom: 5px;
+}
+
+.label-img img {
+  width: 16px;
+  height: 16px;
+  transform: translateY(-2px);
+  margin: 0 5px;
+}
+
+.help-text {
+  position: absolute;
+  top: -95px;
+  left: 0;
+  transform: translateY(-10px);
+  height: 100px;
+  width: 200px;
+  box-shadow: 1px 2px 1px var(--shadow-1);
+  z-index: 1;
+  background: var(--bg-secondary);
+  border-radius: 5px;
+  padding: 5px 8px;
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+}
+
+.help-arrow-down {
+  border-top: 10px solid #65676b;
+  border-right: 10px solid transparent;
+  border-left: 10px solid transparent;
+  position: absolute;
+  top: -5px;
+  left: 65%;
+  width: 10px;
+  z-index: 2;
+  transform: translateX(50%);
+}
+
+.help-text-header {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.help-text-content {
+  font-size: 13px;
+  padding: 10px 0;
+}
+
+.mt-open {
+  margin-top: 20px;
+}
+/* Documentation Label */
+
 @media (max-width: 768px) {
   .custom-multiselect-control {
     width: 100% !important;

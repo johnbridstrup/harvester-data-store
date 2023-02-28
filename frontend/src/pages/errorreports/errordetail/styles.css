@@ -8,3 +8,7 @@
   border: 1px solid #ccc;
   padding: 5px;
 }
+
+.scrollbar::-webkit-scrollbar {
+  width: 4px;
+}

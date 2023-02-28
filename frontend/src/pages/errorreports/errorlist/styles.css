@@ -19,3 +19,7 @@
 .bg-dark {
   background: var(--dark-bg-mild);
 }
+
+.scrollbar::-webkit-scrollbar {
+  width: 4px;
+}

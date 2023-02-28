@@ -50,6 +50,10 @@
   background: var(--dark-bg-third);
 }
 
+.scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+
 @media (min-width: 892px) {
   .sidecontent {
     position: absolute;
