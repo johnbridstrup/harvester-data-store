@@ -2,6 +2,7 @@ import { useEffect, useReducer } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import PropTypes from "prop-types";
 import ReactJson from "@microlink/react-json-view";
+import moment from "moment";
 import { JsonDiv, LoaderDiv, NavTabItem, NavTabs, NavTabSpan } from "../styled";
 import { FULLFILLED_PROMISE, THEME_MODES } from "features/base/constants";
 import { fullConfigReport } from "features/aftconfigs/aftconfigSlice";
@@ -50,7 +51,9 @@ function reducer(state, action) {
 
 function SchemaTabsView(props) {
   const [state, dispatchAction] = useReducer(reducer, initialState);
-  const { configkeys, configs } = useSelector((state) => state.aftconfig);
+  const { configkeys, configs, configreport } = useSelector(
+    (state) => state.aftconfig
+  );
   const dispatch = useDispatch();
   const {
     harvester: { release, version, id },
@@ -195,21 +198,26 @@ function SchemaTabsView(props) {
         <>
           {fetching ? (
             <LoaderDiv>
-              <Loader size={50} />
+              <Loader size={25} />
             </LoaderDiv>
           ) : (
-            <JsonDiv>
-              <ReactJson
-                src={configObj ? configObj : {}}
-                collapsed={3}
-                enableClipboard
-                theme={
-                  props.theme === THEME_MODES.DARK_THEME
-                    ? "monokai"
-                    : "monokaii"
-                }
-              />
-            </JsonDiv>
+            <>
+              <div className="pt-2 pb-2">
+                ReportTime: {moment(configreport.reportTime).format("LLLL")}
+              </div>
+              <JsonDiv>
+                <ReactJson
+                  src={configObj ? configObj : {}}
+                  collapsed={3}
+                  enableClipboard
+                  theme={
+                    props.theme === THEME_MODES.DARK_THEME
+                      ? "monokai"
+                      : "monokaii"
+                  }
+                />
+              </JsonDiv>
+            </>
           )}
         </>
       )}
