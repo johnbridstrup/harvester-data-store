@@ -1,5 +1,6 @@
-from rest_framework.renderers import JSONRenderer
+import collections
 import structlog
+from rest_framework.renderers import JSONRenderer
 
 logger = structlog.get_logger(__name__)
 class NoContextError(Exception):
@@ -45,11 +46,15 @@ class HDSJSONRenderer(JSONRenderer):
 
             if status != HDSJSONRenderer.SUCCESS:
                 return data
+            
+            if isinstance(data, collections.Mapping) and data.get("message") is not None:
+                msg = data.pop("message")
 
-            msg = "{} {} successfully".format(
-                model, 
-                self.METHODS.get(method, f'{method} completed')
-            )
+            else:
+                msg = "{} {} successfully".format(
+                    model, 
+                    self.METHODS.get(method, f'{method} completed')
+                )
 
         response = {
             'status': status,
