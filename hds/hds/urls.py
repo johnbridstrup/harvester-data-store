@@ -39,6 +39,7 @@ urlpatterns = [
     path(f'{version}/exceptioncodemanifests/', include('exceptions.urls.exceptioncodemanifesturls')),
     path(f'{version}/exceptions/', include('exceptions.urls.exceptionurls')),
     path(f'{version}/gripreports/', include('gripreport.urls')),
+    path(f'{version}/scheduledjobs/', include('jobscheduler.urls')),
     path(f'{version}/migrations/', include('hdsmigrations.urls')),
     path(f'{version}/notifications/', include('notifications.urls')),
     path(f'{version}/s3files/', include('s3file.urls.s3fileurls')),

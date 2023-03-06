@@ -74,6 +74,7 @@ LOCAL_APPS = [
     'harvdeploy',
     'harvjobs',
     'healthcheck',
+    'jobscheduler',
     'notifications',
     's3file',
     'logparser',
