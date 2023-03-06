@@ -6,6 +6,7 @@ from django.urls import resolve, reverse, URLPattern, URLResolver
 from django.urls.exceptions import NoReverseMatch
 from rest_framework.response import Response
 from rest_framework.views import exception_handler
+from urllib.parse import urljoin, urlencode
 
 import importlib
 import os
@@ -39,6 +40,20 @@ def build_frontend_url(endpoint, _id=None):
     if _id:
         frontend_url = frontend_url + f"{_id}/"
     return frontend_url
+
+def build_api_url(request, rel_path, api_version=None, params: dict=None):
+    base = request._current_scheme_host
+    if api_version == "current":
+        api_version = "api/v1/"
+    api_base_url = urljoin(base, api_version)
+    api_url = urljoin(api_base_url, rel_path)
+    if not api_url.endswith('/'):
+        api_url += '/'
+
+    if params:
+        api_url += f"?{urlencode(params)}"
+
+    return api_url
 
 def make_ok(response_message, response_data=None, response_status=200):
     """ generate success response """
