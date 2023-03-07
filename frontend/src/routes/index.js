@@ -85,6 +85,9 @@ const AutodiagnosticDetailView = lazy(() =>
   import("pages/autodiagnostics/detailview")
 );
 const PickSessionListView = lazy(() => import("pages/event/picksessionlist"));
+const PickSessionDetailView = lazy(() =>
+  import("pages/event/picksessiondetail")
+);
 
 const BaseRoutes = () => {
   return (
@@ -775,6 +778,22 @@ const BaseRoutes = () => {
               }
             >
               <PickSessionListView />
+            </Suspense>
+          </RequireUser>
+        }
+      />
+      <Route
+        path="/picksessions/:picksessionId"
+        element={
+          <RequireUser>
+            <Suspense
+              fallback={
+                <RouteLoader>
+                  <Loader size={50} />
+                </RouteLoader>
+              }
+            >
+              <PickSessionDetailView />
             </Suspense>
           </RequireUser>
         }
