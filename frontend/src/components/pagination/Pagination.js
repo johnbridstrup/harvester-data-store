@@ -18,7 +18,7 @@ import {
 } from "features/harvester/harvesterSlice";
 import { paginateLocation } from "features/location/locationSlice";
 import { paginateDistributor } from "features/distributor/distributorSlice";
-import { paginateEvent } from "features/event/eventSlice";
+import { paginateEvent, paginatePickSession } from "features/event/eventSlice";
 import {
   paginateVersion,
   paginateRelease,
@@ -171,7 +171,7 @@ export const GenericPagination = (props) => {
 
   const dispatchObj = {
     distributor: paginateDistributor,
-    event: paginateEvent,
+    event: props.attr === "picksession" ? paginatePickSession : paginateEvent,
     harvester:
       props.attr === "historys"
         ? paginateHarvHistory
