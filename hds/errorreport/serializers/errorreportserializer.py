@@ -100,10 +100,9 @@ class ErrorReportSerializer(TaggitSerializer, PickSessionSerializerMixin, Report
         reportTime = self.extract_timestamp(report)
         githash = report['data'].get('githash') or DEFAULT_UNKNOWN
         gitbranch = report['data'].get('branch_name') or DEFAULT_UNKNOWN
-        UUID = report['data'].get("uuid", None)
+        UUID = self.extract_uuid(report)
         pick_session_uuid = self.extract_uuid(report, "pick_session_uuid")
-        if UUID is None:
-            UUID = Event.generate_uuid()
+
         data = {
             'harvester': harvester.id,
             'location': harvester.location.id,

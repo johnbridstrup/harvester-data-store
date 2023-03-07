@@ -22,8 +22,10 @@ class TaggedUUIDModelTestBase(HDSAPITestBase):
 class EventApiTestCase(TaggedUUIDModelTestBase):
     def test_get_by_UUID(self):
         self._post_error_report()
-        self._post_error_report()
-        data = self._post_error_report()
+        self.data['uuid'] = Event.generate_uuid()
+        self._post_error_report(load=False)
+        self.data['uuid'] = Event.generate_uuid()
+        data = self._post_error_report(load=False)
         UUID = data["data"]["event"]["UUID"]
 
         # 3 total events
