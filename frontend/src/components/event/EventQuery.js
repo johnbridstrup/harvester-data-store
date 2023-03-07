@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import { queryEvent } from "features/event/eventSlice";
-import { InputFormControl } from "../styled";
+import { FormQuery } from "./Helpers";
 
 function EventQuery(props) {
   const [uuid, setUUID] = useState("");
@@ -25,25 +26,19 @@ function EventQuery(props) {
 
   return (
     <div className="mt-4 mb-4">
-      <form onSubmit={handleFormQuerySubmit}>
-        <div className="form-group">
-          <label>UUID</label>
-          <InputFormControl
-            type="text"
-            name="uuid"
-            id="uuid"
-            value={uuid}
-            theme={theme}
-            onChange={handleFieldChange}
-            placeholder="68b3aab6-24c9-11ed-bb17-f9799c718175"
-          />
-        </div>
-        <div className="text-center mt-3">
-          <button type="submit" className="btn btn-primary">
-            Submit
-          </button>
-        </div>
-      </form>
+      <div className="flex-right">
+        <span className="btn btn-sm">
+          <Link to={`/picksessions`}>Go To PickSession </Link>
+          <i className="las la-arrow-right"></i>
+        </span>
+      </div>
+      <FormQuery
+        handleChange={handleFieldChange}
+        handleSubmit={handleFormQuerySubmit}
+        label="UUID"
+        theme={theme}
+        uuid={uuid}
+      />
     </div>
   );
 }

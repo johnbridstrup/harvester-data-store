@@ -2,7 +2,7 @@ import { useSelector } from "react-redux";
 import { handleDownload } from "utils/services";
 import { Loader } from "utils/utils";
 import { LoaderDiv } from "../styled";
-import EventTable from "../tables/EventTable";
+import { GenericEvent } from "./Helpers";
 
 function ListEvent(props) {
   const { events, loading } = useSelector((state) => state.event);
@@ -20,10 +20,11 @@ function ListEvent(props) {
           <Loader size={50} />
         </LoaderDiv>
       ) : (
-        <EventTable
-          events={events}
-          handleDownload={handleDownloadFiles}
+        <GenericEvent
+          data={events}
+          link="events"
           theme={theme}
+          handleDownload={handleDownloadFiles}
         />
       )}
     </>
