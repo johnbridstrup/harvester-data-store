@@ -77,6 +77,21 @@ class ErrorReportAPITest(HDSAPITestBase):
         self.assertEqual(Event.objects.count(), 1)
         self.assertEqual(PickSession.objects.count(), 1)
 
+    def test_aux_events_created(self):
+        self._load_report_data()
+        dummies = ["dummy-uuid-1", "dummy-uuid-2"]
+        self.data["aux_uuids"] = dummies
+        self._post_error_report(load=False)
+        self.assertEqual(Event.objects.count(), 1 + len(dummies))
+
+        PRIMARY_UUID = self.data['uuid']
+        prim_event = Event.objects.get(UUID=PRIMARY_UUID)
+
+        self.assertEqual(prim_event.secondary_events.count(), len(dummies))
+        for sec_event in prim_event.secondary_events.all():
+            self.assertIn(sec_event.UUID, dummies)
+            dummies.remove(sec_event.UUID)
+
     def test_create_errorreport_with_invalid_harvester(self):
         """ create error report with invalid harvester """
         data = self.data.copy()

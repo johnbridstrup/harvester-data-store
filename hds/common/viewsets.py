@@ -6,6 +6,7 @@ from rest_framework.viewsets import ModelViewSet
 from common.utils import make_ok, merge_nested_dict
 from hds.roles import RoleChoices
 from .renderers import HDSJSONRenderer
+from .signals import report_created
 
 
 class CreateModelViewSet(ModelViewSet):
@@ -92,6 +93,13 @@ class ReportModelViewSet(CreateModelViewSet):
             RoleChoices.SQS: True,
         },
     }
+
+    def perform_create(self, serializer):
+        inst = super().perform_create(serializer)
+        app_label = inst._meta.app_label
+        class_name = inst.__class__.__name__
+        report_created.send(sender=class_name, app_label=app_label, pk=inst.id)
+        return inst
     
     @property
     def report_type(self):

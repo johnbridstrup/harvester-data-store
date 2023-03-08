@@ -1,5 +1,8 @@
+from django.contrib.contenttypes.models import ContentType
 from django.dispatch import receiver, Signal
+from common.signals import report_created
 from .models import Event
+from .tasks import collect_aux_uuids
 
 import logging
 
@@ -24,3 +27,8 @@ def add_event_tag(sender, event_id, tag, **kwargs):
             f"Tag: {tag}"
         )
         raise
+
+@receiver(report_created)
+def collect_linked_events(sender, app_label, pk, **kwargs):
+    collect_aux_uuids.delay(app_label, sender, pk)
+    
