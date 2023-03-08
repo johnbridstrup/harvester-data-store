@@ -1,6 +1,7 @@
 from django.test.client import RequestFactory
 from django.urls import reverse
 from django.utils import timezone
+from django_celery_beat.models import PeriodicTask
 from rest_framework import status
 
 from common.utils import build_api_url
@@ -34,6 +35,13 @@ class JobSchedulerTestCase(HarvJobApiTestBase):
         self._create_defaults()
         r = self.client.post(self.url, self.jobsched_payload, format='json')
         self.assertEqual(r.status_code, status.HTTP_201_CREATED)
+
+    def test_period_task_created(self):
+        self._create_defaults()
+
+        self.assertEqual(PeriodicTask.objects.count(), 0)
+        self.client.post(self.url, self.jobsched_payload, format='json')
+        self.assertEqual(PeriodicTask.objects.count(), 1)
 
     def test_scheduler_interface_endpoint(self):
         j1_schem_vers = "36.7a"

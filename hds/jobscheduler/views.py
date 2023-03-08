@@ -10,6 +10,7 @@ from hds.roles import RoleChoices
 from .forms import create_job_scheduler_form
 from .models import ScheduledJob
 from .serializers import ScheduledJobSerializer
+from .utils import create_periodic_task
 
 
 class ScheduledJobView(CreateModelViewSet):
@@ -23,6 +24,16 @@ class ScheduledJobView(CreateModelViewSet):
             RoleChoices.DEVELOPER: True,
         }
     }
+
+    def perform_create(self, serializer):
+        inst = super().perform_create(serializer)
+        try:
+            create_periodic_task(inst.id)
+        except:
+            inst.delete()
+            raise
+        return inst
+
 
     @action(
         methods=['get'],
