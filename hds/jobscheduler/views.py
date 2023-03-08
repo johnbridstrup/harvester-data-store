@@ -19,6 +19,9 @@ class ScheduledJobView(CreateModelViewSet):
         'create_scheduled_job': {
             RoleChoices.DEVELOPER: True, #is_whitelisted
         },
+        'create': {
+            RoleChoices.DEVELOPER: True,
+        }
     }
 
     @action(

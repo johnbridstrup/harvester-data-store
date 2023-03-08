@@ -1,5 +1,6 @@
 from django.test.client import RequestFactory
 from django.urls import reverse
+from django.utils import timezone
 from rest_framework import status
 
 from common.utils import build_api_url
@@ -11,6 +12,28 @@ class JobSchedulerTestCase(HarvJobApiTestBase):
         super().setUp()
         self.factory = RequestFactory()
         self.url = reverse("jobscheduler-list")
+        self.jobsched_payload = {
+            "jobtype": self.DEFAULT_JOBTYPE,
+            "schema_version": self.DEFAULT_SCHEMA_VERSION,
+            "payload": self.DEFAULT_JOB_PAYLOAD,
+            "schedule": {
+                "clocked": {
+                    "clocked_time": str(timezone.now()),
+                }
+            },
+            "targets": {
+                "harvesters": [self.test_objects['harvester'].name],
+            },
+        }
+
+    def _create_defaults(self):
+        self.create_jobtype()
+        self.create_jobschema()
+
+    def test_create_sched_job_basic(self):
+        self._create_defaults()
+        r = self.client.post(self.url, self.jobsched_payload, format='json')
+        self.assertEqual(r.status_code, status.HTTP_201_CREATED)
 
     def test_scheduler_interface_endpoint(self):
         j1_schem_vers = "36.7a"
