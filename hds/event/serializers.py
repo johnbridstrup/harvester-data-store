@@ -73,6 +73,14 @@ class EventSerializer(TaggedUUIDSerializerBase):
         fields = ('__all__')
         read_only_fields = ('creator',)
 
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        for event in instance.secondary_events.all():
+            aux_ev_data = super().to_representation(event)
+            data["related_objects"].extend(aux_ev_data["related_objects"])
+            data["related_files"].extend(aux_ev_data["related_files"])
+        return data
+
     def related_objects(self):
         return [
             ("autodiagnosticsreport", "autodiagnostics", "Autodiagnostics Report"),

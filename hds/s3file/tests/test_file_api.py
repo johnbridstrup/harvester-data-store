@@ -6,6 +6,8 @@ from common.tests import HDSAPITestBase
 from django.conf import settings
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from errorreport.models import ErrorReport
+from event.models import Event
+from event.serializers import EventSerializer
 from ..models import S3File, SessClip
 from ..serializers import DirectUploadSerializer
 
@@ -133,6 +135,26 @@ class S3FileTestCase(HDSAPITestBase):
         expect_tags = [S3File.__name__, self.filetype, ErrorReport.__name__]
         for tag in expect_tags:
             self.assertIn(tag, event_data["tags"])
+
+    def test_link_aux_file_to_report(self):
+        self._setup_basic()
+        PRIM_UUID = "primar"
+        SEC_UUID = "second"
+
+        prim_key = f"file_{PRIM_UUID}.txt"
+        sec_key = f"file_{SEC_UUID}.txt"
+
+        self.create_s3file(prim_key, has_uuid=True)
+        self.create_s3file(sec_key, has_uuid=True)
+
+        self._load_report_data()
+        self.data['uuid'] = PRIM_UUID
+        self.data["aux_uuids"] = [SEC_UUID]
+        self._post_error_report(load=False)
+
+        report = ErrorReport.objects.get(id=1)
+        event_data = EventSerializer(instance=report.event).data
+        self.assertEqual(len(event_data["related_files"]), 2)
 
     def test_create_sessclip(self):
         self.create_s3file("test", endpoint="sessclip")
