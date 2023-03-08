@@ -75,6 +75,7 @@ class EventSerializer(TaggedUUIDSerializerBase):
 
     def related_objects(self):
         return [
+            ("autodiagnosticsreport", "autodiagnostics", "Autodiagnostics Report"),
             ("errorreport", "errorreports", "Error Report"),
             ("gripreport", "gripreports", "Grip Report"),
             ("job", "jobs", "Job"),

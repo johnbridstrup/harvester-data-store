@@ -43,6 +43,7 @@ class AutodiagnosticsReportSerializer(TaggitSerializer, PickSessionSerializerMix
         robot_id = report["data"].get("robot_id")
         gripper_sn = report["data"].get("serial_no")
         pick_session_uuid = self.extract_uuid(report, "pick_session_uuid")
+        UUID = self.extract_uuid(report)
 
         data.update({
             "result": result,
@@ -50,6 +51,7 @@ class AutodiagnosticsReportSerializer(TaggitSerializer, PickSessionSerializerMix
             "gripper_sn": gripper_sn,
             "tags": tags,
             "pick_session_uuid": pick_session_uuid,
+            "UUID": UUID,
         })
         return super().to_internal_value(data)
     
