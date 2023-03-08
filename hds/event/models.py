@@ -58,7 +58,7 @@ class Event(TaggedUUIDModelFactory('Event')):
 
     E.g.; error reports and sessclips
     """
-    pass
+    secondary_events = models.ManyToManyField('self', blank=True)
 
 
 class PickSession(TaggedUUIDModelFactory('PickSession')):
