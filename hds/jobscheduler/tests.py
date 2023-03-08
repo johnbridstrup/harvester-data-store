@@ -5,7 +5,9 @@ from django_celery_beat.models import PeriodicTask
 from rest_framework import status
 
 from common.utils import build_api_url
+from harvjobs.models import Job
 from harvjobs.tests.HarvJobApiTestBase import HarvJobApiTestBase
+from .tasks import run_scheduled_job
 
 
 class JobSchedulerTestCase(HarvJobApiTestBase):
@@ -42,6 +44,16 @@ class JobSchedulerTestCase(HarvJobApiTestBase):
         self.assertEqual(PeriodicTask.objects.count(), 0)
         self.client.post(self.url, self.jobsched_payload, format='json')
         self.assertEqual(PeriodicTask.objects.count(), 1)
+
+    def test_run_scheduled_job(self):
+        self._create_defaults()
+        self.client.post(self.url, self.jobsched_payload, format='json')
+
+        run_scheduled_job(1)
+        self.assertEqual(Job.objects.count(), 1)
+
+        run_scheduled_job(1)
+        self.assertEqual(Job.objects.count(), 2)
 
     def test_scheduler_interface_endpoint(self):
         j1_schem_vers = "36.7a"
