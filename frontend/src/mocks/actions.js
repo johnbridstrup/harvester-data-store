@@ -8,7 +8,7 @@ import { NOTIFICATION_URL } from "features/notification/notificationService";
 import { LOGSESSION_URL } from "features/logparser/logparserService";
 import { MIGRATION_URL } from "features/migration/migrationService";
 import { S3FILE_URL } from "features/s3file/s3fileService";
-import { EVENTS_URL } from "features/event/eventService";
+import { EVENTS_URL, PICKSESSION_URL } from "features/event/eventService";
 import { HARVESTERS_URL } from "features/harvester/harvesterService";
 import { ERROR_REPORT_URL } from "features/errorreport/errorreportService";
 import errorreport from "test-utils/test-data/errorreport.json";
@@ -19,6 +19,7 @@ import { LOCATION_URL } from "features/location/locationService";
 import location from "test-utils/test-data/location.json";
 import s3file from "test-utils/test-data/s3file.json";
 import migrationlog from "test-utils/test-data/migration.json";
+import { picksession, event } from "test-utils/test-data/event";
 
 let genericListResponse = {
   status: "success",
@@ -184,3 +185,30 @@ export const getAutodiagReport = rest.get(
     return res(ctx.json(genericGetResponse));
   }
 );
+
+export const listPickSession = rest.get(PICKSESSION_URL, (req, res, ctx) => {
+  genericListResponse["message"] = "picksession retrieved successfully";
+  genericListResponse["data"]["results"] = [picksession];
+  return res(ctx.json(genericListResponse));
+});
+
+export const getPickSession = rest.get(
+  `${PICKSESSION_URL}:pickId`,
+  (req, res, ctx) => {
+    genericGetResponse["message"] = "picksession retrieved successfully";
+    genericGetResponse["data"] = picksession;
+    return res(ctx.json(genericGetResponse));
+  }
+);
+
+export const listEvent = rest.get(EVENTS_URL, (req, res, ctx) => {
+  genericListResponse["message"] = "event retrieved successfully";
+  genericListResponse["data"]["results"] = [event];
+  return res(ctx.json(genericListResponse));
+});
+
+export const getEvent = rest.get(`${EVENTS_URL}:eventId`, (req, res, ctx) => {
+  genericGetResponse["message"] = "event retrieved successfully";
+  genericGetResponse["data"] = event;
+  return res(ctx.json(genericGetResponse));
+});

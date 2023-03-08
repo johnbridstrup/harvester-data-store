@@ -18,6 +18,10 @@ import {
   listHarvesters,
   listLocations,
   getAutodiagReport,
+  listPickSession,
+  getPickSession,
+  listEvent,
+  getEvent,
 } from "./actions";
 
 export const handlers = [
@@ -36,4 +40,8 @@ export const handlers = [
   listHarvesters,
   listLocations,
   getAutodiagReport,
+  listPickSession,
+  getPickSession,
+  listEvent,
+  getEvent,
 ];
