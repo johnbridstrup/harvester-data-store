@@ -187,8 +187,9 @@ class AutodiagnosticsApiTestCase(HDSAPITestBase):
         self.assertEqual(r_no_ranch.json()['data']['count'], 0)
 
     def test_filter_harv_id(self):
-        self.create_harvester_object(harv_id=101)
-        self.create_harvester_object(harv_id=201)
+        fruit = self.test_objects["fruit"]
+        self.create_harvester_object(harv_id=101, fruit=fruit)
+        self.create_harvester_object(harv_id=201, fruit=fruit, name="other-harv")
         self.post_autodiag_report()
         self.ad_data['serial_number'] = "101"
         self.post_autodiag_report(load=False)

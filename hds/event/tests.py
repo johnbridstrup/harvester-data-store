@@ -131,10 +131,13 @@ class PickSessionApiTestCase(TaggedUUIDModelTestBase):
     def test_filter_params(self):
         t0 = time.time()
         ts = [t0 + i*100 for i in range(4)]  # Four start times
+        fruit = self.test_objects["fruit"]
         harvs = [
             self.create_harvester_object(
                 harv_id=i+1000,
                 location=self.create_location_object(ranch=f"ranch_{i}"),
+                name=f"new_harv_{i}",
+                fruit=fruit,
             ) for i in range(1,3)
         ] * 2  # two harvesters
 

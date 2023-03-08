@@ -279,7 +279,7 @@ class ErrorReportAPITest(HDSAPITestBase):
             'harv_id': 1100,
             'fruit': self.test_objects["fruit"],
             'location': self.test_objects["location"],
-            'name': 'Harvester 1',
+            'name': 'EMU',
             'creator': self.user,
             'is_emulator': True
         })
@@ -318,7 +318,7 @@ class ErrorReportAPITest(HDSAPITestBase):
             'harv_id': 1100,
             'fruit': self.test_objects["fruit"],
             'location': self.test_objects["location"],
-            'name': 'Harvester 1',
+            'name': 'EMU',
             'creator': self.user,
             'is_emulator': True
         })
@@ -494,7 +494,7 @@ class ErrorReportAPITest(HDSAPITestBase):
             'harv_id': 20,
             'fruit': self.test_objects["fruit"],
             'location': self.test_objects["location"],
-            'name': 'Harvester 1',
+            'name': 'Harvester 2',
             'creator': self.user
         })
         harv_dict.update({
