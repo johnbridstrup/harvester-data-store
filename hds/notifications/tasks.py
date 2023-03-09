@@ -46,9 +46,13 @@ def notify_operator_task(report_id):
     
     for exc in exceptions:
         if exc["handled"]:
-            exc["code__operator_msg"] = "Handled error. Harvester will continue picking."
-            unit = exc["robot"]
-            emoji = Emojis.GREENCHECK.value
+            # exc["code__operator_msg"] = "Handled error. Harvester will continue picking."
+            # unit = exc["robot"]
+            # emoji = Emojis.GREENCHECK.value
+
+            # if it is a handled error, proceed to the next iteration of the
+            # for loop, without adding any info to the msgs defaultdict
+            continue
         elif "traychg" in exc['info']:
             unit = exc["info"].split("traychgunit.")[-1][0]
             emoji = f"{Emojis.REDX.value} {Emojis.TRAY.value}"
@@ -95,5 +99,8 @@ def notify_operator_task(report_id):
         "text": "*OPERATOR MESSAGE*",
         "blocks": content,
     }
-    r = post_to_slack(message)
-    return r
+
+    # if the msgs variable is non-empty, post a message to slack
+    if msgs:
+        r = post_to_slack(message)
+        return r
