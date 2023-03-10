@@ -1,4 +1,9 @@
+import pytz
+
+from datetime import datetime
 from django.urls import reverse
+from django.utils import timezone
+from django.utils.timezone import make_naive
 from rest_framework import status
 
 from common.reports import DTimeFormatter
@@ -108,6 +113,39 @@ class AutodiagnosticsApiTestCase(HDSAPITestBase):
         self.assertEqual(r_all.json()['data']['count'], 3)
         r = self.client.get(f"{self.run_url}?gripper_sns=23,77")
         self.assertEqual(r.json()['data']['count'], 2)
+
+    def test_common_filters(self):
+        t1 = timezone.now() # This is a UTC datetime
+
+        self._post_autodiag_report()
+        t2 = timezone.now()
+
+        self._post_autodiag_report()
+        t3 = timezone.now()
+
+        r1_before = self.client.get(f"{self.run_url}?created_before={make_naive(t1)}&tz=utc")
+        self.assertEqual(r1_before.json()['data']['count'], 0)
+        r1_after = self.client.get(f"{self.run_url}?created_after={make_naive(t1)}&tz=utc")
+        self.assertEqual(r1_after.json()['data']['count'], 2)
+        
+        r2_before = self.client.get(f"{self.run_url}?created_before={make_naive(t2)}&tz=utc")
+        self.assertEqual(r2_before.json()['data']['count'], 1)
+        r2_after = self.client.get(f"{self.run_url}?created_after={make_naive(t2)}&tz=utc")
+        self.assertEqual(r2_after.json()['data']['count'], 1)
+
+        r3_before = self.client.get(f"{self.run_url}?created_before={make_naive(t3)}&tz=utc")
+        self.assertEqual(r3_before.json()['data']['count'], 2)
+        r3_after = self.client.get(f"{self.run_url}?created_after={make_naive(t3)}&tz=utc")
+        self.assertEqual(r3_after.json()['data']['count'], 0)
+
+        # Check another timezone
+        tz = pytz.timezone("US/Pacific")
+        t2_othertz = t2.astimezone(tz).replace(tzinfo=None)
+        
+        r_tz_before = self.client.get(f"{self.run_url}?created_before={t2_othertz}&tz={tz}")
+        self.assertEqual(r_tz_before.json()['data']['count'], 1)
+        r_tz_after = self.client.get(f"{self.run_url}?created_after={t2_othertz}&tz={tz}")
+        self.assertEqual(r_tz_after.json()['data']['count'], 1)
 
     def test_filter_harv_id(self):
         self.create_harvester_object(harv_id=101)

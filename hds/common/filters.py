@@ -18,7 +18,28 @@ class ListFilter(Filter):
         return super().filter(qs, values)
 
 
+class DTimeFilter(Filter):
+    def filter(self, qs, value):
+        if not value:
+            return qs
+        tz = self.parent.request.query_params.get("tz", DEFAULT_TZ)
+        try:
+            value = DTimeFormatter.convert_to_datetime(value, tz)
+        except:
+            return qs
+        return super().filter(qs, value)
+        
+
+
 class CommonInfoFilterset(filters.FilterSet):
+    FIELDS_BASE = [
+        'created_after', 
+        'created_before',
+    ]
+
+    created_after = DTimeFilter(field_name='created', lookup_expr='gte')
+    created_before = DTimeFilter(field_name='created', lookup_expr='lte')
+
     def filter_datetime_range(self, queryset, name, value):
         split_dates = value.split(',')
         if len(split_dates) != 2:

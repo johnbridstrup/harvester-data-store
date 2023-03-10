@@ -20,7 +20,7 @@ class AutodiagnosticsRunFilter(CommonInfoFilterset):
 
     class Meta:
         model = AutodiagnosticsRun
-        fields = (
+        fields = CommonInfoFilterset.FIELDS_BASE + [
             'robot_id',
             'report__harvester__location__ranch',
-        )
+        ]

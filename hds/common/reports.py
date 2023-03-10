@@ -37,24 +37,21 @@ class DTimeFormatter:
     @classmethod
     def convert_to_datetime(cls, dt_str, tz_str, format=None):
         # try standard parse datetime first
+        tz = pytz.timezone(tz_str)
         try:
             dt = parse_datetime(dt_str)
             if dt:  # parse datetime will return None if it doesn't match
-                return dt
+                return tz.localize(dt)
         except ValueError:
             pass
-
-        tz = pytz.timezone(tz_str)
+        
         if format:
             return tz.localize(datetime.strptime(dt_str, format))
         
         try:
             return tz.localize(datetime.strptime(dt_str, LOG_TIMESTAMP_FMT))
         except ValueError:
-            try:
-                return tz.localize(datetime.strptime(dt_str, UTILITY_TIMESTAMP_FMT))
-            except ValueError:
-                return tz.localize(parse_datetime(dt_str))
+            return tz.localize(datetime.strptime(dt_str, UTILITY_TIMESTAMP_FMT))
 
     @classmethod
     def format_datetime(cls, dt_str, tz_str):

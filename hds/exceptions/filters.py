@@ -22,7 +22,7 @@ class AFTExceptionFilter(CommonInfoFilterset):
 
     class Meta:
         model = AFTException
-        fields = (
+        fields = CommonInfoFilterset.FIELDS_BASE + [
             'primary',
             'code__code',
             'code__name',
@@ -33,4 +33,4 @@ class AFTExceptionFilter(CommonInfoFilterset):
             'robot',
             'report__harvester__harv_id',
             'report__harvester__location__ranch',
-        )
+        ]
