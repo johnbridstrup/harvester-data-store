@@ -2,6 +2,7 @@ from datetime import datetime
 import pytz
 
 from django.db import models
+from django.utils.dateparse import parse_datetime
 from taggit.managers import TaggableManager
 
 from harvester.models import Harvester, Location
@@ -9,6 +10,8 @@ from .models import CommonInfo
 
 
 DEFAULT_TZ = "US/Pacific"
+LOG_TIMESTAMP_FMT = '%Y%m%dT%H%M%S.%f'
+UTILITY_TIMESTAMP_FMT = "%Y%m%d%H%M%S"
 
 
 class ReportBase(CommonInfo):
@@ -32,11 +35,26 @@ class DTimeFormatter:
         return dt_str
 
     @classmethod
-    def convert_to_datetime(cls, dt_str, tz_str, format='%Y%m%dT%H%M%S.%f'):
-        tz = pytz.timezone(tz_str)
-        dt = tz.localize(datetime.strptime(dt_str, format))
+    def convert_to_datetime(cls, dt_str, tz_str, format=None):
+        # try standard parse datetime first
+        try:
+            dt = parse_datetime(dt_str)
+            if dt:  # parse datetime will return None if it doesn't match
+                return dt
+        except ValueError:
+            pass
 
-        return dt
+        tz = pytz.timezone(tz_str)
+        if format:
+            return tz.localize(datetime.strptime(dt_str, format))
+        
+        try:
+            return tz.localize(datetime.strptime(dt_str, LOG_TIMESTAMP_FMT))
+        except ValueError:
+            try:
+                return tz.localize(datetime.strptime(dt_str, UTILITY_TIMESTAMP_FMT))
+            except ValueError:
+                return tz.localize(parse_datetime(dt_str))
 
     @classmethod
     def format_datetime(cls, dt_str, tz_str):
