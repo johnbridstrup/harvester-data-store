@@ -1,13 +1,13 @@
 from django_filters import rest_framework as filters
 
-from common.filters import ListFilter, HDSFilterset
+from common.filters import ListFilter, CommonInfoFilterset
 from common.reports import DEFAULT_TZ, DTimeFormatter
 from .models import AutodiagnosticsRun
 
 
-class AutodiagnosticsRunFilter(HDSFilterset):
+class AutodiagnosticsRunFilter(CommonInfoFilterset):
     # Special method filters
-    datetime_range = filters.CharFilter(field_name="run_timestamp", method="filter_datetime") # start,end
+    datetime_range = filters.CharFilter(field_name="run_timestamp", method="filter_datetime_range") # start,end
     result = filters.CharFilter(field_name="result", method="filter_bool")
     template_match_result = filters.CharFilter(field_name="template_match_result", method="filter_bool")
     ball_found_result = filters.CharFilter(field_name="ball_found_result", method="filter_bool")

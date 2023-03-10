@@ -18,8 +18,8 @@ class ListFilter(Filter):
         return super().filter(qs, values)
 
 
-class HDSFilterset(filters.FilterSet):
-    def filter_datetime(self, queryset, name, value):
+class CommonInfoFilterset(filters.FilterSet):
+    def filter_datetime_range(self, queryset, name, value):
         split_dates = value.split(',')
         if len(split_dates) != 2:
             return queryset

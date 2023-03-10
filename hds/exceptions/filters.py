@@ -1,13 +1,13 @@
 from django_filters import rest_framework as filters
 
-from common.filters import ListFilter, HDSFilterset
+from common.filters import ListFilter, CommonInfoFilterset
 from common.reports import DEFAULT_TZ, DTimeFormatter
 from .models import AFTException
 
 
-class AFTExceptionFilter(HDSFilterset):
+class AFTExceptionFilter(CommonInfoFilterset):
     # Special method filters
-    datetime_range = filters.CharFilter(field_name="timestamp", method="filter_datetime") # start,end
+    datetime_range = filters.CharFilter(field_name="timestamp", method="filter_datetime_range") # start,end
     is_emulator = filters.CharFilter(field_name="is_emulator", method="filter_bool")
     handled = filters.CharFilter(field_name="handled", method="filter_bool")
 
