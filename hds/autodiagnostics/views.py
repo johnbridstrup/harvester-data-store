@@ -1,4 +1,4 @@
-from .filters import AutodiagnosticsRunFilter
+from .filters import AutodiagnosticsRunFilter, AutodiagnosticsReportFilter
 from .models import AutodiagnosticsReport, AutodiagnosticsRun
 from .serializers import AutodiagnosticsReportSerializer, AutodiagnosticsRunSerializer
 from .tasks import extract_autodiag_run
@@ -16,13 +16,7 @@ MAGIC_GRIPPER_MSG = f'Magic gripper {MAGIC_GRIPPER_SN} ignored.'
 class AutodiagnosticsReportView(ReportModelViewSet):
     queryset = AutodiagnosticsReport.objects.all()
     serializer_class = AutodiagnosticsReportSerializer
-    filterset_fields = (
-        'harvester__harv_id', 
-        'event__UUID',
-        'location__ranch',
-        'robot',
-        'gripper_sn',
-    )
+    filterset_class = AutodiagnosticsReportFilter
 
     def create(self, request, *args, **kwargs):
         gripper_sn = int(request.data['data']['serial_no'])

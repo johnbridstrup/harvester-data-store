@@ -1,4 +1,5 @@
 import pytz
+import time
 
 from datetime import datetime
 from django.urls import reverse
@@ -42,10 +43,10 @@ class AutodiagnosticsApiTestCase(HDSAPITestBase):
         r_all = self.client.get(self.url)
         self.assertEqual(r_all.json()["data"]["count"], 1)
 
-        r_harv11 = self.client.get(f"{self.url}?harvester__harv_id=11")
+        r_harv11 = self.client.get(f"{self.url}?harv_ids=11")
         self.assertEqual(r_harv11.json()["data"]["count"], 1)
 
-        r_harv12 = self.client.get(f"{self.url}?harvester__harv_id=12")
+        r_harv12 = self.client.get(f"{self.url}?harv_ids=12")
         self.assertEqual(r_harv12.json()["data"]["count"], 0)
 
         r_sn1298 = self.client.get(f"{self.url}?gripper_sn=1298")
@@ -146,6 +147,50 @@ class AutodiagnosticsApiTestCase(HDSAPITestBase):
         self.assertEqual(r_tz_before.json()['data']['count'], 1)
         r_tz_after = self.client.get(f"{self.run_url}?created_after={t2_othertz}&tz={tz}")
         self.assertEqual(r_tz_after.json()['data']['count'], 1)
+
+    def test_report_filters(self):
+        self._load_autodiag_report()
+
+        # Report time filters
+
+        t1 = time.time() # This is a posix timestamp
+        self.ad_data['timestamp'] = t1 + .00001  # shift for gte and lte
+        dt1 = timezone.datetime.fromtimestamp(t1) # This is UTC
+        self._post_autodiag_report(load=False)
+
+        t2 = time.time()
+        dt2 = timezone.datetime.fromtimestamp(t2)
+        self.ad_data['timestamp'] = t2 + .00001
+        self._post_autodiag_report(load=False)
+
+        t3 = time.time()
+        dt3 = timezone.datetime.fromtimestamp(t3)
+
+        r1_before = self.client.get(f"{self.url}?reporttime_before={dt1}&tz=utc")
+        self.assertEqual(r1_before.json()['data']['count'], 0)
+        r1_after = self.client.get(f"{self.url}?reporttime_after={dt1}&tz=utc")
+        self.assertEqual(r1_after.json()['data']['count'], 2)
+        
+        r2_before = self.client.get(f"{self.url}?reporttime_before={dt2}&tz=utc")
+        self.assertEqual(r2_before.json()['data']['count'], 1)
+        r2_after = self.client.get(f"{self.url}?reporttime_after={dt2}&tz=utc")
+        self.assertEqual(r2_after.json()['data']['count'], 1)
+
+        r3_before = self.client.get(f"{self.url}?reporttime_before={dt3}&tz=utc")
+        self.assertEqual(r3_before.json()['data']['count'], 2)
+        r3_after = self.client.get(f"{self.url}?reporttime_after={dt3}&tz=utc")
+        self.assertEqual(r3_after.json()['data']['count'], 0)
+
+        # Fruit and ranch
+        r_straw = self.client.get(f"{self.url}?fruits={self.test_objects['fruit'].name}")
+        r_other = self.client.get(f"{self.url}?fruits=otherfruit")
+        self.assertEqual(r_straw.json()['data']['count'], 2)
+        self.assertEqual(r_other.json()['data']['count'], 0)
+
+        r_ranch = self.client.get(f"{self.url}?locations={self.test_objects['location'].ranch}")
+        r_no_ranch = self.client.get(f"{self.url}?locations=notaranch")
+        self.assertEqual(r_ranch.json()['data']['count'], 2)
+        self.assertEqual(r_no_ranch.json()['data']['count'], 0)
 
     def test_filter_harv_id(self):
         self.create_harvester_object(harv_id=101)

@@ -61,3 +61,19 @@ class CommonInfoFilterset(filters.FilterSet):
         # This should probably be handled more elegantly
         value = value.lower() in ["1", "true"]
         return queryset.filter(**{name: value})
+
+
+class ReportFilterset(CommonInfoFilterset):
+    FIELDS_BASE = CommonInfoFilterset.FIELDS_BASE + [
+        "reporttime_after",
+        "reporttime_before",
+        "locations",
+        "harv_ids",
+        "fruits"
+    ]
+
+    reporttime_after = DTimeFilter(field_name='reportTime', lookup_expr='gte')
+    reporttime_before = DTimeFilter(field_name='reportTime', lookup_expr='lte')
+    locations = ListFilter(field_name="location__ranch")
+    harv_ids = ListFilter(field_type=int, field_name="harvester__harv_id")
+    fruits = ListFilter(field_name="harvester__fruit__name")

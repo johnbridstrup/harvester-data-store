@@ -1,8 +1,8 @@
 from django_filters import rest_framework as filters
 
-from common.filters import ListFilter, CommonInfoFilterset
+from common.filters import ListFilter, CommonInfoFilterset, ReportFilterset
 from common.reports import DEFAULT_TZ, DTimeFormatter
-from .models import AutodiagnosticsRun
+from .models import AutodiagnosticsRun, AutodiagnosticsReport
 
 
 class AutodiagnosticsRunFilter(CommonInfoFilterset):
@@ -23,4 +23,16 @@ class AutodiagnosticsRunFilter(CommonInfoFilterset):
         fields = CommonInfoFilterset.FIELDS_BASE + [
             'robot_id',
             'report__harvester__location__ranch',
+        ]
+
+
+class AutodiagnosticsReportFilter(ReportFilterset):
+    class Meta:
+        model = AutodiagnosticsReport
+        fields = ReportFilterset.FIELDS_BASE + [
+            'harvester__harv_id',
+            'gripper_sn',
+            'event__UUID',
+            'location__ranch',
+            'robot',
         ]
