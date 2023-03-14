@@ -1,5 +1,4 @@
 from .metrics import PARETO_QUERY_TIMER
-from common.viewsets import ReportModelViewSet
 from exceptions.models import AFTException
 
 from django.db.models import Count, F
@@ -29,9 +28,6 @@ def build_list_filter(request):
         if 'exceptions__primary' in request.query_params:
             primary = request.query_params['exceptions__primary'].lower() in ['1', 'true']
             listfilter['exceptions__primary'] = primary
-
-        # update listfilter with generic query dict
-        listfilter.update(ReportModelViewSet.build_generic_query(request))
 
         return listfilter
 

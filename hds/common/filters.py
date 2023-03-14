@@ -28,6 +28,28 @@ class DTimeFilter(Filter):
         except:
             return qs
         return super().filter(qs, value)
+
+
+class GenericFilter(Filter):
+    """Generic lookup filter.
+
+    Filter any fields for exact matches. JSONField compatible. 
+    example: client.get(<url>/?jsonfield__key1__key2=3,jsonfield2__key3__key4=hello)
+    """
+    def filter(self, qs, value):
+        if not value:
+            return qs
+        query_filter = {}
+        for item in value.split(','):
+                try:
+                    key, value = item.split('=')
+                except ValueError:
+                    # too many or not enough values to unpack
+                    return qs
+                query_filter[key.strip()] = value.strip()
+        
+        return qs.filter(**query_filter)
+
         
 
 

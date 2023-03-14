@@ -667,3 +667,15 @@ class ErrorReportAPITest(HDSAPITestBase):
         )
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         self.assertEqual(len(resp.json()["data"]["results"]), 1)
+
+        # generic
+        self.data['data']['sysmon_report']['sysmon.0']['PID'] = '111'
+        self._post_error_report(load=False)
+        generic_dict = {
+            "generic": "report__data__sysmon_report__sysmon.0__PID=111"
+        }
+
+        r_gen = self.client.get(
+            f'{self.api_base_url}/errorreports/?{urlencode(generic_dict)}'
+        )
+        self.assertEqual(r_gen.json()['data']['count'], 1)

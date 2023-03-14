@@ -1,5 +1,5 @@
 from django_filters import rest_framework as filters
-from common.filters import DTimeFilter, ListFilter, ReportFilterset
+from common.filters import DTimeFilter, GenericFilter, ListFilter, ReportFilterset
 
 from .models import ErrorReport
 
@@ -11,6 +11,7 @@ class ErrorReportFilterset(ReportFilterset):
     traceback = filters.CharFilter(field_name="exceptions__traceback", lookup_expr="icontains")
     is_emulator = filters.BooleanFilter(field_name="harvester__is_emulator")
     handled = filters.BooleanFilter(field_name="exceptions__handled")
+    generic = GenericFilter()
 
     class Meta:
         model = ErrorReport
