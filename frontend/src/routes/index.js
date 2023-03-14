@@ -88,6 +88,7 @@ const PickSessionListView = lazy(() => import("pages/event/picksessionlist"));
 const PickSessionDetailView = lazy(() =>
   import("pages/event/picksessiondetail")
 );
+const DocumentationView = lazy(() => import("pages/docs"));
 
 const BaseRoutes = () => {
   return (
@@ -794,6 +795,22 @@ const BaseRoutes = () => {
               }
             >
               <PickSessionDetailView />
+            </Suspense>
+          </RequireUser>
+        }
+      />
+      <Route
+        path="/docs"
+        element={
+          <RequireUser>
+            <Suspense
+              fallback={
+                <RouteLoader>
+                  <Loader size={50} />
+                </RouteLoader>
+              }
+            >
+              <DocumentationView />
             </Suspense>
           </RequireUser>
         }
