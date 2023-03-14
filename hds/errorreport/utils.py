@@ -1,5 +1,4 @@
 from .metrics import PARETO_QUERY_TIMER
-from common.reports import DTimeFormatter, DEFAULT_TZ
 from common.viewsets import ReportModelViewSet
 from exceptions.models import AFTException
 
@@ -19,65 +18,12 @@ def build_list_filter(request):
             dict: dictionary of query params and values
         """
         listfilter = {}
-        # get query timezone
-        tz = request.query_params.get('tz', DEFAULT_TZ)
-
-        # get harv_ids fromrequest and filter queryset for harvester ids
-        if 'harv_ids' in request.query_params:
-            qp = request.query_params["harv_ids"]
-            if len(qp) > 0:
-                harv_ids = [int(h) for h in qp.split(',')]
-                listfilter['harvester__harv_id__in'] = harv_ids
-
-        # get location names from request and filter queryset for location ids
-        if 'locations' in request.query_params:
-            qp = request.query_params["locations"]
-            if len(qp) > 0:
-                location_names = request.query_params["locations"].split(',')
-                listfilter['location__ranch__in'] = location_names
-
-        # get reportTime range fromrequest and filter queryset for reportTime
-        # check if start_time exists in query_params
-        if 'start_time' in request.query_params:
-            qp = request.query_params["start_time"]
-            if len(qp) > 0:
-                start_time = DTimeFormatter.format_datetime(qp, tz)
-                listfilter['reportTime__gte'] = start_time
-
-        # check if end_time exists in query_params
-        if 'end_time' in request.query_params:
-            qp = request.query_params["end_time"]
-            if len(qp) > 0:
-                end_time = DTimeFormatter.format_datetime(qp, tz)
-                listfilter['reportTime__lte'] = end_time
-
-        # get fruit fromrequest and filter queryset for fruit
-        if 'fruits' in request.query_params:
-            fruits = request.query_params["fruits"].split(",")
-            if len(fruits) > 0:
-                listfilter['harvester__fruit__name__in'] = fruits
 
         # get exception codes fromrequest and filter queryset for exception code
         if 'codes' in request.query_params:
             codes = request.query_params["codes"].split(",")
             if len(codes) > 0:
                 listfilter['exceptions__code__code__in'] = codes
-
-        # get traceback fromrequest and filter queryset for traceback
-        if 'traceback' in request.query_params:
-            traceback = request.query_params["traceback"]
-            if len(traceback) > 0:
-                listfilter['exceptions__traceback__icontains'] = traceback
-
-        # Filter for emulator data
-        if 'is_emulator' in request.query_params:
-            is_emu = bool(int(request.query_params['is_emulator']))
-            listfilter['harvester__is_emulator'] = is_emu
-
-        # Filter for handled/unhandled errors
-        if 'handled' in request.query_params:
-            handled = bool(int(request.query_params['handled']))
-            listfilter['exceptions__handled'] = handled
 
         # Primary exceptions flag
         if 'exceptions__primary' in request.query_params:

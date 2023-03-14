@@ -3,6 +3,7 @@ from ..utils import (
     pareto_list_filter,
     create_pareto,
 )
+from ..filters import ErrorReportFilterset
 from ..models import ErrorReport
 from ..metrics import (
     ERRORREPORT_LIST_QUERY_TIMER,
@@ -26,6 +27,7 @@ from rest_framework.renderers import JSONRenderer
 class ErrorReportView(ReportModelViewSet):
     queryset = ErrorReport.objects.all()
     serializer_class = ErrorReportSerializer
+    filterset_class = ErrorReportFilterset
     view_permissions_update = {
         'pareto': {
             RoleChoices.SUPPORT: True, #is_whitelisted

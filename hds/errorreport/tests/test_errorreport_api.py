@@ -10,13 +10,14 @@ from event.models import Event, PickSession
 from exceptions.models import AFTException
 from ..models import ErrorReport, DEFAULT_UNKNOWN
 from ..serializers.errorreportserializer import ErrorReportSerializer, FAILED_SPLIT_MSG
+from django.utils import timezone
 from django.utils.timezone import make_aware
 from rest_framework import serializers, status
 from rest_framework.authtoken.models import Token
 from taggit.models import Tag
 from unittest.mock import patch
 from urllib.parse import urlencode
-import datetime
+import datetime, time
 
 
 class ErrorReportAPITest(HDSAPITestBase):
@@ -178,6 +179,47 @@ class ErrorReportAPITest(HDSAPITestBase):
         self.assertEqual(unhand_data['count'], 1)
         self.assertEqual(hand_data['results'][0]['exceptions'][0]['handled'], True)
         self.assertEqual(unhand_data['results'][0]['exceptions'][0]['handled'], False)
+
+        r_loc = self.client.get(f'{self.api_base_url}/errorreports/?locations={self.test_objects["location"].ranch}')
+        r_no_loc = self.client.get(f'{self.api_base_url}/errorreports/?locations=otherlocation')
+        self.assertEqual(r_loc.json()['data']['count'], 2)
+        self.assertEqual(r_no_loc.json()['data']['count'], 0)
+
+        r_codes = self.client.get(f'{self.api_base_url}/errorreports/?codes=0,1')
+        r_non_codes = self.client.get(f'{self.api_base_url}/errorreports/?codes=1,2')
+        self.assertEqual(r_codes.json()['data']['count'], 2)
+        self.assertEqual(r_non_codes.json()['data']['count'], 0)
+
+    def test_start_end_time(self):
+        self._load_report_data()
+
+        t1 = time.time() # This is a posix timestamp
+        self.data['timestamp'] = t1 + .00001  # shift for gte and lte
+        dt1 = timezone.datetime.fromtimestamp(t1) # This is UTC
+        self._post_error_report(load=False)
+
+        t2 = time.time()
+        dt2 = timezone.datetime.fromtimestamp(t2)
+        self.data['timestamp'] = t2 + .00001
+        self._post_error_report(load=False)
+
+        t3 = time.time()
+        dt3 = timezone.datetime.fromtimestamp(t3)
+
+        r1_before = self.client.get(f"{self.api_base_url}/errorreports/?end_time={dt1}&tz=utc")
+        self.assertEqual(r1_before.json()['data']['count'], 0)
+        r1_after = self.client.get(f"{self.api_base_url}/errorreports/?start_time={dt1}&tz=utc")
+        self.assertEqual(r1_after.json()['data']['count'], 2)
+        
+        r2_before = self.client.get(f"{self.api_base_url}/errorreports/?end_time={dt2}&tz=utc")
+        self.assertEqual(r2_before.json()['data']['count'], 1)
+        r2_after = self.client.get(f"{self.api_base_url}/errorreports/?start_time={dt2}&tz=utc")
+        self.assertEqual(r2_after.json()['data']['count'], 1)
+
+        r3_before = self.client.get(f"{self.api_base_url}/errorreports/?end_time={dt3}&tz=utc")
+        self.assertEqual(r3_before.json()['data']['count'], 2)
+        r3_after = self.client.get(f"{self.api_base_url}/errorreports/?start_time={dt3}&tz=utc")
+        self.assertEqual(r3_after.json()['data']['count'], 0)
 
     def test_get_errorreport_by_id(self):
         """ get error report by id """
@@ -614,12 +656,14 @@ class ErrorReportAPITest(HDSAPITestBase):
             code
         )
 
+        self.data['data']['sysmon_report']['sysmon.0']['errors']['harvester.0']['traceback'] = "findme"
+        self._post_error_report(load=False)
         # query traceback
         trace_dict = {
-            'traceback': "traceback"
+            'traceback': "findme"
         }
         resp = self.client.get(
             f'{self.api_base_url}/errorreports/?{urlencode(trace_dict)}'
         )
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(resp.json()["data"]["results"]), 0)
+        self.assertEqual(len(resp.json()["data"]["results"]), 1)
