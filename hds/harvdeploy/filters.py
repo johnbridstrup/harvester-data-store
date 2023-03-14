@@ -1,12 +1,22 @@
-from .models import HarvesterCodeRelease
-
 import django_filters.rest_framework as filters
 
+from common.filters import CommonInfoFilterset, ReportFilterset
 
-class ReleaseFilter(filters.FilterSet):
+from .models import HarvesterCodeRelease, HarvesterVersionReport
+
+
+class ReleaseFilter(CommonInfoFilterset):
     fruit = filters.CharFilter(field_name="fruit__name")
     tags = filters.CharFilter(field_name='tags__name')
 
     class Meta:
         model = HarvesterCodeRelease
-        fields = ['fruit', 'tags']
+        fields = CommonInfoFilterset.FIELDS_BASE + [
+            'fruit', 
+            'tags',
+        ]
+
+class VersionFilterset(ReportFilterset):
+    class Meta:
+        model = HarvesterVersionReport
+        fields = ReportFilterset.FIELDS_BASE

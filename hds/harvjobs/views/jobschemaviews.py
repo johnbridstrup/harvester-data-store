@@ -1,3 +1,4 @@
+from ..filters import JobSchemaFilterset
 from ..models import JobSchema
 from ..serializers.jobschemaserializer import JobSchemaSerializer
 
@@ -10,7 +11,7 @@ class JobSchemaView(CreateModelViewSet):
     queryset = JobSchema.objects.all()
     serializer_class = JobSchemaSerializer
     permission_classes = (DjangoModelPermissions,)
-    filterset_fields = ('jobtype__name',)
+    filterset_class = JobSchemaFilterset
     ordering = ('-created',)
     view_permissions_update = {
         'create': {

@@ -1,3 +1,4 @@
+from ..filters import JobFilterset
 from ..models import Job
 from ..roles import whitelist
 from ..serializers.jobserializer import JobSerializer, JobHistorySerializer
@@ -17,13 +18,7 @@ is_support_whitelist = whitelist(["sess_clip", "session_scrape", "test"])
 class JobView(CreateModelViewSet):
     queryset = Job.objects.all()
     serializer_class = JobSerializer
-    filterset_fields = (
-        'target__harv_id',
-        'schema__id',
-        'schema__version',
-        'event__UUID',
-        'jobstatus',
-    )
+    filterset_class = JobFilterset
     ordering = ('-created', )
     view_permissions_update = {
         'create': {

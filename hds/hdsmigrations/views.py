@@ -5,6 +5,7 @@ from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.renderers import JSONRenderer
 
+from .filters import MigrationLogFilterset
 from .models import MigrationLog
 from .serializers import MigrationLogSerializer
 from .tasks import execute_migrations
@@ -15,7 +16,7 @@ import os
 class MigrationLogView(CreateModelViewSet):
     queryset = MigrationLog.objects.all()
     serializer_class = MigrationLogSerializer
-    filterset_fields = ('result',)
+    filterset_class = MigrationLogFilterset
     ordering = ('-id',)
     http_method_names = ['get']
     view_permissions_update = {

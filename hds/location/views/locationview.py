@@ -1,3 +1,4 @@
+from ..filters import LocationFilterset
 from ..models import Location
 from ..serializers.locationserializer import LocationSerializer
 
@@ -8,6 +9,7 @@ from hds.roles import RoleChoices
 class LocationView(CreateModelViewSet):
     queryset = Location.objects.all()
     serializer_class = LocationSerializer
+    filterset_class = LocationFilterset
     view_permissions_update = {
         "create": {
             RoleChoices.DEVELOPER: True

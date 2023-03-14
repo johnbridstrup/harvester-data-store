@@ -1,3 +1,4 @@
+from ..filters import JobResultsFilterset
 from ..models import JobResults, Job
 from ..serializers.jobresultsserializer import JobResultsSerializer
 from ..tasks import job_status_update
@@ -11,7 +12,7 @@ class JobResultsView(ReportModelViewSet):
     queryset = JobResults.objects.all()
     serializer_class = JobResultsSerializer
     permission_classes = (IsAuthenticated,)
-    filterset_fields = ('job__target__harv_id', 'job__event__UUID')
+    filterset_class = JobResultsFilterset
 
 
     def perform_create(self, serializer):

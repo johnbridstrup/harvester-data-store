@@ -1,6 +1,7 @@
 from common.async_metrics import ASYNC_UPLOAD_COUNTER
 from common.viewsets import CreateModelViewSet
 from hds.roles import RoleChoices
+from logparser.filters import LogSessionFilterset
 from logparser.tasks import perform_extraction
 from logparser.serializers.logsessionserializers import (
     LogSessionSerializer,
@@ -11,7 +12,7 @@ from logparser.models import LogSession
 class LogSessionViewset(CreateModelViewSet):
     queryset = LogSession.objects.all()
     serializer_class = LogSessionSerializer
-    filterset_fields = ('harv__harv_id',)
+    filterset_class = LogSessionFilterset
     ordering = ("-created",)
     view_permissions_update = {
         "create": {

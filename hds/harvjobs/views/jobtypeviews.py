@@ -1,3 +1,4 @@
+from ..filters import JobTypeFilterset
 from ..models import JobType
 from ..serializers.jobtypeserializer import JobTypeSerializer
 
@@ -10,6 +11,7 @@ class JobTypeView(CreateModelViewSet):
     queryset = JobType.objects.all()
     serializer_class = JobTypeSerializer
     permission_classes = (DjangoModelPermissions,)
+    filterset_class = JobTypeFilterset
     view_permissions_update = {
         'create': {
             RoleChoices.JENKINS: True,

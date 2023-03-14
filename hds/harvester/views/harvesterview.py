@@ -1,3 +1,4 @@
+from ..filters import HarvesterFilterset
 from ..models import Harvester
 from ..serializers.harvesterserializer import HarvesterSerializer, HarvesterHistorySerializer
 
@@ -15,7 +16,7 @@ from harvassets.serializers import HarvesterAssetSerializer
 class HarvesterView(CreateModelViewSet):
     queryset = Harvester.objects.all()
     serializer_class = HarvesterSerializer
-    filterset_fields = ('harv_id', 'fruit__name')
+    filterset_class = HarvesterFilterset
     ordering = ('-id',)
     view_permissions_update = {
         "create": {

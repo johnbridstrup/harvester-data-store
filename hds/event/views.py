@@ -1,3 +1,4 @@
+from .filters import EventFilterset, PickSessionFilterset
 from .serializers import EventSerializer, PickSessionSerializer
 
 from rest_framework.decorators import action
@@ -8,7 +9,6 @@ from hds.roles import RoleChoices
 
 
 class TaggedUUIDViewBase(CreateModelViewSet):
-    filterset_fields = ("UUID",)
     ordering = ('-id',)
     view_permissions_update = {
         'get_tags': {
@@ -35,8 +35,10 @@ class TaggedUUIDViewBase(CreateModelViewSet):
 
 
 class EventView(TaggedUUIDViewBase):
+    filterset_class = EventFilterset
     serializer_class = EventSerializer    
 
 
 class PickSessionView(TaggedUUIDViewBase):
+    filterset_class = PickSessionFilterset
     serializer_class = PickSessionSerializer

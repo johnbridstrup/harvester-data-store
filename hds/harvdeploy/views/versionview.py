@@ -1,3 +1,4 @@
+from ..filters import VersionFilterset
 from ..models import HarvesterVersionReport
 from ..serializers import HarvesterVersionReportSerializer
 
@@ -7,6 +8,7 @@ from common.viewsets import ReportModelViewSet
 class HarvesterVersionReportView(ReportModelViewSet):
     queryset = HarvesterVersionReport.objects.all()
     serializer_class = HarvesterVersionReportSerializer
+    filterset_class = VersionFilterset
 
     def get_queryset(self):
         listfilter = {}
