@@ -395,9 +395,9 @@ export const robotInError = (exception, sysmonReport) => {
     let robotIndex = `Robot ${robotNumber}`;
     let service = `${exception.service}.${exception.robot}`;
     robot["robot"] = robotIndex;
-    if (sysmonReport[robotIndex]["NUC"]["services"][service]) {
+    if (sysmonReport[robotIndex]["NUC"]?.["services"]?.[service]) {
       robot["arm"] = "NUC";
-    } else if (sysmonReport[robotIndex]["JETSON"]["services"][service]) {
+    } else if (sysmonReport[robotIndex]["JETSON"]?.["services"]?.[service]) {
       robot["arm"] = "JETSON";
     }
   }

@@ -27,6 +27,7 @@ import {
 import errorreport from "test-utils/test-data/errorreport.json";
 import { API_URL } from "features/base/constants";
 import autodiagnostic from "test-utils/test-data/autodiagnostic.json";
+import emureport from "test-utils/test-data/emureport.json";
 
 test("should do binary search for given timestamp", () => {
   let content = [
@@ -239,6 +240,7 @@ test("should build query object", () => {
 
 describe("error report transformation block scope", () => {
   const sysmondata = errorreport.report.data.sysmon_report;
+  const emusysmondata = emureport.report.data.sysmon_report;
   function _getexceptions() {
     return transformExceptions(errorreport.exceptions);
   }
@@ -247,6 +249,9 @@ describe("error report transformation block scope", () => {
   }
   function _erroredservices() {
     return getServicesInError(_getexceptions(), _getsysreport());
+  }
+  function _emusysreport() {
+    return transformSysmonReport(emusysmondata);
   }
 
   test("should transform exceptions into required array obj", () => {
@@ -259,8 +264,11 @@ describe("error report transformation block scope", () => {
   test("should transform sysmon report into required obj", () => {
     let expected = _getsysreport();
     expect(transformSysmonReport(sysmondata)).toMatchObject(expected);
-    expect(transformSysmonReport(sysmondata)).toHaveProperty("Master");
-    expect(transformSysmonReport(sysmondata)).toHaveProperty("Robot 1");
+    expect(Object.keys(expected)).toHaveLength(7);
+    expect(expected).toHaveProperty("Master");
+    expect(expected).toHaveProperty("Robot 1");
+    expect(expected["Robot 1"]).toHaveProperty("NUC");
+    expect(expected["Robot 1"]).toHaveProperty("JETSON");
   });
 
   test("should transform sysmon services into required array", () => {
@@ -327,6 +335,22 @@ describe("error report transformation block scope", () => {
       codes: ["0*", "0"],
     };
     expect(output).toMatchObject(expected);
+  });
+
+  test("should handle robots with missing NUC & JETSON arms", () => {
+    let expected = _emusysreport();
+    expect(transformSysmonReport(emusysmondata)).toMatchObject(expected);
+    expect(Object.keys(expected)).toHaveLength(4);
+    expect(expected).toHaveProperty("Master");
+    expect(expected).toHaveProperty("Robot 1");
+    expect(expected).toHaveProperty("Robot 2");
+    expect(expected).toHaveProperty("Robot 5");
+    expect(expected["Robot 1"]).toHaveProperty("NUC");
+    expect(expected["Robot 1"]).not.toHaveProperty("JETSON");
+    expect(expected["Robot 2"]).toHaveProperty("NUC");
+    expect(expected["Robot 2"]).not.toHaveProperty("JETSON");
+    expect(expected["Robot 5"]).toHaveProperty("NUC");
+    expect(expected["Robot 5"]).not.toHaveProperty("JETSON");
   });
 });
 
