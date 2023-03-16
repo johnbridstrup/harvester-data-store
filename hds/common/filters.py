@@ -79,11 +79,6 @@ class CommonInfoFilterset(filters.FilterSet):
             filter_dict[f"{name}__lte"] = end
         return queryset.filter(**filter_dict)
 
-    def filter_bool(self, queryset, name, value):
-        # This should probably be handled more elegantly
-        value = value.lower() in ["1", "true"]
-        return queryset.filter(**{name: value})
-
 
 class ReportFilterset(CommonInfoFilterset):
     FIELDS_BASE = CommonInfoFilterset.FIELDS_BASE + [

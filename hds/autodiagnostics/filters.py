@@ -16,9 +16,9 @@ class AutodiagnosticsRunFilter(CommonInfoFilterset):
     harv_ids = ListFilter(field_name="report__harvester__harv_id")
 
     # Autodiag filters
-    result = filters.CharFilter(field_name="result", method="filter_bool")
-    template_match_result = filters.CharFilter(field_name="template_match_result", method="filter_bool")
-    ball_found_result = filters.CharFilter(field_name="ball_found_result", method="filter_bool")
+    result = filters.BooleanFilter(field_name="result")
+    template_match_result = filters.BooleanFilter(field_name="template_match_result")
+    ball_found_result = filters.BooleanFilter(field_name="ball_found_result")
     min_vac_gte = filters.NumberFilter(field_name="min_vac", lookup_expr="gte")
     min_vac_lte = filters.NumberFilter(field_name="min_vac", lookup_expr="lte")
     finger_delta_gte = filters.NumberFilter(field_name="finger_delta", lookup_expr="gte")

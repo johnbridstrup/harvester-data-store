@@ -8,8 +8,8 @@ from .models import AFTException
 class AFTExceptionFilter(CommonInfoFilterset):
     # Special method filters
     datetime_range = filters.CharFilter(field_name="timestamp", method="filter_datetime_range") # start,end
-    is_emulator = filters.CharFilter(field_name="is_emulator", method="filter_bool")
-    handled = filters.CharFilter(field_name="handled", method="filter_bool")
+    is_emulator = filters.BooleanFilter(field_name="is_emulator")
+    handled = filters.BooleanFilter(field_name="handled")
 
     # Comma separated lists
     harv_ids = ListFilter(field_name="report__harvester__harv_id") # 10,11,9,2,...
