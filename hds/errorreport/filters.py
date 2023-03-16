@@ -1,5 +1,5 @@
 from django_filters import rest_framework as filters
-from common.filters import DTimeFilter, GenericFilter, ListFilter, ReportFilterset
+from common.filters import DTimeFilter, EventUUIDFilter, GenericFilter, ListFilter, ReportFilterset
 
 from .models import ErrorReport
 
@@ -12,6 +12,7 @@ class ErrorReportFilterset(ReportFilterset):
     is_emulator = filters.BooleanFilter(field_name="harvester__is_emulator")
     handled = filters.BooleanFilter(field_name="exceptions__handled")
     generic = GenericFilter()
+    uuid = EventUUIDFilter()
 
     class Meta:
         model = ErrorReport

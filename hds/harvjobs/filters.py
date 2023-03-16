@@ -1,9 +1,10 @@
-from common.filters import CommonInfoFilterset, ReportFilterset
+from common.filters import CommonInfoFilterset, EventUUIDFilter, ReportFilterset
 
 from .models import Job, JobResults, JobSchema, JobType
 
 
 class JobFilterset(CommonInfoFilterset):
+    uuid = EventUUIDFilter()
     class Meta:
         model = Job
         fields = CommonInfoFilterset.FIELDS_BASE + [
@@ -16,6 +17,7 @@ class JobFilterset(CommonInfoFilterset):
 
 
 class JobResultsFilterset(ReportFilterset):
+    uuid = EventUUIDFilter()
     class Meta:
         model = JobResults
         fields = ReportFilterset.FIELDS_BASE + [

@@ -1,4 +1,4 @@
-from common.filters import CommonInfoFilterset, ReportFilterset
+from common.filters import CommonInfoFilterset, EventUUIDFilter, ReportFilterset
 
 from .models import HarvesterAsset, HarvesterAssetReport, HarvesterAssetType
 
@@ -13,6 +13,7 @@ class HarvesterAssetFilterset(CommonInfoFilterset):
         ]
 
 class HarvesterAssetReportFilterset(ReportFilterset):
+    uuid = EventUUIDFilter()
     class Meta:
         model = HarvesterAssetReport
         fields = ReportFilterset.FIELDS_BASE

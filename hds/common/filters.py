@@ -65,8 +65,15 @@ class GenericFilter(Filter):
         
         return qs.filter(**query_filter)
 
-        
 
+class EventUUIDFilter(ListFilter):
+    def __init__(self, field_type=str, field_name="event", lookup_expr=None, *, label=None, method=None, distinct=False, exclude=False, **kwargs):
+        super().__init__(field_type, field_name, lookup_expr, label=label, method=method, distinct=distinct, exclude=exclude, **kwargs)
+
+    def filter(self, qs, value):
+        self.field_name += "__UUID" 
+        return super().filter(qs, value)
+        
 
 class CommonInfoFilterset(filters.FilterSet):
     FIELDS_BASE = [

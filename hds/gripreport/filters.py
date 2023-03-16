@@ -1,9 +1,10 @@
-from common.filters import ReportFilterset
+from common.filters import EventUUIDFilter, ReportFilterset
 
 from .models import GripReport
 
 
 class PickSessionReportFilterset(ReportFilterset):
+    uuid = EventUUIDFilter()
     class Meta:
         model = GripReport
         fields = ReportFilterset.FIELDS_BASE + [

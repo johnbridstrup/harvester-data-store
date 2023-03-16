@@ -1,6 +1,6 @@
 from django_filters import rest_framework as filters
 
-from common.filters import ListFilter, CommonInfoFilterset
+from common.filters import EventUUIDFilter, ListFilter, CommonInfoFilterset
 from common.reports import DEFAULT_TZ, DTimeFormatter
 from .models import AFTException
 
@@ -19,6 +19,7 @@ class AFTExceptionFilter(CommonInfoFilterset):
 
     # Standard Filters
     traceback = filters.CharFilter(field_name="traceback", lookup_expr="icontains")
+    uuid = EventUUIDFilter(field_name="report__event")
 
     class Meta:
         model = AFTException

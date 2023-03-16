@@ -1,6 +1,6 @@
 from django_filters import rest_framework as filters
 
-from common.filters import DTimeFilter, ListFilter, CommonInfoFilterset, ReportFilterset
+from common.filters import DTimeFilter, EventUUIDFilter, ListFilter, CommonInfoFilterset, ReportFilterset
 from common.reports import DEFAULT_TZ, DTimeFormatter
 from .models import AutodiagnosticsRun, AutodiagnosticsReport
 
@@ -25,6 +25,8 @@ class AutodiagnosticsRunFilter(CommonInfoFilterset):
     template_y_match_error_gte = filters.NumberFilter(field_name="template_y_match_error", lookup_expr="gte")
     template_y_match_error_lte = filters.NumberFilter(field_name="template_y_match_error", lookup_expr="lte")
 
+    uuid = EventUUIDFilter(field_name="report__event")
+
     class Meta:
         model = AutodiagnosticsRun
         fields = CommonInfoFilterset.FIELDS_BASE + [
@@ -34,6 +36,7 @@ class AutodiagnosticsRunFilter(CommonInfoFilterset):
 
 
 class AutodiagnosticsReportFilter(ReportFilterset):
+    uuid = EventUUIDFilter()
     class Meta:
         model = AutodiagnosticsReport
         fields = ReportFilterset.FIELDS_BASE + [

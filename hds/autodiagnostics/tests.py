@@ -263,3 +263,12 @@ class AutodiagnosticsApiTestCase(HDSAPITestBase):
         
         r = self.client.get(f"{self.run_url}?ball_found_result=True")
         self.assertEqual(r.json()['data']['count'], 1)
+
+    def test_filter_uuid(self):
+        self._post_autodiag_report()
+        UUID = Event.generate_uuid()
+        self.ad_data['uuid'] = UUID
+        self._post_autodiag_report(load=False)
+
+        r = self.client.get(f"{self.url}?uuid={UUID}")
+        self.assertEqual(r.json()['data']['count'], 1)
