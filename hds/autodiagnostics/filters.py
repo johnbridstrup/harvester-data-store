@@ -1,6 +1,6 @@
 from django_filters import rest_framework as filters
 
-from common.filters import ListFilter, CommonInfoFilterset, ReportFilterset
+from common.filters import DTimeFilter, ListFilter, CommonInfoFilterset, ReportFilterset
 from common.reports import DEFAULT_TZ, DTimeFormatter
 from .models import AutodiagnosticsRun, AutodiagnosticsReport
 
@@ -8,15 +8,22 @@ from .models import AutodiagnosticsRun, AutodiagnosticsReport
 class AutodiagnosticsRunFilter(CommonInfoFilterset):
     # Special method filters
     datetime_range = filters.CharFilter(field_name="run_timestamp", method="filter_datetime_range") # start,end
-    result = filters.CharFilter(field_name="result", method="filter_bool")
-    template_match_result = filters.CharFilter(field_name="template_match_result", method="filter_bool")
-    ball_found_result = filters.CharFilter(field_name="ball_found_result", method="filter_bool")
+    start_time = DTimeFilter(field_name="run_timestamp", lookup_expr="gte")
+    end_time = DTimeFilter(field_name="run_timestamp", lookup_expr="lte")
 
     # Comma separated lists
     gripper_sns = ListFilter(field_name="gripper__serial_number")
     harv_ids = ListFilter(field_name="report__harvester__harv_id")
 
-    # We can potentially add more complex filters like min_vac > X
+    # Autodiag filters
+    result = filters.CharFilter(field_name="result", method="filter_bool")
+    template_match_result = filters.CharFilter(field_name="template_match_result", method="filter_bool")
+    ball_found_result = filters.CharFilter(field_name="ball_found_result", method="filter_bool")
+    min_vac_gte = filters.NumberFilter(field_name="min_vac", lookup_expr="gte")
+    min_vac_lte = filters.NumberFilter(field_name="min_vac", lookup_expr="lte")
+    finger_delta_gte = filters.NumberFilter(field_name="finger_delta", lookup_expr="gte")
+    template_y_match_error_gte = filters.NumberFilter(field_name="template_y_match_error", lookup_expr="gte")
+    template_y_match_error_lte = filters.NumberFilter(field_name="template_y_match_error", lookup_expr="lte")
 
     class Meta:
         model = AutodiagnosticsRun
