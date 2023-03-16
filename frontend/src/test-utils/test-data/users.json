@@ -1,0 +1,17 @@
+{
+  "id": 1,
+  "first_name": "",
+  "last_name": "",
+  "username": "aft",
+  "email": "aft@aft.aft",
+  "is_active": true,
+  "is_staff": true,
+  "is_superuser": true,
+  "last_login": "2022-04-12T22:06:44.761000Z",
+  "profile": {
+    "id": 1,
+    "slack_id": "slack@aft.aft",
+    "role": "manager",
+    "user": 1
+  }
+}

@@ -22,6 +22,9 @@ import {
   getPickSession,
   listEvent,
   getEvent,
+  listFruit,
+  listExceptionCode,
+  listUsers,
 } from "./actions";
 
 export const handlers = [
@@ -44,4 +47,7 @@ export const handlers = [
   getPickSession,
   listEvent,
   getEvent,
+  listFruit,
+  listExceptionCode,
+  listUsers,
 ];

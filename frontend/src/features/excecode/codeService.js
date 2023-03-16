@@ -1,7 +1,7 @@
 import { API_URL } from "../base/constants";
 import { axiosService } from "../base/service";
 
-const CODE_URL = `${API_URL}/exceptioncodes/`;
+export const CODE_URL = `${API_URL}/exceptioncodes/`;
 
 const listCodes = async (token, limit = 10) => {
   let response = await axiosService.get(`${CODE_URL}?limit=${limit}`, token);

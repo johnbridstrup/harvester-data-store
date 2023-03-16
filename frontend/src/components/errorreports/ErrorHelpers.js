@@ -364,7 +364,7 @@ export const GenericFormField = (props) => {
               placeholder="1,2,3,..."
               options={harvesterOptions}
               name="harv_ids"
-              id="harv_ids"
+              inputId="harv_ids"
               onChange={handleHarvestSelect}
               value={selectedHarvId}
               defaultValue={selectedHarvId}
@@ -395,7 +395,7 @@ export const GenericFormField = (props) => {
               placeholder="ranch1, ranch2, ..."
               options={locationOptions}
               name="locations"
-              id="locations"
+              inputId="locations"
               onChange={handleLocationSelect}
               defaultValue={selectedLocation}
               value={selectedLocation}
@@ -428,7 +428,7 @@ export const GenericFormField = (props) => {
               placeholder="strawberry"
               options={fruitOptions}
               name="fruit"
-              id="fruit"
+              inputId="fruit"
               onChange={handleFruitSelect}
               defaultValue={selectedFruit}
               value={selectedFruit}
@@ -459,7 +459,7 @@ export const GenericFormField = (props) => {
               placeholder="1,2,3,..."
               options={codeOptions}
               name="code"
-              id="code"
+              inputId="code"
               onChange={handleCodeSelect}
               defaultValue={selectedCode}
               value={selectedCode}
@@ -658,7 +658,7 @@ export const GenericFormField = (props) => {
               placeholder="US/Pacific"
               options={timezoneOptions}
               name="tz"
-              id="tz"
+              inputId="tz"
               onChange={handleTimezoneSelect}
               defaultValue={selectedTimezone}
               value={selectedTimezone}
@@ -719,7 +719,7 @@ export const FormQuery = (props) => {
     notifyRef,
   } = props;
   return (
-    <form onSubmit={handleFormQuerySubmit}>
+    <form onSubmit={handleFormQuerySubmit} data-testid="query-form">
       <GenericFormField {...props} />
       <div className="form-group">
         <button type="submit" className="btn btn-primary btn-md">

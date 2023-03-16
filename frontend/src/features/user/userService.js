@@ -1,7 +1,7 @@
 import { API_URL } from "../base/constants";
 import { axiosService } from "../base/service";
 
-const USERS_URL = `${API_URL}/users/profiles/`;
+export const USERS_URL = `${API_URL}/users/profiles/`;
 
 const listUsers = async (token, limit = 10) => {
   let response = await axiosService.get(`${USERS_URL}?limit=${limit}`, token);

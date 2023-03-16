@@ -20,6 +20,12 @@ import location from "test-utils/test-data/location.json";
 import s3file from "test-utils/test-data/s3file.json";
 import migrationlog from "test-utils/test-data/migration.json";
 import { picksession, event } from "test-utils/test-data/event";
+import { FRUIT_URL } from "features/fruit/fruitService";
+import { CODE_URL } from "features/excecode/codeService";
+import { USERS_URL } from "features/user/userService";
+import fruit from "test-utils/test-data/fruit.json";
+import aftexceptioncode from "test-utils/test-data/aftexceptioncode.json";
+import users from "test-utils/test-data/users.json";
 
 let genericListResponse = {
   status: "success",
@@ -211,4 +217,22 @@ export const getEvent = rest.get(`${EVENTS_URL}:eventId`, (req, res, ctx) => {
   genericGetResponse["message"] = "event retrieved successfully";
   genericGetResponse["data"] = event;
   return res(ctx.json(genericGetResponse));
+});
+
+export const listFruit = rest.get(FRUIT_URL, (req, res, ctx) => {
+  genericListResponse["message"] = "fruit retrieved successfully";
+  genericListResponse["data"]["results"] = [fruit];
+  return res(ctx.json(genericListResponse));
+});
+
+export const listExceptionCode = rest.get(CODE_URL, (req, res, ctx) => {
+  genericListResponse["message"] = "aftexceptioncode retrieved successfully";
+  genericListResponse["data"]["results"] = [aftexceptioncode];
+  return res(ctx.json(genericListResponse));
+});
+
+export const listUsers = rest.get(USERS_URL, (req, res, ctx) => {
+  genericListResponse["message"] = "user retrieved successfully";
+  genericListResponse["data"]["results"] = [users];
+  return res(ctx.json(genericListResponse));
 });
