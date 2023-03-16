@@ -30,6 +30,21 @@ class DTimeFilter(Filter):
         return super().filter(qs, value)
 
 
+class TagListFilter(Filter):
+    def __init__(self, field_name="tags__name", lookup_expr=None, *, label=None, method=None, distinct=False, exclude=False, **kwargs):
+        super().__init__(field_name=field_name, lookup_expr=lookup_expr, label=label, method=method, distinct=distinct, exclude=exclude, **kwargs)
+    
+    """Filter by list of tags"""
+    def filter(self, qs, value):
+        if not value:
+            return qs
+        
+        for val in value.split(','):
+            filt = {f"{self.field_name}": val}
+            qs = qs.filter(**filt)
+        return qs
+
+
 class GenericFilter(Filter):
     """Generic lookup filter.
 
@@ -94,3 +109,4 @@ class ReportFilterset(CommonInfoFilterset):
     locations = ListFilter(field_name="location__ranch")
     harv_ids = ListFilter(field_type=int, field_name="harvester__harv_id")
     fruits = ListFilter(field_name="harvester__fruit__name")
+    tags = TagListFilter()

@@ -1,4 +1,4 @@
-from common.filters import CommonInfoFilterset
+from common.filters import CommonInfoFilterset, TagListFilter
 
 from .models import LogFile, LogSession, LogVideo
 
@@ -12,6 +12,7 @@ class LogFileFilterset(CommonInfoFilterset):
 
 
 class LogSessionFilterset(CommonInfoFilterset):
+    tags = TagListFilter()
     class Meta:
         model = LogSession
         fields = CommonInfoFilterset.FIELDS_BASE + [

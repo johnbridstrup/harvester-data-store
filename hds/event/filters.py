@@ -1,9 +1,10 @@
-from common.filters import CommonInfoFilterset
+from common.filters import CommonInfoFilterset, TagListFilter
 
 from .models import Event, PickSession
 
 
 class EventFilterset(CommonInfoFilterset):
+    tags = TagListFilter()
     class Meta:
         model = Event
         fields = CommonInfoFilterset.FIELDS_BASE + [
@@ -12,6 +13,7 @@ class EventFilterset(CommonInfoFilterset):
 
 
 class PickSessionFilterset(CommonInfoFilterset):
+    tags = TagListFilter()
     class Meta:
         model = PickSession
         fields = CommonInfoFilterset.FIELDS_BASE + [

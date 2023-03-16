@@ -5,6 +5,7 @@ from s3file.models import S3File
 
 from rest_framework import status
 from django.urls import reverse
+from django.utils.http import urlencode
 
 
 class TaggedUUIDModelTestBase(HDSAPITestBase):
@@ -50,6 +51,60 @@ class EventApiTestCase(TaggedUUIDModelTestBase):
 
         for tag in expect:
             self.assertIn(tag, data["tags"])
+
+    def test_filter_by_tags(self):
+        data = self._post_error_report()
+        UUID1 = data["data"]["event"]["UUID"]
+        UUID2 = Event.generate_uuid()
+        UUID3 = Event.generate_uuid()
+        ftype1 = f"test"
+        ftype2 = f"anothertest"
+
+        self.create_s3file(f"{ftype1}_{UUID1}", has_uuid=True)
+        self.create_s3file(f"{ftype2}_{UUID2}", has_uuid=True)
+        
+        self.data['uuid'] = UUID3
+        self._post_error_report(load=False)
+
+        all_r = self.client.get(self.event_url)
+        self.assertEqual(all_r.json()['data']['count'], 3)
+
+        # There should be 4 tags and 3 events.
+        # Event 1: ErrorReport, S3File and test tags
+        # Event 2: S3File and anothertest tags
+        # Event 3: ErrorReport tag
+
+        case1 = [ErrorReport.__name__] # match event 1 and 3
+        params1 = urlencode({"tags": ','.join(case1)})
+        c1_r = self.client.get(f"{self.event_url}?{params1}")
+        self.assertEqual(c1_r.json()['data']['count'], 2)
+        exp_uuids = [UUID1, UUID3]
+        for event in c1_r.json()['data']['results']:
+            self.assertIn(event['UUID'], exp_uuids)
+            exp_uuids.remove(event['UUID'])
+
+        case2 = [S3File.__name__] # match event 1 and 2
+        params2 = urlencode({"tags": ','.join(case2)})
+        c2_r = self.client.get(f"{self.event_url}?{params2}")
+        self.assertEqual(c2_r.json()['data']['count'], 2)
+        exp_uuids = [UUID1, UUID2]
+        for event in c2_r.json()['data']['results']:
+            self.assertIn(event['UUID'], exp_uuids)
+            exp_uuids.remove(event['UUID'])
+
+        case3 = [ftype1, ErrorReport.__name__] # match only event 1
+        params3 = urlencode({"tags": ','.join(case3)})
+        c3_r = self.client.get(f"{self.event_url}?{params3}")
+        self.assertEqual(c3_r.json()['data']['count'], 1)
+        exp_uuids = [UUID1]
+        for event in c3_r.json()['data']['results']:
+            self.assertIn(event['UUID'], exp_uuids)
+            exp_uuids.remove(event['UUID'])
+
+        case4 = [ftype2, ErrorReport.__name__] # match no events
+        params4 = urlencode({"tags": ','.join(case4)})
+        c4_r = self.client.get(f"{self.event_url}?{params4}")
+        self.assertEqual(c4_r.json()['data']['count'], 0)
 
 
 class PickSessionApiTestCase(TaggedUUIDModelTestBase):

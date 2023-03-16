@@ -1,13 +1,13 @@
 import django_filters.rest_framework as filters
 
-from common.filters import CommonInfoFilterset, ReportFilterset
+from common.filters import CommonInfoFilterset, ReportFilterset, TagListFilter
 
 from .models import HarvesterCodeRelease, HarvesterVersionReport
 
 
 class ReleaseFilter(CommonInfoFilterset):
     fruit = filters.CharFilter(field_name="fruit__name")
-    tags = filters.CharFilter(field_name='tags__name')
+    tags = TagListFilter()
 
     class Meta:
         model = HarvesterCodeRelease
