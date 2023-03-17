@@ -47,6 +47,9 @@ class ReportSerializerBase(serializers.ModelSerializer):
     @property
     def data_schema(self):
         raise NotImplementedError
+
+    def get_user_from_request(self):
+        return self.context['request'].user
     
     def get_schema(self):
         schema = deepcopy(self.REPORT_BASE_SCHEMA)        
@@ -119,13 +122,11 @@ class ReportSerializerBase(serializers.ModelSerializer):
     @classmethod
     def extract_basic(cls, report, fruit_key="fruit"):
         reportTime = cls.extract_timestamp(report)
-        UUID = cls.extract_uuid(report)
         harv_id = cls.get_serial_number(report)
         harv = cls.get_harvester(harv_id, report, fruit_key=fruit_key)
         data = {
             "report": report,
             "reportTime": reportTime,
-            "UUID": UUID,
             "harvester": harv.id,
             "location": harv.location.id,
         }

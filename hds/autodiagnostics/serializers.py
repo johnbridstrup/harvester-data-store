@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from rest_framework import serializers
 from taggit.serializers import TaggitSerializer
 
@@ -27,6 +28,14 @@ class AutodiagnosticsReportSerializer(TaggitSerializer, PickSessionSerializerMix
         fields = ('__all__')
         read_only_fields = ('creator',)
 
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        event = self.serialize_event(instance.event)
+        pick_session = self.serialize_picksession(instance.pick_session)
+        data['event'] = event
+        data['pick_session'] = pick_session
+        return data
+
     def to_internal_value(self, data):
         try:
             self.validate_incoming_report(data)
@@ -42,16 +51,19 @@ class AutodiagnosticsReportSerializer(TaggitSerializer, PickSessionSerializerMix
         result = report["data"].get("passed_autodiag")
         robot_id = report["data"].get("robot_id")
         gripper_sn = report["data"].get("serial_no")
+
+        creator = self.get_user_from_request()
         pick_session_uuid = self.extract_uuid(report, "pick_session_uuid")
         UUID = self.extract_uuid(report)
-
+        event = self.get_or_create_event(UUID, creator, AutodiagnosticsReport.__name__)
+        pick_session = self.get_or_create_picksession(pick_session_uuid, creator, AutodiagnosticsReport.__name__)
         data.update({
             "result": result,
             "robot": robot_id,
             "gripper_sn": gripper_sn,
             "tags": tags,
-            "pick_session_uuid": pick_session_uuid,
-            "UUID": UUID,
+            "pick_session": pick_session,
+            "event": event,
         })
         return super().to_internal_value(data)
     

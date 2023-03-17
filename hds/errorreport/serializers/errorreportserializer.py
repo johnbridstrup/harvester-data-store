@@ -5,7 +5,7 @@ from ..tasks import extract_exceptions
 from ..models import ErrorReport, DEFAULT_UNKNOWN
 from harvester.serializers.harvesterserializer import HarvesterSerializer
 from location.serializers.locationserializer import LocationSerializer
-from event.models import Event
+from event.models import Event, PickSession
 from event.serializers import PickSessionSerializerMixin
 from exceptions.models import AFTException, AFTExceptionCode
 from exceptions.serializers import AFTExceptionSerializer
@@ -80,6 +80,10 @@ class ErrorReportSerializer(TaggitSerializer, PickSessionSerializerMixin, Report
         data = super().to_representation(instance)
         harv_data = HarvesterSerializer(instance.harvester).data
         location_data = LocationSerializer(instance.location).data
+        event = self.serialize_event(instance.event)
+        pick_session = self.serialize_picksession(instance.pick_session)
+        data['event'] = event
+        data['pick_session'] = pick_session
         data['location'] = location_data
         data['harvester'] = harv_data
         return data
@@ -100,8 +104,12 @@ class ErrorReportSerializer(TaggitSerializer, PickSessionSerializerMixin, Report
         reportTime = self.extract_timestamp(report)
         githash = report['data'].get('githash') or DEFAULT_UNKNOWN
         gitbranch = report['data'].get('branch_name') or DEFAULT_UNKNOWN
+
+        creator = self.get_user_from_request()
         UUID = self.extract_uuid(report)
         pick_session_uuid = self.extract_uuid(report, "pick_session_uuid")
+        event = self.get_or_create_event(UUID, creator, ErrorReport.__name__)
+        pick_session = self.get_or_create_picksession(pick_session_uuid, creator, PickSession.__name__)
 
         data = {
             'harvester': harvester.id,
@@ -112,7 +120,8 @@ class ErrorReportSerializer(TaggitSerializer, PickSessionSerializerMixin, Report
             'githash': githash,
             'gitbranch': gitbranch,
             'tags': tags,
-            'pick_session_uuid': pick_session_uuid,
+            'pick_session': pick_session,
+            'event': event,
         }
         return super().to_internal_value(data)
 

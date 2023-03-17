@@ -26,6 +26,7 @@ class JobSerializer(EventSerializerMixin, serializers.ModelSerializer):
             f"&job__event__UUID={instance.event.UUID}"
         )
         data["history"] = reverse("job-detail", args=[instance.id]) + "history/"
+        data["event"] = self.serialize_event(instance.event)
         return data
 
     def to_internal_value(self, data):
@@ -42,11 +43,14 @@ class JobSerializer(EventSerializerMixin, serializers.ModelSerializer):
         UUID = job_payload["id"]
         self._validate_payload(job_payload, jobschema.schema)
 
+        creator = self.context['request'].user
+        event = self.get_or_create_event(UUID, creator, Job.__name__)
+
         data = {
             "schema": jobschema.id,
             "target": harvester.id,
             "payload": job_payload,
-            "UUID": UUID,
+            "event": event,
         }
 
         return super().to_internal_value(data)

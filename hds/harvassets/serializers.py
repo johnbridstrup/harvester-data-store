@@ -55,17 +55,22 @@ class HarvesterAssetReportSerializer(TaggitSerializer, EventSerializerMixin, Rep
             tags = [Tags.INVALIDSCHEMA.value]
         
         meta = self.extract_basic(data)
+        creator = self.get_user_from_request()
+        event_uuid = self.extract_uuid(data)
+        event = self.get_or_create_event(event_uuid, creator, HarvesterAssetReport.__name__)
 
         internal_data = {
             **meta,
             "report": data,
             "tags": tags,
+            "event": event,
         }
         return super().to_internal_value(internal_data)
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
         data["harvester"] = HarvesterSerializer(instance.harvester).data
+        data["event"] = self.serialize_event(instance.event)
         return data
 
     @classmethod

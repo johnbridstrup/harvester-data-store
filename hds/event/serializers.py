@@ -45,24 +45,13 @@ class TaggedUUIDSerializerBase(serializers.ModelSerializer):
         for obj in obj_set.all()]
 
     @staticmethod
-    def get_or_create_uuid_tagged_obj(called_by, data, model, key):
-        UUID = data.pop(key, model.generate_uuid())
+    def get_or_create_uuid_tagged_obj(creator, uuid_model, model_tag, UUID=None):
         try:
-            creator = called_by.context['request'].user
-        except (KeyError, AttributeError):
-            creator_id = data["creator"]
-            creator = User.objects.get(id=creator_id)
-        try:
-            obj = model.objects.get(UUID=UUID)
-        except model.DoesNotExist:
-            obj = model.objects.create(UUID=UUID, creator=creator)
+            obj = uuid_model.objects.get(UUID=UUID)
+        except uuid_model.DoesNotExist:
+            obj = uuid_model.objects.create(UUID=UUID, creator=creator)
 
-        try:
-            obj.tags.add(called_by.Meta.model.__name__)
-        except AttributeError:
-            # The serializer either doesn't have a Meta class or a
-            # model associated with it.
-            logging.exception(f"No Meta or model in {called_by.__class__.__name__}")
+        obj.tags.add(model_tag)
 
         return obj.id
 
@@ -112,28 +101,20 @@ class PickSessionSerializer(TaggedUUIDSerializerBase):
 
 
 class EventSerializerMixin(serializers.Serializer):
-    # Automatically serialize events in responses
-    def to_representation(self, instance):
-        data = super().to_representation(instance)
+    @classmethod
+    def serialize_event(cls, event):
+        return EventSerializer(instance=event).data
 
-        event = EventSerializer(instance=instance.event)
-        data['event'] = event.data
-        return data
-
-    def to_internal_value(self, data):
-        data['event'] = TaggedUUIDSerializerBase.get_or_create_uuid_tagged_obj(self, data, Event, "UUID")
-        return super().to_internal_value(data)
+    @classmethod
+    def get_or_create_event(cls, event_uuid, creator, tag):
+        return TaggedUUIDSerializerBase.get_or_create_uuid_tagged_obj(creator, Event, tag, event_uuid)
 
 
 class PickSessionSerializerMixin(EventSerializerMixin): # Pick session uploads are also events
-    def to_representation(self, instance):
-        data = super().to_representation(instance)
-
-        pick_session = PickSessionSerializer(instance=instance.pick_session)
-        data['pick_session'] = pick_session.data
-        return data
-
-    def to_internal_value(self, data):
-        data['pick_session'] = TaggedUUIDSerializerBase.get_or_create_uuid_tagged_obj(self, data, PickSession, "pick_session_uuid")
-
-        return super().to_internal_value(data)
+    @classmethod
+    def serialize_picksession(cls, picksession):
+        return PickSessionSerializer(instance=picksession).data
+    
+    @classmethod
+    def get_or_create_picksession(cls, ps_uuid, creator, tag):
+        return TaggedUUIDSerializerBase.get_or_create_uuid_tagged_obj(creator, PickSession, tag, ps_uuid)
