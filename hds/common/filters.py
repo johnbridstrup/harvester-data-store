@@ -15,7 +15,7 @@ class ListFilter(Filter):
         
         self.lookup_expr = "in"
         values = [self.field_type(v) for v in value.split(',')]
-        return super().filter(qs, values)
+        return super().filter(qs, values).distinct()
 
 
 class DTimeFilter(Filter):
