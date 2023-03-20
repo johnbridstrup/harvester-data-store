@@ -12,7 +12,7 @@ class S3FileFilter(CommonInfoFilterset):
     class Meta:
         model = S3File
         fields = CommonInfoFilterset.FIELDS_BASE + [
-            'key', 
+            'key',
             'filetype',
             'event__tags__name',
         ]
