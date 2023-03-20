@@ -1,8 +1,8 @@
 import os
 
-from celery import shared_task
 from prometheus_client import Gauge
 
+from common.celery import monitored_shared_task
 from common.metrics import prometheus_get_registry
 from .serializers.logvideoserializers import EXTRACT_DIR
 
@@ -23,7 +23,7 @@ def get_dir_size(dir_path):
                 total_size += os.path.getsize(fp)
     return total_size
 
-@shared_task
+@monitored_shared_task
 def check_extracts_dir_size():
     dir_size = get_dir_size(EXTRACT_DIR)/1000.0
     EXTRACTS_SIZE_GAUGE.set(dir_size)
