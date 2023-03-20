@@ -38,11 +38,12 @@ def compile_asset_report():
     return dict(report)
 
 @monitored_shared_task
-def send_asset_manifest():
+def send_asset_manifest(channel="hds-test"):
     report = compile_asset_report()
     r = upload_file(
         filename=f"asset_manifest_{datetime.now()}.txt",
         title="Asset Manifest",
-        content=json.dumps(report, indent=4)
+        content=json.dumps(report, indent=4),
+        channel=channel,
     )
     return r
