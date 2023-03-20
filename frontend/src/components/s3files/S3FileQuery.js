@@ -37,8 +37,8 @@ function S3FileQuery(props) {
     if (fieldData.filetype) {
       queryObj["filetype"] = fieldData.filetype;
     }
-    if (selectedTag && selectedTag.hasOwnProperty("value")) {
-      queryObj["event__tags__name"] = selectedTag.value;
+    if (selectedTag && selectedTag.every((x) => x.hasOwnProperty("value"))) {
+      queryObj["tags"] = selectedTag.map((x) => x.value).join(",");
     }
     return queryObj;
   };
