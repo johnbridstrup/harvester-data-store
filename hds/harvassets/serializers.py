@@ -7,6 +7,7 @@ from common.serializers.reportserializer import ReportSerializerBase
 from event.serializers import EventSerializerMixin
 from harvester.serializers.harvesterserializer import HarvesterSerializer
 
+from .metrics import MISSING_SERIAL_NUMBER
 from .models import HarvesterAssetReport, HarvesterAssetType, HarvesterAsset
 
 
@@ -74,10 +75,17 @@ class HarvesterAssetReportSerializer(TaggitSerializer, EventSerializerMixin, Rep
         asset_list = report_obj.report["data"]
 
         for asset in asset_list:
-            asset_type = asset.pop("asset")
-            serial_number = asset.pop("asset-tag")
-            asset["serial_number"] = serial_number
             index = asset["index"]
+            asset_type = asset.pop("asset")
+            serial_number = asset.pop("asset-tag", None)
+            if serial_number is None:
+                MISSING_SERIAL_NUMBER.labels(harv.harv_id, index, asset_type).set(1)
+                continue
+            else:
+                MISSING_SERIAL_NUMBER.labels(harv.harv_id, index, asset_type).set(0)
+
+            asset["serial_number"] = serial_number
+            
             version = asset.get("version", None)
             asset_type_obj = HarvesterAssetType.get_or_create(asset_type=asset_type, user=user)
             HarvesterAsset.update_or_create_and_get(asset_type_obj, harv, index, serial_number, user, version)
