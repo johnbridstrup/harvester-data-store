@@ -285,6 +285,11 @@ variable "grip_queue_url" {
 }
 
 variable "config_queue_url" {
-  description = "URL for grip report queue"
+  description = "URL for config report queue"
+  type        = string
+}
+
+variable "asset_queue_url" {
+  description = "URL for asset report queue"
   type        = string
 }

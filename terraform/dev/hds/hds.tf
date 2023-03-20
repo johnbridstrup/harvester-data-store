@@ -5,7 +5,7 @@ locals {
   frontend_url             = "https://hds.devcloud.advanced.farm"
   service_port             = "8000"
   service_name             = "hds"
-  service_docker_image     = "082346306812.dkr.ecr.us-west-1.amazonaws.com/hds:hds-staging-c4ab67fc"
+  service_docker_image     = "082346306812.dkr.ecr.us-west-1.amazonaws.com/hds:hds-staging-1d2e885c"
   healthcheck_path         = "/api/v1/healthcheck/"
   sqs_client_metrics_ports = [9104]
   enable_prometheus_scrape = true
@@ -67,6 +67,7 @@ module "hds" {
   jobresults_queue_url      = data.aws_sqs_queue.jobresults_queue.url
   config_queue_url          = data.aws_sqs_queue.configs_queue.url
   grip_queue_url            = data.aws_sqs_queue.grip_queue.url
+  asset_queue_url           = data.aws_sqs_queue.asset_queue.url
   migrate_flag              = local.migrate
   s3_bucket                 = local.bucket
 }

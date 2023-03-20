@@ -39,3 +39,8 @@ grip_reports:
   destination: !ENV http://localhost:${HDS_PORT}/api/v1/gripreports/
   s3-event-payload: true
   s3-delete: true
+asset_reports:
+  queue: !ENV ${ASSET_QUEUE_URL}
+  destination: !ENV http://localhost:${HDS_PORT}/api/v1/harvassetreport/
+  s3-event-payload: true
+  s3-delete: true
