@@ -1,4 +1,4 @@
-import os
+import logging, os, shutil
 
 from prometheus_client import Gauge
 
@@ -28,3 +28,18 @@ def check_extracts_dir_size():
     dir_size = get_dir_size(EXTRACT_DIR)/1000.0
     EXTRACTS_SIZE_GAUGE.set(dir_size)
     return f"Extracts dir size: {dir_size} kB"
+
+@monitored_shared_task
+def clean_extracts_dir():
+    if not os.path.exists(EXTRACT_DIR):
+        raise OSError(f"{EXTRACT_DIR} does not exist.")
+    
+    for f in os.listdir(EXTRACT_DIR):
+        try:
+            if os.path.isfile(f):
+                os.unlink(f)
+            elif os.path.isdir(f):
+                shutil.rmtree(f)
+        except Exception as e:
+            logging.error(f"Failed to delete {f}:\n\t{e}")
+    return "Clean extracts directory."
