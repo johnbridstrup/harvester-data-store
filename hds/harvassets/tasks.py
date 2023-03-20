@@ -1,14 +1,15 @@
 import json
 from datetime import datetime
 from collections import defaultdict
-from celery import shared_task
+
+from common.celery import monitored_shared_task
 from notifications.slack import upload_file
 
 from .models import HarvesterAsset
 from .serializers import HarvesterAssetReportSerializer
 
 
-@shared_task
+@monitored_shared_task
 def extract_assets(report_id):
     HarvesterAssetReportSerializer.extract_report(report_id)
 
@@ -36,7 +37,7 @@ def compile_asset_report():
         report[k] = dict(v)
     return dict(report)
 
-@shared_task
+@monitored_shared_task
 def send_asset_manifest():
     report = compile_asset_report()
     r = upload_file(
