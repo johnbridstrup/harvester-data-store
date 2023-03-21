@@ -156,6 +156,7 @@ data "aws_iam_policy_document" "poll_queues" {
       data.aws_sqs_queue.jobresults_queue.arn,
       data.aws_sqs_queue.configs_queue.arn,
       data.aws_sqs_queue.grip_queue.arn,
+      data.aws_sqs_queue.asset_queue.arn,
     ]
     effect = "Allow"
   }
