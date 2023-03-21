@@ -1,6 +1,7 @@
 import os, tempfile, uuid
 from contextlib import contextmanager
 from urllib.parse import urljoin
+from django.urls import reverse
 
 from common.tests import HDSAPITestBase
 from django.conf import settings
@@ -14,7 +15,7 @@ from ..serializers import DirectUploadSerializer
 @contextmanager
 def remove_after(fp):
     try:
-        yield 
+        yield
     finally:
         os.remove(fp)
 
@@ -24,6 +25,10 @@ class S3FileTestCase(HDSAPITestBase):
         super().setUp()
         self.update_user_permissions_all(ErrorReport)
         self.update_user_permissions_all(S3File)
+        self.s3file_detail_url = lambda _id: reverse(
+            "s3file-detail",
+            args=[_id]
+        )
 
     @staticmethod
     def _rm_file(filename):
@@ -59,7 +64,7 @@ class S3FileTestCase(HDSAPITestBase):
         with tempfile.NamedTemporaryFile(dir=settings.MEDIA_ROOT, suffix=f"_{UUID}") as f:
             fname = f.name.split('/')[-1]
             resp = self.create_s3file(fname, has_uuid=True)
-            
+
             url = resp.json()["data"]["file"]
             resp = self.client.get(url)
             self.assertEqual(
@@ -159,3 +164,31 @@ class S3FileTestCase(HDSAPITestBase):
     def test_create_sessclip(self):
         self.create_s3file("test", endpoint="sessclip")
         self.assertEqual(SessClip.objects.count(), 1)
+
+    def test_delete_file(self):
+        with tempfile.NamedTemporaryFile() as tf:
+            with open(tf.name, 'rb') as f:
+                file = InMemoryUploadedFile(
+                    file=f,
+                    field_name="test",
+                    name="test",
+                    content_type="test/test",
+                    size=8,
+                    charset="UTF-8",
+                )
+                fname = f.name.split('/')[-1]
+                data = {
+                    "key": fname,
+                    "file": file,
+                    "filetype": "test",
+                    "creator": self.user.id,
+                }
+                file_upload = DirectUploadSerializer(data=data)
+                file_upload.is_valid(raise_exception=True)
+                inst = file_upload.save()
+                self.assertFalse(inst.deleted)
+                self.client.delete(self.s3file_detail_url(inst.id)) #file.delete() cleans up fs
+                inst.refresh_from_db()
+                self.assertTrue(inst.deleted)
+                with self.assertRaises(ValueError):
+                    inst.file.url
