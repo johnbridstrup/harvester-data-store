@@ -22,6 +22,7 @@ export const FULLFILLED_PROMISE = {
   logout: "auth/logout/fulfilled",
   migration: "migration/execMigration/fulfilled",
   aftconfig: "aftconfig/fullConfigReport/fulfilled",
+  s3file: "s3file/deleteS3File/fulfilled",
 };
 
 export const REJECTED_PROMISE = {
@@ -31,6 +32,7 @@ export const REJECTED_PROMISE = {
   confirm: "auth/confirmPassword/rejected",
   migration: "migration/execMigration/rejected",
   aftconfig: "aftconfig/fullConfigReport/rejected",
+  s3file: "s3file/deleteS3File/rejected",
 };
 
 export const LOG_STR_PATTERN =

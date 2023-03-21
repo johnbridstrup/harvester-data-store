@@ -22,10 +22,16 @@ const paginateS3File = async (url, token) => {
   return response;
 };
 
+const deleteS3File = async (id, token) => {
+  const response = await axiosService.delete(`${S3FILE_URL}${id}/`, token);
+  return response;
+};
+
 const s3fileService = {
   queryS3File,
   getS3FileById,
   paginateS3File,
+  deleteS3File,
 };
 
 export default s3fileService;

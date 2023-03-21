@@ -12,7 +12,7 @@ import "./styles.css";
 function S3FileListView(props) {
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(queryS3File());
+    dispatch(queryS3File({ deleted: false }));
     dispatch(getEventTags());
   }, [dispatch]);
 

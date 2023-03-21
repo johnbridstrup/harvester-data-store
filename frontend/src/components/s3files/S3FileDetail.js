@@ -57,12 +57,25 @@ function S3FileDetail(props) {
           </div>
           <div className="col-md-4">
             <div>
+              <strong>Marked As Deleted</strong>
+            </div>
+            <div>
+              <input
+                className="form-check-input"
+                type="checkbox"
+                disabled
+                checked={s3file.deleted}
+              />
+            </div>
+          </div>
+        </div>
+        <div className="row mb-4">
+          <div className="col-md-4">
+            <div>
               <strong>Created At</strong>
             </div>
             <div>{moment(s3file.createdAt).format("LLLL")}</div>
           </div>
-        </div>
-        <div className="row mb-4">
           <div className="col-md-4">
             <div>
               <strong>Updated At</strong>

@@ -4,6 +4,7 @@ import s3fileService from "./s3fileService";
 
 const initialState = {
   loading: false,
+  flagging: false,
   s3file: {},
   s3files: [],
   errorMsg: null,
@@ -64,6 +65,22 @@ export const paginateS3File = createAsyncThunk(
   }
 );
 
+export const deleteS3File = createAsyncThunk(
+  "s3file/deleteS3File",
+  async (id, thunkAPI) => {
+    try {
+      const {
+        auth: { token },
+      } = thunkAPI.getState();
+      return await s3fileService.deleteS3File(id, token);
+    } catch (error) {
+      console.log(error);
+      const message = invalidateCache(error, thunkAPI.dispatch);
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 const s3fileSlice = createSlice({
   name: "s3file",
   initialState,
@@ -107,6 +124,16 @@ const s3fileSlice = createSlice({
       })
       .addCase(paginateS3File.rejected, (state, action) => {
         state.loading = false;
+        state.errorMsg = action.payload;
+      })
+      .addCase(deleteS3File.pending, (state) => {
+        state.flagging = true;
+      })
+      .addCase(deleteS3File.fulfilled, (state) => {
+        state.flagging = false;
+      })
+      .addCase(deleteS3File.rejected, (state, action) => {
+        state.flagging = false;
         state.errorMsg = action.payload;
       });
   },
