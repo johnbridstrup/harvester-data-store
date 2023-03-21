@@ -54,7 +54,7 @@ def pareto_list_filter(request, replace='exceptions__', _append='report__'):
     return out_filter
 
 @PARETO_QUERY_TIMER.time() 
-def create_pareto(field_lookup, listfilter=None):
+def create_pareto(qs, field_lookup, listfilter=None):
     """Create pareto data.
 
     Field_lookup determines which field in the exception will be grouped
@@ -72,7 +72,7 @@ def create_pareto(field_lookup, listfilter=None):
 
     value_dict = {"value": F(field_lookup)}
     count_dict = {"count": Count(field_lookup)}
-    qs = AFTException.objects.filter(
+    qs = qs.filter(
         **listfilter
     ).values(
         **value_dict

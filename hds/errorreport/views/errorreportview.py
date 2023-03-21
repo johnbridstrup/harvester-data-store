@@ -15,6 +15,7 @@ from ..serializers.errorreportserializer import (
 )
 from common.viewsets import ReportModelViewSet
 from common.utils import make_ok, build_frontend_url
+from exceptions.views import AFTExceptionView
 from hds.roles import RoleChoices
 from notifications.signals import error_report_created
 from notifications.serializers import NotificationSerializer
@@ -66,8 +67,9 @@ class ErrorReportView(ReportModelViewSet):
 
         pareto_group = request.query_params.get("aggregate_query", "code__code")
         pareto_name = request.query_params.get("aggregate_name", None)
-
-        query_set = create_pareto(pareto_group, listfilter)
+        view = AFTExceptionView(request=request)
+        qs = view.filter_queryset(view.get_queryset())
+        query_set = create_pareto(qs, pareto_group, listfilter)
         return make_ok(
             f"Pareto generated: {pareto_name if pareto_name else 'Exceptions'}",
             ParetoSerializer(query_set, many=True, new_name=pareto_name).data
