@@ -14,6 +14,8 @@ function S3FileQuery(props) {
   const [fieldData, setFieldData] = useState({
     name: "",
     filetype: "",
+    deleted: false,
+    uuid: "",
   });
   const [selectedTag, setSelectedTag] = useState(null);
   const { theme } = useSelector((state) => state.home);
@@ -23,8 +25,10 @@ function S3FileQuery(props) {
   const tagOptions = transformTagsOptions(tags);
 
   const handleFieldChange = (e) => {
+    const name = e.target.name;
+    const value = name === "deleted" ? e.target.checked : e.target.value;
     setFieldData((current) => {
-      return { ...current, [e.target.name]: e.target.value };
+      return { ...current, [name]: value };
     });
   };
   const handleTagSelect = handleSelectFactory(setSelectedTag);
@@ -40,6 +44,12 @@ function S3FileQuery(props) {
     if (selectedTag && selectedTag.every((x) => x.hasOwnProperty("value"))) {
       queryObj["tags"] = selectedTag.map((x) => x.value).join(",");
     }
+    if (fieldData.uuid) {
+      queryObj["uuid"] = fieldData.uuid;
+    }
+    if (fieldData.deleted) {
+      queryObj["deleted"] = fieldData.deleted;
+    }
     return queryObj;
   };
 
@@ -52,28 +62,46 @@ function S3FileQuery(props) {
   return (
     <div className="mt-4 mb-4">
       <form onSubmit={handleFormSubmit}>
-        <div className="form-group mb-3">
-          <label htmlFor="name">Name</label>
-          <InputFormControl
-            type="text"
-            name="name"
-            id="name"
-            value={fieldData.name}
-            theme={theme}
-            onChange={handleFieldChange}
-            placeholder="sessclip_dev001_R3"
-          />
+        <div className="row">
+          <div className="col-md-6">
+            <div className="form-group mb-3">
+              <label htmlFor="name">Name</label>
+              <InputFormControl
+                type="text"
+                name="name"
+                id="name"
+                value={fieldData.name}
+                theme={theme}
+                onChange={handleFieldChange}
+                placeholder="sessclip_dev001_R3"
+              />
+            </div>
+          </div>
+          <div className="col-md-6">
+            <div className="form-group mb-3">
+              <label htmlFor="filetype">File Type</label>
+              <InputFormControl
+                type="text"
+                name="filetype"
+                id="filetype"
+                value={fieldData.filetype}
+                theme={theme}
+                onChange={handleFieldChange}
+                placeholder="zip"
+              />
+            </div>
+          </div>
         </div>
         <div className="form-group mb-3">
-          <label htmlFor="filetype">File Type</label>
+          <label htmlFor="name">UUID</label>
           <InputFormControl
             type="text"
-            name="filetype"
-            id="filetype"
-            value={fieldData.filetype}
+            name="uuid"
+            id="uuid"
+            value={fieldData.uuid}
             theme={theme}
             onChange={handleFieldChange}
-            placeholder="zip"
+            placeholder="77f6a03c-24c9-11ed-bb17-f9799c718175"
           />
         </div>
         <div className="form-group mb-3">
@@ -93,6 +121,19 @@ function S3FileQuery(props) {
             classNamePrefix="select"
             styles={customStyles}
           />
+        </div>
+        <div className="form-check mb-3">
+          <input
+            className="form-check-input"
+            type="checkbox"
+            id="deleted"
+            name="deleted"
+            checked={fieldData.deleted}
+            onChange={handleFieldChange}
+          />
+          <label className="form-check-label" htmlFor="deleted">
+            Deleted File(s)
+          </label>
         </div>
         <div className="form-group text-center">
           <button type="submit" className="btn btn-primary">
