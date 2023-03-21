@@ -7,6 +7,8 @@ from common.reports import ReportBase
 from event.models import EventModelMixin
 from harvester.models import Harvester
 
+from .metrics import HarvAssetMonitor
+
 
 class HarvesterAssetReport(EventModelMixin, ReportBase):
     def __str__(self):
@@ -41,6 +43,7 @@ class HarvesterAsset(CommonInfo):
         unique_together = ('asset', 'serial_number',)
 
     def clear_harv(self):
+        HarvAssetMonitor.removed_from_harvester(self)
         self.harvester = None
         self.save()
 
@@ -51,6 +54,7 @@ class HarvesterAsset(CommonInfo):
         exist_at_index = cls.objects.filter(asset=asset_type_obj, harvester=harv, index=index)
         for existing in exist_at_index:
             existing.clear_harv()
+            HarvAssetMonitor.removed_from_harvester(existing)
 
         try:
             asset_obj = HarvesterAsset.objects.get(asset=asset_type_obj, serial_number=serial_number)
@@ -60,6 +64,7 @@ class HarvesterAsset(CommonInfo):
             asset_obj.modifiedBy = user
             if version is not None:
                 asset_obj.version = version
+                HarvAssetMonitor.version_update(asset_obj)
             asset_obj.save()
         
         except HarvesterAsset.DoesNotExist:
@@ -73,5 +78,7 @@ class HarvesterAsset(CommonInfo):
             if version is not None:
                 asset["version"] = version
             asset_obj = HarvesterAsset.objects.create(**asset)
+
+        HarvAssetMonitor.set_gauges(asset_obj)
         return asset_obj
         

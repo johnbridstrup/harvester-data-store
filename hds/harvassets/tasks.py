@@ -1,10 +1,12 @@
 import json
 from datetime import datetime
+from django.core.paginator import Paginator
 from collections import defaultdict
 
 from common.celery import monitored_shared_task
 from notifications.slack import upload_file
 
+from .metrics import HarvAssetMonitor
 from .models import HarvesterAsset
 from .serializers import HarvesterAssetReportSerializer
 
@@ -47,3 +49,23 @@ def send_asset_manifest(channel="hds-test"):
         channel=channel,
     )
     return r
+
+@monitored_shared_task
+def clear_asset_gauges():
+    HarvAssetMonitor.clear()
+
+@monitored_shared_task
+def refresh_asset_gauges(clear=False):
+    """Loop through all assets and set their gauges. 
+
+    Args:
+        clear (bool, optional): Flag to remove all gauges prior to update. Defaults to False.
+    """
+    if clear:
+        clear_asset_gauges()
+
+    assets = HarvesterAsset.objects.all()
+    paginator = Paginator(assets, 50)
+    for page in range(1, paginator.num_pages + 1):
+        for asset in paginator.page(page).object_list:
+            HarvAssetMonitor.set_gauges(asset)
