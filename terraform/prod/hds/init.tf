@@ -98,6 +98,7 @@ locals {
   autodiagnostics_queue_name = "hds-autodiagnostics-queue"
   configs_queue_name         = "hds-config-queue"
   grip_queue_name            = "hds-gripreport-queue"
+  asset_queue_name           = "hds-asset-queue"
 }
 
 data "aws_s3_bucket" "data-lake" {
@@ -134,6 +135,10 @@ data "aws_sqs_queue" "configs_queue" {
 
 data "aws_sqs_queue" "grip_queue" {
   name = local.grip_queue_name
+}
+
+data "aws_sqs_queue" "asset_queue" {
+  name = local.asset_queue_name
 }
 
 data "aws_iam_policy_document" "poll_queues" {
