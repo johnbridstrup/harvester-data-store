@@ -6,7 +6,6 @@ import {
   waitFor,
 } from "test-utils/testing-libary-utils";
 import userEvent from "@testing-library/user-event";
-
 import LogSessionListView from "pages/logparser/logsession/listview";
 
 test("should render the logsession list view", async () => {
@@ -38,10 +37,8 @@ test("should render the logsession list view", async () => {
   const inputFile = await screen.findByTestId(/fileDropZone/i);
   expect(inputFile).toBeInTheDocument();
 
-  await act(async () => {
-    await waitFor(async () => {
-      await user.upload(inputFile, fakeFile);
-    });
+  await waitFor(async () => {
+    await user.upload(inputFile, fakeFile);
   });
 
   expect(inputFile.files).toBeInstanceOf(FileList);
