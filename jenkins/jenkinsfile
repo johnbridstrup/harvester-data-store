@@ -38,7 +38,7 @@ pipeline {
 		always {
             script {
                 currentBuild.result = ((env.totalExitCode).toInteger() == 0) ? "SUCCESS" : "FAILURE"
-                sh "sudo docker compose down"
+                sh "sudo docker compose down --remove-orphans"
             }
 		}
 	}

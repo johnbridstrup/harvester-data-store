@@ -12,14 +12,11 @@ services:
       context: .
       dockerfile: Dockerfile.local
     command: ["/opt/app/scripts/wait-for-it.sh", "db:5432", "--", "supervisord"]
-    volumes:
-      - ./fixtures:/opt/app/fixtures
-    ports:
-      - 127.0.0.1:${HDS_PORT}:8000
     environment:
       - POSTGRES_NAME=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+      - BROKER_URL=redis://redis:6379/0
       - DEBUG=1
       - SECRET_KEY=dummy_key
       - DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 [::1]
@@ -34,10 +31,21 @@ services:
       - HDS_PORT=${HDS_PORT}
       - PAGE_CACHING=true
       - MIGRATE=true
+    volumes:
+      - ./fixtures:/opt/app/fixtures
     depends_on:
       - db
+      - redis
+    ports:
+      - 127.0.0.1:8085:8000
     networks:
       - "hds-network"
+  redis:
+    image: redis:6.2-alpine
+    restart: always
+    networks:
+      - "hds-network"
+
 networks:
   hds-network:
     driver: bridge
@@ -45,3 +53,4 @@ networks:
       driver: default
       config:
       - subnet:  10.103.0.1/16
+      

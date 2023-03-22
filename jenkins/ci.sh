@@ -11,7 +11,7 @@ source ./scripts/set_port.sh
 
 echo ""
 echo "Spinning up test server"
-sudo docker compose -f docker-compose.test.yml up -d --build --force-recreate
+sudo docker compose -f docker-compose.base.yml up -d --build --force-recreate
 sleep 10 # Ensure spin-up before curl
 
 echo ""
@@ -21,11 +21,11 @@ curl localhost:${HDS_PORT} > /dev/null
 res1=$?
 if test "$res1" != "0"; then
     echo "curl failed with: $res1"
-    sudo docker compose down
+    sudo docker compose -f docker-compose.base.yml down --remove-orphans
     exit 1
 fi
 echo "curl successful"
 
 echo ""
 echo "Tear down"
-sudo docker compose down
+sudo docker compose -f docker-compose.base.yml down --remove-orphans

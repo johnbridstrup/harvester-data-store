@@ -9,6 +9,10 @@ install-docker: ## Install docker and docker compose
 build-dev: ## Build local server in docker compose
 	docker compose up -d --build
 
+build-backend: ## Build backend for CI. Does not build the frontend.
+	export HDS_PORT=${HDS_PORT}
+	docker compose -f docker-compose.base.yml up -d --build
+
 migrate-dev: ## Migrate database in local compose server
 	docker compose exec web python hds/manage.py migrate
 
@@ -19,8 +23,13 @@ load-fixtures: ## Load fixtures in local compose server
 
 server: install-docker build-dev migrate-dev load-fixtures  ## Build, Migrate, Load
 
-clean: ## Tear down containers
+ci: install-docker build-backend migrate-dev load-fixtures ## Create environment for integration testing the API in CI
+
+clean-server: ## Tear down containers
 	docker compose down --remove-orphans
+
+clean-ci:
+	docker compose -f docker-compose.base.yml down --remove-orphans
 
 help:
 	@echo Use these commands for setting up docker environment outside of python virtual environment
