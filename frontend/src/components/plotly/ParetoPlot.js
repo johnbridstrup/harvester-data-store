@@ -14,6 +14,7 @@ function ParetoPlot(props) {
     height: 400,
     xaxis: {
       type: "category",
+      automargin: true,
     },
     paper_bgcolor: paper_bgcolor,
     plot_bgcolor: plot_bgcolor,
