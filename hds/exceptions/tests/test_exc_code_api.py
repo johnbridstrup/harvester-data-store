@@ -171,7 +171,7 @@ class AFTExceptionCodeManifestTestCase(ExceptionTestBase):
 
         self.assertEqual(code_0["msg"], aft_code_0.msg)
         self.assertNotEqual(original_0_msg, aft_code_0.msg)
-        self.assertAlmostEqual(int(datetime.now().timestamp()), int(aft_code_0.lastModified.timestamp()))
+        self.assertAlmostEqual(datetime.now().timestamp(), aft_code_0.lastModified.timestamp(), 1)
         self.assertEqual(code_3["name"], aft_code_3.name)
         self.assertGreater(aft_code_3.lastModified, aft_code_3.created)
 
