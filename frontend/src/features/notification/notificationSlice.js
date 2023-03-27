@@ -77,7 +77,7 @@ export const deleteManyNotif = async (notifs, token) => {
 };
 
 export const paginateNotification = createAsyncThunk(
-  "errorreport/paginateNotification",
+  "notification/paginateNotification",
   async (url, thunkAPI) => {
     try {
       const {
