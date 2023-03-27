@@ -15,9 +15,7 @@ function VersionReportDetailView(props) {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    (async () => {
-      await dispatch(getVersionById(versionId));
-    })();
+    dispatch(getVersionById(versionId));
   }, [dispatch, versionId]);
 
   return (

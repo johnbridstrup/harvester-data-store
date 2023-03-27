@@ -24,10 +24,8 @@ function ScheduleJobView(props) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    (async () => {
-      await dispatch(getJobSchemaById(jobschemaId));
-      await dispatch(listHarvesters(MAX_LIMIT));
-    })();
+    dispatch(getJobSchemaById(jobschemaId));
+    dispatch(listHarvesters(MAX_LIMIT));
   }, [dispatch, jobschemaId]);
 
   const harvSchema = {

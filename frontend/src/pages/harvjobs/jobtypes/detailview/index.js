@@ -17,9 +17,7 @@ function JobTypeDetailView(props) {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    (async () => {
-      await dispatch(getJobTypeById(jobtypeId));
-    })();
+    dispatch(getJobTypeById(jobtypeId));
   }, [dispatch, jobtypeId]);
 
   return (

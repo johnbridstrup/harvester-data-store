@@ -19,15 +19,11 @@ function NotificationList(props) {
 
   useEffect(() => {
     if (search) {
-      (async () => {
-        const queryObj = paramsToObject(search);
-        queryObj["limit"] = MAX_LIMIT;
-        await dispatch(queryNotification(queryObj));
-      })();
+      const queryObj = paramsToObject(search);
+      queryObj["limit"] = MAX_LIMIT;
+      dispatch(queryNotification(queryObj));
     } else {
-      (async () => {
-        await dispatch(listNotifications());
-      })();
+      dispatch(listNotifications());
     }
   }, [dispatch, search]);
   return (

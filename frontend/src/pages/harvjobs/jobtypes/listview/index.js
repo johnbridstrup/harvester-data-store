@@ -13,9 +13,7 @@ function JobTypeListView(props) {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    (async () => {
-      await dispatch(listJobTypes());
-    })();
+    dispatch(listJobTypes());
   }, [dispatch]);
 
   return (

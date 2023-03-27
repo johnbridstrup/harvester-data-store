@@ -17,9 +17,7 @@ function LogSessionDetailView(props) {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    (async () => {
-      await dispatch(getLogSessionById(sessionId));
-    })();
+    dispatch(getLogSessionById(sessionId));
   }, [dispatch, sessionId]);
 
   return (

@@ -11,9 +11,7 @@ function UserListView(props) {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    (async () => {
-      await dispatch(listUsers());
-    })();
+    dispatch(listUsers());
   }, [dispatch]);
 
   return (

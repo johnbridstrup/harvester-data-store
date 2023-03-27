@@ -13,9 +13,7 @@ function EventDetailView(props) {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    (async () => {
-      await dispatch(getEventById(eventId));
-    })();
+    dispatch(getEventById(eventId));
   }, [dispatch, eventId]);
 
   return (

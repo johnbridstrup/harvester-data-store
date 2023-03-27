@@ -15,9 +15,7 @@ function HarvesterHistoryDetailView(props) {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    (async () => {
-      await dispatch(getHarvHistoryById(historyId));
-    })();
+    dispatch(getHarvHistoryById(historyId));
   }, [dispatch, historyId]);
   return (
     <MainLayout>

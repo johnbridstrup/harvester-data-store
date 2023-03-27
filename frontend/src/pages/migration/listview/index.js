@@ -10,9 +10,7 @@ import "./styles.css";
 function MigrationListView(props) {
   const dispatch = useDispatch();
   useEffect(() => {
-    (async () => {
-      await dispatch(listMigrationLogs());
-    })();
+    dispatch(listMigrationLogs());
   }, [dispatch]);
 
   return (

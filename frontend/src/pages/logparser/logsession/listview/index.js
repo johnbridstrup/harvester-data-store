@@ -12,9 +12,7 @@ function LogSessionListView(props) {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    (async () => {
-      await dispatch(listLogSession());
-    })();
+    dispatch(listLogSession());
   }, [dispatch]);
 
   return (

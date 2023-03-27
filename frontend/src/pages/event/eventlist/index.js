@@ -11,9 +11,7 @@ import "./styles.css";
 function EventListView(props) {
   const dispatch = useDispatch();
   useEffect(() => {
-    (async () => {
-      await dispatch(listEvents());
-    })();
+    dispatch(listEvents());
   }, [dispatch]);
 
   return (

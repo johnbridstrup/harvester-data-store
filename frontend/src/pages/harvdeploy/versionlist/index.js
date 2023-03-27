@@ -11,9 +11,7 @@ function VersionReportListView(props) {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    (async () => {
-      await dispatch(listVersion());
-    })();
+    dispatch(listVersion());
   }, [dispatch]);
 
   return (

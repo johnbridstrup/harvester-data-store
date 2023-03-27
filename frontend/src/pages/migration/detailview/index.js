@@ -16,9 +16,7 @@ function MigrationDetailView(props) {
   const { migrationId } = useParams();
 
   useEffect(() => {
-    (async () => {
-      await dispatch(getMigrationLogById(migrationId));
-    })();
+    dispatch(getMigrationLogById(migrationId));
   }, [migrationId, dispatch]);
 
   return (

@@ -35,9 +35,7 @@ function JobSchedulerView(props) {
   const jobtypeOptions = transformJobTypeOptions(jobtypes);
 
   useEffect(() => {
-    (async () => {
-      await dispatch(listJobTypes(MAX_LIMIT));
-    })();
+    dispatch(listJobTypes(MAX_LIMIT));
   }, [dispatch]);
 
   useEffect(() => {

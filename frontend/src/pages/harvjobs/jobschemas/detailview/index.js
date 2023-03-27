@@ -17,9 +17,7 @@ function JobSchemaDetailView(props) {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    (async () => {
-      await dispatch(getJobSchemaById(jobschemaId));
-    })();
+    dispatch(getJobSchemaById(jobschemaId));
   }, [dispatch, jobschemaId]);
 
   return (

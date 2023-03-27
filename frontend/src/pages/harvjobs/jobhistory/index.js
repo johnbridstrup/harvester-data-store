@@ -15,9 +15,7 @@ function JobHistoryView(props) {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    (async () => {
-      await dispatch(listJobStatus(jobId));
-    })();
+    dispatch(listJobStatus(jobId));
   }, [dispatch, jobId]);
 
   return (

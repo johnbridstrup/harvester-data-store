@@ -36,14 +36,10 @@ function ErrorsReportList(props) {
     })();
     if (search) {
       const paramsObj = paramsToObject(search);
-      (async () => {
-        await dispatch(queryErrorReport(paramsObj));
-        dispatch(copyQueryUrl(copiedUrl(paramsObj)));
-      })();
+      dispatch(queryErrorReport(paramsObj));
+      dispatch(copyQueryUrl(copiedUrl(paramsObj)));
     } else {
-      (async () => {
-        await dispatch(queryErrorReport({ is_emulator: 0 }));
-      })();
+      dispatch(queryErrorReport({ is_emulator: 0 }));
     }
     return () => {};
   }, [dispatch, search]);

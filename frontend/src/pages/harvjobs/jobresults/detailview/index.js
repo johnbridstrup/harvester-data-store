@@ -17,9 +17,7 @@ function JobResultDetailView(props) {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    (async () => {
-      await dispatch(getJobResultById(jobresultId));
-    })();
+    dispatch(getJobResultById(jobresultId));
   }, [dispatch, jobresultId]);
 
   return (

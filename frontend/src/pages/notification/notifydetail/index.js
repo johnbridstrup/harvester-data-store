@@ -12,9 +12,7 @@ function NotificationDetail(props) {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    (async () => {
-      await dispatch(getNotificationById(params.notifyId));
-    })();
+    dispatch(getNotificationById(params.notifyId));
   }, [dispatch, params]);
 
   return (

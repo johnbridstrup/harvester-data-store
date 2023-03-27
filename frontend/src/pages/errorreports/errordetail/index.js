@@ -19,9 +19,7 @@ function ErrorsReportDetail(props) {
   const paramsObj = paramsToObject(search);
 
   useEffect(() => {
-    (async () => {
-      dispatch(detailErrorReport(params.reportId));
-    })();
+    dispatch(detailErrorReport(params.reportId));
   }, [dispatch, params]);
 
   return (

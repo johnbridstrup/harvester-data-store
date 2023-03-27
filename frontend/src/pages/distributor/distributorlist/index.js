@@ -10,9 +10,7 @@ import "./styles.css";
 function DistributorListView(props) {
   const dispatch = useDispatch();
   useEffect(() => {
-    (async () => {
-      await dispatch(listDistributors());
-    })();
+    dispatch(listDistributors());
   }, [dispatch]);
 
   return (
