@@ -16,9 +16,9 @@ const initialState = {
   reports: [],
   report: {},
   sensors: {
-    fingers: [],
-    vacuum: [],
-    touch: [],
+    fingers: {},
+    vacuum: {},
+    touch: {},
   },
 };
 
