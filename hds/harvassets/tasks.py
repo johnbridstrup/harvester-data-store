@@ -24,6 +24,7 @@ def compile_asset_report():
                 {
                     "serial number": asset.serial_number,
                     "index": asset.index,
+                    "rev": asset.version or "",
                 }
             )
             continue
@@ -31,6 +32,7 @@ def compile_asset_report():
             {
                 "serial number": asset.serial_number,
                 "index": asset.index,
+                "rev": asset.version or "",
             }
         )
     
