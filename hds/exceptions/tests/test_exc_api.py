@@ -8,12 +8,13 @@ class AFTExceptionTest(ExceptionTestBase):
     def setUp(self):
         super().setUp()
         self.test_objects = self._setup_basic()
-    
+        self._load_report_data()
+
     def _send_exception(self, code=0, service='testservice', node=1):
         ts = datetime.now().replace(tzinfo=pytz.utc)
 
         resp = self.client.post(
-            f'{self.api_base_url}/exceptions/', 
+            f'{self.api_base_url}/exceptions/',
             {
                 'code': code,
                 'service': service,
@@ -30,7 +31,7 @@ class AFTExceptionTest(ExceptionTestBase):
     def test_create_exception(self):
         resp=self._send_code()
         resp = self._send_exception()
-    
+
         self.assertEqual(resp.status_code, 201)
         self.assertEqual(AFTException.objects.count(), 1)
         self.assertEqual(AFTException.objects.get().code.code, self.CODE)
@@ -70,23 +71,23 @@ class AFTExceptionTest(ExceptionTestBase):
         self._post_error_report()
         resp = self.client.get(f'{self.api_base_url}/exceptions/?datetime_range=20220101T000100.0,20220430T235955.0')
         self.assertEqual(resp.json()['data']['count'], 1)
-    
+
     def test_get_harv_ids(self):
         self._post_error_report()
         self.create_harvester_object(
             10,
             name="harv10" ,
-            fruit=self.test_objects["fruit"], 
-            location=self.test_objects["location"], 
+            fruit=self.test_objects["fruit"],
+            location=self.test_objects["location"],
             creator=self.user
         )
         self.data['serial_number'] = "010"
         self._post_error_report(load=False)
         self.create_harvester_object(
             9,
-            name="harv9", 
-            fruit=self.test_objects["fruit"], 
-            location=self.test_objects["location"], 
+            name="harv9",
+            fruit=self.test_objects["fruit"],
+            location=self.test_objects["location"],
             creator=self.user
         )
         self.data['serial_number'] = "009"
@@ -94,3 +95,26 @@ class AFTExceptionTest(ExceptionTestBase):
 
         resp = self.client.get(f'{self.api_base_url}/exceptions/?harv_ids=9,10')
         self.assertEqual(resp.json()['data']['count'], 6)
+
+    def test_generate_pareto(self):
+        pareto_groups = ["code__code", "code__name", "service", "report__harvester__harv_id"]
+        pareto_names = ["code", "exception", "service", "harvester"]
+        pareto_name_vals = ["0", "AFTBaseException", "harvester", "11"]
+        pareto_counts = [15, 15, 5, 15]
+        num = 5
+        for _ in range(num):
+            self.client.post(f'{self.api_base_url}/errorreports/', self.data, format='json', HTTP_ACCEPT='application/json')
+
+        def check_pareto(group, name, name_val, count):
+            resp = self.client.get(
+                f'{self.api_base_url}/exceptions/pareto/?aggregate_query={group}&aggregate_name={name}'
+            )
+            self.assertEqual(resp.status_code, 200)
+            rdata = resp.json()
+
+            self.assertEqual(rdata['message'], f'Pareto generated: {name}')
+            self.assertEqual(rdata['data'][0]['count'], count)
+            self.assertEqual(rdata['data'][0][name], name_val)
+
+        for group, name, val, count in zip(pareto_groups, pareto_names, pareto_name_vals, pareto_counts):
+            check_pareto(group, name, val, count)
