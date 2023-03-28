@@ -233,7 +233,7 @@ test("should build query object", () => {
     harv_ids: [11],
     locations: ["Ranch A"],
     tz: "US/Pacific",
-    exceptions__primary: true,
+    primary: true,
   };
   expect(queryObj).toMatchObject(expected);
 });

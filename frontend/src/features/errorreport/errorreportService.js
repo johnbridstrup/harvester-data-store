@@ -2,6 +2,7 @@ import { API_URL } from "../base/constants";
 import { axiosService } from "../base/service";
 
 export const ERROR_REPORT_URL = `${API_URL}/errorreports/`;
+export const ERROR_PARETO_URL = `${API_URL}/exceptions/pareto/`;
 
 const errorListView = async (token) => {
   let response = await axiosService.get(ERROR_REPORT_URL, token);
@@ -33,7 +34,7 @@ const detailErrorReport = async (reportId, token) => {
 const generatePareto = async (paramsObj, token) => {
   const searchParams = new URLSearchParams(paramsObj);
   const response = await axiosService.get(
-    `${ERROR_REPORT_URL}pareto/?${searchParams.toString()}`,
+    `${ERROR_PARETO_URL}?${searchParams.toString()}`,
     token
   );
   return response;

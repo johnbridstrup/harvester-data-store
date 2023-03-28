@@ -126,7 +126,7 @@ function ErrorReportQuery(props) {
       selectedFruit,
       selectedCode
     );
-    queryObj["exceptions__primary"] = true;
+    queryObj["primary"] = true;
     let params = new URLSearchParams(queryObj);
     pushState(queryObj, true);
     let routeto = `/errorreports/view/pareto/?aggregate_query=code__name&${params.toString()}`;
