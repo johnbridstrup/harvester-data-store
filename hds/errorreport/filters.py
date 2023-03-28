@@ -11,6 +11,7 @@ class ErrorReportFilterset(ReportFilterset):
     traceback = filters.CharFilter(field_name="exceptions__traceback", lookup_expr="icontains")
     is_emulator = filters.BooleanFilter(field_name="harvester__is_emulator")
     handled = filters.BooleanFilter(field_name="exceptions__handled")
+    primary = filters.BooleanFilter(field_name="exceptions__primary")
     generic = GenericFilter()
     uuid = EventUUIDFilter()
 
