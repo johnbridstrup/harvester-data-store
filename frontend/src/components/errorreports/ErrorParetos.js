@@ -11,6 +11,7 @@ import {
   Loader,
   mapParamsObject,
   paramsToObject,
+  pushState,
   transformCodeOptions,
   transformFruitOptions,
   transformHarvOptions,
@@ -19,6 +20,7 @@ import {
   uuid,
 } from "utils/utils";
 import timezones from "utils/timezones";
+import { PushStateEnum } from "features/base/constants";
 import { LoaderDiv, SidePane } from "../styled";
 import { ParetoForm, ParetoTabular } from "./ErrorHelpers";
 import { CopyBuildConfig } from "../copytoclipboard/CopyToClipboard";
@@ -164,6 +166,7 @@ function ErrorParetos(props) {
     if (fieldData.primary) {
       queryObj["primary"] = fieldData.primary;
     }
+    pushState(queryObj, PushStateEnum.BUILDCHART);
     await paretoApiReq(queryObj);
   };
 
