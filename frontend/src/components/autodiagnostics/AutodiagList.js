@@ -39,7 +39,7 @@ function AutodiagList(props) {
                       {timeStampFormat(obj.reportTime, timezone)}
                     </Link>
                   </td>
-                  <td>{obj.true ? "success" : "failed"}</td>
+                  <td>{obj.result ? "success" : "failed"}</td>
                   <td>{obj.robot}</td>
                   <td>{obj.gripper_sn}</td>
                   <td>
