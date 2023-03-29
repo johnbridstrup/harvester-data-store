@@ -1250,3 +1250,23 @@ export const logFilter = (str = "", content = []) => {
 
   return [...new Set(filteredArr)];
 };
+
+/**
+ * sort and apply reduce method to paretos
+ * @param {Array} paretos
+ * @returns
+ */
+export const sortReduceParetos = (paretos = []) => {
+  paretos.sort((a, b) => b.count - a.count);
+  const [xlabels, ydata] = paretos.reduce(
+    (acc, pareto) => {
+      const [xlabelsAcc, ydataAcc] = acc;
+      return [
+        [...xlabelsAcc, pareto.value],
+        [...ydataAcc, pareto.count],
+      ];
+    },
+    [[], []]
+  );
+  return { xlabels, ydata };
+};

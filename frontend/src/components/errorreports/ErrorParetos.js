@@ -12,6 +12,7 @@ import {
   mapParamsObject,
   paramsToObject,
   pushState,
+  sortReduceParetos,
   transformCodeOptions,
   transformFruitOptions,
   transformHarvOptions,
@@ -77,18 +78,9 @@ function ErrorParetos(props) {
 
   useEffect(() => {
     const paramsObj = paramsToObject(search);
-    const dataArr = paretos.slice();
-    dataArr.sort((a, b) =>
-      a.count > b.count ? -1 : b.count > a.count ? 1 : 0
-    );
-    const xlabels = dataArr.map((pareto, index) => {
-      return pareto.value;
-    });
-    const ydata = dataArr.map((pareto, index) => {
-      return pareto.count;
-    });
+    const { xlabels, ydata } = sortReduceParetos(paretos.slice());
     const option = aggregateOptions.find(
-      (x, i) => x.value === paramsObj.aggregate_query
+      (x, _) => x.value === paramsObj.aggregate_query
     );
     let paretoObj = {
       id: uuid(),
@@ -121,21 +113,13 @@ function ErrorParetos(props) {
 
   const paretoApiReq = async (aggregateObj) => {
     const option = aggregateOptions.find(
-      (x, i) => x.value === aggregateObj.aggregate_query
+      (x, _) => x.value === aggregateObj.aggregate_query
     );
     let chart_title = option?.label;
     const res = await dispatch(generatePareto(aggregateObj));
     if (res.type === "errorreport/generatePareto/fulfilled") {
-      const dataArr = res?.payload.slice();
-      dataArr.sort((a, b) =>
-        a.count > b.count ? -1 : b.count > a.count ? 1 : 0
-      );
-      const xlabels = dataArr.map((pareto, index) => {
-        return pareto.value;
-      });
-      const ydata = dataArr.map((pareto, index) => {
-        return pareto.count;
-      });
+      const dataArr = res?.payload?.slice() || [];
+      const { xlabels, ydata } = sortReduceParetos(dataArr);
       let paretoObj = {
         id: uuid(),
         paretos: { xlabels, ydata },
@@ -143,7 +127,7 @@ function ErrorParetos(props) {
         chart_title,
       };
       let arr = paretoArr.slice();
-      let exist = arr.find((x, i) => x.chart_title === chart_title);
+      let exist = arr.find((x, _) => x.chart_title === chart_title);
       if (!exist) {
         arr.push(paretoObj);
       }
