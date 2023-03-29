@@ -30,7 +30,7 @@ import timezones from "utils/timezones";
 import NotificationModal from "../modals/NotificationModal";
 import { FormQuery } from "./ErrorHelpers";
 import { HoverTabular } from "./ErrorHelpers";
-import { SUCCESS, THEME_MODES } from "features/base/constants";
+import { PushStateEnum, SUCCESS, THEME_MODES } from "features/base/constants";
 
 function ErrorReportQuery(props) {
   const [selectedHarvId, setSelectedHarvId] = useState(null);
@@ -114,7 +114,7 @@ function ErrorReportQuery(props) {
     await dispatch(queryErrorReport(queryObj));
     dispatch(copyQueryUrl(copiedUrl(queryObj)));
     dispatch(cacheParamsObj(queryObj));
-    pushState(queryObj, false);
+    pushState(queryObj);
   };
 
   const handleGenPareto = async () => {
@@ -128,7 +128,7 @@ function ErrorReportQuery(props) {
     );
     queryObj["primary"] = true;
     let params = new URLSearchParams(queryObj);
-    pushState(queryObj, true);
+    pushState(queryObj, PushStateEnum.GENPARETO);
     let routeto = `/errorreports/view/pareto/?aggregate_query=code__name&${params.toString()}`;
     navigate(routeto);
   };

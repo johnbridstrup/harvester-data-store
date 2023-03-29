@@ -4,6 +4,7 @@ import {
   LOG_STR_PATTERN,
   MASTER_ROBOT,
   PROD_ENV,
+  PushStateEnum,
   THEME_MODES,
 } from "features/base/constants";
 import { Oval } from "react-loader-spinner";
@@ -451,13 +452,22 @@ export const transformErroredServices = (errors = []) => {
   return errors.map((x, i) => x.service);
 };
 
-export const pushState = (queryObj, pareto = false) => {
+/**
+ *
+ * @param {object} queryObj
+ * @param {String} pareto
+ */
+export const pushState = (queryObj, pareto = undefined) => {
   let newurl;
   let params = new URLSearchParams(queryObj);
-  if (pareto) {
+  if (pareto === PushStateEnum.GENPARETO) {
     newurl = `${window.location.protocol}//${
       window.location.host
     }/errorreports/?aggregate_query=code__name&${params.toString()}`;
+  } else if (pareto === PushStateEnum.BUILDCHART) {
+    newurl = `${window.location.protocol}//${
+      window.location.host
+    }/errorreports/view/pareto/?${params.toString()}`;
   } else {
     newurl = `${window.location.protocol}//${
       window.location.host
