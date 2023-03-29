@@ -46,6 +46,15 @@
   cursor: pointer;
 }
 
+.non-pareto {
+  height: 400px;
+  width: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 3rem;
+}
+
 .dt-delete-icon {
   background: var(--dark-bg-third);
 }

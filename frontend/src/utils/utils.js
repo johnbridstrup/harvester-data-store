@@ -964,6 +964,7 @@ export const selectDarkStyles = {
  * @param {Function} setSelectedCode
  * @param {Function} setFieldData
  * @param {Function} setSelectedTimezone
+ * @param {Function} setSelectedAggregate
  */
 export const mapParamsObject = (
   paramsObj,
@@ -973,7 +974,8 @@ export const mapParamsObject = (
   setSelectedFruit,
   setSelectedCode,
   setFieldData,
-  setSelectedTimezone
+  setSelectedTimezone,
+  setSelectedAggregate
 ) => {
   if (paramsObj.harv_ids) {
     let harv_ids = paramsObj.harv_ids.split(",").map((harv_id, index) => {
@@ -1042,6 +1044,11 @@ export const mapParamsObject = (
     setFieldData((current) => {
       return { ...current, primary: Boolean(paramsObj.primary) };
     });
+  }
+  if (paramsObj.group_by) {
+    const groups = paramsObj.group_by.split(",");
+    const newGroup = aggregateOptions.filter((x) => groups.includes(x.value));
+    setSelectedAggregate((current) => newGroup);
   }
 };
 

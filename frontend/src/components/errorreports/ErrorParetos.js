@@ -1,10 +1,15 @@
-import { lazy, Suspense, useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import {
+  lazy,
+  Suspense,
+  useState,
+  useEffect,
+  useCallback,
+  useMemo,
+} from "react";
+import { useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 import { useMediaQuery } from "react-responsive";
-import { generatePareto } from "features/errorreport/errorreportSlice";
 import {
-  aggregateOptions,
   buildQueryObj,
   darkThemeClass,
   handleSelectFactory,
@@ -18,9 +23,9 @@ import {
   transformHarvOptions,
   transformLocOptions,
   transformTzOptions,
-  uuid,
 } from "utils/utils";
 import timezones from "utils/timezones";
+import { paretoApiService } from "utils/services";
 import { PushStateEnum } from "features/base/constants";
 import { LoaderDiv, SidePane } from "../styled";
 import { ParetoForm, ParetoTabular } from "./ErrorHelpers";
@@ -45,18 +50,18 @@ function ErrorParetos(props) {
     handled: "",
     primary: true,
   });
-  const { paretos, loading } = useSelector((state) => state.errorreport);
+  const [loading, setLoading] = useState(false);
   const { harvesters } = useSelector((state) => state.harvester);
   const { locations } = useSelector((state) => state.location);
   const { fruits } = useSelector((state) => state.fruit);
   const { exceptioncodes } = useSelector((state) => state.exceptioncode);
   const { theme } = useSelector((state) => state.home);
+  const { token } = useSelector((state) => state.auth);
   const harvesterOptions = transformHarvOptions(harvesters);
   const locationOptions = transformLocOptions(locations);
   const timezoneOptions = transformTzOptions(timezones);
   const fruitOptions = transformFruitOptions(fruits);
   const codeOptions = transformCodeOptions(exceptioncodes);
-  const dispatch = useDispatch();
   const { search } = useLocation();
   const paramsObj = paramsToObject(search);
   const lg = useMediaQuery({ query: "(min-width: 1170px)" });
@@ -72,25 +77,54 @@ function ErrorParetos(props) {
       setSelectedFruit,
       setSelectedCode,
       setFieldData,
-      setSelectedTimezone
+      setSelectedTimezone,
+      setSelectedAggregate
     );
   }, [search, exceptioncodes]);
 
+  const memoizeSortReducePareto = useMemo(() => sortReduceParetos, []);
+
+  const paretoApiReq = useCallback(
+    async (aggregateObj) => {
+      if (selectedAggregate && selectedAggregate.length > 0) {
+        const groups = selectedAggregate.map((x) => x.value);
+        await paretoApiService(
+          groups,
+          token,
+          aggregateObj,
+          setParetoArr,
+          memoizeSortReducePareto
+        );
+      }
+    },
+    [selectedAggregate, token, memoizeSortReducePareto]
+  );
+
+  const paretoApiReqMount = useCallback(
+    async (aggregateObj) => {
+      if (aggregateObj.group_by) {
+        const groups = aggregateObj.group_by
+          .split(",")
+          .map((x) => {
+            return { label: x, value: x };
+          })
+          .map((x) => x.value);
+        await paretoApiService(
+          groups,
+          token,
+          aggregateObj,
+          setParetoArr,
+          memoizeSortReducePareto
+        );
+      }
+    },
+    [token, memoizeSortReducePareto]
+  );
+
   useEffect(() => {
     const paramsObj = paramsToObject(search);
-    const { xlabels, ydata } = sortReduceParetos(paretos.slice());
-    const option = aggregateOptions.find(
-      (x, _) => x.value === paramsObj.aggregate_query
-    );
-    let paretoObj = {
-      id: uuid(),
-      paretos: { xlabels, ydata },
-      aggregate_query: paramsObj.aggregate_query,
-      chart_title: option?.label,
-    };
-    let arr = [paretoObj];
-    setParetoArr((current) => arr);
-  }, [search, paretos]);
+    paretoApiReqMount(paramsObj);
+  }, [search, paretoApiReqMount]);
 
   const handleHarvestSelect = handleSelectFactory(setSelectedHarvId);
   const handleLocationSelect = handleSelectFactory(setSelectedLocation);
@@ -111,30 +145,6 @@ function ErrorParetos(props) {
     setOpen(!open);
   };
 
-  const paretoApiReq = async (aggregateObj) => {
-    const option = aggregateOptions.find(
-      (x, _) => x.value === aggregateObj.aggregate_query
-    );
-    let chart_title = option?.label;
-    const res = await dispatch(generatePareto(aggregateObj));
-    if (res.type === "errorreport/generatePareto/fulfilled") {
-      const dataArr = res?.payload?.slice() || [];
-      const { xlabels, ydata } = sortReduceParetos(dataArr);
-      let paretoObj = {
-        id: uuid(),
-        paretos: { xlabels, ydata },
-        aggregate_query: aggregateObj.aggregate_query,
-        chart_title,
-      };
-      let arr = paretoArr.slice();
-      let exist = arr.find((x, _) => x.chart_title === chart_title);
-      if (!exist) {
-        arr.push(paretoObj);
-      }
-      setParetoArr((current) => arr);
-    }
-  };
-
   const handleBuildPareto = async (e) => {
     e.preventDefault();
     let queryObj = buildQueryObj(
@@ -145,16 +155,16 @@ function ErrorParetos(props) {
       selectedFruit,
       selectedCode
     );
-    if (selectedAggregate && selectedAggregate.hasOwnProperty("value")) {
-      queryObj["aggregate_query"] = selectedAggregate.value;
-    } else {
-      queryObj["aggregate_query"] = "code__name";
+    if (selectedAggregate && selectedAggregate.length > 0) {
+      queryObj["group_by"] = selectedAggregate.map((x) => x.value).join(",");
     }
     if (fieldData.primary) {
       queryObj["primary"] = fieldData.primary;
     }
     pushState(queryObj, PushStateEnum.BUILDCHART);
+    setLoading(true);
     await paretoApiReq(queryObj);
+    setLoading(false);
   };
 
   const handleDeletePareto = (chart) => {

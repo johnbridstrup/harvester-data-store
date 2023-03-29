@@ -33,7 +33,17 @@ function ParetoPlot(props) {
     },
   ];
   return (
-    <Plotly data={data} layout={layout} style={{ width: "100% !important" }} />
+    <>
+      {props.ydata?.length ? (
+        <Plotly data={data} layout={layout} />
+      ) : (
+        <div className="non-pareto">
+          <span>
+            No data points available for the group {props.chart_title}
+          </span>
+        </div>
+      )}
+    </>
   );
 }
 

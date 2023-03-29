@@ -2,6 +2,8 @@ import { toast } from "react-toastify";
 import { SUCCESS } from "features/base/constants";
 import harvjobService from "features/harvjobs/harvjobService";
 import { createJob } from "features/harvjobs/harvjobSlice";
+import errorreportService from "features/errorreport/errorreportService";
+import { aggregateOptions, uuid } from "./utils";
 
 export const handleDownload = async (fileObj, token) => {
   const link = document.createElement("a");
@@ -55,4 +57,37 @@ export const handleReleaseFormSubmit = (
     }
   };
   return handleFormSubmit;
+};
+
+export const paretoApiService = async (
+  groups,
+  token,
+  aggregateObj,
+  setParetoArr,
+  memoizeSortReducePareto
+) => {
+  const paretoObjs = await Promise.all(
+    groups.map(async (group) => {
+      const chart_title = aggregateOptions.find(
+        (x) => x.value === group
+      )?.label;
+
+      try {
+        const res = await errorreportService.generatePareto(
+          { ...aggregateObj, aggregate_query: group },
+          token
+        );
+        const { xlabels, ydata } = memoizeSortReducePareto(res);
+        return {
+          id: uuid(),
+          paretos: { xlabels, ydata },
+          aggregate_query: group,
+          chart_title,
+        };
+      } catch (error) {
+        return {};
+      }
+    })
+  );
+  setParetoArr((current) => paretoObjs);
 };

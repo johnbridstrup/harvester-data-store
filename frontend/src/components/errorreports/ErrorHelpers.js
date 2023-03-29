@@ -687,7 +687,8 @@ export const ParetoForm = (props) => {
               <Select
                 isSearchable
                 isClearable
-                placeholder="code__name"
+                isMulti
+                placeholder="exception"
                 options={aggregateOptions}
                 name="aggregate_query"
                 id="aggregate_query"
@@ -800,7 +801,7 @@ ExceptTabular.propTypes = {
 ParetoForm.propTypes = {
   handleAggreSelect: PropTypes.func,
   handleSubmit: PropTypes.func,
-  selectedAggregate: PropTypes.object,
+  selectedAggregate: PropTypes.array,
   harvesterOptions: PropTypes.array,
   handleHarvestSelect: PropTypes.func,
   selectedHarvId: PropTypes.array,
