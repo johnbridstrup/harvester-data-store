@@ -31,7 +31,7 @@ function AutodiagnosticDetailView(props) {
     <MainLayout>
       <div className="container">
         <Header
-          title={`Autodiagnostics: Harv ${report.harvester} Robot ${
+          title={`Autodiagnostics: Harv ${report.harvester?.harv_id} Robot ${
             report.robot
           } (${timeStampFormat(report.reportTime, timezone)})`}
           className={"display-6 mt-4 mb-4"}

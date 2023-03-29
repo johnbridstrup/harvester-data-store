@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { LoaderDiv } from "components/styled";
 import { darkThemeClass, Loader, timeStampFormat } from "utils/utils";
+import { HarvesterLink } from "components/common";
 
 function AutodiagList(props) {
   const { reports, loading } = useSelector((state) => state.autodiagnostic);
@@ -43,9 +44,7 @@ function AutodiagList(props) {
                   <td>{obj.robot}</td>
                   <td>{obj.gripper_sn}</td>
                   <td>
-                    <Link to={`/harvesters/${obj.harvester}`}>
-                      {obj.harvester}
-                    </Link>
+                    <HarvesterLink harvester={obj.harvester} />
                   </td>
                   <td>
                     <Link to={`/events/${obj.event.id}`}>{obj.event.id}</Link>
