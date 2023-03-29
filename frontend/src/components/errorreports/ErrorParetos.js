@@ -63,6 +63,20 @@ function ErrorParetos(props) {
 
   useEffect(() => {
     const paramsObj = paramsToObject(search);
+    mapParamsObject(
+      paramsObj,
+      exceptioncodes,
+      setSelectedHarvId,
+      setSelectedLocation,
+      setSelectedFruit,
+      setSelectedCode,
+      setFieldData,
+      setSelectedTimezone
+    );
+  }, [search, exceptioncodes]);
+
+  useEffect(() => {
+    const paramsObj = paramsToObject(search);
     const dataArr = paretos.slice();
     dataArr.sort((a, b) =>
       a.count > b.count ? -1 : b.count > a.count ? 1 : 0
@@ -84,18 +98,7 @@ function ErrorParetos(props) {
     };
     let arr = [paretoObj];
     setParetoArr((current) => arr);
-
-    mapParamsObject(
-      paramsObj,
-      exceptioncodes,
-      setSelectedHarvId,
-      setSelectedLocation,
-      setSelectedFruit,
-      setSelectedCode,
-      setFieldData,
-      setSelectedTimezone
-    );
-  }, [search, paretos, exceptioncodes]);
+  }, [search, paretos]);
 
   const handleHarvestSelect = handleSelectFactory(setSelectedHarvId);
   const handleLocationSelect = handleSelectFactory(setSelectedLocation);
