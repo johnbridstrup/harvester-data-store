@@ -37,7 +37,7 @@ test("should render the autodiagnostic detail view", async () => {
   });
 
   const header = screen.getByText(
-    /Autodiagnostics: Harv 3 Robot 1 \(20230206T234724.671\)/i
+    /Autodiagnostics: Harv 11 Robot 1 \(20230206T234724.671\)/i
   );
   expect(header).toBeInTheDocument();
 

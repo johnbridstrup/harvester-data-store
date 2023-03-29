@@ -309,7 +309,10 @@
   "creator": 1,
   "modifiedBy": null,
   "location": 2,
-  "harvester": 3,
+  "harvester": {
+    "id": 3,
+    "harv_id": 11
+  },
   "event": {
     "id": 9,
     "tags": ["AutodiagnosticsReport"],
