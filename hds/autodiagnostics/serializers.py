@@ -7,6 +7,7 @@ from common.reports import ReportBase
 from common.serializers.reportserializer import ExtractionError, ReportSerializerBase
 from event.serializers import PickSessionSerializerMixin
 from harvassets.models import HarvesterAsset, HarvesterAssetType
+from harvester.serializers.harvesterserializer import HarvesterSerializer
 
 from .models import AutodiagnosticsReport, AutodiagnosticsRun
 
@@ -23,6 +24,7 @@ class AutodiagnosticsRunSerializer(serializers.ModelSerializer):
 
 class AutodiagnosticsReportSerializer(TaggitSerializer, PickSessionSerializerMixin, ReportSerializerBase):
     run_data = AutodiagnosticsRunSerializer(read_only=True)
+
     class Meta:
         model = AutodiagnosticsReport
         fields = ('__all__')
@@ -34,6 +36,7 @@ class AutodiagnosticsReportSerializer(TaggitSerializer, PickSessionSerializerMix
         pick_session = self.serialize_picksession(instance.pick_session)
         data['event'] = event
         data['pick_session'] = pick_session
+        data['harvester'] = HarvesterSerializer(instance.harvester).data
         return data
 
     def to_internal_value(self, data):
@@ -45,7 +48,7 @@ class AutodiagnosticsReportSerializer(TaggitSerializer, PickSessionSerializerMix
             # This failure has already been logged.
             # The tag will only apply if we are able to ingest.
             tags = [Tags.INVALIDSCHEMA.value]
-        
+
         report = data.copy()
         data = self.extract_basic(data)
         result = report["data"].get("passed_autodiag")
@@ -66,7 +69,7 @@ class AutodiagnosticsReportSerializer(TaggitSerializer, PickSessionSerializerMix
             "event": event,
         })
         return super().to_internal_value(data)
-    
+
     @classmethod
     def extract(cls, report_obj: ReportBase):
         creator = report_obj.creator
@@ -76,7 +79,7 @@ class AutodiagnosticsReportSerializer(TaggitSerializer, PickSessionSerializerMix
             report.tags.add(Tags.INCOMPLETE.value)
             report.save()
             raise ExtractionError(f"Autodiagnostics report {report_obj.id} has no data")
-        
+
         # Retrieve or create gripper HarvesterAssetType.
         # We can do this regardless of whether we can extract the actual gripper asset
         gripper_asset_type = HarvesterAssetType.get_or_create(GRIPPER_ASSET_NAME, creator)
@@ -90,7 +93,7 @@ class AutodiagnosticsReportSerializer(TaggitSerializer, PickSessionSerializerMix
                 report.tags.add(Tags.MISSINGVALUE.value)
                 report.save()
                 raise ExtractionError(f"No gripper serial number in autodiag report {report_obj.id}")
-        
+
         # Get robot ID
         robot_id = data.pop("robot_id", None)
         if robot_id is None:
@@ -101,7 +104,7 @@ class AutodiagnosticsReportSerializer(TaggitSerializer, PickSessionSerializerMix
 
         # Update or create the gripper HarvesterAsset
         gripper = HarvesterAsset.update_or_create_and_get(
-            gripper_asset_type, 
+            gripper_asset_type,
             report_obj.harvester,
             robot_id,
             gripper_sn,
@@ -135,7 +138,7 @@ class AutodiagnosticsReportSerializer(TaggitSerializer, PickSessionSerializerMix
         # Sensor curves
         autodiag_run["sensors"] = data.pop("sensors", {})
 
-        # Create and save    
+        # Create and save
         run = AutodiagnosticsRun(**autodiag_run)
         run.save()
 
