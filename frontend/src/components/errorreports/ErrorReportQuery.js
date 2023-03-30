@@ -79,7 +79,8 @@ function ErrorReportQuery(props) {
       setSelectedFruit,
       setSelectedCode,
       setFieldData,
-      setSelectedTimezone
+      setSelectedTimezone,
+      () => {}
     );
   }, [search, exceptioncodes]);
 
@@ -129,7 +130,7 @@ function ErrorReportQuery(props) {
     queryObj["primary"] = true;
     let params = new URLSearchParams(queryObj);
     pushState(queryObj, PushStateEnum.GENPARETO);
-    let routeto = `/errorreports/view/pareto/?aggregate_query=code__name&${params.toString()}`;
+    let routeto = `/errorreports/view/pareto/?group_by=code__name&${params.toString()}`;
     navigate(routeto);
   };
 
