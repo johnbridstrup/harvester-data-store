@@ -10,7 +10,10 @@ import { MIGRATION_URL } from "features/migration/migrationService";
 import { S3FILE_URL } from "features/s3file/s3fileService";
 import { EVENTS_URL, PICKSESSION_URL } from "features/event/eventService";
 import { HARVESTERS_URL } from "features/harvester/harvesterService";
-import { ERROR_REPORT_URL } from "features/errorreport/errorreportService";
+import {
+  ERROR_REPORT_URL,
+  ERROR_PARETO_URL,
+} from "features/errorreport/errorreportService";
 import errorreport from "test-utils/test-data/errorreport.json";
 import { AUTODIAG_REPORT_URL } from "features/autodiagnostics/autodiagnosticService";
 import autodiagnostic from "test-utils/test-data/autodiagnostic.json";
@@ -43,6 +46,17 @@ let genericGetResponse = {
   message: "any retrieved successfully",
   data: {},
 };
+
+const pareto = [
+  {
+    value: "0",
+    count: 2,
+  },
+  {
+    value: "9",
+    count: 5,
+  },
+];
 
 export const login = rest.post(LOGIN_URL, (req, res, ctx) => {
   // Persist user's authentication in the localstorage
@@ -235,4 +249,10 @@ export const listUsers = rest.get(USERS_URL, (req, res, ctx) => {
   genericListResponse["message"] = "user retrieved successfully";
   genericListResponse["data"]["results"] = [users];
   return res(ctx.json(genericListResponse));
+});
+
+export const generatePareto = rest.get(ERROR_PARETO_URL, (req, res, ctx) => {
+  genericGetResponse["message"] = "Pareto generated: Exceptions";
+  genericGetResponse["data"] = pareto;
+  return res(ctx.json(genericGetResponse));
 });

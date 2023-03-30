@@ -25,6 +25,7 @@ import {
   listFruit,
   listExceptionCode,
   listUsers,
+  generatePareto,
 } from "./actions";
 
 export const handlers = [
@@ -50,4 +51,5 @@ export const handlers = [
   listFruit,
   listExceptionCode,
   listUsers,
+  generatePareto,
 ];

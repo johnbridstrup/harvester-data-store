@@ -24,6 +24,7 @@ import {
   transformSensors,
   titleCase,
   logFilter,
+  sortReduceParetos,
 } from "utils/utils";
 import errorreport from "test-utils/test-data/errorreport.json";
 import { API_URL } from "features/base/constants";
@@ -557,4 +558,22 @@ describe("autodiagnostics transformation block scope", () => {
 
 test("should return the title case of str", () => {
   expect(titleCase("hds autodiagnostic")).toBe("Hds Autodiagnostic");
+});
+
+test("should reduce and return xlabels & ydata arrays", () => {
+  const data = [
+    {
+      value: "AFTException",
+      count: 2,
+    },
+    {
+      value: "AFTBaseException",
+      count: 5,
+    },
+  ];
+  const expected = {
+    xlabels: ["AFTBaseException", "AFTException"],
+    ydata: [5, 2],
+  };
+  expect(sortReduceParetos(data)).toMatchObject(expected);
 });

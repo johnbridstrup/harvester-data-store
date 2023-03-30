@@ -678,7 +678,7 @@ export const ParetoForm = (props) => {
   const customStyles = dark ? selectDarkStyles : {};
   return (
     <div className="mb-4">
-      <form onSubmit={props.handleSubmit}>
+      <form onSubmit={props.handleSubmit} data-testid="query-form">
         <GenericFormField {...props} />
         <div className="row mb-3">
           <div className="col">
@@ -691,7 +691,7 @@ export const ParetoForm = (props) => {
                 placeholder="exception"
                 options={aggregateOptions}
                 name="aggregate_query"
-                id="aggregate_query"
+                inputId="aggregate_query"
                 onChange={props.handleAggreSelect}
                 defaultValue={props.selectedAggregate}
                 value={props.selectedAggregate}
