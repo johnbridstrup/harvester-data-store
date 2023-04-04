@@ -1180,7 +1180,7 @@ const revertOgShapeAndCalculate = (sortedSensors = []) => {
 export const transformSensors = (sensors = {}) => {
   const toSensorArray = (key, value, prop) => {
     return value.reduce((acc, [ts, values]) => {
-      if (values[prop]) {
+      if (!isNaN(values[prop])) {
         acc.push({ state: key, ts, value: values[prop] });
       }
       return acc;

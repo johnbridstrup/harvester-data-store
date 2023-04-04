@@ -450,12 +450,12 @@ describe("autodiagnostics transformation block scope", () => {
   test("should handle missing properties in sensor readings", () => {
     const sensorDataWithMissingProps = {
       state1: [
-        [1, { touch: 1, vac: 2 }],
-        [2, { touch: 2, vac: 4, finger: 6 }],
+        [1, { touch: 1, vac: 0 }],
+        [2, { touch: 2, vac: 2, finger: 6 }],
       ],
       state2: [
-        [3, { touch: 3, vac: 6, finger: 9 }],
-        [4, { touch: 4, vac: 8 }],
+        [3, { touch: 3, vac: 4, finger: 9 }],
+        [4, { touch: 4, vac: 6 }],
       ],
     };
 
@@ -470,12 +470,12 @@ describe("autodiagnostics transformation block scope", () => {
         ],
       },
       vacuum: {
-        values: [2, 4, 6, 8],
+        values: [0, 2, 4, 6],
         states: ["state1", "state1", "state2", "state2"],
         timestamps: [0, 1, 2, 3],
         ts_interval: [
-          { state: "state1", x0: 0, diff: 1, x1: 2, max: 8, min: 2 },
-          { state: "state2", x0: 2, diff: 1, x1: 3, max: 8, min: 2 },
+          { state: "state1", x0: 0, diff: 1, x1: 2, max: 6, min: 0 },
+          { state: "state2", x0: 2, diff: 1, x1: 3, max: 6, min: 0 },
         ],
       },
       finger: {
