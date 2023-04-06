@@ -2,7 +2,9 @@
 from django.core.paginator import Paginator
 from django.db import migrations, models
 from errorreport.serializers.errorreportserializer import NO_VALUE_STR
-import logging
+import structlog
+
+logger = structlog.get_logger(__name__)
 
 
 def extract_info(apps, schema_editor):
@@ -11,7 +13,7 @@ def extract_info(apps, schema_editor):
 
     paginator = Paginator(AFTException.objects.all(), 1000)
     for page in range(1, paginator.num_pages + 1):
-        logging.info(f"Page {page}")
+        logger.info(f"Page {page}")
         for exc in paginator.page(page).object_list:
             if exc.report.harvester.fruit.name == 'apple':
                 sys_key = 'sysmon_ap.{}'
@@ -30,10 +32,10 @@ def extract_info(apps, schema_editor):
                     serv_str = f"{exc.service}.{exc.robot}"
                     info = sys_report[key]['errors'][serv_str].get('value', NO_VALUE_STR)
                 except Exception as e:
-                    logging.error(sys_report)
-                    logging.error(f"PK: {exc.pk}")
-                    logging.error(f"sysmon key: {key}")
-                    logging.error(f"service string: {serv_str}")
+                    logger.error(sys_report)
+                    logger.error(f"PK: {exc.pk}")
+                    logger.error(f"sysmon key: {key}")
+                    logger.error(f"service string: {serv_str}")
                     raise e
             else:
                 info = NO_VALUE_STR

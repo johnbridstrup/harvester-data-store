@@ -3,7 +3,9 @@ from ..models import HarvesterVersionReport as HVR
 
 from django.core.paginator import Paginator
 from django.db import migrations, models
-import logging
+import structlog
+
+logger = structlog.get_logger(__name__)
 
 
 def set_has_unexpected(apps, schema_editor):
@@ -11,7 +13,7 @@ def set_has_unexpected(apps, schema_editor):
 
     paginator = Paginator(HarvesterVersionReport.objects.all(), 1000)
     for page in range(1, paginator.num_pages + 1):
-        logging.info(f"Page {page}")
+        logger.info(f"Page {page}")
         for vers_report in paginator.page(page).object_list:
             vers_report.has_unexpected = HVR.check_unexpected(vers_report.report["data"])
             vers_report.save()

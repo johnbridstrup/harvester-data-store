@@ -1,6 +1,6 @@
 import re
 import zipfile
-import logging
+import structlog
 import uuid
 from django.core.cache import cache
 from rest_framework import serializers
@@ -11,6 +11,8 @@ from harvester.models import Harvester
 from logparser.models import LogSession, LogFile, TIMEZONE, LogVideo
 from s3file.models import SessClip
 from s3file.serializers import DirectUploadSerializer
+
+logger = structlog.get_logger(__name__)
 
 
 class VideoSerializer(serializers.ModelSerializer):
@@ -63,7 +65,7 @@ class LogSessionSerializer(TaggitSerializer, serializers.ModelSerializer):
                 internal_data["date_time"] = str(date_obj)
                 internal_data["harv"] = harv.pk if harv else None
             except IndexError:
-                logging.error('Zip file is empty no files found')
+                logger.error('Zip file is empty no files found')
 
         return super().to_internal_value(internal_data)
 
@@ -106,7 +108,7 @@ class LogSessionSerializer(TaggitSerializer, serializers.ModelSerializer):
                 AttributeError.__name__,
                 "Failed date pattern match"
             ).inc()
-            logging.error(
+            logger.error(
                 f"could not match date pattern on file {file.filename}"
             )
 
@@ -121,14 +123,14 @@ class LogSessionSerializer(TaggitSerializer, serializers.ModelSerializer):
                     Harvester.DoesNotExist.__name__,
                     "Harvester does not exist"
                 ).inc()
-                logging.error(f"could not find harvester with harv_id {harv_id}")
+                logger.error(f"could not find harvester with harv_id {harv_id}")
         else:
             ASYNC_ERROR_COUNTER.labels(
                 'extract_harvester_and_date',
                 AttributeError.__name__,
                 "Failed harvester pattern match"
             ).inc()
-            logging.error(
+            logger.error(
                 f"could not match harv_id pattern on file {file.filename}"
             )
         return harv, date_obj
@@ -157,4 +159,4 @@ class LogSessionSerializer(TaggitSerializer, serializers.ModelSerializer):
                 LogSession.DoesNotExist.__name__,
                 "Logsession does not exist"
             ).inc()
-            logging.info(f"log session with id {_id} does not exist")
+            logger.info(f"log session with id {_id} does not exist")

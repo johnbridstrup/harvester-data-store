@@ -1,11 +1,11 @@
-import logging
+import structlog
 import django_filters.rest_framework as filters
 
 from common.filters import CommonInfoFilterset
 
 from .models import Notification
 
-
+logger = structlog.get_logger(__name__)
 
 
 class NotificationFilter(CommonInfoFilterset):
@@ -19,7 +19,7 @@ class NotificationFilter(CommonInfoFilterset):
         if category == "is_recipient":
             return queryset.filter(recipients__in=[self.request.user])
         
-        logging.warn(f"Unrecognized category {category} in NotificationFilter.")
+        logger.warn(f"Unrecognized category {category} in NotificationFilter.")
         return queryset
 
     class Meta:

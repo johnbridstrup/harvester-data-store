@@ -1,11 +1,13 @@
 import re, os
-import logging
+import structlog
 from rest_framework import serializers
 from logparser.models import LogFile, LogSession
 from common.async_metrics import ASYNC_ERROR_COUNTER
 from common.reports import DTimeFormatter
 from logparser.models import TIMEZONE
 from .logsessionserializers import LogSessionBaseSerializer
+
+logger = structlog.get_logger(__name__)
 
 LOG_DATE_PATTERN = re.compile(r'\[\d{8}T\d{6}.[0-9]+\]')
 
@@ -47,7 +49,7 @@ class LogFileSerializer(serializers.ModelSerializer):
                 AttributeError.__name__,
                 "Failed date pattern match"
             ).inc()
-            logging.error(f"could not match the date on line {line_str}")
+            logger.error(f"could not match the date on line {line_str}")
         return date_obj
 
     @staticmethod
@@ -75,7 +77,7 @@ class LogFileSerializer(serializers.ModelSerializer):
                 AttributeError.__name__,
                 "Failed robot pattern match"
             ).inc()
-            logging.error(
+            logger.error(
                 f"could not match robot id on file {filename}"
             )
         if service_match is not None:
@@ -86,7 +88,7 @@ class LogFileSerializer(serializers.ModelSerializer):
                 AttributeError.__name__,
                 "Failed service pattern match"
             ).inc()
-            logging.error(f"could not match service on file {filename}")
+            logger.error(f"could not match service on file {filename}")
         return service, robot
 
     @classmethod
@@ -96,7 +98,7 @@ class LogFileSerializer(serializers.ModelSerializer):
             DateMatchError.__name__,
             "Failed date pattern match"
         ).inc()
-        logging.error(f'No match for the line {entry}')
+        logger.error(f'No match for the line {entry}')
 
     @classmethod
     def _extract_lines(cls, file_iter, service, robot, ext):

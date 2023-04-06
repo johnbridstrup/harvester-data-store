@@ -1,4 +1,4 @@
-import logging, json
+import json
 from django.contrib.auth.models import User
 
 from .models import Job, JobHostResult, JobResults
@@ -8,8 +8,10 @@ from common.utils import build_frontend_url, test_env
 from harvester.models import Harvester
 from notifications.slack import post_to_slack
 
-import datetime, logging, os, pytz, requests, sys
+import datetime, os, pytz, requests, structlog, sys
 from requests.adapters import Retry, HTTPAdapter
+
+logger = structlog.get_logger(__name__)
 
 
 JOB_STATUS_MSG_FMT = (
@@ -110,9 +112,9 @@ def schedule_job(job_id, harv_pk, user_pk):
         "job_payload": json.dumps(job.payload),
         "valid_until": (datetime.datetime.now(pytz.utc) + datetime.timedelta(seconds=3600)).strftime(JOB_DATETIME_FMT)
     }
-    logging.info("Sending job to server.")
-    logging.debug(json.dumps(request_payload))
-    logging.info("/".join([JOB_SERVER_ADDRESS, "job"]))
+    logger.info("Sending job to server.")
+    logger.debug(json.dumps(request_payload))
+    logger.info("/".join([JOB_SERVER_ADDRESS, "job"]))
 
     retry = Retry(
         total=MAX_RETRIES,

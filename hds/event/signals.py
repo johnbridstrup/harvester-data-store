@@ -4,7 +4,9 @@ from common.signals import report_created
 from .models import Event
 from .tasks import collect_aux_uuids
 
-import logging
+import structlog
+
+logger = structlog.get_logger(__name__)
 
 
 update_event_tag = Signal()
@@ -16,12 +18,12 @@ def add_event_tag(sender, event_id, tag, **kwargs):
         event.tags.add(tag)
         event.save()
     except Event.DoesNotExist:
-        logging.error(
+        logger.error(
             f"Event with id {event_id} does not exist!"
         )
         raise
     except:
-        logging.error(
+        logger.error(
             f"Failed to add Event tag\n"
             f"Event: {event.UUID}\n"
             f"Tag: {tag}"

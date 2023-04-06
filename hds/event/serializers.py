@@ -3,8 +3,6 @@ from rest_framework import serializers
 from taggit.serializers import TagListSerializerField
 from .models import Event, PickSession
 
-import logging
-
 
 class TaggedUUIDSerializerBase(serializers.ModelSerializer):
     tags = TagListSerializerField(required=False, read_only=True)

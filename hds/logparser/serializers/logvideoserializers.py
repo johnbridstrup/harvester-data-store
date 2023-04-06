@@ -1,5 +1,5 @@
 import re
-import logging
+import structlog
 import json
 import shutil
 import os
@@ -13,6 +13,8 @@ from common.utils import media_upload_path
 from rest_framework import serializers
 from logparser.models import LogVideo, LogSession
 from s3file.serializers import DirectUploadSerializer
+
+logger = structlog.get_logger(__name__)
 
 
 EXTRACT_DIR = os.path.join(settings.MEDIA_ROOT, "extracts")
@@ -63,7 +65,7 @@ class LogVideoSerializer(serializers.ModelSerializer):
                 AttributeError.__name__,
                 "Failed robot pattern match"
             ).inc()
-            logging.error(f"could not match robot on file, {filename}")
+            logger.error(f"could not match robot on file, {filename}")
 
         if cat_match:
             category = cat_match.group(0)
@@ -73,7 +75,7 @@ class LogVideoSerializer(serializers.ModelSerializer):
                 AttributeError.__name__,
                 "Failed category pattern match"
             ).inc()
-            logging.error(f"could not match category on file {filename}")
+            logger.error(f"could not match category on file {filename}")
 
         return robot, category
 
@@ -115,7 +117,7 @@ class LogVideoSerializer(serializers.ModelSerializer):
                 e.__class__.__name__,
                 "Could not save log video"
             ).inc()
-            logging.info(f"could not save the log video {filename} {e}")
+            logger.info(f"could not save the log video {filename} {e}")
 
     @staticmethod
     def extract_meta_json_data(filepath, filename):
@@ -139,6 +141,6 @@ class LogVideoSerializer(serializers.ModelSerializer):
                 LogVideo.DoesNotExist.__name__,
                 "Log video does not exist"
             ).inc()
-            logging.error(
+            logger.error(
                 f"could not find log video with given name {filename}"
             )

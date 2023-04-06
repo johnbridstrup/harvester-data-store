@@ -47,22 +47,7 @@ CSRF_TRUSTED_ORIGINS = ['https://*.cloud.advanced.farm', 'https://*.devcloud.adv
 
 # Application definition
 
-INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'rest_framework',
-    'rest_framework_roles',
-    'rest_framework.authtoken',
-    'simple_history',
-    'corsheaders',
-    'django_prometheus',
-    'django_celery_beat',
-    'django_celery_results',
-    'django_filters',
+LOCAL_APPS = [
     'aftconfigs',
     'autodiagnostics',
     'common',
@@ -79,12 +64,32 @@ INSTALLED_APPS = [
     'healthcheck',
     'notifications',
     's3file',
-    'taggit',
     'logparser',
 ]
 
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'rest_framework',
+    'rest_framework_roles',
+    'rest_framework.authtoken',
+    'simple_history',
+    'corsheaders',
+    'django_prometheus',
+    'django_celery_beat',
+    'django_celery_results',
+    'django_filters',
+    'taggit',
+] + LOCAL_APPS
+
 MIDDLEWARE = [
     'django_prometheus.middleware.PrometheusBeforeMiddleware',
+    'django_structlog.middlewares.RequestMiddleware',
+    'django_structlog.middlewares.CeleryMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     "corsheaders.middleware.CorsMiddleware",
@@ -97,27 +102,60 @@ MIDDLEWARE = [
     'simple_history.middleware.HistoryRequestMiddleware',
 ]
 
+# LOGGING
+
+import copy, structlog
+
+local_logger_conf = {
+    'handlers': ['console'],
+    'level': 'DEBUG' if DEBUG else 'INFO',
+    'propagate': False,
+}
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
     'handlers': {
         'console': {
-            'class': 'logging.StreamHandler',
-            'formatter': 'default'
+            "class": "logging.StreamHandler",
+            "formatter": "console",
         },
     },
     'loggers': {
         '': {
             'handlers': ['console'],
-            'level': 'DEBUG',
+            'level': 'WARNING',
         },
+        "django_structlog": {
+            "handlers": ["console"],
+            "level": "INFO",
+            'propagate': False,
+        },
+        **{ app: copy.deepcopy(local_logger_conf) for app in LOCAL_APPS }
     },
     'formatters': {
-        'default': {
-            "format": "%(asctime)s [%(levelname)s] %(message)s",
-        }
+        "console": {
+            "()": structlog.stdlib.ProcessorFormatter,
+            "processor": structlog.dev.ConsoleRenderer(),
+        },
     }
 }
+structlog.configure(
+    processors=[
+        structlog.contextvars.merge_contextvars,
+        structlog.stdlib.filter_by_level,
+        structlog.processors.TimeStamper(fmt="iso"),
+        structlog.stdlib.add_logger_name,
+        structlog.stdlib.add_log_level,
+        structlog.stdlib.PositionalArgumentsFormatter(),
+        structlog.processors.StackInfoRenderer(),
+        structlog.processors.format_exc_info,
+        structlog.processors.UnicodeDecoder(),
+        structlog.stdlib.ProcessorFormatter.wrap_for_formatter,
+    ],
+    logger_factory=structlog.stdlib.LoggerFactory(),
+    cache_logger_on_first_use=True,
+)
 
 ROOT_URLCONF = 'hds.urls'
 

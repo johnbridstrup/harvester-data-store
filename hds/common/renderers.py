@@ -1,7 +1,7 @@
 from rest_framework.renderers import JSONRenderer
-import logging
+import structlog
 
-
+logger = structlog.get_logger(__name__)
 class NoContextError(Exception):
     pass
 
@@ -24,7 +24,7 @@ class HDSJSONRenderer(JSONRenderer):
 
     def _create_response(self, data, context):
         if context is None:
-            logging.error("No context was provided to the renderer")
+            logger.error("No context was provided to the renderer")
             status = "error"
             msg = "No context provided to the renderer"
 

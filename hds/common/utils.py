@@ -8,10 +8,12 @@ from rest_framework.response import Response
 from rest_framework.views import exception_handler
 
 import importlib
-import logging
 import os
+import structlog
 import sys
 import traceback
+
+logger = structlog.get_logger(__name__)
 
 def get_key(file):
     """return full key of s3 file"""
@@ -69,15 +71,15 @@ def custom_exception_handler(exc, context):
     TOTAL_ERROR_COUNTER.labels(exc.__class__.__name__, basename).inc()
 
     # Log exception information
-    logging.error(
+    logger.error(
         "An exception occurred during {} request to {}".format(
             context['request']._request.method,
             basename
         )
     )
-    logging.error(exc)
+    logger.error(exc)
     for tb in traceback.format_tb(exc.__traceback__):
-        logging.debug(tb)
+        logger.debug(tb)
 
     # Call REST framework's default exception handler
     # to get the standard error response.
@@ -185,7 +187,7 @@ def get_url_permissions(urlpatterns):
                         url = reverse(pat.name, args=[0])
                         view_func = resolve(url).func
                     except NoReverseMatch:
-                        logging.warning(f"Skipping {pat.name}: No reverse match")
+                        logger.warning(f"Skipping {pat.name}: No reverse match")
                         continue
                 
                 # Import the view class
@@ -194,7 +196,7 @@ def get_url_permissions(urlpatterns):
                 try:
                     view_permissions = view().view_permissions
                 except Exception as e:
-                    logging.exception("There are no view permisions for this model")
+                    logger.exception("There are no view permisions for this model")
                     continue
                 permission_matrix.append((url, actions, view_permissions, view))
     return permission_matrix

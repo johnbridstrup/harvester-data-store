@@ -1,10 +1,12 @@
-import logging, os, shutil
+import os, shutil, structlog
 
 from prometheus_client import Gauge
 
 from common.celery import monitored_shared_task
 from common.metrics import prometheus_get_registry
 from .serializers.logvideoserializers import EXTRACT_DIR
+
+logger = structlog.get_logger(__name__)
 
 EXTRACTS_SIZE_GAUGE = Gauge(
     "extracts_dir_size",
@@ -41,5 +43,5 @@ def clean_extracts_dir():
             elif os.path.isdir(f):
                 shutil.rmtree(f)
         except Exception as e:
-            logging.error(f"Failed to delete {f}:\n\t{e}")
+            logger.error(f"Failed to delete {f}:\n\t{e}")
     return "Clean extracts directory."

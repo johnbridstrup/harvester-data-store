@@ -9,8 +9,9 @@ from event.models import Event
 from event.serializers import EventSerializerMixin
 import datetime
 import jsonschema
-import logging
+import structlog
 
+logger = structlog.get_logger(__name__)
 
 class ExtractionError(Exception):
     pass
@@ -80,7 +81,7 @@ class ReportSerializerBase(serializers.ModelSerializer):
                 err = str(e.message)
             msg = f"Failed to validate: {e.validator}"       
             ERROR_COUNTER.labels(serializers.ValidationError.__name__, msg, self.__class__.__name__).inc()
-            logging.exception(err)
+            logger.exception(err)
             raise serializers.ValidationError(detail={"validation error": err})
 
     @classmethod
@@ -114,7 +115,7 @@ class ReportSerializerBase(serializers.ModelSerializer):
                 sn = report["data"]["serial_number"]
             except KeyError:
                 ERROR_COUNTER.labels(KeyError.__name__, "Serial number not found!", cls.__name__)
-                logging.error(f"Serial number not found! {cls.__name__}")
+                logger.error(f"Serial number not found! {cls.__name__}")
                 raise
             ERROR_COUNTER.labels(KeyError.__name__, "Serial number not at top level", cls.__name__)
         return int(sn)
@@ -162,4 +163,4 @@ class ReportSerializerBase(serializers.ModelSerializer):
             report_obj.tags.add(Tags.INCOMPLETE.value) 
             report_obj.save()
             
-            logging.exception(f"{exc} while extracting {cls.__name__}")
+            logger.exception(f"{exc} while extracting {cls.__name__}")

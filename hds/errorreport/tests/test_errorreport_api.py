@@ -371,7 +371,7 @@ class ErrorReportAPITest(HDSAPITestBase):
         self.assertEqual(emu_data['results'][0]['harvester']['harv_id'], 1100)
         self.assertTrue(emu_data['results'][0]['harvester']['is_emulator'])
 
-    @patch('errorreport.serializers.errorreportserializer.logging')
+    @patch('errorreport.serializers.errorreportserializer.logger')
     def test_catch_extract_exc_errors(self, mock_logger):
         data = self.data.copy()
         # replace traychg.0 error with no '.' to split on
@@ -416,7 +416,7 @@ class ErrorReportAPITest(HDSAPITestBase):
         self.assertEqual(counter._value.get(), 2)
 
     ## Schema validation tests
-    @patch("common.serializers.reportserializer.logging")
+    @patch("common.serializers.reportserializer.logger")
     def test_create_errorreport_invalid_schema(self, mock_logger):
         # Get initial counter value, it may have been incremented in other tests
         msg = "Failed to validate: required"

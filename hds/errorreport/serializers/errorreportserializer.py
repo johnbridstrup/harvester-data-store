@@ -14,7 +14,9 @@ from collections.abc import Mapping
 from rest_framework import serializers
 from taggit.serializers import TagListSerializerField, TaggitSerializer
 
-import logging
+import structlog
+
+logger = structlog.get_logger(__name__)
 
 
 NO_TRACEBACK_STR = 'No Traceback Available (HDS)'
@@ -132,13 +134,13 @@ class ErrorReportSerializer(TaggitSerializer, PickSessionSerializerMixin, Report
         incomplete = False
         for key, sysmon_entry in sysmon_report.items():
             if not isinstance(sysmon_entry, Mapping):
-                logging.info(f"Skipping sysmon entry {key}: {sysmon_entry}")
+                logger.info(f"Skipping sysmon entry {key}: {sysmon_entry}")
                 continue
             for serv, errdict in sysmon_entry.get('errors', {}).items():
                 try:
                     service, index = serv.split('.')
                 except ValueError as e:
-                    logging.exception(FAILED_SPLIT_MSG)
+                    logger.exception(FAILED_SPLIT_MSG)
                     ASYNC_ERROR_COUNTER.labels("_extract_exception_data", ValueError.__name__, FAILED_SPLIT_MSG).inc()
                     incomplete = True
                     continue

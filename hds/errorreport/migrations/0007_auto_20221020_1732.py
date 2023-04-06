@@ -3,7 +3,9 @@ from django.core.paginator import Paginator
 from django.db import migrations
 from common.models import Tags
 from errorreport.models import DEFAULT_UNKNOWN
-import logging
+import structlog
+
+logger = structlog.get_logger(__name__)
 
 
 def extract_branch_hash(apps, schema_editor):
@@ -11,13 +13,13 @@ def extract_branch_hash(apps, schema_editor):
 
     paginator = Paginator(ErrorReport.objects.all(), 1000)
     for page in range(1, paginator.num_pages + 1):
-        logging.info(f"Page {page}")
+        logger.info(f"Page {page}")
         for report in paginator.page(page).object_list:
             try:
                 data = report.report["data"]
             except KeyError:
-                logging.error(f"Report {report.id} has no 'data' key. Skipping.")
-                logging.error(f"{report.report}")
+                logger.error(f"Report {report.id} has no 'data' key. Skipping.")
+                logger.error(f"{report.report}")
                 report.tags.add(Tags.INVALID)
                 report.save()
                 continue
@@ -27,7 +29,7 @@ def extract_branch_hash(apps, schema_editor):
                 if githash is None:
                     githash = DEFAULT_UNKNOWN
             except KeyError:
-                logging.error((
+                logger.error((
                     f"Report {report.id} has no 'githash' key.\n" 
                     f"Continuing with default: {DEFAULT_UNKNOWN}."
                 ))
@@ -37,7 +39,7 @@ def extract_branch_hash(apps, schema_editor):
                 if gitbranch is None:
                     gitbranch = DEFAULT_UNKNOWN
             except KeyError:
-                logging.error((
+                logger.error((
                     f"Report {report.id} has no 'branch_name' key.\n" 
                     f"Continuing with default: {DEFAULT_UNKNOWN}."
                 ))

@@ -7,8 +7,9 @@ from django.core.management import call_command
 from django.utils.timezone import datetime, make_aware
 from io import StringIO
 
-import logging, traceback
+import structlog, traceback
 
+logger = structlog.get_logger(__name__)
 
 TEST_OUTPUT = "We faked a migration"
 
@@ -21,8 +22,8 @@ def execute_migrations(id):
     except MigrationLog.DoesNotExist:
         last_hash = "INITIAL"
 
-    logging.info("Beginning Migration")
-    logging.info(f"\t{last_hash} -> {log.githash}")
+    logger.info("Beginning Migration")
+    logger.info(f"\t{last_hash} -> {log.githash}")
 
     output = StringIO()
     startTime = make_aware(datetime.now())
@@ -33,16 +34,16 @@ def execute_migrations(id):
     try:
         call_command("migrate", stdout=output)
     except Exception as e:
-        logging.error("An error occurred during migration!")
-        logging.error(f"\tStarted: {startTime}")
-        logging.error(f"\tEnded {make_aware(datetime.now())}")
+        logger.error("An error occurred during migration!")
+        logger.error(f"\tStarted: {startTime}")
+        logger.error(f"\tEnded {make_aware(datetime.now())}")
         try:
             log.log_fail(str(e))
         except Exception as log_err:
-            logging.exception("FAILED TO SAVE MIGRATION LOG! DATABASE MAY BE CORRUPTED!")
+            logger.exception("FAILED TO SAVE MIGRATION LOG! DATABASE MAY BE CORRUPTED!")
             raise
         raise
 
     log.log_success(output.getvalue())
-    logging.info(str(log))
+    logger.info(str(log))
     return str(log)
