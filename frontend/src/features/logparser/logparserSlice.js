@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { findLogIndex, sortServices } from "utils/utils";
+import { logFilter, findLogIndex, sortServices } from "utils/utils";
 import { uniqueVideoTabs } from "utils/utils";
 import { invalidateCache } from "../auth/authSlice";
 import logparserService from "./logparserService";
@@ -161,15 +161,24 @@ const logparserSlice = createSlice({
     },
     searchLog: (state, action) => {
       if (action.payload) {
-        let filtered = state.oglogfile.content?.filter((x) =>
-          x.log_message.toLowerCase().includes(action.payload.toLowerCase())
-        );
-        let objIndex = findLogIndex(state.oglogfile.content, filtered[0]);
+        let filtered = logFilter(action.payload, state.oglogfile.content);
         state.internal.search.searchText = action.payload;
-        state.internal.search.currentIndex = objIndex;
-        state.internal.search.countIndex = 0;
-        state.internal.search.content = filtered;
-        state.currentIndex = objIndex;
+
+        if (state.oglogfile.file_name.endsWith(".dump")) {
+          state.internal.search.currentIndex = 0;
+          state.internal.search.countIndex = 0;
+          state.currentIndex = 0;
+          state.internal.search.content = filtered;
+          let logObj = JSON.parse(JSON.stringify(state.logfile));
+          logObj.content = filtered;
+          state.logfile = logObj;
+        } else {
+          let objIndex = findLogIndex(state.oglogfile.content, filtered[0]);
+          state.internal.search.currentIndex = objIndex;
+          state.internal.search.countIndex = 0;
+          state.currentIndex = objIndex;
+          state.internal.search.content = filtered;
+        }
       } else {
         state.internal.search.currentIndex = null;
         state.internal.search.countIndex = 0;
@@ -182,11 +191,17 @@ const logparserSlice = createSlice({
         state.internal.search.searchText &&
         state.internal.search.content[current]
       ) {
-        let obj = state.internal.search.content[current];
-        let objIndex = findLogIndex(state.oglogfile.content, obj);
-        state.internal.search.currentIndex = objIndex;
-        state.internal.search.countIndex = current;
-        state.currentIndex = objIndex;
+        if (state.oglogfile.file_name.endsWith(".dump")) {
+          state.internal.search.currentIndex = current;
+          state.internal.search.countIndex = current;
+          state.currentIndex = current;
+        } else {
+          let obj = state.internal.search.content[current];
+          let objIndex = findLogIndex(state.oglogfile.content, obj);
+          state.internal.search.currentIndex = objIndex;
+          state.internal.search.countIndex = current;
+          state.currentIndex = objIndex;
+        }
       }
     },
     scrollDownIndex: (state) => {
@@ -195,11 +210,17 @@ const logparserSlice = createSlice({
         state.internal.search.searchText &&
         state.internal.search.content[current]
       ) {
-        let obj = state.internal.search.content[current];
-        let objIndex = findLogIndex(state.oglogfile.content, obj);
-        state.internal.search.currentIndex = objIndex;
-        state.internal.search.countIndex = current;
-        state.currentIndex = objIndex;
+        if (state.oglogfile.file_name.endsWith(".dump")) {
+          state.internal.search.currentIndex = current;
+          state.internal.search.countIndex = current;
+          state.currentIndex = current;
+        } else {
+          let obj = state.internal.search.content[current];
+          let objIndex = findLogIndex(state.oglogfile.content, obj);
+          state.internal.search.currentIndex = objIndex;
+          state.internal.search.countIndex = current;
+          state.currentIndex = objIndex;
+        }
       }
     },
     clearSearch: (state) => {
@@ -207,15 +228,19 @@ const logparserSlice = createSlice({
       state.internal.search.currentIndex = null;
       state.internal.search.countIndex = 0;
       state.internal.search.content = [];
+      state.logfile = state.oglogfile;
     },
     tabChangeSearch: (state) => {
       let searchText = state.internal.search.searchText;
       if (searchText) {
-        let filtered = state.oglogfile.content?.filter((x) =>
-          x.log_message.toLowerCase().includes(searchText.toLowerCase())
-        );
+        let filtered = logFilter(searchText, state.oglogfile.content);
         state.internal.search.countIndex = 0;
         state.internal.search.content = filtered;
+        if (state.oglogfile.file_name.endsWith(".dump")) {
+          let logObj = JSON.parse(JSON.stringify(state.logfile));
+          logObj.content = filtered;
+          state.logfile = logObj;
+        }
       }
     },
   },

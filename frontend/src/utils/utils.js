@@ -1221,3 +1221,22 @@ export const titleCase = (str, separator = " ") => {
   }
   return str.join(" ");
 };
+
+/**
+ * Filters out comma separated strings
+ * and return combined set array of filters
+ * @param {String} str
+ * @param {Array} content
+ * @returns
+ */
+export const logFilter = (str = "", content = []) => {
+  const splitStr = str.split(",").map((s) => s.toLowerCase().trim());
+  const filteredArr = splitStr.reduce((acc, curr) => {
+    const filtered = content.filter((obj) =>
+      obj.log_message.toLowerCase().includes(curr)
+    );
+    return filtered.length > 0 ? [...acc, ...filtered] : acc;
+  }, []);
+
+  return [...new Set(filteredArr)];
+};
