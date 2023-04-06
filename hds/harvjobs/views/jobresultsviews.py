@@ -2,8 +2,6 @@ from ..filters import JobResultsFilterset
 from ..models import JobResults, Job
 from ..serializers.jobresultsserializer import JobResultsSerializer
 from ..tasks import job_status_update
-
-from rest_framework.permissions import IsAuthenticated
 from common.utils import build_frontend_url
 from common.viewsets import ReportModelViewSet
 
@@ -11,7 +9,6 @@ from common.viewsets import ReportModelViewSet
 class JobResultsView(ReportModelViewSet):
     queryset = JobResults.objects.all()
     serializer_class = JobResultsSerializer
-    permission_classes = (IsAuthenticated,)
     filterset_class = JobResultsFilterset
 
 

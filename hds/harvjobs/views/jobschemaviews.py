@@ -10,7 +10,6 @@ from hds.roles import RoleChoices
 class JobSchemaView(CreateModelViewSet):
     queryset = JobSchema.objects.all()
     serializer_class = JobSchemaSerializer
-    permission_classes = (DjangoModelPermissions,)
     filterset_class = JobSchemaFilterset
     ordering = ('-created',)
     view_permissions_update = {

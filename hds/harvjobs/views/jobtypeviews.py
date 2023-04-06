@@ -10,7 +10,6 @@ from hds.roles import RoleChoices
 class JobTypeView(CreateModelViewSet):
     queryset = JobType.objects.all()
     serializer_class = JobTypeSerializer
-    permission_classes = (DjangoModelPermissions,)
     filterset_class = JobTypeFilterset
     view_permissions_update = {
         'create': {
