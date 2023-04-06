@@ -7,8 +7,7 @@ class DistributorAPITest(HDSAPITestBase):
     """ Test Distributor APIs """
     def setUp(self):
         super().setUp()
-        self.update_user_permissions_all(Distributor)
-    
+
     def test_create_distributor(self):
         """ create fruit and assert it exists """
         self.client.post(f'{self.api_base_url}/distributors/', {'name': 'Apple'})

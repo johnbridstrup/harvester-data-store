@@ -20,10 +20,9 @@ class AutodiagnosticsApiTestCase(HDSAPITestBase):
     def setUp(self):
         super().setUp()
         self.test_objects = self._setup_basic()
-        self.update_user_permissions_all(AutodiagnosticsReport)
         self.url = reverse("autodiagnostics-list")
         self.run_url = reverse("autodiagnosticsrun-list")
-    
+
     def test_basic(self):
         self._post_autodiag_report()
 
@@ -128,7 +127,7 @@ class AutodiagnosticsApiTestCase(HDSAPITestBase):
         self.assertEqual(r1_before.json()['data']['count'], 0)
         r1_after = self.client.get(f"{self.run_url}?created_after={make_naive(t1)}&tz=utc")
         self.assertEqual(r1_after.json()['data']['count'], 2)
-        
+
         r2_before = self.client.get(f"{self.run_url}?created_before={make_naive(t2)}&tz=utc")
         self.assertEqual(r2_before.json()['data']['count'], 1)
         r2_after = self.client.get(f"{self.run_url}?created_after={make_naive(t2)}&tz=utc")
@@ -142,7 +141,7 @@ class AutodiagnosticsApiTestCase(HDSAPITestBase):
         # Check another timezone
         tz = pytz.timezone("US/Pacific")
         t2_othertz = t2.astimezone(tz).replace(tzinfo=None)
-        
+
         r_tz_before = self.client.get(f"{self.run_url}?created_before={t2_othertz}&tz={tz}")
         self.assertEqual(r_tz_before.json()['data']['count'], 1)
         r_tz_after = self.client.get(f"{self.run_url}?created_after={t2_othertz}&tz={tz}")
@@ -170,7 +169,7 @@ class AutodiagnosticsApiTestCase(HDSAPITestBase):
         self.assertEqual(r1_before.json()['data']['count'], 0)
         r1_after = self.client.get(f"{self.url}?reporttime_after={dt1}&tz=utc")
         self.assertEqual(r1_after.json()['data']['count'], 2)
-        
+
         r2_before = self.client.get(f"{self.url}?reporttime_before={dt2}&tz=utc")
         self.assertEqual(r2_before.json()['data']['count'], 1)
         r2_after = self.client.get(f"{self.url}?reporttime_after={dt2}&tz=utc")
@@ -213,7 +212,7 @@ class AutodiagnosticsApiTestCase(HDSAPITestBase):
 
         r_all = self.client.get(self.run_url)
         self.assertEqual(r_all.json()['data']['count'], 2)
-        
+
         r = self.client.get(f"{self.run_url}?result=True")
         self.assertEqual(r.json()['data']['count'], 1)
 
@@ -224,7 +223,7 @@ class AutodiagnosticsApiTestCase(HDSAPITestBase):
         self.ad_data['data']['ts'] += 1000
         self._post_autodiag_report(load=False)
         rep2_ts = self.ad_data['data']['ts']
-        
+
         r_all = self.client.get(self.run_url)
         self.assertEqual(r_all.json()['data']['count'], 2)
 
@@ -249,7 +248,7 @@ class AutodiagnosticsApiTestCase(HDSAPITestBase):
 
         r_all = self.client.get(self.run_url)
         self.assertEqual(r_all.json()['data']['count'], 2)
-        
+
         r = self.client.get(f"{self.run_url}?template_match_result=True")
         self.assertEqual(r.json()['data']['count'], 1)
 
@@ -260,7 +259,7 @@ class AutodiagnosticsApiTestCase(HDSAPITestBase):
 
         r_all = self.client.get(self.run_url)
         self.assertEqual(r_all.json()['data']['count'], 2)
-        
+
         r = self.client.get(f"{self.run_url}?ball_found_result=True")
         self.assertEqual(r.json()['data']['count'], 1)
 

@@ -23,8 +23,6 @@ def remove_after(fp):
 class S3FileTestCase(HDSAPITestBase):
     def setUp(self):
         super().setUp()
-        self.update_user_permissions_all(ErrorReport)
-        self.update_user_permissions_all(S3File)
         self.s3file_detail_url = lambda _id: reverse(
             "s3file-detail",
             args=[_id]

@@ -20,9 +20,6 @@ class LogBaseTestCase(HDSAPITestBase):
     def setUp(self):
         super().setUp()
 
-        self.update_user_permissions_all(LogSession)
-        self.update_user_permissions_all(LogFile)
-
         self.log_session_url = reverse("logsession-list")
         self.log_session_detail = lambda _id : reverse(
           "logsession-detail", args=[_id]
@@ -81,7 +78,7 @@ class LogBaseTestCase(HDSAPITestBase):
           _video_avi=s3file,
         )
 
-      
+
 class BeatTestCase(TestCase):
   def setUp(self):
     super().setUp()

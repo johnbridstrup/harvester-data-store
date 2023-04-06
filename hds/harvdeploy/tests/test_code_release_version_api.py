@@ -12,9 +12,6 @@ from rest_framework import status
 class ReleaseApiTestCase(HDSAPITestBase):
     def setUp(self):
         super().setUp()
-        self.update_user_permissions_all(HarvesterCodeRelease)
-        self.update_user_permissions_all(HarvesterVersionReport)
-        self.update_user_permissions_all(Harvester)
         self.test_objects = self._setup_basic()
 
         self.release = {

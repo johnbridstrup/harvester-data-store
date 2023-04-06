@@ -16,7 +16,6 @@ GIT_HASH = "test-git-hash"
 class HDSMigrationsTestCase(HDSAPITestBase):
     def setUp(self):
         super().setUp()
-        self.update_user_permissions_all(MigrationLog)
 
         self.migration_log = MigrationLog(
             creator=self.user,
@@ -42,7 +41,7 @@ class HDSMigrationsTestCase(HDSAPITestBase):
         status_codes.append(self.client.put(self.url).status_code)
         status_codes.append(self.client.patch(self.url).status_code)
         status_codes.append(self.client.delete(self.url).status_code)
-        
+
         self.assertTrue(all([s == status.HTTP_405_METHOD_NOT_ALLOWED for s in status_codes]))
 
     @patch.dict(os.environ, {"GITHASH": GIT_HASH})
@@ -71,4 +70,3 @@ class HDSMigrationsTestCase(HDSAPITestBase):
         self.assertEqual(log.output, TEST_OUTPUT)
 
         self.assertEqual(GIT_HASH, log.githash)
-    

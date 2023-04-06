@@ -8,8 +8,6 @@ class NotificationAPITest(HDSAPITestBase):
     """ Test Notification APIs """
     def setUp(self):
         super().setUp()
-        self.update_user_permissions_all(ErrorReport)
-        self.update_user_permissions_all(Notification)
         self.test_objects = self._setup_basic()
         self.notification = {
             "trigger_on": "ErrorReport",
@@ -25,8 +23,8 @@ class NotificationAPITest(HDSAPITestBase):
     def test_create_notification_disallowed(self):
         """ create notifications and assert it exists """
         resp = self.client.post(
-            f"{self.api_base_url}/notifications/", 
-            data=self.notification, 
+            f"{self.api_base_url}/notifications/",
+            data=self.notification,
             format="json"
         )
 
@@ -43,7 +41,7 @@ class NotificationAPITest(HDSAPITestBase):
 
         # PUT not allowed
         resp = self.client.put(
-            f"{self.api_base_url}/notifications/1/", 
+            f"{self.api_base_url}/notifications/1/",
             self.notification,
             format="json"
         )
@@ -61,11 +59,11 @@ class NotificationAPITest(HDSAPITestBase):
         report = ErrorReport.objects.get(id=1)
         ptst_args = post_to_slack_task.call_args.args
         check_notif_args = check_notifications.call_args.args
-        
+
         self.assertEqual(f"h{report.harvester.harv_id}_dev", ptst_args[1])
         self.assertEqual("errorreport", check_notif_args[0])
         self.assertEqual("ErrorReport", check_notif_args[1])
-        self.assertEqual(1, check_notif_args[2]) 
+        self.assertEqual(1, check_notif_args[2])
 
     @patch("notifications.models.Notification.notify")
     def test_notify_called(self, notify):
@@ -94,7 +92,7 @@ class NotificationAPITest(HDSAPITestBase):
         self.assertIn("Error on Harvester", notify_args[0])
         self.assertIn("errorreports/2", notify_args[1])
         self.assertNotIn("api/v1", notify_args[1])
- 
+
     def test_get_notifications(self):
         r = self.client.get(f"{self.api_base_url}/notifications/")
         self.assertEqual(r.status_code, status.HTTP_200_OK)
@@ -107,7 +105,7 @@ class NotificationAPITest(HDSAPITestBase):
             "harvester__harv_id__in": [11],
             "harvester__fruit__name": "strawberry"
         }
-        
+
         notification2 = Notification.objects.create(
             creator=user2,
             trigger_on=self.notification["trigger_on"],
@@ -123,7 +121,7 @@ class NotificationAPITest(HDSAPITestBase):
         )
         notification3.recipients.add(user2)
         notification3.save()
-        
+
         # Assert two notifications exist
         r = self.client.get(f"{self.api_base_url}/notifications/")
         self.assertEqual(r.json()["data"]["count"], 3)

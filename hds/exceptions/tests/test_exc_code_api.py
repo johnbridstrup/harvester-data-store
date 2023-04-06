@@ -1,6 +1,6 @@
 from ..models import (
     AFTExceptionCode,
-    AFTExceptionCodeManifest, 
+    AFTExceptionCodeManifest,
     AFTException
 )
 from common.tests import HDSAPITestBase
@@ -8,12 +8,9 @@ from django.utils.timezone import datetime
 from rest_framework import status
 
 
-class ExceptionTestBase(HDSAPITestBase):   
+class ExceptionTestBase(HDSAPITestBase):
     def setUp(self):
         super().setUp()
-        self.update_user_permissions_all(AFTExceptionCode)
-        self.update_user_permissions_all(AFTException)
-        self.update_user_permissions_all(AFTExceptionCodeManifest)
 
         self.CODE = 0
         self.CODES = [
@@ -41,7 +38,7 @@ class ExceptionTestBase(HDSAPITestBase):
         if not code:
             code = self.CODE
         resp = self.client.post(
-            f'{self.api_base_url}/exceptioncodes/', 
+            f'{self.api_base_url}/exceptioncodes/',
             self.CODES[code]
         )
 
@@ -91,8 +88,8 @@ class AFTExceptionCodeTest(ExceptionTestBase):
     def test_update_code(self):
         self._send_code()
         self.client.patch(
-            f'{self.api_base_url}/exceptioncodes/1/', 
-            {'name': 'NewName'}, 
+            f'{self.api_base_url}/exceptioncodes/1/',
+            {'name': 'NewName'},
             HTTP_ACCEPT='application/json'
         )
         self.assertEqual(AFTExceptionCode.objects.count(), 1)
@@ -108,10 +105,10 @@ class AFTExceptionCodeManifestTestCase(ExceptionTestBase):
             format="json",
         )
         return r
-        
+
     def test_basic(self):
         r = self._send_manifest()
-        
+
         self.assertEqual(r.status_code, status.HTTP_201_CREATED)
         self.assertEqual(AFTExceptionCodeManifest.objects.count(), 1)
 
@@ -160,7 +157,7 @@ class AFTExceptionCodeManifestTestCase(ExceptionTestBase):
         self.MANIFEST["manifest"] = self.CODES
         self.MANIFEST["manifest"][0]["msg"] = "A NEW MESSAGE"
         r = self._send_manifest(manifest=self.MANIFEST)
-        
+
         self.assertEqual(r.status_code, status.HTTP_201_CREATED)
         self.assertEqual(AFTExceptionCode.objects.count(), len(self.CODES))
 

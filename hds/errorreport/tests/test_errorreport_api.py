@@ -23,7 +23,6 @@ import datetime, time
 class ErrorReportAPITest(HDSAPITestBase):
     def setUp(self):
         super().setUp()
-        self.update_user_permissions_all(ErrorReport)
         self.test_objects = self._setup_basic()
 
         self._load_report_data()
@@ -210,7 +209,7 @@ class ErrorReportAPITest(HDSAPITestBase):
         self.assertEqual(r1_before.json()['data']['count'], 0)
         r1_after = self.client.get(f"{self.api_base_url}/errorreports/?start_time={dt1}&tz=utc")
         self.assertEqual(r1_after.json()['data']['count'], 2)
-        
+
         r2_before = self.client.get(f"{self.api_base_url}/errorreports/?end_time={dt2}&tz=utc")
         self.assertEqual(r2_before.json()['data']['count'], 1)
         r2_after = self.client.get(f"{self.api_base_url}/errorreports/?start_time={dt2}&tz=utc")

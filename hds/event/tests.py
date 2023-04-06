@@ -12,9 +12,6 @@ class TaggedUUIDModelTestBase(HDSAPITestBase):
     def setUp(self):
         super().setUp()
         self._setup_basic()
-        self.update_user_permissions_all(ErrorReport)
-        self.update_user_permissions_all(Event)
-        self.update_user_permissions_all(S3File)
         self.event_url = reverse("event-list")
         self.picksess_url = reverse("picksession-list")
         self.tags_endpoint = f"{self.event_url}tags/"
@@ -45,7 +42,7 @@ class EventApiTestCase(TaggedUUIDModelTestBase):
 
         r = self.client.get(self.tags_endpoint)
         self.assertEqual(r.status_code, status.HTTP_200_OK)
-        
+
         data = r.json()["data"]
         expect = [self.filetype, ErrorReport.__name__]
 
@@ -62,7 +59,7 @@ class EventApiTestCase(TaggedUUIDModelTestBase):
 
         self.create_s3file(f"{ftype1}_{UUID1}", has_uuid=True)
         self.create_s3file(f"{ftype2}_{UUID2}", has_uuid=True)
-        
+
         self.data['uuid'] = UUID3
         self._post_error_report(load=False)
 

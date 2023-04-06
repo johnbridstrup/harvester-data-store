@@ -14,9 +14,8 @@ class HarvesterAssetsTestCase(HDSAPITestBase):
         self.test_objects = self._setup_basic()
         self.url = reverse("harvassetreport-list")
         self.asset_url = reverse("harvassets-list")
-        self.update_user_permissions_all(HarvesterAssetReport)
         self.base_report = self.create_report(self.asset())
-    
+
     def asset(self, asset="test", index=1, serial_number=33, version=None):
         return {
             "asset": asset,
@@ -76,7 +75,7 @@ class HarvesterAssetsTestCase(HDSAPITestBase):
 
         self.assertFalse(self.test_objects['harvester'].has_asset("test", 33))
         self.assertTrue(self.test_objects['harvester'].has_asset("test", 31))
-        
+
     def test_sample_report(self):
         self._load_asset_report()
         r = self.client.post(self.url, self.asset_data, format='json')
@@ -119,7 +118,7 @@ class HarvesterAssetsTestCase(HDSAPITestBase):
 
         r = self.client.get(url)
         self.assertTrue("assets" in r.json()["data"])
-        
+
         assets_url = f"{url}{r.json()['data']['assets']}"
         r2 = self.client.get(assets_url)
         data = r2.json()["data"]
@@ -135,7 +134,7 @@ class HarvesterAssetsTestCase(HDSAPITestBase):
         self.client.post(self.url, self.asset_data, format='json')
 
         report = compile_asset_report()
-        
+
         harv_key = f"Harvester {self.test_objects['harvester'].harv_id}"
         self.assertIn(harv_key, report)
         for asset in self.asset_data["data"]:
