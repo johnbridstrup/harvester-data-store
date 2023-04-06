@@ -23,6 +23,7 @@ import {
   getAftConfigKeys,
   transformSensors,
   titleCase,
+  logFilter,
 } from "utils/utils";
 import errorreport from "test-utils/test-data/errorreport.json";
 import { API_URL } from "features/base/constants";
@@ -201,6 +202,65 @@ test("should match and return log message into 4 parts", () => {
   };
   expect(logContent(logMsg, ".log")).toMatchObject(output1);
   expect(logContent(dumpMsg, ".dump")).toMatchObject(output2);
+});
+
+describe("logFilter case scenarios", () => {
+  const content = [
+    {
+      robot: 3,
+      service: "dump",
+      log_date: "2023-01-31 13:13:13.518230-08:00",
+      timestamp: 1675199593.51823,
+      log_message: "[20230131T131313.518230]  rcan0  384  37 97 51 FC FF FF",
+      logfile_type: ".dump",
+    },
+    {
+      robot: 3,
+      service: "dump",
+      log_date: "2023-01-31 13:13:13.522260-08:00",
+      timestamp: 1675199593.52226,
+      log_message:
+        "[20230131T131313.522260]  rcan0  282  0B 00 00 00 3B F5 FF FF",
+      logfile_type: ".dump",
+    },
+    {
+      robot: 3,
+      service: "dump",
+      log_date: "2023-01-31 13:13:13.522261-08:00",
+      timestamp: 1675199593.522261,
+      log_message:
+        "[20230131T131313.522261]  rcan0  281  F3 FE FF FF 2E 23 00 00",
+      logfile_type: ".dump",
+    },
+  ];
+
+  const expected = [
+    {
+      robot: 3,
+      service: "dump",
+      log_date: "2023-01-31 13:13:13.518230-08:00",
+      timestamp: 1675199593.51823,
+      log_message: "[20230131T131313.518230]  rcan0  384  37 97 51 FC FF FF",
+      logfile_type: ".dump",
+    },
+    {
+      robot: 3,
+      service: "dump",
+      log_date: "2023-01-31 13:13:13.522260-08:00",
+      timestamp: 1675199593.52226,
+      log_message:
+        "[20230131T131313.522260]  rcan0  282  0B 00 00 00 3B F5 FF FF",
+      logfile_type: ".dump",
+    },
+  ];
+
+  test("should return empty array when no matches are found", () => {
+    expect(logFilter("300", content)).toMatchObject([]);
+  });
+
+  test("should filter objects by cob ids or relevant log str", () => {
+    expect(logFilter("384, 282", content)).toMatchObject(expected);
+  });
 });
 
 test("should build query object", () => {
