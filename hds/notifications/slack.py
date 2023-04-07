@@ -12,6 +12,9 @@ class Emojis(Enum):
     REDX = ":red_cross:"
     GREENCHECK = ":green_check_mark:"
     TRAY = ":outbox_tray:"
+    HANDLE_CYCLE = ":recycle:"
+    HANDLE_DISARM = ":large_yellow_circle:"
+    UNHANDLED = ":red_circle:"
 
 class SlackError(Exception):
     # Unfortunately SlackApiErrors can't be serialized to JSON, to celery complains heavily
