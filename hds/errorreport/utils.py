@@ -1,9 +1,3 @@
-from .metrics import PARETO_QUERY_TIMER
-from exceptions.models import AFTException
-
-from django.db.models import Count, F
-
-
 def build_list_filter(request):
         """Builds the filter dictionary for the query.
 
@@ -30,54 +24,3 @@ def build_list_filter(request):
             listfilter['exceptions__primary'] = primary
 
         return listfilter
-
-def pareto_list_filter(request, replace='exceptions__', _append='report__'):
-    """Swap field lookup keys across foreign key relationship
-
-        Args:
-            request (request): Initial request
-            replace (str, optional): Field lookup key to drop. Defaults to 'exceptions__'.
-            _append (str, optional): Field lookup key to add when replace key isnt there. Defaults to '__report'.
-
-        Returns:
-            dict: New field lookup dict
-        """
-    listfilter = build_list_filter(request)
-
-    out_filter = {}
-    for key in list(listfilter.keys()):
-        if replace in key:
-            new_key = key.replace(replace, '')
-        else:
-            new_key = _append + key
-        out_filter[new_key] = listfilter.pop(key)
-    return out_filter
-
-@PARETO_QUERY_TIMER.time() 
-def create_pareto(qs, field_lookup, listfilter=None):
-    """Create pareto data.
-
-    Field_lookup determines which field in the exception will be grouped
-    and aggregated.
-
-    Args:
-        field_lookup (str): field lookup string
-        listfilter (dict, optional): dictionary of filter params. Defaults to None.
-
-    Returns:
-        QuerySet: The filtered and aggregated queryset
-    """
-    if listfilter is None:
-        listfilter = {}
-
-    value_dict = {"value": F(field_lookup)}
-    count_dict = {"count": Count(field_lookup)}
-    qs = qs.filter(
-        **listfilter
-    ).values(
-        **value_dict
-    ).annotate(
-        **count_dict
-    )
-
-    return qs

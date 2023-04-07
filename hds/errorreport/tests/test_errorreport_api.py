@@ -265,29 +265,6 @@ class ErrorReportAPITest(HDSAPITestBase):
         primary = excs.filter(primary=True).get()
         self.assertTrue(all([primary.timestamp <= e.timestamp for e in excs])) # primary is first
 
-    def test_generate_pareto(self):
-        pareto_groups = ["code__code", "code__name", "service", "report__harvester__harv_id"]
-        pareto_names = ["code", "exception", "service", "harvester"]
-        pareto_name_vals = ["0", "AFTBaseException", "harvester", "11"]
-        pareto_counts = [15, 15, 5, 15]
-        num = 5
-        for _ in range(num):
-            self.client.post(f'{self.api_base_url}/errorreports/', self.data, format='json', HTTP_ACCEPT='application/json')
-
-        def check_pareto(group, name, name_val, count):
-            resp = self.client.get(
-                f'{self.api_base_url}/errorreports/pareto/?aggregate_query={group}&aggregate_name={name}'
-            )
-            self.assertEqual(resp.status_code, 200)
-            rdata = resp.json()
-
-            self.assertEqual(rdata['message'], f'Pareto generated: {name}')
-            self.assertEqual(rdata['data'][0]['count'], count)
-            self.assertEqual(rdata['data'][0][name], name_val)
-
-        for group, name, val, count in zip(pareto_groups, pareto_names, pareto_name_vals, pareto_counts):
-            check_pareto(group, name, val, count)
-
     def test_create_notification(self):
         self.set_user_role(RoleChoices.MANAGER)
         params = "?harv_ids=100"

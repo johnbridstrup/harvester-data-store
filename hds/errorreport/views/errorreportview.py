@@ -1,7 +1,5 @@
 from ..utils import (
-    build_list_filter, 
-    pareto_list_filter,
-    create_pareto,
+    build_list_filter,
 )
 from ..filters import ErrorReportFilterset
 from ..models import ErrorReport
@@ -11,16 +9,12 @@ from ..metrics import (
 from ..serializers.errorreportserializer import (
     ErrorReportSerializer,
     ErrorReportListSerializer,
-    ParetoSerializer,
 )
 from common.viewsets import ReportModelViewSet
 from common.utils import make_ok, build_frontend_url
-from exceptions.views import AFTExceptionView
 from hds.roles import RoleChoices
 from notifications.signals import error_report_created
 from notifications.serializers import NotificationSerializer
-from django.utils.decorators import method_decorator
-from django.views.decorators.cache import cache_page
 from rest_framework.decorators import action
 from rest_framework.renderers import JSONRenderer
 
@@ -30,9 +24,6 @@ class ErrorReportView(ReportModelViewSet):
     serializer_class = ErrorReportSerializer
     filterset_class = ErrorReportFilterset
     view_permissions_update = {
-        'pareto': {
-            RoleChoices.SUPPORT: True, #is_whitelisted
-        },
         'create_notification': {
             RoleChoices.DEVELOPER: True,
         },
@@ -54,26 +45,6 @@ class ErrorReportView(ReportModelViewSet):
         listfilter = build_list_filter(self.request)
         harvs = ErrorReport.objects.filter(**listfilter).order_by('-reportTime').distinct()
         return harvs
-
-    @action(
-        methods=['get'],
-        url_path='pareto',
-        detail=False,
-        renderer_classes=[JSONRenderer],
-    )
-    @method_decorator(cache_page(60*20))
-    def pareto(self, request):
-        listfilter = pareto_list_filter(request)
-
-        pareto_group = request.query_params.get("aggregate_query", "code__code")
-        pareto_name = request.query_params.get("aggregate_name", None)
-        view = AFTExceptionView(request=request)
-        qs = view.filter_queryset(view.get_queryset())
-        query_set = create_pareto(qs, pareto_group, listfilter)
-        return make_ok(
-            f"Pareto generated: {pareto_name if pareto_name else 'Exceptions'}",
-            ParetoSerializer(query_set, many=True, new_name=pareto_name).data
-        )
 
     @action(
         methods=['Post'],
