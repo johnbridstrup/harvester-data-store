@@ -112,9 +112,8 @@ def schedule_job(job_id, harv_pk, user_pk):
         "job_payload": json.dumps(job.payload),
         "valid_until": (datetime.datetime.now(pytz.utc) + datetime.timedelta(seconds=3600)).strftime(JOB_DATETIME_FMT)
     }
-    logger.info("Sending job to server.")
+    logger.info("Sending job to server.", jobserver="/".join([JOB_SERVER_ADDRESS, "job"]))
     logger.debug(json.dumps(request_payload))
-    logger.info("/".join([JOB_SERVER_ADDRESS, "job"]))
 
     retry = Retry(
         total=MAX_RETRIES,

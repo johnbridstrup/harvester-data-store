@@ -392,7 +392,7 @@ class ErrorReportAPITest(HDSAPITestBase):
         self.assertEqual(AFTException.objects.count(), 0)
         self.assertEqual(counter._value.get(), 1)
 
-        mock_logger.exception.assert_called_with(FAILED_SPLIT_MSG)
+        mock_logger.exception.assert_called_with(FAILED_SPLIT_MSG, key='traychg_0')
 
         # Assert tag assigned
         report = ErrorReport.objects.get()
@@ -433,7 +433,7 @@ class ErrorReportAPITest(HDSAPITestBase):
 
 
         self.assertEqual(counter._value.get() - init_ctr, 1)
-        mock_logger.exception.assert_called_with("'sysmon_report' is a required property")
+        mock_logger.exception.assert_called_with("'sysmon_report' is a required property", serializer=ErrorReportSerializer.__name__)
 
     def test_sysmon_entry_key_invalid(self):
         # Note: This also tests any invalid key, including ones without

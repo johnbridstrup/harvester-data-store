@@ -134,13 +134,13 @@ class ErrorReportSerializer(TaggitSerializer, PickSessionSerializerMixin, Report
         incomplete = False
         for key, sysmon_entry in sysmon_report.items():
             if not isinstance(sysmon_entry, Mapping):
-                logger.info(f"Skipping sysmon entry {key}: {sysmon_entry}")
+                logger.info(f"Skipping sysmon entry", key=key, val=sysmon_entry)
                 continue
             for serv, errdict in sysmon_entry.get('errors', {}).items():
                 try:
                     service, index = serv.split('.')
                 except ValueError as e:
-                    logger.exception(FAILED_SPLIT_MSG)
+                    logger.exception(FAILED_SPLIT_MSG, key=serv)
                     ASYNC_ERROR_COUNTER.labels("_extract_exception_data", ValueError.__name__, FAILED_SPLIT_MSG).inc()
                     incomplete = True
                     continue

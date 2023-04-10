@@ -109,7 +109,8 @@ class LogSessionSerializer(TaggitSerializer, serializers.ModelSerializer):
                 "Failed date pattern match"
             ).inc()
             logger.error(
-                f"could not match date pattern on file {file.filename}"
+                f"could not match date pattern on file",
+                filename=file.filename,
             )
 
         if harv_match:
@@ -123,7 +124,7 @@ class LogSessionSerializer(TaggitSerializer, serializers.ModelSerializer):
                     Harvester.DoesNotExist.__name__,
                     "Harvester does not exist"
                 ).inc()
-                logger.error(f"could not find harvester with harv_id {harv_id}")
+                logger.error(f"could not find harvester with harv_id {harv_id}", harv_id=harv_id)
         else:
             ASYNC_ERROR_COUNTER.labels(
                 'extract_harvester_and_date',
@@ -131,7 +132,8 @@ class LogSessionSerializer(TaggitSerializer, serializers.ModelSerializer):
                 "Failed harvester pattern match"
             ).inc()
             logger.error(
-                f"could not match harv_id pattern on file {file.filename}"
+                f"could not match harv_id pattern on file",
+                filename=file.filename,
             )
         return harv, date_obj
 
@@ -159,4 +161,4 @@ class LogSessionSerializer(TaggitSerializer, serializers.ModelSerializer):
                 LogSession.DoesNotExist.__name__,
                 "Logsession does not exist"
             ).inc()
-            logger.info(f"log session with id {_id} does not exist")
+            logger.error(f"log session with id {_id} does not exist", logsession_id=_id)

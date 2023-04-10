@@ -72,14 +72,24 @@ def custom_exception_handler(exc, context):
 
     # Log exception information
     logger.error(
-        "An exception occurred during {} request to {}".format(
-            context['request']._request.method,
-            basename
-        )
+        "An exception occurred during a request.",
+        http_method=context['request']._request.method,
+        view=basename,
+        user=context['request'].user.username,
     )
-    logger.error(exc)
+    logger.error(
+        exc,
+        http_method=context['request']._request.method,
+        view=basename,
+        user=context['request'].user.username,
+    )
     for tb in traceback.format_tb(exc.__traceback__):
-        logger.debug(tb)
+        logger.debug(
+            tb,
+            http_method=context['request']._request.method,
+            view=basename,
+            user=context['request'].user.username,
+        )
 
     # Call REST framework's default exception handler
     # to get the standard error response.
@@ -187,7 +197,7 @@ def get_url_permissions(urlpatterns):
                         url = reverse(pat.name, args=[0])
                         view_func = resolve(url).func
                     except NoReverseMatch:
-                        logger.warning(f"Skipping {pat.name}: No reverse match")
+                        logger.warning(f"Skipping: No reverse match", pattern_name=pat.name)
                         continue
                 
                 # Import the view class
@@ -196,7 +206,7 @@ def get_url_permissions(urlpatterns):
                 try:
                     view_permissions = view().view_permissions
                 except Exception as e:
-                    logger.exception("There are no view permisions for this model")
+                    logger.exception("There are no view permisions for this view", view=view.__name__)
                     continue
                 permission_matrix.append((url, actions, view_permissions, view))
     return permission_matrix

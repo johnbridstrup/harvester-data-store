@@ -65,7 +65,7 @@ class LogVideoSerializer(serializers.ModelSerializer):
                 AttributeError.__name__,
                 "Failed robot pattern match"
             ).inc()
-            logger.error(f"could not match robot on file, {filename}")
+            logger.error(f"could not match robot on file", filename=filename)
 
         if cat_match:
             category = cat_match.group(0)
@@ -75,7 +75,7 @@ class LogVideoSerializer(serializers.ModelSerializer):
                 AttributeError.__name__,
                 "Failed category pattern match"
             ).inc()
-            logger.error(f"could not match category on file {filename}")
+            logger.error(f"could not match category on file", filename=filename)
 
         return robot, category
 
@@ -112,12 +112,18 @@ class LogVideoSerializer(serializers.ModelSerializer):
                 in_mem_upload.close()
 
         except Exception as e:
+            exc = type(e).__name__
             ASYNC_ERROR_COUNTER.labels(
                 'extract_video_log',
                 e.__class__.__name__,
                 "Could not save log video"
             ).inc()
-            logger.info(f"could not save the log video {filename} {e}")
+            logger.error(
+                f"could not save the log video",
+                filename=filename,
+                exception_name=exc,
+                exception_info=str(e),
+            )
 
     @staticmethod
     def extract_meta_json_data(filepath, filename):
@@ -142,5 +148,6 @@ class LogVideoSerializer(serializers.ModelSerializer):
                 "Log video does not exist"
             ).inc()
             logger.error(
-                f"could not find log video with given name {filename}"
+                f"could not find log video with given name",
+                filename=filename,
             )

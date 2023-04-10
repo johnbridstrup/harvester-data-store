@@ -22,8 +22,7 @@ def execute_migrations(id):
     except MigrationLog.DoesNotExist:
         last_hash = "INITIAL"
 
-    logger.info("Beginning Migration")
-    logger.info(f"\t{last_hash} -> {log.githash}")
+    logger.info("Beginning Migration", last_hash=last_hash, new_hash=log.githash)
 
     output = StringIO()
     startTime = make_aware(datetime.now())
@@ -34,13 +33,29 @@ def execute_migrations(id):
     try:
         call_command("migrate", stdout=output)
     except Exception as e:
-        logger.error("An error occurred during migration!")
-        logger.error(f"\tStarted: {startTime}")
-        logger.error(f"\tEnded {make_aware(datetime.now())}")
+        exc = type(e).__name__
+        logger.error(
+            "An error occurred during migration!",
+            exception_name=exc,
+            exception_info=str(e),
+            start_time=startTime,
+            end_time=make_aware(datetime.now()),
+            user=log.creator.username,
+            user_id=log.creator.id,
+        )
         try:
             log.log_fail(str(e))
         except Exception as log_err:
-            logger.exception("FAILED TO SAVE MIGRATION LOG! DATABASE MAY BE CORRUPTED!")
+            exc = type(log_err).__name__
+            logger.exception(
+                "FAILED TO SAVE MIGRATION LOG! DATABASE MAY BE CORRUPTED!",
+                exception_name=exc,
+                exception_info=str(log_err),
+                start_time=startTime,
+                end_time=make_aware(datetime.now()),
+                user=log.creator.username,
+                user_id=log.creator.id,
+            )
             raise
         raise
 

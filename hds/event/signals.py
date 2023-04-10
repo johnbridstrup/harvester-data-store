@@ -17,16 +17,23 @@ def add_event_tag(sender, event_id, tag, **kwargs):
         event = Event.objects.get(id=event_id)
         event.tags.add(tag)
         event.save()
-    except Event.DoesNotExist:
+    except Event.DoesNotExist as e:
+        exc = type(e).__name__
         logger.error(
-            f"Event with id {event_id} does not exist!"
+            f"Event with id {event_id} does not exist!",
+            event_id=event_id,
+            exception_name=exc,
+            exception_info=str(e)
         )
         raise
-    except:
+    except Exception as e:
+        exc = type(e).__name__
         logger.error(
-            f"Failed to add Event tag\n"
-            f"Event: {event.UUID}\n"
-            f"Tag: {tag}"
+            f"Failed to add Event tag.",
+            event_uuid=event.UUID,
+            tag=tag,
+            exception_name=exc,
+            exception_info=str(e),
         )
         raise
 

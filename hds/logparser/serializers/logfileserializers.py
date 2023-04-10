@@ -78,7 +78,8 @@ class LogFileSerializer(serializers.ModelSerializer):
                 "Failed robot pattern match"
             ).inc()
             logger.error(
-                f"could not match robot id on file {filename}"
+                f"could not match robot id on file",
+                filename=filename,
             )
         if service_match is not None:
             service = service_match.group(0)
@@ -88,7 +89,7 @@ class LogFileSerializer(serializers.ModelSerializer):
                 AttributeError.__name__,
                 "Failed service pattern match"
             ).inc()
-            logger.error(f"could not match service on file {filename}")
+            logger.error(f"could not match service on file", filename=filename)
         return service, robot
 
     @classmethod

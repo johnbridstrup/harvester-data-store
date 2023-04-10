@@ -43,5 +43,10 @@ def clean_extracts_dir():
             elif os.path.isdir(f):
                 shutil.rmtree(f)
         except Exception as e:
-            logger.error(f"Failed to delete {f}:\n\t{e}")
+            exc = type(e).__name__
+            logger.error(
+                f"Failed to delete {f}:\n\t{e}",
+                exception_name=exc,
+                exception_info=str(e)
+            )
     return "Clean extracts directory."
