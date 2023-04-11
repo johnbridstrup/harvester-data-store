@@ -1,0 +1,47 @@
+{
+    "data": {
+        "master": {
+            "error": "Command 'sudo aft-release version' timed out after 10 seconds"
+        },
+        "aft-robot01": {
+            "error": "Error running remote cmd: sudo: aft-release: command not found"
+        },
+        "aft-robot02": {
+            "error": "Error running remote cmd: sudo: aft-release: command not found"
+        },
+        "aft-robot03": {
+            "error": "Error running remote cmd: sudo: aft-release: command not found"
+        },
+        "aft-robot04": {
+            "error": "Error running remote cmd: sudo: aft-release: command not found"
+        },
+        "aft-robot05": {
+            "error": "[Errno None] Unable to connect to port 22 on 192.168.1.45"
+        },
+        "aft-robot06": {
+            "error": "[Errno None] Unable to connect to port 22 on 192.168.1.46"
+        },
+        "aft-stereo01": {
+            "error": "Error running remote cmd: sudo: aft-release: command not found"
+        },
+        "aft-stereo02": {
+            "error": "Error running remote cmd: sudo: aft-release: command not found"
+        },
+        "aft-stereo03": {
+            "error": "Error running remote cmd: sudo: aft-release: command not found"
+        },
+        "aft-stereo04": {
+            "error": "Error running remote cmd: sudo: aft-release: command not found"
+        },
+        "aft-stereo05": {
+            "error": "[Errno None] Unable to connect to port 22 on 192.168.1.55"
+        },
+        "aft-stereo06": {
+            "error": "[Errno None] Unable to connect to port 22 on 192.168.1.56"
+        }
+    },
+    "type": "version_report",
+    "version": "1.0",
+    "timestamp": 1680026591,
+    "serial_number": "011"
+}

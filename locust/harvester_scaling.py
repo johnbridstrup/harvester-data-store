@@ -30,6 +30,7 @@ class HarvesterUser(UserBase):
         "files": "/api/v1/s3files/",
         "sessclip": "/api/v1/sessclip/",
         "assets": "/api/v1/harvassetreport/",
+        "version": "/api/v1/harvversion/",
     }
 
     wait_time = between(20, 120) # Range of times between harvester arm/pick cycles
@@ -41,6 +42,8 @@ class HarvesterUser(UserBase):
     def on_start(self):
         UserBase.on_start(self)
         self.worker_id = greenlet.getcurrent().minimal_ident
+        self._create_me_if_needed()
+        self._load_and_adjust_reports()
 
     @task
     def harvester_behavior(self):
@@ -73,7 +76,11 @@ class HarvesterUser(UserBase):
            - Assets (all)
            - Autodiagnostics x4-6 (all)
         """
-        pass
+        self.post(self.ENDPOINTS["config"], json=self.config)
+        self.post(self.ENDPOINTS["assets"], json=self.assets)
+        for _ in range(4):
+            self.post(self.ENDPOINTS["autodiag"], json=self.autodiag)
+            time.sleep(0.1)
 
     def _stop_picking(self):
         """Harvester stop picking sub-task.
@@ -85,7 +92,7 @@ class HarvesterUser(UserBase):
         Uploads:
            - Pick session report
         """
-        pass
+        self.post(self.ENDPOINTS["picksess"], json=self.picksess)
 
     def _error(self):
         """Handled error sub-task.
@@ -98,7 +105,7 @@ class HarvesterUser(UserBase):
            - Sessclip
            - dmesg .txt file
         """
-        pass
+        self.post(self.ENDPOINTS["error"], json=self.erreport)
 
     def _version_upload(self):
         """Version upload sub-task.
@@ -108,7 +115,7 @@ class HarvesterUser(UserBase):
         Uploads:
            - Version report
         """
-        pass
+        self.post(self.ENDPOINTS["version"], json=self.versions)
 
     #######################
     ## Kinetic Monte Carlo
@@ -148,3 +155,53 @@ class HarvesterUser(UserBase):
 
     def async_wait(self, seconds):
         gevent.sleep(seconds)
+
+    def _load_and_adjust_reports(self):
+        self._load_assets()
+        self._load_configs()
+        self._load_auto_diag()
+        self._load_error_report()
+        self._load_version()
+        self._load_picksess_report()
+    
+    def _create_me_if_needed(self):
+        ep = "/api/v1/harvesters/"
+
+        r = self.get(ep, params={"harv_id": self.worker_id}, name="Get Harv ID")
+        if r.json()["data"]["count"] > 0:
+            return
+        harv = {
+			"harv_id": self.worker_id,
+			"fruit": 1,
+			"location": 1,
+			"name": f"worker_{self.worker_id}",
+		}
+        self.post(ep, json=harv, name="Create Harv")
+
+
+    def _adjust_serial_num(self, report):
+        report["serial_number"] = self.worker_id
+
+    def _load_error_report(self):
+        self.erreport = self._load_json("report.json")
+        self._adjust_serial_num(self.erreport)
+    
+    def _load_configs(self):
+        self.config = self._load_json("configs-report_002_1675256694.218969.json")
+        self._adjust_serial_num(self.config)
+
+    def _load_assets(self):
+        self.assets = self._load_json("serialnums.json")
+        self._adjust_serial_num(self.assets)
+
+    def _load_auto_diag(self):
+        self.autodiag = self._load_json("autodiag_report.json")
+        self._adjust_serial_num(self.autodiag)
+
+    def _load_version(self):
+        self.versions = self._load_json("version.json")
+        self._adjust_serial_num(self.versions)
+
+    def _load_picksess_report(self):
+        self.picksess = self._load_big_json("picksessreport.json")
+        self._adjust_serial_num(self.picksess)

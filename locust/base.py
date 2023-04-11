@@ -33,6 +33,12 @@ class UserBase(HttpUser):
             d = json.load(f)
         return d
 
+    def _load_big_json(self, fname):
+        fpath = os.path.join(CUR_DIR, f"big_data/{fname}")
+        with open(fpath, 'r') as f:
+            d = json.load(f)
+        return d
+
     def get(self, *args, **kwargs):
         headers = self._add_auth_headers(kwargs)
         return self.client.get(*args, headers=headers, **kwargs)
