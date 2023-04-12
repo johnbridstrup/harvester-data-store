@@ -43,10 +43,13 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY','django-insecure-rzr+x&83_l1%9sc
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = check_env('DEBUG', default=True)
 
-FRONTEND_PORT = os.environ.get('FRONTEND_PORT', '3000')
-USES3 = check_env("USES3")
-PAGE_CACHING = check_env("PAGE_CACHING")
 CLOUDWATCH = check_env("CLOUDWATCH")
+FRONTEND_PORT = os.environ.get('FRONTEND_PORT', '3000')
+PAGE_CACHING = check_env("PAGE_CACHING")
+SILK_PROFILING = check_env('SILK_PROFILING')
+SILKY_PYTHON_PROFILER = SILK_PROFILING and check_env("SILK_CPROFILE")
+USES3 = check_env("USES3")
+
 
 ALLOWED_HOSTS = ['*']
 CSRF_TRUSTED_ORIGINS = ['https://*.cloud.advanced.farm', 'https://*.devcloud.advanced.farm', f'http://localhost:{FRONTEND_PORT}']
@@ -90,6 +93,7 @@ INSTALLED_APPS = [
     'django_celery_beat',
     'django_celery_results',
     'django_filters',
+    'silk',
     'taggit',
 ] + LOCAL_APPS
 
@@ -108,6 +112,9 @@ MIDDLEWARE = [
     'django_prometheus.middleware.PrometheusAfterMiddleware',
     'simple_history.middleware.HistoryRequestMiddleware',
 ]
+
+if SILK_PROFILING:
+    MIDDLEWARE = ['silk.middleware.SilkyMiddleware'] + MIDDLEWARE
 
 # LOGGING
 
