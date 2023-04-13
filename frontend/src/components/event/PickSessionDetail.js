@@ -32,7 +32,8 @@ function PickSessionDetail(props) {
             <div>
               {picksession.related_objects?.map((obj, index) => (
                 <Link to={obj.url} key={index}>
-                  {obj.object}
+                  <span>{obj.object}</span>
+                  <br />
                 </Link>
               ))}
             </div>
@@ -48,7 +49,8 @@ function PickSessionDetail(props) {
                   key={index}
                   onClick={() => handleDownloadFiles(obj)}
                 >
-                  {obj.filetype}
+                  <span>{obj.filetype}</span>
+                  <br />
                 </a>
               ))}
             </div>
