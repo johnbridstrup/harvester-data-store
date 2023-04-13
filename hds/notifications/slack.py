@@ -15,6 +15,7 @@ class Emojis(Enum):
     HANDLE_CYCLE = ":recycle:"
     HANDLE_DISARM = ":large_yellow_circle:"
     UNHANDLED = ":red_circle:"
+    UNKNOWN = ":question:"
 
 class SlackError(Exception):
     # Unfortunately SlackApiErrors can't be serialized to JSON, to celery complains heavily

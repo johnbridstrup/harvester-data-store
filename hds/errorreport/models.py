@@ -12,14 +12,29 @@ class ErrorReport(PickSessionModelMixin, ReportBase):
     githash = models.CharField(max_length=20, default=DEFAULT_UNKNOWN)
     gitbranch = models.CharField(max_length=50, default=DEFAULT_UNKNOWN)
 
+    def _slack_msg(self, action_msg, emoji, exc_strs):
+        return (
+            f"{emoji} *Error on Harvester {self.harvester.harv_id}* {emoji}\n"
+            f"ts: {self.reportTime}\n"
+            f"Action: {action_msg}\n"
+            f"Exceptions: {''.join(exc_strs)}\n"
+            f"Location: {self.location.ranch}\n"
+        )
+
     def __str__(self):
         excs = sort_exceptions(self.exceptions.all())
         exc_strs = [f"\n\t{str(exc)}" for exc in excs]
 
-        cycling = all([exc.code.cycle for exc in excs])
-        handled = all([exc.handled for exc in excs])
+        excs_exist = len(excs) > 0
 
-        if cycling:
+        if not excs_exist:
+            action_msg = "*Unknown: No exceptions received.*"
+            handle_emoji = Emojis.UNKNOWN.value
+            return self._slack_msg(action_msg, handle_emoji, [])
+
+        cyclable = all([exc.code.cycle for exc in excs])
+        handled = all([exc.handled for exc in excs])
+        if cyclable and handled:
             action_msg = "*Attempting to cycle the robot.*"
             handle_emoji = Emojis.HANDLE_CYCLE.value
         elif handled:
@@ -29,10 +44,4 @@ class ErrorReport(PickSessionModelMixin, ReportBase):
             action_msg = "*Unable to handle.*"
             handle_emoji = Emojis.UNHANDLED.value
         
-        return (
-            f"{handle_emoji} *Error on Harvester {self.harvester.harv_id}* {handle_emoji}\n"
-            f"ts: {self.reportTime}\n"
-            f"Action: {action_msg}\n"
-            f"Exceptions: {''.join(exc_strs)}\n"
-            f"Location: {self.location.ranch}\n"
-        )
+        return self._slack_msg(action_msg, handle_emoji, exc_strs)
