@@ -19,7 +19,7 @@ function ErrorReportJson(props) {
 
   const exportJson = () => {
     const jsonString = `data:text/json;chatset=utf-8,${encodeURIComponent(
-      JSON.stringify(props.reportObj?.report)
+      JSON.stringify(props.reportObj?.report, null, 4)
     )}`;
     const link = document.createElement("a");
     link.href = jsonString;
