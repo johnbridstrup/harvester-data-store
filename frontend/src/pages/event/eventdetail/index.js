@@ -5,8 +5,8 @@ import DetailEvent from "components/event/DetailEvent";
 import Header from "components/layout/header";
 import MainLayout from "components/layout/main";
 import { getEventById } from "features/event/eventSlice";
-import "./styles.css";
 import { BackButton } from "components/common";
+import "./styles.css";
 
 function EventDetailView(props) {
   const { eventId } = useParams();
