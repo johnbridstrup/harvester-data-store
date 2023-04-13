@@ -34,12 +34,17 @@ PROJECT_DIR = Path(__file__).resolve().parent.parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
+# ENVIRONMENT VARIABLES
+
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY','django-insecure-rzr+x&83_l1%9sc-hj)!7i8!^*^s&(+5v1v8vehxoyd5(8f_%x')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = check_env('DEBUG', default=True)
+
 FRONTEND_PORT = os.environ.get('FRONTEND_PORT', '3000')
+USES3 = check_env("USES3")
+PAGE_CACHING = check_env("PAGE_CACHING")
 
 ALLOWED_HOSTS = ['*']
 CSRF_TRUSTED_ORIGINS = ['https://*.cloud.advanced.farm', 'https://*.devcloud.advanced.farm', f'http://localhost:{FRONTEND_PORT}']
@@ -212,7 +217,7 @@ DATABASES = {
 # Cache
 REDIS_DEFAULT_URL = 'redis://localhost:6379'
 
-PAGE_CACHING = check_env("PAGE_CACHING")
+
 if not PAGE_CACHING:
     CACHES = {
         'default': {
@@ -261,7 +266,6 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
-USES3 = check_env("USES3")
 if USES3:
     AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME')
     if AWS_STORAGE_BUCKET_NAME is None:
