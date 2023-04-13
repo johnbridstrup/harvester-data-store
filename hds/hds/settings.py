@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 import os, sys, logging
 
 from pathlib import Path
+from structlog.exceptions import DropEvent
 
 # UTILS
 # These must be defined here otherwise we get issues with app modules being loaded too soon
@@ -45,6 +46,7 @@ DEBUG = check_env('DEBUG', default=True)
 FRONTEND_PORT = os.environ.get('FRONTEND_PORT', '3000')
 USES3 = check_env("USES3")
 PAGE_CACHING = check_env("PAGE_CACHING")
+CLOUDWATCH = check_env("CLOUDWATCH")
 
 ALLOWED_HOSTS = ['*']
 CSRF_TRUSTED_ORIGINS = ['https://*.cloud.advanced.farm', 'https://*.devcloud.advanced.farm', f'http://localhost:{FRONTEND_PORT}']
@@ -117,13 +119,28 @@ local_logger_conf = {
     'propagate': False,
 }
 
+# Cloudwatch healtcheck filter
+def ignore_healtcheck_metrics_get(logger, method_name, event_dict):
+    # Check if the log event request is GET *healthcheck*
+    if (
+        event_dict.get('request') and
+        'GET' in event_dict['request'] and
+        ('healthcheck' in event_dict['request'] or 'metrics' in event_dict['request'])
+    ):
+        # Ignore if we are in cloudwatch environment
+        if CLOUDWATCH:
+            raise DropEvent
+
+    # Otherwise, pass along as usual
+    return event_dict
+
 LOGGING = {
     'version': 1,
-    'disable_existing_loggers': False,
+    'disable_existing_loggers': True,
     'handlers': {
         'console': {
             "class": "logging.StreamHandler",
-            "formatter": "console",
+            "formatter": "console" if not CLOUDWATCH else "cloudwatch",
         },
     },
     'loggers': {
@@ -143,15 +160,21 @@ LOGGING = {
             "()": structlog.stdlib.ProcessorFormatter,
             "processor": structlog.dev.ConsoleRenderer(),
         },
+        "cloudwatch": {
+            "()": structlog.stdlib.ProcessorFormatter,
+            "processor": structlog.processors.JSONRenderer(indent=2),
+        },
     }
 }
 structlog.configure(
     processors=[
         structlog.contextvars.merge_contextvars,
+            
         structlog.stdlib.filter_by_level,
         structlog.processors.TimeStamper(fmt="iso"),
         structlog.stdlib.add_logger_name,
         structlog.stdlib.add_log_level,
+        ignore_healtcheck_metrics_get, 
         structlog.stdlib.PositionalArgumentsFormatter(),
         structlog.processors.StackInfoRenderer(),
         structlog.processors.format_exc_info,

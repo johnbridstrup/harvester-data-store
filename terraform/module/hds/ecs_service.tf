@@ -53,6 +53,7 @@ locals {
     { "name" : "GITHASH", "value" : module.git_info.commit_hash },
     { "name" : "AWS_STORAGE_BUCKET_NAME", "value" : var.s3_bucket },
     { "name" : "USES3", "value" : "true" },
+    { "name" : "CLOUDWATCH", "value" : "true" },
   ]
 }
 
