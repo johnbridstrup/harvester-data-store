@@ -39,7 +39,7 @@ export const queryAutodiagReport = createAsyncThunk(
 );
 
 export const getAutodiagReport = createAsyncThunk(
-  "errorreport/getAutodiagReport",
+  "autodiagnostics/getAutodiagReport",
   async (id, thunkAPI) => {
     try {
       const {
