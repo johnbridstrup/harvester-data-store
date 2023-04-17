@@ -87,8 +87,8 @@ class AutodiagnosticsApiTestCase(HDSAPITestBase):
     def test_run_data(self):
         init_resp_data = self.post_autodiag_report()
         self.assertIsNone(init_resp_data['data']['run_data'])
-        r = self.client.get(self.ad_url)
-        data = r.json()['data']['results'][0]
+        r = self.client.get(self.ad_det_url(init_resp_data["data"]["id"]))
+        data = r.json()['data']
         self.assertIsNotNone(data['run_data'])
 
     def test_get_runs(self):

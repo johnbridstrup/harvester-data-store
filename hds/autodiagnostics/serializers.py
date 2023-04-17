@@ -147,3 +147,16 @@ class AutodiagnosticsReportSerializer(TaggitSerializer, PickSessionSerializerMix
         report_obj.report = report
         report_obj.save()
         return "Extracted Autodiagnostics Run"
+
+
+class AutodiagnosticsReportListSerializer(TaggitSerializer, PickSessionSerializerMixin, ReportSerializerBase):
+    """
+    This serializer return a response with minimal nesting to the list view
+
+    This saves on response time and payload size. Responses with Foreign Key
+    return the ID or PK instead.
+    """
+
+    class Meta:
+        model = AutodiagnosticsReport
+        fields = ('__all__')

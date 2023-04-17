@@ -4,7 +4,11 @@ from common.viewsets import CreateModelViewSet, ReportModelViewSet
 
 from .filters import AutodiagnosticsRunFilter, AutodiagnosticsReportFilter
 from .models import AutodiagnosticsReport, AutodiagnosticsRun
-from .serializers import AutodiagnosticsReportSerializer, AutodiagnosticsRunSerializer
+from .serializers import (
+    AutodiagnosticsReportListSerializer,
+    AutodiagnosticsReportSerializer,
+    AutodiagnosticsRunSerializer
+)
 from .tasks import extract_autodiag_run
 
 
@@ -16,6 +20,7 @@ class AutodiagnosticsReportView(ReportModelViewSet):
     queryset = AutodiagnosticsReport.objects.all()
     serializer_class = AutodiagnosticsReportSerializer
     filterset_class = AutodiagnosticsReportFilter
+    list_serializer_class = AutodiagnosticsReportListSerializer
 
     def create(self, request, *args, **kwargs):
         gripper_sn = int(request.data['data']['serial_no'])
@@ -27,6 +32,7 @@ class AutodiagnosticsReportView(ReportModelViewSet):
         super().perform_create(serializer)
         data = serializer.data
         extract_autodiag_run.delay(data["id"])
+
 
 class AutodiagnosticsRunView(CreateModelViewSet):
     queryset = AutodiagnosticsRun.objects.all()
