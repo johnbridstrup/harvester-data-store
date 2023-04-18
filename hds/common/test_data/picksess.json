@@ -1,0 +1,939 @@
+{
+    "data": {
+        "cand": [
+            {
+                "ts": 1680728569.4589317,
+                "ts0": 1680728566.0732725,
+                "bbox": null,
+                "gpos": {
+                    "dtype": "float64",
+                    "values": [
+                        1134.1375121052042,
+                        38865.18417104706,
+                        482.2857698136778
+                    ]
+                },
+                "score": -220.9350905829982,
+                "bed_pos": null,
+                "cand_id": 22173,
+                "harv_id": 9,
+                "obs_ids": [
+                    38756,
+                    26401,
+                    38770,
+                    49625,
+                    38792,
+                    26420,
+                    26426,
+                    26441,
+                    38831,
+                    26454,
+                    38843,
+                    38863,
+                    26471,
+                    38876,
+                    26485,
+                    38897,
+                    26500,
+                    49767,
+                    38933,
+                    26541,
+                    38953,
+                    49816,
+                    26573,
+                    38982,
+                    26586,
+                    49893,
+                    39046,
+                    26640,
+                    49940,
+                    39086,
+                    26669,
+                    39113,
+                    26700,
+                    26713,
+                    49998
+                ],
+                "sess_ts": {},
+                "diameter": 36.82742857142858,
+                "index_ts": 1680728569.567816,
+                "observed": [
+                    0.0,
+                    0.0
+                ],
+                "plant_id": null,
+                "ripeness": 0.9151500824218218,
+                "robot_id": 4,
+                "sess_num": 0,
+                "plant_pos": null,
+                "cluster_set": [
+                    22168,
+                    22173
+                ],
+                "orientation": {
+                    "dtype": "float64",
+                    "values": [
+                        -0.9192862322707189,
+                        0.3935896634281769,
+                        0.0
+                    ]
+                },
+                "find_info_dict": {
+                    "basic": {
+                        "x_zen": {
+                            "dtype": "float64",
+                            "value": 0.9748995991487672
+                        },
+                        "y_zen": {
+                            "dtype": "float64",
+                            "value": 0.8274758752186234
+                        },
+                        "find_pos": {
+                            "dtype": "float64",
+                            "values": [
+                                1137.809188343675,
+                                38697.20615996132,
+                                699.2471283647209,
+                                0.0
+                            ]
+                        },
+                        "pick_pos": {
+                            "dtype": "float64",
+                            "values": [
+                                1137.8159992183703,
+                                38766.97615996132,
+                                832.4471281905917,
+                                0.0
+                            ]
+                        },
+                        "find_score": {
+                            "dtype": "float64",
+                            "value": 12.394729041162146
+                        },
+                        "feature_pos": {
+                            "dtype": "float64",
+                            "values": [
+                                1126.8128449938574,
+                                38861.56645105925,
+                                474.91645965551436
+                            ]
+                        },
+                        "obs_occlusion": {
+                            "dtype": "float64",
+                            "value": 0.17600594220481774
+                        },
+                        "obs_pos_error": {
+                            "dtype": "float64",
+                            "values": [
+                                0.6632581391554595,
+                                0.19397698109969497,
+                                -0.011943414058634971
+                            ]
+                        },
+                        "obs_match_conf": {
+                            "dtype": "float64",
+                            "value": 0.9987403819043957
+                        },
+                        "obs_match_type": 1,
+                        "feature_pos_rel": {
+                            "dtype": "float64",
+                            "values": [
+                                3.732395305412183,
+                                -9.193162649768055,
+                                16.012396847610603
+                            ]
+                        },
+                        "template_match_y_error": {
+                            "dtype": "float64",
+                            "value": 1.0
+                        }
+                    },
+                    "pick_on_ray": {
+                        "x_zen": {
+                            "dtype": "float64",
+                            "value": 1.0251004008512328
+                        },
+                        "y_zen": {
+                            "dtype": "float64",
+                            "value": 0.8274758752186234
+                        },
+                        "find_pos": {
+                            "dtype": "float64",
+                            "values": [
+                                1137.809188343675,
+                                38697.20615996132,
+                                699.2471283647209,
+                                0.0
+                            ]
+                        },
+                        "pick_pos": {
+                            "dtype": "float64",
+                            "values": [
+                                1137.8159992183703,
+                                38766.97615996132,
+                                832.4471281905917,
+                                0.0
+                            ]
+                        },
+                        "find_score": {
+                            "dtype": "float64",
+                            "value": 12.394729041162146
+                        },
+                        "feature_pos": {
+                            "dtype": "float64",
+                            "values": [
+                                1126.8128449938574,
+                                38861.56645105925,
+                                474.91645965551436
+                            ]
+                        },
+                        "obs_occlusion": {
+                            "dtype": "float64",
+                            "value": 0.17600594220481774
+                        },
+                        "obs_pos_error": {
+                            "dtype": "float64",
+                            "values": [
+                                0.6632581391554595,
+                                0.19397698109969497,
+                                -0.011943414058634971
+                            ]
+                        },
+                        "obs_match_conf": {
+                            "dtype": "float64",
+                            "value": 0.9987403819043957
+                        },
+                        "obs_match_type": 1,
+                        "feature_pos_rel": {
+                            "dtype": "float64",
+                            "values": [
+                                3.732395305412183,
+                                -9.193162649768055,
+                                16.012396847610603
+                            ]
+                        },
+                        "template_match_y_error": {
+                            "dtype": "float64",
+                            "value": 1.0
+                        }
+                    }
+                },
+                "gen_match_conf": 0.9989348077158033,
+                "gen_match_type": 1.0,
+                "general_occlusion": 0.2454095012498581,
+                "average_template_match_y_error": 0.5428571428571428
+            },
+            {
+                "ts": 1680728586.6177588,
+                "ts0": 1680728567.648949,
+                "bbox": null,
+                "gpos": {
+                    "dtype": "float64",
+                    "values": [
+                        1134.2910920996733,
+                        39023.88491231305,
+                        478.77652609701084
+                    ]
+                },
+                "score": -452.4380131964908,
+                "bed_pos": null,
+                "cand_id": 22245,
+                "harv_id": 9,
+                "obs_ids": [
+                    26526,
+                    38937,
+                    26575,
+                    49859,
+                    39018,
+                    26609,
+                    49931,
+                    26650,
+                    39082,
+                    26670,
+                    39110,
+                    26699,
+                    39128,
+                    49997,
+                    26714,
+                    39160,
+                    26733,
+                    39180,
+                    26758,
+                    39195,
+                    39224,
+                    50079,
+                    26810,
+                    26820,
+                    39260,
+                    50125,
+                    50131,
+                    26839,
+                    39284,
+                    39293,
+                    50153,
+                    39335,
+                    26860,
+                    50202,
+                    39352,
+                    50221,
+                    26885,
+                    39383,
+                    26907,
+                    39403,
+                    26915,
+                    50297,
+                    26919,
+                    39417,
+                    50305,
+                    39423,
+                    50309,
+                    39425,
+                    50376,
+                    50386,
+                    39558,
+                    26962,
+                    50517,
+                    26987,
+                    39580,
+                    50543,
+                    27001,
+                    39605,
+                    50568,
+                    50572,
+                    50593,
+                    50597,
+                    50609,
+                    50630,
+                    39639,
+                    50648
+                ],
+                "sess_ts": {},
+                "diameter": 35.41515151515152,
+                "index_ts": 1680728586.6896207,
+                "observed": [
+                    0.0,
+                    0.0
+                ],
+                "plant_id": null,
+                "ripeness": 0.9024711917826495,
+                "robot_id": 4,
+                "sess_num": 0,
+                "plant_pos": null,
+                "cluster_set": [
+                    22228,
+                    22245
+                ],
+                "orientation": {
+                    "dtype": "float64",
+                    "values": [
+                        0.9987737729026596,
+                        0.04950707587594485,
+                        0.0
+                    ]
+                },
+                "find_info_dict": {
+                    "basic": {
+                        "x_zen": {
+                            "dtype": "float64",
+                            "value": 0.8537544293034387
+                        },
+                        "y_zen": {
+                            "dtype": "float64",
+                            "value": 0.9941598054847334
+                        },
+                        "find_pos": {
+                            "dtype": "float64",
+                            "values": [
+                                1062.6044115142433,
+                                38922.829593476556,
+                                717.7393862188595,
+                                0.0
+                            ]
+                        },
+                        "pick_pos": {
+                            "dtype": "float64",
+                            "values": [
+                                1063.2272793818547,
+                                38992.59959347655,
+                                850.9379298881485,
+                                0.0
+                            ]
+                        },
+                        "find_score": {
+                            "dtype": "float64",
+                            "value": 14.030778728878728
+                        },
+                        "feature_pos": {
+                            "dtype": "float64",
+                            "values": [
+                                1143.4472828110288,
+                                38995.20724191538,
+                                492.9968331061407
+                            ]
+                        },
+                        "obs_occlusion": {
+                            "dtype": "float64",
+                            "value": 0.1821638651937209
+                        },
+                        "obs_pos_error": {
+                            "dtype": "float64",
+                            "values": [
+                                -3.8746916862226044,
+                                -2.285709041003429,
+                                -0.01429633347845538
+                            ]
+                        },
+                        "obs_match_conf": {
+                            "dtype": "float64",
+                            "value": 0.9978193515314623
+                        },
+                        "obs_match_type": 1,
+                        "feature_pos_rel": {
+                            "dtype": "float64",
+                            "values": [
+                                -6.917348225770866,
+                                -0.8107767754481756,
+                                14.679374441341338
+                            ]
+                        },
+                        "template_match_y_error": {
+                            "dtype": "float64",
+                            "value": 1.0
+                        }
+                    },
+                    "pick_on_ray": {
+                        "x_zen": {
+                            "dtype": "float64",
+                            "value": 0.8537544293034387
+                        },
+                        "y_zen": {
+                            "dtype": "float64",
+                            "value": 0.9941598054847334
+                        },
+                        "find_pos": {
+                            "dtype": "float64",
+                            "values": [
+                                1062.6044115142433,
+                                38922.829593476556,
+                                717.7393862188595,
+                                0.0
+                            ]
+                        },
+                        "pick_pos": {
+                            "dtype": "float64",
+                            "values": [
+                                1063.2272793818547,
+                                38992.59959347655,
+                                850.9379298881485,
+                                0.0
+                            ]
+                        },
+                        "find_score": {
+                            "dtype": "float64",
+                            "value": 14.030778728878728
+                        },
+                        "feature_pos": {
+                            "dtype": "float64",
+                            "values": [
+                                1143.4472828110288,
+                                38995.20724191538,
+                                492.9968331061407
+                            ]
+                        },
+                        "obs_occlusion": {
+                            "dtype": "float64",
+                            "value": 0.1821638651937209
+                        },
+                        "obs_pos_error": {
+                            "dtype": "float64",
+                            "values": [
+                                -3.8746916862226044,
+                                -2.285709041003429,
+                                -0.01429633347845538
+                            ]
+                        },
+                        "obs_match_conf": {
+                            "dtype": "float64",
+                            "value": 0.9978193515314623
+                        },
+                        "obs_match_type": 1,
+                        "feature_pos_rel": {
+                            "dtype": "float64",
+                            "values": [
+                                -6.917348225770866,
+                                -0.8107767754481756,
+                                14.679374441341338
+                            ]
+                        },
+                        "template_match_y_error": {
+                            "dtype": "float64",
+                            "value": 1.0
+                        }
+                    }
+                },
+                "gen_match_conf": 0.9977201197766858,
+                "gen_match_type": 1.0,
+                "general_occlusion": 0.2602539691083562,
+                "average_template_match_y_error": 0.3484848484848485
+            },
+            {
+                "ts": 1680728598.4638944,
+                "ts0": 1680728595.04096,
+                "bbox": null,
+                "gpos": {
+                    "dtype": "float64",
+                    "values": [
+                        1200.845891835229,
+                        40525.15099887173,
+                        482.93493323069845
+                    ]
+                },
+                "score": -149.1016987439774,
+                "bed_pos": null,
+                "cand_id": 22805,
+                "harv_id": 9,
+                "obs_ids": [
+                    51078,
+                    51087,
+                    51098,
+                    27208,
+                    40000,
+                    40017,
+                    51155,
+                    27218,
+                    51170,
+                    27242,
+                    51203,
+                    40089,
+                    51237,
+                    1343,
+                    40115,
+                    27325,
+                    27378,
+                    40190,
+                    27399,
+                    40225,
+                    27437,
+                    51335,
+                    27465,
+                    51372,
+                    27504,
+                    51417,
+                    40350
+                ],
+                "sess_ts": {},
+                "diameter": 40.01777777777778,
+                "index_ts": 1680728598.5346222,
+                "observed": [
+                    0.0,
+                    0.0
+                ],
+                "plant_id": null,
+                "ripeness": 0.9080926404407537,
+                "robot_id": 4,
+                "sess_num": 0,
+                "plant_pos": null,
+                "cluster_set": [
+                    22804,
+                    22805
+                ],
+                "orientation": {
+                    "dtype": "float64",
+                    "values": [
+                        0.339803242713853,
+                        0.940496547702941,
+                        0.0
+                    ]
+                },
+                "find_info_dict": {
+                    "basic": {
+                        "x_zen": {
+                            "dtype": "float64",
+                            "value": 0.6578841479973361
+                        },
+                        "y_zen": {
+                            "dtype": "float64",
+                            "value": 0.9830478563549666
+                        },
+                        "find_pos": {
+                            "dtype": "float64",
+                            "values": [
+                                979.8181981836105,
+                                40437.8886833565,
+                                750.7679599866188,
+                                0.0
+                            ]
+                        },
+                        "pick_pos": {
+                            "dtype": "float64",
+                            "values": [
+                                980.8515622741173,
+                                40507.658683356494,
+                                883.9639515128525,
+                                0.0
+                            ]
+                        },
+                        "find_score": {
+                            "dtype": "float64",
+                            "value": 13.763184115702911
+                        },
+                        "feature_pos": {
+                            "dtype": "float64",
+                            "values": [
+                                1230.711003650002,
+                                40514.205338276166,
+                                455.89900019274717
+                            ]
+                        },
+                        "obs_occlusion": {
+                            "dtype": "float64",
+                            "value": 0.21345888956935116
+                        },
+                        "obs_pos_error": {
+                            "dtype": "float64",
+                            "values": [
+                                -46.136505483354995,
+                                -4.8837122933982755,
+                                48.46592523525953
+                            ]
+                        },
+                        "obs_match_conf": {
+                            "dtype": "float64",
+                            "value": 0.9982294502114571
+                        },
+                        "obs_match_type": 1,
+                        "feature_pos_rel": {
+                            "dtype": "float64",
+                            "values": [
+                                -16.802225397861548,
+                                -5.372331496255356,
+                                19.43414092494868
+                            ]
+                        },
+                        "template_match_y_error": {
+                            "dtype": "float64",
+                            "value": 0.0
+                        }
+                    },
+                    "pick_on_ray": {
+                        "x_zen": {
+                            "dtype": "float64",
+                            "value": 0.6578841479973361
+                        },
+                        "y_zen": {
+                            "dtype": "float64",
+                            "value": 0.9830478563549666
+                        },
+                        "find_pos": {
+                            "dtype": "float64",
+                            "values": [
+                                979.8181981836105,
+                                40437.8886833565,
+                                750.7679599866188,
+                                0.0
+                            ]
+                        },
+                        "pick_pos": {
+                            "dtype": "float64",
+                            "values": [
+                                980.8515622741173,
+                                40507.658683356494,
+                                883.9639515128525,
+                                0.0
+                            ]
+                        },
+                        "find_score": {
+                            "dtype": "float64",
+                            "value": 13.763184115702911
+                        },
+                        "feature_pos": {
+                            "dtype": "float64",
+                            "values": [
+                                1230.711003650002,
+                                40514.205338276166,
+                                455.89900019274717
+                            ]
+                        },
+                        "obs_occlusion": {
+                            "dtype": "float64",
+                            "value": 0.21345888956935116
+                        },
+                        "obs_pos_error": {
+                            "dtype": "float64",
+                            "values": [
+                                -46.136505483354995,
+                                -4.8837122933982755,
+                                48.46592523525953
+                            ]
+                        },
+                        "obs_match_conf": {
+                            "dtype": "float64",
+                            "value": 0.9982294502114571
+                        },
+                        "obs_match_type": 1,
+                        "feature_pos_rel": {
+                            "dtype": "float64",
+                            "values": [
+                                -16.802225397861548,
+                                -5.372331496255356,
+                                19.43414092494868
+                            ]
+                        },
+                        "template_match_y_error": {
+                            "dtype": "float64",
+                            "value": 0.0
+                        }
+                    }
+                },
+                "gen_match_conf": 0.9986955421323025,
+                "gen_match_type": 1.0,
+                "general_occlusion": 0.23891805355909548,
+                "average_template_match_y_error": 0.5555555555555556
+            }
+        ],
+        "grip": [
+            {
+                "_meta": {
+                    "ts": 1680727824.323062,
+                    "name": "picker",
+                    "index": 1,
+                    "topic": "grip_attempt"
+                },
+                "random": false,
+                "cand_id": 401,
+                "harv_id": 9,
+                "sess_ts": {},
+                "success": true,
+                "index_ts": 1680727820.3720565,
+                "modality": {
+                    "DROP_CHILD": "BASIC",
+                    "PREP_CHILD": "VAC_LIFT_TO_MIN",
+                    "TOUCH_CHILD": "FLESH_POS_PICK_ON_RAY",
+                    "REMOVE_CHILD": "REMOVE_NO_UNTENSION",
+                    "ACQUIRE_CHILD": "ACQUIRE_IMPROVE_REACH"
+                },
+                "prepData": {
+                    "liftPos": {
+                        "dtype": "float64",
+                        "values": [
+                            -20.028894303783403,
+                            20.12756929558259,
+                            27.426261322649225,
+                            0.0
+                        ]
+                    },
+                    "abort_ts": null,
+                    "usedPullSense": false,
+                    "vacLiftStemDist": 30,
+                    "vaclift_avg_vac": -59.881555821147344,
+                    "vaclift_max_vac": -59.562992125984245,
+                    "vaclift_min_vac": -60.77133717660292
+                },
+                "robot_id": 1,
+                "sess_num": 0,
+                "touchData": {
+                    "gpos": {
+                        "dtype": "float64",
+                        "values": [
+                            -896.516587629121,
+                            1766.5267969003667,
+                            503.37605680325873
+                        ]
+                    },
+                    "vac_ts": 1680727821.6156552,
+                    "suck_ts": 1680727821.026439,
+                    "abort_ts": null,
+                    "touchPos": {
+                        "dtype": "float64",
+                        "values": [
+                            -895.9188005175134,
+                            1768.2994315561991,
+                            502.82156031731995,
+                            -0.4824907840626722
+                        ]
+                    },
+                    "touchVel": {
+                        "dtype": "float64",
+                        "values": [
+                            46.70503160178613,
+                            14.397976232734145,
+                            -129.58686641740584
+                        ]
+                    },
+                    "touch_ts": null,
+                    "avg_touch": {
+                        "dtype": "float64",
+                        "value": 3.3572998046875
+                    },
+                    "max_touch": {
+                        "dtype": "float64",
+                        "value": 4.1142578125
+                    },
+                    "min_touch": {
+                        "dtype": "float64",
+                        "value": 3.279296875
+                    },
+                    "finger_rotation": false
+                },
+                "removeData": {
+                    "exitPos": null,
+                    "abort_ts": null,
+                    "rotation_ts": 1680727822.787259,
+                    "extension_ts": 1680727822.5373116,
+                    "untensionRelPos": [
+                        0.0,
+                        0.0,
+                        0,
+                        0.0
+                    ]
+                },
+                "serial_num": 78,
+                "acquireData": {
+                    "findPos": {
+                        "dtype": "float64",
+                        "values": [
+                            -225.91278794323455,
+                            -111.05354810908449,
+                            -700.0,
+                            0.0
+                        ]
+                    },
+                    "abort_ts": null
+                },
+                "attempt_num": 1,
+                "grip_end_ts": 1680727824.3229325,
+                "grip_result": "None",
+                "isSideBerry": false,
+                "pick_result": "None",
+                "grip_start_ts": 1680727820.3720565,
+                "used_grip_model": true,
+                "auto_diag_result": true
+            },
+            {
+                "_meta": {
+                    "ts": 1680727825.2466779,
+                    "name": "picker",
+                    "index": 4,
+                    "topic": "grip_attempt"
+                },
+                "random": false,
+                "cand_id": 128,
+                "harv_id": 9,
+                "sess_ts": {},
+                "success": true,
+                "index_ts": 1680727820.419935,
+                "modality": {
+                    "DROP_CHILD": "BASIC",
+                    "PREP_CHILD": "VAC_LIFT_TO_MIN",
+                    "TOUCH_CHILD": "FLESH_POS_PICK_ON_RAY",
+                    "REMOVE_CHILD": "REMOVE_NO_UNTENSION",
+                    "ACQUIRE_CHILD": "ACQUIRE_IMPROVE_REACH"
+                },
+                "prepData": {
+                    "liftPos": {
+                        "dtype": "float64",
+                        "values": [
+                            -26.675770010651377,
+                            -8.661549403539766,
+                            51.909690184850774,
+                            0.0
+                        ]
+                    },
+                    "abort_ts": null,
+                    "usedPullSense": false,
+                    "vacLiftStemDist": 30,
+                    "vaclift_avg_vac": -67.61496414510687,
+                    "vaclift_max_vac": -65.49486782902136,
+                    "vaclift_min_vac": -68.68050478065241
+                },
+                "robot_id": 4,
+                "sess_num": 0,
+                "touchData": {
+                    "gpos": {
+                        "dtype": "float64",
+                        "values": [
+                            818.8886019079899,
+                            1811.2539507662846,
+                            531.3009258750265
+                        ]
+                    },
+                    "vac_ts": 1680727822.4479175,
+                    "suck_ts": 1680727821.9147427,
+                    "abort_ts": null,
+                    "touchPos": {
+                        "dtype": "float64",
+                        "values": [
+                            821.5073401245734,
+                            1811.5737534940465,
+                            533.3524490142249,
+                            0.40301710994217654
+                        ]
+                    },
+                    "touchVel": {
+                        "dtype": "float64",
+                        "values": [
+                            -87.72023627414173,
+                            -12.23794294408552,
+                            -137.79398305512063
+                        ]
+                    },
+                    "touch_ts": null,
+                    "avg_touch": {
+                        "dtype": "float64",
+                        "value": 2.3641357421875
+                    },
+                    "max_touch": {
+                        "dtype": "float64",
+                        "value": 3.114501953125
+                    },
+                    "min_touch": {
+                        "dtype": "float64",
+                        "value": 2.235595703125
+                    },
+                    "finger_rotation": false
+                },
+                "removeData": {
+                    "exitPos": null,
+                    "abort_ts": null,
+                    "rotation_ts": 1680727823.7838328,
+                    "extension_ts": 1680727823.525889,
+                    "untensionRelPos": [
+                        0.0,
+                        0.0,
+                        0,
+                        0.0
+                    ]
+                },
+                "serial_num": 169,
+                "acquireData": {
+                    "findPos": {
+                        "dtype": "float64",
+                        "values": [
+                            56.029271090858344,
+                            -25.813219462955047,
+                            -700.0,
+                            59.946991580148456
+                        ]
+                    },
+                    "abort_ts": null
+                },
+                "attempt_num": 1,
+                "grip_end_ts": 1680727825.2465475,
+                "grip_result": "None",
+                "isSideBerry": false,
+                "pick_result": "None",
+                "grip_start_ts": 1680727820.419935,
+                "used_grip_model": true,
+                "auto_diag_result": true
+            }
+        ]
+    },
+    "type": "grip",
+    "uuid": "cd31cb2e-d3f8-11ed-8b6c-78d00427e4fa",
+    "fruit": "strawberry",
+    "timestamp": 1680730106.6295166,
+    "is_emulator": false,
+    "serial_number": 11,
+    "pick_session_uuid": "2225cd5a-765a-11ed-9d09-677a59a17003",
+    "pick_session_start_time": 1680727785.7587228
+}

@@ -3,8 +3,8 @@ from rest_framework import serializers
 from taggit.serializers import TagListSerializerField, TaggitSerializer
 from .models import HarvesterCodeRelease, HarvesterVersionReport
 from common.models import Tags
-from common.serializers.reportserializer import ReportSerializerBase
-from harvester.models import Fruit, Harvester
+from common.serializers.reportserializer import ReportSerializerBase, Harvester
+from harvester.models import Fruit
 from harvester.serializers.fruitserializer import FruitSerializer
 
 

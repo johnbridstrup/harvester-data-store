@@ -234,6 +234,11 @@ class HDSAPITestBase(APITestCase):
         report_path = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'test_data/serialnums.json')
         with open(report_path, 'rb') as f:
             self.asset_data = json.load(f)
+
+    def _load_picksess_report(self):
+        report_path = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'test_data/picksess.json')
+        with open(report_path, 'rb') as f:
+            self.picksess_data = json.load(f)
     
     def _post_error_report(self, load=True):
         if load:
@@ -246,6 +251,13 @@ class HDSAPITestBase(APITestCase):
         if load:
             self._load_autodiag_report()
         resp = self.client.post(f'{self.api_base_url}/autodiagnostics/', self.ad_data, format='json')
+        self.assertEqual(resp.status_code, resp_status, msg=resp.json())
+        return resp.json()
+
+    def _post_picksess_report(self, load=True, resp_status=status.HTTP_201_CREATED):
+        if load:
+            self._load_picksess_report()
+        resp = self.client.post(f'{self.api_base_url}/gripreports/', self.picksess_data, format='json')
         self.assertEqual(resp.status_code, resp_status, msg=resp.json())
         return resp.json()
 

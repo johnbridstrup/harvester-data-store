@@ -6,7 +6,6 @@ from common.models import Tags
 from common.reports import DTimeFormatter, ReportBase
 from harvester.models import Harvester
 from event.models import Event
-from event.serializers import EventSerializerMixin
 import datetime
 import jsonschema
 import structlog
