@@ -16,7 +16,10 @@ import {
 } from "features/errorreport/errorreportService";
 import errorreport from "test-utils/test-data/errorreport.json";
 import { AUTODIAG_REPORT_URL } from "features/autodiagnostics/autodiagnosticService";
-import autodiagnostic from "test-utils/test-data/autodiagnostic.json";
+import {
+  autodiaglist,
+  autodiagdetail,
+} from "test-utils/test-data/autodiagnostic";
 import harvester from "test-utils/test-data/harvester.json";
 import { LOCATION_URL } from "features/location/locationService";
 import location from "test-utils/test-data/location.json";
@@ -180,7 +183,7 @@ export const listAutodiagReport = rest.get(
   AUTODIAG_REPORT_URL,
   (req, res, ctx) => {
     genericListResponse["message"] = "autodiagnostics retrieved successfully";
-    genericListResponse["data"]["results"] = [autodiagnostic];
+    genericListResponse["data"]["results"] = [autodiaglist];
     return res(ctx.json(genericListResponse));
   }
 );
@@ -201,7 +204,7 @@ export const getAutodiagReport = rest.get(
   `${AUTODIAG_REPORT_URL}:reportId`,
   (req, res, ctx) => {
     genericGetResponse["message"] = "autodiagnostics retrieved successfully";
-    genericGetResponse["data"] = autodiagnostic;
+    genericGetResponse["data"] = autodiagdetail;
     return res(ctx.json(genericGetResponse));
   }
 );

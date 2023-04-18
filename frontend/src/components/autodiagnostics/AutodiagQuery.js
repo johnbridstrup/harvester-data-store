@@ -80,7 +80,7 @@ function AutodiagQuery(props) {
 
   return (
     <div className="mt-4 mb-4">
-      <form onSubmit={handleQuerySubmit}>
+      <form onSubmit={handleQuerySubmit} data-testid="query-form">
         <div className="row mb-2">
           <div className="col-md-6">
             <div className="form-group">
@@ -91,7 +91,7 @@ function AutodiagQuery(props) {
                 placeholder="1,2,3,..."
                 options={harvesterOptions}
                 name="harv_ids"
-                id="harv_ids"
+                inputId="harv_ids"
                 onChange={handleHarvestSelect}
                 value={selectedHarvId}
                 defaultValue={selectedHarvId}
@@ -110,7 +110,7 @@ function AutodiagQuery(props) {
                 placeholder="ranch1, ranch2, ..."
                 options={locationOptions}
                 name="locations"
-                id="locations"
+                inputId="locations"
                 onChange={handleLocationSelect}
                 defaultValue={selectedLocation}
                 value={selectedLocation}

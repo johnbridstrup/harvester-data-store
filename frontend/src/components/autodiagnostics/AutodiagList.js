@@ -3,13 +3,13 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { LoaderDiv } from "components/styled";
 import { darkThemeClass, Loader, timeStampFormat } from "utils/utils";
-import { HarvesterLink } from "components/common";
 
 function AutodiagList(props) {
   const { reports, loading } = useSelector((state) => state.autodiagnostic);
   const { timezone } = useSelector((state) => state.errorreport);
   const { theme } = useSelector((state) => state.home);
   const tabledt = darkThemeClass("dt-table", theme);
+
   return (
     <>
       {loading ? (
@@ -26,6 +26,7 @@ function AutodiagList(props) {
                 <th>Robot</th>
                 <th>Gripper SN</th>
                 <th>Harvester</th>
+                <th>Fruit</th>
                 <th>Event</th>
                 <th>Pick Session</th>
                 <th>Created At</th>
@@ -44,14 +45,17 @@ function AutodiagList(props) {
                   <td>{obj.robot}</td>
                   <td>{obj.gripper_sn}</td>
                   <td>
-                    <HarvesterLink harvester={obj.harvester} />
+                    <Link to={`/harvesters/${obj.harvester}`}>
+                      {obj.report?.serial_number}
+                    </Link>
+                  </td>
+                  <td>{obj.report?.fruit}</td>
+                  <td>
+                    <Link to={`/events/${obj.event}`}>{obj.event}</Link>
                   </td>
                   <td>
-                    <Link to={`/events/${obj.event.id}`}>{obj.event.id}</Link>
-                  </td>
-                  <td>
-                    <Link to={`/picksessions/${obj.pick_session.id}`}>
-                      {obj.pick_session.id}
+                    <Link to={`/picksessions/${obj.pick_session}`}>
+                      {obj.pick_session}
                     </Link>
                   </td>
                   <td>{moment(obj.createdAt).format("LLLL")}</td>
