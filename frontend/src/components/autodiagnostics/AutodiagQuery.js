@@ -3,8 +3,10 @@ import { useDispatch, useSelector } from "react-redux";
 import Select from "react-select";
 import { InputFormControl } from "components/styled";
 import {
+  extractDateFromString,
   handleSelectFactory,
   selectDarkStyles,
+  timeStampFormat,
   transformHarvOptions,
   transformLocOptions,
 } from "utils/utils";
@@ -18,6 +20,9 @@ function AutodiagQuery(props) {
     uuid: "",
     robot: "",
     gripper_sn: "",
+    result: "",
+    start_time: "",
+    end_time: "",
   });
   const { theme } = useSelector((state) => state.home);
   const { harvesters } = useSelector((state) => state.harvester);
@@ -37,13 +42,13 @@ function AutodiagQuery(props) {
   const buildQueryObj = () => {
     let queryObj = {};
     if (selectedHarvId && selectedHarvId.hasOwnProperty("value")) {
-      queryObj["harvester__harv_id"] = selectedHarvId.value;
+      queryObj["harv_id"] = selectedHarvId.value;
     }
     if (selectedLocation && selectedLocation.hasOwnProperty("value")) {
-      queryObj["location__ranch"] = selectedLocation.value;
+      queryObj["ranch"] = selectedLocation.value;
     }
     if (fieldData.uuid) {
-      queryObj["event__UUID"] = fieldData.uuid;
+      queryObj["uuid"] = fieldData.uuid;
     }
     if (fieldData.gripper_sn) {
       queryObj["gripper_sn"] = fieldData.gripper_sn;
@@ -51,13 +56,25 @@ function AutodiagQuery(props) {
     if (fieldData.robot) {
       queryObj["robot"] = fieldData.robot;
     }
+    if (fieldData.result) {
+      queryObj["result"] = fieldData.result;
+    }
+    if (fieldData.start_time) {
+      queryObj["start_time"] = timeStampFormat(
+        extractDateFromString(fieldData.start_time)
+      );
+    }
+    if (fieldData.end_time) {
+      queryObj["end_time"] = timeStampFormat(
+        extractDateFromString(fieldData.end_time)
+      );
+    }
     return queryObj;
   };
 
   const handleQuerySubmit = async (e) => {
     e.preventDefault();
     let queryObj = buildQueryObj();
-    console.log(queryObj);
     dispatch(queryAutodiagReport(queryObj));
   };
 
@@ -134,8 +151,8 @@ function AutodiagQuery(props) {
             </div>
           </div>
         </div>
-        <div className="row mb-3">
-          <div className="col">
+        <div className="row mb-2">
+          <div className="col-md-6">
             <div className="form-group">
               <label htmlFor="gripper_sn">Gripper SN</label>
               <InputFormControl
@@ -146,6 +163,62 @@ function AutodiagQuery(props) {
                 theme={theme}
                 onChange={handleFieldChange}
                 placeholder="1277"
+              />
+            </div>
+          </div>
+          <div className="col-md-6">
+            <div className="form-check">
+              <label htmlFor="result_1">Result Success</label>
+              <input
+                type="radio"
+                name="result"
+                value="1"
+                id="result_1"
+                checked={fieldData.result === "1"}
+                onChange={handleFieldChange}
+                className="form-check-input"
+              />
+            </div>
+            <div className="form-check">
+              <label htmlFor="result_0">Result Failed</label>
+              <input
+                type="radio"
+                name="result"
+                value="0"
+                id="result_0"
+                checked={fieldData.result === "0"}
+                onChange={handleFieldChange}
+                className="form-check-input"
+              />
+            </div>
+          </div>
+        </div>
+        <div className="row mb-4">
+          <div className="col-md-6">
+            <div className="form-group">
+              <label htmlFor="start_time">Start Time</label>
+              <InputFormControl
+                type="text"
+                name="start_time"
+                id="start_time"
+                value={fieldData.start_time}
+                onChange={handleFieldChange}
+                placeholder="YYYYMMDDHHmmSS"
+                theme={theme}
+              />
+            </div>
+          </div>
+          <div className="col-md-6">
+            <div className="form-group">
+              <label htmlFor="end_time">End Time</label>
+              <InputFormControl
+                type="text"
+                name="end_time"
+                id="end_time"
+                value={fieldData.end_time}
+                onChange={handleFieldChange}
+                placeholder="YYYYMMDDHHmmSS"
+                theme={theme}
               />
             </div>
           </div>
