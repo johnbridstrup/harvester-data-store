@@ -50,7 +50,7 @@ class AutodiagnosticsReportSerializer(TaggitSerializer, PickSessionSerializerMix
             tags = [Tags.INVALIDSCHEMA.value]
 
         report = data.copy()
-        data, _ = self.extract_basic(data)
+        data, harv_obj = self.extract_basic(data)
         result = report["data"].get("passed_autodiag")
         robot_id = report["data"].get("robot_id")
         gripper_sn = report["data"].get("serial_no")
@@ -60,6 +60,7 @@ class AutodiagnosticsReportSerializer(TaggitSerializer, PickSessionSerializerMix
         UUID = self.extract_uuid(report)
         event = self.get_or_create_event(UUID, creator, AutodiagnosticsReport.__name__)
         pick_session = self.get_or_create_picksession(pick_session_uuid, creator, AutodiagnosticsReport.__name__)
+        self.set_picksess_harv_location(pick_session, harv_obj)
         data.update({
             "result": result,
             "robot": robot_id,

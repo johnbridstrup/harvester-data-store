@@ -1,7 +1,10 @@
 from django.db import models
 from taggit.managers import TaggableManager
 from taggit.models import TaggedItemBase
+
 from common.models import CommonInfo
+from harvester.models import Harvester
+from location.models import Location
 
 import uuid
 
@@ -67,7 +70,10 @@ class PickSession(TaggedUUIDModelFactory('PickSession')):
 
     E.g.; grip and autodiagnostics reports.
     """
-    pass
+    harvester = models.ForeignKey(Harvester, on_delete=models.CASCADE, null=True, blank=True)
+    location = models.ForeignKey(Location, on_delete=models.CASCADE, null=True, blank=True)
+    start_time = models.DateTimeField(null=True, blank=True)
+    session_length = models.DurationField(null=True, blank=True)
 
     
 class EventModelMixin(models.Model):

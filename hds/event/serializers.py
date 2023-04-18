@@ -1,8 +1,11 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
 from taggit.serializers import TagListSerializerField
-from .models import Event, PickSession
 
+from harvester.serializers.harvesterserializer import HarvesterSerializer
+from location.serializers.locationserializer import LocationSerializer
+
+from .models import Event, PickSession
 
 class TaggedUUIDSerializerBase(serializers.ModelSerializer):
     tags = TagListSerializerField(required=False, read_only=True)
@@ -97,6 +100,13 @@ class PickSessionSerializer(TaggedUUIDSerializerBase):
     def has_related_files(self) -> bool:
         return False
 
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data["harvester"] = HarvesterSerializer(instance=instance.harvester).data
+        data["location"] = LocationSerializer(instance=instance.location).data
+        return data
+
+
 
 class EventSerializerMixin(serializers.Serializer):
     @classmethod
@@ -116,3 +126,17 @@ class PickSessionSerializerMixin(EventSerializerMixin): # Pick session uploads a
     @classmethod
     def get_or_create_picksession(cls, ps_uuid, creator, tag):
         return TaggedUUIDSerializerBase.get_or_create_uuid_tagged_obj(creator, PickSession, tag, ps_uuid)
+
+    @classmethod
+    def set_picksess_harv_location(cls, picksess, harv):
+        if picksess.harvester is not None:
+            return
+        picksess.harvester = harv
+        picksess.location = harv.location
+        picksess.save()
+
+    @classmethod
+    def set_picksess_time(cls, picksess, start_time, end_time):
+        picksess.start_time = start_time
+        picksess.session_length = end_time - start_time
+        picksess.save()

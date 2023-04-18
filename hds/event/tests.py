@@ -1,17 +1,20 @@
+from common.reports import DTimeFormatter
 from common.tests import HDSAPITestBase
 from event.models import Event, PickSession
+from event.serializers import PickSessionSerializer
 from errorreport.models import ErrorReport
 from s3file.models import S3File
 
 from rest_framework import status
 from django.urls import reverse
 from django.utils.http import urlencode
+from django.utils.timezone import datetime, timedelta
 
 
 class TaggedUUIDModelTestBase(HDSAPITestBase):
     def setUp(self):
         super().setUp()
-        self._setup_basic()
+        self.test_objects = self._setup_basic()
         self.event_url = reverse("event-list")
         self.picksess_url = reverse("picksession-list")
         self.tags_endpoint = f"{self.event_url}tags/"
@@ -145,3 +148,35 @@ class EventPicksessIntegrationTestCase(TaggedUUIDModelTestBase):
         # Events are different, session is the same
         self.assertNotEqual(err_event, aut_event)
         self.assertEqual(err_sess, aut_sess)
+
+    
+    def test_picksess_meta(self):
+        self._post_autodiag_report()
+        self._post_picksess_report()
+
+        start_time = DTimeFormatter.str_from_timestamp(self.picksess_data["pick_session_start_time"])
+        start_dt = DTimeFormatter.from_timestamp(self.picksess_data["pick_session_start_time"])
+        end_dt = DTimeFormatter.from_timestamp(self.picksess_data["timestamp"])
+
+        picksess = PickSession.objects.get()
+        psdata = PickSessionSerializer(instance=picksess).data
+        
+        # From autodiag report
+        self.assertEqual(
+            self.test_objects["harvester"].harv_id,
+            psdata["harvester"]["harv_id"]
+        )
+        self.assertEqual(
+            self.test_objects["location"].ranch,
+            psdata["location"]["ranch"]
+        )
+
+        # From picksess report
+        self.assertEqual(start_time, psdata["start_time"])
+        duration_exp = end_dt - start_dt
+        dur_dt = datetime.strptime(psdata["session_length"],"%H:%M:%S.%f")
+        duration = timedelta(
+            hours=dur_dt.hour, minutes=dur_dt.minute, seconds=dur_dt.second, microseconds=dur_dt.microsecond
+        )
+        self.assertEqual(duration, duration_exp)
+        
