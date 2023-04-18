@@ -50,7 +50,7 @@ class AutodiagnosticsReportSerializer(TaggitSerializer, PickSessionSerializerMix
             tags = [Tags.INVALIDSCHEMA.value]
 
         report = data.copy()
-        data = self.extract_basic(data)
+        data, _ = self.extract_basic(data)
         result = report["data"].get("passed_autodiag")
         robot_id = report["data"].get("robot_id")
         gripper_sn = report["data"].get("serial_no")

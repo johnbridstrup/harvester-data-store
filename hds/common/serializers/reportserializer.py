@@ -131,7 +131,7 @@ class ReportSerializerBase(serializers.ModelSerializer):
             "harvester": harv.id,
             "location": harv.location.id,
         }
-        return data
+        return data, harv
 
     @classmethod
     def get_harvester(self, harv_id, report, fruit_key="fruit"):

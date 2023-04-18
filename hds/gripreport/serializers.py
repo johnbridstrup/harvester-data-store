@@ -20,7 +20,7 @@ class GripReportSerializer(PickSessionSerializerMixin, ReportSerializerBase):
 
     def to_internal_value(self, data):
         report = data.copy()
-        data = self.extract_basic(report)
+        data, _ = self.extract_basic(report)
 
         creator = self.get_user_from_request()
         event_uuid = self.extract_uuid(report)

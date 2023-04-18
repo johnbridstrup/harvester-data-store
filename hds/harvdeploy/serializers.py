@@ -102,7 +102,7 @@ class HarvesterVersionReportSerializer(TaggitSerializer, ReportSerializerBase):
             tags = [Tags.INVALIDSCHEMA.value]
 
         report = data.copy()
-        data = self.extract_basic(report)
+        data, _ = self.extract_basic(report)
 
         data.update({
             "is_dirty": self.Meta.model.check_dirty(report['data']),

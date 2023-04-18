@@ -54,7 +54,7 @@ class HarvesterAssetReportSerializer(TaggitSerializer, EventSerializerMixin, Rep
             # We've already logged the failure, continue trying anyway...
             tags = [Tags.INVALIDSCHEMA.value]
         
-        meta = self.extract_basic(data)
+        meta, _ = self.extract_basic(data)
         creator = self.get_user_from_request()
         event_uuid = self.extract_uuid(data)
         event = self.get_or_create_event(event_uuid, creator, HarvesterAssetReport.__name__)

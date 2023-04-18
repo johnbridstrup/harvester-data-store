@@ -11,7 +11,7 @@ class ConfigReportSerializer(EventSerializerMixin, ReportSerializerBase):
 
     def to_internal_value(self, data):
         report = data.copy()
-        data = self.extract_basic(report)
+        data, _ = self.extract_basic(report)
         UUID = self.extract_uuid(report)
         creator = self.get_user_from_request()
         event = self.get_or_create_event(UUID, creator, ConfigReport.__name__)
