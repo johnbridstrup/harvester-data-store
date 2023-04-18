@@ -28,6 +28,16 @@ class ReportBase(CommonInfo):
 
 class DTimeFormatter:
     @classmethod
+    def from_timestamp(cls, ts):
+        return datetime.fromtimestamp(ts)
+
+    @classmethod
+    def str_from_timestamp(cls, ts):
+        fmt = '%Y-%m-%dT%H:%M:%S.%fZ'
+        dt = cls.from_timestamp(ts)
+        return dt.strftime(fmt)
+    
+    @classmethod
     def fill_dt_with_zeros(cls, dt_str):
         """Fill with zeros if not all YYYYMMDDHHmmss are present"""
         if len(dt_str) < 14:

@@ -3,7 +3,7 @@ from rest_framework import serializers
 from common.async_metrics import ASYNC_ERROR_COUNTER
 from common.metrics import ERROR_COUNTER
 from common.models import Tags
-from common.reports import ReportBase
+from common.reports import DTimeFormatter, ReportBase
 from harvester.models import Harvester
 from event.models import Event
 from event.serializers import EventSerializerMixin
@@ -91,7 +91,7 @@ class ReportSerializerBase(serializers.ModelSerializer):
             ts = report.pop(key)
         else:
             ts = report[key]
-        return datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S.%f')
+        return DTimeFormatter.str_from_timestamp(ts)
 
     @classmethod
     def extract_uuid(cls, report, key="uuid"):
