@@ -31,6 +31,10 @@ test("should render the autodiagnostic list view", async () => {
   const uuidInput = screen.getByRole("textbox", { name: /UUID/i });
   const robotInput = screen.getByRole("spinbutton", { name: /Robot/i });
   const gripperInput = screen.getByRole("spinbutton", { name: /Gripper SN/i });
+  const result1 = screen.getByRole("radio", { name: /Result Success/i });
+  const result0 = screen.getByRole("radio", { name: /Result Failed/i });
+  const startTime = screen.getByRole("textbox", { name: /Start Time/i });
+  const endTime = screen.getByRole("textbox", { name: /End Time/i });
 
   await act(async () => {
     await user.clear(uuidInput);
@@ -40,11 +44,18 @@ test("should render the autodiagnostic list view", async () => {
     await user.type(uuidInput, "fake-uuid");
     await user.type(robotInput, "0");
     await user.type(gripperInput, "1277");
+    await user.click(result1);
+    await user.type(startTime, "20230206T234724.670");
+    await user.type(endTime, "20230206T234724.671");
   });
 
   expect(uuidInput).toHaveValue("fake-uuid");
   expect(robotInput).toHaveValue(0);
   expect(gripperInput).toHaveValue(1277);
+  expect(result1).toBeChecked();
+  expect(result0).not.toBeChecked();
+  expect(startTime).toHaveValue("20230206T234724.670");
+  expect(endTime).toHaveValue("20230206T234724.671");
 
   const table = screen.getByRole("table");
   expect(table).toBeInTheDocument();
