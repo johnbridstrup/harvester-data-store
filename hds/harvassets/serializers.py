@@ -63,7 +63,7 @@ class HarvesterAssetReportSerializer(TaggitSerializer, EventSerializerMixin, Rep
             **meta,
             "report": data,
             "tags": tags,
-            "event": event,
+            "event": event.id,
         }
         return super().to_internal_value(internal_data)
 

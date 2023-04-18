@@ -50,7 +50,7 @@ class JobSerializer(EventSerializerMixin, serializers.ModelSerializer):
             "schema": jobschema.id,
             "target": harvester.id,
             "payload": job_payload,
-            "event": event,
+            "event": event.id,
         }
 
         return super().to_internal_value(data)

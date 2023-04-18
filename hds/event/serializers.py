@@ -51,7 +51,7 @@ class TaggedUUIDSerializerBase(serializers.ModelSerializer):
 
         obj.tags.add(model_tag)
 
-        return obj.id
+        return obj
 
 
 class EventSerializer(TaggedUUIDSerializerBase):

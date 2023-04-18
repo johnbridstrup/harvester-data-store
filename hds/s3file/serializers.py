@@ -44,7 +44,7 @@ class S3FileSerializer(EventSerializerMixin, serializers.ModelSerializer):
         data = {
             'key': key,
             'filetype': filetype,
-            'event': event,
+            'event': event.id,
         }
         return super().to_internal_value(data)
 
@@ -68,7 +68,7 @@ class DirectUploadSerializer(EventSerializerMixin, serializers.ModelSerializer):
         # This is all bad. We shouldn't need to create events for these files
         UUID = Event.generate_uuid()
         event = self.get_or_create_event(UUID, creator, S3File.__name__)
-        data['event'] = event
+        data['event'] = event.id
         return super().to_internal_value(data)
 
     def save(self, **kwargs):

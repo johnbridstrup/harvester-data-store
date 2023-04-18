@@ -122,8 +122,8 @@ class ErrorReportSerializer(TaggitSerializer, PickSessionSerializerMixin, Report
             'githash': githash,
             'gitbranch': gitbranch,
             'tags': tags,
-            'pick_session': pick_session,
-            'event': event,
+            'pick_session': pick_session.id,
+            'event': event.id,
         }
         return super().to_internal_value(data)
 

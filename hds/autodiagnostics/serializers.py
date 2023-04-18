@@ -65,8 +65,8 @@ class AutodiagnosticsReportSerializer(TaggitSerializer, PickSessionSerializerMix
             "robot": robot_id,
             "gripper_sn": gripper_sn,
             "tags": tags,
-            "pick_session": pick_session,
-            "event": event,
+            "pick_session": pick_session.id,
+            "event": event.id,
         })
         return super().to_internal_value(data)
 
