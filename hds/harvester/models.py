@@ -21,6 +21,12 @@ class Harvester(CommonInfo):
     history = HistoricalRecords()
     thingName = models.CharField(max_length=20, null=True, blank=True)
 
+    class Meta:
+        indexes = [
+            models.Index(fields=['harv_id',]),
+            models.Index(fields=["is_emulator",])
+        ]
+
     @property
     def version_history(self):
         return self.harvesterversionreport_set
