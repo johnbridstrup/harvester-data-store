@@ -36,13 +36,15 @@ class AutodiagnosticsRunFilter(CommonInfoFilterset):
 
 
 class AutodiagnosticsReportFilter(ReportFilterset):
+    harv_id = filters.CharFilter(field_name='harvester__harv_id')
+    ranch = filters.CharFilter(field_name="location__ranch")
+    result = filters.BooleanFilter(field_name="result")
+    robot = filters.NumberFilter(field_name="robot")
+    gripper_sn = filters.NumberFilter(field_name="gripper_sn")
     uuid = EventUUIDFilter()
+    start_time = DTimeFilter(field_name="reportTime", lookup_expr="gte")
+    end_time = DTimeFilter(field_name="reportTime", lookup_expr="lte")
+
     class Meta:
         model = AutodiagnosticsReport
-        fields = ReportFilterset.FIELDS_BASE + [
-            'harvester__harv_id',
-            'gripper_sn',
-            'event__UUID',
-            'location__ranch',
-            'robot',
-        ]
+        fields = ReportFilterset.FIELDS_BASE
