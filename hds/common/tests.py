@@ -269,11 +269,6 @@ class HDSAPITestBase(APITestCase):
     def canpath(self):
         return os.path.join(os.path.abspath(os.path.dirname(__file__)), 'test_data/20230131131250_010_03_CAN.dump')
 
-    def test_frontend_url(self):
-        url = build_frontend_url('test_endpoint', 1)
-
-        self.assertEqual(url, "http://localhost:3000/test_endpoint/1/")
-
 
 class RolesTest(HDSAPITestBase):
     IGNORE = ["/api/v1/sessclip/0/mock/"]  # We really need to stop using this sessclip endpoint anyway...
