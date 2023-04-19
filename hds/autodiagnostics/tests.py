@@ -1,7 +1,6 @@
 import pytz
 import time
 
-from datetime import datetime
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.timezone import make_naive

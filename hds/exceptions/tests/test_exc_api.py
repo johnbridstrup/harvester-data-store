@@ -1,7 +1,8 @@
+import pytz
+from datetime import datetime
+
 from ..models import AFTException
 from .test_exc_code_api import ExceptionTestBase
-from datetime import datetime
-import pytz
 
 
 class AFTExceptionTest(ExceptionTestBase):

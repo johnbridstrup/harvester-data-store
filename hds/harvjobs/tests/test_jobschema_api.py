@@ -1,6 +1,6 @@
-from .HarvJobApiTestBase import HarvJobApiTestBase
-
 from rest_framework import status
+
+from .HarvJobApiTestBase import HarvJobApiTestBase
 
 
 class JobSchemaApiTestCase(HarvJobApiTestBase):

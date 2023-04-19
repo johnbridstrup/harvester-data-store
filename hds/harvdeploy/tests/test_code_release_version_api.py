@@ -1,12 +1,12 @@
-from ..models import HarvesterCodeRelease, HarvesterVersionReport
-from harvester.models import Harvester
-from common.tests import HDSAPITestBase
-
 import time
 from dateutil import parser as dateparser
 from urllib.parse import urljoin
 
 from rest_framework import status
+
+from common.tests import HDSAPITestBase
+from ..models import HarvesterCodeRelease, HarvesterVersionReport
+
 
 
 class ReleaseApiTestCase(HDSAPITestBase):

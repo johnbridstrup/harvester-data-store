@@ -1,10 +1,12 @@
+from rest_framework import status
+from unittest.mock import patch
+
+from common.utils import build_frontend_url
+
 from .HarvJobApiTestBase import HarvJobApiTestBase
 from ..models import Job
 from ..tasks import JOB_STATUS_MSG_FMT, JOB_SLACK_CHANNEL
-from common.utils import build_frontend_url
 
-from rest_framework import status
-from unittest.mock import patch
 
 class JobResultApiTestCase(HarvJobApiTestBase):
     @patch("harvjobs.tasks.post_to_slack")

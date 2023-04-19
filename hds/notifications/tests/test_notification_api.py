@@ -1,8 +1,11 @@
+from unittest.mock import patch
+
+from rest_framework import status
+
 from common.tests import HDSAPITestBase, create_user
 from errorreport.models import ErrorReport
 from ..models import Notification
-from unittest.mock import patch
-from rest_framework import status
+
 
 class NotificationAPITest(HDSAPITestBase):
     """ Test Notification APIs """

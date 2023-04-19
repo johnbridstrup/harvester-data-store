@@ -1,16 +1,16 @@
+import time
+from django.urls import reverse
+from django.utils import timezone
+from django.utils.timezone import datetime, timedelta
+from django.utils.http import urlencode
+from rest_framework import status
+
 from common.reports import DTimeFormatter
 from common.tests import HDSAPITestBase
 from event.models import Event, PickSession
 from event.serializers import PickSessionSerializer
 from errorreport.models import ErrorReport
 from s3file.models import S3File
-
-import time
-from rest_framework import status
-from django.urls import reverse
-from django.utils import timezone
-from django.utils.http import urlencode
-from django.utils.timezone import datetime, timedelta
 
 
 class TaggedUUIDModelTestBase(HDSAPITestBase):

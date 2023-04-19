@@ -1,6 +1,6 @@
 """ Test Location APIs """
-from location.models import Location, Distributor
 from common.tests import HDSAPITestBase
+from location.models import Location, Distributor
 
 class LocationAPITest(HDSAPITestBase):
     """ Test Location APIs """

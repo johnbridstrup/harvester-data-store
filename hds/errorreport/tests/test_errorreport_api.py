@@ -1,4 +1,14 @@
 """ Test ErrorReport APIs """
+import datetime
+import time
+from unittest.mock import patch
+from urllib.parse import urlencode
+
+from django.utils import timezone
+from django.utils.timezone import make_aware
+from rest_framework import serializers, status
+from rest_framework.authtoken.models import Token
+
 from common.async_metrics import ASYNC_ERROR_COUNTER, TOTAL_ERROR_COUNTER
 from common.metrics import ERROR_COUNTER
 from common.models import Tags, UserProfile
@@ -8,16 +18,9 @@ from harvester.models import Harvester
 from hds.roles import RoleChoices
 from event.models import Event, PickSession
 from exceptions.models import AFTException
+
 from ..models import ErrorReport, DEFAULT_UNKNOWN
 from ..serializers.errorreportserializer import ErrorReportSerializer, FAILED_SPLIT_MSG
-from django.utils import timezone
-from django.utils.timezone import make_aware
-from rest_framework import serializers, status
-from rest_framework.authtoken.models import Token
-from taggit.models import Tag
-from unittest.mock import patch
-from urllib.parse import urlencode
-import datetime, time
 
 
 class ErrorReportAPITest(HDSAPITestBase):

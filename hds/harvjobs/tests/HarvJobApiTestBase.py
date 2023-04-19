@@ -1,7 +1,7 @@
-from common.tests import HDSAPITestBase
-from event.models import Event
 from django.urls import reverse
 
+from common.tests import HDSAPITestBase
+from event.models import Event
 from hds.roles import RoleChoices
 
 

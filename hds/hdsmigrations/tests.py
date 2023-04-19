@@ -1,14 +1,15 @@
-from common.tests import HDSAPITestBase
-from hds.roles import RoleChoices
+import os
+from unittest.mock import patch
+
 from django.urls import reverse
 from django.utils.timezone import datetime, timedelta, make_aware
-from unittest.mock import patch
 from rest_framework import status
+
+from common.tests import HDSAPITestBase
+from hds.roles import RoleChoices
 
 from .models import MigrationLog
 from .tasks import TEST_OUTPUT
-
-import os
 
 
 GIT_HASH = "test-git-hash"

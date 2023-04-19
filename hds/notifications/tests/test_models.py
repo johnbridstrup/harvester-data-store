@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
-from ..models import Notification
+
 from exceptions.tests.test_models import ExceptionTestBase
+from ..models import Notification
 
 
 class NotificationTestCase(ExceptionTestBase):

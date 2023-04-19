@@ -1,11 +1,12 @@
+from django.utils.timezone import datetime
+from rest_framework import status
+
+from common.tests import HDSAPITestBase
+
 from ..models import (
     AFTExceptionCode,
     AFTExceptionCodeManifest,
-    AFTException
 )
-from common.tests import HDSAPITestBase
-from django.utils.timezone import datetime
-from rest_framework import status
 
 
 class ExceptionTestBase(HDSAPITestBase):

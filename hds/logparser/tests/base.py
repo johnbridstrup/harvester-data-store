@@ -7,6 +7,7 @@ from datetime import datetime
 from django.test import TestCase
 from django.utils.timezone import make_aware
 from django.urls import reverse
+
 from common.tests import HDSAPITestBase
 from event.models import Event
 from s3file.models import S3File

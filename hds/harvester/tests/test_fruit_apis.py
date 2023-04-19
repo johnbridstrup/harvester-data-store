@@ -1,6 +1,7 @@
 """ Test Fruits APIs """
-from ..models import Fruit
 from common.tests import HDSAPITestBase
+
+from ..models import Fruit
 
 
 class FruitAPITest(HDSAPITestBase):

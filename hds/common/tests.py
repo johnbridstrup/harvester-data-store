@@ -1,19 +1,29 @@
-import json, os, uuid
-from time import time
+import json
+import logging
+import os
+import unittest
+import uuid
+from collections import defaultdict
 from pprint import pprint
+from time import time
+from unittest.mock import MagicMock
+
+from django.contrib.auth.models import User
+from django.urls import reverse
 from rest_framework import status
+from rest_framework.authtoken.models import Token
 from rest_framework.test import APITestCase
 from rest_framework.test import APIClient
-from rest_framework.authtoken.models import Token
+
 from common.viewsets import CreateModelViewSet, ReportModelViewSet
-from django.contrib.auth.models import User, Permission
-from django.contrib.contenttypes.models import ContentType
-from django.urls import reverse
-from .serializers.userserializer import UserSerializer
-from .models import UserProfile
-from .utils import merge_nested_dict
+from common.models import UserProfile
+from common.serializers.userserializer import UserSerializer
+from common.utils import (
+    build_frontend_url, 
+    merge_nested_dict, 
+    get_url_permissions,
+)
 from common.viewsets import CreateModelViewSet
-from common.utils import get_url_permissions
 from hds.roles import RoleChoices, ROLES
 from hds.urls import urlpatterns
 from exceptions.models import AFTExceptionCode
@@ -21,11 +31,6 @@ from event.models import Event
 from harvester.models import Fruit, Harvester
 from location.models import Distributor, Location
 from s3file.serializers import S3FileSerializer
-from .utils import build_frontend_url
-from collections import defaultdict
-import logging
-import unittest
-from unittest.mock import MagicMock
 
 
 # Disable logging in unit tests

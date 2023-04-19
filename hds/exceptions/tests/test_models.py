@@ -1,8 +1,10 @@
+import pytz
+from datetime import datetime
+
 from django.test import TestCase
 from django.contrib.auth.models import User
+
 from ..models import AFTException, AFTExceptionCode
-from datetime import datetime
-import pytz
 
 
 class ExceptionTestBase(TestCase):

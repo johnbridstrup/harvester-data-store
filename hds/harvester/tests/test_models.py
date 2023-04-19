@@ -1,7 +1,8 @@
-from django.test import TestCase
 from django.contrib.auth.models import User
-from ..models import Fruit, Harvester
+from django.test import TestCase
+
 from location.models import Location, Distributor
+from ..models import Fruit, Harvester
 
 
 class FruitTestCase(TestCase):

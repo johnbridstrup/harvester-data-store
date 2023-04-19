@@ -1,6 +1,6 @@
 """ Test Fruits APIs """
-from ..models import Distributor
 from common.tests import HDSAPITestBase
+from ..models import Distributor
 
 
 class DistributorAPITest(HDSAPITestBase):

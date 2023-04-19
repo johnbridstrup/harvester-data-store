@@ -1,9 +1,10 @@
-from .HarvJobApiTestBase import HarvJobApiTestBase
-from ..models import Job
-from hds.roles import RoleChoices
+from unittest.mock import patch
 
 from rest_framework import status
-from unittest.mock import patch
+
+from hds.roles import RoleChoices
+from .HarvJobApiTestBase import HarvJobApiTestBase
+from ..models import Job
 
 
 class JobApiTestCase(HarvJobApiTestBase):

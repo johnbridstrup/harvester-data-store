@@ -1,13 +1,15 @@
-import os, tempfile, uuid
+import os
+import tempfile
+import uuid
 from contextlib import contextmanager
 from urllib.parse import urljoin
 from django.urls import reverse
 
-from common.tests import HDSAPITestBase
 from django.conf import settings
 from django.core.files.uploadedfile import InMemoryUploadedFile
+
+from common.tests import HDSAPITestBase
 from errorreport.models import ErrorReport
-from event.models import Event
 from event.serializers import EventSerializer
 from ..models import S3File, SessClip
 from ..serializers import DirectUploadSerializer

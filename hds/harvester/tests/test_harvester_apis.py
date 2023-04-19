@@ -1,7 +1,8 @@
 """ Test Harvester APIs """
-from ..models import Harvester, Fruit
-from location.models import Location, Distributor
 from common.tests import HDSAPITestBase
+from location.models import Location, Distributor
+
+from ..models import Harvester, Fruit
 
 
 class HarvesterAPITest(HDSAPITestBase):
