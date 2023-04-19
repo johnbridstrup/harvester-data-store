@@ -131,14 +131,6 @@ class HDSAPITestBase(APITestCase):
             "data": {"hello": "there"}
         }
 
-    def update_user_permissions_all(self, model):
-        content_type = ContentType.objects.get_for_model(model)
-        model_perm = Permission.objects.filter(content_type=content_type)
-        for perm in model_perm:
-            # Give test user all permissions
-            self.user.user_permissions.add(perm)
-        self.user = User.objects.get(id=1)
-
     def create_fruit_object(self, name=None):
         name = name or "strawberry"
         return Fruit.objects.create(name=name, creator=self.user)
