@@ -80,6 +80,8 @@ class HarvesterCodeReleaseView(CreateModelViewSet):
         renderer_classes=[JSONRenderer]
     )
     def tags_view(self, request, pk=None):
-        queryset = HarvesterCodeRelease.tags.all().values_list("name")
-        tags = [tag[0] for tag in queryset]
-        return make_ok(f"Release tags retrieved successfully", {'tags': tags})
+        queryset = HarvesterCodeRelease.tags.all().values_list("name", flat=True)
+        return make_ok(
+            f"Release tags retrieved successfully",
+            {'tags': list(queryset)}
+        )

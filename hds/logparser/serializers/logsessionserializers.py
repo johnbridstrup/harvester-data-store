@@ -73,8 +73,8 @@ class LogSessionSerializer(TaggitSerializer, serializers.ModelSerializer):
         data = super().to_representation(instance)
         queryset = LogFile.objects.filter(log_session=instance)
         vid_queryset = LogVideo.objects.filter(log_session=instance)
-        r_queryset = queryset.values_list('robot')
-        robots = [robot[0] for robot in set(r_queryset) ]
+        r_queryset = queryset.values_list('robot', flat=True).distinct()
+        robots = list(r_queryset)
         services = ServiceSerializer(queryset, many=True).data
         videos = VideoSerializer(vid_queryset, many=True).data
         harv_id = instance.harv.harv_id if instance.harv else None

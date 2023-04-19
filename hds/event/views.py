@@ -29,14 +29,13 @@ class TaggedUUIDViewBase(CreateModelViewSet):
     )
     def get_tags(self, request):
         model = self.serializer_class.Meta.model
-        queryset = model.tags.all().values_list("name")
-        tags = [tag[0] for tag in queryset]
-        return make_ok("Event tags", {"tags": tags})
+        queryset = model.tags.all().values_list("name", flat=True)
+        return make_ok("Event tags", {"tags": list(queryset)})
 
 
 class EventView(TaggedUUIDViewBase):
     filterset_class = EventFilterset
-    serializer_class = EventSerializer    
+    serializer_class = EventSerializer
 
 
 class PickSessionView(TaggedUUIDViewBase):
