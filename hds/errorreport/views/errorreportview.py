@@ -24,16 +24,12 @@ class ErrorReportView(ReportModelViewSet):
     queryset = ErrorReport.objects.all()
     serializer_class = ErrorReportSerializer
     filterset_class = ErrorReportFilterset
+    list_serializer_class = ErrorReportListSerializer
     view_permissions_update = {
         'create_notification': {
             RoleChoices.DEVELOPER: True,
         },
     }
-
-    def get_serializer_class(self):
-        if self.action == 'list':
-            return ErrorReportListSerializer
-        return ErrorReportSerializer
 
     def perform_create(self, serializer):
         super().perform_create(serializer)

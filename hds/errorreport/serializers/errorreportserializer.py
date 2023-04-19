@@ -31,7 +31,7 @@ EXC_EXT_FAIL_MSG = "Error extracting exceptions"
 class ErrorReportSerializer(TaggitSerializer, PickSessionSerializerMixin, ReportSerializerBase):
     """Serializer for the ErrorReport model"""
     report_type = "error"
-    
+
     # Additional report schema properties
     REPORT_DATA_PROPERTIES = {
         "sysmon_report": {
@@ -186,7 +186,7 @@ class ErrorReportSerializer(TaggitSerializer, PickSessionSerializerMixin, Report
                 error['timestamp'] = error['timestamp']
                 error['code'] = AFTExceptionCode.objects.get(code=error['code'])
                 exceptions.append(AFTException.objects.create(**error, creator=creator, primary=False))
-            
+
             sorted_excs = sort_exceptions(exceptions)
             if len(sorted_excs) > 0:
                 sorted_excs[0].primary = True
@@ -204,7 +204,7 @@ class ErrorReportListSerializer(serializers.ModelSerializer):
     tags = TagListSerializerField()
     harvester = HarvesterSerializer()
     location = LocationSerializer()
-    
+
     class Meta:
         model = ErrorReport
         fields = (
@@ -237,4 +237,3 @@ class ParetoSerializer(serializers.Serializer):
 
         return data
 
-   
