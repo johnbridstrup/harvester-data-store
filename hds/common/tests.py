@@ -85,6 +85,7 @@ class HDSAPITestBase(APITestCase):
         self.token = Token.objects.create(user=self.user)
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
         self.api_base_url = '/api/v1'
+        self.setup_urls()
 
     def set_admin(self):
         self.user.is_superuser = True
@@ -135,6 +136,114 @@ class HDSAPITestBase(APITestCase):
             "serial_number": self.test_objects["harvester"].harv_id,
             "data": {"hello": "there"}
         }
+
+    def setup_urls(self):
+        # Autodiag
+        self.ad_url = reverse("autodiagnostics-list")
+        self.ad_det_url = lambda id_: reverse("autodiagnostics-detail", args=[id_])
+
+        self.ad_run_url = reverse("autodiagnosticsrun-list")
+        self.ad_run_det_url = lambda id_: reverse("autodiagnosticsrun-detail", args=[id_])
+
+        # Assets
+        self.asset_url = reverse("harvassets-list")
+        self.asset_det_url = lambda id_: reverse("harvassets-detail", args=[id_])
+
+        self.assetrep_url = reverse("harvassetreport-list")
+        self.assetrep_det_url = lambda id_: reverse("harvassetreport-detail", args=[id_])
+
+        # Configs
+        self.config_url = reverse("configreports-list")
+        self.config_det_url = lambda id_: reverse("configreports-list", args=[id_])
+
+        # Error report
+        self.error_url = reverse("errorreport-list")
+        self.error_det_url = lambda id_: reverse("errorreport-detail", args=[id_])
+
+        # Exceptions
+        self.code_manif_url = reverse("codemanifest-list")
+        self.code_manif_det_url = lambda id_: reverse("codemanifest-detail", args=[id_])
+
+        self.exc_url = reverse("exception-list")
+        self.exc_det_url = lambda id_: reverse("exception-detail", args=[id_])
+
+        self.exc_code_url = reverse("exceptioncode-list")
+        self.exc_code_det_url = lambda id_: reverse("exceptioncode-detail", args=[id_])
+
+        # Event/Picksession
+        self.event_url = reverse("event-list")
+        self.event_det_url = lambda id_: reverse("event-detail", args=[id_])
+
+        self.picksess_url = reverse("picksession-list")
+        self.picksess_det_url = lambda id_: reverse("picksession-detail", args=[id_])
+
+        # Grip Report
+        self.griprep_url = reverse("gripreports-list")
+        self.griprep_det_url = lambda id_: reverse("gripreports-detail", args=[id_])
+
+        # Harvester
+        self.harv_url = reverse("harvester-list")
+        self.harv_det_url = lambda id_: reverse("harvester-detail", args=[id_])
+
+        self.fruit_url = reverse("fruit-list")
+        self.fruit_det_url = lambda id_: reverse("fruit-detail", args=[id_])
+
+        # HarvDeploy
+        self.release_url = reverse("harvcoderelease-list")
+        self.release_det_url = lambda id_: reverse("harvcoderelease-detail", args=[id_])
+
+        self.version_url = reverse("harvcodeversion-list")
+        self.version_det_url = lambda id_: reverse("harvcodeversion-detail", args=[id_])
+
+        # HarvJobs
+
+        self.jobtype_url = reverse("jobtype-list")
+        self.jobtype_det_url = lambda id_: reverse("jobtype-detail", args=[id_])
+
+        self.jobschema_url = reverse("jobschema-list")
+        self.jobschema_det_url = lambda id_: reverse("jobschema-detail", args=[id_])
+
+        self.jobs_url = reverse("job-list")
+        self.job_det_urls = lambda id_: reverse("job-detail", args=[id_])
+        self.reschedule_url = lambda id_ : reverse("job-reschedule", args=[id_])
+
+        self.jobresults_url = reverse("jobresults-list")
+        self.jobresults_det_url = lambda id_: reverse("jobresults-detail", args=[id_])
+
+        # Migrations
+        self.migr_url = reverse("hdsmigrations-list")
+
+        # Location
+        self.distr_url = reverse("distributor-list")
+        self.distr_det_url = lambda id_: reverse("distributor-detail", args=[id_])
+
+        self.loc_url = reverse("location-list")
+        self.loc_det_url = lambda id_: reverse("location-detail", args=[id_])
+
+        # Logparser
+        self.log_session_url = reverse("logsession-list")
+        self.log_session_det_url = lambda _id : reverse(
+          "logsession-detail", args=[_id]
+        )
+        self.log_file_url = reverse("logfile-list")
+        self.log_file_det_url = lambda _id : reverse(
+          "logfile-detail", args=[_id]
+        )
+        self.log_video_url = reverse("logvideo-list")
+        self.log_video_det_url = lambda _id: reverse(
+          "logvideo-detail",args=[_id]
+        )
+
+        # Notification
+        self.notif_url = reverse("notification-list")
+        self.notif_det_url = lambda id_: reverse("notification-detail", args=[id_])
+
+        # S3File
+        self.s3file_url = reverse("s3file-list")
+        self.s3file_det_url = lambda id_: reverse("s3file-detail", args=[id_])
+
+        self.sesscl_url = reverse("sessclip-list")
+        self.sesscl_det_url = lambda id_: reverse("sessclip-detail", args=[id_])
 
     def create_fruit_object(self, name=None):
         name = name or "strawberry"
@@ -203,10 +312,10 @@ class HDSAPITestBase(APITestCase):
         
         return {"Body": json.dumps(event)}, *S3FileSerializer.get_filetype_uuid(full_key)
 
-    def create_s3file(self, key, has_uuid=False, endpoint="s3files"):
+    def create_s3file(self, key, endpoint, has_uuid=False):
         self.s3event, self.filetype, self.uuid = self.create_s3event(key, has_uuid=has_uuid)
         resp = self.client.post(
-            f"{self.api_base_url}/{endpoint}/",
+            endpoint,
             data=self.s3event,
             format='json'
         )
@@ -236,21 +345,21 @@ class HDSAPITestBase(APITestCase):
     def post_error_report(self, load=True):
         if load:
             self.load_error_report()
-        resp = self.client.post(f'{self.api_base_url}/errorreports/', self.data, format='json')
-        self.assertEqual(resp.status_code, status.HTTP_201_CREATED, msg=resp.json())
+        resp = self.client.post(self.error_url, self.data, format='json')
+        self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
         return resp.json()
 
     def post_autodiag_report(self, load=True, resp_status=status.HTTP_201_CREATED):
         if load:
             self.load_autodiag_report()
-        resp = self.client.post(f'{self.api_base_url}/autodiagnostics/', self.ad_data, format='json')
-        self.assertEqual(resp.status_code, resp_status, msg=resp.json())
+        resp = self.client.post(self.ad_url, self.ad_data, format='json')
+        self.assertEqual(resp.status_code, resp_status)
         return resp.json()
 
     def post_picksess_report(self, load=True, resp_status=status.HTTP_201_CREATED):
         if load:
             self.load_picksess_report()
-        resp = self.client.post(f'{self.api_base_url}/gripreports/', self.picksess_data, format='json')
+        resp = self.client.post(self.griprep_url, self.picksess_data, format='json')
         self.assertEqual(resp.status_code, resp_status, msg=resp.json())
         return resp.json()
 

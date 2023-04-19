@@ -1,7 +1,6 @@
 import os
 from unittest.mock import patch
 
-from django.urls import reverse
 from django.utils.timezone import datetime, timedelta, make_aware
 from rest_framework import status
 
@@ -27,21 +26,20 @@ class HDSMigrationsTestCase(HDSAPITestBase):
             githash="XXXXXX",
         )
         self.migration_log.save()
-        self.url = reverse("hdsmigrations-list")
 
     def test_get_migration_logs(self):
         self.set_user_role(RoleChoices.MANAGER)
-        r = self.client.get(self.url)
+        r = self.client.get(self.migr_url)
         data = r.json()["data"]
 
         self.assertEqual(data["count"], 1)
 
     def test_disallowed_methods(self):
         status_codes = []
-        status_codes.append(self.client.post(self.url).status_code)
-        status_codes.append(self.client.put(self.url).status_code)
-        status_codes.append(self.client.patch(self.url).status_code)
-        status_codes.append(self.client.delete(self.url).status_code)
+        status_codes.append(self.client.post(self.migr_url).status_code)
+        status_codes.append(self.client.put(self.migr_url).status_code)
+        status_codes.append(self.client.patch(self.migr_url).status_code)
+        status_codes.append(self.client.delete(self.migr_url).status_code)
 
         self.assertTrue(all([s == status.HTTP_405_METHOD_NOT_ALLOWED for s in status_codes]))
 
@@ -49,19 +47,19 @@ class HDSMigrationsTestCase(HDSAPITestBase):
     def test_migrate(self):
         # disallowed for non admin
         self.set_user_role(RoleChoices.SUPPORT)
-        r = self.client.get(f"{self.url}migrate/")
+        r = self.client.get(f"{self.migr_url}migrate/")
         self.assertEqual(r.status_code, status.HTTP_403_FORBIDDEN)
 
         # allowed for managers
         self.set_user_role(RoleChoices.MANAGER)
-        r = self.client.get(f"{self.url}migrate/")
+        r = self.client.get(f"{self.migr_url}migrate/")
         self.assertEqual(r.status_code, status.HTTP_202_ACCEPTED)
         self.assertEqual(MigrationLog.objects.count(), 2)
 
         # allowed for admin
         self.set_user_role(RoleChoices.SUPPORT)
         self.set_admin()
-        r = self.client.get(f"{self.url}migrate/")
+        r = self.client.get(f"{self.migr_url}migrate/")
         self.assertEqual(r.status_code, status.HTTP_202_ACCEPTED)
         self.assertEqual(MigrationLog.objects.count(), 3)
 

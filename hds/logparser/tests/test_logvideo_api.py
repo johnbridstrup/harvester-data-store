@@ -18,7 +18,7 @@ class LogVideoTestCase(LogBaseTestCase):
     def test_retrieve_detail_log_video(self):
         """Test retrieve log video by id"""
         log = self.create_log_video()
-        res = self.client.get(self.log_video_detail(log.id))
+        res = self.client.get(self.log_video_det_url(log.id))
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(res.data["file_name"], log.file_name)
 

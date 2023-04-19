@@ -52,7 +52,7 @@ class ReleaseApiTestCase(HDSAPITestBase):
         if release is None:
             release = self.release
         resp = self.client.post(
-            f"{self.api_base_url}/release/",
+            self.release_url,
             data=release,
             format='json'
         )
@@ -68,7 +68,7 @@ class ReleaseApiTestCase(HDSAPITestBase):
         self.create_release()
 
         resp = self.client.get(
-            f"{self.api_base_url}/release/"
+            self.release_url
         )
 
         self.assertEqual(resp.status_code, 200)
@@ -77,7 +77,7 @@ class ReleaseApiTestCase(HDSAPITestBase):
         self.create_release()
 
         resp = self.client.get(
-            f"{self.api_base_url}/release/1/"
+            self.release_det_url(1)
         )
 
         self.assertEqual(resp.status_code, 200)
@@ -94,7 +94,7 @@ class ReleaseApiTestCase(HDSAPITestBase):
 
         # assert both are there
         resp = self.client.get(
-            f"{self.api_base_url}/release/"
+            self.release_url
         )
         data = resp.json()['data']
         self.assertEqual(
@@ -104,7 +104,7 @@ class ReleaseApiTestCase(HDSAPITestBase):
 
         #assert only apple release retrieved
         resp = self.client.get(
-            f"{self.api_base_url}/release/?fruit=apple"
+            f"{self.release_url}?fruit=apple"
         )
         data = resp.json()['data']
         self.assertEqual(
@@ -123,7 +123,7 @@ class ReleaseApiTestCase(HDSAPITestBase):
         self.assertEqual(HarvesterCodeRelease.objects.count(), 1)
 
         resp = self.client.delete(
-            f"{self.api_base_url}/release/1/"
+            self.release_det_url(1)
         )
 
         self.assertEqual(resp.status_code, 204)
@@ -131,7 +131,7 @@ class ReleaseApiTestCase(HDSAPITestBase):
 
     def test_update_harvester(self):
         self.create_release()
-        resp = self.client.patch(f"{self.api_base_url}/harvesters/1/", data={"release": 1})
+        resp = self.client.patch(self.harv_det_url(1), data={"release": 1})
 
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
 
@@ -149,7 +149,7 @@ class ReleaseApiTestCase(HDSAPITestBase):
 
 
         resp = self.client.post(
-            f"{self.api_base_url}/harvversion/",
+            self.version_url,
             data=versions,
             format='json'
         )
@@ -245,14 +245,14 @@ class ReleaseApiTestCase(HDSAPITestBase):
         self.create_version()
         self.create_version(versions=self.version2)
 
-        resp = self.client.get(f"{self.api_base_url}/harvversion/")
+        resp = self.client.get(self.version_url)
         self.assertEqual(resp.json()['data']['count'], 2)
 
     def test_get_version_by_id(self):
         self.create_version()
         self.create_version(versions=self.version2)
 
-        resp = self.client.get(f"{self.api_base_url}/harvversion/2/")
+        resp = self.client.get(self.version_det_url(2))
         data = resp.json()['data']
 
         self.assertDictEqual(data['report'], self.version2)
@@ -270,11 +270,11 @@ class ReleaseApiTestCase(HDSAPITestBase):
         self.versions['serial_number'] = harv.harv_id
         resp,_ = self.create_version()
 
-        resp = self.client.get(f"{self.api_base_url}/harvversion/")
+        resp = self.client.get(self.version_url)
         data = resp.json()['data']
         self.assertEqual(data['count'], 2)
 
-        resp = self.client.get(f"{self.api_base_url}/harvversion/?harv_id={harv.harv_id}")
+        resp = self.client.get(f"{self.version_url}?harv_id={harv.harv_id}")
         data = resp.json()['data']
         self.assertEqual(data['count'], 1)
         self.assertEqual(
@@ -289,20 +289,20 @@ class ReleaseApiTestCase(HDSAPITestBase):
         r,_=self.create_release()
 
         # Set to harvester
-        self.client.patch(f"{self.api_base_url}/harvesters/1/", data={"release": 1})
+        self.client.patch(self.harv_det_url(1), data={"release": 1})
 
         # Upload version from harvester
         self.create_version()
 
         # GET harvester and check release + versions
-        resp = self.client.get(f"{self.api_base_url}/harvesters/1/")
+        resp = self.client.get(self.harv_det_url(1))
         data = resp.json()["data"]
         self.assertDictEqual(data["release"]["release"], self.release)
         self.assertDictEqual(data["version"]["report"], self.versions)
 
         # Update version and re-check
         self.create_version(versions=self.version2)
-        resp = self.client.get(f"{self.api_base_url}/harvesters/1/")
+        resp = self.client.get(self.harv_det_url(1))
         data = resp.json()["data"]
         self.assertDictEqual(data["release"]["release"], self.release)
         self.assertDictEqual(data["version"]["report"], self.version2)
@@ -310,27 +310,27 @@ class ReleaseApiTestCase(HDSAPITestBase):
     def test_no_release(self):
         self.create_version()
 
-        resp = self.client.get(f"{self.api_base_url}/harvesters/1/")
+        resp = self.client.get(self.harv_det_url(1))
         data = resp.json()["data"]
         self.assertIsNone(data["release"])
         self.assertDictEqual(data["version"]["report"], self.versions)
 
     def test_no_versions(self):
         self.create_release()
-        self.client.patch(f"{self.api_base_url}/harvesters/1/", data={"release": 1})
+        self.client.patch(self.harv_det_url(1), data={"release": 1})
 
-        resp = self.client.get(f"{self.api_base_url}/harvesters/1/")
+        resp = self.client.get(self.harv_det_url(1))
         data = resp.json()["data"]
         self.assertDictEqual(data["release"]["release"], self.release)
         self.assertIsNone(data["version"])
 
     def test_version_history(self):
         self.create_release()
-        self.client.patch(f"{self.api_base_url}/harvesters/1/", data={"release": 1})
+        self.client.patch(self.harv_det_url(1), data={"release": 1})
         self.create_version()
         self.create_version(versions=self.version2)
 
-        harv_url = f"{self.api_base_url}/harvesters/1/"
+        harv_url = self.harv_det_url(1)
 
         harv_resp = self.client.get(harv_url)
         vers_hist_rel_url = harv_resp.json()["data"]["version_history"]
@@ -343,14 +343,14 @@ class ReleaseApiTestCase(HDSAPITestBase):
 
     def test_release_history(self):
         self.create_release()
-        self.client.patch(f"{self.api_base_url}/harvesters/1/", data={"release": 1})
+        self.client.patch(self.harv_det_url(1), data={"release": 1})
 
         rel2 = self.release.copy()
         rel2["version"] = 2.0
         self.create_release(release=rel2)
-        self.client.patch(f"{self.api_base_url}/harvesters/1/", data={"release": 2})
+        self.client.patch(self.harv_det_url(1), data={"release": 2})
 
-        harv_url = f"{self.api_base_url}/harvesters/1/"
+        harv_url = self.harv_det_url(1)
         harv_resp = self.client.get(harv_url)
 
         # Release history is relative to the API root endpoint
@@ -366,7 +366,7 @@ class ReleaseApiTestCase(HDSAPITestBase):
         rel2 = self.release.copy()
         rel2["version"] = "2.0"
         self.create_release(release=rel2)
-        self.client.patch(f"{self.api_base_url}/harvesters/1/", data={"release": 1})
+        self.client.patch(self.harv_det_url(1), data={"release": 1})
 
         # Conflicts with version 1
         resp, _ = self.create_version()
@@ -409,7 +409,7 @@ class ReleaseApiTestCase(HDSAPITestBase):
 
         self.release["tags"] = ["Errored"]
         resp = self.client.patch(
-            f"{self.api_base_url}/release/{resp.data['id']}/update_tags/",
+            f"{self.release_url}{resp.data['id']}/update_tags/",
             self.release,
             format='json'
         )
@@ -432,7 +432,7 @@ class ReleaseApiTestCase(HDSAPITestBase):
         harvester.refresh_from_db()
 
         resp = self.client.get(
-            f"{self.api_base_url}/release/{release_obj.id}/harvesters/"
+            f"{self.release_det_url(release_obj.id)}harvesters/"
         )
 
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
@@ -451,7 +451,7 @@ class ReleaseApiTestCase(HDSAPITestBase):
         self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
 
         resp = self.client.get(
-            f"{self.api_base_url}/release/tags/"
+            f"{self.release_url}tags/"
         )
 
         self.assertEqual(resp.status_code, status.HTTP_200_OK)

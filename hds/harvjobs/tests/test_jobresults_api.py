@@ -26,7 +26,7 @@ class JobResultApiTestCase(HarvJobApiTestBase):
 
         # Check host results. These are extracted asynchronously so wont
         # be in the POST response
-        host_resp = self.client.get(self.jobresults_detail_url(result_data['id']))
+        host_resp = self.client.get(self.jobresults_det_url(result_data['id']))
         self.assertEqual(host_resp.status_code, status.HTTP_200_OK)
         host_data = host_resp.json()['data']
         self.assertEqual(len(host_data['host_results']), 1)
@@ -46,7 +46,7 @@ class JobResultApiTestCase(HarvJobApiTestBase):
         self.assertEqual(len(harv_data2["results"]), 0)
 
         # Assert the job status updates
-        updated_job_resp = self.client.get(self.job_detail_urls(result_data["id"]))
+        updated_job_resp = self.client.get(self.job_det_urls(result_data["id"]))
         updated_job_data = updated_job_resp.json()["data"]
 
         self.assertEqual(updated_job_data["jobstatus"], Job.StatusChoices.SUCCESS)
@@ -79,7 +79,7 @@ class JobResultApiTestCase(HarvJobApiTestBase):
         self.assertEqual(result_resp.status_code, status.HTTP_201_CREATED)
 
         # Assert the job status updates
-        updated_job_resp = self.client.get(self.job_detail_urls(result_data["id"]))
+        updated_job_resp = self.client.get(self.job_det_urls(result_data["id"]))
         updated_job_data = updated_job_resp.json()["data"]
 
         self.assertEqual(updated_job_data["jobstatus"], Job.StatusChoices.FAIL)
@@ -99,7 +99,7 @@ class JobResultApiTestCase(HarvJobApiTestBase):
         self.assertEqual(result_resp.status_code, status.HTTP_201_CREATED)
 
         # Assert the job status updates
-        updated_job_resp = self.client.get(self.job_detail_urls(result_data["id"]))
+        updated_job_resp = self.client.get(self.job_det_urls(result_data["id"]))
         updated_job_data = updated_job_resp.json()["data"]
 
         self.assertEqual(updated_job_data["jobstatus"], Job.StatusChoices.ERROR)
@@ -121,7 +121,7 @@ class JobResultApiTestCase(HarvJobApiTestBase):
         self.assertEqual(result_resp.status_code, status.HTTP_201_CREATED)
 
         # Assert the job status updates
-        updated_job_resp = self.client.get(self.job_detail_urls(result_data["id"]))
+        updated_job_resp = self.client.get(self.job_det_urls(result_data["id"]))
         updated_job_data = updated_job_resp.json()["data"]
 
         self.assertEqual(updated_job_data["jobstatus"], Job.StatusChoices.FAILERROR)

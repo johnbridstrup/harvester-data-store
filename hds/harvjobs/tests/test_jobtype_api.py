@@ -26,7 +26,7 @@ class JobTypeApiTestCase(HarvJobApiTestBase):
         self.create_jobtype()
         payload, _ = self.create_jobtype('job2')
 
-        r = self.client.get(self.jobtype_detail_url(2))
+        r = self.client.get(self.jobtype_det_url(2))
         self.assertEqual(r.status_code, status.HTTP_200_OK)
 
         data = r.json()['data']

@@ -38,12 +38,12 @@ class ErrorReportAPITest(HDSAPITestBase):
         user = create_user("user", "password")
         token = Token.objects.create(user=user)
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
-        r = self.client.post(f'{self.api_base_url}/errorreports/', self.data, format='json')
+        r = self.client.post(self.error_url, self.data, format='json')
         self.assertEqual(r.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_create_errorreport_no_uuid(self):
         """ create error report and assert it exists """
-        r = self.client.post(f'{self.api_base_url}/errorreports/', self.data, format='json', HTTP_ACCEPT='application/json')
+        r = self.post_error_report()
         # Assert report created
         self.assertEqual(ErrorReport.objects.count(), 1)
 
@@ -54,26 +54,27 @@ class ErrorReportAPITest(HDSAPITestBase):
         self.assertEqual(Event.objects.count(), 1)
 
         # Assert representation correct
-        self.assertIn("event", r.json()['data'])
+        self.assertIn("event", r['data'])
         self.assertEqual(
-            f'/errorreports/{r.json()["data"]["id"]}/',
-            r.json()['data']['event']['related_objects'][0]['url']
+            f'/errorreports/{r["data"]["id"]}/',
+            r['data']['event']['related_objects'][0]['url']
         )
 
         # Assert hash is extracted
-        self.assertEqual(self.data["data"]["githash"], r.json()["data"]["githash"])
+        self.assertEqual(self.data["data"]["githash"], r["data"]["githash"])
 
         # Assert branch name is "unknown"
-        self.assertEqual(DEFAULT_UNKNOWN, r.json()["data"]["gitbranch"])
+        self.assertEqual(DEFAULT_UNKNOWN, r["data"]["gitbranch"])
 
     def test_create_errorreport_with_uuid(self):
         """ create error report with uuid in data """
         UUID = "a-test-uuid-string"
+        self.load_error_report()
         self.data['uuid'] = UUID
 
-        r = self.client.post(f'{self.api_base_url}/errorreports/', self.data, format='json', HTTP_ACCEPT='application/json')
+        r = self.post_error_report(load=False)
 
-        self.assertEqual(UUID, r.json()['data']['event']['UUID'])
+        self.assertEqual(UUID, r['data']['event']['UUID'])
 
     def test_event_and_picksess_created(self):
         self.post_error_report()
@@ -81,7 +82,6 @@ class ErrorReportAPITest(HDSAPITestBase):
         self.assertEqual(PickSession.objects.count(), 1)
 
     def test_aux_events_created(self):
-        self.load_error_report()
         dummies = ["dummy-uuid-1", "dummy-uuid-2"]
         self.data["aux_uuids"] = dummies
         self.post_error_report(load=False)
@@ -99,7 +99,7 @@ class ErrorReportAPITest(HDSAPITestBase):
         """ create error report with invalid harvester """
         data = self.data.copy()
         data["serial_number"] = 99
-        response = self.client.post(f'{self.api_base_url}/errorreports/', data, format='json')
+        response = self.client.post(self.error_url, data, format='json')
         self.assertEqual(response.status_code, 400)
         self.assertEqual(ErrorReport.objects.count(), 0)
 
@@ -117,7 +117,7 @@ class ErrorReportAPITest(HDSAPITestBase):
         new_timestamp = current_time.timestamp()
         self.data["timestamp"] = new_timestamp
 
-        self.client.patch(f'{self.api_base_url}/errorreports/1/', self.data, format='json', HTTP_ACCEPT='application/json')
+        self.client.patch(self.error_det_url(1), self.data, format='json', HTTP_ACCEPT='application/json')
         self.assertEqual(ErrorReport.objects.get().reportTime, current_time)
 
     def test_update_errorreport_with_invalid_data(self):
@@ -126,7 +126,7 @@ class ErrorReportAPITest(HDSAPITestBase):
         self.data["serial_number"]= "99"
         # updating harv_id
         response = self.client.patch(
-            f'{self.api_base_url}/errorreports/1/',
+            self.error_det_url(1),
             self.data,
             format='json'
         )
@@ -134,45 +134,38 @@ class ErrorReportAPITest(HDSAPITestBase):
 
     def test_delete_errorreport(self):
         """ delete error report and assert it does not exist """
-        data = self.data.copy()
-        report_time = make_aware(datetime.datetime.fromtimestamp(data["timestamp"]))
-
         self.post_error_report()
 
-        self.client.delete(f'{self.api_base_url}/errorreports/1/', HTTP_ACCEPT='application/json')
+        self.client.delete(self.error_det_url(1), HTTP_ACCEPT='application/json')
         self.assertEqual(ErrorReport.objects.count(), 0)
 
     def test_get_all_errorreports(self):
         """ get all error reports """
         data = self.data
-        report_time = make_aware(datetime.datetime.fromtimestamp(data["timestamp"]))
 
         self.post_error_report()
         self.post_error_report()
 
-        response = self.client.get(f'{self.api_base_url}/errorreports/', HTTP_ACCEPT='application/json')
+        response = self.client.get(self.error_url, HTTP_ACCEPT='application/json')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data["count"], 2)
 
     def test_get_with_params(self):
-        data= self.data.copy()
+        data = self.data.copy()
 
-        self.client.post(
-            f'{self.api_base_url}/errorreports/',
-            data,
-            format='json'
-        )
+        self.post_error_report()
+
         for d in data['data']['sysmon_report']['sysmon.0']['errors'].values():
             d['handled'] = True
 
         self.client.post(
-            f'{self.api_base_url}/errorreports/',
+            self.error_url,
             data,
             format='json'
         )
 
-        resp_unhandled = self.client.get(f'{self.api_base_url}/errorreports/?handled=0')
-        resp_handled = self.client.get(f'{self.api_base_url}/errorreports/?handled=1')
+        resp_unhandled = self.client.get(f'{self.error_url}?handled=0')
+        resp_handled = self.client.get(f'{self.error_url}?handled=1')
 
         hand_data = resp_handled.json()['data']
         unhand_data = resp_unhandled.json()['data']
@@ -182,13 +175,13 @@ class ErrorReportAPITest(HDSAPITestBase):
         self.assertEqual(hand_data['results'][0]['exceptions'][0]['handled'], True)
         self.assertEqual(unhand_data['results'][0]['exceptions'][0]['handled'], False)
 
-        r_loc = self.client.get(f'{self.api_base_url}/errorreports/?locations={self.test_objects["location"].ranch}')
-        r_no_loc = self.client.get(f'{self.api_base_url}/errorreports/?locations=otherlocation')
+        r_loc = self.client.get(f'{self.error_url}?locations={self.test_objects["location"].ranch}')
+        r_no_loc = self.client.get(f'{self.error_url}?locations=otherlocation')
         self.assertEqual(r_loc.json()['data']['count'], 2)
         self.assertEqual(r_no_loc.json()['data']['count'], 0)
 
-        r_codes = self.client.get(f'{self.api_base_url}/errorreports/?codes=0,1')
-        r_non_codes = self.client.get(f'{self.api_base_url}/errorreports/?codes=1,2')
+        r_codes = self.client.get(f'{self.error_url}?codes=0,1')
+        r_non_codes = self.client.get(f'{self.error_url}?codes=1,2')
         self.assertEqual(r_codes.json()['data']['count'], 2)
         self.assertEqual(r_non_codes.json()['data']['count'], 0)
 
@@ -208,26 +201,26 @@ class ErrorReportAPITest(HDSAPITestBase):
         t3 = time.time()
         dt3 = timezone.datetime.fromtimestamp(t3)
 
-        r1_before = self.client.get(f"{self.api_base_url}/errorreports/?end_time={dt1}&tz=utc")
+        r1_before = self.client.get(f"{self.error_url}?end_time={dt1}&tz=utc")
         self.assertEqual(r1_before.json()['data']['count'], 0)
-        r1_after = self.client.get(f"{self.api_base_url}/errorreports/?start_time={dt1}&tz=utc")
+        r1_after = self.client.get(f"{self.error_url}?start_time={dt1}&tz=utc")
         self.assertEqual(r1_after.json()['data']['count'], 2)
 
-        r2_before = self.client.get(f"{self.api_base_url}/errorreports/?end_time={dt2}&tz=utc")
+        r2_before = self.client.get(f"{self.error_url}?end_time={dt2}&tz=utc")
         self.assertEqual(r2_before.json()['data']['count'], 1)
-        r2_after = self.client.get(f"{self.api_base_url}/errorreports/?start_time={dt2}&tz=utc")
+        r2_after = self.client.get(f"{self.error_url}?start_time={dt2}&tz=utc")
         self.assertEqual(r2_after.json()['data']['count'], 1)
 
-        r3_before = self.client.get(f"{self.api_base_url}/errorreports/?end_time={dt3}&tz=utc")
+        r3_before = self.client.get(f"{self.error_url}?end_time={dt3}&tz=utc")
         self.assertEqual(r3_before.json()['data']['count'], 2)
-        r3_after = self.client.get(f"{self.api_base_url}/errorreports/?start_time={dt3}&tz=utc")
+        r3_after = self.client.get(f"{self.error_url}?start_time={dt3}&tz=utc")
         self.assertEqual(r3_after.json()['data']['count'], 0)
 
     def test_get_errorreport_by_id(self):
         """ get error report by id """
         self.post_error_report()
 
-        response = self.client.get(f'{self.api_base_url}/errorreports/1/')
+        response = self.client.get(self.error_det_url(1))
         self.assertEqual(response.status_code, 200)
 
     def test_extract_errors(self):
@@ -254,7 +247,7 @@ class ErrorReportAPITest(HDSAPITestBase):
         # Handled error
         data = self.data.copy()
         data['data']['sysmon_report']['sysmon.0']['errors'][serv_str]['handled'] = True
-        self.client.post(f'{self.api_base_url}/errorreports/', data, format='json')
+        self.client.post(self.error_url, data, format='json')
         report = ErrorReport.objects.get(id=2)
         errs = ErrorReportSerializer._extract_exception_data(report)
 
@@ -276,7 +269,7 @@ class ErrorReportAPITest(HDSAPITestBase):
             "recipients": [1]
         }
         resp = self.client.post(
-            f'{self.api_base_url}/errorreports/createnotification/{params}',
+            f'{self.error_url}createnotification/{params}',
             data,
             format='json',
             HTTP_ACCEPT='application/json'
@@ -286,7 +279,7 @@ class ErrorReportAPITest(HDSAPITestBase):
         # Disallowed for support
         self.set_user_role(RoleChoices.SUPPORT)
         resp = self.client.post(
-            f'{self.api_base_url}/errorreports/createnotification/{params}',
+            f'{self.error_url}createnotification/{params}',
             data,
         )
         self.assertEqual(resp.status_code, status.HTTP_403_FORBIDDEN)
@@ -315,7 +308,7 @@ class ErrorReportAPITest(HDSAPITestBase):
         self.assertEqual(data['data']['serial_number'], '011')
 
         resp = self.client.post(
-            f'{self.api_base_url}/errorreports/',
+            self.error_url,
             data,
             format='json'
         )
@@ -329,7 +322,7 @@ class ErrorReportAPITest(HDSAPITestBase):
     def test_get_emu_get_non_emu(self):
         # Create real harv report
         self.client.post(
-            f'{self.api_base_url}/errorreports/',
+            self.error_url,
             self.data,
             format='json'
         )
@@ -348,7 +341,7 @@ class ErrorReportAPITest(HDSAPITestBase):
         data['data']['sysmon_report']['fruit'] = self.test_objects['fruit'].name
         data['data']['sysmon_report']['is_emulator'] = True
         self.client.post(
-            f'{self.api_base_url}/errorreports/',
+            self.error_url,
             data,
             format='json'
         )
@@ -356,19 +349,19 @@ class ErrorReportAPITest(HDSAPITestBase):
         self.assertEqual(Harvester.objects.count(), 2)
 
         # get all
-        resp = self.client.get(f'{self.api_base_url}/errorreports/')
+        resp = self.client.get(self.error_url)
         all_data = resp.json()['data']
         self.assertEqual(all_data['count'], 2)
 
         # get real
-        resp = self.client.get(f'{self.api_base_url}/errorreports/?is_emulator=0')
+        resp = self.client.get(f'{self.error_url}?is_emulator=0')
         real_data = resp.json()['data']
         self.assertEqual(real_data['count'], 1)
         self.assertEqual(real_data['results'][0]['harvester']['harv_id'], 11)
         self.assertFalse(real_data['results'][0]['harvester']['is_emulator'])
 
         # # get emu
-        resp = self.client.get(f'{self.api_base_url}/errorreports/?is_emulator=1')
+        resp = self.client.get(f'{self.error_url}?is_emulator=1')
         emu_data = resp.json()['data']
         self.assertEqual(emu_data['count'], 1)
         self.assertEqual(emu_data['results'][0]['harvester']['harv_id'], 1100)
@@ -385,7 +378,7 @@ class ErrorReportAPITest(HDSAPITestBase):
         counter = ASYNC_ERROR_COUNTER.labels("_extract_exception_data", expected_error, FAILED_SPLIT_MSG)
 
         r = self.client.post(
-            f'{self.api_base_url}/errorreports/',
+            self.error_url,
             data,
             format='json'
         )
@@ -411,7 +404,7 @@ class ErrorReportAPITest(HDSAPITestBase):
 
         # Assert counter continues increasing
         self.client.post(
-            f'{self.api_base_url}/errorreports/',
+            self.error_url,
             data,
             format='json'
         )
@@ -430,7 +423,7 @@ class ErrorReportAPITest(HDSAPITestBase):
         # This tests that we reject error reports that will fail to ingest
         # and make this visible to devs
         self.data['data'] = {}
-        r = self.client.post(f'{self.api_base_url}/errorreports/', self.data, format='json')
+        r = self.client.post(self.error_url, self.data, format='json')
 
         self.assertEqual(r.status_code, status.HTTP_400_BAD_REQUEST)
 
@@ -444,7 +437,7 @@ class ErrorReportAPITest(HDSAPITestBase):
         data = self.data.copy()
         data['data']['sysmon_report']['sysmon_0'] = {}
         resp = self.client.post(
-            f'{self.api_base_url}/errorreports/',
+            self.error_url,
             data,
             format='json'
         )
@@ -452,7 +445,7 @@ class ErrorReportAPITest(HDSAPITestBase):
         # It will fail if the timestamp isn't there
         del data['timestamp']
         resp = self.client.post(
-            f'{self.api_base_url}/errorreports/',
+            self.error_url,
             data,
             format='json'
         )
@@ -466,14 +459,14 @@ class ErrorReportAPITest(HDSAPITestBase):
         data['data']['sysmon_report']['info_obj'] = {"new": "info"}
 
         resp = self.client.post(
-            f'{self.api_base_url}/errorreports/',
+            self.error_url,
             data,
             format='json'
         )
         self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
 
     def test_get_schema(self):
-        resp = self.client.get(f'{self.api_base_url}/errorreports/getschema/')
+        resp = self.client.get(f'{self.error_url}getschema/')
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
 
         msg = resp.json()['message']
@@ -500,7 +493,7 @@ class ErrorReportAPITest(HDSAPITestBase):
             'harv_ids': ','.join(map(str, [harv_id]))
         }
         resp = self.client.get(
-            f'{self.api_base_url}/errorreports/?{urlencode(harv_dict)}'
+            f'{self.error_url}?{urlencode(harv_dict)}'
         )
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         self.assertEqual(
@@ -520,7 +513,7 @@ class ErrorReportAPITest(HDSAPITestBase):
             'harv_ids': ','.join(map(str, [harvester.harv_id]))
         })
         resp = self.client.get(
-            f'{self.api_base_url}/errorreports/?{urlencode(harv_dict)}'
+            f'{self.error_url}?{urlencode(harv_dict)}'
         )
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         self.assertEqual(len(resp.json()["data"]["results"]), 0)
@@ -531,7 +524,7 @@ class ErrorReportAPITest(HDSAPITestBase):
             'locations': ','.join(map(str, [ranch]))
         }
         resp = self.client.get(
-            f'{self.api_base_url}/errorreports/?{urlencode(ranch_dict)}'
+            f'{self.error_url}?{urlencode(ranch_dict)}'
         )
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         self.assertEqual(
@@ -551,7 +544,7 @@ class ErrorReportAPITest(HDSAPITestBase):
             'locations': ','.join(map(str, [location.ranch]))
         })
         resp = self.client.get(
-            f'{self.api_base_url}/errorreports/?{urlencode(harv_dict)}'
+            f'{self.error_url}?{urlencode(harv_dict)}'
         )
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         self.assertEqual(len(resp.json()["data"]["results"]), 0)
@@ -561,7 +554,7 @@ class ErrorReportAPITest(HDSAPITestBase):
             self.data["timestamp"]
         )}
         resp = self.client.get(
-            f'{self.api_base_url}/errorreports/?{urlencode(start_dict)}'
+            f'{self.error_url}?{urlencode(start_dict)}'
         )
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         self.assertEqual(len(resp.json()["data"]["results"]), 1)
@@ -571,7 +564,7 @@ class ErrorReportAPITest(HDSAPITestBase):
             self.data["timestamp"], inc=True
         )}
         resp = self.client.get(
-            f'{self.api_base_url}/errorreports/?{urlencode(start_dict)}'
+            f'{self.error_url}?{urlencode(start_dict)}'
         )
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         self.assertEqual(len(resp.json()["data"]["results"]), 0)
@@ -581,7 +574,7 @@ class ErrorReportAPITest(HDSAPITestBase):
             self.data["timestamp"]
         )}
         resp = self.client.get(
-            f'{self.api_base_url}/errorreports/?{urlencode(end_dict)}'
+            f'{self.error_url}?{urlencode(end_dict)}'
         )
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         self.assertEqual(len(resp.json()["data"]["results"]), 1)
@@ -591,7 +584,7 @@ class ErrorReportAPITest(HDSAPITestBase):
             self.data["timestamp"], dec=True
         )}
         resp = self.client.get(
-            f'{self.api_base_url}/errorreports/?{urlencode(end_dict)}'
+            f'{self.error_url}?{urlencode(end_dict)}'
         )
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         self.assertEqual(len(resp.json()["data"]["results"]), 0)
@@ -602,7 +595,7 @@ class ErrorReportAPITest(HDSAPITestBase):
             'fruits': ','.join(map(str, [fruit]))
         }
         resp = self.client.get(
-            f'{self.api_base_url}/errorreports/?{urlencode(fruit_dict)}'
+            f'{self.error_url}?{urlencode(fruit_dict)}'
         )
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         self.assertEqual(
@@ -616,7 +609,7 @@ class ErrorReportAPITest(HDSAPITestBase):
             'fruits': ','.join(map(str, [fruit.name]))
         })
         resp = self.client.get(
-            f'{self.api_base_url}/errorreports/?{urlencode(fruit_dict)}'
+            f'{self.error_url}?{urlencode(fruit_dict)}'
         )
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         self.assertEqual(len(resp.json()["data"]["results"]), 0)
@@ -627,7 +620,7 @@ class ErrorReportAPITest(HDSAPITestBase):
             'codes': ','.join(map(str, [code]))
         }
         resp = self.client.get(
-            f'{self.api_base_url}/errorreports/?{urlencode(codes_dict)}'
+            f'{self.error_url}?{urlencode(codes_dict)}'
         )
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         self.assertEqual(
@@ -642,7 +635,7 @@ class ErrorReportAPITest(HDSAPITestBase):
             'traceback': "findme"
         }
         resp = self.client.get(
-            f'{self.api_base_url}/errorreports/?{urlencode(trace_dict)}'
+            f'{self.error_url}?{urlencode(trace_dict)}'
         )
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         self.assertEqual(len(resp.json()["data"]["results"]), 1)
@@ -655,6 +648,6 @@ class ErrorReportAPITest(HDSAPITestBase):
         }
 
         r_gen = self.client.get(
-            f'{self.api_base_url}/errorreports/?{urlencode(generic_dict)}'
+            f'{self.error_url}?{urlencode(generic_dict)}'
         )
         self.assertEqual(r_gen.json()['data']['count'], 1)

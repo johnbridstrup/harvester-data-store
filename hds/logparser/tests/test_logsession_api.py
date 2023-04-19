@@ -34,6 +34,6 @@ class LogSessionTestCase(LogBaseTestCase):
         """Test retrieve log session by id"""
         log = self.create_log_session()
 
-        res = self.client.get(self.log_session_detail(log.id))
+        res = self.client.get(self.log_session_det_url(log.id))
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(res.data["name"], log.name)

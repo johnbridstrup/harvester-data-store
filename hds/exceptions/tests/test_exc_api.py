@@ -15,7 +15,7 @@ class AFTExceptionTest(ExceptionTestBase):
         ts = datetime.now().replace(tzinfo=pytz.utc)
 
         resp = self.client.post(
-            f'{self.api_base_url}/exceptions/',
+            self.exc_url,
             {
                 'code': code,
                 'service': service,
@@ -43,7 +43,7 @@ class AFTExceptionTest(ExceptionTestBase):
         resp = self._send_exception()
         self.assertEqual(resp.status_code, 201)
 
-        self.client.delete(f'{self.api_base_url}/exceptions/1/')
+        self.client.delete(self.exc_det_url(1))
         self.assertEqual(AFTException.objects.count(), 0)
 
     def test_get_all_exceptions(self):
@@ -51,26 +51,26 @@ class AFTExceptionTest(ExceptionTestBase):
         self._send_exception()
         self._send_exception(service="otherservice")
 
-        resp = self.client.get(f'{self.api_base_url}/exceptions/')
+        resp = self.client.get(self.exc_url)
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(resp.data["count"], 2)
 
     def test_get_exception_by_id(self):
         self._send_code()
         self._send_exception()
-        resp = self.client.get(f'{self.api_base_url}/exceptions/1/')
+        resp = self.client.get(self.exc_det_url(1))
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(resp.data['code']['code'], 0)
 
     def test_get_primary(self):
         self.post_error_report()
         self.assertEqual(AFTException.objects.count(), 3)
-        resp = self.client.get(f'{self.api_base_url}/exceptions/?primary=True')
+        resp = self.client.get(f'{self.exc_url}?primary=True')
         self.assertEqual(resp.json()['data']['count'], 1)
 
     def test_get_date_range(self):
         self.post_error_report()
-        resp = self.client.get(f'{self.api_base_url}/exceptions/?datetime_range=20220101T000100.0,20220430T235955.0')
+        resp = self.client.get(f'{self.exc_url}?datetime_range=20220101T000100.0,20220430T235955.0')
         self.assertEqual(resp.json()['data']['count'], 1)
 
     def test_get_harv_ids(self):
@@ -94,7 +94,7 @@ class AFTExceptionTest(ExceptionTestBase):
         self.data['serial_number'] = "009"
         self.post_error_report(load=False)
 
-        resp = self.client.get(f'{self.api_base_url}/exceptions/?harv_ids=9,10')
+        resp = self.client.get(f'{self.exc_url}?harv_ids=9,10')
         self.assertEqual(resp.json()['data']['count'], 6)
 
     def test_generate_pareto(self):
@@ -108,7 +108,7 @@ class AFTExceptionTest(ExceptionTestBase):
 
         def check_pareto(group, name, name_val, count):
             resp = self.client.get(
-                f'{self.api_base_url}/exceptions/pareto/?aggregate_query={group}&aggregate_name={name}'
+                f'{self.exc_url}pareto/?aggregate_query={group}&aggregate_name={name}'
             )
             self.assertEqual(resp.status_code, 200)
             rdata = resp.json()

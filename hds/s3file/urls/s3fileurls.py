@@ -3,7 +3,7 @@ from ..views import S3FileView
 
 
 router = routers.SimpleRouter()
-router.register(r'', S3FileView)
+router.register(r'', S3FileView, basename="s3file")
 
 urlpatterns = [
 ] + router.urls

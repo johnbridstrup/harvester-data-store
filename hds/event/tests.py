@@ -1,5 +1,4 @@
 import time
-from django.urls import reverse
 from django.utils import timezone
 from django.utils.timezone import datetime, timedelta
 from django.utils.http import urlencode
@@ -17,8 +16,6 @@ class TaggedUUIDModelTestBase(HDSAPITestBase):
     def setUp(self):
         super().setUp()
         self.setup_basic()
-        self.event_url = reverse("event-list")
-        self.picksess_url = reverse("picksession-list")
         self.tags_endpoint = f"{self.event_url}tags/"
 
 
@@ -43,7 +40,7 @@ class EventApiTestCase(TaggedUUIDModelTestBase):
         data = self.post_error_report()
         UUID = data["data"]["event"]["UUID"]
         key = f"test_{UUID}"
-        r=self.create_s3file(key, has_uuid=True)
+        r=self.create_s3file(key, self.s3file_url, has_uuid=True)
 
         r = self.client.get(self.tags_endpoint)
         self.assertEqual(r.status_code, status.HTTP_200_OK)
@@ -62,8 +59,8 @@ class EventApiTestCase(TaggedUUIDModelTestBase):
         ftype1 = f"test"
         ftype2 = f"anothertest"
 
-        self.create_s3file(f"{ftype1}_{UUID1}", has_uuid=True)
-        self.create_s3file(f"{ftype2}_{UUID2}", has_uuid=True)
+        self.create_s3file(f"{ftype1}_{UUID1}", self.s3file_url, has_uuid=True)
+        self.create_s3file(f"{ftype2}_{UUID2}", self.s3file_url, has_uuid=True)
 
         self.data['uuid'] = UUID3
         self.post_error_report(load=False)
@@ -179,8 +176,8 @@ class EventPicksessIntegrationTestCase(TaggedUUIDModelTestBase):
 
         self.assertEqual(Event.objects.count(), 2)
         self.assertEqual(PickSession.objects.count(), 1)
-        erreport_url = reverse("errorreport-detail", args=[1])
-        autodrep_url = reverse("autodiagnostics-detail", args=[1])
+        erreport_url = self.error_det_url(1)
+        autodrep_url = self.ad_det_url(1)
 
         erreport_resp = self.client.get(erreport_url)
         autodiag_resp = self.client.get(autodrep_url)

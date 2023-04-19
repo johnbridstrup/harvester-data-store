@@ -39,7 +39,7 @@ class ExceptionTestBase(HDSAPITestBase):
         if not code:
             code = self.CODE
         resp = self.client.post(
-            f'{self.api_base_url}/exceptioncodes/',
+            self.exc_code_url,
             self.CODES[code]
         )
 
@@ -69,27 +69,27 @@ class AFTExceptionCodeTest(ExceptionTestBase):
         resp = self._send_code()
         self.assertEqual(resp.status_code, 201)
 
-        self.client.delete(f'{self.api_base_url}/exceptioncodes/1/')
+        self.client.delete(self.exc_code_det_url(1))
         self.assertEqual(AFTExceptionCode.objects.count(), 0)
 
     def test_get_all_codes(self):
         self._send_code(0)
         self._send_code(1, 'testexc2')
 
-        resp = self.client.get(f'{self.api_base_url}/exceptioncodes/')
+        resp = self.client.get(self.exc_code_url)
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(resp.data["count"], 2)
 
     def test_get_code_by_id(self):
         self._send_code()
-        resp = self.client.get(f'{self.api_base_url}/exceptioncodes/1/')
+        resp = self.client.get(self.exc_code_det_url(1))
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(resp.data['code'], self.CODE)
 
     def test_update_code(self):
         self._send_code()
         self.client.patch(
-            f'{self.api_base_url}/exceptioncodes/1/',
+            self.exc_code_det_url(1),
             {'name': 'NewName'},
             HTTP_ACCEPT='application/json'
         )
@@ -101,7 +101,7 @@ class AFTExceptionCodeManifestTestCase(ExceptionTestBase):
     def _send_manifest(self, manifest=None):
         manifest = manifest or self.MANIFEST
         r = self.client.post(
-            f"{self.api_base_url}/exceptioncodemanifests/",
+            self.code_manif_url,
             data=self.MANIFEST,
             format="json",
         )

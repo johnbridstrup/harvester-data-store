@@ -1,5 +1,4 @@
 import os
-from django.urls import reverse
 from rest_framework import status
 
 from common.tests import HDSAPITestBase
@@ -13,7 +12,6 @@ class GripReportTestCase(HDSAPITestBase):
     def setUp(self):
         super().setUp()
         self.setup_basic()
-        self.url = reverse("gripreports-list")
 
     def test_basic(self):
         self.post_picksess_report()

@@ -97,7 +97,7 @@ class JobApiTestCase(HarvJobApiTestBase):
         data = resp.json()["data"]
         self.assertEqual(data["count"], 2)
 
-        resp2 = self.client.get(self.job_detail_urls(2))
+        resp2 = self.client.get(self.job_det_urls(2))
         self.assertEqual(resp2.status_code, status.HTTP_200_OK)
 
         data = resp2.json()["data"]

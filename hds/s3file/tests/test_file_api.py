@@ -3,7 +3,6 @@ import tempfile
 import uuid
 from contextlib import contextmanager
 from urllib.parse import urljoin
-from django.urls import reverse
 
 from django.conf import settings
 from django.core.files.uploadedfile import InMemoryUploadedFile
@@ -22,21 +21,14 @@ def remove_after(fp):
         os.remove(fp)
 
 
-class S3FileTestCase(HDSAPITestBase):
-    def setUp(self):
-        super().setUp()
-        self.s3file_detail_url = lambda _id: reverse(
-            "s3file-detail",
-            args=[_id]
-        )
-
+class S3FileTestCase(HDSAPITestBase):   
     @staticmethod
     def _rm_file(filename):
         full_path = os.path.join(settings.MEDIA_ROOT, "uploads", filename)
         os.remove(full_path)
 
     def test_create_s3file(self):
-        resp = self.create_s3file("test")
+        resp = self.create_s3file("test", self.s3file_url)
         self.assertEqual(resp.status_code, 201)
         self.assertEqual(resp.json()['data']['event']['UUID'], self.uuid)
 
@@ -54,7 +46,7 @@ class S3FileTestCase(HDSAPITestBase):
         self.assertIn(S3File.__name__, data["event"]["tags"])
 
         # Assert filetype tag added
-        resp = self.client.get(f"{self.api_base_url}/events/{data['event']['id']}/")
+        resp = self.client.get(self.event_det_url(data['event']['id']))
         data = resp.json()["data"]
         self.assertIn(self.filetype, data["tags"])
 
@@ -63,7 +55,7 @@ class S3FileTestCase(HDSAPITestBase):
         os.makedirs(settings.MEDIA_ROOT, exist_ok=True)
         with tempfile.NamedTemporaryFile(dir=settings.MEDIA_ROOT, suffix=f"_{UUID}") as f:
             fname = f.name.split('/')[-1]
-            resp = self.create_s3file(fname, has_uuid=True)
+            resp = self.create_s3file(fname, self.s3file_url, has_uuid=True)
 
             url = resp.json()["data"]["file"]
             resp = self.client.get(url)
@@ -124,7 +116,7 @@ class S3FileTestCase(HDSAPITestBase):
                     self.assertEqual(inst.file.name, key)
 
     def test_link_to_report(self):
-        file_resp = self.create_s3file("test")
+        file_resp = self.create_s3file("test", self.s3file_url)
         self.setup_basic()
         self.load_error_report()
         self.data['uuid'] = self.uuid
@@ -149,8 +141,8 @@ class S3FileTestCase(HDSAPITestBase):
         prim_key = f"file_{PRIM_UUID}.txt"
         sec_key = f"file_{SEC_UUID}.txt"
 
-        self.create_s3file(prim_key, has_uuid=True)
-        self.create_s3file(sec_key, has_uuid=True)
+        self.create_s3file(prim_key, self.s3file_url, has_uuid=True)
+        self.create_s3file(sec_key, self.s3file_url, has_uuid=True)
 
         self.load_error_report()
         self.data['uuid'] = PRIM_UUID
@@ -162,7 +154,7 @@ class S3FileTestCase(HDSAPITestBase):
         self.assertEqual(len(event_data["related_files"]), 2)
 
     def test_create_sessclip(self):
-        self.create_s3file("test", endpoint="sessclip")
+        self.create_s3file("test", endpoint=self.sesscl_url)
         self.assertEqual(SessClip.objects.count(), 1)
 
     def test_delete_file(self):
@@ -187,7 +179,7 @@ class S3FileTestCase(HDSAPITestBase):
                 file_upload.is_valid(raise_exception=True)
                 inst = file_upload.save()
                 self.assertFalse(inst.deleted)
-                self.client.delete(self.s3file_detail_url(inst.id)) #file.delete() cleans up fs
+                self.client.delete(self.s3file_det_url(inst.id)) #file.delete() cleans up fs
                 inst.refresh_from_db()
                 self.assertTrue(inst.deleted)
                 with self.assertRaises(ValueError):

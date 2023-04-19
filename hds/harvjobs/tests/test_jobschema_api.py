@@ -53,7 +53,7 @@ class JobSchemaApiTestCase(HarvJobApiTestBase):
         data = r.json()['data']
         self.assertEqual(data['count'], 2)
 
-        r = self.client.get(self.jobschema_detail_url(2))
+        r = self.client.get(self.jobschema_det_url(2))
         self.assertEqual(r.status_code, status.HTTP_200_OK)
 
         data = r.json()['data']

@@ -40,7 +40,7 @@ class HarvesterAPITest(HDSAPITestBase):
 
     def test_create_harvester(self):
         """ create harvester and assert it exists """
-        self.client.post(f'{self.api_base_url}/harvesters/', self.data)
+        self.client.post(self.harv_url, self.data)
         self.assertEqual(Harvester.objects.count(), 1)
         self.assertEqual(Harvester.objects.get().name, 'Harvester 1')
 
@@ -48,7 +48,7 @@ class HarvesterAPITest(HDSAPITestBase):
         """ create harvester with creator different than authenticated user"""
         data = self.data
         data["creator"] = 2
-        self.client.post(f'{self.api_base_url}/harvesters/', data)
+        self.client.post(self.harv_url, data)
         self.assertEqual(Harvester.objects.count(), 1)
         self.assertEqual(Harvester.objects.get().name, 'Harvester 1')
         self.assertNotEqual(Harvester.objects.get().creator, 2)
@@ -57,7 +57,7 @@ class HarvesterAPITest(HDSAPITestBase):
         """ create harvester with invalid fruit """
         data = self.data
         data["fruit"] = 99
-        response = self.client.post(f'{self.api_base_url}/harvesters/', data)
+        response = self.client.post(self.harv_url, data)
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.data['status'], 'error')
         self.assertEqual(Harvester.objects.count(), 0)
@@ -66,7 +66,7 @@ class HarvesterAPITest(HDSAPITestBase):
         """ create harvester with invalid location """
         data = self.data
         data["location"] = 99
-        response = self.client.post(f'{self.api_base_url}/harvesters/', data)
+        response = self.client.post(self.harv_url, data)
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.data['status'], 'error')
         self.assertEqual(Harvester.objects.count(), 0)
@@ -74,35 +74,35 @@ class HarvesterAPITest(HDSAPITestBase):
     def test_update_harvester(self):
         """ update harvester and assert it exists """
         Harvester.objects.create(**self.data1)
-        self.client.patch(f'{self.api_base_url}/harvesters/1/', {'name': 'Harvester 2'})
+        self.client.patch(self.harv_det_url(1), {'name': 'Harvester 2'})
         self.assertEqual(Harvester.objects.count(), 1)
         self.assertEqual(Harvester.objects.get().name, 'Harvester 2')
 
     def test_update_harvester_with_invalid_data(self):
         """ update harvester with invalid data """
         Harvester.objects.create(**self.data1)
-        response = self.client.patch(f'{self.api_base_url}/harvesters/1/', {'fruit': 11})
+        response = self.client.patch(self.harv_det_url(1), {'fruit': 11})
         self.assertEqual(response.data['status'], 'error')
         self.assertEqual(response.status_code, 400)
 
     def test_delete_harvester(self):
         """ delete harvester and assert it does not exist """
         Harvester.objects.create(**self.data1)
-        self.client.delete(f'{self.api_base_url}/harvesters/1/')
+        self.client.delete(self.harv_det_url(1))
         self.assertEqual(Harvester.objects.count(), 0)
 
     def test_get_all_harvesters(self):
         """ get all harvesters """
         Harvester.objects.create(**self.data1)
         Harvester.objects.create(**self.data2)
-        response = self.client.get(f'{self.api_base_url}/harvesters/')
+        response = self.client.get(self.harv_url)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data["count"], 2)
 
     def test_get_harvester_by_id(self):
         """ get harvester by id """
         Harvester.objects.create(**self.data1)
-        response = self.client.get(f'{self.api_base_url}/harvesters/1/')
+        response = self.client.get(self.harv_det_url(1))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data['name'], 'Harvester 1')
 

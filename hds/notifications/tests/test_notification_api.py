@@ -26,7 +26,7 @@ class NotificationAPITest(HDSAPITestBase):
     def test_create_notification_disallowed(self):
         """ create notifications and assert it exists """
         resp = self.client.post(
-            f"{self.api_base_url}/notifications/",
+            self.notif_url,
             data=self.notification,
             format="json"
         )
@@ -36,7 +36,7 @@ class NotificationAPITest(HDSAPITestBase):
 
     def test_delete_notification(self):
         self.assertEqual(Notification.objects.count(), 1)
-        r=self.client.delete(f"{self.api_base_url}/notifications/1/")
+        r=self.client.delete(self.notif_det_url(1))
         self.assertEqual(Notification.objects.count(), 0)
 
     def test_update_notification_disallowed(self):
@@ -44,7 +44,7 @@ class NotificationAPITest(HDSAPITestBase):
 
         # PUT not allowed
         resp = self.client.put(
-            f"{self.api_base_url}/notifications/1/",
+            self.notif_det_url(1),
             self.notification,
             format="json"
         )
@@ -97,9 +97,9 @@ class NotificationAPITest(HDSAPITestBase):
         self.assertNotIn("api/v1", notify_args[1])
 
     def test_get_notifications(self):
-        r = self.client.get(f"{self.api_base_url}/notifications/")
+        r = self.client.get(self.notif_url)
         self.assertEqual(r.status_code, status.HTTP_200_OK)
-        r = self.client.get(f"{self.api_base_url}/notifications/1/")
+        r = self.client.get(self.notif_det_url(1))
         self.assertEqual(r.status_code, status.HTTP_200_OK)
 
     def test_filter_notifications(self):
@@ -126,18 +126,18 @@ class NotificationAPITest(HDSAPITestBase):
         notification3.save()
 
         # Assert two notifications exist
-        r = self.client.get(f"{self.api_base_url}/notifications/")
+        r = self.client.get(self.notif_url)
         self.assertEqual(r.json()["data"]["count"], 3)
 
         # Get created by self.user
-        r = self.client.get(f"{self.api_base_url}/notifications/?category=created")
+        r = self.client.get(f"{self.notif_url}?category=created")
         self.assertEqual(r.status_code, status.HTTP_200_OK)
         data = r.json()["data"]
         self.assertEqual(data["count"], 1)
         self.assertEqual(data["results"][0]["creator"], self.user.id)
 
         # Get self.user is recipient
-        r = self.client.get(f"{self.api_base_url}/notifications/?category=is_recipient")
+        r = self.client.get(f"{self.notif_url}?category=is_recipient")
         self.assertEqual(r.status_code, status.HTTP_200_OK)
         data = r.json()["data"]
         self.assertEqual(data["count"], 2)

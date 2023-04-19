@@ -1,5 +1,3 @@
-from django.urls import reverse
-
 from common.tests import HDSAPITestBase
 from event.models import Event
 from hds.roles import RoleChoices
@@ -79,18 +77,6 @@ class HarvJobApiTestBase(HDSAPITestBase):
             "timestamp": 1666048158.1355963,
             "type": "jobresults"
         }
-        self.jobtype_url = reverse("jobtype-list")
-        self.jobtype_detail_url = lambda id_: reverse("jobtype-detail", args=[id_])
-
-        self.jobschema_url = reverse("jobschema-list")
-        self.jobschema_detail_url = lambda id_: reverse("jobschema-detail", args=[id_])
-
-        self.jobs_url = reverse("job-list")
-        self.job_detail_urls = lambda id_: reverse("job-detail", args=[id_])
-        self.reschedule_url = lambda id_ : reverse("job-reschedule", args=[id_])
-
-        self.jobresults_url = reverse("jobresults-list")
-        self.jobresults_detail_url = lambda id_: reverse("jobresults-detail", args=[id_])
 
         self.setup_basic()
         self.set_user_role(RoleChoices.MANAGER)

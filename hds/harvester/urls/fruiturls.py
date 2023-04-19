@@ -3,7 +3,7 @@ from ..views.fruitview import FruitView
 
 
 router = routers.SimpleRouter()
-router.register(r'', FruitView)
+router.register(r'', FruitView, basename="fruit")
 
 urlpatterns = [
 ] + router.urls
