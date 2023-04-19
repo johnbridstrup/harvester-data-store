@@ -12,7 +12,7 @@ from .models import GripReport
 class GripReportTestCase(HDSAPITestBase):
     def setUp(self):
         super().setUp()
-        self.test_objects = self._setup_basic()
+        self.setup_basic()
         self.url = reverse("gripreports-list")
 
     def test_basic(self):

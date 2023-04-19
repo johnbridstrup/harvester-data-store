@@ -16,7 +16,7 @@ from django.utils.timezone import datetime, timedelta
 class TaggedUUIDModelTestBase(HDSAPITestBase):
     def setUp(self):
         super().setUp()
-        self.test_objects = self._setup_basic()
+        self.setup_basic()
         self.event_url = reverse("event-list")
         self.picksess_url = reverse("picksession-list")
         self.tags_endpoint = f"{self.event_url}tags/"

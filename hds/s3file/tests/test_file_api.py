@@ -123,7 +123,7 @@ class S3FileTestCase(HDSAPITestBase):
 
     def test_link_to_report(self):
         file_resp = self.create_s3file("test")
-        self._setup_basic()
+        self.setup_basic()
         self.load_error_report()
         self.data['uuid'] = self.uuid
         rep_resp = self.post_error_report(load=False)
@@ -140,7 +140,7 @@ class S3FileTestCase(HDSAPITestBase):
             self.assertIn(tag, event_data["tags"])
 
     def test_link_aux_file_to_report(self):
-        self._setup_basic()
+        self.setup_basic()
         PRIM_UUID = "primar"
         SEC_UUID = "second"
 

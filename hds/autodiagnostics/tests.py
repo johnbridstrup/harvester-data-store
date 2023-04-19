@@ -19,7 +19,7 @@ from .views import MAGIC_GRIPPER_MSG
 class AutodiagnosticsApiTestCase(HDSAPITestBase):
     def setUp(self):
         super().setUp()
-        self.test_objects = self._setup_basic()
+        self.setup_basic()
         self.url = reverse("autodiagnostics-list")
         self.run_url = reverse("autodiagnosticsrun-list")
 

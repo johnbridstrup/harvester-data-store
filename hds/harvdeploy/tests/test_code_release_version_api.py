@@ -12,7 +12,7 @@ from rest_framework import status
 class ReleaseApiTestCase(HDSAPITestBase):
     def setUp(self):
         super().setUp()
-        self.test_objects = self._setup_basic()
+        self.setup_basic()
 
         self.release = {
             "version": 1.0,

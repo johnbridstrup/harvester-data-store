@@ -7,7 +7,7 @@ import pytz
 class AFTExceptionTest(ExceptionTestBase):
     def setUp(self):
         super().setUp()
-        self.test_objects = self._setup_basic()
+        self.setup_basic()
         self.load_error_report()
 
     def _send_exception(self, code=0, service='testservice', node=1):

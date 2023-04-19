@@ -8,7 +8,7 @@ class NotificationAPITest(HDSAPITestBase):
     """ Test Notification APIs """
     def setUp(self):
         super().setUp()
-        self.test_objects = self._setup_basic()
+        self.setup_basic()
         self.notification = {
             "trigger_on": "ErrorReport",
             "criteria": {

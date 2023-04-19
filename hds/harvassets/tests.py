@@ -11,7 +11,7 @@ from .tasks import compile_asset_report
 class HarvesterAssetsTestCase(HDSAPITestBase):
     def setUp(self):
         super().setUp()
-        self.test_objects = self._setup_basic()
+        self.setup_basic()
         self.url = reverse("harvassetreport-list")
         self.asset_url = reverse("harvassets-list")
         self.base_report = self.create_report(self.asset())

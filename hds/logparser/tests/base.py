@@ -32,7 +32,7 @@ class LogBaseTestCase(HDSAPITestBase):
         self.log_video_detail = lambda _id: reverse(
           "logvideo-detail",args=[_id]
         )
-        self.test_objects = self._setup_basic()
+        self.setup_basic()
 
         self.line_content = "[20220714T072500.013] [DEBUG] [autodrive.cand] -- Min Pos: 12492.610686305652, Cand: 4598"
 

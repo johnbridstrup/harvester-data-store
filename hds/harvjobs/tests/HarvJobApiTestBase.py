@@ -92,7 +92,7 @@ class HarvJobApiTestBase(HDSAPITestBase):
         self.jobresults_url = reverse("jobresults-list")
         self.jobresults_detail_url = lambda id_: reverse("jobresults-detail", args=[id_])
 
-        self.test_objects = self._setup_basic()
+        self.setup_basic()
         self.set_user_role(RoleChoices.MANAGER)
 
     def create_jobtype(self, name=None):

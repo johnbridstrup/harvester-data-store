@@ -10,7 +10,7 @@ from .models import ConfigReport
 class ConfigReportTestCase(HDSAPITestBase):
     def setUp(self):
         super().setUp()
-        self.test_objects = self._setup_basic()
+        self.setup_basic()
         self.url = reverse("configreports-list")
         self.load_config_data()
 

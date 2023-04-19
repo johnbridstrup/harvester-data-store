@@ -98,25 +98,25 @@ class HDSAPITestBase(APITestCase):
         self.user.profile.role = role.value
         self.user.profile.save()       
 
-    def _setup_basic(self):
-        test_objects = {}
-        test_objects["fruit"] = self.create_fruit_object('strawberry')
-        test_objects["distributor"] = self.create_distributor_object('test_distrib')
-        test_objects["location"] = self.create_location_object(**{
-            "distributor": test_objects["distributor"],
+    def setup_basic(self):
+        self.test_objects = {}
+        self.test_objects["fruit"] = self.create_fruit_object('strawberry')
+        self.test_objects["distributor"] = self.create_distributor_object('test_distrib')
+        self.test_objects["location"] = self.create_location_object(**{
+            "distributor": self.test_objects["distributor"],
             "ranch": "Ranch A",
             "country": "US",
             "region": "California",
             'creator': self.user
         })
-        test_objects["harvester"] = self.create_harvester_object(**{
+        self.test_objects["harvester"] = self.create_harvester_object(**{
             'harv_id': 11,
-            'fruit': test_objects["fruit"],
-            'location': test_objects["location"],
+            'fruit': self.test_objects["fruit"],
+            'location': self.test_objects["location"],
             'name': 'Harvester 1',
             'creator': self.user
         })
-        test_objects["code"] = AFTExceptionCode.objects.create(**{
+        self.test_objects["code"] = AFTExceptionCode.objects.create(**{
             'code': 0,
             'name': 'AFTBaseException',
             'msg': 'test message',
@@ -124,14 +124,12 @@ class HDSAPITestBase(APITestCase):
             'cycle': False,
             'creator': self.user
         })
-        test_objects["dummy_report"] = {
+        self.test_objects["dummy_report"] = {
             "timestamp": time(),
             "UUID": Event.generate_uuid(),
-            "serial_number": test_objects["harvester"].harv_id,
+            "serial_number": self.test_objects["harvester"].harv_id,
             "data": {"hello": "there"}
         }
-
-        return test_objects
 
     def update_user_permissions_all(self, model):
         content_type = ContentType.objects.get_for_model(model)
