@@ -77,7 +77,7 @@ class HarvesterAssetsTestCase(HDSAPITestBase):
         self.assertTrue(self.test_objects['harvester'].has_asset("test", 31))
 
     def test_sample_report(self):
-        self._load_asset_report()
+        self.load_asset_report()
         r = self.client.post(self.url, self.asset_data, format='json')
         self.assertEqual(r.status_code, status.HTTP_201_CREATED)
 
@@ -130,7 +130,7 @@ class HarvesterAssetsTestCase(HDSAPITestBase):
         self.assertEqual(asset["serial_number"], "33")
 
     def test_compile_report(self):
-        self._load_asset_report()
+        self.load_asset_report()
         self.client.post(self.url, self.asset_data, format='json')
 
         report = compile_asset_report()

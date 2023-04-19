@@ -16,11 +16,11 @@ class GripReportTestCase(HDSAPITestBase):
         self.url = reverse("gripreports-list")
 
     def test_basic(self):
-        self._post_picksess_report()
+        self.post_picksess_report()
         self.assertEqual(GripReport.objects.count(), 1)
 
     def test_event(self):
-        resp = self._post_picksess_report()
+        resp = self.post_picksess_report()
         event = resp["data"]["event"]
         
         self.assertTrue(GripReport.__name__ in event['tags'])

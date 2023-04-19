@@ -124,9 +124,9 @@ class S3FileTestCase(HDSAPITestBase):
     def test_link_to_report(self):
         file_resp = self.create_s3file("test")
         self._setup_basic()
-        self._load_report_data()
+        self.load_error_report()
         self.data['uuid'] = self.uuid
-        rep_resp = self._post_error_report(load=False)
+        rep_resp = self.post_error_report(load=False)
 
         self.assertEqual(
             file_resp.json()['data']['event']['UUID'],
@@ -150,10 +150,10 @@ class S3FileTestCase(HDSAPITestBase):
         self.create_s3file(prim_key, has_uuid=True)
         self.create_s3file(sec_key, has_uuid=True)
 
-        self._load_report_data()
+        self.load_error_report()
         self.data['uuid'] = PRIM_UUID
         self.data["aux_uuids"] = [SEC_UUID]
-        self._post_error_report(load=False)
+        self.post_error_report(load=False)
 
         report = ErrorReport.objects.get(id=1)
         event_data = EventSerializer(instance=report.event).data

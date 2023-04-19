@@ -24,10 +24,10 @@ class AutodiagnosticsApiTestCase(HDSAPITestBase):
         self.run_url = reverse("autodiagnosticsrun-list")
 
     def test_basic(self):
-        self._post_autodiag_report()
+        self.post_autodiag_report()
 
     def test_get_ad_report(self):
-        self._post_autodiag_report()
+        self.post_autodiag_report()
 
         r = self.client.get(self.url)
         self.assertEqual(r.status_code, status.HTTP_200_OK)
@@ -37,7 +37,7 @@ class AutodiagnosticsApiTestCase(HDSAPITestBase):
         self.assertEqual(data["results"][0]["result"], True)
 
     def test_get_with_params(self):
-        self._post_autodiag_report()
+        self.post_autodiag_report()
 
         r_all = self.client.get(self.url)
         self.assertEqual(r_all.json()["data"]["count"], 1)
@@ -55,9 +55,9 @@ class AutodiagnosticsApiTestCase(HDSAPITestBase):
         self.assertEqual(r_sn1299.json()["data"]["count"], 0)
 
     def test_magic_gripper(self):
-        self._load_autodiag_report()
+        self.load_autodiag_report()
         self.ad_data['data']['serial_no'] = 1297
-        r_json = self._post_autodiag_report(load=False, resp_status=status.HTTP_200_OK)
+        r_json = self.post_autodiag_report(load=False, resp_status=status.HTTP_200_OK)
         self.assertEqual(r_json['data'], MAGIC_GRIPPER_MSG)
 
         r = self.client.get(self.url)
@@ -65,17 +65,17 @@ class AutodiagnosticsApiTestCase(HDSAPITestBase):
         self.assertEqual(data["count"], 0)
 
     def test_event_and_picksess_created(self):
-        self._post_autodiag_report()
+        self.post_autodiag_report()
         self.assertEqual(Event.objects.count(), 1)
         self.assertEqual(PickSession.objects.count(), 1)
     def test_extract_basic(self):
-        self._post_autodiag_report()
+        self.post_autodiag_report()
         self.assertEqual(AutodiagnosticsRun.objects.count(), 1)
         self.assertEqual(HarvesterAssetType.objects.count(), 1)
         self.assertEqual(HarvesterAsset.objects.count(), 1)
 
     def test_extract_values(self):
-        self._post_autodiag_report()
+        self.post_autodiag_report()
         report = AutodiagnosticsReport.objects.get()
         run = AutodiagnosticsRun.objects.get()
         gripper = run.gripper
@@ -89,14 +89,14 @@ class AutodiagnosticsApiTestCase(HDSAPITestBase):
         self.assertDictContainsSubset(report.report['data'], self.ad_data['data'])
 
     def test_run_data(self):
-        init_resp_data = self._post_autodiag_report()
+        init_resp_data = self.post_autodiag_report()
         self.assertIsNone(init_resp_data['data']['run_data'])
         r = self.client.get(self.url)
         data = r.json()['data']['results'][0]
         self.assertIsNotNone(data['run_data'])
 
     def test_get_runs(self):
-        self._post_autodiag_report()
+        self.post_autodiag_report()
         r = self.client.get(self.run_url)
         self.assertEqual(r.status_code, status.HTTP_200_OK)
 
@@ -104,11 +104,11 @@ class AutodiagnosticsApiTestCase(HDSAPITestBase):
         self.assertEqual(r.status_code, status.HTTP_200_OK)
 
     def test_filter_gripper_sn(self):
-        self._post_autodiag_report()
+        self.post_autodiag_report()
         self.ad_data['data']['serial_no'] = "23"
-        self._post_autodiag_report(load=False)
+        self.post_autodiag_report(load=False)
         self.ad_data['data']['serial_no'] = "77"
-        self._post_autodiag_report(load=False)
+        self.post_autodiag_report(load=False)
         r_all = self.client.get(self.run_url)
         self.assertEqual(r_all.json()['data']['count'], 3)
         r = self.client.get(f"{self.run_url}?gripper_sns=23,77")
@@ -117,10 +117,10 @@ class AutodiagnosticsApiTestCase(HDSAPITestBase):
     def test_common_filters(self):
         t1 = timezone.now() # This is a UTC datetime
 
-        self._post_autodiag_report()
+        self.post_autodiag_report()
         t2 = timezone.now()
 
-        self._post_autodiag_report()
+        self.post_autodiag_report()
         t3 = timezone.now()
 
         r1_before = self.client.get(f"{self.run_url}?created_before={make_naive(t1)}&tz=utc")
@@ -148,19 +148,19 @@ class AutodiagnosticsApiTestCase(HDSAPITestBase):
         self.assertEqual(r_tz_after.json()['data']['count'], 1)
 
     def test_report_filters(self):
-        self._load_autodiag_report()
+        self.load_autodiag_report()
 
         # Report time filters
 
         t1 = time.time() # This is a posix timestamp
         self.ad_data['timestamp'] = t1 + .00001  # shift for gte and lte
         dt1 = timezone.datetime.fromtimestamp(t1) # This is UTC
-        self._post_autodiag_report(load=False)
+        self.post_autodiag_report(load=False)
 
         t2 = time.time()
         dt2 = timezone.datetime.fromtimestamp(t2)
         self.ad_data['timestamp'] = t2 + .00001
-        self._post_autodiag_report(load=False)
+        self.post_autodiag_report(load=False)
 
         t3 = time.time()
         dt3 = timezone.datetime.fromtimestamp(t3)
@@ -194,11 +194,11 @@ class AutodiagnosticsApiTestCase(HDSAPITestBase):
     def test_filter_harv_id(self):
         self.create_harvester_object(harv_id=101)
         self.create_harvester_object(harv_id=201)
-        self._post_autodiag_report()
+        self.post_autodiag_report()
         self.ad_data['serial_number'] = "101"
-        self._post_autodiag_report(load=False)
+        self.post_autodiag_report(load=False)
         self.ad_data['serial_number'] = "201"
-        self._post_autodiag_report(load=False)
+        self.post_autodiag_report(load=False)
         r_all = self.client.get(self.run_url)
 
         self.assertEqual(r_all.json()['data']['count'], 3)
@@ -206,9 +206,9 @@ class AutodiagnosticsApiTestCase(HDSAPITestBase):
         self.assertEqual(r.json()['data']['count'], 2)
 
     def test_filter_result(self):
-        self._post_autodiag_report()
+        self.post_autodiag_report()
         self.ad_data['data']['passed_autodiag'] = False
-        self._post_autodiag_report(load=False)
+        self.post_autodiag_report(load=False)
 
         r_all = self.client.get(self.run_url)
         self.assertEqual(r_all.json()['data']['count'], 2)
@@ -217,11 +217,11 @@ class AutodiagnosticsApiTestCase(HDSAPITestBase):
         self.assertEqual(r.json()['data']['count'], 1)
 
     def test_filter_datetime_range(self):
-        self._post_autodiag_report()
+        self.post_autodiag_report()
         rep1_ts = self.ad_data['data']['ts']
 
         self.ad_data['data']['ts'] += 1000
-        self._post_autodiag_report(load=False)
+        self.post_autodiag_report(load=False)
         rep2_ts = self.ad_data['data']['ts']
 
         r_all = self.client.get(self.run_url)
@@ -242,9 +242,9 @@ class AutodiagnosticsApiTestCase(HDSAPITestBase):
         self.assertEqual(r2.json()['data']['results'][0]['id'], 2)
 
     def test_filter_tmpl_match_result(self):
-        self._post_autodiag_report()
+        self.post_autodiag_report()
         self.ad_data['data']['passed_autodiag_template_match'] = False
-        self._post_autodiag_report(load=False)
+        self.post_autodiag_report(load=False)
 
         r_all = self.client.get(self.run_url)
         self.assertEqual(r_all.json()['data']['count'], 2)
@@ -253,9 +253,9 @@ class AutodiagnosticsApiTestCase(HDSAPITestBase):
         self.assertEqual(r.json()['data']['count'], 1)
 
     def test_filter_ball_found_result(self):
-        self._post_autodiag_report()
+        self.post_autodiag_report()
         self.ad_data['data']['passed_autodiag_ball_found'] = False
-        self._post_autodiag_report(load=False)
+        self.post_autodiag_report(load=False)
 
         r_all = self.client.get(self.run_url)
         self.assertEqual(r_all.json()['data']['count'], 2)
@@ -264,10 +264,10 @@ class AutodiagnosticsApiTestCase(HDSAPITestBase):
         self.assertEqual(r.json()['data']['count'], 1)
 
     def test_filter_uuid(self):
-        self._post_autodiag_report()
+        self.post_autodiag_report()
         UUID = Event.generate_uuid()
         self.ad_data['uuid'] = UUID
-        self._post_autodiag_report(load=False)
+        self.post_autodiag_report(load=False)
 
         r = self.client.get(f"{self.url}?uuid={UUID}")
         self.assertEqual(r.json()['data']['count'], 1)

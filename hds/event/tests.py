@@ -24,11 +24,11 @@ class TaggedUUIDModelTestBase(HDSAPITestBase):
 
 class EventApiTestCase(TaggedUUIDModelTestBase):
     def test_get_by_UUID(self):
-        self._post_error_report()
+        self.post_error_report()
         self.data['uuid'] = Event.generate_uuid()
-        self._post_error_report(load=False)
+        self.post_error_report(load=False)
         self.data['uuid'] = Event.generate_uuid()
-        data = self._post_error_report(load=False)
+        data = self.post_error_report(load=False)
         UUID = data["data"]["event"]["UUID"]
 
         # 3 total events
@@ -40,7 +40,7 @@ class EventApiTestCase(TaggedUUIDModelTestBase):
         self.assertEqual(resp.json()["data"]["count"], 1)
 
     def test_event_tags(self):
-        data = self._post_error_report()
+        data = self.post_error_report()
         UUID = data["data"]["event"]["UUID"]
         key = f"test_{UUID}"
         r=self.create_s3file(key, has_uuid=True)
@@ -55,7 +55,7 @@ class EventApiTestCase(TaggedUUIDModelTestBase):
             self.assertIn(tag, data["tags"])
 
     def test_filter_by_tags(self):
-        data = self._post_error_report()
+        data = self.post_error_report()
         UUID1 = data["data"]["event"]["UUID"]
         UUID2 = Event.generate_uuid()
         UUID3 = Event.generate_uuid()
@@ -66,7 +66,7 @@ class EventApiTestCase(TaggedUUIDModelTestBase):
         self.create_s3file(f"{ftype2}_{UUID2}", has_uuid=True)
 
         self.data['uuid'] = UUID3
-        self._post_error_report(load=False)
+        self.post_error_report(load=False)
 
         all_r = self.client.get(self.event_url)
         self.assertEqual(all_r.json()['data']['count'], 3)
@@ -111,11 +111,11 @@ class EventApiTestCase(TaggedUUIDModelTestBase):
 
 class PickSessionApiTestCase(TaggedUUIDModelTestBase):
     def test_get_by_UUID(self):
-        self._post_autodiag_report()
+        self.post_autodiag_report()
         self.ad_data["uuid"] = Event.generate_uuid()
-        self._post_autodiag_report(load=False)
+        self.post_autodiag_report(load=False)
         self.ad_data["uuid"] = Event.generate_uuid()
-        data = self._post_autodiag_report(load=False)
+        data = self.post_autodiag_report(load=False)
 
         picksess_uuid = data["data"]["pick_session"]["UUID"]
 
@@ -174,8 +174,8 @@ class PickSessionApiTestCase(TaggedUUIDModelTestBase):
 class EventPicksessIntegrationTestCase(TaggedUUIDModelTestBase):
     def test_multi_report(self):
         # The test data have the same pick_session_uuid
-        self._post_error_report()
-        self._post_autodiag_report()
+        self.post_error_report()
+        self.post_autodiag_report()
 
         self.assertEqual(Event.objects.count(), 2)
         self.assertEqual(PickSession.objects.count(), 1)
@@ -196,8 +196,8 @@ class EventPicksessIntegrationTestCase(TaggedUUIDModelTestBase):
 
     
     def test_picksess_meta(self):
-        self._post_autodiag_report()
-        self._post_picksess_report()
+        self.post_autodiag_report()
+        self.post_picksess_report()
 
         start_time = DTimeFormatter.str_from_timestamp(self.picksess_data["pick_session_start_time"])
         start_dt = DTimeFormatter.from_timestamp(self.picksess_data["pick_session_start_time"])

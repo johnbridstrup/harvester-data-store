@@ -66,6 +66,8 @@ def compare_patterns(keys, urls):
 
 
 class HDSAPITestBase(APITestCase):
+    BASE_PATH = os.path.join(os.path.abspath(os.path.dirname(__file__)), "test_data")
+
     def setUp(self):
         self.client = APIClient()
         self.user = User.objects.create(username='test_user')
@@ -215,59 +217,55 @@ class HDSAPITestBase(APITestCase):
         )
         return resp
 
-    def _load_report_data(self):
-        report_path = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'test_data/report.json')
-        with open(report_path, 'rb') as f:
-            self.data = json.load(f)
+    def _load_report(self, relpath):
+        fpath = os.path.join(self.BASE_PATH, relpath)
+        with open(fpath, 'rb') as f:
+            d = json.load(f)
+        return d
 
-    def _load_config_data(self):
-        report_path = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'test_data/configs-report_002_1675256694.218969.json')
-        with open(report_path, 'rb') as f:
-            self.conf_data = json.load(f)
+    def load_error_report(self):
+        self.data = self._load_report('report.json')
+
+    def load_config_data(self):
+        self.conf_data = self._load_report('configs-report_002_1675256694.218969.json')
     
-    def _load_autodiag_report(self):
-        report_path = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'test_data/autodiag_report.json')
-        with open(report_path, 'rb') as f:
-            self.ad_data = json.load(f)
+    def load_autodiag_report(self):
+        self.ad_data = self._load_report('autodiag_report.json')
 
-    def _load_asset_report(self):
-        report_path = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'test_data/serialnums.json')
-        with open(report_path, 'rb') as f:
-            self.asset_data = json.load(f)
+    def load_asset_report(self):
+        self.asset_data = self._load_report('serialnums.json')
 
-    def _load_picksess_report(self):
-        report_path = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'test_data/picksess.json')
-        with open(report_path, 'rb') as f:
-            self.picksess_data = json.load(f)
+    def load_picksess_report(self):
+        self.picksess_data = self._load_report('picksess.json')
     
-    def _post_error_report(self, load=True):
+    def post_error_report(self, load=True):
         if load:
-            self._load_report_data()
+            self.load_error_report()
         resp = self.client.post(f'{self.api_base_url}/errorreports/', self.data, format='json')
         self.assertEqual(resp.status_code, status.HTTP_201_CREATED, msg=resp.json())
         return resp.json()
 
-    def _post_autodiag_report(self, load=True, resp_status=status.HTTP_201_CREATED):
+    def post_autodiag_report(self, load=True, resp_status=status.HTTP_201_CREATED):
         if load:
-            self._load_autodiag_report()
+            self.load_autodiag_report()
         resp = self.client.post(f'{self.api_base_url}/autodiagnostics/', self.ad_data, format='json')
         self.assertEqual(resp.status_code, resp_status, msg=resp.json())
         return resp.json()
 
-    def _post_picksess_report(self, load=True, resp_status=status.HTTP_201_CREATED):
+    def post_picksess_report(self, load=True, resp_status=status.HTTP_201_CREATED):
         if load:
-            self._load_picksess_report()
+            self.load_picksess_report()
         resp = self.client.post(f'{self.api_base_url}/gripreports/', self.picksess_data, format='json')
         self.assertEqual(resp.status_code, resp_status, msg=resp.json())
         return resp.json()
 
     @property
     def logpath(self):
-        return os.path.join(os.path.abspath(os.path.dirname(__file__)), 'test_data/20230131131250_010_03_robot.log')
+        return os.path.join(self.BASE_PATH, '20230131131250_010_03_robot.log')
 
     @property
     def canpath(self):
-        return os.path.join(os.path.abspath(os.path.dirname(__file__)), 'test_data/20230131131250_010_03_CAN.dump')
+        return os.path.join(self.BASE_PATH, '20230131131250_010_03_CAN.dump')
 
 
 class OpenApiTest(HDSAPITestBase):
@@ -443,7 +441,7 @@ class TestUtils(unittest.TestCase):
 
 class TestRoles(HDSAPITestBase):
     IGNORE = ["/api/v1/sessclip/0/mock/"]  # We really need to stop using this sessclip endpoint anyway...
-    
+
     def test_create_model_perms(self):
         class TestView(CreateModelViewSet):
             view_permissions_update = {

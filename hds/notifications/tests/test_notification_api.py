@@ -51,7 +51,7 @@ class NotificationAPITest(HDSAPITestBase):
     @patch("notifications.tasks.check_notifications.delay")
     @patch("notifications.tasks.post_to_slack_task.delay")
     def test_notification_tasks(self, post_to_slack_task, check_notifications):
-        self._post_error_report()
+        self.post_error_report()
 
         self.assertEqual(post_to_slack_task.call_count, 1)
         self.assertEqual(check_notifications.call_count, 1)
@@ -67,7 +67,7 @@ class NotificationAPITest(HDSAPITestBase):
 
     @patch("notifications.models.Notification.notify")
     def test_notify_called(self, notify):
-        self._post_error_report()
+        self.post_error_report()
 
         self.assertFalse(notify.called)
 
@@ -85,7 +85,7 @@ class NotificationAPITest(HDSAPITestBase):
         notification.recipients.add(self.user)
         notification.save()
 
-        resp = self._post_error_report()
+        resp = self.post_error_report()
         self.assertTrue(notify.called)
 
         notify_args = notify.call_args.args

@@ -8,7 +8,7 @@ class AFTExceptionTest(ExceptionTestBase):
     def setUp(self):
         super().setUp()
         self.test_objects = self._setup_basic()
-        self._load_report_data()
+        self.load_error_report()
 
     def _send_exception(self, code=0, service='testservice', node=1):
         ts = datetime.now().replace(tzinfo=pytz.utc)
@@ -62,18 +62,18 @@ class AFTExceptionTest(ExceptionTestBase):
         self.assertEqual(resp.data['code']['code'], 0)
 
     def test_get_primary(self):
-        self._post_error_report()
+        self.post_error_report()
         self.assertEqual(AFTException.objects.count(), 3)
         resp = self.client.get(f'{self.api_base_url}/exceptions/?primary=True')
         self.assertEqual(resp.json()['data']['count'], 1)
 
     def test_get_date_range(self):
-        self._post_error_report()
+        self.post_error_report()
         resp = self.client.get(f'{self.api_base_url}/exceptions/?datetime_range=20220101T000100.0,20220430T235955.0')
         self.assertEqual(resp.json()['data']['count'], 1)
 
     def test_get_harv_ids(self):
-        self._post_error_report()
+        self.post_error_report()
         self.create_harvester_object(
             10,
             name="harv10" ,
@@ -82,7 +82,7 @@ class AFTExceptionTest(ExceptionTestBase):
             creator=self.user
         )
         self.data['serial_number'] = "010"
-        self._post_error_report(load=False)
+        self.post_error_report(load=False)
         self.create_harvester_object(
             9,
             name="harv9",
@@ -91,7 +91,7 @@ class AFTExceptionTest(ExceptionTestBase):
             creator=self.user
         )
         self.data['serial_number'] = "009"
-        self._post_error_report(load=False)
+        self.post_error_report(load=False)
 
         resp = self.client.get(f'{self.api_base_url}/exceptions/?harv_ids=9,10')
         self.assertEqual(resp.json()['data']['count'], 6)

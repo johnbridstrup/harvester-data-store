@@ -25,7 +25,7 @@ class ErrorReportAPITest(HDSAPITestBase):
         super().setUp()
         self.test_objects = self._setup_basic()
 
-        self._load_report_data()
+        self.load_error_report()
 
     def _extract_service_node(self, serv_str):
         serv_split = serv_str.split('.')
@@ -73,15 +73,15 @@ class ErrorReportAPITest(HDSAPITestBase):
         self.assertEqual(UUID, r.json()['data']['event']['UUID'])
 
     def test_event_and_picksess_created(self):
-        self._post_error_report()
+        self.post_error_report()
         self.assertEqual(Event.objects.count(), 1)
         self.assertEqual(PickSession.objects.count(), 1)
 
     def test_aux_events_created(self):
-        self._load_report_data()
+        self.load_error_report()
         dummies = ["dummy-uuid-1", "dummy-uuid-2"]
         self.data["aux_uuids"] = dummies
-        self._post_error_report(load=False)
+        self.post_error_report(load=False)
         self.assertEqual(Event.objects.count(), 1 + len(dummies))
 
         PRIMARY_UUID = self.data['uuid']
@@ -107,7 +107,7 @@ class ErrorReportAPITest(HDSAPITestBase):
 
     def test_update_errorreport(self):
         """ update error report and assert it exists """
-        self._post_error_report()
+        self.post_error_report()
 
         # updating reportTime
         current_time = make_aware(datetime.datetime.now().replace(microsecond=0))
@@ -119,7 +119,7 @@ class ErrorReportAPITest(HDSAPITestBase):
 
     def test_update_errorreport_with_invalid_data(self):
         """ update error report with invalid data """
-        self._post_error_report()
+        self.post_error_report()
         self.data["serial_number"]= "99"
         # updating harv_id
         response = self.client.patch(
@@ -134,7 +134,7 @@ class ErrorReportAPITest(HDSAPITestBase):
         data = self.data.copy()
         report_time = make_aware(datetime.datetime.fromtimestamp(data["timestamp"]))
 
-        self._post_error_report()
+        self.post_error_report()
 
         self.client.delete(f'{self.api_base_url}/errorreports/1/', HTTP_ACCEPT='application/json')
         self.assertEqual(ErrorReport.objects.count(), 0)
@@ -144,8 +144,8 @@ class ErrorReportAPITest(HDSAPITestBase):
         data = self.data
         report_time = make_aware(datetime.datetime.fromtimestamp(data["timestamp"]))
 
-        self._post_error_report()
-        self._post_error_report()
+        self.post_error_report()
+        self.post_error_report()
 
         response = self.client.get(f'{self.api_base_url}/errorreports/', HTTP_ACCEPT='application/json')
         self.assertEqual(response.status_code, 200)
@@ -190,17 +190,17 @@ class ErrorReportAPITest(HDSAPITestBase):
         self.assertEqual(r_non_codes.json()['data']['count'], 0)
 
     def test_start_end_time(self):
-        self._load_report_data()
+        self.load_error_report()
 
         t1 = time.time() # This is a posix timestamp
         self.data['timestamp'] = t1 + .00001  # shift for gte and lte
         dt1 = timezone.datetime.fromtimestamp(t1) # This is UTC
-        self._post_error_report(load=False)
+        self.post_error_report(load=False)
 
         t2 = time.time()
         dt2 = timezone.datetime.fromtimestamp(t2)
         self.data['timestamp'] = t2 + .00001
-        self._post_error_report(load=False)
+        self.post_error_report(load=False)
 
         t3 = time.time()
         dt3 = timezone.datetime.fromtimestamp(t3)
@@ -222,13 +222,13 @@ class ErrorReportAPITest(HDSAPITestBase):
 
     def test_get_errorreport_by_id(self):
         """ get error report by id """
-        self._post_error_report()
+        self.post_error_report()
 
         response = self.client.get(f'{self.api_base_url}/errorreports/1/')
         self.assertEqual(response.status_code, 200)
 
     def test_extract_errors(self):
-        self._post_error_report()
+        self.post_error_report()
         report = ErrorReport.objects.get()
         errs = ErrorReportSerializer._extract_exception_data(report)
 
@@ -289,7 +289,7 @@ class ErrorReportAPITest(HDSAPITestBase):
         self.assertEqual(resp.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_err_report_str(self):
-        self._post_error_report()
+        self.post_error_report()
         inst = ErrorReport.objects.get()
         self.assertIn("*Error on Harvester", str(inst))
         self.assertIn("AFTBaseException", str(inst))
@@ -488,7 +488,7 @@ class ErrorReportAPITest(HDSAPITestBase):
 
     def test_query_errorreport(self):
         # test the available query strings for errorreport
-        res = self._post_error_report()
+        res = self.post_error_report()
         res_data = res["data"]
 
         # query harv_ids associated with report
@@ -633,7 +633,7 @@ class ErrorReportAPITest(HDSAPITestBase):
         )
 
         self.data['data']['sysmon_report']['sysmon.0']['errors']['harvester.0']['traceback'] = "findme"
-        self._post_error_report(load=False)
+        self.post_error_report(load=False)
         # query traceback
         trace_dict = {
             'traceback': "findme"
@@ -646,7 +646,7 @@ class ErrorReportAPITest(HDSAPITestBase):
 
         # generic
         self.data['data']['sysmon_report']['sysmon.0']['PID'] = '111'
-        self._post_error_report(load=False)
+        self.post_error_report(load=False)
         generic_dict = {
             "generic": "report__data__sysmon_report__sysmon.0__PID=111"
         }

@@ -12,7 +12,7 @@ class ConfigReportTestCase(HDSAPITestBase):
         super().setUp()
         self.test_objects = self._setup_basic()
         self.url = reverse("configreports-list")
-        self._load_config_data()
+        self.load_config_data()
 
     def test_basic(self):
         r = self.client.post(self.url, data=self.conf_data, format='json')
