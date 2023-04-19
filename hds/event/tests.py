@@ -5,8 +5,10 @@ from event.serializers import PickSessionSerializer
 from errorreport.models import ErrorReport
 from s3file.models import S3File
 
+import time
 from rest_framework import status
 from django.urls import reverse
+from django.utils import timezone
 from django.utils.http import urlencode
 from django.utils.timezone import datetime, timedelta
 
@@ -124,6 +126,49 @@ class PickSessionApiTestCase(TaggedUUIDModelTestBase):
         # 1 pick session
         resp = self.client.get(self.picksess_url + f"?UUID={picksess_uuid}")
         self.assertEqual(resp.json()["data"]["count"], 1)
+
+    def test_filter_params(self):
+        t0 = time.time()
+        ts = [t0 + i*100 for i in range(4)]  # Four start times
+        harvs = [
+            self.create_harvester_object(
+                harv_id=i+1000, 
+                location=self.create_location_object(ranch=f"ranch_{i}"),
+            ) for i in range(1,3)
+        ] * 2  # two harvesters
+
+        for t, harv in zip(ts, harvs):
+            UUID = PickSession.generate_uuid()
+            dt = DTimeFormatter.from_timestamp(t)
+            PickSession.objects.create(
+                UUID=UUID,
+                start_time=dt,
+                harvester=harv,
+                location=harv.location,
+                creator=self.user,
+            )
+
+        # Filter by harvester
+        resp = self.client.get(self.picksess_url + f"?harv_ids={harvs[0].harv_id}")
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        self.assertEqual(resp.json()['data']['count'], 2)  # Two for each harvester
+
+        # Filter by location
+        resp = self.client.get(self.picksess_url + f"?locations={harvs[0].location.ranch}")
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        self.assertEqual(resp.json()['data']['count'], 2)  # Two for each harvester
+
+        # Filter by start and end time
+        start_str = timezone.datetime.fromtimestamp(ts[0]+10)
+        resp = self.client.get(self.picksess_url + f"?start_time={start_str}&tz=utc")
+        self.assertEqual(resp.json()["data"]["count"], 3)
+
+        end_str = timezone.datetime.fromtimestamp(ts[-1] - 10)
+        resp = self.client.get(self.picksess_url + f"?end_time={end_str}&tz=utc")
+        self.assertEqual(resp.json()["data"]["count"], 3)
+
+        resp = self.client.get(self.picksess_url + f"?start_time={start_str}&end_time={end_str}&tz=utc")
+        self.assertEqual(resp.json()["data"]["count"], 2)
 
 
 class EventPicksessIntegrationTestCase(TaggedUUIDModelTestBase):
