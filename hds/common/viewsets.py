@@ -12,11 +12,12 @@ from .signals import report_created
 class CreateModelViewSet(ModelViewSet):
     renderer_classes = (HDSJSONRenderer,)
     filter_backends = (DjangoFilterBackend, filters.OrderingFilter)
+    list_serializer_class = None
     view_permissions_update = {}
     view_permissions = {
             'create': {
                 'admin': True, # Must whitelist permission below admin for creating
-            },  
+            },
             'list': {
                 RoleChoices.SUPPORT: True,
                 RoleChoices.JENKINS: True,
@@ -45,6 +46,17 @@ class CreateModelViewSet(ModelViewSet):
     def perform_create(self, serializer):
         return serializer.save(creator=self.request.user)
 
+    def get_serializer_class(self):
+        """
+        Return the class to use for the serializer.
+        Defaults to using `self.serializer_class`.
+        """
+
+        if self.list_serializer_class is not None and self.action == "list":
+            return self.list_serializer_class
+
+        return super().get_serializer_class()
+
 
 class ReportModelViewSet(CreateModelViewSet):
     """ Viewset for error reports """
@@ -53,7 +65,7 @@ class ReportModelViewSet(CreateModelViewSet):
         'create': {
             'admin': True,
             RoleChoices.SQS: True,
-        },  
+        },
         'list': {
             RoleChoices.SUPPORT: True,
             RoleChoices.JENKINS: True,
@@ -86,7 +98,7 @@ class ReportModelViewSet(CreateModelViewSet):
         class_name = inst.__class__.__name__
         report_created.send(sender=class_name, app_label=app_label, pk=inst.id)
         return inst
-    
+
     @property
     def report_type(self):
         return self.serializer_class.report_type
