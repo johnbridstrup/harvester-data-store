@@ -1,0 +1,42 @@
+services:
+  db:
+    extends:
+      file: docker-compose.yml
+      service: db
+    networks:
+      - "hds-network"
+
+  web:
+    extends:
+      file: docker-compose.yml
+      service: web
+    networks:
+      - "hds-network"
+
+  redis:
+    extends:
+      file: docker-compose.yml
+      service: redis
+    networks:
+      - "hds-network"
+
+  beatbox:
+    build:
+      context: beatbox
+    environment:
+      - TEST_USERNAME=beatbox
+      - TEST_PASSWORD=testingpwd
+      - TEST_HOSTNAME=http://web:8000
+      - VERBOSE=true
+    ports:
+      - 127.0.0.1:8080:8080
+    networks:
+      - "hds-network" 
+
+networks:
+  hds-network:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+      - subnet:  10.103.0.1/16
