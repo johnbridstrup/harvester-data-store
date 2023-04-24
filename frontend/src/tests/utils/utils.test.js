@@ -188,6 +188,8 @@ test("should return the index of logs", () => {
 test("should match and return log message into 4 parts", () => {
   let logMsg =
     "[20220208T105000.014] [DEBUG] [autodrive.beh.fsm] -- Vpos: 99715.06447550641";
+  let complexMsg =
+    "[20230209T095331.171] [DEBUG] [robot.beh.fsm] -- temp bezier: P0: [ -25.938  197.527 -906.75 ]\tP1: [ -25.938  197.925 -906.75 ]\tP2: [ -25.938  197.064 -906.752]\tP3: [ -25.938  195.513 -906.752]\tvel_max: 20.742422324838202\taccel_max: 150.1727469427821\tjerk_max: 302.8897235392171";
   let dumpMsg = "[20230131T131313.522260]  rcan0  282  0B 00 00 00 3B F5 FF FF";
   let output1 = {
     timestamp: "20220208T105000.014",
@@ -201,8 +203,15 @@ test("should match and return log message into 4 parts", () => {
     service: "282",
     log: "0B 00 00 00 3B F5 FF FF",
   };
+  let output3 = {
+    timestamp: "20230209T095331.171",
+    log_level: "DEBUG",
+    service: "robot.beh.fsm",
+    log: "-- temp bezier: P0: [ -25.938  197.527 -906.75 ]\tP1: [ -25.938  197.925 -906.75 ]\tP2: [ -25.938  197.064 -906.752]\tP3: [ -25.938  195.513 -906.752]\tvel_max: 20.742422324838202\taccel_max: 150.1727469427821\tjerk_max: 302.8897235392171",
+  };
   expect(logContent(logMsg, ".log")).toMatchObject(output1);
   expect(logContent(dumpMsg, ".dump")).toMatchObject(output2);
+  expect(logContent(complexMsg, ".log")).toMatchObject(output3);
 });
 
 describe("logFilter case scenarios", () => {

@@ -845,10 +845,8 @@ export const logContent = (logMessage = "", ext = ".log") => {
       logObj["log_level"] = splittedArr[1].replace("[", "").replace("]", "");
       logObj["service"] = splittedArr[2].replace("[", "").replace("]", "");
     }
-    let logMatch = logMessage.match(LOG_MSG_PATTERN);
-    if (logMatch) {
-      logObj["log"] = logMatch[0];
-    }
+    splittedArr = logMessage.split("-- ");
+    logObj["log"] = `-- ${splittedArr[1]}`;
   } else if (ext === ".dump") {
     splittedArr = logMessage.split("  ");
     logObj["timestamp"] = splittedArr[0].replace("[", "").replace("]", "");
