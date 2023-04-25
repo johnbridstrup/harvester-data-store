@@ -43,9 +43,9 @@ class ErrorReportView(ReportModelViewSet):
 
     @ERRORREPORT_LIST_QUERY_TIMER.time()
     def get_queryset(self):
-        listfilter = build_list_filter(self.request)
-        harvs = ErrorReport.objects.filter(**listfilter).order_by('-reportTime').distinct()
-        return harvs
+        queryset = super().get_queryset()
+        queryset = queryset.order_by('-reportTime').distinct()
+        return queryset
 
     @action(
         methods=['Post'],
