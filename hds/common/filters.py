@@ -8,11 +8,11 @@ class ListFilter(Filter):
     def __init__(self, field_type=str, field_name=None, lookup_expr=None, *, label=None, method=None, distinct=False, exclude=False, **kwargs):
         self.field_type = field_type
         super().__init__(field_name, lookup_expr, label=label, method=method, distinct=distinct, exclude=exclude, **kwargs)
-    
+
     def filter(self, qs, value):
         if not value:
             return qs
-        
+
         self.lookup_expr = "in"
         values = [self.field_type(v) for v in value.split(',')]
         return super().filter(qs, values).distinct()
@@ -33,12 +33,12 @@ class DTimeFilter(Filter):
 class TagListFilter(Filter):
     def __init__(self, field_name="tags__name", lookup_expr=None, *, label=None, method=None, distinct=False, exclude=False, **kwargs):
         super().__init__(field_name=field_name, lookup_expr=lookup_expr, label=label, method=method, distinct=distinct, exclude=exclude, **kwargs)
-    
+
     """Filter by list of tags"""
     def filter(self, qs, value):
         if not value:
             return qs
-        
+
         for val in value.split(','):
             filt = {f"{self.field_name}": val}
             qs = qs.filter(**filt)
@@ -48,7 +48,7 @@ class TagListFilter(Filter):
 class GenericFilter(Filter):
     """Generic lookup filter.
 
-    Filter any fields for exact matches. JSONField compatible. 
+    Filter any fields for exact matches. JSONField compatible.
     example: client.get(<url>/?jsonfield__key1__key2=3,jsonfield2__key3__key4=hello)
     """
     def filter(self, qs, value):
@@ -62,7 +62,7 @@ class GenericFilter(Filter):
                     # too many or not enough values to unpack
                     return qs
                 query_filter[key.strip()] = value.strip()
-        
+
         return qs.filter(**query_filter)
 
 
@@ -71,13 +71,13 @@ class EventUUIDFilter(ListFilter):
         super().__init__(field_type, field_name, lookup_expr, label=label, method=method, distinct=distinct, exclude=exclude, **kwargs)
 
     def filter(self, qs, value):
-        self.field_name += "__UUID" 
+        self.field_name += "__UUID"
         return super().filter(qs, value)
-        
+
 
 class CommonInfoFilterset(filters.FilterSet):
     FIELDS_BASE = [
-        'created_after', 
+        'created_after',
         'created_before',
     ]
 
@@ -88,7 +88,7 @@ class CommonInfoFilterset(filters.FilterSet):
         split_dates = value.split(',')
         if len(split_dates) != 2:
             return queryset
-        
+
         filter_dict = {}
         tz = self.request.query_params.get("tz", DEFAULT_TZ)
         start_str = split_dates[0]
@@ -99,6 +99,25 @@ class CommonInfoFilterset(filters.FilterSet):
         if end_str:
             end = DTimeFormatter.convert_to_datetime(end_str, tz)
             filter_dict[f"{name}__lte"] = end
+        return queryset.filter(**filter_dict)
+
+
+    def filter_primary_exception(self, queryset, name, value):
+        """
+        Filters out errorreport with primary exceptions for the
+        exceptions codes sent by the client.
+
+        It is a hack that intercepts any reordering for exception code and
+        boolean primary flag.
+        """
+        codes_str = self.request.query_params.get("codes", None)
+        codes = codes_str.split(",") if codes_str else None
+
+        filter_dict = {}
+        if codes:
+            filter_dict["exceptions__code__code__in"] = codes
+        filter_dict.update({name: value})
+
         return queryset.filter(**filter_dict)
 
 
