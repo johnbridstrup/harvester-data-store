@@ -1,6 +1,5 @@
 import {
   API_URL,
-  LOG_MSG_PATTERN,
   LOG_STR_PATTERN,
   MASTER_ROBOT,
   PROD_ENV,

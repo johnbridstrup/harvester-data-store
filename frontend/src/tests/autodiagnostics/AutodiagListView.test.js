@@ -34,7 +34,7 @@ test("should render the autodiagnostic list view", async () => {
     robot: null,
     gripper_sn: null,
     start_time: "",
-    end_time: ""
+    end_time: "",
   });
 
   const combobox = screen.getAllByRole("combobox");
@@ -80,7 +80,7 @@ test("should render the autodiagnostic list view", async () => {
     gripper_sn: 1277,
     result: "1",
     start_time: "20230206T234724.670",
-    end_time: "20230206T234724.671"
+    end_time: "20230206T234724.671",
   });
   expect(result1).toBeChecked();
   expect(result0).not.toBeChecked();
