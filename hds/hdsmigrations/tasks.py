@@ -1,13 +1,14 @@
-from sys import stderr, stdout
-from .models import MigrationLog
+import structlog
+from io import StringIO
+from django.core.management import call_command
+from django.utils.timezone import datetime, make_aware
+
 from common.celery import monitored_shared_task
 from common.utils import test_env
 
-from django.core.management import call_command
-from django.utils.timezone import datetime, make_aware
-from io import StringIO
+from .models import MigrationLog
 
-import structlog, traceback
+
 
 logger = structlog.get_logger(__name__)
 

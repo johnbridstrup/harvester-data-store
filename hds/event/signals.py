@@ -1,4 +1,3 @@
-from django.contrib.contenttypes.models import ContentType
 from django.dispatch import receiver, Signal
 from common.signals import report_created
 from .models import Event

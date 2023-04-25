@@ -1,6 +1,6 @@
 from common.filters import CommonInfoFilterset, EventUUIDFilter, ReportFilterset
 
-from .models import HarvesterAsset, HarvesterAssetReport, HarvesterAssetType
+from .models import HarvesterAsset, HarvesterAssetReport
 
 
 class HarvesterAssetFilterset(CommonInfoFilterset):

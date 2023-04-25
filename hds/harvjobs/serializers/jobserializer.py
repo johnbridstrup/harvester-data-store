@@ -1,13 +1,13 @@
 import jsonschema
 import re
 
+from django.urls import reverse
+from rest_framework import serializers
+
 from harvester.models import Harvester
 from event.models import Event
 from event.serializers import EventSerializerMixin
 from ..models import Job, JobType, JobSchema
-
-from django.urls import reverse
-from rest_framework import serializers
 
 
 DEFAULT_JOB_TIMEOUT = 6000

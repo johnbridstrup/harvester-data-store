@@ -1,12 +1,11 @@
 # import serializers
+import json
 from django.contrib.auth.models import User
 from rest_framework import serializers
 
-from .models import S3File
 from event.models import Event
 from event.serializers import EventSerializerMixin
-
-import json
+from .models import S3File
 
 
 class S3FileSerializer(EventSerializerMixin, serializers.ModelSerializer):

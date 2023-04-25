@@ -1,9 +1,8 @@
+from common.viewsets import CreateModelViewSet
+from hds.roles import RoleChoices
 from .filters import NotificationFilter
 from .models import Notification
 from .serializers import NotificationSerializer
-
-from common.viewsets import CreateModelViewSet
-from hds.roles import RoleChoices
 
 
 class NotificationView(CreateModelViewSet):

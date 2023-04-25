@@ -1,16 +1,17 @@
-from ..filters import HarvesterFilterset
-from ..models import Harvester
-from ..serializers.harvesterserializer import HarvesterSerializer, HarvesterHistorySerializer
-
-from harvdeploy.serializers import HarvesterVersionReportSerializer
 
 from rest_framework.decorators import action
 from rest_framework.renderers import JSONRenderer
+
 from aftconfigs.serializers import ConfigReportSerializer
 from common.utils import make_ok
 from common.viewsets import CreateModelViewSet
 from hds.roles import RoleChoices
 from harvassets.serializers import HarvesterAssetSerializer
+from harvdeploy.serializers import HarvesterVersionReportSerializer
+
+from ..filters import HarvesterFilterset
+from ..models import Harvester
+from ..serializers.harvesterserializer import HarvesterSerializer, HarvesterHistorySerializer
 
 
 class HarvesterView(CreateModelViewSet):

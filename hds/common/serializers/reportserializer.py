@@ -1,14 +1,16 @@
+import jsonschema
+import structlog
 from copy import deepcopy
+
 from rest_framework import serializers
+
 from common.async_metrics import ASYNC_ERROR_COUNTER
 from common.metrics import ERROR_COUNTER
 from common.models import Tags
 from common.reports import DTimeFormatter, ReportBase
 from harvester.models import Harvester
 from event.models import Event
-import datetime
-import jsonschema
-import structlog
+
 
 logger = structlog.get_logger(__name__)
 

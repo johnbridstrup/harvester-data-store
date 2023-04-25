@@ -1,8 +1,8 @@
+from rest_framework import serializers
+
 from common.serializers.reportserializer import ReportSerializerBase
 from event.serializers import EventSerializerMixin
 from ..models import JobResults, Job, JobHostResult
-
-from rest_framework import serializers
 
 
 class JobHostResultSerializer(serializers.ModelSerializer):

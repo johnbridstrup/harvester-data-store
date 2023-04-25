@@ -1,9 +1,8 @@
+from common.viewsets import CreateModelViewSet
+from hds.roles import RoleChoices
 from ..filters import DistributorFilterset
 from ..models import Distributor
 from ..serializers.distributorserializer import DistributorSerializer
-
-from common.viewsets import CreateModelViewSet
-from hds.roles import RoleChoices
 
 
 class DistributorView(CreateModelViewSet):

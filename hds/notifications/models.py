@@ -1,7 +1,8 @@
-from common.models import CommonInfo
-from .slack import post_to_slack
 from django.contrib.auth.models import User
 from django.db import models
+
+from common.models import CommonInfo
+from .slack import post_to_slack
 
 class Notification(CommonInfo):
     trigger_on = models.TextField()

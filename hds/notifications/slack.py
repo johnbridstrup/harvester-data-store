@@ -1,9 +1,10 @@
-from slack_sdk import WebClient
-from slack_sdk.errors import SlackApiError
-from common.async_metrics import ASYNC_ERROR_COUNTER
 import os
+
+from common.async_metrics import ASYNC_ERROR_COUNTER
 from collections.abc import Mapping
 from enum import Enum
+from slack_sdk import WebClient
+from slack_sdk.errors import SlackApiError
 
 
 TOKEN = os.environ.get("SLACK_TOKEN")

@@ -1,10 +1,10 @@
+from django.db import models
+from simple_history.models import HistoricalRecords
+
 from common.models import CommonInfo
 from common.reports import ReportBase
 from event.models import EventModelMixin
 from harvester.models import Harvester
-
-from django.db import models
-from simple_history.models import HistoricalRecords
 
 
 class JobType(CommonInfo):

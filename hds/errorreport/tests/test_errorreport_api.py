@@ -11,7 +11,7 @@ from rest_framework.authtoken.models import Token
 
 from common.async_metrics import ASYNC_ERROR_COUNTER, TOTAL_ERROR_COUNTER
 from common.metrics import ERROR_COUNTER
-from common.models import Tags, UserProfile
+from common.models import Tags
 from common.tests import HDSAPITestBase, create_user
 from common.reports import DTimeFormatter
 from harvester.models import Harvester

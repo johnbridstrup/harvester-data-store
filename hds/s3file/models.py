@@ -1,9 +1,9 @@
 from django.db import models
+from urllib.parse import urljoin
+
 from common.models import CommonInfo
 from common.utils import media_upload_path
 from event.models import EventModelMixin
-
-from urllib.parse import urljoin
 
 
 class S3File(EventModelMixin, CommonInfo):

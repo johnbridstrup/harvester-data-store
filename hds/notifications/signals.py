@@ -1,6 +1,7 @@
 from django.dispatch import receiver, Signal
-from .tasks import check_notifications, notify_operator_task, post_to_slack_task
+
 from errorreport.models import ErrorReport
+from .tasks import check_notifications, notify_operator_task, post_to_slack_task
 
 
 error_report_created = Signal()

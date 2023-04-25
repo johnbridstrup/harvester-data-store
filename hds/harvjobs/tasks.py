@@ -1,15 +1,21 @@
+import datetime
 import json
-from django.contrib.auth.models import User
+import os
+import pytz
+import requests
+import structlog
 
-from .models import Job, JobHostResult, JobResults
+from django.contrib.auth.models import User
+from requests.adapters import Retry, HTTPAdapter
+
 from common.celery import monitored_shared_task
 from common.serializers.reportserializer import ReportSerializerBase
 from common.utils import build_frontend_url, test_env
 from harvester.models import Harvester
 from notifications.slack import post_to_slack
 
-import datetime, os, pytz, requests, structlog, sys
-from requests.adapters import Retry, HTTPAdapter
+from .models import Job, JobHostResult, JobResults
+
 
 logger = structlog.get_logger(__name__)
 

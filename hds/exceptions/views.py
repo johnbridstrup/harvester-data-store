@@ -2,6 +2,11 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
 from rest_framework.decorators import action
 from rest_framework.renderers import JSONRenderer
+
+from common.viewsets import CreateModelViewSet
+from common.utils import make_ok
+from hds.roles import RoleChoices
+
 from .filters import AFTExceptionFilter
 from .models import (
     AFTExceptionCode,
@@ -16,10 +21,6 @@ from .serializers import (
 )
 from .tasks import update_exception_codes
 from .utils import create_pareto
-
-from common.viewsets import CreateModelViewSet
-from common.utils import make_ok
-from hds.roles import RoleChoices
 
 
 class AFTExceptionCodeManifestView(CreateModelViewSet):

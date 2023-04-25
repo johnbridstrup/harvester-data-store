@@ -1,9 +1,8 @@
+from common.viewsets import CreateModelViewSet
+from hds.roles import RoleChoices
 from ..filters import LocationFilterset
 from ..models import Location
 from ..serializers.locationserializer import LocationSerializer
-
-from common.viewsets import CreateModelViewSet
-from hds.roles import RoleChoices
 
 
 class LocationView(CreateModelViewSet):

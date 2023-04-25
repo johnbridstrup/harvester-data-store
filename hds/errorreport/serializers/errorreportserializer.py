@@ -1,20 +1,23 @@
-from common.async_metrics import ASYNC_ERROR_COUNTER
-from common.models import Tags
-from common.serializers.reportserializer import ReportSerializerBase
-from ..tasks import extract_exceptions
-from ..models import ErrorReport, DEFAULT_UNKNOWN
-from harvester.serializers.harvesterserializer import HarvesterSerializer
-from location.serializers.locationserializer import LocationSerializer
-from event.models import Event, PickSession
-from event.serializers import PickSessionSerializerMixin
-from exceptions.models import AFTException, AFTExceptionCode
-from exceptions.serializers import AFTExceptionSerializer
-from exceptions.utils import sort_exceptions
+import structlog
+
 from collections.abc import Mapping
 from rest_framework import serializers
 from taggit.serializers import TagListSerializerField, TaggitSerializer
 
-import structlog
+from common.async_metrics import ASYNC_ERROR_COUNTER
+from common.models import Tags
+from common.serializers.reportserializer import ReportSerializerBase
+from event.models import PickSession
+from event.serializers import PickSessionSerializerMixin
+from exceptions.models import AFTException, AFTExceptionCode
+from exceptions.serializers import AFTExceptionSerializer
+from exceptions.utils import sort_exceptions
+from harvester.serializers.harvesterserializer import HarvesterSerializer
+from location.serializers.locationserializer import LocationSerializer
+
+from ..tasks import extract_exceptions
+from ..models import ErrorReport, DEFAULT_UNKNOWN
+
 
 logger = structlog.get_logger(__name__)
 

@@ -1,12 +1,11 @@
+from rest_framework.response import Response
+
+from common.viewsets import CreateModelViewSet, ReportModelViewSet
+
 from .filters import AutodiagnosticsRunFilter, AutodiagnosticsReportFilter
 from .models import AutodiagnosticsReport, AutodiagnosticsRun
 from .serializers import AutodiagnosticsReportSerializer, AutodiagnosticsRunSerializer
 from .tasks import extract_autodiag_run
-
-from common.utils import make_ok
-from common.viewsets import CreateModelViewSet, ReportModelViewSet
-
-from rest_framework.response import Response
 
 
 MAGIC_GRIPPER_SN = 1297

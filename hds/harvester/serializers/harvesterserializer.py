@@ -1,9 +1,6 @@
 # import serializers
 from rest_framework import serializers
-from rest_framework.decorators import action
-from rest_framework.renderers import JSONRenderer
 
-from common.utils import make_ok
 from harvdeploy.models import HarvesterVersionReport
 from harvdeploy.serializers import HarvesterCodeReleaseSerializer, HarvesterVersionReportSerializer
 from location.serializers.locationserializer import LocationSerializer

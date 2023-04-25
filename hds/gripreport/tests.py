@@ -2,7 +2,6 @@ import os
 from rest_framework import status
 
 from common.tests import HDSAPITestBase
-from event.models import PickSession
 from hds.urls import version
 
 from .models import GripReport

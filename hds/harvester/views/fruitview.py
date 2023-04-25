@@ -1,9 +1,9 @@
+from common.viewsets import CreateModelViewSet
+from hds.roles import RoleChoices
+
 from ..filters import FruitFilterset
 from ..models import Fruit
 from ..serializers.fruitserializer import FruitSerializer
-
-from common.viewsets import CreateModelViewSet
-from hds.roles import RoleChoices
 
 
 class FruitView(CreateModelViewSet):

@@ -1,3 +1,11 @@
+from common.viewsets import ReportModelViewSet
+from common.utils import make_ok, build_frontend_url
+from hds.roles import RoleChoices
+from notifications.signals import error_report_created
+from notifications.serializers import NotificationSerializer
+from rest_framework.decorators import action
+from rest_framework.renderers import JSONRenderer
+
 from ..utils import (
     build_list_filter,
 )
@@ -10,13 +18,6 @@ from ..serializers.errorreportserializer import (
     ErrorReportSerializer,
     ErrorReportListSerializer,
 )
-from common.viewsets import ReportModelViewSet
-from common.utils import make_ok, build_frontend_url
-from hds.roles import RoleChoices
-from notifications.signals import error_report_created
-from notifications.serializers import NotificationSerializer
-from rest_framework.decorators import action
-from rest_framework.renderers import JSONRenderer
 
 
 class ErrorReportView(ReportModelViewSet):

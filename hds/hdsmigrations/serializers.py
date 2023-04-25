@@ -1,6 +1,6 @@
-from .models import MigrationLog
-
 from rest_framework import serializers
+
+from .models import MigrationLog
 
 
 class MigrationLogSerializer(serializers.ModelSerializer):

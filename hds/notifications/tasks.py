@@ -1,12 +1,12 @@
 from collections import defaultdict
-
-from .models import Notification
-from .slack import post_to_slack, Emojis
 from django.apps import apps
 from django.core.exceptions import FieldError
+
 from common.async_metrics import ASYNC_ERROR_COUNTER
 from common.celery import monitored_shared_task
 from exceptions.models import AFTExceptionCode
+from .models import Notification
+from .slack import post_to_slack, Emojis
 
 
 @monitored_shared_task

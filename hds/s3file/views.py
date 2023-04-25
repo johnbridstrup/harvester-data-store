@@ -1,12 +1,12 @@
 from rest_framework.response import Response
 
+from event.signals import update_event_tag
+from common.viewsets import CreateModelViewSet
+from hds.roles import RoleChoices
 from .models import S3File, SessClip
 from .serializers import S3FileSerializer
 from .signals import sessclip_uploaded
 from .filters import S3FileFilter
-from event.signals import update_event_tag
-from common.viewsets import CreateModelViewSet
-from hds.roles import RoleChoices
 
 class S3FileView(CreateModelViewSet):
     queryset = S3File.objects.all()

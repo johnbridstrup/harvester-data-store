@@ -1,10 +1,10 @@
+from collections.abc import Mapping, Iterable
+from django.db import models
+from taggit.managers import TaggableManager
+
 from common.models import CommonInfo
 from common.reports import ReportBase
 from harvester.models import Fruit
-
-from django.db import models
-from collections.abc import Mapping, Iterable
-from taggit.managers import TaggableManager
 
 class HarvesterCodeRelease(CommonInfo):
     version = models.CharField(max_length=40)
