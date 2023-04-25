@@ -7,6 +7,8 @@ locals {
   service_name             = "hds"
   service_docker_image     = "838860823423.dkr.ecr.us-west-1.amazonaws.com/hds:hds-staging-5dc1def"
   healthcheck_path         = "/api/v1/healthcheck/"
+  silk_profiling           = "true"
+  silk_cprofile            = "true"
   sqs_client_metrics_ports = [9104]
   enable_prometheus_scrape = true
   service_container_memory = 4096
@@ -72,4 +74,6 @@ module "hds" {
   asset_queue_url           = data.aws_sqs_queue.asset_queue.url
   migrate_flag              = local.migrate
   s3_bucket                 = local.bucket
+  silk_profiling            = local.silk_profiling
+  silk_cprofile             = local.silk_cprofile
 }

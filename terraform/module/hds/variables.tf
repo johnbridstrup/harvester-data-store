@@ -247,6 +247,18 @@ variable "s3_bucket" {
   type        = string
 }
 
+variable "silk_profiling" {
+  description = "Enable Silk profiler"
+  type        = string
+  default     = "false"
+}
+
+variable "silk_cprofile" {
+  description = "Enable CProfile via Silk"
+  type        = string
+  default     = "false"
+}
+
 # SQS QUEUES
 
 variable "errorreport_queue_url" {
