@@ -651,3 +651,55 @@ class ErrorReportAPITest(HDSAPITestBase):
             f'{self.error_url}?{urlencode(generic_dict)}'
         )
         self.assertEqual(r_gen.json()['data']['count'], 1)
+
+        # primary exception codes with primary flag set to true
+        # e.g 0*,0*
+        excs = AFTException.objects.filter()
+        self.assertEqual(sum([e.primary for e in excs]), 3)
+
+        codes = [x.code.code for x in excs.filter(primary=True)]
+        code_dict = {
+            'codes': ','.join(map(str, set(codes))),
+            'primary': True
+        }
+        resp = self.client.get(
+            f'{self.error_url}?{urlencode(code_dict)}'
+        )
+        self.assertEqual(resp.json()['data']['count'], 3)
+
+        # primary exception codes with primary flag set to false
+        # e.g 0*,0
+        code_dict = {
+            'codes': ','.join(map(str, set(codes))),
+            'primary': False
+        }
+        resp = self.client.get(
+            f'{self.error_url}?{urlencode(code_dict)}'
+        )
+        self.assertEqual(resp.json()['data']['count'], 3)
+
+        # non primary codes with primary flag set to true
+        # e.g 0,0
+        for ex in excs:
+            ex.primary = False # modify all to be non primary
+            ex.save()
+        codes = [x.code.code for x in AFTException.objects.filter()]
+        code_dict = {
+            'codes': ','.join(map(str, set(codes))),
+            'primary': True
+        }
+        resp = self.client.get(
+            f'{self.error_url}?{urlencode(code_dict)}'
+        )
+        self.assertEqual(resp.json()['data']['count'], 0)
+
+        # non primary codes with primary flag set to false
+        # e.g 0,0
+        code_dict = {
+            'codes': ''.join(map(str, set(codes))),
+            'primary': False
+        }
+        resp = self.client.get(
+            f'{self.error_url}?{urlencode(code_dict)}'
+        )
+        self.assertEqual(resp.json()['data']['count'], 3)
