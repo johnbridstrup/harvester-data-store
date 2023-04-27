@@ -1,4 +1,5 @@
 from unittest.mock import patch
+from urllib.parse import urlencode
 
 from rest_framework import status
 
@@ -23,16 +24,39 @@ class NotificationAPITest(HDSAPITestBase):
         )
         self.notifcation_inst.recipients.set([1])
 
-    def test_create_notification_disallowed(self):
+    def test_create_notification(self):
         """ create notifications and assert it exists """
+        params = {
+            'harv_ids': 11,
+            'locations': "Ranch A",
+            'fruits': 'apple',
+            'codes': 0
+        }
+        criteria = {
+            "harvester__harv_id__in": [
+                "11"
+            ],
+            "location__ranch": [
+                "Ranch A"
+            ],
+            "harvester__fruit__name__in": [
+                "apple"
+            ],
+            "exceptions__code__code__in": [
+                "0"
+            ]
+        }
+        self.notification["recipients"] = [self.user.id]
         resp = self.client.post(
-            self.notif_url,
+            f'{self.notif_url}?{urlencode(params)}',
             data=self.notification,
             format="json"
         )
 
-        self.assertEqual(resp.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
-        self.assertEqual(Notification.objects.count(), 1)
+        self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(Notification.objects.count(), 2)
+        obj = Notification.objects.get(id=resp.data["id"])
+        self.assertDictEqual(criteria, obj.criteria)
 
     def test_delete_notification(self):
         self.assertEqual(Notification.objects.count(), 1)
@@ -144,5 +168,3 @@ class NotificationAPITest(HDSAPITestBase):
         self.assertEqual(data["results"][0]["creator"], user2.id)
         self.assertIn(self.user.username, data["results"][0]["recipients"])
         self.assertIn(self.user.username, data["results"][1]["recipients"])
-
-
