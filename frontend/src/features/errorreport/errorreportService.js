@@ -1,4 +1,5 @@
-import { API_URL } from "../base/constants";
+import { NOTIFICATION_URL } from "features/notification/notificationService";
+import { API_URL, ERRORREPORT_TRIGGER } from "../base/constants";
 import { axiosService } from "../base/service";
 
 export const ERROR_REPORT_URL = `${API_URL}/errorreports/`;
@@ -45,9 +46,9 @@ const createNotification = async (paramsObj, token) => {
   delete paramsObj["recipients"];
   const searchParams = new URLSearchParams(paramsObj);
   const response = await axiosService.post(
-    `${ERROR_REPORT_URL}createnotification/?${searchParams.toString()}`,
+    `${NOTIFICATION_URL}?${searchParams.toString()}`,
     token,
-    { recipients }
+    { recipients, trigger_on: ERRORREPORT_TRIGGER }
   );
   return response;
 };

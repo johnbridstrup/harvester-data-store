@@ -55,6 +55,7 @@ export const THEME_MODES = {
 };
 
 export const MASTER_ROBOT = 0;
+export const ERRORREPORT_TRIGGER = "ErrorReport";
 
 export class PushStateEnum {
   static get GENPARETO() {
