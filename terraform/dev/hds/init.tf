@@ -64,6 +64,12 @@ data "aws_security_group" "pritunl_sg" {
     Name = "pritunl-vpn"
   }
 }
+
+data "aws_security_group" "beatbox_sg" {
+  tags = {
+    Name = "hds-beatbox"
+  }
+}
 data "aws_security_group" "prom_scrape_sg" {
   tags = {
     Name = "ecs-prometheus-scraper"

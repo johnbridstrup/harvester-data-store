@@ -5,7 +5,7 @@ locals {
   frontend_url             = "https://hds.devcloud.advanced.farm"
   service_port             = "8000"
   service_name             = "hds"
-  service_docker_image     = "082346306812.dkr.ecr.us-west-1.amazonaws.com/hds:hds-staging-94c45f18"
+  service_docker_image     = "082346306812.dkr.ecr.us-west-1.amazonaws.com/hds:hds-staging-e7be9f09"
   healthcheck_path         = "/api/v1/healthcheck/"
   silk_profiling           = "true"
   silk_cprofile            = "true"
@@ -42,7 +42,9 @@ module "hds" {
     "80,tcp,${data.aws_security_group.lambda_sg.id},web traffic from lambda",
     "443,tcp,${data.aws_security_group.lambda_sg.id},ssl traffic from lambda",
     "80,tcp,${data.aws_security_group.pritunl_sg.id},web traffic from pritunl",
-    "443,tcp,${data.aws_security_group.pritunl_sg.id},ssl traffic from pritunl"
+    "443,tcp,${data.aws_security_group.pritunl_sg.id},ssl traffic from pritunl",
+    "80,tcp,${data.aws_security_group.beatbox_sg.id},web traffic from beatbox",
+    "443,tcp,${data.aws_security_group.beatbox_sg.id},ssl traffic from beatbox"
   ]
   service_ingress_sg_rules = concat(
     ["${local.service_port},tcp,${data.aws_security_group.prom_scrape_sg.id},django prometheus scraping"],
