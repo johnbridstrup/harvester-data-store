@@ -1,14 +1,7 @@
 from common.viewsets import ReportModelViewSet
-from common.utils import make_ok, build_frontend_url
-from hds.roles import RoleChoices
+from common.utils import build_frontend_url
 from notifications.signals import error_report_created
-from notifications.serializers import NotificationSerializer
-from rest_framework.decorators import action
-from rest_framework.renderers import JSONRenderer
 
-from ..utils import (
-    build_list_filter,
-)
 from ..filters import ErrorReportFilterset
 from ..models import ErrorReport
 from ..metrics import (
@@ -25,11 +18,6 @@ class ErrorReportView(ReportModelViewSet):
     serializer_class = ErrorReportSerializer
     filterset_class = ErrorReportFilterset
     list_serializer_class = ErrorReportListSerializer
-    view_permissions_update = {
-        'create_notification': {
-            RoleChoices.DEVELOPER: True,
-        },
-    }
 
     def perform_create(self, serializer):
         super().perform_create(serializer)
@@ -42,25 +30,3 @@ class ErrorReportView(ReportModelViewSet):
         queryset = super().get_queryset()
         queryset = queryset.order_by('-reportTime').distinct()
         return queryset
-
-    @action(
-        methods=['Post'],
-        url_path='createnotification',
-        detail=False,
-        renderer_classes=[JSONRenderer]
-    )
-    def create_notification(self, request):
-        criteria = build_list_filter(request)
-        trigger_on = ErrorReport.__name__
-        recipients = request.data.get("recipients")
-        notification = {
-            "criteria": criteria,
-            "trigger_on": trigger_on,
-            "recipients": recipients
-        }
-
-        serializer = NotificationSerializer(data=notification)
-        serializer.is_valid()
-        serializer.save(creator=request.user)
-        return make_ok("Notification created", serializer.data)
-

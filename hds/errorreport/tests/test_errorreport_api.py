@@ -261,29 +261,6 @@ class ErrorReportAPITest(HDSAPITestBase):
         primary = excs.filter(primary=True).get()
         self.assertTrue(all([primary.timestamp <= e.timestamp for e in excs])) # primary is first
 
-    def test_create_notification(self):
-        self.set_user_role(RoleChoices.MANAGER)
-        params = "?harv_ids=100"
-        data = {
-            "trigger_on": "ErrorReport",
-            "recipients": [1]
-        }
-        resp = self.client.post(
-            f'{self.error_url}createnotification/{params}',
-            data,
-            format='json',
-            HTTP_ACCEPT='application/json'
-        )
-        self.assertEqual(resp.status_code, 200)
-
-        # Disallowed for support
-        self.set_user_role(RoleChoices.SUPPORT)
-        resp = self.client.post(
-            f'{self.error_url}createnotification/{params}',
-            data,
-        )
-        self.assertEqual(resp.status_code, status.HTTP_403_FORBIDDEN)
-
     def test_err_report_str(self):
         self.post_error_report()
         inst = ErrorReport.objects.get()
