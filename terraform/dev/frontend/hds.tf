@@ -23,8 +23,6 @@ module "hds-frontend" {
   route53_pub_zone_id       = data.aws_route53_zone.cloud_zone.id
   service_health_check_path = local.healthcheck_path
   service_alb_ingress_sg_rules = [
-    "80,tcp,${data.aws_security_group.lambda_sg.id},web traffic from lambda",
-    "443,tcp,${data.aws_security_group.lambda_sg.id},ssl traffic from lambda",
     "80,tcp,${data.aws_security_group.pritunl_sg.id},web traffic from pritunl",
     "443,tcp,${data.aws_security_group.pritunl_sg.id},ssl traffic from pritunl"
   ]

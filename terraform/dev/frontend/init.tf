@@ -45,12 +45,6 @@ data "aws_route53_zone" "private_cloud_zone" {
   private_zone = true
 }
 
-data "aws_security_group" "lambda_sg" {
-  tags = {
-    Name = "errorreport"
-  }
-}
-
 data "aws_security_group" "pritunl_sg" {
   tags = {
     Name = "pritunl-vpn"

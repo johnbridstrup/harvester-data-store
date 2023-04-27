@@ -53,12 +53,6 @@ data "aws_secretsmanager_secret_version" "service_secrets" {
   secret_id = "hds-secret"
 }
 
-data "aws_security_group" "lambda_sg" {
-  tags = {
-    Name = "errorreport"
-  }
-}
-
 data "aws_security_group" "pritunl_sg" {
   tags = {
     Name = "pritunl-vpn"
