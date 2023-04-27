@@ -42,7 +42,9 @@ module "hds" {
   service_iam_policy_document = data.aws_iam_policy_document.poll_queues.json
   service_alb_ingress_sg_rules = [
     "80,tcp,${data.aws_security_group.pritunl_sg.id},web traffic from pritunl",
-    "443,tcp,${data.aws_security_group.pritunl_sg.id},ssl traffic from pritunl"
+    "443,tcp,${data.aws_security_group.pritunl_sg.id},ssl traffic from pritunl",
+    "80,tcp,${data.aws_security_group.beatbox_sg.id},web traffic from beatbox",
+    "443,tcp,${data.aws_security_group.beatbox_sg.id},ssl traffic from beatbox"
   ]
   service_ingress_sg_rules = concat(
     ["${local.service_port},tcp,${data.aws_security_group.vm_metrics_security_group.id},django prometheus scraping"],
