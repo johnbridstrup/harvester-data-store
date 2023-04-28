@@ -10,6 +10,8 @@ services:
     extends:
       file: docker-compose.yml
       service: web
+    environment:
+      - MIGRATE=true
     networks:
       - "hds-network"
 
@@ -28,6 +30,8 @@ services:
       - TEST_PASSWORD=testingpwd
       - TEST_HOSTNAME=http://web:8000
       - VERBOSE=true
+      - SLACK_TOKEN=${SLACK_TOKEN}
+      - SLACK_CHANNEL=hds-test
     ports:
       - 127.0.0.1:8080:8080
     networks:

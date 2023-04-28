@@ -9,11 +9,13 @@ https://docs.djangoproject.com/en/4.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
-
-import os, sys, logging
+import logging
+import os
+import sys
 
 from pathlib import Path
 from structlog.exceptions import DropEvent
+from urllib.parse import parse_qs, urlparse
 
 # UTILS
 # These must be defined here otherwise we get issues with app modules being loaded too soon
@@ -141,6 +143,23 @@ def ignore_healtcheck_metrics_get(logger, method_name, event_dict):
     # Otherwise, pass along as usual
     return event_dict
 
+# Test requests log filter
+
+def limit_test_logging(logger, method_name, event_dict):
+    if event_dict.get('request') is None:
+        return event_dict
+    
+    parsed_url = urlparse(event_dict['request'])
+    query_dict = parse_qs(parsed_url.query)
+    if 'is_beatbox_request' in query_dict:
+        # Ignore if we are in cloudwatch environment
+        event_dict["BEATBOX_REQUEST"] = True
+        if CLOUDWATCH:
+            raise DropEvent
+    # Otherwise, pass along as usual
+    return event_dict
+
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': True,
@@ -181,7 +200,8 @@ structlog.configure(
         structlog.processors.TimeStamper(fmt="iso"),
         structlog.stdlib.add_logger_name,
         structlog.stdlib.add_log_level,
-        ignore_healtcheck_metrics_get, 
+        ignore_healtcheck_metrics_get,
+        limit_test_logging,
         structlog.stdlib.PositionalArgumentsFormatter(),
         structlog.processors.StackInfoRenderer(),
         structlog.processors.format_exc_info,
