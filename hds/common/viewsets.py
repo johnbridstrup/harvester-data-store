@@ -20,10 +20,12 @@ class CreateModelViewSet(ModelViewSet):
             'list': {
                 RoleChoices.SUPPORT: True,
                 RoleChoices.JENKINS: True,
+                RoleChoices.BEATBOX: True,
             },
             'retrieve': {
                 RoleChoices.SUPPORT: True,
                 RoleChoices.JENKINS: True,
+                RoleChoices.BEATBOX: True,
             },
             'destroy': {
                 'admin': True,
@@ -55,10 +57,12 @@ class ReportModelViewSet(CreateModelViewSet):
         'list': {
             RoleChoices.SUPPORT: True,
             RoleChoices.JENKINS: True,
+            RoleChoices.BEATBOX: True,
         },
         'retrieve': {
             RoleChoices.SUPPORT: True,
             RoleChoices.JENKINS: True,
+            RoleChoices.BEATBOX: True,
         },
         'destroy': {
             'admin': True,

@@ -8,6 +8,7 @@ class RoleChoices(models.TextChoices):
     MANAGER = "manager" # Can access all resources, create users, deploy code, etc...
     SQS = "sqs" # Can create reports and files
     JENKINS = "jenkins" # Can create certain reports and access certain data
+    BEATBOX = "beatbox" # Can do only exactly what it needs to run tests
 
 def is_role(role):
     def is_role_choice(request, view):
@@ -31,6 +32,9 @@ def is_sqs(request, view):
 def is_jenkins(request, view):
     return is_role(RoleChoices.JENKINS)(request, view)
 
+def is_beatbox(request, view):
+    return is_role(RoleChoices.BEATBOX)(request, view)
+
 ROLES = {
     'admin': is_admin,
     'manager': is_manager,
@@ -38,6 +42,7 @@ ROLES = {
     'support': is_support,
     'sqs': is_sqs,
     'jenkins': is_jenkins,
+    'beatbox': is_beatbox,
     'user': is_user,
     'anon': is_anon,
 }
