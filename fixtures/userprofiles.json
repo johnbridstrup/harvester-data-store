@@ -16,5 +16,14 @@
         "slack_id": "slack@not_aft",
         "role": "support"
     }
+},
+{
+    "model": "common.userprofile",
+    "pk": 3,
+    "fields": {
+        "user": 3,
+        "slack_id": null,
+        "role": "beatbox"
+    }
 }
 ]
