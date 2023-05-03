@@ -18,6 +18,8 @@ The central hub for all AFT Harvester data.
   - S3
   - ECS Fargate
 
+## Sub-READMEs
+* [beatbox](beatbox/README.md) (Continuous integration in the cloud)
 
 ## Bootstrapping
 Clone the repo, `cd` in and run `./setup-venv.sh`. This script will create a `venv` and 
