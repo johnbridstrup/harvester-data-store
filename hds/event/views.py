@@ -14,6 +14,9 @@ class TaggedUUIDViewBase(CreateModelViewSet):
         'get_tags': {
             RoleChoices.SUPPORT: True, #is_whitelisted,
             RoleChoices.JENKINS: True,
+        },
+        'destroy': {
+            RoleChoices.BEATBOX: True, # Beatbox creates and deletes these as part of CI
         }
     }
 
