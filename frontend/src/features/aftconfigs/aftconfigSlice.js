@@ -1,14 +1,17 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { getAftConfigKeys } from "utils/utils";
+import { getAftConfigKeys, transformConfig } from "utils/utils";
 import { invalidateCache } from "../auth/authSlice";
 import aftconfigService from "./aftconfigService";
 
 const initialState = {
   loading: false,
   configreport: {},
-  configs: {},
   configkeys: [],
   errorMsg: null,
+  transformed: {
+    configs: {},
+    errored: false,
+  },
 };
 
 export const fullConfigReport = createAsyncThunk(
@@ -38,9 +41,12 @@ const aftconfigSlice = createSlice({
       })
       .addCase(fullConfigReport.fulfilled, (state, action) => {
         state.loading = false;
+        const configs = action.payload.report?.data;
+        const { errored, obj } = transformConfig(configs);
         state.configreport = action.payload;
-        state.configs = action.payload.report?.data;
-        state.configkeys = getAftConfigKeys(action.payload.report?.data);
+        state.configkeys = getAftConfigKeys(configs);
+        state.transformed.configs = obj;
+        state.transformed.errored = errored;
       })
       .addCase(fullConfigReport.rejected, (state, action) => {
         state.loading = false;

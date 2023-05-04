@@ -3,10 +3,17 @@ import { useSelector, useDispatch } from "react-redux";
 import PropTypes from "prop-types";
 import ReactJson from "@microlink/react-json-view";
 import moment from "moment";
+import VSCodeEditor from "@monaco-editor/react";
 import { JsonDiv, LoaderDiv, NavTabItem, NavTabs, NavTabSpan } from "../styled";
 import { FULLFILLED_PROMISE, THEME_MODES } from "features/base/constants";
 import { fullConfigReport } from "features/aftconfigs/aftconfigSlice";
-import { getAftConfigKeys, Loader } from "utils/utils";
+import {
+  getAftConfigKeys,
+  Loader,
+  monacoOptions,
+  titleCase,
+  transformConfig,
+} from "utils/utils";
 
 const initialState = {
   activetab: "release",
@@ -15,6 +22,7 @@ const initialState = {
   schema: null,
   configObj: null,
   fetching: false,
+  subtabkeys: [],
 };
 
 function reducer(state, action) {
@@ -26,12 +34,13 @@ function reducer(state, action) {
     case "AFTCONFIG_TAB":
       return { ...state, activetab: "aftconfig" };
     case "AFTCONFIG_KEY_TAB":
-      const { tab, subtab, obj } = action.payload;
+      const { tab, subtab, obj, subtabkeys } = action.payload;
       return {
         ...state,
         configtab: tab,
         configsubtab: subtab,
         configObj: obj ? obj : state.configObj,
+        subtabkeys: subtabkeys,
       };
     case "AFTCONFIG_SUB_TAB":
       return {
@@ -51,15 +60,24 @@ function reducer(state, action) {
 
 function SchemaTabsView(props) {
   const [state, dispatchAction] = useReducer(reducer, initialState);
-  const { configkeys, configs, configreport } = useSelector(
-    (state) => state.aftconfig
-  );
+  const {
+    configkeys,
+    configreport,
+    transformed: { configs, errored },
+  } = useSelector((state) => state.aftconfig);
   const dispatch = useDispatch();
   const {
     harvester: { release, version, id },
   } = props;
-  const { activetab, schema, configtab, configsubtab, configObj, fetching } =
-    state;
+  const {
+    activetab,
+    schema,
+    configtab,
+    configsubtab,
+    configObj,
+    fetching,
+    subtabkeys,
+  } = state;
 
   const handleTabChange = async (tab, category, obj) => {
     if (category === "maintabs") {
@@ -76,19 +94,27 @@ function SchemaTabsView(props) {
         });
         const res = await dispatch(fullConfigReport(id));
         if (res.type === FULLFILLED_PROMISE.aftconfig) {
-          const report = res.payload.report?.data;
-          const keys = getAftConfigKeys(report);
-          dispatchAction({
-            type: "AFTCONFIG_KEY_TAB",
-            payload: { tab: keys[0], obj: undefined },
-          });
-          dispatchAction({
-            type: "AFTCONFIG_SUB_TAB",
-            payload: {
-              tab: "overlay_diff",
-              obj: report[keys[0]]?.["overlay_diff"],
-            },
-          });
+          const { errored, obj } = transformConfig(res.payload.report?.data);
+          const keys = getAftConfigKeys(obj);
+          if (errored) {
+            dispatchAction({
+              type: "AFTCONFIG_KEY_TAB",
+              payload: { tab: keys[0], obj: obj[keys[0]], subtabkeys: [] },
+            });
+          } else {
+            const subkeys = getAftConfigKeys(obj[keys[0]]);
+            dispatchAction({
+              type: "AFTCONFIG_KEY_TAB",
+              payload: { tab: keys[0], obj: undefined, subtabkeys: subkeys },
+            });
+            dispatchAction({
+              type: "AFTCONFIG_SUB_TAB",
+              payload: {
+                tab: subkeys[0],
+                obj: obj[keys[0]]?.[subkeys[0]],
+              },
+            });
+          }
         }
         dispatchAction({
           type: "AFTCONFIG_FETCH",
@@ -96,14 +122,28 @@ function SchemaTabsView(props) {
         });
       }
     } else if (category === "keytabs") {
-      dispatchAction({
-        type: "AFTCONFIG_KEY_TAB",
-        payload: {
-          tab,
-          subtab: "overlay_diff",
-          obj: configs[tab]?.["overlay_diff"],
-        },
-      });
+      if (errored) {
+        dispatchAction({
+          type: "AFTCONFIG_KEY_TAB",
+          payload: {
+            tab,
+            subtab: undefined,
+            obj: configs[tab],
+            subtabkeys: [],
+          },
+        });
+      } else {
+        const keys = getAftConfigKeys(configs[tab]);
+        dispatchAction({
+          type: "AFTCONFIG_KEY_TAB",
+          payload: {
+            tab,
+            subtab: keys[0],
+            obj: configs[tab]?.[keys[0]],
+            subtabkeys: keys,
+          },
+        });
+      }
     } else if (category === "subtabs") {
       dispatchAction({
         type: "AFTCONFIG_SUB_TAB",
@@ -168,18 +208,18 @@ function SchemaTabsView(props) {
       )}
       {activetab === "aftconfig" && configObj && (
         <NavTabs>
-          <NavTabItem>
-            <NavTabSpan
-              onClick={() =>
-                handleTabChange("overlay_diff", "subtabs", undefined)
-              }
-              activetab={configsubtab}
-              navto={"overlay_diff"}
-              theme={props.theme}
-            >
-              Applied Overlay Diff
-            </NavTabSpan>
-          </NavTabItem>
+          {subtabkeys.map((item, index) => (
+            <NavTabItem key={index}>
+              <NavTabSpan
+                onClick={() => handleTabChange(item, "subtabs", undefined)}
+                activetab={configsubtab}
+                navto={item}
+                theme={props.theme}
+              >
+                {titleCase(item, "_")}
+              </NavTabSpan>
+            </NavTabItem>
+          ))}
         </NavTabs>
       )}
       {(activetab === "release" || activetab === "version") && (
@@ -205,18 +245,30 @@ function SchemaTabsView(props) {
               <div className="pt-2 pb-2">
                 ReportTime: {moment(configreport.reportTime).format("LLLL")}
               </div>
-              <JsonDiv>
-                <ReactJson
-                  src={configObj ? configObj : {}}
-                  collapsed={3}
-                  enableClipboard
+              {errored ? (
+                <VSCodeEditor
+                  height="40vh"
+                  language="python"
+                  value={configObj}
                   theme={
-                    props.theme === THEME_MODES.DARK_THEME
-                      ? "monokai"
-                      : "monokaii"
+                    props.theme === THEME_MODES.DARK_THEME ? "vs-dark" : "light"
                   }
+                  options={{ ...monacoOptions, readOnly: true }}
                 />
-              </JsonDiv>
+              ) : (
+                <JsonDiv>
+                  <ReactJson
+                    src={configObj ? configObj : {}}
+                    collapsed={3}
+                    enableClipboard
+                    theme={
+                      props.theme === THEME_MODES.DARK_THEME
+                        ? "monokai"
+                        : "monokaii"
+                    }
+                  />
+                </JsonDiv>
+              )}
             </>
           )}
         </>
