@@ -54,8 +54,8 @@ locals {
     { "name" : "AWS_STORAGE_BUCKET_NAME", "value" : var.s3_bucket },
     { "name" : "USES3", "value" : "true" },
     { "name" : "CLOUDWATCH", "value" : "true" },
-    { "name" : "SILK_PROFILING", "value" : var.silk_profiling},
-    { "name" : "SILK_CPROFILE", "value" : var.silk_cprofile},
+    { "name" : "SILK_PROFILING", "value" : var.silk_profiling },
+    { "name" : "SILK_CPROFILE", "value" : var.silk_cprofile },
   ]
 }
 

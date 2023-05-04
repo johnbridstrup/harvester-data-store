@@ -8,7 +8,7 @@ locals {
     { "name" : "BEAT_INTERVAL", "value" : var.beat_interval },
     { "name" : "SERVER_ADDRESS", "value" : var.server_address },
     { "name" : "VERBOSE", "value" : var.verbose_logging },
-    { "name" : "S3_BUCKET", "value" : var.bucket_name}
+    { "name" : "S3_BUCKET", "value" : var.bucket_name }
   ]
 }
 
