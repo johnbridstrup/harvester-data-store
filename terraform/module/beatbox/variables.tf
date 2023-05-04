@@ -191,3 +191,8 @@ variable "beat_interval" {
   type        = number
   default     = 30
 }
+
+variable "bucket_name" {
+  description = "Name of the bucket for uploading files"
+  type        = string
+}

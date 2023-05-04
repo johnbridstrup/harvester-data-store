@@ -52,6 +52,26 @@ data "aws_security_group" "pritunl_sg" {
 }
 
 # HDS
+locals {
+  bucket = "dev-aft-hv-data-lake-prod"
+}
 data "aws_secretsmanager_secret_version" "service_secrets" {
   secret_id = "hds-secret"
+}
+
+data "aws_s3_bucket" "data-lake" {
+  bucket = local.bucket
+}
+
+data "aws_iam_policy_document" "s3" {
+  statement {
+    actions = [
+      "s3:*"
+    ]
+
+    resources = [
+      data.aws_s3_bucket.data-lake.arn,
+      "${data.aws_s3_bucket.data-lake.arn}/*",
+    ]
+  }
 }

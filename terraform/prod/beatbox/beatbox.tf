@@ -28,11 +28,13 @@ module "hds-beatbox" {
   route53_priv_zone_id      = data.aws_route53_zone.private_cloud_zone.id
   route53_pub_zone_id       = data.aws_route53_zone.cloud_zone.id
   service_health_check_path = local.healthcheck_path
+  service_iam_policy_document = data.aws_iam_policy_document.s3.json
   slack_token               = local.slack_token
   slack_channel             = local.slack_channel
   target_host_url           = local.target_url
   beatbox_pwd               = local.beatbox_pwd
   beat_interval             = local.beat_interval
+  bucket_name = local.bucket
   verbose_logging           = "true"
   server_address            = "${local.protocol}://${local.dns_name}"
   service_alb_ingress_sg_rules = [
