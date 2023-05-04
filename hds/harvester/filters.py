@@ -15,4 +15,5 @@ class HarvesterFilterset(CommonInfoFilterset):
         fields = CommonInfoFilterset.FIELDS_BASE + [
             'harv_id', 
             'fruit__name',
+            'name',
         ]
