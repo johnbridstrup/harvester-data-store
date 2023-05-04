@@ -51,7 +51,7 @@ class AFTException(CommonInfo):
     traceback = models.TextField(blank=True, null=True)
     info = models.TextField(blank=True, null=True)
     timestamp = models.DateTimeField(blank=True, null=True)
-    report = models.ForeignKey(ErrorReport, on_delete=models.SET_NULL, null=True, related_name="exceptions")
+    report = models.ForeignKey(ErrorReport, on_delete=models.CASCADE, null=True, related_name="exceptions")
     handled = models.BooleanField(default=False)
     primary = models.BooleanField(null=True, blank=True)
 
