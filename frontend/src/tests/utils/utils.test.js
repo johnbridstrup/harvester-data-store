@@ -25,6 +25,7 @@ import {
   titleCase,
   logFilter,
   sortReduceParetos,
+  transformConfig,
 } from "utils/utils";
 import errorreport from "test-utils/test-data/errorreport.json";
 import { API_URL } from "features/base/constants";
@@ -449,6 +450,60 @@ describe("aftconfig transformation block scope", () => {
     };
     let expected = ["0", "1", "2"];
     expect(getAftConfigKeys(config)).toMatchObject(expected);
+  });
+
+  test("should render all tabs except conf default host", () => {
+    const config = {
+      0: {
+        conf_default_master: {},
+        overlay_diff_master: {},
+      },
+      1: {
+        conf_default_jet: {},
+        conf_default_robot: {},
+        overlay_diff_jet: {},
+        overlay_diff_robot: {},
+      },
+    };
+    const expected = {
+      errored: false,
+      obj: {
+        0: {
+          overlay_diff_master: {},
+        },
+        1: {
+          overlay_diff_jet: {},
+          overlay_diff_robot: {},
+        },
+      },
+    };
+    expect(transformConfig(config)).toMatchObject(expected);
+  });
+
+  test("should handle config with error or traceback sent", () => {
+    const erroredConfig = {
+      type: "config",
+      timestamp: 1681931176.7109792,
+      data: {
+        error: "Unable to generate Configs report",
+        traceback:
+          'Traceback (most recent call last):\n  File "/home/aft/aft-py-packages/apple/venv/bin/masterconf_view.py", line 11, in <module>\n    load_entry_point(\'aft-core\', \'console_scripts\', \'masterconf_view.py\')()\n  File "/home/aft/aft-py-packages/aft-core/src/aft_core/utils/masterconf_view.py", line 229, in main\n    generate_full_config_report(),\n  File "/home/aft/aft-py-packages/aft-core/src/aft_core/utils/masterconf_view.py", line 114, in generate_full_config_report\n    conf_default, _, deep_diff = generate_conf_diff_report(\n  File "/home/aft/aft-py-packages/aft-core/src/aft_core/utils/masterconf_view.py", line 94, in generate_conf_diff_report\n    raise RuntimeError("Dummy error here")\nRuntimeError: Dummy error here\n',
+      },
+      serial_number: "011",
+      is_emulator: false,
+      uuid: "42c004a4-dee5-11ed-95e0-570b5e4ae538",
+      fruit: "apple",
+    };
+
+    const expected = {
+      errored: true,
+      obj: {
+        error: "Unable to generate Configs report",
+        traceback:
+          'Traceback (most recent call last):\n  File "/home/aft/aft-py-packages/apple/venv/bin/masterconf_view.py", line 11, in <module>\n    load_entry_point(\'aft-core\', \'console_scripts\', \'masterconf_view.py\')()\n  File "/home/aft/aft-py-packages/aft-core/src/aft_core/utils/masterconf_view.py", line 229, in main\n    generate_full_config_report(),\n  File "/home/aft/aft-py-packages/aft-core/src/aft_core/utils/masterconf_view.py", line 114, in generate_full_config_report\n    conf_default, _, deep_diff = generate_conf_diff_report(\n  File "/home/aft/aft-py-packages/aft-core/src/aft_core/utils/masterconf_view.py", line 94, in generate_conf_diff_report\n    raise RuntimeError("Dummy error here")\nRuntimeError: Dummy error here\n',
+      },
+    };
+    expect(transformConfig(erroredConfig.data)).toMatchObject(expected);
   });
 });
 
