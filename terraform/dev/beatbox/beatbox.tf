@@ -5,7 +5,7 @@ locals {
   target_url           = "https://hdsapi.devcloud.advanced.farm"
   service_port         = "8080"
   service_name         = "hds-beatbox"
-  service_docker_image = "082346306812.dkr.ecr.us-west-1.amazonaws.com/hds:hds-beatbox-aaeacd94"
+  service_docker_image = "082346306812.dkr.ecr.us-west-1.amazonaws.com/hds:hds-beatbox-71c81d7e"
   healthcheck_path     = "/metrics"
   slack_channel        = "hds-test"
   slack_token          = jsondecode(data.aws_secretsmanager_secret_version.service_secrets.secret_string)["slack_token"]
