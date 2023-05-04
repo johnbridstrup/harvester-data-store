@@ -15,3 +15,9 @@ class TestBasic(BaseTestCase):
 
     def test_get_harvesters(self):
         self._test_get(Endpoints.HARVESTERS)
+
+    def test_get_events(self):
+        self._test_get(Endpoints.EVENTS)
+    
+    def test_get_picksessions(self):
+        self._test_get(Endpoints.PICKSESSIONS)
