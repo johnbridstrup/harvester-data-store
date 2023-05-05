@@ -5,6 +5,7 @@ import os
 import pytest
 import time
 import uuid
+import warnings
 from parameterized import parameterized
 from requests.status_codes import codes
 
@@ -88,6 +89,13 @@ class TestPicksessionReports(S3BaseTestCase):
         num_ps = ps_resp.json()["data"]["count"]
         self.assertEqual(num_ps, 1, f"Expected 1 pick session, found {num_ps}")
 
+        # Check report specific behavior
+        try:
+            extract_behavior = getattr(self, f"assert_{report_type}_behavior")
+            extract_behavior(ev_uuid)
+        except AttributeError:
+            warnings.warn(f"{report_type} has no behavior assertions. Checking only that it arrived.")
+
         ev_id = ev_resp.json()["data"]["results"][0]["id"]
         ps_id = ps_resp.json()["data"]["results"][0]["id"]
 
@@ -152,3 +160,15 @@ class TestPicksessionReports(S3BaseTestCase):
             os.remove(tmp_fpath)
 
         return report
+    
+    # Report specific assertions
+    def assert_errorreport_behavior(self, ev_uuid):
+        params = {
+            "uuid": ev_uuid,
+        }
+        r = self.client.get(Endpoints.ERROR, params=params)
+        data = r.json()["data"]
+        self.assertEqual(data["count"], 1)
+
+        excs = data["results"][0]["exceptions"]
+        self.assertGreater(len(excs), 0)
