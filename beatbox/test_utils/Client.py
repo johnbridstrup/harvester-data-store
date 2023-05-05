@@ -63,3 +63,13 @@ class Client:
         params = self._build_full_params(params)
         r = requests.post(url, data, params=params)
         return r
+
+    def delete(self, endpoint: Endpoints, id_, params=None):
+        url = urljoin(self.base_url, endpoint.value)
+        det_url = urljoin(url, id_)
+        if not det_url.endswith('/'):
+            det_url += '/'
+        
+        params = self._build_full_params(params)
+        r = requests.delete(det_url, headers=self.headers, params=params)
+        return r
