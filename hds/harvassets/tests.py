@@ -38,8 +38,12 @@ class HarvesterAssetsTestCase(HDSAPITestBase):
         self.assertEqual(HarvesterAssetType.objects.count(), 1)
         self.assertEqual(HarvesterAsset.objects.count(), 1)
 
-        # We delete the report after successful extraction
-        self.assertEqual(HarvesterAssetReport.objects.count(), 0)
+        # Ensure report object is linked to assets
+        self.assertEqual(HarvesterAssetReport.objects.count(), 1)
+        report = HarvesterAssetReport.objects.get()
+
+        self.assertEqual(report.assets.count(), 1)
+        self.assertEqual(report.assets.get(), HarvesterAsset.objects.get())
 
     def test_extraction_multi_sn(self):
         report = self.create_report(

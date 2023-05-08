@@ -29,6 +29,7 @@ class HarvesterAssetSerializer(serializers.ModelSerializer):
 
 class HarvesterAssetReportSerializer(TaggitSerializer, EventSerializerMixin, ReportSerializerBase):
     tags = TagListSerializerField(required=False)
+    assets = HarvesterAssetSerializer(many=True, read_only=True)
 
     @property
     def data_schema(self):
@@ -93,10 +94,11 @@ class HarvesterAssetReportSerializer(TaggitSerializer, EventSerializerMixin, Rep
             
             version = asset.get("version", None)
             asset_type_obj = HarvesterAssetType.get_or_create(asset_type=asset_type, user=user)
-            HarvesterAsset.update_or_create_and_get(asset_type_obj, harv, index, serial_number, user, version)
+            asset_obj = HarvesterAsset.update_or_create_and_get(asset_type_obj, harv, index, serial_number, user, version)
+            report_obj.assets.add(asset_obj)
         
-        # All report information is extracted. Delete the report.
-        report_obj.delete()
+        # Save the report
+        report_obj.save()
     
     class Meta:
         model = HarvesterAssetReport
