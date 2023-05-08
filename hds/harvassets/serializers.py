@@ -4,7 +4,7 @@ from taggit.serializers import TaggitSerializer, TagListSerializerField
 from common.models import Tags
 from common.reports import ReportBase
 from common.serializers.reportserializer import ReportSerializerBase
-from event.serializers import EventSerializerMixin
+from event.serializers import PickSessionSerializerMixin
 from harvester.serializers.harvesterserializer import HarvesterSerializer
 
 from .metrics import MISSING_SERIAL_NUMBER
@@ -27,7 +27,7 @@ class HarvesterAssetSerializer(serializers.ModelSerializer):
         read_only_fields = ('creator',)
 
 
-class HarvesterAssetReportSerializer(TaggitSerializer, EventSerializerMixin, ReportSerializerBase):
+class HarvesterAssetReportSerializer(TaggitSerializer, PickSessionSerializerMixin, ReportSerializerBase):
     tags = TagListSerializerField(required=False)
     assets = HarvesterAssetSerializer(many=True, read_only=True)
 
@@ -58,6 +58,7 @@ class HarvesterAssetReportSerializer(TaggitSerializer, EventSerializerMixin, Rep
         meta, _ = self.extract_basic(data)
         creator = self.get_user_from_request()
         event_uuid = self.extract_uuid(data)
+        picksess_uuid = self.extract_uuid(data, key="pick_session_uuid", allow_null=True)
         event = self.get_or_create_event(event_uuid, creator, HarvesterAssetReport.__name__)
 
         internal_data = {
@@ -66,6 +67,9 @@ class HarvesterAssetReportSerializer(TaggitSerializer, EventSerializerMixin, Rep
             "tags": tags,
             "event": event.id,
         }
+        if picksess_uuid:
+            picksess = self.get_or_create_picksession(picksess_uuid, creator, HarvesterAssetReport.__name__)
+            internal_data["pick_session"] = picksess.id
         return super().to_internal_value(internal_data)
 
     def to_representation(self, instance):

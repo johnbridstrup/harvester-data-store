@@ -2,6 +2,7 @@ import time
 from rest_framework import status
 
 from common.tests import HDSAPITestBase
+from event.models import Event, PickSession
 
 from .models import HarvesterAssetReport, HarvesterAsset, HarvesterAssetType
 from .tasks import compile_asset_report
@@ -44,6 +45,23 @@ class HarvesterAssetsTestCase(HDSAPITestBase):
 
         self.assertEqual(report.assets.count(), 1)
         self.assertEqual(report.assets.get(), HarvesterAsset.objects.get())
+
+    def test_event_picksession(self):
+        ev_uuid = Event.generate_uuid()
+        ps_uuid = Event.generate_uuid()
+        self.base_report["uuid"] = ev_uuid
+        self.base_report["pick_session_uuid"] = ps_uuid
+
+        self.client.post(self.assetrep_url, self.base_report, format='json')
+
+        self.assertEqual(Event.objects.count(), 1)
+        self.assertEqual(PickSession.objects.count(), 1)
+
+        report: HarvesterAssetReport = HarvesterAssetReport.objects.get()
+        self.assertIsNotNone(report.event)
+        self.assertIsNotNone(report.pick_session)
+        self.assertEqual(report.event.UUID, ev_uuid)
+        self.assertEqual(report.pick_session.UUID, ps_uuid)
 
     def test_extraction_multi_sn(self):
         report = self.create_report(
