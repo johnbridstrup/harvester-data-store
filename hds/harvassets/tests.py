@@ -58,11 +58,23 @@ class HarvesterAssetsTestCase(HDSAPITestBase):
         self.assertEqual(Event.objects.count(), 1)
         self.assertEqual(PickSession.objects.count(), 1)
 
+        # test linked
         report: HarvesterAssetReport = HarvesterAssetReport.objects.get()
         self.assertIsNotNone(report.event)
         self.assertIsNotNone(report.pick_session)
         self.assertEqual(report.event.UUID, ev_uuid)
         self.assertEqual(report.pick_session.UUID, ps_uuid)
+
+        # test related objects
+        ps_r = self.client.get(self.picksess_det_url(1))
+        self.assertEqual(len(ps_r.json()["data"]["related_objects"]), 1)
+        rep_related_object = ps_r.json()["data"]["related_objects"][0]
+        self.assertEqual(rep_related_object["object"], "Asset Report")
+
+        ev_r = self.client.get(self.event_det_url(1))
+        self.assertEqual(len(ev_r.json()["data"]["related_objects"]), 1)
+        rep_related_object = ev_r.json()["data"]["related_objects"][0]
+        self.assertEqual(rep_related_object["object"], "Asset Report")
 
     def test_filter_reports_for_asset(self):
         report1 = self.create_report(self.asset("A", serial_number=11))

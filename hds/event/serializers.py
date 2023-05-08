@@ -77,6 +77,7 @@ class EventSerializer(TaggedUUIDSerializerBase):
             ("gripreport", "gripreports", "Grip Report"),
             ("job", "jobs", "Job"),
             ("jobresults", "jobstatus", "Job Status"),
+            ("harvesterassetreport", "harvassetreport", "Asset Report"),
         ]
 
     def has_related_files(self) -> bool:
@@ -94,6 +95,7 @@ class PickSessionSerializer(TaggedUUIDSerializerBase):
             ("errorreport", "errorreports", "Error Report"),
             ("autodiagnosticsreport", "autodiagnostics", "Autodiagnostics Report"),
             ("gripreport", "gripreports", "Grip Report"),
+            ("harvesterassetreport", "harvassetreport", "Asset Report"),
         ]
 
     def has_related_files(self) -> bool:
