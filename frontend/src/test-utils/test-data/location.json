@@ -6,14 +6,18 @@
   "country": "United States",
   "region": "California",
   "site_channel": "harvs-dev",
-  "creator": 1,
+  "creator": {
+    "username": "aft"
+  },
   "modifiedBy": null,
   "distributor": {
     "id": 1,
     "created": "2022-04-26T10:05:04.151000Z",
     "lastModified": "2022-04-26T10:05:04.151000Z",
     "name": "Distributor 1",
-    "creator": 1,
+    "creator": {
+      "username": "aft"
+    },
     "modifiedBy": null
   }
 }

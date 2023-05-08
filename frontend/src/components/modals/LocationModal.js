@@ -18,6 +18,7 @@ function LocationModal(props) {
         aria-labelledby="modal-center"
         aria-hidden="true"
         style={{ display: "none" }}
+        data-testid="addUpdateModal"
       >
         <div className="modal-dialog modal-dialog-centered" role="document">
           <div className={`modal-content ${modal}`}>

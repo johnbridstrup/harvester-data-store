@@ -1,4 +1,5 @@
 import PropTypes from "prop-types";
+import moment from "moment";
 import { darkThemeClass } from "utils/utils";
 
 function LocationTable(props) {
@@ -14,6 +15,11 @@ function LocationTable(props) {
             <th>Ranch</th>
             <th>Country</th>
             <th>Region</th>
+            <th>Site Channel</th>
+            <th>Created By</th>
+            <th>Updated By</th>
+            <th>Created At</th>
+            <th>Updated At</th>
             <th>Action</th>
           </tr>
         </thead>
@@ -25,6 +31,11 @@ function LocationTable(props) {
               <td>{location.ranch}</td>
               <td>{location.country}</td>
               <td>{location.region}</td>
+              <td>{location.site_channel}</td>
+              <td>{location.creator?.username}</td>
+              <td>{location.modifiedBy?.username}</td>
+              <td>{moment(location.created).format("LLLL")}</td>
+              <td>{moment(location.lastModified).format("LLLL")}</td>
               <td>
                 <span>
                   <i

@@ -26,6 +26,7 @@ import {
   listExceptionCode,
   listUsers,
   generatePareto,
+  listDistributors,
 } from "./actions";
 
 export const handlers = [
@@ -52,4 +53,5 @@ export const handlers = [
   listExceptionCode,
   listUsers,
   generatePareto,
+  listDistributors,
 ];

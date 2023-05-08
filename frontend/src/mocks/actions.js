@@ -32,6 +32,8 @@ import { USERS_URL } from "features/user/userService";
 import fruit from "test-utils/test-data/fruit.json";
 import aftexceptioncode from "test-utils/test-data/aftexceptioncode.json";
 import users from "test-utils/test-data/users.json";
+import { DISTRIBUTORS_URL } from "features/distributor/distributorService";
+import distributor from "test-utils/test-data/distributor.json";
 
 let genericListResponse = {
   status: "success",
@@ -258,4 +260,10 @@ export const generatePareto = rest.get(ERROR_PARETO_URL, (req, res, ctx) => {
   genericGetResponse["message"] = "Pareto generated: Exceptions";
   genericGetResponse["data"] = pareto;
   return res(ctx.json(genericGetResponse));
+});
+
+export const listDistributors = rest.get(DISTRIBUTORS_URL, (req, res, ctx) => {
+  genericListResponse["message"] = "distributor retrieved successfully";
+  genericListResponse["data"]["results"] = [distributor];
+  return res(ctx.json(genericListResponse));
 });

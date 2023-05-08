@@ -12,6 +12,8 @@ function DistributorTable(props) {
           <tr>
             <th>ID</th>
             <th>Name</th>
+            <th>Created By</th>
+            <th>Updated By</th>
             <th>Created At</th>
             <th>Updated At</th>
             <th>Action</th>
@@ -22,6 +24,8 @@ function DistributorTable(props) {
             <tr key={distributor.id} className={`tr-hover ${rowdt}`}>
               <td>{distributor.id}</td>
               <td>{distributor.name}</td>
+              <td>{distributor.creator?.username}</td>
+              <td>{distributor.modifiedBy?.username}</td>
               <td>{moment(distributor.created).format("LLLL")}</td>
               <td>{moment(distributor.lastModified).format("LLLL")}</td>
               <td>

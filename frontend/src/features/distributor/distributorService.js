@@ -1,7 +1,7 @@
 import { API_URL } from "../base/constants";
 import { axiosService } from "../base/service";
 
-const DISTRIBUTORS_URL = `${API_URL}/distributors/`;
+export const DISTRIBUTORS_URL = `${API_URL}/distributors/`;
 
 const listDistributors = async (token, limit = 10) => {
   let response = await axiosService.get(
