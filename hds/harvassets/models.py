@@ -4,13 +4,15 @@ from simple_history.models import HistoricalRecords
 
 from common.models import CommonInfo
 from common.reports import ReportBase
-from event.models import EventModelMixin
+from event.models import PickSessionModelMixin
 from harvester.models import Harvester
 
 from .metrics import HarvAssetMonitor
 
 
-class HarvesterAssetReport(EventModelMixin, ReportBase):
+class HarvesterAssetReport(PickSessionModelMixin, ReportBase):
+    assets = models.ManyToManyField("HarvesterAsset", related_name="linked_asset_reports")
+
     def __str__(self):
         return f"Harv {self.harvester.harv_id} asset report"
 
