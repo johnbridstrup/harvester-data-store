@@ -11,6 +11,7 @@ locals {
   slack_token          = jsondecode(data.aws_secretsmanager_secret_version.service_secrets.secret_string)["slack_token"]
   beatbox_pwd          = jsondecode(data.aws_secretsmanager_secret_version.service_secrets.secret_string)["beatbox_pwd"]
   beat_interval        = 60
+  run_tests_async      = "true"
 }
 
 
@@ -35,6 +36,7 @@ module "hds-beatbox" {
   beatbox_pwd                 = local.beatbox_pwd
   beat_interval               = local.beat_interval
   bucket_name                 = local.bucket
+  run_tests_async             = local.run_tests_async
   verbose_logging             = "true"
   server_address              = "${local.protocol}://${local.dns_name}"
   service_alb_ingress_sg_rules = [

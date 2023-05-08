@@ -32,6 +32,7 @@ services:
       - VERBOSE=true
       - SLACK_TOKEN=${SLACK_TOKEN}
       - SLACK_CHANNEL=hds-test
+      - RUN_ASYNC=true
     ports:
       - 127.0.0.1:8080:8080
     networks:

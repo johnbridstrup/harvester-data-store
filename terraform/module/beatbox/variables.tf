@@ -196,3 +196,9 @@ variable "bucket_name" {
   description = "Name of the bucket for uploading files"
   type        = string
 }
+
+variable "run_tests_async" {
+  description = "Run tests in parallel with pytest-xdist"
+  type        = string
+  default     = "false"
+}
