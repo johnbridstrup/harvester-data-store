@@ -1,5 +1,6 @@
 import time
 from rest_framework import status
+from urllib.parse import urlencode
 
 from common.tests import HDSAPITestBase
 from event.models import Event, PickSession
@@ -62,6 +63,31 @@ class HarvesterAssetsTestCase(HDSAPITestBase):
         self.assertIsNotNone(report.pick_session)
         self.assertEqual(report.event.UUID, ev_uuid)
         self.assertEqual(report.pick_session.UUID, ps_uuid)
+
+    def test_filter_reports_for_asset(self):
+        report1 = self.create_report(self.asset("A", serial_number=11))
+        r=self.client.post(self.assetrep_url, report1, format="json")
+        report2 = self.create_report(self.asset("A", serial_number=12))
+        self.client.post(self.assetrep_url, report2, format="json")
+        report3 = self.create_report(self.asset("B", serial_number=21))
+        self.client.post(self.assetrep_url, report3, format="json")
+        report4 = self.create_report(self.asset("A", serial_number=11), self.asset("B", serial_number=21))
+        self.client.post(self.assetrep_url, report4, format="json")
+
+        r_all = self.client.get(self.assetrep_url)
+        self.assertEqual(r_all.json()["data"]["count"], 4)
+
+        A_11_params = {  # There should be two
+            "asset": "A,11"
+        }
+        r_A_11 = self.client.get(f"{self.assetrep_url}?{urlencode(A_11_params)}")
+        self.assertEqual(r_A_11.json()["data"]["count"], 2)
+
+        A_12_params = {  # There should be one
+            "asset": "A,12"
+        }
+        r_A_11 = self.client.get(f"{self.assetrep_url}?{urlencode(A_12_params)}")
+        self.assertEqual(r_A_11.json()["data"]["count"], 1)
 
     def test_extraction_multi_sn(self):
         report = self.create_report(
