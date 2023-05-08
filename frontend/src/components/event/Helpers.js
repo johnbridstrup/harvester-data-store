@@ -1,21 +1,137 @@
 import moment from "moment";
 import PropTypes from "prop-types";
+import Select from "react-select";
 import { Link } from "react-router-dom";
 import { InputFormControl } from "components/styled";
-import { darkThemeClass } from "utils/utils";
+import { darkThemeClass, selectDarkStyles } from "utils/utils";
 
 export const FormQuery = (props) => {
+  const {
+    theme,
+    label,
+    fieldData,
+    handleSubmit,
+    handleFieldChange,
+    harvesterOptions,
+    handleHarvestSelect,
+    selectedHarvId,
+    locationOptions,
+    handleLocationSelect,
+    selectedLocation,
+    tagOptions,
+    handleTagSelect,
+    selectedTag,
+  } = props;
+  const PICKSESSION = "PickSession";
+  const dark = darkThemeClass("dark-theme", theme);
+  const customStyles = dark ? selectDarkStyles : {};
+
   return (
-    <form onSubmit={props.handleSubmit}>
+    <form onSubmit={handleSubmit}>
+      {label === PICKSESSION && (
+        <>
+          <div className="row mb-4">
+            <div className="col-md-6">
+              <div className="form-group">
+                <label htmlFor="harv_ids">Harv IDS</label>
+                <Select
+                  isMulti
+                  isSearchable
+                  placeholder="1,2,3,..."
+                  options={harvesterOptions}
+                  name="harv_ids"
+                  inputId="harv_ids"
+                  onChange={handleHarvestSelect}
+                  value={selectedHarvId}
+                  defaultValue={selectedHarvId}
+                  className="multi-select-container"
+                  classNamePrefix="select"
+                  styles={customStyles}
+                />
+              </div>
+            </div>
+            <div className="col-md-6">
+              <div className="form-group">
+                <label htmlFor="locations">Ranches</label>
+                <Select
+                  isMulti
+                  isSearchable
+                  placeholder="ranch1, ranch2, ..."
+                  options={locationOptions}
+                  name="locations"
+                  inputId="locations"
+                  onChange={handleLocationSelect}
+                  defaultValue={selectedLocation}
+                  value={selectedLocation}
+                  className="multi-select-container"
+                  classNamePrefix="select"
+                  styles={customStyles}
+                />
+              </div>
+            </div>
+          </div>
+          <div className="row mb-4">
+            <div className="col-md-6">
+              <div className="form-group">
+                <label htmlFor="start_time">Start Time</label>
+                <InputFormControl
+                  type="text"
+                  name="start_time"
+                  id="start_time"
+                  value={fieldData?.start_time}
+                  onChange={handleFieldChange}
+                  placeholder="YYYYMMDDHHmmSS"
+                  theme={theme}
+                />
+              </div>
+            </div>
+            <div className="col-md-6">
+              <div className="form-group">
+                <label htmlFor="end_time">End Time</label>
+                <InputFormControl
+                  type="text"
+                  name="end_time"
+                  id="end_time"
+                  value={fieldData?.end_time}
+                  onChange={handleFieldChange}
+                  placeholder="YYYYMMDDHHmmSS"
+                  theme={theme}
+                />
+              </div>
+            </div>
+          </div>
+          <div className="row mb-4">
+            <div className="col">
+              <div className="form-group">
+                <label htmlFor="tags">Tags</label>
+                <Select
+                  isMulti
+                  isSearchable
+                  placeholder="completed, errorreport, ..."
+                  options={tagOptions}
+                  name="tags"
+                  inputId="tags"
+                  onChange={handleTagSelect}
+                  defaultValue={selectedTag}
+                  value={selectedTag}
+                  className="multi-select-container"
+                  classNamePrefix="select"
+                  styles={customStyles}
+                />
+              </div>
+            </div>
+          </div>
+        </>
+      )}
       <div className="form-group">
-        <label htmlFor="uuid">{props.label}</label>
+        <label htmlFor="uuid">{label}</label>
         <InputFormControl
           type="text"
           name="uuid"
           id="uuid"
-          value={props.uuid}
-          theme={props.theme}
-          onChange={props.handleChange}
+          value={fieldData?.uuid}
+          theme={theme}
+          onChange={handleFieldChange}
           placeholder="68b3aab6-24c9-11ed-bb17-f9799c718175"
         />
       </div>
@@ -78,10 +194,20 @@ export const GenericEvent = (props) => {
 
 FormQuery.propTypes = {
   handleSubmit: PropTypes.func,
-  handleChange: PropTypes.func,
+  handleFieldChange: PropTypes.func,
   label: PropTypes.string,
   theme: PropTypes.string,
   uuid: PropTypes.string,
+  harvesterOptions: PropTypes.array,
+  handleHarvestSelect: PropTypes.func,
+  selectedHarvId: PropTypes.array,
+  locationOptions: PropTypes.array,
+  handleLocationSelect: PropTypes.func,
+  selectedLocation: PropTypes.array,
+  fieldData: PropTypes.object,
+  tagOptions: PropTypes.array,
+  handleTagSelect: PropTypes.func,
+  selectedTag: PropTypes.array,
 };
 
 GenericEvent.propTypes = {

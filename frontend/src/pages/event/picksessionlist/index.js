@@ -4,14 +4,27 @@ import PickSessionList from "components/event/PickSessionList";
 import PickSessionQuery from "components/event/PickSessionQuery";
 import Header from "components/layout/header";
 import MainLayout from "components/layout/main";
-import { queryPickSession } from "features/event/eventSlice";
+import {
+  getPickSessionTags,
+  queryPickSession,
+} from "features/event/eventSlice";
 import { GenericPagination } from "components/pagination/Pagination";
+import { listHarvesters } from "features/harvester/harvesterSlice";
+import { MAX_LIMIT } from "features/base/constants";
+import { listLocations } from "features/location/locationSlice";
 import "./styles.css";
 
 function PickSessionListView(props) {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(queryPickSession());
+    (async () => {
+      await Promise.all([
+        dispatch(listHarvesters(MAX_LIMIT)),
+        dispatch(listLocations(MAX_LIMIT)),
+        dispatch(getPickSessionTags()),
+      ]);
+    })();
   }, [dispatch]);
 
   return (
