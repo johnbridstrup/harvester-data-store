@@ -2,7 +2,10 @@ from common.viewsets import CreateModelViewSet
 from hds.roles import RoleChoices
 from ..filters import LocationFilterset
 from ..models import Location
-from ..serializers.locationserializer import LocationSerializer
+from ..serializers.locationserializer import (
+    LocationSerializer,
+    LocationListSerializer
+)
 
 
 class LocationView(CreateModelViewSet):
@@ -19,4 +22,8 @@ class LocationView(CreateModelViewSet):
         "destroy": {
             RoleChoices.MANAGER: True,
         },
+    }
+    action_serializers = {
+        "list": LocationListSerializer,
+        "retrieve": LocationListSerializer
     }

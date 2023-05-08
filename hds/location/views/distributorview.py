@@ -2,7 +2,10 @@ from common.viewsets import CreateModelViewSet
 from hds.roles import RoleChoices
 from ..filters import DistributorFilterset
 from ..models import Distributor
-from ..serializers.distributorserializer import DistributorSerializer
+from ..serializers.distributorserializer import (
+    DistributorSerializer,
+    DistributorListSerializer
+)
 
 
 class DistributorView(CreateModelViewSet):
@@ -19,4 +22,8 @@ class DistributorView(CreateModelViewSet):
         "destroy": {
             RoleChoices.MANAGER: True,
         },
+    }
+    action_serializers = {
+        "list": DistributorListSerializer,
+        "retrieve": DistributorListSerializer
     }
