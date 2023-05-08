@@ -27,7 +27,7 @@ export const FormQuery = (props) => {
   const customStyles = dark ? selectDarkStyles : {};
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} data-testid="query-form">
       {label === PICKSESSION && (
         <>
           <div className="row mb-4">
