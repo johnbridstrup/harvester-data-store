@@ -95,7 +95,7 @@ class ReportSerializerBase(serializers.ModelSerializer):
         return DTimeFormatter.str_from_timestamp(ts)
 
     @classmethod
-    def extract_uuid(cls, report, key="uuid"):
+    def extract_uuid(cls, report, key="uuid", allow_null=False):
         try:
             UUID = report[key]
         except KeyError:
@@ -103,7 +103,7 @@ class ReportSerializerBase(serializers.ModelSerializer):
                 UUID = report["data"].get(key, None)
             except AttributeError: # some reports have lists in data key
                 UUID = Event.generate_uuid()
-        if UUID is None:
+        if UUID is None and not allow_null:
             UUID = Event.generate_uuid()
         return UUID
 
