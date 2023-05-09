@@ -167,6 +167,7 @@ class TestPicksessionReports(S3BaseTestCase):
             "uuid": ev_uuid,
         }
         r = self.client.get(Endpoints.ERROR, params=params)
+        self.assertOk(r)
         data = r.json()["data"]
         self.assertEqual(data["count"], 1)
 
