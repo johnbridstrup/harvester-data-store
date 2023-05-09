@@ -7,7 +7,7 @@ locals {
   service_name         = "hds-beatbox"
   service_docker_image = "082346306812.dkr.ecr.us-west-1.amazonaws.com/hds:hds-beatbox-7c425130"
   healthcheck_path     = "/metrics"
-  slack_channel        = "hds-test"
+  slack_channel        = "hds-beatbox-ci"
   slack_token          = jsondecode(data.aws_secretsmanager_secret_version.service_secrets.secret_string)["slack_token"]
   beatbox_pwd          = jsondecode(data.aws_secretsmanager_secret_version.service_secrets.secret_string)["beatbox_pwd"]
   beat_interval        = 60
