@@ -12,8 +12,8 @@ from .signals import report_created
 class CreateModelViewSet(ModelViewSet):
     renderer_classes = (HDSJSONRenderer,)
     filter_backends = (DjangoFilterBackend, filters.OrderingFilter)
-    list_serializer_class = None
     view_permissions_update = {}
+    action_serializers = {}
     view_permissions = {
             'create': {
                 'admin': True, # Must whitelist permission below admin for creating
@@ -49,12 +49,13 @@ class CreateModelViewSet(ModelViewSet):
     def get_serializer_class(self):
         """
         Return the class to use for the serializer.
-        Defaults to using `self.serializer_class`.
+        Defaults to using `self.serializer_class` for
+        create, update & partial_update actions.
         """
 
-        if self.list_serializer_class is not None and self.action == "list":
-            return self.list_serializer_class
-
+        serializer = self.action_serializers.get(self.action)
+        if serializer:
+            return serializer
         return super().get_serializer_class()
 
 

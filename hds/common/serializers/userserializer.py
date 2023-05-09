@@ -97,3 +97,14 @@ class UserCreateSerializer(UserSerializer):
         data = super().to_representation(instance)
         data['profile'] = ProfileSerializer(instance=instance.profile).data
         return data
+
+
+class UserCustomSerializer(UserSerializer):
+    class Meta(UserSerializer.Meta):
+        fields = ["id", "username"]
+
+
+class UsernameSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['username']
