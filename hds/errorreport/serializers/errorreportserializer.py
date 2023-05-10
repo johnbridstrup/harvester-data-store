@@ -15,7 +15,7 @@ from event.serializers import (
     PickSessionSerializer
 )
 from exceptions.models import AFTException, AFTExceptionCode
-from exceptions.serializers import AFTExceptionSerializer
+from exceptions.serializers import AFTExceptionListSerializer
 from exceptions.utils import sort_exceptions
 from harvester.serializers.harvesterserializer import HarvesterSerializer
 from location.serializers.locationserializer import LocationSerializer
@@ -78,7 +78,7 @@ class ErrorReportSerializer(TaggitSerializer, PickSessionSerializerMixin, Report
     REPORT_DATA_REQUIRED = ["sysmon_report",]
 
     # Serializer fields
-    exceptions = AFTExceptionSerializer(many=True, required=False)
+    exceptions = AFTExceptionListSerializer(many=True, required=False)
     tags = TagListSerializerField(required=False)
 
     def create(self, validated_data):
@@ -193,7 +193,7 @@ class ErrorReportSerializer(TaggitSerializer, PickSessionSerializerMixin, Report
 
 class ErrorReportListSerializer(serializers.ModelSerializer):
     # Serializer fields
-    exceptions = AFTExceptionSerializer(many=True)
+    exceptions = AFTExceptionListSerializer(many=True)
     tags = TagListSerializerField()
     harvester = HarvesterSerializer()
     location = LocationSerializer()
@@ -241,7 +241,7 @@ class ErrorReportDetailSerializer(ErrorReportSerializer):
     pick_session = PickSessionSerializer(read_only=True)
     location = LocationSerializer(read_only=True)
     harvester = HarvesterSerializer(read_only=True)
-    exceptions = AFTExceptionSerializer(many=True)
+    exceptions = AFTExceptionListSerializer(many=True)
     tags = TagListSerializerField()
     creator = UserCustomSerializer(read_only=True)
     modifiedBy = UserCustomSerializer(read_only=True)

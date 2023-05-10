@@ -1,5 +1,11 @@
 from rest_framework import serializers
-from .models import AFTExceptionCode, AFTExceptionCodeManifest, AFTException
+
+from common.serializers.userserializer import UserCustomSerializer
+from .models import (
+    AFTExceptionCode,
+    AFTExceptionCodeManifest,
+    AFTException
+)
 
 
 class AFTExceptionCodeManifestSerializer(serializers.ModelSerializer):
@@ -24,12 +30,6 @@ class AFTExceptionSerializer(serializers.ModelSerializer):
         data._mutable = False
         return super().to_internal_value(data)
 
-    def to_representation(self, instance):
-        data = super().to_representation(instance)
-        code = AFTExceptionCodeSerializer(instance.code).data
-        data['code'] = code
-        return data
-
     class Meta:
         model = AFTException
         fields = ('__all__')
@@ -52,3 +52,31 @@ class ParetoSerializer(serializers.Serializer):
             data[f"{self.new_name}"] = data.pop("value")
 
         return data
+
+
+class AFTExceptionListSerializer(AFTExceptionSerializer):
+    """
+    Return a response with minimal nesting to the list view.
+
+    Exception
+        - code is required as object
+    """
+
+    code = AFTExceptionCodeSerializer(read_only=True)
+
+    class Meta(AFTExceptionSerializer.Meta):
+        pass
+
+
+class AFTExceptionDetailSerializer(AFTExceptionSerializer):
+    """
+    Return a response with full nesting to the detail view
+    for any related objected.
+    """
+
+    code = AFTExceptionCodeSerializer(read_only=True)
+    creator = UserCustomSerializer(read_only=True)
+    modifiedBy = UserCustomSerializer(read_only=True)
+
+    class Meta(AFTExceptionSerializer.Meta):
+        pass

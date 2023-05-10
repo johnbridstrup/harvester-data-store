@@ -17,6 +17,8 @@ from .serializers import (
     AFTExceptionCodeSerializer,
     AFTExceptionCodeManifestSerializer,
     AFTExceptionSerializer,
+    AFTExceptionListSerializer,
+    AFTExceptionDetailSerializer,
     ParetoSerializer,
 )
 from .tasks import update_exception_codes
@@ -50,6 +52,10 @@ class AFTExceptionView(CreateModelViewSet):
         'pareto': {
             RoleChoices.SUPPORT: True
         }
+    }
+    action_serializers = {
+        "list": AFTExceptionListSerializer,
+        "retrieve": AFTExceptionDetailSerializer
     }
 
     @action(
