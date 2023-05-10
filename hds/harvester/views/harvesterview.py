@@ -11,7 +11,12 @@ from harvdeploy.serializers import HarvesterVersionReportSerializer
 
 from ..filters import HarvesterFilterset
 from ..models import Harvester
-from ..serializers.harvesterserializer import HarvesterSerializer, HarvesterHistorySerializer
+from ..serializers.harvesterserializer import (
+    HarvesterSerializer,
+    HarvesterHistorySerializer,
+    HarvesterListSerializer,
+    HarvesterDetailSerializer
+)
 
 
 class HarvesterView(CreateModelViewSet):
@@ -41,6 +46,10 @@ class HarvesterView(CreateModelViewSet):
         "latest_config": {
             RoleChoices.SUPPORT: True,
         },
+    }
+    action_serializers = {
+        "list": HarvesterListSerializer,
+        "retrieve": HarvesterDetailSerializer
     }
 
     @action(
@@ -72,7 +81,7 @@ class HarvesterView(CreateModelViewSet):
         harv = self.get_object()
         assets = [HarvesterAssetSerializer(asset).data for asset in harv.assets.all()]
         return make_ok(f"Harvester {harv.harv_id} assets retrieved", response_data=assets)
-    
+
     @action(
         methods=["get"],
         detail=True,
@@ -83,7 +92,7 @@ class HarvesterView(CreateModelViewSet):
         harv = self.get_object()
         conf_report = harv.configreport_set.latest()
         data = ConfigReportSerializer(conf_report).data
-        
+
         return make_ok(f"Harvester {harv.harv_id} config", data)
 
 

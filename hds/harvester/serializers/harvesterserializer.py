@@ -1,8 +1,12 @@
 # import serializers
 from rest_framework import serializers
 
+from common.serializers.userserializer import UserCustomSerializer
 from harvdeploy.models import HarvesterVersionReport
-from harvdeploy.serializers import HarvesterCodeReleaseSerializer, HarvesterVersionReportSerializer
+from harvdeploy.serializers import (
+    HarvesterCodeReleaseSerializer,
+    HarvesterVersionReportSerializer
+)
 from location.serializers.locationserializer import LocationSerializer
 from .fruitserializer import FruitSerializer
 from ..models import Harvester
@@ -16,16 +20,45 @@ class HarvesterSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
-        data['fruit'] = FruitSerializer(instance.fruit).data
-        data['location'] = LocationSerializer(instance.location).data
         data['harvester_history'] = f"/harvesterhistory/?harv_id={instance.harv_id}"
         data['version_history'] = 'versions/'
         data["assets"] = "assets/"
         data['config'] = 'config/'
-        if instance.release:
-            data['release'] = HarvesterCodeReleaseSerializer(instance.release).data
-        else:
-            data['release'] = None
+        return data
+
+
+class HarvesterListSerializer(HarvesterSerializer):
+    """
+    Return a response with minimal nesting to the list view.
+
+    Exception:
+        - fruit & location are required objects
+    """
+
+    fruit = FruitSerializer(read_only=True)
+    location = LocationSerializer(read_only=True)
+
+    class Meta(HarvesterSerializer.Meta):
+        pass
+
+
+class HarvesterDetailSerializer(HarvesterSerializer):
+    """
+    Return a response with full nesting to the detail view
+    for any related objected.
+    """
+
+    fruit = FruitSerializer(read_only=True)
+    location = LocationSerializer(read_only=True)
+    release = HarvesterCodeReleaseSerializer(read_only=True)
+    creator = UserCustomSerializer(read_only=True)
+    modifiedBy = UserCustomSerializer(read_only=True)
+
+    class Meta(HarvesterSerializer.Meta):
+        pass
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
         try:
             vers = instance.current_version()
             data['version'] = HarvesterVersionReportSerializer(vers).data
