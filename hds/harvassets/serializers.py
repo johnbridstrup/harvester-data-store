@@ -4,7 +4,8 @@ from taggit.serializers import TaggitSerializer, TagListSerializerField
 from common.models import Tags
 from common.reports import ReportBase
 from common.serializers.reportserializer import ReportSerializerBase
-from event.serializers import PickSessionSerializerMixin
+from common.serializers.userserializer import UserCustomSerializer
+from event.serializers import PickSessionSerializerMixin, EventSerializer
 from harvester.serializers.harvesterserializer import HarvesterSerializer
 
 from .metrics import MISSING_SERIAL_NUMBER
@@ -54,7 +55,7 @@ class HarvesterAssetReportSerializer(TaggitSerializer, PickSessionSerializerMixi
         except serializers.ValidationError:
             # We've already logged the failure, continue trying anyway...
             tags = [Tags.INVALIDSCHEMA.value]
-        
+
         meta, _ = self.extract_basic(data)
         creator = self.get_user_from_request()
         event_uuid = self.extract_uuid(data)
@@ -71,12 +72,6 @@ class HarvesterAssetReportSerializer(TaggitSerializer, PickSessionSerializerMixi
             picksess = self.get_or_create_picksession(picksess_uuid, creator, HarvesterAssetReport.__name__)
             internal_data["pick_session"] = picksess.id
         return super().to_internal_value(internal_data)
-
-    def to_representation(self, instance):
-        data = super().to_representation(instance)
-        data["harvester"] = HarvesterSerializer(instance.harvester).data
-        data["event"] = self.serialize_event(instance.event)
-        return data
 
     @classmethod
     def extract(cls, report_obj: ReportBase):
@@ -95,16 +90,31 @@ class HarvesterAssetReportSerializer(TaggitSerializer, PickSessionSerializerMixi
                 MISSING_SERIAL_NUMBER.labels(harv.harv_id, index, asset_type).set(0)
 
             asset["serial_number"] = serial_number
-            
+
             version = asset.get("version", None)
             asset_type_obj = HarvesterAssetType.get_or_create(asset_type=asset_type, user=user)
             asset_obj = HarvesterAsset.update_or_create_and_get(asset_type_obj, harv, index, serial_number, user, version)
             report_obj.assets.add(asset_obj)
-        
+
         # Save the report
         report_obj.save()
-    
+
     class Meta:
         model = HarvesterAssetReport
         fields = ('__all__')
         read_only_fields = ('creator',)
+
+
+class HarvesterAssetReportDetailSerializer(HarvesterAssetReportSerializer):
+    """
+    Return a response with full nesting to the detail view
+    for any related objected
+    """
+
+    harvester = HarvesterSerializer(read_only=True)
+    event = EventSerializer(read_only=True)
+    creator = UserCustomSerializer(read_only=True)
+    modifiedBy = UserCustomSerializer(read_only=True)
+
+    class Meta(HarvesterAssetReportSerializer.Meta):
+        pass
