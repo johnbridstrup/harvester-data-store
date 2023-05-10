@@ -2,6 +2,10 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
 
+from common.serializers.userserializer import (
+    UserCustomSerializer,
+    UsernameSerializer
+)
 from .models import Notification
 from .utils import build_list_filter
 
@@ -11,13 +15,6 @@ class NotificationSerializer(serializers.ModelSerializer):
         model = Notification
         fields = ('__all__')
         read_only_fields = ('creator',)
-
-    def to_representation(self, instance):
-        notification = super().to_representation(instance)
-        recipients = [User.objects.get(id=user).username for user in notification['recipients']]
-        notification['recipients'] = recipients
-
-        return notification
 
     def to_internal_value(self, data):
         request = self.context["request"]
@@ -31,3 +28,28 @@ class NotificationSerializer(serializers.ModelSerializer):
             "creator": request.user.id
         }
         return super().to_internal_value(notification)
+
+
+class NotificationListSerializer(NotificationSerializer):
+    """
+    Return a response with minimal nesting to the list view
+    """
+
+    recipients = UsernameSerializer(many=True)
+
+    class Meta(NotificationSerializer.Meta):
+        pass
+
+
+class NotificationDetailSerializer(NotificationSerializer):
+    """
+    This serializer return a response with full nesting to the detail view
+    for any related objected.
+    """
+
+    recipients = UsernameSerializer(many=True)
+    creator = UserCustomSerializer(read_only=True)
+    modifiedBy = UserCustomSerializer(read_only=True)
+
+    class Meta(NotificationSerializer.Meta):
+        pass

@@ -3,7 +3,11 @@ from hds.roles import RoleChoices
 
 from .filters import NotificationFilter
 from .models import Notification
-from .serializers import NotificationSerializer
+from .serializers import (
+    NotificationSerializer,
+    NotificationListSerializer,
+    NotificationDetailSerializer
+)
 
 
 class NotificationView(CreateModelViewSet):
@@ -20,4 +24,8 @@ class NotificationView(CreateModelViewSet):
         "destroy": {
             RoleChoices.DEVELOPER: True,
         },
+    }
+    action_serializers = {
+        "list": NotificationListSerializer,
+        "retrieve": NotificationDetailSerializer
     }

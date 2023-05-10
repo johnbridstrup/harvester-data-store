@@ -166,5 +166,5 @@ class NotificationAPITest(HDSAPITestBase):
         data = r.json()["data"]
         self.assertEqual(data["count"], 2)
         self.assertEqual(data["results"][0]["creator"], user2.id)
-        self.assertIn(self.user.username, data["results"][0]["recipients"])
-        self.assertIn(self.user.username, data["results"][1]["recipients"])
+        self.assertIn({'username': self.user.username}, data["results"][0]["recipients"])
+        self.assertIn({'username': self.user.username}, data["results"][1]["recipients"])

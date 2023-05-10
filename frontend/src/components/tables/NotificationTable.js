@@ -44,7 +44,7 @@ function NotificationTable(props) {
                     {notif.trigger_on}
                   </Link>
                 </td>
-                <td>{notif.recipients.join(", ")}</td>
+                <td>{notif.recipients?.map((x) => x.username)?.join(", ")}</td>
                 <td>{JSON.stringify(notif.criteria)}</td>
                 <td>
                   {(props.user?.id === notif.creator ||
