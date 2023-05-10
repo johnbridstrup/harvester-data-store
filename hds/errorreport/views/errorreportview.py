@@ -10,6 +10,7 @@ from ..metrics import (
 from ..serializers.errorreportserializer import (
     ErrorReportSerializer,
     ErrorReportListSerializer,
+    ErrorReportDetailSerializer
 )
 
 
@@ -17,7 +18,10 @@ class ErrorReportView(ReportModelViewSet):
     queryset = ErrorReport.objects.all()
     serializer_class = ErrorReportSerializer
     filterset_class = ErrorReportFilterset
-    list_serializer_class = ErrorReportListSerializer
+    action_serializers = {
+        "list": ErrorReportListSerializer,
+        "retrieve": ErrorReportDetailSerializer
+    }
 
     def perform_create(self, serializer):
         super().perform_create(serializer)

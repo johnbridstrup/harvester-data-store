@@ -53,11 +53,15 @@ class ErrorReportAPITest(HDSAPITestBase):
         # Assert event created
         self.assertEqual(Event.objects.count(), 1)
 
+        # Get the report
+        resp = self.client.get(self.error_det_url(r["data"]["id"]))
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+
         # Assert representation correct
-        self.assertIn("event", r['data'])
+        self.assertIn("event", resp.data)
         self.assertEqual(
-            f'/errorreports/{r["data"]["id"]}/',
-            r['data']['event']['related_objects'][0]['url']
+            f'/errorreports/{resp.data["id"]}/',
+            resp.data['event']['related_objects'][0]['url']
         )
 
         # Assert hash is extracted
@@ -74,7 +78,9 @@ class ErrorReportAPITest(HDSAPITestBase):
 
         r = self.post_error_report(load=False)
 
-        self.assertEqual(UUID, r['data']['event']['UUID'])
+        resp = self.client.get(self.error_det_url(r['data']['id']))
+
+        self.assertEqual(UUID, resp.data['event']['UUID'])
 
     def test_event_and_picksess_created(self):
         self.post_error_report()
@@ -291,6 +297,9 @@ class ErrorReportAPITest(HDSAPITestBase):
         )
 
         self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
+        resp = self.client.get(self.error_det_url(resp.json()["data"]["id"]))
+
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
         resp_data = resp.json()['data']
 
         # Assert we used the emulated harvester and not harv 11
@@ -462,7 +471,9 @@ class ErrorReportAPITest(HDSAPITestBase):
     def test_query_errorreport(self):
         # test the available query strings for errorreport
         res = self.post_error_report()
-        res_data = res["data"]
+        res = self.client.get(self.error_det_url(res["data"]["id"]))
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        res_data = res.json()["data"]
 
         # query harv_ids associated with report
         harv_id = res_data['harvester']['harv_id']
@@ -567,17 +578,17 @@ class ErrorReportAPITest(HDSAPITestBase):
         self.assertEqual(len(resp.json()["data"]["results"]), 0)
 
         # query fruits associated with report
-        fruit = self.test_objects['fruit'].name
+        fruit = self.test_objects['fruit']
         fruit_dict = {
-            'fruits': ','.join(map(str, [fruit]))
+            'fruits': ','.join(map(str, [fruit.name]))
         }
         resp = self.client.get(
             f'{self.error_url}?{urlencode(fruit_dict)}'
         )
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         self.assertEqual(
-            resp.json()["data"]["results"][0]["harvester"]["fruit"]["name"],
-            fruit
+            resp.json()["data"]["results"][0]["harvester"]["fruit"],
+            fruit.id
         )
 
         # query fruits not associated with report

@@ -7,8 +7,13 @@ from taggit.serializers import TagListSerializerField, TaggitSerializer
 from common.async_metrics import ASYNC_ERROR_COUNTER
 from common.models import Tags
 from common.serializers.reportserializer import ReportSerializerBase
+from common.serializers.userserializer import UserCustomSerializer
 from event.models import PickSession
-from event.serializers import PickSessionSerializerMixin
+from event.serializers import (
+    PickSessionSerializerMixin,
+    EventSerializer,
+    PickSessionSerializer
+)
 from exceptions.models import AFTException, AFTExceptionCode
 from exceptions.serializers import AFTExceptionSerializer
 from exceptions.utils import sort_exceptions
@@ -80,18 +85,6 @@ class ErrorReportSerializer(TaggitSerializer, PickSessionSerializerMixin, Report
         report_inst = super().create(validated_data)
         extract_exceptions.delay(report_inst.id)
         return report_inst
-
-    def to_representation(self, instance):
-        data = super().to_representation(instance)
-        harv_data = HarvesterSerializer(instance.harvester).data
-        location_data = LocationSerializer(instance.location).data
-        event = self.serialize_event(instance.event)
-        pick_session = self.serialize_picksession(instance.pick_session)
-        data['event'] = event
-        data['pick_session'] = pick_session
-        data['location'] = location_data
-        data['harvester'] = harv_data
-        return data
 
     def to_internal_value(self, data):
         try:
@@ -237,3 +230,21 @@ class ParetoSerializer(serializers.Serializer):
 
         return data
 
+
+class ErrorReportDetailSerializer(ErrorReportSerializer):
+    """
+    This serializer return a response with full nesting to the detail view
+    for any related objected.
+    """
+
+    event = EventSerializer(read_only=True)
+    pick_session = PickSessionSerializer(read_only=True)
+    location = LocationSerializer(read_only=True)
+    harvester = HarvesterSerializer(read_only=True)
+    exceptions = AFTExceptionSerializer(many=True)
+    tags = TagListSerializerField()
+    creator = UserCustomSerializer(read_only=True)
+    modifiedBy = UserCustomSerializer(read_only=True)
+
+    class Meta(ErrorReportSerializer.Meta):
+        pass
