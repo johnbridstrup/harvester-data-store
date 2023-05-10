@@ -1,11 +1,16 @@
-from .filters import EventFilterset, PickSessionFilterset
-from .serializers import EventSerializer, PickSessionSerializer
-
 from rest_framework.decorators import action
 from rest_framework.renderers import JSONRenderer
+
 from common.utils import make_ok
 from common.viewsets import CreateModelViewSet
 from hds.roles import RoleChoices
+
+from .filters import EventFilterset, PickSessionFilterset
+from .serializers import (
+    EventSerializer,
+    PickSessionSerializer,
+    PickSessionDetailSerializer
+)
 
 
 class TaggedUUIDViewBase(CreateModelViewSet):
@@ -44,3 +49,6 @@ class EventView(TaggedUUIDViewBase):
 class PickSessionView(TaggedUUIDViewBase):
     filterset_class = PickSessionFilterset
     serializer_class = PickSessionSerializer
+    action_serializers = {
+        "retrieve": PickSessionDetailSerializer
+    }

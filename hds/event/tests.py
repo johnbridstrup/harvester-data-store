@@ -7,7 +7,7 @@ from rest_framework import status
 from common.reports import DTimeFormatter
 from common.tests import HDSAPITestBase
 from event.models import Event, PickSession
-from event.serializers import PickSessionSerializer
+from event.serializers import PickSessionDetailSerializer
 from errorreport.models import ErrorReport
 from s3file.models import S3File
 
@@ -26,7 +26,8 @@ class EventApiTestCase(TaggedUUIDModelTestBase):
         self.post_error_report(load=False)
         self.data['uuid'] = Event.generate_uuid()
         data = self.post_error_report(load=False)
-        UUID = data["data"]["event"]["UUID"]
+        resp = self.client.get(self.error_det_url(data["data"]["id"]))
+        UUID = resp.data["event"]["UUID"]
 
         # 3 total events
         all_resp = self.client.get(self.event_url)
@@ -38,7 +39,8 @@ class EventApiTestCase(TaggedUUIDModelTestBase):
 
     def test_event_tags(self):
         data = self.post_error_report()
-        UUID = data["data"]["event"]["UUID"]
+        resp = self.client.get(self.error_det_url(data["data"]["id"]))
+        UUID = resp.data["event"]["UUID"]
         key = f"test_{UUID}"
         r=self.create_s3file(key, self.s3file_url, has_uuid=True)
 
@@ -53,7 +55,8 @@ class EventApiTestCase(TaggedUUIDModelTestBase):
 
     def test_filter_by_tags(self):
         data = self.post_error_report()
-        UUID1 = data["data"]["event"]["UUID"]
+        resp = self.client.get(self.error_det_url(data["data"]["id"]))
+        UUID1 = resp.data["event"]["UUID"]
         UUID2 = Event.generate_uuid()
         UUID3 = Event.generate_uuid()
         ftype1 = f"test"
@@ -113,8 +116,9 @@ class PickSessionApiTestCase(TaggedUUIDModelTestBase):
         self.post_autodiag_report(load=False)
         self.ad_data["uuid"] = Event.generate_uuid()
         data = self.post_autodiag_report(load=False)
+        resp = self.client.get(self.ad_det_url(data["data"]["id"]))
 
-        picksess_uuid = data["data"]["pick_session"]["UUID"]
+        picksess_uuid = resp.data["pick_session"]["UUID"]
 
         # 3 total events
         all_resp = self.client.get(self.event_url)
@@ -129,7 +133,7 @@ class PickSessionApiTestCase(TaggedUUIDModelTestBase):
         ts = [t0 + i*100 for i in range(4)]  # Four start times
         harvs = [
             self.create_harvester_object(
-                harv_id=i+1000, 
+                harv_id=i+1000,
                 location=self.create_location_object(ranch=f"ranch_{i}"),
             ) for i in range(1,3)
         ] * 2  # two harvesters
@@ -191,7 +195,7 @@ class EventPicksessIntegrationTestCase(TaggedUUIDModelTestBase):
         self.assertNotEqual(err_event, aut_event)
         self.assertEqual(err_sess, aut_sess)
 
-    
+
     def test_picksess_meta(self):
         self.post_autodiag_report()
         self.post_picksess_report()
@@ -201,8 +205,8 @@ class EventPicksessIntegrationTestCase(TaggedUUIDModelTestBase):
         end_dt = DTimeFormatter.from_timestamp(self.picksess_data["timestamp"])
 
         picksess = PickSession.objects.get()
-        psdata = PickSessionSerializer(instance=picksess).data
-        
+        psdata = PickSessionDetailSerializer(instance=picksess).data
+
         # From autodiag report
         self.assertEqual(
             self.test_objects["harvester"].harv_id,
@@ -221,4 +225,3 @@ class EventPicksessIntegrationTestCase(TaggedUUIDModelTestBase):
             hours=dur_dt.hour, minutes=dur_dt.minute, seconds=dur_dt.second, microseconds=dur_dt.microsecond
         )
         self.assertEqual(duration, duration_exp)
-        

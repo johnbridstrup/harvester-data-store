@@ -3,6 +3,7 @@ from taggit.serializers import TagListSerializerField
 
 from harvester.serializers.harvesterserializer import HarvesterSerializer
 from location.serializers.locationserializer import LocationSerializer
+from common.serializers.userserializer import UserCustomSerializer
 
 from .models import Event, PickSession
 
@@ -101,13 +102,6 @@ class PickSessionSerializer(TaggedUUIDSerializerBase):
     def has_related_files(self) -> bool:
         return False
 
-    def to_representation(self, instance):
-        data = super().to_representation(instance)
-        data["harvester"] = HarvesterSerializer(instance=instance.harvester).data
-        data["location"] = LocationSerializer(instance=instance.location).data
-        return data
-
-
 
 class EventSerializerMixin(serializers.Serializer):
     @classmethod
@@ -123,7 +117,7 @@ class PickSessionSerializerMixin(EventSerializerMixin): # Pick session uploads a
     @classmethod
     def serialize_picksession(cls, picksession):
         return PickSessionSerializer(instance=picksession).data
-    
+
     @classmethod
     def get_or_create_picksession(cls, ps_uuid, creator, tag):
         return TaggedUUIDSerializerBase.get_or_create_uuid_tagged_obj(creator, PickSession, tag, ps_uuid)
@@ -141,3 +135,18 @@ class PickSessionSerializerMixin(EventSerializerMixin): # Pick session uploads a
         picksess.start_time = start_time
         picksess.session_length = end_time - start_time
         picksess.save()
+
+
+class PickSessionDetailSerializer(PickSessionSerializer):
+    """
+    Return a response with full nesting to the detail view
+    for any related objected.
+    """
+
+    harvester = HarvesterSerializer(read_only=True)
+    location = LocationSerializer(read_only=True)
+    creator = UserCustomSerializer(read_only=True)
+    modifiedBy = UserCustomSerializer(read_only=True)
+
+    class Meta(PickSessionSerializer.Meta):
+        pass
