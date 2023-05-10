@@ -18,8 +18,9 @@ class GripReportTestCase(HDSAPITestBase):
 
     def test_event(self):
         resp = self.post_picksess_report()
-        event = resp["data"]["event"]
-        
+        resp = self.client.get(self.griprep_det_url(resp["data"]["id"]))
+        event = resp.data["event"]
+
         self.assertTrue(GripReport.__name__ in event['tags'])
         url_ext = event["related_objects"][0]["url"]
         url = os.path.join(f"/{version}", url_ext[1:])
