@@ -5,7 +5,7 @@ from common.viewsets import CreateModelViewSet, ReportModelViewSet
 from .filters import AutodiagnosticsRunFilter, AutodiagnosticsReportFilter
 from .models import AutodiagnosticsReport, AutodiagnosticsRun
 from .serializers import (
-    AutodiagnosticsReportListSerializer,
+    AutodiagnosticsReportDetailSerializer,
     AutodiagnosticsReportSerializer,
     AutodiagnosticsRunSerializer
 )
@@ -20,7 +20,9 @@ class AutodiagnosticsReportView(ReportModelViewSet):
     queryset = AutodiagnosticsReport.objects.all()
     serializer_class = AutodiagnosticsReportSerializer
     filterset_class = AutodiagnosticsReportFilter
-    list_serializer_class = AutodiagnosticsReportListSerializer
+    action_serializers = {
+        "retrieve": AutodiagnosticsReportDetailSerializer
+    }
 
     def create(self, request, *args, **kwargs):
         gripper_sn = int(request.data['data']['serial_no'])

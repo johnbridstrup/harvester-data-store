@@ -4,9 +4,15 @@ from taggit.serializers import TaggitSerializer
 from common.models import Tags
 from common.reports import ReportBase
 from common.serializers.reportserializer import ExtractionError, ReportSerializerBase
-from event.serializers import PickSessionSerializerMixin
+from common.serializers.userserializer import UserCustomSerializer
+from event.serializers import (
+    PickSessionSerializerMixin,
+    EventSerializer,
+    PickSessionSerializer
+)
 from harvassets.models import HarvesterAsset, HarvesterAssetType
 from harvester.serializers.harvesterserializer import HarvesterSerializer
+from location.serializers.locationserializer import LocationListSerializer
 
 from .models import AutodiagnosticsReport, AutodiagnosticsRun
 
@@ -22,21 +28,11 @@ class AutodiagnosticsRunSerializer(serializers.ModelSerializer):
 
 
 class AutodiagnosticsReportSerializer(TaggitSerializer, PickSessionSerializerMixin, ReportSerializerBase):
-    run_data = AutodiagnosticsRunSerializer(read_only=True)
 
     class Meta:
         model = AutodiagnosticsReport
         fields = ('__all__')
         read_only_fields = ('creator',)
-
-    def to_representation(self, instance):
-        data = super().to_representation(instance)
-        event = self.serialize_event(instance.event)
-        pick_session = self.serialize_picksession(instance.pick_session)
-        data['event'] = event
-        data['pick_session'] = pick_session
-        data['harvester'] = HarvesterSerializer(instance.harvester).data
-        return data
 
     def to_internal_value(self, data):
         try:
@@ -149,14 +145,19 @@ class AutodiagnosticsReportSerializer(TaggitSerializer, PickSessionSerializerMix
         return "Extracted Autodiagnostics Run"
 
 
-class AutodiagnosticsReportListSerializer(TaggitSerializer, PickSessionSerializerMixin, ReportSerializerBase):
+class AutodiagnosticsReportDetailSerializer(AutodiagnosticsReportSerializer):
     """
-    This serializer return a response with minimal nesting to the list view
-
-    This saves on response time and payload size. Responses with Foreign Key
-    return the ID or PK instead.
+    This serializer return a response with full nesting to the detail view
+    for any related objected.
     """
 
-    class Meta:
-        model = AutodiagnosticsReport
-        fields = ('__all__')
+    run_data = AutodiagnosticsRunSerializer(read_only=True)
+    event = EventSerializer(read_only=True)
+    pick_session = PickSessionSerializer(read_only=True)
+    harvester = HarvesterSerializer(read_only=True)
+    location = LocationListSerializer(read_only=True)
+    creator = UserCustomSerializer(read_only=True)
+    modifiedBy = UserCustomSerializer(read_only=True)
+
+    class Meta(AutodiagnosticsReportSerializer.Meta):
+        pass
