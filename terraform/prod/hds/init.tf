@@ -60,6 +60,12 @@ data "aws_security_group" "pritunl_sg" {
   }
 }
 
+data "aws_security_group" "beatbox_sg" {
+  tags = {
+    Name = "hds-beatbox"
+  }
+}
+
 data "aws_security_group" "jobserver_sg" {
   tags = {
     Name = "iot-job-server-sg"
