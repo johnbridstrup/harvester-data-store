@@ -6,7 +6,8 @@ from rest_framework import serializers
 
 from harvester.models import Harvester
 from event.models import Event
-from event.serializers import EventSerializerMixin
+from event.serializers import EventSerializerMixin, EventSerializer
+from common.serializers.userserializer import UserCustomSerializer
 from ..models import Job, JobType, JobSchema
 
 
@@ -26,7 +27,6 @@ class JobSerializer(EventSerializerMixin, serializers.ModelSerializer):
             f"&job__event__UUID={instance.event.UUID}"
         )
         data["history"] = reverse("job-detail", args=[instance.id]) + "history/"
-        data["event"] = self.serialize_event(instance.event)
         return data
 
     def to_internal_value(self, data):
@@ -61,18 +61,18 @@ class JobSerializer(EventSerializerMixin, serializers.ModelSerializer):
             jsonschema.validate(payload, schema)
         except jsonschema.ValidationError as e:
             if e.validator == "type":
-                err = { 
+                err = {
                     "path": e.json_path,
                     "error": f"Must be {e.validator_value}"
                 }
             elif e.validator == "required":
                 err = {
                     "required": e.validator_value,
-                    "missing": re.findall(r"'(?:[^']|'')*'* is a required property", str(e)), 
+                    "missing": re.findall(r"'(?:[^']|'')*'* is a required property", str(e)),
                 }
             else:
-                err = str(e)               
-            
+                err = str(e)
+
             raise serializers.ValidationError(detail={"validation error": err})
 
     @classmethod
@@ -85,6 +85,19 @@ class JobSerializer(EventSerializerMixin, serializers.ModelSerializer):
 
 
         return payload
+
+
+class JobDetailSerializer(JobSerializer):
+    """
+    Return a response with full nesting to the detail view
+    for any related objected.
+    """
+    event = EventSerializer(read_only=True)
+    creator = UserCustomSerializer(read_only=True)
+    modifiedBy = UserCustomSerializer(read_only=True)
+
+    class Meta(JobSerializer.Meta):
+        pass
 
 
 class JobHistorySerializer(serializers.ModelSerializer):

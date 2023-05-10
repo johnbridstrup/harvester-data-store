@@ -15,13 +15,15 @@ class JobApiTestCase(HarvJobApiTestBase):
         _, job_resp = self.create_job()
 
         self.assertEqual(job_resp.status_code, status.HTTP_201_CREATED)
+        job_resp = self.client.get(self.job_det_urls(job_resp.data["id"]))
+        self.assertEqual(job_resp.status_code, status.HTTP_200_OK)
 
         # Assert status is pending
         job_data = job_resp.json()["data"]
         self.assertEqual(job_data['jobstatus'], Job.StatusChoices.PENDING)
 
         # Assert an event is created
-        event_resp = self.client.get(f"{self.api_base_url}/events/1/")
+        event_resp = self.client.get(self.event_det_url(1))
         self.assertEqual(event_resp.status_code, status.HTTP_200_OK)
 
         # Assert the UUIDs match
@@ -115,7 +117,7 @@ class JobApiTestCase(HarvJobApiTestBase):
         self.create_jobtype()
         self.create_jobschema()
         _, job_resp = self.create_job()
-        
+
         self.assertEqual(job_resp.status_code, status.HTTP_201_CREATED)
 
         res = self.client.get(self.reschedule_url(job_resp.data["id"]))

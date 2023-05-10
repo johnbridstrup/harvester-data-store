@@ -14,6 +14,8 @@ class JobResultApiTestCase(HarvJobApiTestBase):
         self.create_jobtype()
         self.create_jobschema()
         _, job_resp = self.create_job()
+        job_resp = self.client.get(self.job_det_urls(job_resp.data["id"]))
+        self.assertEqual(job_resp.status_code, status.HTTP_200_OK)
         job_data = job_resp.json()["data"]
         self.assertEqual(job_data["jobstatus"], Job.StatusChoices.PENDING)
 
@@ -21,7 +23,7 @@ class JobResultApiTestCase(HarvJobApiTestBase):
 
         _, result_resp = self.create_jobresult(UUID=UUID)
         result_data = result_resp.json()["data"]
-        
+
         self.assertEqual(result_resp.status_code, status.HTTP_201_CREATED)
 
         # Check host results. These are extracted asynchronously so wont
@@ -63,11 +65,13 @@ class JobResultApiTestCase(HarvJobApiTestBase):
 
         self.assertEqual(slack.call_args[0][0], expect_msg)
         self.assertDictEqual(slack.call_args[1], {"channel": JOB_SLACK_CHANNEL})
-    
+
     def test_create_fail(self):
         self.create_jobtype()
         self.create_jobschema()
         _, job_resp = self.create_job()
+        job_resp = self.client.get(self.job_det_urls(job_resp.data["id"]))
+        self.assertEqual(job_resp.status_code, status.HTTP_200_OK)
         job_data = job_resp.json()["data"]
         self.assertEqual(job_data["jobstatus"], Job.StatusChoices.PENDING)
 
@@ -75,7 +79,7 @@ class JobResultApiTestCase(HarvJobApiTestBase):
 
         _, result_resp = self.create_jobresult(UUID=UUID, results=self.DEFAULT_RESULT_FAIL)
         result_data = result_resp.json()["data"]
-        
+
         self.assertEqual(result_resp.status_code, status.HTTP_201_CREATED)
 
         # Assert the job status updates
@@ -88,6 +92,8 @@ class JobResultApiTestCase(HarvJobApiTestBase):
         self.create_jobtype()
         self.create_jobschema()
         _, job_resp = self.create_job()
+        job_resp = self.client.get(self.job_det_urls(job_resp.data["id"]))
+        self.assertEqual(job_resp.status_code, status.HTTP_200_OK)
         job_data = job_resp.json()["data"]
         self.assertEqual(job_data["jobstatus"], Job.StatusChoices.PENDING)
 
@@ -95,7 +101,7 @@ class JobResultApiTestCase(HarvJobApiTestBase):
 
         _, result_resp = self.create_jobresult(UUID=UUID, results=self.DEFAULT_RESULT_ERROR)
         result_data = result_resp.json()["data"]
-        
+
         self.assertEqual(result_resp.status_code, status.HTTP_201_CREATED)
 
         # Assert the job status updates
@@ -108,6 +114,8 @@ class JobResultApiTestCase(HarvJobApiTestBase):
         self.create_jobtype()
         self.create_jobschema()
         _, job_resp = self.create_job()
+        job_resp = self.client.get(self.job_det_urls(job_resp.data["id"]))
+        self.assertEqual(job_resp.status_code, status.HTTP_200_OK)
         job_data = job_resp.json()["data"]
         self.assertEqual(job_data["jobstatus"], Job.StatusChoices.PENDING)
 
@@ -117,7 +125,7 @@ class JobResultApiTestCase(HarvJobApiTestBase):
         result["data"]["robot01"] = self.DEFAULT_RESULT_ERROR["data"]["master"]
         _, result_resp = self.create_jobresult(UUID=UUID, results=result)
         result_data = result_resp.json()["data"]
-        
+
         self.assertEqual(result_resp.status_code, status.HTTP_201_CREATED)
 
         # Assert the job status updates
@@ -135,7 +143,7 @@ class JobResultApiTestCase(HarvJobApiTestBase):
         self.create_jobschema()
         self.create_jobschema(version=1.2)
         self.create_jobschema(jobtype="other-job")
-        
+
         # View jobs for a harvester
         harv_jobs_url = f"{self.jobs_url}?target__harv_id={self.test_objects['harvester'].harv_id}"
         resp = self.client.get(harv_jobs_url)
@@ -151,9 +159,11 @@ class JobResultApiTestCase(HarvJobApiTestBase):
         resp = self.client.get(self.jobschema_url + f"?jobtype__name={jobname}")
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         self.assertEqual(resp.json()["data"]["count"], 2)
-        
+
         # Schedule a job
         _, resp = self.create_job()
+        resp = self.client.get(self.job_det_urls(resp.data["id"]))
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
         job_data = resp.json()["data"]
 
         # View pending job
@@ -187,6 +197,8 @@ class JobResultApiTestCase(HarvJobApiTestBase):
         self.create_jobtype()
         self.create_jobschema()
         _, job_resp = self.create_job()
+        job_resp = self.client.get(self.job_det_urls(job_resp.data["id"]))
+        self.assertEqual(job_resp.status_code, status.HTTP_200_OK)
         job_data = job_resp.json()["data"]
 
         UUID = job_data["event"]["UUID"]
@@ -203,14 +215,14 @@ class JobResultApiTestCase(HarvJobApiTestBase):
         self.assertEqual(d1["count"], COUNT+1)
         self.assertIsNone(d1["previous"])
         self.assertIsNotNone(d1["next"])
-        
+
         url2 = r1.json()["data"]["next"]
         r2 = self.client.get(url2)
         self.assertEqual(r2.status_code, status.HTTP_200_OK)
         d2 = r2.json()["data"]
         self.assertIsNotNone(d2["previous"])
         self.assertIsNotNone(d2["next"])
-        
+
         # check all history ids in d1 are greater than all in d2 (more recent)
         check = all([[id1["history_id"] > id2["history_id"] for id2 in d2["results"]] for id1 in d1["results"]])
         self.assertTrue(check)

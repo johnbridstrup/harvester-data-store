@@ -1,7 +1,11 @@
 from ..filters import JobFilterset
 from ..models import Job
 from ..roles import whitelist
-from ..serializers.jobserializer import JobSerializer, JobHistorySerializer
+from ..serializers.jobserializer import (
+    JobSerializer,
+    JobHistorySerializer,
+    JobDetailSerializer
+)
 from ..tasks import schedule_job
 
 from rest_framework.decorators import action
@@ -33,6 +37,9 @@ class JobView(CreateModelViewSet):
             RoleChoices.SUPPORT: is_support_whitelist,
             RoleChoices.MANAGER: True,
         },
+    }
+    action_serializers = {
+        "retrieve": JobDetailSerializer
     }
 
     @action(
