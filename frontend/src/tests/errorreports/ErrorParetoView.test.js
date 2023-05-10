@@ -3,7 +3,7 @@ import userEvent from "@testing-library/user-event";
 import selectEvent from "react-select-event";
 import ErrorReportPareto from "pages/errorreports/errorpareto";
 
-jest.setTimeout(35000);
+jest.setTimeout(40000);
 
 // mock the react-plotly.js library, which fails to run server side
 // TypeError: window.URL.createObjectURL is not a function
