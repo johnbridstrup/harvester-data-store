@@ -4,7 +4,11 @@ from event.signals import update_event_tag
 from common.viewsets import CreateModelViewSet
 from hds.roles import RoleChoices
 from .models import S3File, SessClip
-from .serializers import S3FileSerializer
+from .serializers import (
+    S3FileSerializer,
+    S3FileListSerializer,
+    S3FileDetailSerializer
+)
 from .signals import sessclip_uploaded
 from .filters import S3FileFilter
 
@@ -23,6 +27,10 @@ class S3FileView(CreateModelViewSet):
             RoleChoices.DEVELOPER: True
         },
     }
+    action_serializers = {
+        "list": S3FileListSerializer,
+        "retrieve": S3FileDetailSerializer
+    }
 
     def get_queryset(self):
         deleted = False
@@ -38,7 +46,7 @@ class S3FileView(CreateModelViewSet):
         inst.file = inst.key
         inst.save()
         filetype = serializer.data["filetype"]
-        event_id = serializer.data["event"]["id"]
+        event_id = serializer.data["event"]
         update_event_tag.send(sender=S3File, event_id=event_id, tag=filetype)
         return inst
 
@@ -56,7 +64,7 @@ class S3FileView(CreateModelViewSet):
 class SessClipView(S3FileView):
     def perform_create(self, serializer):
         inst = super().perform_create(serializer)
-        event_id = serializer.data["event"]["id"]
+        event_id = serializer.data["event"]
         sessclip_uploaded.send(sender=SessClip, s3file_id=inst.id)
         update_event_tag.send(sender=SessClip, event_id=event_id, tag="sessclip")
         return inst

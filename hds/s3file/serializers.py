@@ -4,7 +4,8 @@ from django.contrib.auth.models import User
 from rest_framework import serializers
 
 from event.models import Event
-from event.serializers import EventSerializerMixin
+from event.serializers import EventSerializerMixin, EventSerializer
+from common.serializers.userserializer import UserCustomSerializer
 from .models import S3File
 
 
@@ -27,11 +28,6 @@ class S3FileSerializer(EventSerializerMixin, serializers.ModelSerializer):
         key = event['object']['key']
         return key
 
-    def to_representation(self, instance):
-        data = super().to_representation(instance)
-        data['event'] = self.serialize_event(instance.event)
-        return data
-
     def to_internal_value(self, data):
         key = self.get_key(data)
 
@@ -46,6 +42,34 @@ class S3FileSerializer(EventSerializerMixin, serializers.ModelSerializer):
             'event': event.id,
         }
         return super().to_internal_value(data)
+
+
+class S3FileListSerializer(S3FileSerializer):
+    """
+    Return a response with minimal nesting to the list view
+
+    Exception:
+        - event object is required here
+    """
+
+    event = EventSerializer(read_only=True)
+
+    class Meta(S3FileSerializer.Meta):
+        pass
+
+
+class S3FileDetailSerializer(S3FileSerializer):
+    """
+    This serializer return a response with full nesting to the detail view
+    for any related objected.
+    """
+
+    event = EventSerializer(read_only=True)
+    creator = UserCustomSerializer(read_only=True)
+    modifiedBy = UserCustomSerializer(read_only=True)
+
+    class Meta(S3FileSerializer.Meta):
+        pass
 
 
 class DirectUploadSerializer(EventSerializerMixin, serializers.ModelSerializer):
@@ -75,6 +99,5 @@ class DirectUploadSerializer(EventSerializerMixin, serializers.ModelSerializer):
         if inst.key is None:
             inst.key = inst.file.name
             inst.save()
-        
+
         return inst
- 

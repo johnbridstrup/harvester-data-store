@@ -19,8 +19,8 @@ from common.viewsets import CreateModelViewSet, ReportModelViewSet
 from common.models import UserProfile
 from common.serializers.userserializer import UserSerializer
 from common.utils import (
-    build_frontend_url, 
-    merge_nested_dict, 
+    build_frontend_url,
+    merge_nested_dict,
     get_url_permissions,
 )
 from common.viewsets import CreateModelViewSet
@@ -78,8 +78,8 @@ class HDSAPITestBase(APITestCase):
         self.user = User.objects.create(username='test_user')
         self.set_admin()
         self.user_profile = UserProfile.objects.create(
-            user=self.user, 
-            slack_id="fake-id", 
+            user=self.user,
+            slack_id="fake-id",
             role=RoleChoices.MANAGER
         )
         self.token = Token.objects.create(user=self.user)
@@ -314,17 +314,17 @@ class HDSAPITestBase(APITestCase):
             full_key = f"{key}_{UUID}"
         else:
             full_key = key
-        event = {  
-            "Records":[{  
+        event = {
+            "Records":[{
                     "s3":{
-                        "bucket":{  
-                            "name":"test-bucket"  
+                        "bucket":{
+                            "name":"test-bucket"
                         },
                         "object":{"key": full_key}
                     }
                 }]
             }
-        
+
         return {"Body": json.dumps(event)}, *S3FileSerializer.get_filetype_uuid(full_key)
 
     def create_s3file(self, key, endpoint, has_uuid=False):
@@ -347,7 +347,7 @@ class HDSAPITestBase(APITestCase):
 
     def load_config_data(self):
         self.conf_data = self._load_report('configs-report_002_1675256694.218969.json')
-    
+
     def load_autodiag_report(self):
         self.ad_data = self._load_report('autodiag_report.json')
 
@@ -356,7 +356,7 @@ class HDSAPITestBase(APITestCase):
 
     def load_picksess_report(self):
         self.picksess_data = self._load_report('picksess.json')
-    
+
     def post_error_report(self, load=True):
         if load:
             self.load_error_report()
@@ -395,7 +395,7 @@ class OpenApiTest(HDSAPITestBase):
         data = resp.data
         keys = list(data['paths'].keys())
         endpoints = [get_endpoint(p) for p in urlpatterns]
-        
+
         assert compare_patterns(keys, endpoints)
 
         assert data['info']['title'] == "Harvester Data Store"
@@ -589,7 +589,7 @@ class TestRoles(HDSAPITestBase):
         """Test forbidden/allowed endpoints per role.
 
         This is a fairly confusing test. The idea is get the permissions matrix and test every
-        endpoint with every role, knowing whether we should expect a 403 response or another 
+        endpoint with every role, knowing whether we should expect a 403 response or another
         response. "Another" response may or may not be 2XX since we will not be sending any
         correctly formatted data, so we only check for 403/not-403.
         """

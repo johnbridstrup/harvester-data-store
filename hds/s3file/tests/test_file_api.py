@@ -6,6 +6,7 @@ from urllib.parse import urljoin
 
 from django.conf import settings
 from django.core.files.uploadedfile import InMemoryUploadedFile
+from rest_framework import status
 
 from common.tests import HDSAPITestBase
 from errorreport.models import ErrorReport
@@ -21,7 +22,7 @@ def remove_after(fp):
         os.remove(fp)
 
 
-class S3FileTestCase(HDSAPITestBase):   
+class S3FileTestCase(HDSAPITestBase):
     @staticmethod
     def _rm_file(filename):
         full_path = os.path.join(settings.MEDIA_ROOT, "uploads", filename)
@@ -30,6 +31,8 @@ class S3FileTestCase(HDSAPITestBase):
     def test_create_s3file(self):
         resp = self.create_s3file("test", self.s3file_url)
         self.assertEqual(resp.status_code, 201)
+        resp = self.client.get(self.s3file_det_url(resp.data["id"]))
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
         self.assertEqual(resp.json()['data']['event']['UUID'], self.uuid)
 
         exp_url = urljoin(
@@ -117,10 +120,12 @@ class S3FileTestCase(HDSAPITestBase):
 
     def test_link_to_report(self):
         file_resp = self.create_s3file("test", self.s3file_url)
+        file_resp = self.client.get(self.s3file_det_url(file_resp.data["id"]))
         self.setup_basic()
         self.load_error_report()
         self.data['uuid'] = self.uuid
         rep_resp = self.post_error_report(load=False)
+        rep_resp = self.client.get(self.error_det_url(rep_resp["data"]["id"])).json()
 
         self.assertEqual(
             file_resp.json()['data']['event']['UUID'],
@@ -154,7 +159,7 @@ class S3FileTestCase(HDSAPITestBase):
         self.assertEqual(len(event_data["related_files"]), 2)
 
     def test_create_sessclip(self):
-        self.create_s3file("test", endpoint=self.sesscl_url)
+        resp = self.create_s3file("test", endpoint=self.sesscl_url)
         self.assertEqual(SessClip.objects.count(), 1)
 
     def test_delete_file(self):
