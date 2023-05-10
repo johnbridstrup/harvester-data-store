@@ -4,6 +4,7 @@ from taggit.serializers import TagListSerializerField, TaggitSerializer
 
 from common.models import Tags
 from common.serializers.reportserializer import ReportSerializerBase
+from common.serializers.userserializer import UserCustomSerializer
 from harvester.models import Fruit
 from harvester.serializers.fruitserializer import FruitSerializer
 from .models import HarvesterCodeRelease, HarvesterVersionReport
@@ -31,10 +32,20 @@ class HarvesterCodeReleaseSerializer(TaggitSerializer, serializers.ModelSerializ
         }
         return super().to_internal_value(data)
 
-    def to_representation(self, instance):
-        data = super().to_representation(instance)
-        data["fruit"] = FruitSerializer(instance=instance.fruit).data
-        return data
+
+class HarvesterCodeReleaseDetailSerializer(HarvesterCodeReleaseSerializer):
+    """
+    Return a response with full nesting to the detail view
+    for any related objected.
+    """
+
+    fruit = FruitSerializer(read_only=True)
+    creator = UserCustomSerializer(read_only=True)
+    modifiedBy = UserCustomSerializer(read_only=True)
+
+    class Meta(HarvesterCodeReleaseSerializer.Meta):
+        pass
+
 
 class HarvesterVersionReportSerializer(TaggitSerializer, ReportSerializerBase):
     report_type = "version_report"

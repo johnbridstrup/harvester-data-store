@@ -1,15 +1,19 @@
 from rest_framework.decorators import action
 from rest_framework.renderers import JSONRenderer
-from ..filters import ReleaseFilter
-from ..models import HarvesterCodeRelease
-from ..serializers import HarvesterCodeReleaseSerializer
+
 from harvester.serializers.harvesterserializer import (
     HarvesterSerializer
 )
-
 from common.viewsets import CreateModelViewSet
 from common.utils import make_ok
 from hds.roles import RoleChoices
+
+from ..filters import ReleaseFilter
+from ..models import HarvesterCodeRelease
+from ..serializers import (
+    HarvesterCodeReleaseSerializer,
+    HarvesterCodeReleaseDetailSerializer
+)
 
 
 class HarvesterCodeReleaseView(CreateModelViewSet):
@@ -36,6 +40,9 @@ class HarvesterCodeReleaseView(CreateModelViewSet):
         'tags_view': {
             RoleChoices.SUPPORT: True,
         },
+    }
+    action_serializers = {
+        "retrieve": HarvesterCodeReleaseDetailSerializer
     }
 
     @action(

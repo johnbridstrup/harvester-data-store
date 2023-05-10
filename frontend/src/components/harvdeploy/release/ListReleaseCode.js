@@ -116,7 +116,7 @@ function ListReleaseCode(props) {
                   <td>
                     <Link to={`/release/${obj.id}`}>{obj.version}</Link>
                   </td>
-                  <td>{obj.fruit?.name}</td>
+                  <td>{obj.release?.project}</td>
                   <td>{moment(obj.created).format("LLLL")}</td>
                   <td>{moment(obj.lastModified).format("LLLL")}</td>
                   <td>

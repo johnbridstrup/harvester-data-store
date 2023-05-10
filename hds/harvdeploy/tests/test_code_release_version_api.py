@@ -112,7 +112,7 @@ class ReleaseApiTestCase(HDSAPITestBase):
             1
         )
         self.assertEqual(
-            data['results'][0]['fruit']['id'],
+            data['results'][0]['fruit'],
             fruit2_obj.id
         )
 
@@ -132,7 +132,9 @@ class ReleaseApiTestCase(HDSAPITestBase):
     def test_update_harvester(self):
         self.create_release()
         resp = self.client.patch(self.harv_det_url(1), data={"release": 1})
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
 
+        resp = self.client.get(self.harv_det_url(1))
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
 
         data = resp.json()["data"]
