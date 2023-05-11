@@ -67,7 +67,7 @@ function DocumentationView(props) {
               <VSCodeEditor
                 height="80vh"
                 language="json"
-                value={JSON.stringify(schema?.ErrorReport, null, "\t")}
+                value={JSON.stringify(schema?.ErrorReportDetail, null, "\t")}
                 theme={theme === THEME_MODES.DARK_THEME ? "vs-dark" : "light"}
                 options={{ ...monacoOptions, readOnly: true }}
               />
