@@ -12,6 +12,7 @@ locals {
   beatbox_pwd          = jsondecode(data.aws_secretsmanager_secret_version.service_secrets.secret_string)["beatbox_pwd"]
   beat_interval        = 60
   run_tests_async      = "true"
+  enable_prometheus_scrape = true
 }
 
 
@@ -37,6 +38,7 @@ module "hds-beatbox" {
   beat_interval               = local.beat_interval
   bucket_name                 = local.bucket
   run_tests_async             = local.run_tests_async
+  enable_prometheus_scrape    = local.enable_prometheus_scrape
   verbose_logging             = "true"
   server_address              = "${local.protocol}://${local.dns_name}"
   service_alb_ingress_sg_rules = [

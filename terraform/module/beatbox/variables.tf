@@ -153,6 +153,12 @@ variable "service_port" {
   type        = string
 }
 
+variable "enable_prometheus_scrape" {
+  description = "Enable scraping /metrics at the service port"
+  type        = bool
+  default     = false
+}
+
 # Beatbox specfici
 
 variable "target_host_url" {
