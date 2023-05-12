@@ -30,5 +30,5 @@ module "hds_beatbox_ecs" {
   route53_pub_zone_id            = var.route53_pub_zone_id
   service_iam_policy_document    = var.service_iam_policy_document
   service_alb_ingress_sg_rules   = var.service_alb_ingress_sg_rules
-  enable_prometheus_scrape = var.enable_prometheus_scrape
+  enable_prometheus_scrape       = var.enable_prometheus_scrape
 }

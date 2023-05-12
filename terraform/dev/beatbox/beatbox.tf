@@ -1,17 +1,17 @@
 locals {
-  env                  = "dev"
-  dns_name             = "beatbox.devcloud.advanced.farm"
-  protocol             = "https"
-  target_url           = "https://hdsapi.devcloud.advanced.farm"
-  service_port         = "8080"
-  service_name         = "hds-beatbox"
-  service_docker_image = "082346306812.dkr.ecr.us-west-1.amazonaws.com/hds:hds-beatbox-b2c81ec1"
-  healthcheck_path     = "/metrics"
-  slack_channel        = "hds-test"
-  slack_token          = jsondecode(data.aws_secretsmanager_secret_version.service_secrets.secret_string)["slack_token"]
-  beatbox_pwd          = jsondecode(data.aws_secretsmanager_secret_version.service_secrets.secret_string)["beatbox_pwd"]
-  beat_interval        = 60
-  run_tests_async      = "true"
+  env                      = "dev"
+  dns_name                 = "beatbox.devcloud.advanced.farm"
+  protocol                 = "https"
+  target_url               = "https://hdsapi.devcloud.advanced.farm"
+  service_port             = "8080"
+  service_name             = "hds-beatbox"
+  service_docker_image     = "082346306812.dkr.ecr.us-west-1.amazonaws.com/hds:hds-beatbox-b2c81ec1"
+  healthcheck_path         = "/metrics"
+  slack_channel            = "hds-test"
+  slack_token              = jsondecode(data.aws_secretsmanager_secret_version.service_secrets.secret_string)["slack_token"]
+  beatbox_pwd              = jsondecode(data.aws_secretsmanager_secret_version.service_secrets.secret_string)["beatbox_pwd"]
+  beat_interval            = 60
+  run_tests_async          = "true"
   enable_prometheus_scrape = true
 }
 

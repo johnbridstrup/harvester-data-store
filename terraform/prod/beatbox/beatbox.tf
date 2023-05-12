@@ -1,17 +1,17 @@
 locals {
-  env                  = "prod"
-  dns_name             = "beatbox.cloud.advanced.farm"
-  protocol             = "https"
-  target_url           = "https://hdsapi.cloud.advanced.farm"
-  service_port         = "8080"
-  service_name         = "hds-beatbox"
-  service_docker_image = "838860823423.dkr.ecr.us-west-1.amazonaws.com/hds:hds-beatbox-7a2b3bf"
-  healthcheck_path     = "/metrics"
-  slack_channel        = "hds-beatbox-ci"
-  slack_token          = jsondecode(data.aws_secretsmanager_secret_version.service_secrets.secret_string)["slack_token"]
-  beatbox_pwd          = jsondecode(data.aws_secretsmanager_secret_version.service_secrets.secret_string)["beatbox_pwd"]
-  beat_interval        = 60
-  run_tests_async      = "true"
+  env                      = "prod"
+  dns_name                 = "beatbox.cloud.advanced.farm"
+  protocol                 = "https"
+  target_url               = "https://hdsapi.cloud.advanced.farm"
+  service_port             = "8080"
+  service_name             = "hds-beatbox"
+  service_docker_image     = "838860823423.dkr.ecr.us-west-1.amazonaws.com/hds:hds-beatbox-7a2b3bf"
+  healthcheck_path         = "/metrics"
+  slack_channel            = "hds-beatbox-ci"
+  slack_token              = jsondecode(data.aws_secretsmanager_secret_version.service_secrets.secret_string)["slack_token"]
+  beatbox_pwd              = jsondecode(data.aws_secretsmanager_secret_version.service_secrets.secret_string)["beatbox_pwd"]
+  beat_interval            = 60
+  run_tests_async          = "true"
   enable_prometheus_scrape = true
 }
 
@@ -38,7 +38,7 @@ module "hds-beatbox" {
   beat_interval               = local.beat_interval
   bucket_name                 = local.bucket
   run_tests_async             = local.run_tests_async
-  enable_prometheus_scrape = local.enable_prometheus_scrape
+  enable_prometheus_scrape    = local.enable_prometheus_scrape
   verbose_logging             = "true"
   server_address              = "${local.protocol}://${local.dns_name}"
   service_alb_ingress_sg_rules = [
