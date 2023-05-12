@@ -17,8 +17,6 @@ migrate-dev: ## Migrate database in local compose server
 	docker compose exec web python hds/manage.py migrate
 
 load-fixtures: ## Load fixtures in local compose server
-	@echo Wait for migrations
-	sleep 10
 	docker compose exec web python hds/manage.py loaddata fixtures/*
 
 server: install-docker build-dev migrate-dev load-fixtures  ## Build, Migrate, Load
