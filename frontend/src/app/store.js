@@ -17,6 +17,7 @@ import homeReducer from "features/home/homeSlice";
 import s3fileReducer from "features/s3file/s3fileSlice";
 import aftconfigReducer from "features/aftconfigs/aftconfigSlice";
 import autodiagnosticReducer from "features/autodiagnostics/autodiagnosticSlice";
+import { PROD_ENV } from "features/base/constants";
 
 const store = configureStore({
   reducer: {
@@ -39,6 +40,7 @@ const store = configureStore({
     aftconfig: aftconfigReducer,
     autodiagnostic: autodiagnosticReducer,
   },
+  devTools: process.env.REACT_APP_NODE_ENV !== PROD_ENV,
 });
 
 export default store;
