@@ -38,7 +38,7 @@ services:
       - db
       - redis
     ports:
-      - 127.0.0.1:8085:8000
+      - 8085:8000
     networks:
       - "hds-network"
   redis:
@@ -54,4 +54,3 @@ networks:
       driver: default
       config:
       - subnet:  10.103.0.1/16
-      

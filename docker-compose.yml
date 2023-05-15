@@ -18,7 +18,7 @@ services:
       - JOB_SERVER_ADDRESS=${JOB_SERVER_ADDRESS}
       - GITHASH=${GITHASH:-"UNKNOWN"}
     ports:
-      - 127.0.0.1:${HDS_PORT}:8000
+      - ${HDS_PORT}:8000
     networks:
       - "hds-network"
 
@@ -34,7 +34,7 @@ services:
      context: ./frontend
     command: ./entrypoint.sh
     ports:
-      - 127.0.0.1:3000:3000
+      - 3000:3000
     networks:
       - "hds-network"
 
