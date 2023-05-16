@@ -29,7 +29,7 @@ import {
 } from "utils/utils";
 import errorreport from "test-utils/test-data/errorreport.json";
 import { API_URL } from "features/base/constants";
-import autodiagnostic from "test-utils/test-data/autodiagnostic.json";
+import { autodiagdetail } from "test-utils/test-data/autodiagnostic";
 import emureport from "test-utils/test-data/emureport.json";
 
 test("should do binary search for given timestamp", () => {
@@ -550,7 +550,7 @@ describe("autodiagnostics transformation block scope", () => {
   };
 
   test("should transform the sensors data into required shape", () => {
-    let output = transformSensors(autodiagnostic.run_data.sensors);
+    let output = transformSensors(autodiagdetail.run_data.sensors);
     expect(Object.keys(output)).toHaveLength(3);
     expect(output).toHaveProperty("touch");
     expect(output).toHaveProperty("vacuum");

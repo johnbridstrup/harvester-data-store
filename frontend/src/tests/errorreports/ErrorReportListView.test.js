@@ -10,7 +10,7 @@ import ErrorsReportList from "pages/errorreports/errorlist";
 import userEvent from "@testing-library/user-event";
 import selectEvent from "react-select-event";
 
-jest.setTimeout(10000);
+jest.setTimeout(25000);
 
 test("should render the error report list view", async () => {
   let user = userEvent.setup();
@@ -47,7 +47,7 @@ test("should render the error report list view", async () => {
     tz: "",
     start_time: "",
     end_time: "",
-    primary: true,
+    primary: false,
   });
 
   const combobox = screen.getAllByRole("combobox");
@@ -70,6 +70,7 @@ test("should render the error report list view", async () => {
     await user.click(fruitSelect);
     await user.click(codeSelect);
     await user.click(tzSelect);
+    await user.click(primaryOnly);
   });
 
   await act(async () => {

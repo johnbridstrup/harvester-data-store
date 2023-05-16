@@ -680,3 +680,66 @@ class ErrorReportAPITest(HDSAPITestBase):
             f'{self.error_url}?{urlencode(code_dict)}'
         )
         self.assertEqual(resp.json()['data']['count'], 3)
+
+    def test_create_report_withno_exceptions(self):
+        self.load_error_report()
+        self.data["data"]["sysmon_report"]["sysmon.0"].pop("errors")
+        res = self.post_error_report(load=False)
+
+        # assert no exception created
+        self.assertEqual(len(res["data"]["exceptions"]), 0)
+        excs = AFTException.objects.filter()
+        self.assertEqual(len(excs), 0)
+
+        # query for primary flag set to true
+        primary_dict = {
+            'primary': True
+        }
+        resp = self.client.get(
+            f'{self.error_url}?{urlencode(primary_dict)}'
+        )
+        self.assertEqual(resp.json()['data']['count'], 0)
+
+        # query for primary flag set to false
+        primary_dict = {
+            'primary': False
+        }
+        resp = self.client.get(
+            f'{self.error_url}?{urlencode(primary_dict)}'
+        )
+        self.assertEqual(resp.json()['data']['count'], 0)
+
+        # query for harvester only
+        harv_only = {
+            'is_emulator': False
+        }
+        resp = self.client.get(
+            f'{self.error_url}?{urlencode(harv_only)}'
+        )
+        self.assertEqual(resp.json()['data']['count'], 1)
+
+        # query for harv_ids
+        harvids_dict = {
+            'harv_ids': ''.join(map(str, [11]))
+        }
+        resp = self.client.get(
+            f'{self.error_url}?{urlencode(harvids_dict)}'
+        )
+        self.assertEqual(resp.json()['data']['count'], 1)
+
+        # query for fruits
+        fruit_dict = {
+            'fruits': ''.join(map(str, ['strawberry']))
+        }
+        resp = self.client.get(
+            f'{self.error_url}?{urlencode(fruit_dict)}'
+        )
+        self.assertEqual(resp.json()['data']['count'], 1)
+
+        fruit_dict = {
+            'fruits': ''.join(map(str, ['apple']))
+        }
+        resp = self.client.get(
+            f'{self.error_url}?{urlencode(fruit_dict)}'
+        )
+        self.assertEqual(resp.json()['data']['count'], 0)

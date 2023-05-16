@@ -51,7 +51,7 @@ test("should render the error pareto view", async () => {
     tz: "",
     start_time: "",
     end_time: "",
-    primary: true,
+    primary: false,
     aggregate_query: "",
   });
 
@@ -81,6 +81,7 @@ test("should render the error pareto view", async () => {
     await user.click(groupBy);
     await user.click(harvesterOnly);
     await user.click(handled);
+    await user.click(primaryOnly);
   });
 
   await act(async () => {
