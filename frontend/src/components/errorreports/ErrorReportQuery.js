@@ -46,7 +46,7 @@ function ErrorReportQuery(props) {
     generic: "",
     is_emulator: "0",
     handled: "",
-    primary: true,
+    primary: false,
   });
   const {
     pagination: { count },
@@ -127,7 +127,6 @@ function ErrorReportQuery(props) {
       selectedFruit,
       selectedCode
     );
-    queryObj["primary"] = true;
     let params = new URLSearchParams(queryObj);
     pushState(queryObj, PushStateEnum.GENPARETO);
     let routeto = `/errorreports/view/pareto/?group_by=code__name&${params.toString()}`;

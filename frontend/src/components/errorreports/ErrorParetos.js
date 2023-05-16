@@ -48,7 +48,7 @@ function ErrorParetos(props) {
     generic: "",
     is_emulator: "0",
     handled: "",
-    primary: true,
+    primary: false,
   });
   const [loading, setLoading] = useState(false);
   const { harvesters } = useSelector((state) => state.harvester);
