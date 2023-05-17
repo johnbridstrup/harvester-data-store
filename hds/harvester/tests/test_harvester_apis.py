@@ -74,6 +74,7 @@ class HarvesterAPITest(HDSAPITestBase):
     def test_update_harvester(self):
         """ update harvester and assert it exists """
         Harvester.objects.create(**self.data1)
+        self.set_user_support()
         self.client.patch(self.harv_det_url(1), {'name': 'Harvester 2'})
         self.assertEqual(Harvester.objects.count(), 1)
         self.assertEqual(Harvester.objects.get().name, 'Harvester 2')
@@ -88,6 +89,7 @@ class HarvesterAPITest(HDSAPITestBase):
     def test_delete_harvester(self):
         """ delete harvester and assert it does not exist """
         Harvester.objects.create(**self.data1)
+        self.set_user_developer()
         self.client.delete(self.harv_det_url(1))
         self.assertEqual(Harvester.objects.count(), 0)
 

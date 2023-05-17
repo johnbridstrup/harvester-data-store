@@ -24,6 +24,7 @@ class FruitAPITest(HDSAPITestBase):
     def test_update_fruit(self):
         """ update fruit and assert it exists """
         Fruit.objects.create(name='Apple', creator=self.user)
+        self.set_user_developer()
         self.client.put(self.fruit_det_url(1), {'name': 'Orange'})
         self.assertEqual(Fruit.objects.count(), 1)
         self.assertEqual(Fruit.objects.get().name, 'Orange')

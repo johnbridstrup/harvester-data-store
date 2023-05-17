@@ -102,7 +102,22 @@ class HDSAPITestBase(APITestCase):
         self.user.is_superuser = False
         self.user.save()
         self.user.profile.role = role.value
-        self.user.profile.save()       
+        self.user.profile.save()
+
+    def set_user_support(self):
+        self.set_user_role(RoleChoices.SUPPORT)
+
+    def set_user_developer(self):
+        self.set_user_role(RoleChoices.DEVELOPER)
+
+    def set_user_manager(self):
+        self.set_user_role(RoleChoices.MANAGER)
+
+    def set_user_jenkins(self):
+        self.set_user_role(RoleChoices.JENKINS)
+
+    def set_user_beatbox(self):
+        self.set_user_role(RoleChoices.BEATBOX)
 
     def setup_basic(self):
         self.test_objects = {}

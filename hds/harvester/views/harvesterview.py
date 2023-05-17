@@ -29,6 +29,9 @@ class HarvesterView(CreateModelViewSet):
         "update": {
             RoleChoices.SUPPORT: True, # This should become developer once harvester can update location with GPS
         },
+        "partial_update": {
+            RoleChoices.SUPPORT: True,
+        },
         "version_history": {
             RoleChoices.SUPPORT: True,
         },
