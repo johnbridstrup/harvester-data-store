@@ -62,9 +62,11 @@ function ListReleaseCode(props) {
     e.preventDefault();
 
     let tags = fieldData.tag.split(/\s*,\s*/);
+    tags = [...tags, ...selectedRelease?.tags];
+    let uniqueTags = [...new Set(tags)];
     let data = {
       ...selectedRelease?.release,
-      tags: tags,
+      tags: uniqueTags,
       id: selectedRelease?.id,
     };
     const res = await dispatch(updateRelease(data));
