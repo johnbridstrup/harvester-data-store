@@ -7,6 +7,7 @@ from rest_framework import status
 from common.utils import build_api_url
 from harvjobs.models import Job
 from harvjobs.tests.HarvJobApiTestBase import HarvJobApiTestBase
+from .models import ScheduledJob
 from .tasks import run_scheduled_job
 
 
@@ -54,6 +55,24 @@ class JobSchedulerTestCase(HarvJobApiTestBase):
 
         run_scheduled_job(1)
         self.assertEqual(Job.objects.count(), 2)
+
+    def test_status_updates(self):
+        self._create_defaults()
+        r = self.client.post(self.url, self.jobsched_payload, format='json')
+
+        # Response will have pending since it is created before perform_create
+        self.assertEqual(r.json()['data']['schedule_status'], ScheduledJob.SchedJobStatusChoices.PENDING.value)
+
+        # Job should then be waiting to schedule
+        job = ScheduledJob.objects.get()
+        self.assertEqual(job.schedule_status, ScheduledJob.SchedJobStatusChoices.WAITING.value)
+
+        # Job should become scheduled
+        run_scheduled_job(1)
+        job.refresh_from_db()
+        self.assertEqual(job.schedule_status, ScheduledJob.SchedJobStatusChoices.SCHEDULED.value)
+
+        # It is not trivial to test the failure cases... Maybe we don't need to but we can revisit.
 
     def test_scheduler_interface_endpoint(self):
         j1_schem_vers = "36.7a"
