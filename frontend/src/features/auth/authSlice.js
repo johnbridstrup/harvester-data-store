@@ -49,10 +49,7 @@ export const invalidateCache = (error, dispatch) => {
     (error.response && error.response.data && error.response.data.message) ||
     error.message ||
     error.toString();
-  if (
-    message === status.HTTP_401_UNAUTHORIZED ||
-    message === status.HTTP_403_FORBIDDED
-  ) {
+  if (message === status.HTTP_401_UNAUTHORIZED) {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     localStorage.removeItem("isAuthenticated");
