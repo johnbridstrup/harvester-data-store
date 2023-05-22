@@ -1,5 +1,6 @@
 from django_celery_beat.models import PeriodicTask
 
+from common.exceptions import FeatureNotEnabled
 from .models import ScheduledJob
 from .serializers import IntervalScheduleSerializer, CronTabScheduleSerializer, ClockedScheduleSerializer
 
@@ -8,11 +9,13 @@ TASK_NAME = "jobscheduler.tasks.run_scheduled_job"
 
 def _get_schedule_instance(sched_def):
     if "interval" in sched_def:
+        raise FeatureNotEnabled("Interval scheduling not enabled")
         int_sched_ser = IntervalScheduleSerializer(data=sched_def['interval'])
         int_sched_ser.is_valid()
         inst = int_sched_ser.save()
         return {"interval": inst}
     elif "crontab" in sched_def:
+        raise FeatureNotEnabled("Crontab scheduling not enabled")
         cron_sched_ser = CronTabScheduleSerializer(data=sched_def['crontab'])
         cron_sched_ser.is_valid()
         inst = cron_sched_ser.save()
