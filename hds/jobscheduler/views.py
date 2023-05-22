@@ -22,7 +22,13 @@ class ScheduledJobView(CreateModelViewSet):
         },
         'create': {
             RoleChoices.DEVELOPER: True,
-        }
+        },
+        'disable_job': {
+            RoleChoices.DEVELOPER: True,
+        },
+        'enable_job': {
+            RoleChoices.DEVELOPER: True,
+        },
     }
 
     def perform_create(self, serializer):
@@ -34,6 +40,41 @@ class ScheduledJobView(CreateModelViewSet):
             raise
         return inst
 
+    @action(
+        methods=['get'],
+        detail=True,
+        url_path="cancel",
+        renderer_classes=[JSONRenderer],
+    )
+    def disable_job(self, request):
+        obj = self.get_object()
+        task = obj.task
+        if not task.enabled:
+            return make_ok("Task already disabled")
+
+        task.enabled = False
+        task.save()
+        obj.schedule_status = ScheduledJob.SchedJobStatusChoices.CANCELLED
+        obj.save()
+        return make_ok("Task disabled")
+
+    @action(
+        methods=['get'],
+        detail=True,
+        url_path="enable",
+        renderer_classes=[JSONRenderer],
+    )
+    def enable_job(self, request):
+        obj = self.get_object()
+        task = obj.task
+        if task.enabled:
+            return make_ok("Task already enabled")
+
+        task.enabled = True
+        task.save()
+        obj.schedule_status = ScheduledJob.SchedJobStatusChoices.WAITING
+        obj.save()
+        return make_ok("Task enabled")
 
     @action(
         methods=['get'],
