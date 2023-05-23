@@ -11,7 +11,7 @@ export const PROD_ENV = "production";
 export const SUCCESS = "success";
 export const status = {
   HTTP_401_UNAUTHORIZED: "Request failed with status code 401",
-  HTTP_403_FORBIDDED: "Request failed with status code 403",
+  HTTP_403_FORBIDDEN: "Request failed with status code 403",
 };
 export const NOTIFY_CATEGORY = {
   created: "created",
