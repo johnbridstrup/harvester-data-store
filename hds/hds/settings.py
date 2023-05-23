@@ -189,7 +189,7 @@ LOGGING = {
         },
         "cloudwatch": {
             "()": structlog.stdlib.ProcessorFormatter,
-            "processor": structlog.processors.JSONRenderer(indent=2),
+            "processor": structlog.processors.LogfmtRenderer(),
         },
     }
 }
