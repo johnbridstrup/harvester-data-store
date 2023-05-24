@@ -1,14 +1,17 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Select from "react-select";
+import { useLocation } from "react-router-dom";
 import { queryRelease } from "features/harvdeploy/harvdeploySlice";
+import { PushStateEnum, THEME_MODES } from "features/base/constants";
 import {
   handleSelectFactory,
+  paramsToObject,
+  pushState,
   selectDarkStyles,
   transformFruitOptions,
   transformTagsOptions,
 } from "utils/utils";
-import { THEME_MODES } from "features/base/constants";
 
 function ReleaseQuery(props) {
   const [selectedFruit, setSelectedFruit] = useState(null);
@@ -17,11 +20,26 @@ function ReleaseQuery(props) {
   const { fruits } = useSelector((state) => state.fruit);
   const { theme } = useSelector((state) => state.home);
   const dispatch = useDispatch();
+  const { search } = useLocation();
   const fruitOptions = transformFruitOptions(fruits);
   const tagOptions = transformTagsOptions(tags);
 
   const handleFruitSelect = handleSelectFactory(setSelectedFruit);
   const handleTagSelect = handleSelectFactory(setSelectTag);
+
+  useEffect(() => {
+    const paramsObj = paramsToObject(search);
+    if (paramsObj.fruit) {
+      let fruitObj = { label: paramsObj.fruit, value: paramsObj.fruit };
+      setSelectedFruit((current) => fruitObj);
+    }
+    if (paramsObj.tags) {
+      const mapTags = paramsObj.tags.split(",").map((x) => {
+        return { label: x, value: x };
+      });
+      setSelectTag((current) => mapTags);
+    }
+  }, [search]);
 
   const handleFormQuerySubmit = async (e) => {
     e.preventDefault();
@@ -30,11 +48,12 @@ function ReleaseQuery(props) {
     if (selectedFruit && selectedFruit.hasOwnProperty("value")) {
       queryObj["fruit"] = selectedFruit.value;
     }
-    if (selectedTag && selectedTag.hasOwnProperty("value")) {
-      queryObj["tags"] = selectedTag.value;
+    if (selectedTag && selectedTag.length > 0) {
+      queryObj["tags"] = selectedTag.map((x) => x.value);
     }
 
-    await dispatch(queryRelease(queryObj));
+    dispatch(queryRelease(queryObj));
+    pushState(queryObj, PushStateEnum.RELEASECODE);
   };
 
   const customStyles = theme === THEME_MODES.DARK_THEME ? selectDarkStyles : {};
@@ -70,6 +89,7 @@ function ReleaseQuery(props) {
               <Select
                 isSearchable
                 isClearable
+                isMulti
                 placeholder="Invalid"
                 options={tagOptions}
                 name="tags"

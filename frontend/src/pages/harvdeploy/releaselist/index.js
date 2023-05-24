@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
+import { useLocation } from "react-router-dom";
 import ListReleaseCode from "components/harvdeploy/release/ListReleaseCode";
 import ReleaseQuery from "components/harvdeploy/release/ReleaseQuery";
 import Header from "components/layout/header";
@@ -7,20 +8,23 @@ import MainLayout from "components/layout/main";
 import { GenericPagination } from "components/pagination/Pagination";
 import { MAX_LIMIT } from "features/base/constants";
 import { listFruits } from "features/fruit/fruitSlice";
-import { listRelease, listTags } from "features/harvdeploy/harvdeploySlice";
+import { queryRelease, listTags } from "features/harvdeploy/harvdeploySlice";
+import { paramsToObject } from "utils/utils";
 import "./styles.css";
 
 function ReleaseCodeListView(props) {
   const dispatch = useDispatch();
+  const { search } = useLocation();
+
   useEffect(() => {
     (async () => {
+      dispatch(queryRelease(paramsToObject(search)));
       await Promise.all([
-        dispatch(listRelease()),
         dispatch(listFruits(MAX_LIMIT)),
         dispatch(listTags()),
       ]);
     })();
-  }, [dispatch]);
+  }, [dispatch, search]);
 
   return (
     <MainLayout>
