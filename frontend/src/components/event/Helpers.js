@@ -197,7 +197,6 @@ FormQuery.propTypes = {
   handleFieldChange: PropTypes.func,
   label: PropTypes.string,
   theme: PropTypes.string,
-  uuid: PropTypes.string,
   harvesterOptions: PropTypes.array,
   handleHarvestSelect: PropTypes.func,
   selectedHarvId: PropTypes.array,

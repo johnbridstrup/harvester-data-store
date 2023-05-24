@@ -5,12 +5,25 @@ import { queryEvent } from "features/event/eventSlice";
 import { FormQuery } from "./Helpers";
 
 function EventQuery(props) {
-  const [uuid, setUUID] = useState("");
+  const [fieldData, setFieldData] = useState({
+    uuid: "",
+  });
   const { theme } = useSelector((state) => state.home);
   const dispatch = useDispatch();
+  const { search } = useLocation();
+
+  useEffect(() => {
+    const paramsObj = paramsToObject(search);
+    if (paramsObj.UUID)
+      setFieldData((current) => {
+        return { ...current, uuid: paramsObj.UUID };
+      });
+  }, [search]);
 
   const handleFieldChange = (e) => {
-    setUUID(e.target.value);
+    setFieldData((current) => {
+      return { ...current, [e.target.name]: e.target.value };
+    });
   };
 
   const handleFormQuerySubmit = async (e) => {
@@ -18,8 +31,8 @@ function EventQuery(props) {
 
     const queryObj = {};
 
-    if (uuid) {
-      queryObj["UUID"] = uuid;
+    if (fieldData.uuid) {
+      queryObj["UUID"] = fieldData.uuid;
     }
     await dispatch(queryEvent(queryObj));
   };
@@ -33,11 +46,11 @@ function EventQuery(props) {
         </span>
       </div>
       <FormQuery
-        handleChange={handleFieldChange}
         handleSubmit={handleFormQuerySubmit}
+        handleFieldChange={handleFieldChange}
         label="UUID"
         theme={theme}
-        uuid={uuid}
+        fieldData={fieldData}
       />
     </div>
   );
