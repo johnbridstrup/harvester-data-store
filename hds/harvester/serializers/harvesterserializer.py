@@ -7,9 +7,17 @@ from harvdeploy.serializers import (
     HarvesterCodeReleaseSerializer,
     HarvesterVersionReportSerializer
 )
-from location.serializers.locationserializer import LocationSerializer
-from .fruitserializer import FruitSerializer
+from location.serializers.locationserializer import LocationSerializer, LocationMinimalSerializer
+from .fruitserializer import FruitSerializer, FruitMinimalSerializer
 from ..models import Harvester
+
+
+class HarvesterMinimalSerializer(serializers.ModelSerializer):
+    fruit = FruitMinimalSerializer(read_only=True)
+    location = LocationMinimalSerializer(read_only=True)
+    class Meta:
+        model = Harvester
+        fields = ('id', 'url', 'harv_id', 'location', 'fruit',)
 
 
 class HarvesterSerializer(serializers.ModelSerializer):

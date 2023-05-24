@@ -5,6 +5,13 @@ from common.serializers.userserializer import UserCustomSerializer
 from ..models import Distributor
 
 
+class DistributorMinimalSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Distributor
+        fields = ('id', 'url', 'name',)
+        read_only_fields = ('creator',)
+
+
 class DistributorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Distributor

@@ -2,8 +2,16 @@
 from rest_framework import serializers
 
 from common.serializers.userserializer import UserCustomSerializer
-from .distributorserializer import DistributorSerializer
+from .distributorserializer import DistributorSerializer, DistributorMinimalSerializer
 from ..models import Location
+
+
+class LocationMinimalSerializer(serializers.ModelSerializer):
+    distributor = DistributorMinimalSerializer(read_only=True)
+    class Meta:
+        model = Location
+        fields = ('id', 'url', 'ranch', 'distributor',)
+        read_only_fields = ('creator',)
 
 
 class LocationSerializer(serializers.ModelSerializer):
