@@ -1,17 +1,20 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Select from "react-select";
+import { useLocation } from "react-router-dom";
 import { queryJobs } from "features/harvjobs/harvjobSlice";
 import {
   transformHarvOptions,
   statusOptions,
   selectDarkStyles,
+  pushState,
+  paramsToObject,
 } from "utils/utils";
 import { InputFormControl } from "components/styled";
-import { THEME_MODES } from "features/base/constants";
+import { PushStateEnum, THEME_MODES } from "features/base/constants";
 
 function JobQuery(props) {
-  const [fieldData, setFormData] = useState({
+  const [fieldData, setFieldData] = useState({
     uuid: "",
   });
   const [selectedHarvId, setSelectedHarvId] = useState(null);
@@ -20,9 +23,33 @@ function JobQuery(props) {
   const { theme } = useSelector((state) => state.home);
   const harvesterOptions = transformHarvOptions(harvesters);
   const dispatch = useDispatch();
+  const { search } = useLocation();
+
+  useEffect(() => {
+    const paramsObj = paramsToObject(search);
+    if (paramsObj.event__UUID) {
+      setFieldData((current) => {
+        return { ...current, uuid: paramsObj.event__UUID };
+      });
+    }
+    if (paramsObj.target__harv_id) {
+      let harv_id = {
+        label: paramsObj.target__harv_id,
+        value: paramsObj.target__harv_id,
+      };
+      setSelectedHarvId((current) => harv_id);
+    }
+    if (paramsObj.jobstatus) {
+      let jobstatus = {
+        label: paramsObj.jobstatus,
+        value: paramsObj.jobstatus,
+      };
+      setSelectedStatus((current) => jobstatus);
+    }
+  }, [search]);
 
   const handleFieldChange = (e) => {
-    setFormData((current) => {
+    setFieldData((current) => {
       return { ...current, [e.target.name]: e.target.value };
     });
   };
@@ -49,7 +76,8 @@ function JobQuery(props) {
       queryObj["jobstatus"] = selectedStatus.value;
     }
 
-    await dispatch(queryJobs(queryObj));
+    dispatch(queryJobs(queryObj));
+    pushState(queryObj, PushStateEnum.JOBS);
   };
 
   const customStyles = theme === THEME_MODES.DARK_THEME ? selectDarkStyles : {};

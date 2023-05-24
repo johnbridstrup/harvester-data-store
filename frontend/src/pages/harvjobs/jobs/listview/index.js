@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import JobQuery from "components/harvjobs/jobs/JobQuery";
 import ListJobs from "components/harvjobs/jobs/ListJobs";
@@ -7,20 +8,22 @@ import MainLayout from "components/layout/main";
 import { GenericPagination } from "components/pagination/Pagination";
 import { MAX_LIMIT } from "features/base/constants";
 import { listHarvesters } from "features/harvester/harvesterSlice";
-import { listJobs } from "features/harvjobs/harvjobSlice";
+import { queryJobs } from "features/harvjobs/harvjobSlice";
+import { paramsToObject } from "utils/utils";
 import "./styles.css";
 
 function JobListView(props) {
   const dispatch = useDispatch();
+  const { search } = useLocation();
 
   useEffect(() => {
     (async () => {
       await Promise.all([
-        dispatch(listJobs()),
+        dispatch(queryJobs(paramsToObject(search))),
         dispatch(listHarvesters(MAX_LIMIT)),
       ]);
     })();
-  }, [dispatch]);
+  }, [dispatch, search]);
 
   return (
     <MainLayout>
