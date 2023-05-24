@@ -3,6 +3,8 @@ from collections.abc import Mapping
 from rest_framework.renderers import JSONRenderer
 
 logger = structlog.get_logger(__name__)
+
+
 class NoContextError(Exception):
     pass
 
