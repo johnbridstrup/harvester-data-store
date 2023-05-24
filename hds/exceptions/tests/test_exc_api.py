@@ -73,6 +73,17 @@ class AFTExceptionTest(ExceptionTestBase):
         resp = self.client.get(f'{self.exc_url}?datetime_range=20220101T000100.0,20220430T235955.0')
         self.assertEqual(resp.json()['data']['count'], 1)
 
+    def test_get_start_end(self):
+        self.post_error_report()
+        resp = self.client.get(f'{self.exc_url}?start_time=202201010001')
+        self.assertEqual(resp.json()['data']['count'], 2)
+
+        resp = self.client.get(f'{self.exc_url}?end_time=20220430235955')
+        self.assertEqual(resp.json()['data']['count'], 2)
+
+        resp = self.client.get(f'{self.exc_url}?start_time=202201010001&end_time=20220430235955')
+        self.assertEqual(resp.json()['data']['count'], 1)
+
     def test_get_harv_ids(self):
         self.post_error_report()
         self.create_harvester_object(

@@ -16,8 +16,8 @@ class AFTExceptionFilter(CommonInfoFilterset):
     locations = ListFilter(field_name='report__location__ranch')
     fruits = ListFilter(field_name='report__harvester__fruit__name')
     uuid = EventUUIDFilter(field_name="report__event")
-    start_time = DTimeFilter("report__reportTime", lookup_expr="gte")
-    end_time = DTimeFilter("report__reportTime", lookup_expr="lte")
+    start_time = DTimeFilter("timestamp", lookup_expr="gte")
+    end_time = DTimeFilter("timestamp", lookup_expr="lte")
     is_emulator = filters.BooleanFilter(field_name="report__harvester__is_emulator")
 
     class Meta:

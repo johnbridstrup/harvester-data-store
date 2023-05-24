@@ -59,6 +59,7 @@ class DTimeFormatter:
             return tz.localize(datetime.strptime(dt_str, format))
         
         try:
+            dt_str = cls.fill_dt_with_zeros(dt_str)
             return tz.localize(datetime.strptime(dt_str, LOG_TIMESTAMP_FMT))
         except ValueError:
             return tz.localize(datetime.strptime(dt_str, UTILITY_TIMESTAMP_FMT))
