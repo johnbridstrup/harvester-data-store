@@ -64,4 +64,22 @@ export class PushStateEnum {
   static get BUILDCHART() {
     return "buildchart";
   }
+  static get RELEASECODE() {
+    return "releasecode";
+  }
+  static get EVENTS() {
+    return "events";
+  }
+  static get PICKSESSIONS() {
+    return "picksessions";
+  }
+  static get JOBS() {
+    return "jobs";
+  }
+  static get S3FILES() {
+    return "s3files";
+  }
+  static get AUTODIAGNOSTICS() {
+    return "autodiagnostics";
+  }
 }

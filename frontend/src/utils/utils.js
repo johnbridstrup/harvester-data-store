@@ -467,6 +467,30 @@ export const pushState = (queryObj, pareto = undefined) => {
     newurl = `${window.location.protocol}//${
       window.location.host
     }/errorreports/view/pareto/?${params.toString()}`;
+  } else if (pareto === PushStateEnum.RELEASECODE) {
+    newurl = `${window.location.protocol}//${
+      window.location.host
+    }/release/?${params.toString()}`;
+  } else if (pareto === PushStateEnum.EVENTS) {
+    newurl = `${window.location.protocol}//${
+      window.location.host
+    }/events/?${params.toString()}`;
+  } else if (pareto === PushStateEnum.PICKSESSIONS) {
+    newurl = `${window.location.protocol}//${
+      window.location.host
+    }/picksessions/?${params.toString()}`;
+  } else if (pareto === PushStateEnum.JOBS) {
+    newurl = `${window.location.protocol}//${
+      window.location.host
+    }/jobs/?${params.toString()}`;
+  } else if (pareto === PushStateEnum.S3FILES) {
+    newurl = `${window.location.protocol}//${
+      window.location.host
+    }/s3files/?${params.toString()}`;
+  } else if (pareto === PushStateEnum.AUTODIAGNOSTICS) {
+    newurl = `${window.location.protocol}//${
+      window.location.host
+    }/autodiagnostics/?${params.toString()}`;
   } else {
     newurl = `${window.location.protocol}//${
       window.location.host
