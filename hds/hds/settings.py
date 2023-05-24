@@ -60,6 +60,7 @@ CSRF_TRUSTED_ORIGINS = ['https://*.cloud.advanced.farm', 'https://*.devcloud.adv
 # Application definition
 
 LOCAL_APPS = [
+    'admin_utils',
     'aftconfigs',
     'autodiagnostics',
     'common',
