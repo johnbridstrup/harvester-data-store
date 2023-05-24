@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from common.serializers.userserializer import UserCustomSerializer
+from harvester.serializers.harvesterserializer import HarvesterMinimalSerializer
 from .models import (
     AFTExceptionCode,
     AFTExceptionCodeManifest,
@@ -63,6 +64,7 @@ class AFTExceptionListSerializer(AFTExceptionSerializer):
     """
 
     code = AFTExceptionCodeSerializer(read_only=True)
+    harvester = HarvesterMinimalSerializer(source="report.harvester", read_only=True)
 
     class Meta(AFTExceptionSerializer.Meta):
         pass
@@ -76,6 +78,7 @@ class AFTExceptionDetailSerializer(AFTExceptionSerializer):
 
     code = AFTExceptionCodeSerializer(read_only=True)
     creator = UserCustomSerializer(read_only=True)
+    harvester = HarvesterMinimalSerializer(source="report.harvester", read_only=True)
     modifiedBy = UserCustomSerializer(read_only=True)
 
     class Meta(AFTExceptionSerializer.Meta):
