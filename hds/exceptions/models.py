@@ -58,9 +58,15 @@ class AFTException(CommonInfo):
     def __str__(self):
         handled_str = "unhandled"
         primary_str = "unknown"
+        value_str = "No extra info"
         if self.handled:
             handled_str = "handled"
         if self.primary is not None:
             primary_str = "Primary" if self.primary else "Secondary"
+        if self.info is not None:
+            if len(self.info) > 60:
+                value_str = self.info[:54] + "(trunc)"
+            else:
+                value_str = self.info
         
-        return f"{self.service}.{self.robot} {handled_str} error: {self.code.name} ({primary_str})"
+        return f"*{self.service}.{self.robot}* {handled_str} error: *{self.code.name}* ({primary_str}): {value_str}"

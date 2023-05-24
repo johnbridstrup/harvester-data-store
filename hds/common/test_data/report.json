@@ -179,7 +179,7 @@
           },
           "masterui.0": {
             "ts": 1651526861.7674465,
-            "value": "traychgunit.1 Error: No tray detected in collection",
+            "value": "masterui is borked and this message is really long with way more information than we want to display in slack",
             "traceback": "This is a different traceback",
             "code": 0,
             "operator_err_type": "traychg"
