@@ -92,9 +92,10 @@ class TestPicksessionReports(S3BaseTestCase):
         # Check report specific behavior
         try:
             extract_behavior = getattr(self, f"assert_{report_type}_behavior")
-            extract_behavior(ev_uuid)
+            extrctn_errs = extract_behavior(ev_uuid)
         except AttributeError:
             warnings.warn(f"{report_type} has no behavior assertions. Checking only that it arrived.")
+            extrctn_errs = []
 
         ev_id = ev_resp.json()["data"]["results"][0]["id"]
         ps_id = ps_resp.json()["data"]["results"][0]["id"]
@@ -104,6 +105,9 @@ class TestPicksessionReports(S3BaseTestCase):
 
         del_ps_resp = self.client.delete(Endpoints.PICKSESSIONS, str(ps_id))
         self.assertIn(del_ps_resp.status_code, [codes.accepted, codes.no_content])
+
+        if extrctn_errs:
+            assert False, "Extraction Errors: " + ", ".join(extrctn_errs)
 
     # UTILS
     def _gen_uuid(self):
@@ -163,6 +167,7 @@ class TestPicksessionReports(S3BaseTestCase):
     
     # Report specific assertions
     def assert_errorreport_behavior(self, ev_uuid):
+        extrctn_errs = []
         params = {
             "uuid": ev_uuid,
         }
@@ -172,4 +177,9 @@ class TestPicksessionReports(S3BaseTestCase):
         self.assertEqual(data["count"], 1)
 
         excs = data["results"][0]["exceptions"]
-        self.assertGreater(len(excs), 0)
+        try:
+            self.assertGreater(len(excs), 0)
+        except AssertionError:
+            extrctn_errs.append("Found 0 exceptions")
+        
+        return extrctn_errs
