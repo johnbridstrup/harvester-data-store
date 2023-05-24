@@ -799,10 +799,10 @@
     "uuid": null,
     "fruit": "strawberry",
     "githash": "40bc1afbe5",
-    "aux_uuids": null,
-    "timestamp": null,
-    "branch_name": null,
+    "aux_uuids": [],
+    "timestamp": 1684951497.572308,
+    "branch_name": "beatbox",
     "is_emulator": false,
-    "serial_number": null,
+    "serial_number": 193000,
     "pick_session_uuid": null
 }
