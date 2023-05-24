@@ -1,14 +1,17 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Select from "react-select";
 import { InputFormControl } from "components/styled";
 import {
   handleSelectFactory,
+  paramsToObject,
+  pushState,
   selectDarkStyles,
   transformTagsOptions,
 } from "utils/utils";
-import { THEME_MODES } from "features/base/constants";
+import { PushStateEnum, THEME_MODES } from "features/base/constants";
 import { queryS3File } from "features/s3file/s3fileSlice";
+import { useLocation } from "react-router-dom";
 
 function S3FileQuery(props) {
   const [fieldData, setFieldData] = useState({
@@ -21,8 +24,39 @@ function S3FileQuery(props) {
   const { theme } = useSelector((state) => state.home);
   const { tags } = useSelector((state) => state.event);
   const dispatch = useDispatch();
+  const { search } = useLocation();
   const customStyles = theme === THEME_MODES.DARK_THEME ? selectDarkStyles : {};
   const tagOptions = transformTagsOptions(tags);
+
+  useEffect(() => {
+    const paramsObj = paramsToObject(search);
+    if (paramsObj.key) {
+      setFieldData((current) => {
+        return { ...current, name: paramsObj.key };
+      });
+    }
+    if (paramsObj.filetype) {
+      setFieldData((current) => {
+        return { ...current, filetype: paramsObj.filetype };
+      });
+    }
+    if (paramsObj.tags) {
+      let mapTags = paramsObj.tags.split(",").map((x) => {
+        return { label: x, value: x };
+      });
+      setSelectedTag((current) => mapTags);
+    }
+    if (paramsObj.uuid) {
+      setFieldData((current) => {
+        return { ...current, uuid: paramsObj.uuid };
+      });
+    }
+    if (paramsObj.deleted) {
+      setFieldData((current) => {
+        return { ...current, deleted: Boolean(paramsObj.deleted) };
+      });
+    }
+  }, [search]);
 
   const handleFieldChange = (e) => {
     const name = e.target.name;
@@ -57,6 +91,7 @@ function S3FileQuery(props) {
     e.preventDefault();
     let queryObj = buildQueryObj();
     dispatch(queryS3File(queryObj));
+    pushState(queryObj, PushStateEnum.S3FILES);
   };
 
   return (
