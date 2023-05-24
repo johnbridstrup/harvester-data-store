@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
+import { useLocation } from "react-router-dom";
 import PickSessionList from "components/event/PickSessionList";
 import PickSessionQuery from "components/event/PickSessionQuery";
 import Header from "components/layout/header";
@@ -12,12 +13,15 @@ import { GenericPagination } from "components/pagination/Pagination";
 import { listHarvesters } from "features/harvester/harvesterSlice";
 import { MAX_LIMIT } from "features/base/constants";
 import { listLocations } from "features/location/locationSlice";
+import { paramsToObject } from "utils/utils";
 import "./styles.css";
 
 function PickSessionListView(props) {
   const dispatch = useDispatch();
+  const { search } = useLocation();
+
   useEffect(() => {
-    dispatch(queryPickSession());
+    dispatch(queryPickSession(paramsToObject(search)));
     (async () => {
       await Promise.all([
         dispatch(listHarvesters(MAX_LIMIT)),
@@ -25,7 +29,7 @@ function PickSessionListView(props) {
         dispatch(getPickSessionTags()),
       ]);
     })();
-  }, [dispatch]);
+  }, [dispatch, search]);
 
   return (
     <MainLayout>
