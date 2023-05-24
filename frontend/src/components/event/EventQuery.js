@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { queryEvent } from "features/event/eventSlice";
+import { paramsToObject, pushState } from "utils/utils";
+import { PushStateEnum } from "features/base/constants";
 import { FormQuery } from "./Helpers";
 
 function EventQuery(props) {
@@ -34,7 +36,8 @@ function EventQuery(props) {
     if (fieldData.uuid) {
       queryObj["UUID"] = fieldData.uuid;
     }
-    await dispatch(queryEvent(queryObj));
+    dispatch(queryEvent(queryObj));
+    pushState(queryObj, PushStateEnum.EVENTS);
   };
 
   return (
