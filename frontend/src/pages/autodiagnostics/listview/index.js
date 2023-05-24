@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
+import { useLocation } from "react-router-dom";
 import AutodiagList from "components/autodiagnostics/AutodiagList";
 import AutodiagQuery from "components/autodiagnostics/AutodiagQuery";
 import Header from "components/layout/header";
@@ -9,19 +10,22 @@ import { queryAutodiagReport } from "features/autodiagnostics/autodiagnosticSlic
 import { MAX_LIMIT } from "features/base/constants";
 import { listHarvesters } from "features/harvester/harvesterSlice";
 import { listLocations } from "features/location/locationSlice";
+import { paramsToObject } from "utils/utils";
 import "./styles.css";
 
 function AutodiagnosticListView(props) {
   const dispatch = useDispatch();
+  const { search } = useLocation();
+
   useEffect(() => {
     (async () => {
-      dispatch(queryAutodiagReport({}));
+      dispatch(queryAutodiagReport(paramsToObject(search)));
       await Promise.all([
         dispatch(listHarvesters(MAX_LIMIT)),
         dispatch(listLocations(MAX_LIMIT)),
       ]);
     })();
-  }, [dispatch]);
+  }, [dispatch, search]);
 
   return (
     <MainLayout>

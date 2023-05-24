@@ -1,17 +1,20 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
 import Select from "react-select";
 import { InputFormControl } from "components/styled";
 import {
   extractDateFromString,
   handleSelectFactory,
+  paramsToObject,
+  pushState,
   selectDarkStyles,
   timeStampFormat,
   transformHarvOptions,
   transformLocOptions,
 } from "utils/utils";
 import { queryAutodiagReport } from "features/autodiagnostics/autodiagnosticSlice";
-import { THEME_MODES } from "features/base/constants";
+import { PushStateEnum, THEME_MODES } from "features/base/constants";
 
 function AutodiagQuery(props) {
   const [selectedHarvId, setSelectHarvId] = useState(null);
@@ -28,6 +31,7 @@ function AutodiagQuery(props) {
   const { harvesters } = useSelector((state) => state.harvester);
   const { locations } = useSelector((state) => state.location);
   const dispatch = useDispatch();
+  const { search } = useLocation();
   const harvesterOptions = transformHarvOptions(harvesters);
   const locationOptions = transformLocOptions(locations);
   const handleFieldChange = (e) => {
@@ -38,6 +42,48 @@ function AutodiagQuery(props) {
   const handleHarvestSelect = handleSelectFactory(setSelectHarvId);
   const handleLocationSelect = handleSelectFactory(setSelectedLocation);
   const customStyles = theme === THEME_MODES.DARK_THEME ? selectDarkStyles : {};
+
+  useEffect(() => {
+    const paramsObj = paramsToObject(search);
+    if (paramsObj.harv_id) {
+      let harv_id = { label: paramsObj.harv_id, value: paramsObj.harv_id };
+      setSelectHarvId((current) => harv_id);
+    }
+    if (paramsObj.ranch) {
+      let ranch = { label: paramsObj.ranch, value: paramsObj.ranch };
+      setSelectedLocation((current) => ranch);
+    }
+    if (paramsObj.uuid) {
+      setFieldData((current) => {
+        return { ...current, uuid: paramsObj.uuid };
+      });
+    }
+    if (paramsObj.gripper_sn) {
+      setFieldData((current) => {
+        return { ...current, gripper_sn: paramsObj.gripper_sn };
+      });
+    }
+    if (paramsObj.robot) {
+      setFieldData((current) => {
+        return { ...current, robot: paramsObj.robot };
+      });
+    }
+    if (paramsObj.result) {
+      setFieldData((current) => {
+        return { ...current, result: paramsObj.result };
+      });
+    }
+    if (paramsObj.start_time) {
+      setFieldData((current) => {
+        return { ...current, start_time: paramsObj.start_time };
+      });
+    }
+    if (paramsObj.end_time) {
+      setFieldData((current) => {
+        return { ...current, end_time: paramsObj.end_time };
+      });
+    }
+  }, [search]);
 
   const buildQueryObj = () => {
     let queryObj = {};
@@ -76,6 +122,7 @@ function AutodiagQuery(props) {
     e.preventDefault();
     let queryObj = buildQueryObj();
     dispatch(queryAutodiagReport(queryObj));
+    pushState(queryObj, PushStateEnum.AUTODIAGNOSTICS);
   };
 
   return (
