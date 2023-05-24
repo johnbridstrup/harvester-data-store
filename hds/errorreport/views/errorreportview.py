@@ -1,6 +1,4 @@
 from common.viewsets import ReportModelViewSet
-from common.utils import build_frontend_url
-from notifications.signals import error_report_created
 
 from ..filters import ErrorReportFilterset
 from ..models import ErrorReport
@@ -12,6 +10,7 @@ from ..serializers.errorreportserializer import (
     ErrorReportListSerializer,
     ErrorReportDetailSerializer
 )
+from ..tasks import extract_exceptions_and_notify
 
 
 class ErrorReportView(ReportModelViewSet):
@@ -26,8 +25,7 @@ class ErrorReportView(ReportModelViewSet):
     def perform_create(self, serializer):
         super().perform_create(serializer)
         report_id = serializer.data['id']
-        url = build_frontend_url(endpoint="errorreports", _id=report_id)
-        error_report_created.send(sender=ErrorReport, instance_id=report_id, url=url)
+        extract_exceptions_and_notify.delay(report_id)
 
     @ERRORREPORT_LIST_QUERY_TIMER.time()
     def get_queryset(self):

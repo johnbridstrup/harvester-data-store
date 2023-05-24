@@ -384,7 +384,8 @@ class ErrorReportAPITest(HDSAPITestBase):
         self.assertIn(Tags.INVALIDSCHEMA.value, [tag.name for tag in tags])
 
         # Assert tags in response
-        resp_data = r.json()['data']
+        r2 = self.client.get(self.error_det_url(1))
+        resp_data = r2.json()['data']
         self.assertIn("tags", resp_data)
         self.assertIn(Tags.INCOMPLETE.value, resp_data['tags'])
 

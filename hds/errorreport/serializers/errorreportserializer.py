@@ -20,7 +20,6 @@ from exceptions.utils import sort_exceptions
 from harvester.serializers.harvesterserializer import HarvesterSerializer
 from location.serializers.locationserializer import LocationSerializer
 
-from ..tasks import extract_exceptions
 from ..models import ErrorReport, DEFAULT_UNKNOWN
 
 
@@ -80,11 +79,6 @@ class ErrorReportSerializer(TaggitSerializer, PickSessionSerializerMixin, Report
     # Serializer fields
     exceptions = AFTExceptionListSerializer(many=True, required=False)
     tags = TagListSerializerField(required=False)
-
-    def create(self, validated_data):
-        report_inst = super().create(validated_data)
-        extract_exceptions.delay(report_inst.id)
-        return report_inst
 
     def to_internal_value(self, data):
         try:
