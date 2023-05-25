@@ -598,13 +598,13 @@ export const mapCurrentOffset = (previous, next) => {
 
 export const transformJobTypeOptions = (jobtypes = []) => {
   return jobtypes.map((jobtype, index) => {
-    return { value: jobtype.name, label: jobtype.name };
+    return { value: jobtype, label: jobtype };
   });
 };
 
 export const transformJobSchemaOptions = (jobschemas = []) => {
-  return jobschemas.map((jobschema, index) => {
-    return { value: jobschema.id, label: `version ${jobschema.version}` };
+  return jobschemas.map((version, index) => {
+    return { value: version, label: `version ${version}` };
   });
 };
 

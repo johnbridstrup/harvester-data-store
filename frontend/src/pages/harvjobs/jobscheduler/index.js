@@ -4,9 +4,7 @@ import MainLayout from "components/layout/main";
 import Header from "components/layout/header";
 import {
   cacheSelectOptions,
-  getJobSchemaById,
   listJobTypes,
-  queryJobs,
   resetSelectOptions,
 } from "features/harvjobs/harvjobSlice";
 import { MAX_LIMIT } from "features/base/constants";
@@ -14,10 +12,14 @@ import {
   transformJobSchemaOptions,
   transformJobTypeOptions,
 } from "utils/utils";
-import harvjobService from "features/harvjobs/harvjobService";
 import JobTypeSelect from "components/harvjobs/jobscheduler/JobTypeSelect";
 import JobSchemaSelect from "components/harvjobs/jobscheduler/JobSchemaSelect";
 import JobScheduled from "components/harvjobs/jobscheduler/JobScheduled";
+import {
+  getJobTypeSchema,
+  getScheduledJobForm,
+  queryScheduledJobs,
+} from "features/jobscheduler/jobschedulerSlice";
 import "./styles.css";
 
 function JobSchedulerView(props) {
@@ -25,17 +27,21 @@ function JobSchedulerView(props) {
   const [selectedJobSchema, setSelectedJobSchema] = useState(null);
   const [schemaOptions, setSchemaOptions] = useState([]);
   const {
-    jobtypes,
-    jobschema,
     jobs,
     internal: { jtype, schema },
   } = useSelector((state) => state.harvjobs);
+  const { jobtypeschema, formbuilder } = useSelector(
+    (state) => state.jobscheduler
+  );
   const { theme } = useSelector((state) => state.home);
   const dispatch = useDispatch();
-  const jobtypeOptions = transformJobTypeOptions(jobtypes);
+  const jobtypeOptions = transformJobTypeOptions(
+    Object.keys(jobtypeschema.jobs || {})
+  );
 
   useEffect(() => {
     dispatch(listJobTypes(MAX_LIMIT));
+    dispatch(getJobTypeSchema());
   }, [dispatch]);
 
   useEffect(() => {
@@ -43,30 +49,37 @@ function JobSchedulerView(props) {
       if (jtype && schema) {
         setSelectedJobType((current) => jtype);
         setSelectedJobSchema((current) => schema);
-        await dispatch(getJobSchemaById(schema.value));
-        await dispatch(queryJobs({ schema__id: schema.value }));
+        const url =
+          jobtypeschema?.jobs?.[jtype?.value]?.[schema?.value]?.["url"];
+        if (url) dispatch(getScheduledJobForm(url));
+        dispatch(
+          queryScheduledJobs({
+            jobtype: jtype?.value,
+            schema_version: schema?.value,
+          })
+        );
       }
     })();
-  }, [dispatch, jtype, schema]);
+  }, [dispatch, jobtypeschema, jtype, schema]);
 
   const handleJobTypeSelect = async (newValue, actionMeta) => {
     setSelectedJobType((current) => newValue);
     if (newValue && newValue.hasOwnProperty("value")) {
-      try {
-        const res = await harvjobService.queryJobSchema({
-          jobtype__name: newValue.value,
-          limit: MAX_LIMIT,
-        });
-        const options = transformJobSchemaOptions(res.results);
-        setSchemaOptions((current) => options);
-        setSelectedJobSchema((current) => options[0]);
-        await dispatch(getJobSchemaById(res.results[0]?.id));
-        await dispatch(queryJobs({ schema__id: options[0]?.value }));
-        dispatch(cacheSelectOptions({ jtype: newValue, schema: options[0] }));
-      } catch (error) {
-        setSchemaOptions((current) => []);
-        setSelectedJobSchema(null);
-      }
+      const options = transformJobSchemaOptions(
+        Object.keys(jobtypeschema.jobs[newValue.value] || {})
+      );
+      setSchemaOptions((current) => options);
+      setSelectedJobSchema((current) => options[0]);
+      const url =
+        jobtypeschema?.jobs?.[newValue.value]?.[options[0]?.value]?.["url"];
+      dispatch(getScheduledJobForm(url));
+      dispatch(cacheSelectOptions({ jtype: newValue, schema: options[0] }));
+      dispatch(
+        queryScheduledJobs({
+          jobtype: newValue.value,
+          schema_version: options[0]?.value,
+        })
+      );
     } else {
       setSelectedJobSchema(null);
       dispatch(resetSelectOptions());
@@ -77,10 +90,17 @@ function JobSchedulerView(props) {
   const handleJobSchemaSelect = async (newValue, actionMeta) => {
     setSelectedJobSchema((current) => newValue);
     if (newValue && newValue.hasOwnProperty("value")) {
-      await Promise.all([
-        dispatch(getJobSchemaById(newValue.value)),
-        dispatch(queryJobs({ schema__id: newValue.value })),
-      ]);
+      const url =
+        jobtypeschema?.jobs?.[selectedJobType?.value]?.[newValue?.value]?.[
+          "url"
+        ];
+      dispatch(getScheduledJobForm(url));
+      dispatch(
+        queryScheduledJobs({
+          jobtype: selectedJobType?.value,
+          schema_version: newValue.value,
+        })
+      );
       dispatch(
         cacheSelectOptions({ jtype: selectedJobType, schema: newValue })
       );
@@ -106,11 +126,20 @@ function JobSchedulerView(props) {
               handleJobSchemaSelect={handleJobSchemaSelect}
               selectedJobSchema={selectedJobSchema}
               theme={theme}
+              url={
+                jobtypeschema?.jobs?.[selectedJobType?.value]?.[
+                  selectedJobSchema?.value
+                ]?.["url"]
+              }
             />
           </div>
         </div>
         <div className="row mb-4">
-          <JobScheduled jobs={jobs} jobschema={jobschema} theme={theme} />
+          <JobScheduled
+            jobs={jobs}
+            jobschema={formbuilder.form}
+            theme={theme}
+          />
         </div>
       </div>
     </MainLayout>

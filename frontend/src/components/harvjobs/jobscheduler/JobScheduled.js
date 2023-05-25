@@ -30,7 +30,7 @@ function JobScheduled(props) {
             }
           >
             <ReactJson
-              src={props.jobschema?.schema || {}}
+              src={props.jobschema || {}}
               collapsed={4}
               enableClipboard
               theme={

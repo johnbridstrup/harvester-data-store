@@ -9,8 +9,9 @@ function JobSchemaSelect(props) {
   const navigate = useNavigate();
   const handleClick = (e) => {
     e.preventDefault();
-    if (props.selectedJobSchema) {
-      navigate(`/schedulejob/${props.selectedJobSchema?.value}`);
+    if (props.url) {
+      let url = new URL(props.url);
+      navigate(`/schedulejob/${url.search}`);
     } else {
       toast.error("Please select a job type then job schema to proceed", {
         theme: props.theme === THEME_MODES.AUTO_THEME ? "colored" : props.theme,
@@ -63,6 +64,7 @@ JobSchemaSelect.propTypes = {
   handleJobSchemaSelect: PropTypes.func,
   selectedJobSchema: PropTypes.object,
   theme: PropTypes.string,
+  url: PropTypes.string,
 };
 
 export default JobSchemaSelect;
