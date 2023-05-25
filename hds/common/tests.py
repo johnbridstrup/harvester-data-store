@@ -371,10 +371,12 @@ class HDSAPITestBase(APITestCase):
         self.assertEqual(resp.status_code, resp_status)
         return resp.json()
 
-    def post_picksess_report(self, load=True, resp_status=status.HTTP_201_CREATED):
+    def post_picksess_report(self, load=True, resp_status=status.HTTP_202_ACCEPTED):
         if load:
             self.load_picksess_report()
-        resp = self.client.post(self.griprep_url, self.picksess_data, format='json')
+        fpath = os.path.join(self.BASE_PATH, "picksess.json")
+        event = self.create_s3event(key=fpath, has_uuid=True)[0]
+        resp = self.client.post(self.griprep_url, event, format='json')
         self.assertEqual(resp.status_code, resp_status, msg=resp.json())
         return resp.json()
 

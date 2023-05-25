@@ -1,3 +1,6 @@
+from rest_framework import status
+from rest_framework.response import Response
+
 from common.viewsets import ReportModelViewSet
 
 from .models import GripReport
@@ -6,6 +9,7 @@ from .serializers import (
     GripReportSerializer,
     GripReportDetailSerializer
 )
+from .tasks import download_gripreport
 
 
 class GripReportView(ReportModelViewSet):
@@ -15,3 +19,8 @@ class GripReportView(ReportModelViewSet):
     action_serializers = {
         "retrieve": GripReportDetailSerializer
     }
+
+    def create(self, request, *args, **kwargs):
+        event = request.data
+        download_gripreport.delay(event, creator=request.user.id)
+        return Response(status=status.HTTP_202_ACCEPTED)

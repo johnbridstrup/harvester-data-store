@@ -2,6 +2,7 @@ import jsonschema
 import structlog
 from copy import deepcopy
 
+from django.contrib.auth.models import User
 from rest_framework import serializers
 
 from common.async_metrics import ASYNC_ERROR_COUNTER
@@ -52,6 +53,9 @@ class ReportSerializerBase(serializers.ModelSerializer):
 
     def get_user_from_request(self):
         return self.context['request'].user
+
+    def get_user_from_id(self, user_id):
+        return User.objects.get(id=user_id)
     
     def get_schema(self):
         schema = deepcopy(self.REPORT_BASE_SCHEMA)        
@@ -132,6 +136,8 @@ class ReportSerializerBase(serializers.ModelSerializer):
             "harvester": harv.id,
             "location": harv.location.id,
         }
+        if "creator" in report:
+            data["creator"] = report["creator"]
         return data, harv
 
     @classmethod

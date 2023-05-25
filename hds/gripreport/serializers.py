@@ -1,3 +1,5 @@
+from django.contrib.auth.models import User
+
 from common.reports import DTimeFormatter
 from common.serializers.reportserializer import ReportSerializerBase
 from common.serializers.userserializer import UserCustomSerializer
@@ -15,7 +17,6 @@ class GripReportSerializer(PickSessionSerializerMixin, ReportSerializerBase):
     class Meta:
         model = GripReport
         fields = ('__all__')
-        read_only_fields = ('creator',)
 
     def to_internal_value(self, data):
         report = data.copy()
@@ -25,7 +26,12 @@ class GripReportSerializer(PickSessionSerializerMixin, ReportSerializerBase):
         pick_session_end_time = DTimeFormatter.from_timestamp(pick_session_end_ts)
         data, harv_obj = self.extract_basic(report)
 
-        creator = self.get_user_from_request()
+        if "request" in self.context:
+            creator = self.get_user_from_request()
+        elif "creator" in report:
+            creator = self.get_user_from_id(data["creator"])
+        else:
+            raise KeyError("Cannot retrieve creator.")
 
         # Event
         event_uuid = self.extract_uuid(report)
@@ -38,7 +44,6 @@ class GripReportSerializer(PickSessionSerializerMixin, ReportSerializerBase):
         self.set_picksess_harv_location(pick_session, harv_obj)
         self.set_picksess_time(pick_session, pick_session_start_time, pick_session_end_time)
         data['pick_session'] = pick_session.id
-
         return super().to_internal_value(data)
 
 

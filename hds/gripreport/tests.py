@@ -17,8 +17,8 @@ class GripReportTestCase(HDSAPITestBase):
         self.assertEqual(GripReport.objects.count(), 1)
 
     def test_event(self):
-        resp = self.post_picksess_report()
-        resp = self.client.get(self.griprep_det_url(resp["data"]["id"]))
+        self.post_picksess_report()
+        resp = self.client.get(self.griprep_det_url(1))
         event = resp.data["event"]
 
         self.assertTrue(GripReport.__name__ in event['tags'])
