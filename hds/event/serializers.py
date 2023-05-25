@@ -1,8 +1,8 @@
 from rest_framework import serializers
 from taggit.serializers import TagListSerializerField
 
-from harvester.serializers.harvesterserializer import HarvesterSerializer
-from location.serializers.locationserializer import LocationSerializer
+from harvester.serializers.harvesterserializer import HarvesterMinimalSerializer
+from location.serializers.locationserializer import LocationMinimalSerializer
 from common.serializers.userserializer import UserCustomSerializer
 
 from .models import Event, PickSession
@@ -143,10 +143,19 @@ class PickSessionDetailSerializer(PickSessionSerializer):
     for any related objected.
     """
 
-    harvester = HarvesterSerializer(read_only=True)
-    location = LocationSerializer(read_only=True)
+    harvester = HarvesterMinimalSerializer(read_only=True)
+    location = LocationMinimalSerializer(read_only=True)
     creator = UserCustomSerializer(read_only=True)
     modifiedBy = UserCustomSerializer(read_only=True)
 
     class Meta(PickSessionSerializer.Meta):
         pass
+
+
+class PickSessionMinimalSerializer(PickSessionSerializer):
+    harvester = HarvesterMinimalSerializer(read_only=True)
+    location = LocationMinimalSerializer(read_only=True)
+
+    class Meta:
+        model = PickSession
+        fields = ('UUID', 'start_time', 'session_length', 'harvester', 'location')

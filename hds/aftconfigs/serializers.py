@@ -1,8 +1,8 @@
 from common.serializers.reportserializer import ReportSerializerBase
 from common.serializers.userserializer import UserCustomSerializer
 from event.serializers import EventSerializerMixin, EventSerializer
-from harvester.serializers.harvesterserializer import HarvesterSerializer
-from location.serializers.locationserializer import LocationSerializer
+from harvester.serializers.harvesterserializer import HarvesterMinimalSerializer
+from location.serializers.locationserializer import LocationMinimalSerializer
 
 from .models import ConfigReport
 
@@ -31,8 +31,8 @@ class ConfigReportDetailSerializer(ConfigReportSerializer):
     creator = UserCustomSerializer(read_only=True)
     modifiedBy = UserCustomSerializer(read_only=True)
     event = EventSerializer(read_only=True)
-    harvester = HarvesterSerializer(read_only=True)
-    location = LocationSerializer(read_only=True)
+    harvester = HarvesterMinimalSerializer(read_only=True)
+    location = LocationMinimalSerializer(read_only=True)
 
     class Meta(ConfigReportSerializer.Meta):
         pass

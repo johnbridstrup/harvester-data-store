@@ -6,7 +6,7 @@ from common.reports import ReportBase
 from common.serializers.reportserializer import ReportSerializerBase
 from common.serializers.userserializer import UserCustomSerializer
 from event.serializers import PickSessionSerializerMixin, EventSerializer
-from harvester.serializers.harvesterserializer import HarvesterSerializer
+from harvester.serializers.harvesterserializer import HarvesterSerializer, HarvesterMinimalSerializer
 
 from .metrics import MISSING_SERIAL_NUMBER
 from .models import HarvesterAssetReport, HarvesterAssetType, HarvesterAsset
@@ -111,7 +111,7 @@ class HarvesterAssetReportDetailSerializer(HarvesterAssetReportSerializer):
     for any related objected
     """
 
-    harvester = HarvesterSerializer(read_only=True)
+    harvester = HarvesterMinimalSerializer(read_only=True)
     event = EventSerializer(read_only=True)
     creator = UserCustomSerializer(read_only=True)
     modifiedBy = UserCustomSerializer(read_only=True)

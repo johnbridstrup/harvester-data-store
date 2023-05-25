@@ -12,13 +12,13 @@ from event.models import PickSession
 from event.serializers import (
     PickSessionSerializerMixin,
     EventSerializer,
-    PickSessionSerializer
+    PickSessionMinimalSerializer,
 )
 from exceptions.models import AFTException, AFTExceptionCode
 from exceptions.serializers import AFTExceptionListSerializer
 from exceptions.utils import sort_exceptions
-from harvester.serializers.harvesterserializer import HarvesterSerializer
-from location.serializers.locationserializer import LocationSerializer
+from harvester.serializers.harvesterserializer import HarvesterMinimalSerializer
+from location.serializers.locationserializer import LocationMinimalSerializer
 
 from ..models import ErrorReport, DEFAULT_UNKNOWN
 
@@ -189,8 +189,8 @@ class ErrorReportListSerializer(serializers.ModelSerializer):
     # Serializer fields
     exceptions = AFTExceptionListSerializer(many=True)
     tags = TagListSerializerField()
-    harvester = HarvesterSerializer()
-    location = LocationSerializer()
+    harvester = HarvesterMinimalSerializer()
+    location = LocationMinimalSerializer()
 
     class Meta:
         model = ErrorReport
@@ -214,9 +214,9 @@ class ErrorReportDetailSerializer(ErrorReportSerializer):
     """
 
     event = EventSerializer(read_only=True)
-    pick_session = PickSessionSerializer(read_only=True)
-    location = LocationSerializer(read_only=True)
-    harvester = HarvesterSerializer(read_only=True)
+    pick_session = PickSessionMinimalSerializer(read_only=True)
+    location = LocationMinimalSerializer(read_only=True)
+    harvester = HarvesterMinimalSerializer(read_only=True)
     exceptions = AFTExceptionListSerializer(many=True)
     tags = TagListSerializerField()
     creator = UserCustomSerializer(read_only=True)

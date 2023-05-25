@@ -1,4 +1,5 @@
 import time
+from django.test.client import RequestFactory
 from django.utils import timezone
 from django.utils.timezone import datetime, timedelta
 from django.utils.http import urlencode
@@ -17,6 +18,7 @@ class TaggedUUIDModelTestBase(HDSAPITestBase):
         super().setUp()
         self.setup_basic()
         self.tags_endpoint = f"{self.event_url}tags/"
+        self.factory = RequestFactory()
 
 
 class EventApiTestCase(TaggedUUIDModelTestBase):
@@ -208,7 +210,9 @@ class EventPicksessIntegrationTestCase(TaggedUUIDModelTestBase):
         end_dt = DTimeFormatter.from_timestamp(self.picksess_data["timestamp"])
 
         picksess = PickSession.objects.get()
-        psdata = PickSessionDetailSerializer(instance=picksess).data
+
+        req = self.factory.get(self.picksess_url)
+        psdata = PickSessionDetailSerializer(instance=picksess, context={"request": req}).data
 
         # From autodiag report
         self.assertEqual(

@@ -8,11 +8,11 @@ from common.serializers.userserializer import UserCustomSerializer
 from event.serializers import (
     PickSessionSerializerMixin,
     EventSerializer,
-    PickSessionSerializer
+    PickSessionMinimalSerializer,
 )
 from harvassets.models import HarvesterAsset, HarvesterAssetType
-from harvester.serializers.harvesterserializer import HarvesterSerializer
-from location.serializers.locationserializer import LocationListSerializer
+from harvester.serializers.harvesterserializer import HarvesterMinimalSerializer
+from location.serializers.locationserializer import LocationMinimalSerializer
 
 from .models import AutodiagnosticsReport, AutodiagnosticsRun
 
@@ -153,9 +153,9 @@ class AutodiagnosticsReportDetailSerializer(AutodiagnosticsReportSerializer):
 
     run_data = AutodiagnosticsRunSerializer(read_only=True)
     event = EventSerializer(read_only=True)
-    pick_session = PickSessionSerializer(read_only=True)
-    harvester = HarvesterSerializer(read_only=True)
-    location = LocationListSerializer(read_only=True)
+    pick_session = PickSessionMinimalSerializer(read_only=True)
+    harvester = HarvesterMinimalSerializer(read_only=True)
+    location = LocationMinimalSerializer(read_only=True)
     creator = UserCustomSerializer(read_only=True)
     modifiedBy = UserCustomSerializer(read_only=True)
 

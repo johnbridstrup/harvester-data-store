@@ -588,7 +588,7 @@ class ErrorReportAPITest(HDSAPITestBase):
         )
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         self.assertEqual(
-            resp.json()["data"]["results"][0]["harvester"]["fruit"],
+            resp.json()["data"]["results"][0]["harvester"]["fruit"]["id"],
             fruit.id
         )
 

@@ -4,8 +4,10 @@ from common.serializers.userserializer import UserCustomSerializer
 from event.serializers import (
     PickSessionSerializerMixin,
     EventSerializer,
-    PickSessionSerializer
+    PickSessionMinimalSerializer
 )
+from harvester.serializers.harvesterserializer import HarvesterMinimalSerializer
+from location.serializers.locationserializer import LocationMinimalSerializer
 
 from .models import GripReport
 
@@ -47,7 +49,9 @@ class GripReportDetailSerializer(GripReportSerializer):
     """
 
     event = EventSerializer(read_only=True)
-    pick_session = PickSessionSerializer(read_only=True)
+    harvester = HarvesterMinimalSerializer(read_only=True)
+    location = LocationMinimalSerializer(read_only=True)
+    pick_session = PickSessionMinimalSerializer(read_only=True)
     creator = UserCustomSerializer(read_only=True)
     modifiedBy = UserCustomSerializer(read_only=True)
 
