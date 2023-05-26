@@ -32,6 +32,8 @@ import {
   emustatsTags,
   listScheduledJob,
   getScheduledJob,
+  listJob,
+  getJob,
 } from "./actions";
 
 export const handlers = [
@@ -64,4 +66,6 @@ export const handlers = [
   emustatsTags,
   listScheduledJob,
   getScheduledJob,
+  listJob,
+  getJob,
 ];

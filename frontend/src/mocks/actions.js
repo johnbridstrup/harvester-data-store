@@ -38,6 +38,8 @@ import { EMULATORSTATS_URL } from "features/emulatorstats/emulatorstatsService";
 import emustats from "test-utils/test-data/emustats.json";
 import { SCHEDULEDJOBS_URL } from "features/jobscheduler/jobschedulerService";
 import scheduledjob from "test-utils/test-data/scheduledjob.json";
+import { JOBS_URL } from "features/harvjobs/harvjobService";
+import { job, jobdetail } from "test-utils/test-data/harvjob";
 
 let genericListResponse = {
   status: "success",
@@ -312,3 +314,15 @@ export const getScheduledJob = rest.get(
     return res(ctx.json(genericGetResponse));
   }
 );
+
+export const listJob = rest.get(JOBS_URL, (req, res, ctx) => {
+  genericListResponse["message"] = "harvjob retrieved successfully";
+  genericListResponse["data"]["results"] = [job];
+  return res(ctx.json(genericListResponse));
+});
+
+export const getJob = rest.get(`${JOBS_URL}:jobId`, (req, res, ctx) => {
+  genericGetResponse["message"] = "harvjob retrieved successfully";
+  genericGetResponse["data"] = jobdetail;
+  return res(ctx.json(genericGetResponse));
+});

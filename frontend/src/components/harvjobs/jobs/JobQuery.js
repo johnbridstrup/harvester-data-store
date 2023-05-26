@@ -83,11 +83,11 @@ function JobQuery(props) {
   const customStyles = theme === THEME_MODES.DARK_THEME ? selectDarkStyles : {};
 
   return (
-    <form onSubmit={handleFormQuerySubmit}>
+    <form onSubmit={handleFormQuerySubmit} data-testid="query-form">
       <div className="row mb-4">
         <div className="col">
           <div className="form-group">
-            <label>UUID</label>
+            <label htmlFor="uuid">UUID</label>
             <InputFormControl
               type="text"
               name="uuid"
@@ -103,14 +103,14 @@ function JobQuery(props) {
       <div className="row mb-4">
         <div className="col">
           <div className="form-group">
-            <label>Harv ID</label>
+            <label htmlFor="harv_id">Harv ID</label>
             <Select
               isSearchable
               isClearable
               placeholder="11"
               options={harvesterOptions}
               name="harv_id"
-              id="harv_id"
+              inputId="harv_id"
               onChange={handleHarvestSelect}
               defaultValue={selectedHarvId}
               value={selectedHarvId}
@@ -124,14 +124,14 @@ function JobQuery(props) {
       <div className="row mb-4">
         <div className="col">
           <div className="form-group">
-            <label>Job Status</label>
+            <label htmlFor="jobstatus">Job Status</label>
             <Select
               isSearchable
               isClearable
               placeholder="Success"
               options={statusOptions}
               name="jobstatus"
-              id="jobstatus"
+              inputId="jobstatus"
               onChange={handleStatusSelect}
               defaultValue={selectedStatus}
               value={selectedStatus}
