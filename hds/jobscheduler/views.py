@@ -9,7 +9,7 @@ from harvjobs.models import JobSchema, JobType
 from hds.roles import RoleChoices
 from .forms import create_job_scheduler_form
 from .models import ScheduledJob
-from .serializers import ScheduledJobSerializer
+from .serializers import ScheduledJobSerializer, ScheduledJobDetailSerializer
 from .utils import create_periodic_task
 from .filters import ScheduledJobFilterSet
 
@@ -31,6 +31,9 @@ class ScheduledJobView(CreateModelViewSet):
         'enable_job': {
             RoleChoices.DEVELOPER: True,
         },
+    }
+    action_serializers = {
+        "retrieve": ScheduledJobDetailSerializer
     }
 
     def perform_create(self, serializer):
@@ -97,8 +100,8 @@ class ScheduledJobView(CreateModelViewSet):
                 {
                     "form": create_job_scheduler_form(jobtype, schema_version),
                     "submit": build_api_url(
-                        request, 
-                        "scheduledjobs", 
+                        request,
+                        "scheduledjobs",
                         api_version="current",
                         params={"jobtype": jobtype, "schema_version": schema_version}
                     ),
@@ -108,7 +111,7 @@ class ScheduledJobView(CreateModelViewSet):
             return make_error("Missing schema_version parameter.")
         if SCH_VERS_QP in qps:
             return make_error("Missing jobtype parameter.")
-        
+
         jobtypes = JobType.objects.values_list('name', flat=True)
         rel_path = "scheduledjobs/create/"
         resp_data = {"jobs": {}}
@@ -127,4 +130,3 @@ class ScheduledJobView(CreateModelViewSet):
                 }
 
         return make_ok("Harvester Job Scheduler Interface", response_data=resp_data)
-    

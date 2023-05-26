@@ -4,6 +4,7 @@ from rest_framework import serializers
 from timezone_field.rest_framework import TimeZoneSerializerField
 
 from harvester.models import Harvester
+from harvjobs.serializers.jobserializer import JobSerializer
 from .models import ScheduledJob
 
 
@@ -154,22 +155,22 @@ class ScheduledJobSerializer(serializers.ModelSerializer):
     def _parse_targets(self, target_dict):
         if target_dict.get("all"):
             return self._harv_pks_all()
-        
+
         ranches = target_dict.get("ranches", None)
         fruits = target_dict.get("fruits", None)
         harvesters = target_dict.get("harvesters", None)
         if sum([ranches is not None, fruits is not None, harvesters is not None]) > 1:
             raise ValidationError("Provided multiple target options.")
-        
+
         if ranches:
             return self._harv_pks_from_ranch(ranches)
-        
+
         if fruits:
             return self._harv_pks_from_fruit(fruits)
-        
+
         if harvesters:
             return self._harv_pks_from_harvname(harvesters)
-        
+
         raise serializers.ValidationError("Target options incorrect or not provided.")
 
     @staticmethod
@@ -189,7 +190,7 @@ class ScheduledJobSerializer(serializers.ModelSerializer):
         }
         harvs = Harvester.objects.filter(**filter).values_list("id", flat=True)
         return list(harvs)
-    
+
     @staticmethod
     def _harv_pks_from_harvname(harvesters):
         filter = {
@@ -206,3 +207,14 @@ class ScheduledJobSerializer(serializers.ModelSerializer):
         }
         harvs = Harvester.objects.filter(**filter).values_list("id", flat=True)
         return list(harvs)
+
+
+class ScheduledJobDetailSerializer(ScheduledJobSerializer):
+    """
+    Return a response with full nesting to the detail view
+    for any related objected.
+    """
+    jobs = JobSerializer(many=True)
+
+    class Meta(ScheduledJobSerializer.Meta):
+        pass
