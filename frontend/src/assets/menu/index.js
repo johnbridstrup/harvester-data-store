@@ -54,7 +54,7 @@ export const menu = [
     href: "/jobscheduler",
   },
   {
-    name: "Scheduled Jobs",
+    name: "Jobs",
     icon: "jobs",
     description: "Scheduled jobs on the harvesters",
     href: "/jobs",
@@ -82,6 +82,12 @@ export const menu = [
     icon: "emustats",
     description: "Emulator statistics report & graphs",
     href: "/emustats",
+  },
+  {
+    name: "Scheduled Jobs",
+    icon: "scheduler",
+    description: "Jobs to be run or have been run by task runner",
+    href: "/scheduledjobs",
   },
 ];
 
