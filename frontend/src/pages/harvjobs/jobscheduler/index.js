@@ -27,10 +27,9 @@ function JobSchedulerView(props) {
   const [selectedJobSchema, setSelectedJobSchema] = useState(null);
   const [schemaOptions, setSchemaOptions] = useState([]);
   const {
-    jobs,
     internal: { jtype, schema },
   } = useSelector((state) => state.harvjobs);
-  const { jobtypeschema, formbuilder } = useSelector(
+  const { jobtypeschema, formbuilder, scheduledjobs } = useSelector(
     (state) => state.jobscheduler
   );
   const { theme } = useSelector((state) => state.home);
@@ -136,7 +135,7 @@ function JobSchedulerView(props) {
         </div>
         <div className="row mb-4">
           <JobScheduled
-            jobs={jobs}
+            jobs={scheduledjobs}
             jobschema={formbuilder.form}
             theme={theme}
           />

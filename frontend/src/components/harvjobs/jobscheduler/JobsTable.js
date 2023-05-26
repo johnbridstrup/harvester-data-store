@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-import { darkThemeClass, getHarvId, getUrl } from "utils/utils";
+import { darkThemeClass } from "utils/utils";
 
 function JobsTable(props) {
   const tabledt = darkThemeClass("dt-table", props.theme);
@@ -10,34 +10,20 @@ function JobsTable(props) {
         <thead>
           <tr>
             <td>ID</td>
-            <td>Targets</td>
-            <td>Timeout</td>
-            <td>Status</td>
-            <td>Target</td>
-            <td>Results</td>
-            <td>History</td>
+            <td>Schedule Status</td>
+            <td>Job Type</td>
+            <td>Schema Version</td>
           </tr>
         </thead>
         <tbody>
           {props.jobs.map((job, _) => (
             <tr key={job.id}>
               <td>
-                <Link to={`/jobs/${job.id}`}>{job.id}</Link>
+                <Link to={`/scheduledjobs/${job.id}`}>{job.id}</Link>
               </td>
-              <td>{job.payload?.targets?.join(", ")}</td>
-              <td>{job.payload?.timeout}</td>
-              <td>{job.jobstatus}</td>
-              <td>{getHarvId(job.results, job.target)}</td>
-              <td>
-                <Link to={`/${getUrl(job.results)}`}>
-                  <i className="las la-eye"></i>
-                </Link>
-              </td>
-              <td>
-                <Link to={`/jobstatus/${job.id}`}>
-                  <i className="las la-eye"></i>
-                </Link>
-              </td>
+              <td>{job.schedule_status}</td>
+              <td>{job.job_def.jobtype}</td>
+              <td>{job.job_def.schema_version}</td>
             </tr>
           ))}
         </tbody>
