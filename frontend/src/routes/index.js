@@ -537,7 +537,7 @@ const BaseRoutes = () => {
         }
       />
       <Route
-        path="/schedulejob/:jobschemaId"
+        path="/schedulejob"
         element={
           <RequireUser>
             <Suspense

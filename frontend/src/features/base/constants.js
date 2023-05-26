@@ -23,6 +23,8 @@ export const FULLFILLED_PROMISE = {
   migration: "migration/execMigration/fulfilled",
   aftconfig: "aftconfig/fullConfigReport/fulfilled",
   s3file: "s3file/deleteS3File/fulfilled",
+  jobtypeschema: "jobscheduler/getJobTypeSchema/fulfilled",
+  schedulejob: "jobscheduler/createScheduledJob/fulfilled",
 };
 
 export const REJECTED_PROMISE = {
@@ -33,6 +35,8 @@ export const REJECTED_PROMISE = {
   migration: "migration/execMigration/rejected",
   aftconfig: "aftconfig/fullConfigReport/rejected",
   s3file: "s3file/deleteS3File/rejected",
+  jobtypeschema: "jobscheduler/getJobTypeSchema/rejected",
+  schedulejob: "jobscheduler/createScheduledJob/rejected",
 };
 
 export const LOG_STR_PATTERN =
