@@ -36,6 +36,8 @@ import { DISTRIBUTORS_URL } from "features/distributor/distributorService";
 import distributor from "test-utils/test-data/distributor.json";
 import { EMULATORSTATS_URL } from "features/emulatorstats/emulatorstatsService";
 import emustats from "test-utils/test-data/emustats.json";
+import { SCHEDULEDJOBS_URL } from "features/jobscheduler/jobschedulerService";
+import scheduledjob from "test-utils/test-data/scheduledjob.json";
 
 let genericListResponse = {
   status: "success",
@@ -292,6 +294,21 @@ export const emustatsTags = rest.get(
     genericGetResponse["data"] = {
       tags: ["Incomplete", "Invalid", "Unset"],
     };
+    return res(ctx.json(genericGetResponse));
+  }
+);
+
+export const listScheduledJob = rest.get(SCHEDULEDJOBS_URL, (req, res, ctx) => {
+  genericListResponse["message"] = "jobscheduler retrieved successfully";
+  genericListResponse["data"]["results"] = [scheduledjob];
+  return res(ctx.json(genericListResponse));
+});
+
+export const getScheduledJob = rest.get(
+  `${SCHEDULEDJOBS_URL}:jobId`,
+  (req, res, ctx) => {
+    genericGetResponse["message"] = "jobscheduler retrieved successfully";
+    genericGetResponse["data"] = scheduledjob;
     return res(ctx.json(genericGetResponse));
   }
 );
