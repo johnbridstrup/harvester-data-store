@@ -83,7 +83,7 @@ class JobSchedulerTestCase(HarvJobApiTestBase):
         url = self.url + "create/"
         r = self.client.get(url)
         req = self.factory.get(self.url) # request object for testing
-        
+
         # Keys exist
         self.assertIn("jobs", r.json()['data'])
         self.assertIn("job1", r.json()['data']['jobs'])
@@ -95,7 +95,7 @@ class JobSchedulerTestCase(HarvJobApiTestBase):
 
         form_r = self.client.get(form_url)
         self.assertEqual(form_r.status_code, status.HTTP_200_OK)
-        
+
         # Submit linked correctly
         exp_sub_url = build_api_url(req, self.url, params={"jobtype": "job1", "schema_version": j1_schem_vers})
         self.assertEqual(exp_sub_url, form_r.json()['data']['submit'])
@@ -103,3 +103,33 @@ class JobSchedulerTestCase(HarvJobApiTestBase):
         # Using correct schema in payload
         resp_schema = form_r.json()['data']['form']['properties']['payload']
         self.assertDictEqual(resp_schema, self.DEFAULT_SCHEMA)
+
+    def test_filter_scheduledjobs(self):
+        self._create_defaults()
+        r = self.client.post(self.url, self.jobsched_payload, format='json')
+        self.assertEqual(r.status_code, status.HTTP_201_CREATED)
+
+        # filter by jobtype positive
+        res = self.client.get(f'{self.url}?jobtype={self.jobsched_payload["jobtype"]}')
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(res.json()['data']['count'], 1)
+
+        # filter by jobtype negative
+        res = self.client.get(f'{self.url}?jobtype=unknown')
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(res.json()['data']['count'], 0)
+
+        # filter by schema version positive
+        res = self.client.get(f'{self.url}?schema_version={self.jobsched_payload["schema_version"]}')
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(res.json()['data']['count'], 1)
+
+        # filter by schema version negative
+        res = self.client.get(f'{self.url}?schema_version=10.0')
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(res.json()['data']['count'], 0)
+
+        # filter by jobtype and schema version
+        res = self.client.get(f'{self.url}?jobtype={self.jobsched_payload["jobtype"]}&schema_version={self.jobsched_payload["schema_version"]}')
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(res.json()['data']['count'], 1)

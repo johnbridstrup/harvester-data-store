@@ -11,11 +11,13 @@ from .forms import create_job_scheduler_form
 from .models import ScheduledJob
 from .serializers import ScheduledJobSerializer
 from .utils import create_periodic_task
+from .filters import ScheduledJobFilterSet
 
 
 class ScheduledJobView(CreateModelViewSet):
     queryset = ScheduledJob.objects.all()
     serializer_class = ScheduledJobSerializer
+    filterset_class = ScheduledJobFilterSet
     view_permissions_update = {
         'create_scheduled_job': {
             RoleChoices.DEVELOPER: True, #is_whitelisted
