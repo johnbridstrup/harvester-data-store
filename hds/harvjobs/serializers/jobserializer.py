@@ -7,8 +7,10 @@ from rest_framework import serializers
 from harvester.models import Harvester
 from event.models import Event
 from event.serializers import EventSerializerMixin, EventSerializer
+from harvester.serializers.harvesterserializer import HarvesterMinimalSerializer
 from common.serializers.userserializer import UserCustomSerializer
 from ..models import Job, JobType, JobSchema
+from .jobschemaserializer import JobSchemaSerializer
 
 
 DEFAULT_JOB_TIMEOUT = 6000
@@ -93,6 +95,8 @@ class JobDetailSerializer(JobSerializer):
     for any related objected.
     """
     event = EventSerializer(read_only=True)
+    schema = JobSchemaSerializer(read_only=True)
+    target = HarvesterMinimalSerializer(read_only=True)
     creator = UserCustomSerializer(read_only=True)
     modifiedBy = UserCustomSerializer(read_only=True)
 
