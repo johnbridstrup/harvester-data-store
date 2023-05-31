@@ -34,6 +34,9 @@ import {
   getScheduledJob,
   listJob,
   getJob,
+  listJobResult,
+  getJobResult,
+  getJobHistory,
 } from "./actions";
 
 export const handlers = [
@@ -68,4 +71,7 @@ export const handlers = [
   getScheduledJob,
   listJob,
   getJob,
+  getJobHistory,
+  listJobResult,
+  getJobResult,
 ];

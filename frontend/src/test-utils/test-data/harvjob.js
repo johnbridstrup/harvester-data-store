@@ -101,3 +101,82 @@ export const jobdetail = {
     "/api/v1/jobresults/?job__target__harv_id=1&job__event__UUID=431afec6-3898-11ed-b748-78d00429ea3e",
   history: "/api/v1/harvjobs/1/history/",
 };
+
+export const jobhistory = {
+  jobstatus: "Pending",
+  history_id: 1,
+  history_date: "2022-10-21T23:35:49.694000Z",
+};
+
+export const jobresults = {
+  id: 1,
+  host_results: [
+    {
+      id: 1,
+      created: "2022-10-21T23:43:16.616000Z",
+      lastModified: "2022-10-21T23:43:16.616000Z",
+      host: "aft-robot01",
+      result: "Success",
+      details: {
+        ts: 1666395522.028461,
+        exit_code: 0,
+        stdout: "",
+        stderr: "",
+        status: "success",
+      },
+      timestamp: "2022-10-21T23:38:42.028000Z",
+      creator: 1,
+      modifiedBy: null,
+      parent: 1,
+    },
+    {
+      id: 2,
+      created: "2022-10-21T23:43:16.625000Z",
+      lastModified: "2022-10-21T23:43:16.625000Z",
+      host: "master",
+      result: "Success",
+      details: {
+        ts: 1666395522.0660062,
+        exit_code: 0,
+        stdout: "",
+        stderr: "",
+        status: "success",
+      },
+      timestamp: "2022-10-21T23:38:42.066000Z",
+      creator: 1,
+      modifiedBy: null,
+      parent: 1,
+    },
+  ],
+  created: "2022-10-21T23:43:16.592000Z",
+  lastModified: "2022-10-21T23:43:16.592000Z",
+  reportTime: "2022-10-21T23:38:42.072000Z",
+  report: {
+    type: "jobresults",
+    timestamp: 1666395522.072941,
+    uuid: "183a3ab2-5199-11ed-8eb4-7b94730d4c5d",
+    data: {
+      "aft-robot01": {
+        ts: 1666395522.028461,
+        exit_code: 0,
+        stdout: "",
+        stderr: "",
+        status: "success",
+      },
+      master: {
+        ts: 1666395522.0660062,
+        exit_code: 0,
+        stdout: "",
+        stderr: "",
+        status: "success",
+      },
+    },
+    serial_number: "001",
+  },
+  creator: 1,
+  modifiedBy: null,
+  location: null,
+  harvester: null,
+  event: 7,
+  job: 1,
+};

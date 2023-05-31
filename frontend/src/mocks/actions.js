@@ -38,8 +38,8 @@ import { EMULATORSTATS_URL } from "features/emulatorstats/emulatorstatsService";
 import emustats from "test-utils/test-data/emustats.json";
 import { SCHEDULEDJOBS_URL } from "features/jobscheduler/jobschedulerService";
 import scheduledjob from "test-utils/test-data/scheduledjob.json";
-import { JOBS_URL } from "features/harvjobs/harvjobService";
-import { job, jobdetail } from "test-utils/test-data/harvjob";
+import { JOBS_URL, JOBRESULTS_URL } from "features/harvjobs/harvjobService";
+import { job, jobdetail, jobresults, jobhistory } from "test-utils/test-data/harvjob";
 
 let genericListResponse = {
   status: "success",
@@ -326,3 +326,27 @@ export const getJob = rest.get(`${JOBS_URL}:jobId`, (req, res, ctx) => {
   genericGetResponse["data"] = jobdetail;
   return res(ctx.json(genericGetResponse));
 });
+
+export const getJobHistory = rest.get(
+  `${JOBS_URL}:jobId/history/`,
+  (req, res, ctx) => {
+    genericListResponse["message"] = "job history retrieved successfully";
+    genericListResponse["data"]["results"] = [jobhistory];
+    return res(ctx.json(genericListResponse));
+  }
+);
+
+export const listJobResult = rest.get(JOBRESULTS_URL, (req, res, ctx) => {
+  genericListResponse["message"] = "jobresults retrieved successfully";
+  genericListResponse["data"]["results"] = [jobresults];
+  return res(ctx.json(genericListResponse));
+});
+
+export const getJobResult = rest.get(
+  `${JOBRESULTS_URL}:jobId`,
+  (req, res, ctx) => {
+    genericGetResponse["message"] = "jobresults retrieved successfully";
+    genericGetResponse["data"] = [jobresults];
+    return res(ctx.json(genericGetResponse));
+  }
+);

@@ -3,7 +3,7 @@ import { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
-import { darkThemeClass, getHarvId, timeStampFormat } from "utils/utils";
+import { darkThemeClass, timeStampFormat } from "utils/utils";
 import { RightButtonGroup, JobStatusHistory } from "../helpers";
 import { handleDownload } from "utils/services";
 import DownloadModal from "components/modals/DownloadModal";
@@ -59,7 +59,7 @@ function DetailJob(props) {
         confirmRef={confirmRef}
         theme={theme}
       />
-      <div className="mb-4 mt-3">
+      <div className="mb-4 mt-3" data-testid="job-detail">
         <div className={`card card-body mb-4 ${cardtheme}`}>
           <div className="row">
             <div className="col-md-3 mb-2">
@@ -94,7 +94,7 @@ function DetailJob(props) {
             </div>
             <div className="col-md-3 mb-2">
               <div className="f-w-600">Target</div>
-              <div>{getHarvId(job.results, job.target)}</div>
+              <div>{job.target?.harv_id}</div>
             </div>
             <div className="col-md-3 mb-2">
               <div className="f-w-600">Created At</div>
