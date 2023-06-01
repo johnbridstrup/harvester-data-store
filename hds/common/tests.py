@@ -361,7 +361,7 @@ class HDSAPITestBase(APITestCase):
         if load:
             self.load_error_report()
         resp = self.client.post(self.error_url, self.data, format='json')
-        self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(resp.status_code, status.HTTP_201_CREATED, resp.json())
         return resp.json()
 
     def post_autodiag_report(self, load=True, resp_status=status.HTTP_201_CREATED):

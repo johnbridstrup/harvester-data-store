@@ -81,15 +81,6 @@ class ErrorReportSerializer(TaggitSerializer, PickSessionSerializerMixin, Report
     tags = TagListSerializerField(required=False)
 
     def to_internal_value(self, data):
-        try:
-            self.validate_incoming_report(data)
-            tags = []
-        except serializers.ValidationError:
-            # We will try anyway.
-            # This failure has already been logged.
-            # The tag will only apply if we are able to ingest.
-            tags = [Tags.INVALIDSCHEMA.value]
-
         report = data.copy()
         harv_id = self.get_serial_number(report)
         harvester = self.get_harvester(harv_id, report['data']['sysmon_report'])
@@ -111,7 +102,6 @@ class ErrorReportSerializer(TaggitSerializer, PickSessionSerializerMixin, Report
             'UUID': UUID,
             'githash': githash,
             'gitbranch': gitbranch,
-            'tags': tags,
             'pick_session': pick_session.id,
             'event': event.id,
         }

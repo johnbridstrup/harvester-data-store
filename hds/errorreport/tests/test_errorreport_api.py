@@ -379,9 +379,8 @@ class ErrorReportAPITest(HDSAPITestBase):
         # Assert tag assigned
         report = ErrorReport.objects.get()
         tags = report.tags.all()
-        self.assertEqual(len(tags), 2)
+        self.assertEqual(len(tags), 1)
         self.assertIn(Tags.INCOMPLETE.value, [tag.name for tag in tags])
-        self.assertIn(Tags.INVALIDSCHEMA.value, [tag.name for tag in tags])
 
         # Assert tags in response
         r2 = self.client.get(self.error_det_url(1))
@@ -397,26 +396,6 @@ class ErrorReportAPITest(HDSAPITestBase):
         )
 
         self.assertEqual(counter._value.get(), 2)
-
-    ## Schema validation tests
-    @patch("common.serializers.reportserializer.logger")
-    def test_create_errorreport_invalid_schema(self, mock_logger):
-        # Get initial counter value, it may have been incremented in other tests
-        msg = "Failed to validate: required"
-        exc = serializers.ValidationError.__name__
-        raised_by = ErrorReportSerializer.__name__
-        counter = ERROR_COUNTER.labels(exc, msg, raised_by)
-        init_ctr = counter._value.get()
-        # This tests that we reject error reports that will fail to ingest
-        # and make this visible to devs
-        self.data['data'] = {}
-        r = self.client.post(self.error_url, self.data, format='json')
-
-        self.assertEqual(r.status_code, status.HTTP_400_BAD_REQUEST)
-
-
-        self.assertEqual(counter._value.get() - init_ctr, 1)
-        mock_logger.exception.assert_called_with("'sysmon_report' is a required property", serializer=ErrorReportSerializer.__name__)
 
     def test_sysmon_entry_key_invalid(self):
         # Note: This also tests any invalid key, including ones without

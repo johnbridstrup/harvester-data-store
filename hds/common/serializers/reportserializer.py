@@ -82,7 +82,7 @@ class ReportSerializerBase(serializers.ModelSerializer):
                 err = str(e.message)
             msg = f"Failed to validate: {e.validator}"       
             ERROR_COUNTER.labels(serializers.ValidationError.__name__, msg, self.__class__.__name__).inc()
-            logger.exception(err, serializer=self.__class__.__name__)
+            logger.error(err, serializer=self.__class__.__name__)
             raise serializers.ValidationError(detail={"validation error": err})
 
     @classmethod
