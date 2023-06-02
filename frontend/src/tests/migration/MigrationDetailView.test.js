@@ -1,5 +1,9 @@
-import { act } from "react-dom/test-utils";
-import { getByText, render, screen } from "test-utils/testing-libary-utils";
+import {
+  getByText,
+  render,
+  screen,
+  act,
+} from "test-utils/testing-libary-utils";
 import MigrationDetailView from "pages/migration/detailview";
 
 test("should render the migration log detail view", async () => {

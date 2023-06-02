@@ -1,5 +1,9 @@
-import { act } from "react-dom/test-utils";
-import { getByText, render, screen } from "test-utils/testing-libary-utils";
+import {
+  getByText,
+  render,
+  screen,
+  act,
+} from "test-utils/testing-libary-utils";
 import DistributorListView from "pages/distributor/distributorlist";
 
 test("should render distributor list view", async () => {
