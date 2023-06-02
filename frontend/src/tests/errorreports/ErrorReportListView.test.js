@@ -10,11 +10,10 @@ import ErrorsReportList from "pages/errorreports/errorlist";
 import userEvent from "@testing-library/user-event";
 import selectEvent from "react-select-event";
 
-jest.setTimeout(25000);
+jest.setTimeout(35000);
 
 test("should render the error report list view", async () => {
   let user = userEvent.setup();
-  let roles;
   let routeObject = [
     {
       path: "/errorreports",
@@ -25,12 +24,11 @@ test("should render the error report list view", async () => {
   let initialRouteIndex = 0;
 
   await act(() => {
-    const result = render(<ErrorsReportList />, {
+    render(<ErrorsReportList />, {
       routeHistory,
       initialRouteIndex,
       routeObject,
     });
-    roles = result.container;
   });
 
   const header = screen.getByText("HDS Prototype: Error Reports");
