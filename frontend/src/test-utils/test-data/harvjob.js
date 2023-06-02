@@ -180,3 +180,36 @@ export const jobresults = {
   event: 7,
   job: 1,
 };
+
+export const jobschemas = {
+  id: 1,
+  created: "2022-10-21T23:34:36.535000Z",
+  lastModified: "2022-10-21T23:34:36.535000Z",
+  schema: {
+    type: "object",
+    properties: {
+      targets: {
+        type: "array",
+        items: {
+          type: "string",
+          pattern: "^(master|((robot|stereo)\\d+))$",
+        },
+      },
+    },
+    required: ["targets"],
+  },
+  version: "1.0",
+  comment: "Test schema",
+  creator: 1,
+  modifiedBy: null,
+  jobtype: "test",
+};
+
+export const jobtypes = {
+  id: 1,
+  created: "2022-10-21T23:34:36.534000Z",
+  lastModified: "2022-10-21T23:34:36.534000Z",
+  name: "test",
+  creator: 1,
+  modifiedBy: null,
+};

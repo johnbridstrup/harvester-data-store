@@ -37,6 +37,10 @@ import {
   listJobResult,
   getJobResult,
   getJobHistory,
+  listJobSchema,
+  getJobSchema,
+  listJobType,
+  getJobType,
 } from "./actions";
 
 export const handlers = [
@@ -74,4 +78,8 @@ export const handlers = [
   getJobHistory,
   listJobResult,
   getJobResult,
+  listJobSchema,
+  getJobSchema,
+  listJobType,
+  getJobType,
 ];

@@ -38,8 +38,20 @@ import { EMULATORSTATS_URL } from "features/emulatorstats/emulatorstatsService";
 import emustats from "test-utils/test-data/emustats.json";
 import { SCHEDULEDJOBS_URL } from "features/jobscheduler/jobschedulerService";
 import scheduledjob from "test-utils/test-data/scheduledjob.json";
-import { JOBS_URL, JOBRESULTS_URL } from "features/harvjobs/harvjobService";
-import { job, jobdetail, jobresults, jobhistory } from "test-utils/test-data/harvjob";
+import {
+  JOBS_URL,
+  JOBRESULTS_URL,
+  JOBSCHEMAS_URL,
+  JOBTYPES_URL,
+} from "features/harvjobs/harvjobService";
+import {
+  job,
+  jobdetail,
+  jobresults,
+  jobhistory,
+  jobschemas,
+  jobtypes,
+} from "test-utils/test-data/harvjob";
 
 let genericListResponse = {
   status: "success",
@@ -347,6 +359,36 @@ export const getJobResult = rest.get(
   (req, res, ctx) => {
     genericGetResponse["message"] = "jobresults retrieved successfully";
     genericGetResponse["data"] = [jobresults];
+    return res(ctx.json(genericGetResponse));
+  }
+);
+
+export const listJobSchema = rest.get(JOBSCHEMAS_URL, (req, res, ctx) => {
+  genericListResponse["message"] = "jobschema retrieved successfully";
+  genericListResponse["data"]["results"] = [jobschemas];
+  return res(ctx.json(genericListResponse));
+});
+
+export const getJobSchema = rest.get(
+  `${JOBSCHEMAS_URL}:jobschemaId`,
+  (req, res, ctx) => {
+    genericGetResponse["message"] = "jobschema retrieved successfully";
+    genericGetResponse["data"] = [jobschemas];
+    return res(ctx.json(genericGetResponse));
+  }
+);
+
+export const listJobType = rest.get(JOBTYPES_URL, (req, res, ctx) => {
+  genericListResponse["message"] = "jobtype retrieved successfully";
+  genericListResponse["data"]["results"] = [jobtypes];
+  return res(ctx.json(genericListResponse));
+});
+
+export const getJobType = rest.get(
+  `${JOBTYPES_URL}:jobtypeId`,
+  (req, res, ctx) => {
+    genericGetResponse["message"] = "jobtype retrieved successfully";
+    genericGetResponse["data"] = [jobtypes];
     return res(ctx.json(genericGetResponse));
   }
 );
