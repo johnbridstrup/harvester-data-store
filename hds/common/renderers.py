@@ -1,5 +1,5 @@
-import collections
 import structlog
+from collections.abc import Mapping
 from rest_framework.renderers import JSONRenderer
 
 logger = structlog.get_logger(__name__)
@@ -46,13 +46,13 @@ class HDSJSONRenderer(JSONRenderer):
 
             if status != HDSJSONRenderer.SUCCESS:
                 return data
-            
-            if isinstance(data, collections.Mapping) and data.get("message") is not None:
+
+            if isinstance(data, Mapping) and data.get("message") is not None:
                 msg = data.pop("message")
 
             else:
                 msg = "{} {} successfully".format(
-                    model, 
+                    model,
                     self.METHODS.get(method, f'{method} completed')
                 )
 
