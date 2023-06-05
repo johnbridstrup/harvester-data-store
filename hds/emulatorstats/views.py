@@ -1,3 +1,13 @@
-from django.shortcuts import render
+from common.viewsets import ReportModelViewSet
 
-# Create your views here.
+from .models import EmustatsReport
+from .serializers import EmustatsReportSerializer
+
+
+class EmuReportView(ReportModelViewSet):
+    queryset = EmustatsReport.objects.all()
+    serializer_class = EmustatsReportSerializer
+    filterset_fields = (
+        'runner',
+        'branch',
+    )

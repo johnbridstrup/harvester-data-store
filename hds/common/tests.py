@@ -171,6 +171,10 @@ class HDSAPITestBase(APITestCase):
         self.config_url = reverse("configreports-list")
         self.config_det_url = lambda id_: reverse("configreports-list", args=[id_])
 
+        # Emustats
+        self.emustats_url = reverse("emustatsreports-list")
+        self.emustats_det_url = lambda id_: reverse("emustatsreports-detail", args=[id_])
+
         # Error report
         self.error_url = reverse("errorreport-list")
         self.error_det_url = lambda id_: reverse("errorreport-detail", args=[id_])
@@ -282,7 +286,7 @@ class HDSAPITestBase(APITestCase):
             'creator': creator
         })
 
-    def create_harvester_object(self, harv_id, fruit=None, location=None, name=None, creator=None):
+    def create_harvester_object(self, harv_id, fruit=None, location=None, name=None, creator=None, is_emu=False):
         creator = None or self.user
         fruit = fruit or self.create_fruit_object()
         location = location or self.create_location_object()
@@ -294,7 +298,8 @@ class HDSAPITestBase(APITestCase):
             'fruit': fruit,
             'location': location,
             'name': name,
-            'creator': creator
+            'creator': creator,
+            'is_emulator': is_emu,
         })
 
     def create_exception_code_object(self, code, name, msg, team, cycle, creator):
@@ -356,6 +361,16 @@ class HDSAPITestBase(APITestCase):
 
     def load_picksess_report(self):
         self.picksess_data = self._load_report('picksess.json')
+
+    def load_emustats_report(self):
+        self.emustats_data = self._load_report('emustats.json')
+
+    def post_emustats_report(self, load=True):
+        if load:
+            self.load_emustats_report()
+        resp = self.client.post(self.emustats_url, self.emustats_data, format='json')
+        self.assertEqual(resp.status_code, status.HTTP_201_CREATED, resp.json())
+        return resp.json()
 
     def post_error_report(self, load=True):
         if load:

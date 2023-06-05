@@ -32,6 +32,7 @@ urlpatterns = [
     path(f'{version}/harvesterhistory/', include('harvester.urls.harvesterhistoryurls')),
     path(f'{version}/locations/', include('location.urls.locationurls')),
     path(f'{version}/distributors/', include('location.urls.distributorurls')),
+    path(f'{version}/emustats/', include('emulatorstats.urls')),
     path(f'{version}/errorreports/', include('errorreport.urls')),
     path(f'{version}/events/', include('event.urls.eventurls')),
     path(f'{version}/picksessions/', include('event.urls.picksessionurls')),
