@@ -66,6 +66,7 @@ LOCAL_APPS = [
     'common',
     'location',
     'hdsmigrations',
+    'emulatorstats',
     'errorreport',
     'event',
     'exceptions',
