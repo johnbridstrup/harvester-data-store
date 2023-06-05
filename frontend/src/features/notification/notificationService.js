@@ -27,11 +27,6 @@ const deleteNotification = async (notifyId, token) => {
   return response;
 };
 
-const paginateNotification = async (url, token) => {
-  const response = await axiosService.get(url, token);
-  return response;
-};
-
 const queryNotification = async (queryObj, token) => {
   const params = new URLSearchParams(queryObj);
   const response = await axiosService.get(
@@ -45,7 +40,6 @@ const notificationService = {
   listNotifications,
   getNotificationById,
   deleteNotification,
-  paginateNotification,
   queryNotification,
 };
 

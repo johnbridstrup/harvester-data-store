@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { invalidateCache } from "../auth/authSlice";
 import eventService from "./eventService";
+import { paginateRequest } from "features/base/service";
 
 const initialState = {
   loading: false,
@@ -58,7 +59,7 @@ export const paginateEvent = createAsyncThunk(
       const {
         auth: { token },
       } = thunkAPI.getState();
-      return await eventService.paginateEvent(url, token);
+      return await paginateRequest(url, token);
     } catch (error) {
       console.log(error);
       const message = invalidateCache(error, thunkAPI.dispatch);
@@ -138,7 +139,7 @@ export const paginatePickSession = createAsyncThunk(
       const {
         auth: { token },
       } = thunkAPI.getState();
-      return await eventService.paginateEvent(url, token);
+      return await paginateRequest(url, token);
     } catch (error) {
       console.log(error);
       const message = invalidateCache(error, thunkAPI.dispatch);

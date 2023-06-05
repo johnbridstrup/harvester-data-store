@@ -9,6 +9,7 @@ import {
 } from "utils/utils";
 import { invalidateCache } from "../auth/authSlice";
 import errorreportService from "./errorreportService";
+import { paginateRequest } from "features/base/service";
 
 const initialState = {
   loading: false,
@@ -78,7 +79,7 @@ export const paginateErrorReport = createAsyncThunk(
       const {
         auth: { token },
       } = thunkAPI.getState();
-      return await errorreportService.paginateErrorReport(url, token);
+      return await paginateRequest(url, token);
     } catch (error) {
       console.log(error);
       const message = invalidateCache(error, thunkAPI.dispatch);

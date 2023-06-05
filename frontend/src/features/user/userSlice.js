@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { invalidateCache } from "../auth/authSlice";
 import userService from "./userService";
+import { paginateRequest } from "features/base/service";
 
 const initialState = {
   loading: false,
@@ -73,7 +74,7 @@ export const paginateUser = createAsyncThunk(
       const {
         auth: { token },
       } = thunkAPI.getState();
-      return await userService.paginateUser(url, token);
+      return await paginateRequest(url, token);
     } catch (error) {
       console.log(error);
       const message = invalidateCache(error, thunkAPI.dispatch);

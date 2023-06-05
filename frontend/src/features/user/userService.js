@@ -18,11 +18,6 @@ const createUser = async (userData, token) => {
   return response;
 };
 
-const paginateUser = async (url, token) => {
-  const response = await axiosService.get(url, token);
-  return response;
-};
-
 const updateUser = async (userData, token) => {
   const response = await axiosService.patch(
     `${USERS_URL}${userData.objId}/`,
@@ -36,7 +31,6 @@ const userService = {
   listUsers,
   getUserById,
   createUser,
-  paginateUser,
   updateUser,
 };
 

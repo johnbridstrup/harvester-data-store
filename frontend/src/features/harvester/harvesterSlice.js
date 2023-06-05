@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { invalidateCache } from "../auth/authSlice";
 import harvesterService from "./harvesterService";
+import { paginateRequest } from "features/base/service";
 
 const initialState = {
   loading: false,
@@ -92,7 +93,7 @@ export const paginateHarvester = createAsyncThunk(
       const {
         auth: { token },
       } = thunkAPI.getState();
-      return await harvesterService.paginateHarvester(url, token);
+      return await paginateRequest(url, token);
     } catch (error) {
       console.log(error);
       const message = invalidateCache(error, thunkAPI.dispatch);
@@ -144,7 +145,7 @@ export const paginateHarvVersion = createAsyncThunk(
       const {
         auth: { token },
       } = thunkAPI.getState();
-      return await harvesterService.paginateHarvester(url, token);
+      return await paginateRequest(url, token);
     } catch (error) {
       console.log(error);
       const message = invalidateCache(error, thunkAPI.dispatch);
@@ -192,7 +193,7 @@ export const paginateHarvHistory = createAsyncThunk(
       const {
         auth: { token },
       } = thunkAPI.getState();
-      return await harvesterService.paginateHarvHistory(url, token);
+      return await paginateRequest(url, token);
     } catch (error) {
       console.log(error);
       const message = invalidateCache(error, thunkAPI.dispatch);

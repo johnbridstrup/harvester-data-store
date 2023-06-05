@@ -21,11 +21,6 @@ const updateRelease = async (data, token) => {
   return response;
 };
 
-const paginateRelease = async (url, token) => {
-  let response = await axiosService.get(url, token);
-  return response;
-};
-
 const listVersion = async (token, limit = 10) => {
   let response = await axiosService.get(
     `${HARVVERSION_URL}?limit=${limit}`,
@@ -39,11 +34,6 @@ const getVersionById = async (token, versionId) => {
     `${HARVVERSION_URL}${versionId}/`,
     token
   );
-  return response;
-};
-
-const paginateVersion = async (url, token) => {
-  let response = await axiosService.get(url, token);
   return response;
 };
 
@@ -73,10 +63,8 @@ const harvdeployService = {
   listRelease,
   getReleaseById,
   updateRelease,
-  paginateRelease,
   listVersion,
   getVersionById,
-  paginateVersion,
   queryRelease,
   listTags,
   installedHarvesters,

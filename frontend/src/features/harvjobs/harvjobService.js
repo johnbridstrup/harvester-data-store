@@ -33,11 +33,6 @@ const updateJobType = async (data, token) => {
   return response;
 };
 
-const paginateJob = async (url, token) => {
-  const response = await axiosService.get(url, token);
-  return response;
-};
-
 const listJobSchemas = async (token, limit = 10) => {
   let response = await axiosService.get(
     `${JOBSCHEMAS_URL}?limit=${limit}`,
@@ -141,7 +136,6 @@ const harvjobService = {
   getJobTypeById,
   createJobType,
   updateJobType,
-  paginateJob,
   listJobSchemas,
   getJobSchemaById,
   createJobSchema,

@@ -3,6 +3,7 @@ import { logFilter, findLogIndex, sortServices } from "utils/utils";
 import { uniqueVideoTabs } from "utils/utils";
 import { invalidateCache } from "../auth/authSlice";
 import logparserService from "./logparserService";
+import { paginateRequest } from "features/base/service";
 
 const initialState = {
   loading: false,
@@ -91,7 +92,7 @@ export const paginateLogSession = createAsyncThunk(
       const {
         auth: { token },
       } = thunkAPI.getState();
-      return await logparserService.paginateLog(url, token);
+      return await paginateRequest(url, token);
     } catch (error) {
       console.log(error);
       const message = invalidateCache(error, thunkAPI.dispatch);

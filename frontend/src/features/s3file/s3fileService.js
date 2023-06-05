@@ -17,11 +17,6 @@ const getS3FileById = async (fileId, token) => {
   return response;
 };
 
-const paginateS3File = async (url, token) => {
-  const response = await axiosService.get(url, token);
-  return response;
-};
-
 const deleteS3File = async (id, token) => {
   const response = await axiosService.delete(`${S3FILE_URL}${id}/`, token);
   return response;
@@ -30,7 +25,6 @@ const deleteS3File = async (id, token) => {
 const s3fileService = {
   queryS3File,
   getS3FileById,
-  paginateS3File,
   deleteS3File,
 };
 

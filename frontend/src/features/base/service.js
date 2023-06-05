@@ -81,3 +81,8 @@ export const persistCSRFToken = async () => {
 export const openapiSchema = async (token) => {
   return await axiosService.openapi(OPENAPI_URL, token);
 };
+
+export const paginateRequest = async (url, token) => {
+  const response = await axiosService.get(url, token);
+  return response;
+};

@@ -31,11 +31,6 @@ const updateHarvester = async (data, token) => {
   return response;
 };
 
-const paginateHarvester = async (url, token) => {
-  const response = await axiosService.get(url, token);
-  return response;
-};
-
 const queryHarvester = async (queryObj, token) => {
   const params = new URLSearchParams(queryObj);
   const response = await axiosService.get(
@@ -69,11 +64,6 @@ const getHarvHistoryById = async (harvId, token) => {
   return response;
 };
 
-const paginateHarvHistory = async (url, token) => {
-  const response = await axiosService.get(url, token);
-  return response;
-};
-
 const queryHarvHistory = async (queryObj, token) => {
   const params = new URLSearchParams(queryObj);
   const response = await axiosService.get(
@@ -88,12 +78,10 @@ const harvesterService = {
   getHarvesterById,
   createHarvester,
   updateHarvester,
-  paginateHarvester,
   queryHarvester,
   listHarvVersion,
   listHarvesterHistory,
   getHarvHistoryById,
-  paginateHarvHistory,
   queryHarvHistory,
 };
 

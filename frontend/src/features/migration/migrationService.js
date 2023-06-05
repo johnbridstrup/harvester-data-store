@@ -23,16 +23,10 @@ const execMigration = async (token) => {
   return response;
 };
 
-const paginateMigration = async (url, token) => {
-  let response = await axiosService.get(url, token);
-  return response;
-};
-
 const notificationService = {
   listMigrationLogs,
   getMigrationLogById,
   execMigration,
-  paginateMigration,
 };
 
 export default notificationService;

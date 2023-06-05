@@ -25,11 +25,6 @@ const createLogSession = async (token, data = {}) => {
   return response;
 };
 
-const paginateLog = async (url, token) => {
-  const response = await axiosService.get(url, token);
-  return response;
-};
-
 const getLogFileById = async (id, token) => {
   let response = await axiosService.get(`${LOGFILES_URL}${id}/`, token);
   return response;
@@ -48,7 +43,6 @@ const logparserService = {
   listLogSession,
   getLogSessionById,
   createLogSession,
-  paginateLog,
   getLogFileById,
   queryLogVideo,
 };

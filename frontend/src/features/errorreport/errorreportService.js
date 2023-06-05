@@ -19,11 +19,6 @@ const queryErrorReport = async (paramsObj, token) => {
   return response;
 };
 
-const paginateErrorReport = async (url, token) => {
-  const response = await axiosService.get(url, token);
-  return response;
-};
-
 const detailErrorReport = async (reportId, token) => {
   const response = await axiosService.get(
     `${ERROR_REPORT_URL}${reportId}`,
@@ -56,7 +51,6 @@ const createNotification = async (paramsObj, token) => {
 const errorreportService = {
   errorListView,
   queryErrorReport,
-  paginateErrorReport,
   detailErrorReport,
   generatePareto,
   createNotification,

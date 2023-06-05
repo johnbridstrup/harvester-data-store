@@ -14,11 +14,6 @@ const getEventById = async (eventId, token) => {
   return response;
 };
 
-const paginateEvent = async (url, token) => {
-  let response = await axiosService.get(url, token);
-  return response;
-};
-
 const queryEvent = async (paramsObj, token) => {
   const searchParams = new URLSearchParams(paramsObj);
   const response = await axiosService.get(
@@ -55,7 +50,6 @@ const getPickSessionTags = async (token) => {
 const eventService = {
   listEvents,
   getEventById,
-  paginateEvent,
   queryEvent,
   getEventTags,
   queryPickSession,

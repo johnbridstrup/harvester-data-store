@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { invalidateCache } from "../auth/authSlice";
 import locationService from "./locationService";
+import { paginateRequest } from "features/base/service";
 
 const initialState = {
   loading: false,
@@ -89,7 +90,7 @@ export const paginateLocation = createAsyncThunk(
       const {
         auth: { token },
       } = thunkAPI.getState();
-      return await locationService.paginateLocation(url, token);
+      return await paginateRequest(url, token);
     } catch (error) {
       console.log(error);
       const message = invalidateCache(error, thunkAPI.dispatch);

@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { invalidateCache } from "features/auth/authSlice";
+import { paginateRequest } from "features/base/service";
 import { transformSensors } from "utils/utils";
 import autodiagnosticService from "./autodiagnosticService";
 
@@ -61,7 +62,7 @@ export const paginateAutodiagReport = createAsyncThunk(
       const {
         auth: { token },
       } = thunkAPI.getState();
-      return await autodiagnosticService.paginateAutodiagReport(url, token);
+      return await paginateRequest(url, token);
     } catch (error) {
       console.log(error);
       const message = invalidateCache(error, thunkAPI.dispatch);

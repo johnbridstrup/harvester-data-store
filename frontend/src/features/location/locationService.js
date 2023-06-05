@@ -30,17 +30,11 @@ const updateLocation = async (data, token) => {
   return response;
 };
 
-const paginateLocation = async (url, token) => {
-  let response = await axiosService.get(url, token);
-  return response;
-};
-
 const locationService = {
   listLocations,
   getLocationById,
   createLocation,
   updateLocation,
-  paginateLocation,
 };
 
 export default locationService;

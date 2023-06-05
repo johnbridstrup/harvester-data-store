@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { invalidateCache } from "../auth/authSlice";
 import harvdeployService from "./harvdeployService";
+import { paginateRequest } from "features/base/service";
 
 const initialState = {
   loading: false,
@@ -76,7 +77,7 @@ export const paginateRelease = createAsyncThunk(
       const {
         auth: { token },
       } = thunkAPI.getState();
-      return await harvdeployService.paginateRelease(url, token);
+      return await paginateRequest(url, token);
     } catch (error) {
       console.log(error);
       const message = invalidateCache(error, thunkAPI.dispatch);
@@ -124,7 +125,7 @@ export const paginateVersion = createAsyncThunk(
       const {
         auth: { token },
       } = thunkAPI.getState();
-      return await harvdeployService.paginateVersion(url, token);
+      return await paginateRequest(url, token);
     } catch (error) {
       console.log(error);
       const message = invalidateCache(error, thunkAPI.dispatch);
@@ -188,7 +189,7 @@ export const paginateInstalled = createAsyncThunk(
       const {
         auth: { token },
       } = thunkAPI.getState();
-      return await harvdeployService.paginateRelease(url, token);
+      return await paginateRequest(url, token);
     } catch (error) {
       console.log(error);
       const message = invalidateCache(error, thunkAPI.dispatch);

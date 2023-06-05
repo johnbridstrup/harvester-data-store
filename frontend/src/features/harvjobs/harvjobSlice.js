@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { invalidateCache } from "../auth/authSlice";
 import harvjobService from "./harvjobService";
+import { paginateRequest } from "features/base/service";
 
 const selectOptions = JSON.parse(localStorage.getItem("selectOptions"));
 
@@ -102,7 +103,7 @@ export const paginateJobType = createAsyncThunk(
       const {
         auth: { token },
       } = thunkAPI.getState();
-      return await harvjobService.paginateJob(url, token);
+      return await paginateRequest(url, token);
     } catch (error) {
       console.log(error);
       const message = invalidateCache(error, thunkAPI.dispatch);
@@ -262,7 +263,7 @@ export const paginateJob = createAsyncThunk(
       const {
         auth: { token },
       } = thunkAPI.getState();
-      return await harvjobService.paginateJob(url, token);
+      return await paginateRequest(url, token);
     } catch (error) {
       console.log(error);
       const message = invalidateCache(error, thunkAPI.dispatch);
@@ -326,7 +327,7 @@ export const paginateJobResults = createAsyncThunk(
       const {
         auth: { token },
       } = thunkAPI.getState();
-      return await harvjobService.paginateJob(url, token);
+      return await paginateRequest(url, token);
     } catch (error) {
       console.log(error);
       const message = invalidateCache(error, thunkAPI.dispatch);
@@ -358,7 +359,7 @@ export const paginateJobStatus = createAsyncThunk(
       const {
         auth: { token },
       } = thunkAPI.getState();
-      return await harvjobService.paginateJob(url, token);
+      return await paginateRequest(url, token);
     } catch (error) {
       console.log(error);
       const message = invalidateCache(error, thunkAPI.dispatch);

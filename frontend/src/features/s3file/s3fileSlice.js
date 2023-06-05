@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { invalidateCache } from "../auth/authSlice";
 import s3fileService from "./s3fileService";
+import { paginateRequest } from "features/base/service";
 
 const initialState = {
   loading: false,
@@ -56,7 +57,7 @@ export const paginateS3File = createAsyncThunk(
       const {
         auth: { token },
       } = thunkAPI.getState();
-      return await s3fileService.paginateS3File(url, token);
+      return await paginateRequest(url, token);
     } catch (error) {
       console.log(error);
       const message = invalidateCache(error, thunkAPI.dispatch);

@@ -17,15 +17,9 @@ const getAutodiagReport = async (id, token) => {
   return response;
 };
 
-const paginateAutodiagReport = async (url, token) => {
-  const response = await axiosService.get(url, token);
-  return response;
-};
-
 const autodiagnosticService = {
   queryAutodiagReport,
   getAutodiagReport,
-  paginateAutodiagReport,
 };
 
 export default autodiagnosticService;
