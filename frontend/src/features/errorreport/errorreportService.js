@@ -5,11 +5,6 @@ import { axiosService } from "../base/service";
 export const ERROR_REPORT_URL = `${API_URL}/errorreports/`;
 export const ERROR_PARETO_URL = `${API_URL}/exceptions/pareto/`;
 
-const errorListView = async (token) => {
-  let response = await axiosService.get(ERROR_REPORT_URL, token);
-  return response;
-};
-
 const queryErrorReport = async (paramsObj, token) => {
   const searchParams = new URLSearchParams(paramsObj);
   const response = await axiosService.get(
@@ -49,7 +44,6 @@ const createNotification = async (paramsObj, token) => {
 };
 
 const errorreportService = {
-  errorListView,
   queryErrorReport,
   detailErrorReport,
   generatePareto,

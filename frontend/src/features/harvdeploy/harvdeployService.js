@@ -4,11 +4,6 @@ import { axiosService } from "../base/service";
 const RELEASE_URL = `${API_URL}/release/`;
 const HARVVERSION_URL = `${API_URL}/harvversion/`;
 
-const listRelease = async (token, limit = 10) => {
-  let response = await axiosService.get(`${RELEASE_URL}?limit=${limit}`, token);
-  return response;
-};
-
 const getReleaseById = async (token, releaseId) => {
   let response = await axiosService.get(`${RELEASE_URL}${releaseId}/`, token);
   return response;
@@ -60,7 +55,6 @@ const installedHarvesters = async (token, id) => {
 };
 
 const harvdeployService = {
-  listRelease,
   getReleaseById,
   updateRelease,
   listVersion,

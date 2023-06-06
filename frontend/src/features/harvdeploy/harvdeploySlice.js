@@ -22,22 +22,6 @@ const initialState = {
   },
 };
 
-export const listRelease = createAsyncThunk(
-  "harvdeploy/listRelease",
-  async (limit, thunkAPI) => {
-    try {
-      const {
-        auth: { token },
-      } = thunkAPI.getState();
-      return await harvdeployService.listRelease(token, limit);
-    } catch (error) {
-      console.log(error);
-      const message = invalidateCache(error, thunkAPI.dispatch);
-      return thunkAPI.rejectWithValue(message);
-    }
-  }
-);
-
 export const getReleaseById = createAsyncThunk(
   "harvdeploy/getReleaseById",
   async (releaseId, thunkAPI) => {
@@ -204,20 +188,6 @@ const harvdeploySlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(listRelease.pending, (state) => {
-        state.loading = true;
-      })
-      .addCase(listRelease.fulfilled, (state, action) => {
-        state.loading = false;
-        state.releasecodes = action.payload.results;
-        state.pagination.count = action.payload.count;
-        state.pagination.next = action.payload.next;
-        state.pagination.previous = action.payload.previous;
-      })
-      .addCase(listRelease.rejected, (state, action) => {
-        state.loading = false;
-        state.errorMsg = action.payload;
-      })
       .addCase(getReleaseById.pending, (state) => {
         state.loading = true;
       })
