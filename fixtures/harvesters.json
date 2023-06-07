@@ -1,174 +1,219 @@
 [
-  {
+{
     "model": "harvester.fruit",
     "pk": 1,
     "fields": {
-      "creator": 1,
-      "modifiedBy": null,
-      "created": "2022-04-26T10:06:33.175Z",
-      "lastModified": "2022-04-26T10:06:33.176Z",
-      "name": "strawberry"
+        "creator": 1,
+        "modifiedBy": null,
+        "created": "2022-04-26T10:06:33.175Z",
+        "lastModified": "2022-04-26T10:06:33.176Z",
+        "name": "strawberry"
     }
-  },
-  {
+},
+{
     "model": "harvester.fruit",
     "pk": 2,
     "fields": {
-      "creator": 2,
-      "modifiedBy": null,
-      "created": "2022-04-26T10:06:41.304Z",
-      "lastModified": "2022-04-26T10:06:41.304Z",
-      "name": "apple"
+        "creator": 2,
+        "modifiedBy": null,
+        "created": "2022-04-26T10:06:41.304Z",
+        "lastModified": "2022-04-26T10:06:41.304Z",
+        "name": "apple"
     }
-  },
-  {
+},
+{
     "model": "harvester.historicalharvester",
     "pk": 1,
     "fields": {
-      "id": 1,
-      "created": "2022-04-26T10:07:03.355Z",
-      "lastModified": "2022-04-26T10:07:03.355Z",
-      "harv_id": 100,
-      "name": "Harvester Alpha",
-      "is_emulator": false,
-      "creator": 2,
-      "modifiedBy": null,
-      "fruit": 1,
-      "location": 1,
-      "release": null,
-      "history_date": "2022-10-10T21:51:41.090Z",
-      "history_change_reason": "",
-      "history_type": "+",
-      "history_user": null
+        "id": 1,
+        "created": "2022-04-26T10:07:03.355Z",
+        "lastModified": "2022-04-26T10:07:03.355Z",
+        "harv_id": 100,
+        "name": "Harvester Alpha",
+        "is_emulator": false,
+        "thingName": null,
+        "creator": 2,
+        "modifiedBy": null,
+        "fruit": 1,
+        "location": 1,
+        "release": null,
+        "history_date": "2022-10-10T21:51:41.090Z",
+        "history_change_reason": "",
+        "history_type": "+",
+        "history_user": null
     }
-  },
-  {
+},
+{
     "model": "harvester.historicalharvester",
     "pk": 2,
     "fields": {
-      "id": 2,
-      "created": "2022-04-26T10:07:18.334Z",
-      "lastModified": "2022-04-26T10:07:18.334Z",
-      "harv_id": 200,
-      "name": "Harvester Beta",
-      "is_emulator": false,
-      "creator": 2,
-      "modifiedBy": null,
-      "fruit": 2,
-      "location": 2,
-      "release": null,
-      "history_date": "2022-10-10T21:51:41.091Z",
-      "history_change_reason": "",
-      "history_type": "+",
-      "history_user": null
+        "id": 2,
+        "created": "2022-04-26T10:07:18.334Z",
+        "lastModified": "2022-04-26T10:07:18.334Z",
+        "harv_id": 200,
+        "name": "Harvester Beta",
+        "is_emulator": false,
+        "thingName": null,
+        "creator": 2,
+        "modifiedBy": null,
+        "fruit": 2,
+        "location": 2,
+        "release": null,
+        "history_date": "2022-10-10T21:51:41.091Z",
+        "history_change_reason": "",
+        "history_type": "+",
+        "history_user": null
     }
-  },
-  {
+},
+{
     "model": "harvester.historicalharvester",
     "pk": 3,
     "fields": {
-      "id": 3,
-      "created": "2022-04-26T10:07:18.334Z",
-      "lastModified": "2022-04-26T10:07:18.334Z",
-      "harv_id": 11,
-      "name": "aft-harv011",
-      "is_emulator": false,
-      "creator": 2,
-      "modifiedBy": null,
-      "fruit": 2,
-      "location": 2,
-      "release": null,
-      "history_date": "2022-10-10T21:51:41.091Z",
-      "history_change_reason": "",
-      "history_type": "+",
-      "history_user": null
+        "id": 3,
+        "created": "2022-04-26T10:07:18.334Z",
+        "lastModified": "2022-04-26T10:07:18.334Z",
+        "harv_id": 11,
+        "name": "aft-harv011",
+        "is_emulator": false,
+        "thingName": null,
+        "creator": 2,
+        "modifiedBy": null,
+        "fruit": 2,
+        "location": 2,
+        "release": null,
+        "history_date": "2022-10-10T21:51:41.091Z",
+        "history_change_reason": "",
+        "history_type": "+",
+        "history_user": null
     }
-  },
-  {
+},
+{
     "model": "harvester.historicalharvester",
     "pk": 4,
     "fields": {
-      "id": 4,
-      "created": "2022-04-26T10:07:18.334Z",
-      "lastModified": "2022-04-26T10:07:18.334Z",
-      "harv_id": 1,
-      "name": "dev",
-      "is_emulator": false,
-      "creator": 2,
-      "modifiedBy": null,
-      "fruit": 2,
-      "location": 2,
-      "release": null,
-      "thingName": "dev-dev001",
-      "history_date": "2022-10-10T21:51:41.091Z",
-      "history_change_reason": "",
-      "history_type": "+",
-      "history_user": null
+        "id": 4,
+        "created": "2022-04-26T10:07:18.334Z",
+        "lastModified": "2022-04-26T10:07:18.334Z",
+        "harv_id": 1,
+        "name": "dev",
+        "is_emulator": false,
+        "thingName": "dev-dev001",
+        "creator": 2,
+        "modifiedBy": null,
+        "fruit": 2,
+        "location": 2,
+        "release": null,
+        "history_date": "2022-10-10T21:51:41.091Z",
+        "history_change_reason": "",
+        "history_type": "+",
+        "history_user": null
     }
-  },
-  {
+},
+{
+    "model": "harvester.historicalharvester",
+    "pk": 5,
+    "fields": {
+        "id": 5,
+        "created": "2023-06-07T17:09:49.935Z",
+        "lastModified": "2023-06-07T17:09:49.935Z",
+        "harv_id": 10000,
+        "name": "SB Emulator",
+        "is_emulator": true,
+        "thingName": null,
+        "creator": 1,
+        "modifiedBy": null,
+        "fruit": 1,
+        "location": 1,
+        "release": null,
+        "history_date": "2023-06-07T17:09:49.948Z",
+        "history_change_reason": null,
+        "history_type": "+",
+        "history_user": 1
+    }
+},
+{
     "model": "harvester.harvester",
     "pk": 1,
     "fields": {
-      "creator": 2,
-      "modifiedBy": null,
-      "created": "2022-04-26T10:07:03.355Z",
-      "lastModified": "2022-04-26T10:07:03.355Z",
-      "harv_id": 100,
-      "fruit": 1,
-      "location": 1,
-      "name": "Harvester Alpha",
-      "is_emulator": false,
-      "release": null
+        "creator": 2,
+        "modifiedBy": null,
+        "created": "2022-04-26T10:07:03.355Z",
+        "lastModified": "2022-04-26T10:07:03.355Z",
+        "harv_id": 100,
+        "fruit": 1,
+        "location": 1,
+        "name": "Harvester Alpha",
+        "is_emulator": false,
+        "release": null,
+        "thingName": null
     }
-  },
-  {
+},
+{
     "model": "harvester.harvester",
     "pk": 2,
     "fields": {
-      "creator": 2,
-      "modifiedBy": null,
-      "created": "2022-04-26T10:07:18.334Z",
-      "lastModified": "2022-04-26T10:07:18.334Z",
-      "harv_id": 200,
-      "fruit": 2,
-      "location": 2,
-      "name": "Harvester Beta",
-      "is_emulator": false,
-      "release": null
+        "creator": 2,
+        "modifiedBy": null,
+        "created": "2022-04-26T10:07:18.334Z",
+        "lastModified": "2022-04-26T10:07:18.334Z",
+        "harv_id": 200,
+        "fruit": 2,
+        "location": 2,
+        "name": "Harvester Beta",
+        "is_emulator": false,
+        "release": null,
+        "thingName": null
     }
-  },
-  {
+},
+{
     "model": "harvester.harvester",
     "pk": 3,
     "fields": {
-      "creator": 2,
-      "modifiedBy": null,
-      "created": "2022-04-26T10:07:18.334Z",
-      "lastModified": "2022-04-26T10:07:18.334Z",
-      "harv_id": 11,
-      "fruit": 2,
-      "location": 2,
-      "name": "aft-harv011",
-      "is_emulator": false,
-      "release": null
+        "creator": 2,
+        "modifiedBy": null,
+        "created": "2022-04-26T10:07:18.334Z",
+        "lastModified": "2022-04-26T10:07:18.334Z",
+        "harv_id": 11,
+        "fruit": 2,
+        "location": 2,
+        "name": "aft-harv011",
+        "is_emulator": false,
+        "release": null,
+        "thingName": null
     }
-  },
-  {
+},
+{
     "model": "harvester.harvester",
     "pk": 4,
     "fields": {
-      "creator": 2,
-      "modifiedBy": null,
-      "created": "2022-04-26T10:07:18.334Z",
-      "lastModified": "2022-04-26T10:07:18.334Z",
-      "harv_id": 1,
-      "fruit": 2,
-      "location": 2,
-      "name": "dev",
-      "is_emulator": false,
-      "release": null,
-      "thingName": "dev-dev001"
+        "creator": 2,
+        "modifiedBy": null,
+        "created": "2022-04-26T10:07:18.334Z",
+        "lastModified": "2022-04-26T10:07:18.334Z",
+        "harv_id": 1,
+        "fruit": 2,
+        "location": 2,
+        "name": "dev",
+        "is_emulator": false,
+        "release": null,
+        "thingName": "dev-dev001"
     }
-  }
+},
+{
+    "model": "harvester.harvester",
+    "pk": 5,
+    "fields": {
+        "creator": 1,
+        "modifiedBy": null,
+        "created": "2023-06-07T17:09:49.935Z",
+        "lastModified": "2023-06-07T17:09:49.935Z",
+        "harv_id": 10000,
+        "fruit": 1,
+        "location": 1,
+        "name": "SB Emulator",
+        "is_emulator": true,
+        "release": null,
+        "thingName": null
+    }
+}
 ]

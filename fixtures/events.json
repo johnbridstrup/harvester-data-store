@@ -8,6 +8,54 @@
     }
 },
 {
+    "model": "event.eventtag",
+    "pk": 2,
+    "fields": {
+        "tag": 2,
+        "content_object": 10
+    }
+},
+{
+    "model": "event.eventtag",
+    "pk": 3,
+    "fields": {
+        "tag": 2,
+        "content_object": 11
+    }
+},
+{
+    "model": "event.eventtag",
+    "pk": 4,
+    "fields": {
+        "tag": 2,
+        "content_object": 12
+    }
+},
+{
+    "model": "event.eventtag",
+    "pk": 5,
+    "fields": {
+        "tag": 2,
+        "content_object": 13
+    }
+},
+{
+    "model": "event.eventtag",
+    "pk": 6,
+    "fields": {
+        "tag": 2,
+        "content_object": 14
+    }
+},
+{
+    "model": "event.eventtag",
+    "pk": 7,
+    "fields": {
+        "tag": 2,
+        "content_object": 15
+    }
+},
+{
     "model": "event.event",
     "pk": 1,
     "fields": {
@@ -15,7 +63,8 @@
         "modifiedBy": null,
         "created": "2022-08-25T22:58:18.199Z",
         "lastModified": "2022-08-25T22:58:18.199Z",
-        "UUID": "68b3aab6-24c9-11ed-bb17-f9799c718175"
+        "UUID": "68b3aab6-24c9-11ed-bb17-f9799c718175",
+        "secondary_events": []
     }
 },
 {
@@ -26,7 +75,8 @@
         "modifiedBy": null,
         "created": "2022-08-25T22:58:41.749Z",
         "lastModified": "2022-08-25T22:58:41.749Z",
-        "UUID": "76bd0ecc-24c9-11ed-bb17-f9799c718175"
+        "UUID": "76bd0ecc-24c9-11ed-bb17-f9799c718175",
+        "secondary_events": []
     }
 },
 {
@@ -37,7 +87,8 @@
         "modifiedBy": null,
         "created": "2022-08-25T22:58:43.804Z",
         "lastModified": "2022-08-25T22:58:43.804Z",
-        "UUID": "77f6a03c-24c9-11ed-bb17-f9799c718175"
+        "UUID": "77f6a03c-24c9-11ed-bb17-f9799c718175",
+        "secondary_events": []
     }
 },
 {
@@ -48,7 +99,8 @@
         "modifiedBy": null,
         "created": "2022-08-25T22:59:47.885Z",
         "lastModified": "2022-08-25T22:59:47.885Z",
-        "UUID": "9e28a7f0-24c9-11ed-bb17-f9799c718175"
+        "UUID": "9e28a7f0-24c9-11ed-bb17-f9799c718175",
+        "secondary_events": []
     }
 },
 {
@@ -59,7 +111,8 @@
         "modifiedBy": null,
         "created": "2022-08-25T22:59:57.016Z",
         "lastModified": "2022-08-25T22:59:57.016Z",
-        "UUID": "a399d452-24c9-11ed-bb17-f9799c718175"
+        "UUID": "a399d452-24c9-11ed-bb17-f9799c718175",
+        "secondary_events": []
     }
 },
 {
@@ -70,7 +123,8 @@
         "modifiedBy": null,
         "created": "2022-10-14T16:18:26.637Z",
         "lastModified": "2022-10-14T16:18:26.637Z",
-        "UUID": "431afec6-3898-11ed-b748-78d00429ea2e"
+        "UUID": "431afec6-3898-11ed-b748-78d00429ea2e",
+        "secondary_events": []
     }
 },
 {
@@ -81,7 +135,8 @@
         "modifiedBy": null,
         "created": "2022-10-14T16:19:26.637Z",
         "lastModified": "2022-10-14T16:19:26.637Z",
-        "UUID": "431afec6-3898-11ed-b748-78d00429ea3e"
+        "UUID": "431afec6-3898-11ed-b748-78d00429ea3e",
+        "secondary_events": []
     }
 },
 {
@@ -92,7 +147,8 @@
         "modifiedBy": null,
         "created": "2022-08-25T22:58:18.199Z",
         "lastModified": "2022-08-25T22:58:18.199Z",
-        "UUID": "68b3aab6-24c9-12ed-bb17-f9799c718175"
+        "UUID": "68b3aab6-24c9-12ed-bb17-f9799c718175",
+        "secondary_events": []
     }
 },
 {
@@ -103,7 +159,80 @@
         "modifiedBy": null,
         "created": "2023-02-14T19:23:23.574Z",
         "lastModified": "2023-02-14T19:23:23.574Z",
-        "UUID": "2115cd5a-765a-11ed-9d09-677a59a17003"
+        "UUID": "2115cd5a-765a-11ed-9d09-677a59a17003",
+        "secondary_events": []
+    }
+},
+{
+    "model": "event.event",
+    "pk": 10,
+    "fields": {
+        "creator": 1,
+        "modifiedBy": null,
+        "created": "2023-06-07T17:09:58.934Z",
+        "lastModified": "2023-06-07T17:09:58.934Z",
+        "UUID": "21e9770a-0556-11ee-81c0-d72458f3d2e9",
+        "secondary_events": []
+    }
+},
+{
+    "model": "event.event",
+    "pk": 11,
+    "fields": {
+        "creator": 1,
+        "modifiedBy": null,
+        "created": "2023-06-07T17:10:13.409Z",
+        "lastModified": "2023-06-07T17:10:13.409Z",
+        "UUID": "2a8a2800-0556-11ee-81c0-d72458f3d2e9",
+        "secondary_events": []
+    }
+},
+{
+    "model": "event.event",
+    "pk": 12,
+    "fields": {
+        "creator": 1,
+        "modifiedBy": null,
+        "created": "2023-06-07T17:11:08.621Z",
+        "lastModified": "2023-06-07T17:11:08.621Z",
+        "UUID": "4b72cf0e-0556-11ee-81c0-d72458f3d2e9",
+        "secondary_events": []
+    }
+},
+{
+    "model": "event.event",
+    "pk": 13,
+    "fields": {
+        "creator": 1,
+        "modifiedBy": null,
+        "created": "2023-06-07T17:11:59.661Z",
+        "lastModified": "2023-06-07T17:11:59.661Z",
+        "UUID": "69def5ee-0556-11ee-81c0-d72458f3d2e9",
+        "secondary_events": []
+    }
+},
+{
+    "model": "event.event",
+    "pk": 14,
+    "fields": {
+        "creator": 1,
+        "modifiedBy": null,
+        "created": "2023-06-07T17:13:01.519Z",
+        "lastModified": "2023-06-07T17:13:01.519Z",
+        "UUID": "8ebdc188-0556-11ee-81c0-d72458f3d2e9",
+        "secondary_events": []
+    }
+},
+{
+    "model": "event.event",
+    "pk": 15,
+    "fields": {
+        "creator": 1,
+        "modifiedBy": null,
+        "created": "2023-06-07T17:13:18.797Z",
+        "lastModified": "2023-06-07T17:13:18.797Z",
+        "UUID": "990a1736-0556-11ee-81c0-d72458f3d2e9",
+        "secondary_events": []
     }
 },
 {
@@ -122,7 +251,11 @@
         "modifiedBy": null,
         "created": "2023-02-14T19:23:23.547Z",
         "lastModified": "2023-02-14T19:23:23.547Z",
-        "UUID": "2225cd5a-765a-11ed-9d09-677a59a17003"
+        "UUID": "2225cd5a-765a-11ed-9d09-677a59a17003",
+        "harvester": null,
+        "location": null,
+        "start_time": null,
+        "session_length": null
     }
 }
 ]
