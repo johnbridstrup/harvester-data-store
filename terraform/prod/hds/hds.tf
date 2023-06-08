@@ -11,8 +11,8 @@ locals {
   silk_cprofile            = "false"
   sqs_client_metrics_ports = [9104]
   enable_prometheus_scrape = true
-  service_container_memory = 4096
-  service_container_cpu    = 2048
+  service_container_memory = 8192
+  service_container_cpu    = 4096
   migrate                  = var.migrate_flag
   s3_bucket                = local.bucket
   jobserver_port           = "8000"
