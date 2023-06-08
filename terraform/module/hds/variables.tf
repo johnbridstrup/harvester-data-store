@@ -305,3 +305,8 @@ variable "asset_queue_url" {
   description = "URL for asset report queue"
   type        = string
 }
+
+variable "emustats_queue_url" {
+  description = "URL for emustats report queue"
+  type        = string
+}

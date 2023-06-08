@@ -5,7 +5,7 @@ locals {
   frontend_url             = "https://hds.devcloud.advanced.farm"
   service_port             = "8000"
   service_name             = "hds"
-  service_docker_image     = "082346306812.dkr.ecr.us-west-1.amazonaws.com/hds:hds-staging-5229e37c"
+  service_docker_image     = "082346306812.dkr.ecr.us-west-1.amazonaws.com/hds:hds-staging-f928ea31"
   healthcheck_path         = "/api/v1/healthcheck/"
   silk_profiling           = "true"
   silk_cprofile            = "true"
@@ -70,6 +70,7 @@ module "hds" {
   config_queue_url          = data.aws_sqs_queue.configs_queue.url
   grip_queue_url            = data.aws_sqs_queue.grip_queue.url
   asset_queue_url           = data.aws_sqs_queue.asset_queue.url
+  emustats_queue_url        = data.aws_sqs_queue.emustats_queue.url
   migrate_flag              = local.migrate
   s3_bucket                 = local.bucket
   silk_profiling            = local.silk_profiling

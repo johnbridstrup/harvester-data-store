@@ -49,6 +49,7 @@ locals {
     { "name" : "AFTCONFIGS_QUEUE_URL", "value" : var.config_queue_url },
     { "name" : "GRIPREPORT_QUEUE_URL", "value" : var.grip_queue_url },
     { "name" : "ASSET_QUEUE_URL", "value" : var.asset_queue_url },
+    { "name" : "EMUSTATS_QUEUE_URL", "value" : var.emustats_queue_url },
     { "name" : "MIGRATE", "value" : var.migrate_flag },
     { "name" : "GITHASH", "value" : module.git_info.commit_hash },
     { "name" : "AWS_STORAGE_BUCKET_NAME", "value" : var.s3_bucket },

@@ -44,3 +44,8 @@ asset_reports:
   destination: !ENV http://localhost:${HDS_PORT}/api/v1/harvassetreport/
   s3-event-payload: true
   s3-delete: true
+emustats_reports:
+  queue: !ENV ${EMUSTATS_QUEUE_URL}
+  destination: !ENV http://localhost:${HDS_PORT}/api/v1/emustats/
+  s3-event-payload: true
+  s3-delete: true

@@ -72,6 +72,7 @@ module "hds" {
   config_queue_url          = data.aws_sqs_queue.configs_queue.url
   grip_queue_url            = data.aws_sqs_queue.grip_queue.url
   asset_queue_url           = data.aws_sqs_queue.asset_queue.url
+  emustats_queue_url        = data.aws_sqs_queue.emustats_queue.url
   migrate_flag              = local.migrate
   s3_bucket                 = local.bucket
   silk_profiling            = local.silk_profiling
