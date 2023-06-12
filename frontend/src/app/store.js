@@ -17,6 +17,7 @@ import homeReducer from "features/home/homeSlice";
 import s3fileReducer from "features/s3file/s3fileSlice";
 import aftconfigReducer from "features/aftconfigs/aftconfigSlice";
 import autodiagnosticReducer from "features/autodiagnostics/autodiagnosticSlice";
+import emulatorstatsReducer from "features/emulatorstats/emulatorstatsSlice";
 import { PROD_ENV } from "features/base/constants";
 
 const store = configureStore({
@@ -39,6 +40,7 @@ const store = configureStore({
     s3file: s3fileReducer,
     aftconfig: aftconfigReducer,
     autodiagnostic: autodiagnosticReducer,
+    emulatorstats: emulatorstatsReducer,
   },
   devTools: process.env.REACT_APP_NODE_ENV !== PROD_ENV,
 });
