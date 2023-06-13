@@ -89,6 +89,9 @@ const PickSessionDetailView = lazy(() =>
   import("pages/event/picksessiondetail")
 );
 const DocumentationView = lazy(() => import("pages/docs"));
+const EmulatorstatsListView = lazy(() =>
+  import("pages/emulatorstats/listview")
+);
 
 const BaseRoutes = () => {
   return (
@@ -811,6 +814,22 @@ const BaseRoutes = () => {
               }
             >
               <DocumentationView />
+            </Suspense>
+          </RequireUser>
+        }
+      />
+      <Route
+        path="/emustats"
+        element={
+          <RequireUser>
+            <Suspense
+              fallback={
+                <RouteLoader>
+                  <Loader size={50} />
+                </RouteLoader>
+              }
+            >
+              <EmulatorstatsListView />
             </Suspense>
           </RequireUser>
         }

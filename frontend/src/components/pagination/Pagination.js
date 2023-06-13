@@ -35,6 +35,7 @@ import { paginateLogSession } from "features/logparser/logparserSlice";
 import { paginateMigration } from "features/migration/migrationSlice";
 import { paginateS3File } from "features/s3file/s3fileSlice";
 import { paginateAutodiagReport } from "features/autodiagnostics/autodiagnosticSlice";
+import { paginateEmulatorstats } from "features/emulatorstats/emulatorstatsSlice";
 
 function Pagination(props) {
   const [pageLimit, setPageLimit] = useState(10);
@@ -200,6 +201,7 @@ export const GenericPagination = (props) => {
     migration: paginateMigration,
     s3file: paginateS3File,
     autodiagnostic: paginateAutodiagReport,
+    emulatorstats: paginateEmulatorstats,
   };
 
   const handlePagination = async (navigation) => {

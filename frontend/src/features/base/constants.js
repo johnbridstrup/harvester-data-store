@@ -82,4 +82,7 @@ export class PushStateEnum {
   static get AUTODIAGNOSTICS() {
     return "autodiagnostics";
   }
+  static get EMULATORSTATS() {
+    return "emulatorstats";
+  }
 }

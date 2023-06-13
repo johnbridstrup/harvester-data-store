@@ -77,6 +77,12 @@ export const menu = [
     description: "Auto-diagnostic report from harvesters",
     href: "/autodiagnostics",
   },
+  {
+    name: "Emulator Report",
+    icon: "emustats",
+    description: "Emulator statistics report & graphs",
+    href: "/emustats",
+  },
 ];
 
 export const adminMenu = [

@@ -491,6 +491,10 @@ export const pushState = (queryObj, pareto = undefined) => {
     newurl = `${window.location.protocol}//${
       window.location.host
     }/autodiagnostics/?${params.toString()}`;
+  } else if (pareto === PushStateEnum.EMULATORSTATS) {
+    newurl = `${window.location.protocol}//${
+      window.location.host
+    }/emustats/?${params.toString()}`;
   } else {
     newurl = `${window.location.protocol}//${
       window.location.host
