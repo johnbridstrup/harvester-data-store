@@ -5,13 +5,10 @@ from .models import EmustatsReport
 
 
 class EmustatsReportFilter(ReportFilterset):
-    # Exception filters
-    datetime_range = filters.CharFilter(field_name="timestamp", method="filter_datetime_range") # start,end
-
-    # Report Filters
-    uuid = EventUUIDFilter(field_name="report__event")
-    start_time = DTimeFilter("timestamp", lookup_expr="gte")
-    end_time = DTimeFilter("timestamp", lookup_expr="lte")
+    datetime_range = filters.CharFilter(field_name="reportTime", method="filter_datetime_range") # start,end
+    uuid = EventUUIDFilter(field_name="event")
+    start_time = DTimeFilter("reportTime", lookup_expr="gte")
+    end_time = DTimeFilter("reportTime", lookup_expr="lte")
 
     class Meta:
         model = EmustatsReport
