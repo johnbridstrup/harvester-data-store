@@ -1,3 +1,4 @@
+import { DataFrame, toJSON } from "danfojs";
 import {
   API_URL,
   LOG_STR_PATTERN,
@@ -6,6 +7,7 @@ import {
   PushStateEnum,
   THEME_MODES,
 } from "features/base/constants";
+import moment from "moment";
 import { Oval } from "react-loader-spinner";
 
 export const Loader = ({ size }) => {
@@ -1342,4 +1344,90 @@ export const transformConfig = (config) => {
     }
     return { errored: false, obj: newObj };
   }
+};
+
+/**
+ * Transforms annotated api data using danfo.js pandas'
+ * like data structure and return the aggregates
+ * @param {Array} emustats
+ * @returns
+ */
+export const transformEmustatsAggs = (emustats = []) => {
+  let picksPerHour = [];
+  let thoroughnessPercent = [];
+  let gripSuccessPercent = [];
+  let pickSessionPercent = [];
+
+  const weekStr = (dateStr, weekStart = 3) => {
+    let mom = moment(dateStr);
+    let dayOfWeekMod = mom.day() + ((7 - weekStart) % 7);
+
+    const grpDate = mom.subtract(dayOfWeekMod, "days");
+    return grpDate.format("YYYY-MM-DD");
+  };
+
+  if (emustats.length > 0) {
+    let df = new DataFrame(emustats);
+    const num_picks_col = df
+      .column("num_pick_attempts")
+      .mul(df.column("pick_success_percentage").div(100))
+      .asType("int32");
+    const num_grips_col = df
+      .column("num_grip_attempts")
+      .mul(df.column("grip_success_percentage").div(100))
+      .asType("int32");
+    const num_targets_col = num_picks_col
+      .div(df.column("thoroughness_percentage").div(100))
+      .asType("int32");
+    const elapsed_hours_col = df.column("elapsed_seconds").div(3600);
+    const report_time_col = df.column("reportTime").map((val) => weekStr(val));
+
+    df.addColumn("num_picks", num_picks_col, { inplace: true });
+    df.addColumn("num_grips", num_grips_col, { inplace: true });
+    df.addColumn("num_targets", num_targets_col, { inplace: true });
+    df.addColumn("elapsed_hours", elapsed_hours_col, { inplace: true });
+    df.addColumn("reportTime", report_time_col, { inplace: true });
+
+    df = df.groupby(["reportTime", "date"]).agg({
+      num_picks: "sum",
+      num_grips: "sum",
+      num_targets: "sum",
+      elapsed_hours: "sum",
+      num_pick_attempts: "sum",
+      num_grip_attempts: "sum",
+    });
+
+    const picks_per_hour = df
+      .column("num_picks_sum")
+      .div(df.column("elapsed_hours_sum"));
+    const thoroughness = df
+      .column("num_picks_sum")
+      .div(df.column("num_targets_sum"))
+      .mul(100);
+    const grip_success = df
+      .column("num_picks_sum")
+      .div(df.column("num_grip_attempts_sum"))
+      .mul(100);
+    const pick_success = df
+      .column("num_picks_sum")
+      .div(df.column("num_pick_attempts_sum"))
+      .mul(100);
+
+    df.addColumn("picks_per_hour", picks_per_hour, { inplace: true });
+    df.addColumn("thoroughness", thoroughness, { inplace: true });
+    df.addColumn("grip_success", grip_success, { inplace: true });
+    df.addColumn("pick_success", pick_success, { inplace: true });
+
+    const results = toJSON(df);
+    picksPerHour = results.map((x) => x.picks_per_hour);
+    thoroughnessPercent = results.map((x) => x.thoroughness * 100);
+    gripSuccessPercent = results.map((x) => x.grip_success * 100);
+    pickSessionPercent = results.map((x) => x.pick_success * 100);
+  }
+  return {
+    picksPerHour,
+    thoroughnessPercent,
+    gripSuccessPercent,
+    pickSessionPercent,
+  };
 };

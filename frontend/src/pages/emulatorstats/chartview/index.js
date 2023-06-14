@@ -1,0 +1,48 @@
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
+import MainLayout from "components/layout/main";
+import Header from "components/layout/header";
+import { BackButton } from "components/common";
+import { LoaderDiv } from "components/styled";
+import { Loader, paramsToObject } from "utils/utils";
+import { queryEmulatorstats } from "features/emulatorstats/emulatorstatsSlice";
+import EmulatorstatsChart from "components/emulatorstats/EmulatorstatsChart";
+import "./styles.css";
+
+function EmulatorstatsChartView(props) {
+  const { loading } = useSelector((state) => state.emulatorstats);
+  const { theme } = useSelector((state) => state.home);
+  const dispatch = useDispatch();
+  const { search } = useLocation();
+
+  useEffect(() => {
+    // default to limit stats by 1000 entries
+    // this can change for dynamic implementation
+    dispatch(queryEmulatorstats({...paramsToObject(search), limit: 1000}));
+  }, [dispatch, search]);
+
+  return (
+    <MainLayout>
+      <div className="container">
+        <Header
+          title={"HDS Emulator Stats Chart"}
+          className={"display-6 mt-4 mb-4"}
+        />
+        <BackButton theme={theme} mb={"mb-4"} />
+
+        {loading ? (
+          <LoaderDiv>
+            <Loader size={50} />
+          </LoaderDiv>
+        ) : (
+          <EmulatorstatsChart />
+        )}
+      </div>
+    </MainLayout>
+  );
+}
+
+EmulatorstatsChartView.propTypes = {};
+
+export default EmulatorstatsChartView;
