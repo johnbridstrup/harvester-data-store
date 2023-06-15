@@ -7,7 +7,7 @@ from .models import EmustatsReport
 class EmustatsReportSerializer(TaggitSerializer, EventSerializerMixin, ReportSerializerBase):
     tags = TagListSerializerField()
 
-    M_TO_MM = 0.001
+    M_TO_MM = 1000
     HR_TO_SEC = 3600
 
     class Meta:
