@@ -5,7 +5,13 @@ import { DataFrame, toJSON } from "danfojs";
 import EmustatsPlot from "components/plotly/EmustatsPlot";
 import { EmustatsTabular } from "./EmulatorstatsHelpers";
 import { useLocation } from "react-router-dom";
-import { paramsToObject } from "utils/utils";
+import {
+  groupByWeek,
+  mapTraces,
+  mergeSort,
+  paramsToObject,
+  sortByMonth,
+} from "utils/utils";
 import { NavTabItem, NavTabSpan, NavTabs } from "components/styled";
 
 /**
@@ -84,10 +90,12 @@ const transformEmustatsAggs = (emustats = []) => {
     df.addColumn("pick_success", pick_success, { inplace: true });
 
     const results = toJSON(df);
-    picksPerHour = results.map((x) => x.picks_per_hour);
-    thoroughnessPercent = results.map((x) => x.thoroughness * 100);
-    gripSuccessPercent = results.map((x) => x.grip_success * 100);
-    pickSessionPercent = results.map((x) => x.pick_success * 100);
+    sortByMonth(results);
+    const resultObj = groupByWeek(results);
+    picksPerHour = mergeSort(mapTraces("picks_per_hour", resultObj));
+    thoroughnessPercent = mergeSort(mapTraces("thoroughness", resultObj));
+    gripSuccessPercent = mergeSort(mapTraces("grip_success", resultObj));
+    pickSessionPercent = mergeSort(mapTraces("pick_success", resultObj));
   }
   return {
     picksPerHour,

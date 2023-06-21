@@ -1,4 +1,3 @@
-import { DataFrame, toJSON } from "danfojs";
 import {
   API_URL,
   LOG_STR_PATTERN,
@@ -7,7 +6,6 @@ import {
   PushStateEnum,
   THEME_MODES,
 } from "features/base/constants";
-import moment from "moment";
 import { Oval } from "react-loader-spinner";
 
 export const Loader = ({ size }) => {
@@ -1347,87 +1345,145 @@ export const transformConfig = (config) => {
 };
 
 /**
- * Transforms annotated api data using danfo.js pandas'
- * like data structure and return the aggregates
- * @param {Array} emustats
- * @returns
+ * Sort array by month names. Any item not member of the
+ * monthorder comes last in the sorted array.
+ * @param {Array} data
+ * @returns {Array}
  */
-export const transformEmustatsAggs = (emustats = []) => {
-  let picksPerHour = [];
-  let thoroughnessPercent = [];
-  let gripSuccessPercent = [];
-  let pickSessionPercent = [];
+export const sortByMonth = (data = []) => {
+  const monthOrder = [
+    "nov",
+    "dec",
+    "jan",
+    "feb",
+    "mar",
+    "apr",
+    "may",
+    "jun",
+    "jul",
+    "aug",
+    "sep",
+    "oct",
+  ];
 
-  const weekStr = (dateStr, weekStart = 3) => {
-    let mom = moment(dateStr);
-    let dayOfWeekMod = mom.day() + ((7 - weekStart) % 7);
+  const monthMap = {};
+  monthOrder.forEach((month, index) => {
+    monthMap[month.toLowerCase()] = index;
+  });
 
-    const grpDate = mom.subtract(dayOfWeekMod, "days");
-    return grpDate.format("YYYY-MM-DD");
-  };
+  data.sort((a, b) => {
+    const monthA = a.date.toLowerCase();
+    const monthB = b.date.toLowerCase();
 
-  if (emustats.length > 0) {
-    let df = new DataFrame(emustats);
-    const num_picks_col = df
-      .column("num_pick_attempts")
-      .mul(df.column("pick_success_percentage").div(100))
-      .asType("int32");
-    const num_grips_col = df
-      .column("num_grip_attempts")
-      .mul(df.column("grip_success_percentage").div(100))
-      .asType("int32");
-    const num_targets_col = num_picks_col
-      .div(df.column("thoroughness_percentage").div(100))
-      .asType("int32");
-    const elapsed_hours_col = df.column("elapsed_seconds").div(3600);
-    const report_time_col = df.column("reportTime").map((val) => weekStr(val));
+    if (monthMap.hasOwnProperty(monthA) && monthMap.hasOwnProperty(monthB)) {
+      return monthMap[monthA] - monthMap[monthB];
+    } else if (monthMap.hasOwnProperty(monthA)) {
+      return -1; // a comes before b
+    } else if (monthMap.hasOwnProperty(monthB)) {
+      return 1; // b comes before a
+    } else {
+      return 0; // no change in order for unknown months
+    }
+  });
+  return data;
+};
 
-    df.addColumn("num_picks", num_picks_col, { inplace: true });
-    df.addColumn("num_grips", num_grips_col, { inplace: true });
-    df.addColumn("num_targets", num_targets_col, { inplace: true });
-    df.addColumn("elapsed_hours", elapsed_hours_col, { inplace: true });
-    df.addColumn("reportTime", report_time_col, { inplace: true });
+/**
+ * Group by data by weeks
+ * @param {Array} results
+ * @returns {object}
+ */
+export const groupByWeek = (results = []) => {
+  return results.reduce((acc, item) => {
+    if (!acc[item.reportTime]) {
+      acc[item.reportTime] = [];
+    }
 
-    df = df.groupby(["reportTime", "date"]).agg({
-      num_picks: "sum",
-      num_grips: "sum",
-      num_targets: "sum",
-      elapsed_hours: "sum",
-      num_pick_attempts: "sum",
-      num_grip_attempts: "sum",
+    acc[item.reportTime].push({
+      ...item,
     });
 
-    const picks_per_hour = df
-      .column("num_picks_sum")
-      .div(df.column("elapsed_hours_sum"));
-    const thoroughness = df
-      .column("num_picks_sum")
-      .div(df.column("num_targets_sum"))
-      .mul(100);
-    const grip_success = df
-      .column("num_picks_sum")
-      .div(df.column("num_grip_attempts_sum"))
-      .mul(100);
-    const pick_success = df
-      .column("num_picks_sum")
-      .div(df.column("num_pick_attempts_sum"))
-      .mul(100);
+    return acc;
+  }, {});
+};
 
-    df.addColumn("picks_per_hour", picks_per_hour, { inplace: true });
-    df.addColumn("thoroughness", thoroughness, { inplace: true });
-    df.addColumn("grip_success", grip_success, { inplace: true });
-    df.addColumn("pick_success", pick_success, { inplace: true });
-
-    const results = toJSON(df);
-    picksPerHour = results.map((x) => x.picks_per_hour);
-    thoroughnessPercent = results.map((x) => x.thoroughness * 100);
-    gripSuccessPercent = results.map((x) => x.grip_success * 100);
-    pickSessionPercent = results.map((x) => x.pick_success * 100);
+/**
+ * Implements the merge sort algorithm
+ * @param {Array} data
+ * @returns {Array}
+ */
+export function mergeSort(data = []) {
+  if (data.length <= 1) {
+    return data;
   }
-  return {
-    picksPerHour,
-    thoroughnessPercent,
-    gripSuccessPercent,
-    pickSessionPercent,
-  };
+
+  const mid = Math.floor(data.length / 2);
+  const left = mergeSort(data.slice(0, mid));
+  const right = mergeSort(data.slice(mid));
+
+  return merge(left, right);
+}
+
+/**
+ * Merge sort recursive function
+ * @param {Array} left
+ * @param {Array} right
+ * @returns {Array}
+ */
+function merge(left = [], right = []) {
+  const merged = [];
+  let leftIdx = 0;
+  let rightIdx = 0;
+
+  while (leftIdx < left.length && rightIdx < right.length) {
+    if (left[leftIdx].x.length > right[rightIdx].x.length) {
+      merged.push(left[leftIdx]);
+      leftIdx++;
+    } else {
+      merged.push(right[rightIdx]);
+      rightIdx++;
+    }
+  }
+  return merged.concat(left.slice(leftIdx), right.slice(rightIdx));
+}
+
+/**
+ * Compute aggregates for traces
+ * @param {String} aggregate
+ * @param {Array} results
+ * @returns {Array}
+ */
+export const mapTraces = (aggregate, resultObj = {}) => {
+  const tracesArr = [];
+
+  for (const key in resultObj) {
+    if (Object.hasOwnProperty.call(resultObj, key)) {
+      let x = [];
+      let y = [];
+      const obj = resultObj[key].reduce((acc, item) => {
+        x.push(item.date);
+        if (aggregate === "picks_per_hour") {
+          y.push(item.picks_per_hour);
+        } else if (aggregate === "thoroughness") {
+          y.push(item.thoroughness);
+        } else if (aggregate === "grip_success") {
+          y.push(item.grip_success);
+        } else {
+          y.push(item.pick_success);
+        }
+        acc["x"] = x;
+        acc["y"] = y;
+        acc["type"] = "line";
+        acc["mode"] = "lines+markers";
+        acc["jitter"] = 1;
+        return acc;
+      }, {});
+      // reset x and y
+      x = [];
+      y = [];
+      obj["name"] = key;
+      tracesArr.push(obj);
+    }
+  }
+  return tracesArr;
 };
