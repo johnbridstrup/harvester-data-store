@@ -277,7 +277,7 @@ export const listEmustats = rest.get(EMULATORSTATS_URL, (req, res, ctx) => {
 });
 
 export const getEmustatsById = rest.get(
-  `${EMULATORSTATS_URL}:emuId/`,
+  `${EMULATORSTATS_URL}:emustatsId`,
   (req, res, ctx) => {
     genericGetResponse["message"] = "emulatorstats retrieved successfully";
     genericGetResponse["data"] = emustats;
