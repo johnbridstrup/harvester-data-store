@@ -27,6 +27,9 @@ import {
   listUsers,
   generatePareto,
   listDistributors,
+  listEmustats,
+  getEmustatsById,
+  emustatsTags,
 } from "./actions";
 
 export const handlers = [
@@ -54,4 +57,7 @@ export const handlers = [
   listUsers,
   generatePareto,
   listDistributors,
+  listEmustats,
+  getEmustatsById,
+  emustatsTags,
 ];

@@ -34,6 +34,8 @@ import aftexceptioncode from "test-utils/test-data/aftexceptioncode.json";
 import users from "test-utils/test-data/users.json";
 import { DISTRIBUTORS_URL } from "features/distributor/distributorService";
 import distributor from "test-utils/test-data/distributor.json";
+import { EMULATORSTATS_URL } from "features/emulatorstats/emulatorstatsService";
+import emustats from "test-utils/test-data/emustats.json";
 
 let genericListResponse = {
   status: "success",
@@ -267,3 +269,29 @@ export const listDistributors = rest.get(DISTRIBUTORS_URL, (req, res, ctx) => {
   genericListResponse["data"]["results"] = [distributor];
   return res(ctx.json(genericListResponse));
 });
+
+export const listEmustats = rest.get(EMULATORSTATS_URL, (req, res, ctx) => {
+  genericListResponse["message"] = "emulatorstats retrieved successfully";
+  genericListResponse["data"]["results"] = [emustats];
+  return res(ctx.json(genericListResponse));
+});
+
+export const getEmustatsById = rest.get(
+  `${EMULATORSTATS_URL}:emuId/`,
+  (req, res, ctx) => {
+    genericGetResponse["message"] = "emulatorstats retrieved successfully";
+    genericGetResponse["data"] = emustats;
+    return res(ctx.json(genericGetResponse));
+  }
+);
+
+export const emustatsTags = rest.get(
+  `${EMULATORSTATS_URL}tags`,
+  (req, res, ctx) => {
+    genericGetResponse["message"] = "Emulator tags";
+    genericGetResponse["data"] = {
+      tags: ["Incomplete", "Invalid", "Unset"],
+    };
+    return res(ctx.json(genericGetResponse));
+  }
+);
