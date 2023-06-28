@@ -415,6 +415,12 @@ class HDSAPITestBase(APITestCase):
         return os.path.join(self.BASE_PATH, '20230614134221_013_00_harvester.log')
 
     @property
+    def extra_log_lines(self):
+        # We have intentionally included some logs which contain lines that don't have the log headers.
+        # We will consider these part of the last line which did.
+        return 12
+
+    @property
     def canpath(self):
         return os.path.join(self.BASE_PATH, '20230131131250_010_03_CAN.dump')
 

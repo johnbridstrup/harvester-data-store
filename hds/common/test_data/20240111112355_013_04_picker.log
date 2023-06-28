@@ -1,0 +1,17 @@
+[20240111T112425.119] [DEBUG] [picker.fsm  ] -- Traceback (most recent call last):
+  File "/home/aft/_harv-aft-py-packages/aft-core/src/aft_core/twisted/twistutils.py", line 67, in unwindGenerator
+    return _cancellableInlineCallbacks(gen)
+  File "/home/aft/_harv-aft-py-packages/aft-core/src/aft_core/twisted/twistutils.py", line 78, in _cancellableInlineCallbacks
+    _inlineCallbacks(None, g, status)
+  File "/home/aft/master/venv/lib/python3.8/site-packages/twisted/internet/defer.py", line 1445, in _inlineCallbacks
+    result = current_context.run(g.send, result)
+  File "/home/aft/_harv-aft-py-packages/aft-core/src/aft_core/asm/AsyncStateMachine.py", line 987, in transition
+    d = defer.maybeDeferred(self.global_handler, evt)
+--- <exception caught here> ---
+  File "/home/aft/master/venv/lib/python3.8/site-packages/twisted/internet/defer.py", line 167, in maybeDeferred
+    result = f(*args, **kw)
+  File "/home/aft/_harv-aft-py-packages/aft-core/src/aft_core/servmgr/FSMService.py", line 359, in global_handler
+    return self._handle_lockup_check()
+  File "/home/aft/_harv-aft-py-packages/aft-core/src/aft_core/servmgr/FSMService.py", line 780, in _handle_lockup_check
+    raise ServiceLockupException(msg)
+aft_core.exceptions.service.ServiceLockupException.ServiceLockupException: Service lockup error. Last check occured 12.227619409561157 seconds ago.

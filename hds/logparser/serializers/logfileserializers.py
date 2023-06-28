@@ -136,7 +136,6 @@ class LogFileSerializer(serializers.ModelSerializer):
         matches = re.match(LOG_PATTERN, line)
 
         if not matches:
-            logger.warning("Failed to match line in log")
             raise LogMatchError("failed to match log line")
 
         date = matches.group(1)
@@ -149,7 +148,6 @@ class LogFileSerializer(serializers.ModelSerializer):
         content_dict = {
             'timestamp': dt.timestamp(),
             'log_date': str(dt),
-            'log_message': line,
             'log_level': level,
             'logger': serv_logger
         }
@@ -170,6 +168,7 @@ class LogFileSerializer(serializers.ModelSerializer):
             return cleaned_line
 
         content = []
+        prev_content = None
         for line in file_iter:
             try:
                 line = line.decode("ascii")
@@ -179,18 +178,30 @@ class LogFileSerializer(serializers.ModelSerializer):
             line = clean_line(line)
             try:
                 content_dict = cls._extract_line(line, ext)
+                if prev_content:
+                    content_dict['logfile_type'] = ext
+                    content_dict['service'] = service
+                    content_dict['robot'] = int(robot)
+                    content_dict['harv_id'] = int(harv)
+                    content_dict['log_message'] = full_line
+                    content.append(content_dict)
+                prev_content = content_dict
+                full_line = line
             except DateMatchError:
                 cls._report_date_match_fail(line)
+                full_line += f"\n{line}"
                 continue
             except LogMatchError:
                 cls._report_line_match_fail(line)
+                full_line += f"\n{line}"
                 continue
-
-            content_dict['logfile_type'] = ext
-            content_dict['service'] = service
-            content_dict['robot'] = int(robot)
-            content_dict['harv_id'] = int(harv)
-            content.append(content_dict)
+        
+        content_dict['logfile_type'] = ext
+        content_dict['service'] = service
+        content_dict['robot'] = int(robot)
+        content_dict['harv_id'] = int(harv)
+        content_dict['log_message'] = full_line
+        content.append(content_dict)
         
         return content
 

@@ -32,7 +32,7 @@ class LogFileTestCase(LogBaseTestCase):
         with open(self.logpath, 'r') as f:
             content = LogFileSerializer._extract_lines(f, 'test', 1, 1, ext)
 
-        self.assertEqual(numlines, len(content))
+        self.assertEqual(numlines - self.extra_log_lines, len(content))
 
     def test_candump_extract(self):
         ext = os.path.splitext(self.canpath)[1]
@@ -54,3 +54,14 @@ class LogFileTestCase(LogBaseTestCase):
         self.assertEqual(robot, robot_str)
         self.assertEqual(harv, harv_str)
         self.assertEqual(ext, ext_str)
+
+    def test_multiline_exception(self):
+        filename = "20240111112355_013_04_picker.log"
+        logpath = os.path.join(self.BASE_PATH, filename)
+        ext = os.path.splitext(logpath)[-1]
+        with open(logpath, 'r') as f:
+            lines = f.readlines()
+        with open(logpath, 'r') as f:
+            extracted = LogFileSerializer._extract_lines(f, 'test', 1, 1, ext)
+        
+        self.assertEqual(''.join(lines).strip("\n"), extracted[0]["log_message"].strip("\n"))
