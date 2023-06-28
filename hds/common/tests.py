@@ -412,7 +412,7 @@ class HDSAPITestBase(APITestCase):
 
     @property
     def logpath(self):
-        return os.path.join(self.BASE_PATH, '20230131131250_010_03_robot.log')
+        return os.path.join(self.BASE_PATH, '20230614134221_013_00_harvester.log')
 
     @property
     def canpath(self):

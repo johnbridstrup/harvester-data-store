@@ -25,20 +25,22 @@ class LogFileTestCase(LogBaseTestCase):
         self.assertEqual(res.data["file_name"], log.file_name)
 
     def test_logfile_extract(self):
+        ext = os.path.splitext(self.logpath)[1]
         with open(self.logpath, 'r') as f:
             numlines = len(f.readlines())
 
         with open(self.logpath, 'r') as f:
-            content = LogFileSerializer._extract_lines(f, 'test', 'test', '.test')
+            content = LogFileSerializer._extract_lines(f, 'test', 'test', ext)
 
         self.assertEqual(numlines, len(content))
 
     def test_candump_extract(self):
+        ext = os.path.splitext(self.canpath)[1]
         with open(self.canpath, 'r') as f:
             numlines = len(f.readlines())
 
         with open(self.canpath, 'r') as f:
-            content = LogFileSerializer._extract_lines(f, 'test', 'test', '.test')
+            content = LogFileSerializer._extract_lines(f, 'test', 'test', ext)
 
         self.assertEqual(numlines, len(content))
 

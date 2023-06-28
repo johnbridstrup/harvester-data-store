@@ -9,10 +9,16 @@ from .logsessionserializers import LogSessionBaseSerializer
 
 logger = structlog.get_logger(__name__)
 
-LOG_DATE_PATTERN = re.compile(r'\[\d{8}T\d{6}.[0-9]+\]')
+LOG_PATTERN = r'\[(.*?)\]\s*\[(.*?)\]\s*\[(.*?)\]\s*--\s*(.*)'
+CAN_PATTERN = r'\[(.*?)\]'
+ESC_SEQ_PATTERN = r'\x1B\[[0-9;]*[m|K]'
 
 
 class DateMatchError(Exception):
+    pass
+
+
+class LogMatchError(Exception):
     pass
 
 
@@ -26,7 +32,7 @@ class LogFileSerializer(serializers.ModelSerializer):
         read_only_fields = ['id']
 
     @staticmethod
-    def convert_to_datetime(line_str:str):
+    def convert_to_datetime(date_str:str):
         """
         extract date str from line e.g
 
@@ -35,21 +41,20 @@ class LogFileSerializer(serializers.ModelSerializer):
         return datetime object or None.
 
         """
-        matches = LOG_DATE_PATTERN.search(line_str)
         date_obj = None
-        if matches:
+        try:
             date_obj = DTimeFormatter.convert_to_datetime(
-              matches.group(0)[1:-1],
+              date_str,
               TIMEZONE,
               format='%Y%m%dT%H%M%S.%f'
             )
-        else:
+        except Exception as e:
             ASYNC_ERROR_COUNTER.labels(
                 'convert_to_datetime',
-                AttributeError.__name__,
+                e.__class__.__name__,
                 "Failed date pattern match"
             ).inc()
-            logger.error(f"could not match the date on line {line_str}")
+            logger.error(f"could not match the date string {date_str}")
         return date_obj
 
     @staticmethod
@@ -99,59 +104,97 @@ class LogFileSerializer(serializers.ModelSerializer):
             DateMatchError.__name__,
             "Failed date pattern match"
         ).inc()
-        logger.error(f'No match for the line {entry}')
+        logger.error(f'No date match for the line {entry}')
+
+    @classmethod
+    def _report_line_match_fail(cls, entry):
+        ASYNC_ERROR_COUNTER.labels(
+            'extract_log_file',
+            LogMatchError.__name__,
+            "Failed line pattern match"
+        ).inc()
+        logger.error(f'Could not match line {entry}')
+
+    @classmethod
+    def _extract_can(cls, line):
+        match = re.match(CAN_PATTERN, line)
+
+        if not match:
+            logger.warning("Failed to match line in CAN file")
+            raise LogMatchError("Failed to match can line")
+
+        date = match.group(1)
+        dt = cls.convert_to_datetime(date)
+        if dt is None:
+            raise DateMatchError
+
+        content_dict = {
+            'timestamp': dt.timestamp(),
+            'log_date': str(dt),
+            'log_message': line,
+        }
+        return content_dict
+
+    @classmethod
+    def _extract_log(cls, line):
+        matches = re.match(LOG_PATTERN, line)
+
+        if not matches:
+            logger.warning("Failed to match line in log")
+            raise LogMatchError("failed to match log line")
+
+        date = matches.group(1)
+        level = matches.group(2)
+        serv_logger = matches.group(3)
+        dt = cls.convert_to_datetime(date)
+        if dt is None:
+            raise DateMatchError
+
+        content_dict = {
+            'timestamp': dt.timestamp(),
+            'log_date': str(dt),
+            'log_message': line,
+            'log_level': level,
+            'logger': serv_logger
+        }
+        return content_dict
+
+    @classmethod
+    def _extract_line(cls, line, ext):
+        if ext == '.log':
+            return cls._extract_log(line)
+        elif ext == '.dump':
+            return cls._extract_can(line)
 
     @classmethod
     def _extract_lines(cls, file_iter, service, robot, ext):
-        def create_content_dict(msg):
-            date_obj = cls.convert_to_datetime(entry)
-            if date_obj is None:
-                raise DateMatchError("Failed to match date")
-            return {
-                'service': service,
-                'robot': robot,
-                'timestamp': date_obj.timestamp(),
-                'logfile_type': ext,
-                'log_date': str(date_obj),
-                'log_message': msg,
-            }
+        def clean_line(line):
+            cleaned_line = re.sub(ESC_SEQ_PATTERN, '', line)
+            cleaned_line = cleaned_line.rstrip().strip('\n')
+            return cleaned_line
 
         content = []
-        first = True
-        entry = ""
         for line in file_iter:
             try:
                 line = line.decode("ascii")
             except AttributeError:
                 pass
-
-            if LOG_DATE_PATTERN.match(line):
-                if first:
-                    first = False
-                    entry = line
-                    continue
-
-                entry = entry.rstrip().strip("\n")
-                if len(entry) == 0:
-                    continue
-
-                try:
-                    content_dict = create_content_dict(entry)
-                except DateMatchError:
-                    cls._report_date_match_fail(entry)
-                    continue
-                content.append(content_dict)
-                entry = line
-            else:
-                entry = entry + line
-
-        # append the last line
-        entry = entry.rstrip().strip("\n")
-        if len(entry) != 0:
+            
+            line = clean_line(line)
             try:
-                content.append(create_content_dict(entry))
+                content_dict = cls._extract_line(line, ext)
             except DateMatchError:
-                cls._report_date_match_fail(entry)
+                cls._report_date_match_fail(line)
+                continue
+            except LogMatchError:
+                cls._report_line_match_fail(line)
+                continue
+
+            content_dict['logfile_type'] = ext
+            content_dict['service'] = service
+            content_dict['robot'] = robot
+            content.append(content_dict)
+        
         return content
 
     @classmethod
