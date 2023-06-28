@@ -22,6 +22,10 @@ class LogMatchError(Exception):
     pass
 
 
+class FilenameMatchError(Exception):
+    pass
+
+
 class LogFileSerializer(serializers.ModelSerializer):
     """Serializer for log file model."""
     log_session = LogSessionBaseSerializer()
@@ -58,7 +62,7 @@ class LogFileSerializer(serializers.ModelSerializer):
         return date_obj
 
     @staticmethod
-    def extract_service_robot(filename):
+    def extract_filename(filename):
         """
         extract service and robot from file name
 
@@ -68,34 +72,26 @@ class LogFileSerializer(serializers.ModelSerializer):
         """
         service = None
         robot = None
+        harv = None
 
-        robot_pattern = re.compile(r'_\d{2}_')
-        service_pattern = re.compile(r'[a-z]+(_[a-z]+)?')
-        robot_match = robot_pattern.search(filename)
-        service_match = service_pattern.search(filename)
+        pattern = r'^(.*?)_(.*?)_(.*?)_(.*?)\.(.*)$'  #(ts)_(harvid)_(robotid)_(serv)(.ext)
 
-        if robot_match is not None:
-            robot = int(robot_match.group(0).replace("_", ""))
-        else:
+        matches = re.match(pattern, filename)
+        if not matches:
             ASYNC_ERROR_COUNTER.labels(
-                'extract_service_robot',
-                AttributeError.__name__,
-                "Failed robot pattern match"
+                'extract_filename',
+                FilenameMatchError.__name__,
+                "Failed to match filename"
             ).inc()
-            logger.error(
-                f"could not match robot id on file",
-                filename=filename,
-            )
-        if service_match is not None:
-            service = service_match.group(0)
-        else:
-            ASYNC_ERROR_COUNTER.labels(
-                'extract_service_robot',
-                AttributeError.__name__,
-                "Failed service pattern match"
-            ).inc()
-            logger.error(f"could not match service on file", filename=filename)
-        return service, robot
+            raise FilenameMatchError(f"Failed to match filename: {filename}")
+        
+        harv = matches.group(2)
+        robot = matches.group(3)
+        service = matches.group(4)
+        ext = matches.group(5)
+        
+
+        return service, robot, harv, f".{ext}"
 
     @classmethod
     def _report_date_match_fail(cls, entry):
@@ -167,7 +163,7 @@ class LogFileSerializer(serializers.ModelSerializer):
             return cls._extract_can(line)
 
     @classmethod
-    def _extract_lines(cls, file_iter, service, robot, ext):
+    def _extract_lines(cls, file_iter, service, robot, harv, ext):
         def clean_line(line):
             cleaned_line = re.sub(ESC_SEQ_PATTERN, '', line)
             cleaned_line = cleaned_line.rstrip().strip('\n')
@@ -192,7 +188,8 @@ class LogFileSerializer(serializers.ModelSerializer):
 
             content_dict['logfile_type'] = ext
             content_dict['service'] = service
-            content_dict['robot'] = robot
+            content_dict['robot'] = int(robot)
+            content_dict['harv_id'] = int(harv)
             content.append(content_dict)
         
         return content
@@ -207,7 +204,7 @@ class LogFileSerializer(serializers.ModelSerializer):
         appends the dict to content_list and saves the model.
 
         """
-        service, robot = cls.extract_service_robot(file.filename)
+        service, robot, harv, ext = cls.extract_filename(file.filename)
 
         log_session = LogSession.objects.get(pk=zip_obj_id)
         log_file = LogFile(
@@ -218,10 +215,9 @@ class LogFileSerializer(serializers.ModelSerializer):
           robot=robot
         )
         content = []
-        _, ext = os.path.splitext(file.filename)
 
         with thezip.open(file, "r") as file_iter:
-            content = cls._extract_lines(file_iter, service, robot, ext)
+            content = cls._extract_lines(file_iter, service, robot, harv, ext)
 
         log_file.content = content
         log_file.save()

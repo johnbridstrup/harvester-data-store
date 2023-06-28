@@ -30,7 +30,7 @@ class LogFileTestCase(LogBaseTestCase):
             numlines = len(f.readlines())
 
         with open(self.logpath, 'r') as f:
-            content = LogFileSerializer._extract_lines(f, 'test', 'test', ext)
+            content = LogFileSerializer._extract_lines(f, 'test', 1, 1, ext)
 
         self.assertEqual(numlines, len(content))
 
@@ -40,14 +40,17 @@ class LogFileTestCase(LogBaseTestCase):
             numlines = len(f.readlines())
 
         with open(self.canpath, 'r') as f:
-            content = LogFileSerializer._extract_lines(f, 'test', 'test', ext)
+            content = LogFileSerializer._extract_lines(f, 'test', 1, 1, ext)
 
         self.assertEqual(numlines, len(content))
 
     def test_robot_service_extr(self):
         _, filename = os.path.split(self.logpath)
-        _, _, robot_str, serv_str = filename.split('.')[0].split('_')
-
-        service, robot = LogFileSerializer.extract_service_robot(filename)
+        _, harv_str, robot_str, serv_str = filename.split('.')[0].split('_')
+        ext_str = os.path.splitext(filename)[1]
+        
+        service, robot, harv, ext = LogFileSerializer.extract_filename(filename)
         self.assertEqual(service, serv_str)
-        self.assertEqual(robot, int(robot_str))
+        self.assertEqual(robot, robot_str)
+        self.assertEqual(harv, harv_str)
+        self.assertEqual(ext, ext_str)
