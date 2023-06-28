@@ -79,10 +79,52 @@ export const CopyBuildConfig = (props) => {
   );
 };
 
+export const CopyGenericURL = (props) => {
+  const [copied, setCopied] = useState(false);
+  const btn = darkThemeClass("btn-dark", props.theme);
+  const copy = async (text) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopied(true);
+    } catch (error) {
+      console.log("error", error);
+    }
+    setTimeout(function () {
+      setCopied(false);
+    }, 3000);
+  };
+
+  const buildURL = async () => {
+    let params = new URLSearchParams(props.paramsObj);
+    let public_url =
+      process.env.REACT_APP_HOSTED_URL || "http://localhost:3000";
+    let emuUrl = `/emucharts/?${params.toString()}`;
+    await copy(public_url + emuUrl);
+  };
+
+  return (
+    <div className="copy-container">
+      <button onClick={buildURL} className={`btn ${btn}`}>
+        {copied ? (
+          <span className="las la-check-double text-success">copied</span>
+        ) : (
+          "copy url"
+        )}
+      </button>
+    </div>
+  );
+};
+
 CopyBuildConfig.propTypes = {
   paretoArr: PropTypes.array,
   paramsObj: PropTypes.object,
   theme: PropTypes.string,
+};
+
+CopyGenericURL.propTypes = {
+  paramsObj: PropTypes.object,
+  theme: PropTypes.string,
+  state: PropTypes.string,
 };
 
 CopyToClipboard.propTypes = {};

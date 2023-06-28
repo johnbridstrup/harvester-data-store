@@ -8,6 +8,7 @@ import { LoaderDiv } from "components/styled";
 import { Loader, paramsToObject } from "utils/utils";
 import { queryEmulatorstats } from "features/emulatorstats/emulatorstatsSlice";
 import EmulatorstatsChart from "components/emulatorstats/EmulatorstatsChart";
+import { CopyGenericURL } from "components/copytoclipboard/CopyToClipboard";
 import "./styles.css";
 
 function EmulatorstatsChartView(props) {
@@ -36,7 +37,14 @@ function EmulatorstatsChartView(props) {
             <Loader size={50} />
           </LoaderDiv>
         ) : (
-          <EmulatorstatsChart />
+          <>
+            <EmulatorstatsChart />
+            <CopyGenericURL
+              paramsObj={paramsToObject(search)}
+              theme={theme}
+              state="emucharts"
+            />
+          </>
         )}
       </div>
     </MainLayout>

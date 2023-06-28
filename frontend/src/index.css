@@ -285,6 +285,16 @@ a {
 }
 /* Documentation Label */
 
+/* Copy */
+.copy-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+/* Copy */
+
 @media (max-width: 768px) {
   .custom-multiselect-control {
     width: 100% !important;
