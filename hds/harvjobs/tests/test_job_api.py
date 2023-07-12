@@ -54,7 +54,7 @@ class JobApiTestCase(HarvJobApiTestBase):
         self.create_jobschema()
 
         bad_payload = self.DEFAULT_JOB_PAYLOAD.copy()
-        del bad_payload["requiredArg"]
+        del bad_payload["payload"]["requiredArg"]
         _, resp = self.create_job(job_payload=bad_payload)
 
         self.assertContains(
@@ -68,7 +68,7 @@ class JobApiTestCase(HarvJobApiTestBase):
         self.create_jobschema()
 
         good_payload = self.DEFAULT_JOB_PAYLOAD.copy()
-        del good_payload["optionalArg"]
+        del good_payload["payload"]["optionalArg"]
         _, resp = self.create_job(job_payload=good_payload)
 
         self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
@@ -78,7 +78,7 @@ class JobApiTestCase(HarvJobApiTestBase):
         self.create_jobschema()
 
         bad_payload = self.DEFAULT_JOB_PAYLOAD.copy()
-        bad_payload["requiredArg"] = ["bad", "args"]
+        bad_payload["payload"]["requiredArg"] = ["bad", "args"]
         _, resp = self.create_job(job_payload=bad_payload)
 
         self.assertContains(

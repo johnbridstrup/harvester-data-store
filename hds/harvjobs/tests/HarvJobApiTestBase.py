@@ -11,32 +11,29 @@ class HarvJobApiTestBase(HDSAPITestBase):
         self.DEFAULT_SCHEMA = {
             "type": "object",
             "properties": {
-                "id": {
-                    "type": "string",
-                },
-                "job_type": {
-                    "type": "string",
-                },
-                "targets": {
-                    "type": "array",
-                    "items": {
-                        "type": "string",
-                        "pattern": "^(master|((robot|stereo)\\d+))$"
+                "id": {"type": "string"},
+                "job_type": {"type": "string"},
+                "payload": {
+                    "type": "object",
+                    "properties": {
+                        "requiredArg": {
+                        "type": "string"
+                        },
+                        "optionalArg": {
+                        "type": "string"
+                        }
                     },
-                },
-                "requiredArg": {
-                    "type": "string",
-                },
-                "optionalArg": {
-                    "type": "string",
-                },
+                    "required": ["requiredArg"],
+                }
             },
-            "required": ["id", "job_type", "requiredArg", "targets"],
+            "required": ["payload"],
         }
+
         self.DEFAULT_JOB_PAYLOAD = {
-            "requiredArg": "some value",
-            "optionalArg": "some other value",
-            "targets": ["master"],
+            "payload": {
+                "requiredArg": "some value",
+                "optionalArg": "some other value",
+            }
         }
         self.DEFAULT_RESULT_SUCCESS = {
             "data": {
