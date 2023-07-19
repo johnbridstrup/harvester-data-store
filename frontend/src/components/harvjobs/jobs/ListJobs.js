@@ -37,7 +37,7 @@ function ListJobs(props) {
                   <td>
                     <Link to={`/jobs/${job.id}`}>{job.id}</Link>
                   </td>
-                  <td>{job.payload.targets.join(", ")}</td>
+                  <td>{job.payload.targets?.join(", ")}</td>
                   <td>{job.payload.job_type}</td>
                   <td>{job.payload.timeout}</td>
                   <td
