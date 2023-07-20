@@ -51,6 +51,11 @@ class GenericFilter(Filter):
     Filter any fields for exact matches. JSONField compatible.
     example: client.get(<url>/?jsonfield__key1__key2=3,jsonfield2__key3__key4=hello)
     """
+
+    def __init__(self, field_name=None, lookup_expr=None, *, label=None, method=None, distinct=False, exclude=False, foreign_key_prefix=None, **kwargs):
+        super().__init__(field_name, lookup_expr, label=label, method=method, distinct=distinct, exclude=exclude, **kwargs)
+        self.foreign_key_prefix = foreign_key_prefix
+
     def filter(self, qs, value):
         if not value:
             return qs
@@ -58,6 +63,7 @@ class GenericFilter(Filter):
         for item in value.split(','):
                 try:
                     key, value = item.split('=')
+                    key = f"{self.foreign_key_prefix}__{key}" if self.foreign_key_prefix else key
                 except ValueError:
                     # too many or not enough values to unpack
                     return qs

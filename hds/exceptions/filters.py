@@ -1,6 +1,12 @@
 from django_filters import rest_framework as filters
 
-from common.filters import DTimeFilter, EventUUIDFilter, ListFilter, CommonInfoFilterset
+from common.filters import (
+    DTimeFilter,
+    EventUUIDFilter,
+    GenericFilter,
+    ListFilter,
+    CommonInfoFilterset
+)
 from .models import AFTException
 
 
@@ -19,6 +25,7 @@ class AFTExceptionFilter(CommonInfoFilterset):
     start_time = DTimeFilter("timestamp", lookup_expr="gte")
     end_time = DTimeFilter("timestamp", lookup_expr="lte")
     is_emulator = filters.BooleanFilter(field_name="report__harvester__is_emulator")
+    generic = GenericFilter(foreign_key_prefix="report")
 
     class Meta:
         model = AFTException
