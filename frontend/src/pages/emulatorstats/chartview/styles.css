@@ -7,3 +7,8 @@
 .bg-gray {
   background: #f0f0f0;
 }
+
+.btn-align-end {
+  display: flex;
+  align-items: flex-end;
+}

@@ -1,5 +1,6 @@
 import { DataFrame, toJSON } from "danfojs";
 import moment from "moment";
+import Select from "react-select";
 import PropTypes from "prop-types";
 import {
   darkThemeClass,
@@ -7,6 +8,7 @@ import {
   mapTraces,
   mergeSort,
   sortByMonth,
+  selectDarkStyles,
 } from "utils/utils";
 
 export const EmustatsTabular = (props) => {
@@ -226,6 +228,35 @@ export const transformEmustatSeries = (emustats = []) => {
   };
 };
 
+export const SelectChart = (props) => {
+  const dark = darkThemeClass("dark-theme", props.theme);
+  const customStyles = dark ? selectDarkStyles : {};
+  return (
+    <div className="mb-4">
+      <label htmlFor="chart">Select Chart Type From Dropdown</label>
+      <Select
+        isSearchable
+        options={props.chartOptions}
+        name="chart"
+        inputId="chart"
+        onChange={props.handleChartSelect}
+        value={props.selectedChart}
+        defaultValue={props.selectedChart}
+        className="multi-select-container"
+        classNamePrefix="select"
+        styles={customStyles}
+      />
+    </div>
+  );
+};
+
 EmustatsTabular.propTypes = {
   paramsObj: PropTypes.object,
+};
+
+SelectChart.propTypes = {
+  chartOptions: PropTypes.array,
+  handleChartSelect: PropTypes.func,
+  selectedChart: PropTypes.object,
+  theme: PropTypes.string,
 };

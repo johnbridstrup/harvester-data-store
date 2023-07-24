@@ -1,9 +1,6 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import EmustatsPlot from "components/plotly/EmustatsPlot";
-import { EmustatsTabular } from "./EmulatorstatsHelpers";
-import { useLocation } from "react-router-dom";
-import { paramsToObject } from "utils/utils";
 import { NavTabItem, NavTabSpan, NavTabs } from "components/styled";
 
 function EmulatorstatsChart(props) {
@@ -19,7 +16,6 @@ function EmulatorstatsChart(props) {
       },
     },
   } = useSelector((state) => state.emulatorstats);
-  const { search } = useLocation();
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
@@ -27,7 +23,6 @@ function EmulatorstatsChart(props) {
 
   return (
     <>
-      <EmustatsTabular paramsObj={paramsToObject(search)} />
       <NavTabs>
         <NavTabItem>
           <NavTabSpan
