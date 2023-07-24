@@ -1460,27 +1460,38 @@ export const mapTraces = (aggregate, resultObj = {}) => {
     if (Object.hasOwnProperty.call(resultObj, key)) {
       let x = [];
       let y = [];
+      let error_y = [];
       const obj = resultObj[key].reduce((acc, item) => {
         x.push(item.date);
         if (aggregate === "picks_per_hour") {
           y.push(item.picks_per_hour);
+          error_y.push(item.picks_per_hour_std);
         } else if (aggregate === "thoroughness") {
           y.push(item.thoroughness);
+          error_y.push(item.thoroughness_percentage_std);
         } else if (aggregate === "grip_success") {
           y.push(item.grip_success);
+          error_y.push(item.grip_success_percentage_std);
         } else {
           y.push(item.pick_success);
+          error_y.push(item.pick_success_percentage_std);
         }
         acc["x"] = x;
         acc["y"] = y;
         acc["type"] = "line";
         acc["mode"] = "lines+markers";
         acc["jitter"] = 1;
+        acc["error_y"] = {
+          type: "data",
+          array: error_y,
+          visible: true,
+        };
         return acc;
       }, {});
-      // reset x and y
+      // reset x, y and error_y
       x = [];
       y = [];
+      error_y = [];
       obj["name"] = key;
       tracesArr.push(obj);
     }

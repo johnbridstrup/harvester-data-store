@@ -59,6 +59,9 @@ const transformEmustatsAggs = (emustats = []) => {
     df.addColumn("elapsed_hours", elapsed_hours_col, { inplace: true });
     df.addColumn("reportTime", report_time_col, { inplace: true });
 
+    const picks_col = df.column("num_picks").div(df.column("elapsed_hours"));
+    df.addColumn("picks_per_hour", picks_col, { inplace: true });
+
     df = df.groupby(["reportTime", "date"]).agg({
       num_picks: "sum",
       num_grips: "sum",
@@ -66,6 +69,10 @@ const transformEmustatsAggs = (emustats = []) => {
       elapsed_hours: "sum",
       num_pick_attempts: "sum",
       num_grip_attempts: "sum",
+      pick_success_percentage: "std",
+      grip_success_percentage: "std",
+      thoroughness_percentage: "std",
+      picks_per_hour: "std",
     });
 
     const picks_per_hour = df

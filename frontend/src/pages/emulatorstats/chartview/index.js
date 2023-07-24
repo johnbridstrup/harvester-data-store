@@ -20,7 +20,7 @@ function EmulatorstatsChartView(props) {
   useEffect(() => {
     // default to limit stats by 1000 entries
     // this can change for dynamic implementation
-    dispatch(queryEmulatorstats({...paramsToObject(search), limit: 1000}));
+    dispatch(queryEmulatorstats({ ...paramsToObject(search), limit: 1000 }));
   }, [dispatch, search]);
 
   return (
