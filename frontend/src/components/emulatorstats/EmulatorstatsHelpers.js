@@ -1,3 +1,4 @@
+import { DataFrame } from "danfojs";
 import PropTypes from "prop-types";
 import { darkThemeClass } from "utils/utils";
 
@@ -48,6 +49,40 @@ export const EmustatsTabular = (props) => {
       )}
     </div>
   );
+};
+
+/**
+ * Create and return a DataFrame
+ * @param {Function} dateFunc
+ * @param {Array} emustats
+ * @returns
+ */
+export const createDataFrame = (dateFunc, emustats = []) => {
+  const df = new DataFrame(emustats);
+  const num_picks_col = df
+    .column("num_pick_attempts")
+    .mul(df.column("pick_success_percentage").div(100))
+    .asType("int32");
+  const num_grips_col = df
+    .column("num_grip_attempts")
+    .mul(df.column("grip_success_percentage").div(100))
+    .asType("int32");
+  const num_targets_col = num_picks_col
+    .div(df.column("thoroughness_percentage").div(100))
+    .asType("int32");
+  const elapsed_hours_col = df.column("elapsed_seconds").div(3600);
+  const report_time_col = df.column("reportTime").map((val) => dateFunc(val));
+
+  df.addColumn("num_picks", num_picks_col, { inplace: true });
+  df.addColumn("num_grips", num_grips_col, { inplace: true });
+  df.addColumn("num_targets", num_targets_col, { inplace: true });
+  df.addColumn("elapsed_hours", elapsed_hours_col, { inplace: true });
+  df.addColumn("reportTime", report_time_col, { inplace: true });
+
+  const picks_col = df.column("num_picks").div(df.column("elapsed_hours"));
+  df.addColumn("picks_per_hour", picks_col, { inplace: true });
+
+  return df;
 };
 
 EmustatsTabular.propTypes = {

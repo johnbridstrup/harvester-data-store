@@ -1,9 +1,9 @@
 import { useState, useMemo } from "react";
 import { useSelector } from "react-redux";
 import moment from "moment";
-import { DataFrame, toJSON } from "danfojs";
+import { toJSON } from "danfojs";
 import EmustatsPlot from "components/plotly/EmustatsPlot";
-import { EmustatsTabular } from "./EmulatorstatsHelpers";
+import { EmustatsTabular, createDataFrame } from "./EmulatorstatsHelpers";
 import { useLocation } from "react-router-dom";
 import {
   groupByWeek,
@@ -38,26 +38,7 @@ const transformEmustatsAggs = (emustats = []) => {
   };
 
   if (emustats.length > 0) {
-    let df = new DataFrame(emustats);
-    const num_picks_col = df
-      .column("num_pick_attempts")
-      .mul(df.column("pick_success_percentage").div(100))
-      .asType("int32");
-    const num_grips_col = df
-      .column("num_grip_attempts")
-      .mul(df.column("grip_success_percentage").div(100))
-      .asType("int32");
-    const num_targets_col = num_picks_col
-      .div(df.column("thoroughness_percentage").div(100))
-      .asType("int32");
-    const elapsed_hours_col = df.column("elapsed_seconds").div(3600);
-    const report_time_col = df.column("reportTime").map((val) => weekStr(val));
-
-    df.addColumn("num_picks", num_picks_col, { inplace: true });
-    df.addColumn("num_grips", num_grips_col, { inplace: true });
-    df.addColumn("num_targets", num_targets_col, { inplace: true });
-    df.addColumn("elapsed_hours", elapsed_hours_col, { inplace: true });
-    df.addColumn("reportTime", report_time_col, { inplace: true });
+    let df = createDataFrame(weekStr, emustats);
 
     const picks_col = df.column("num_picks").div(df.column("elapsed_hours"));
     df.addColumn("picks_per_hour", picks_col, { inplace: true });
