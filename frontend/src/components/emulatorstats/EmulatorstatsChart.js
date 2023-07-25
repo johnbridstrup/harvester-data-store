@@ -36,9 +36,9 @@ function EmulatorstatsChart(props) {
         </NavTabItem>
         <NavTabItem>
           <NavTabSpan
-            onClick={() => handleTabChange("thoroughnessVsScence")}
+            onClick={() => handleTabChange("thoroughnessVsScene")}
             activetab={activetab}
-            navto={"thoroughnessVsScence"}
+            navto={"thoroughnessVsScene"}
             theme={theme}
           >
             Thoroughness Vs Scene
@@ -73,7 +73,7 @@ function EmulatorstatsChart(props) {
           ylabel="picks_per_hour"
         />
       )}
-      {activetab === "thoroughnessVsScence" && (
+      {activetab === "thoroughnessVsScene" && (
         <EmustatsPlot
           traces={thoroughnessPercent}
           theme={theme}
