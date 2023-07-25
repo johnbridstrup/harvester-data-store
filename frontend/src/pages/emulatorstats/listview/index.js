@@ -29,7 +29,7 @@ function EmulatorstatsListView(props) {
           title={"HDS Emulator Statistics"}
           className={"display-6 mt-4 mb-4"}
         />
-        <EmulatorstatsQuery />
+        <EmulatorstatsQuery view="listview" />
         <EmulatorstatsList />
         <GenericPagination state="emulatorstats" />
       </div>

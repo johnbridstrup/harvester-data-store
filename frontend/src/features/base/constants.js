@@ -60,6 +60,10 @@ export const THEME_MODES = {
 
 export const MASTER_ROBOT = 0;
 export const ERRORREPORT_TRIGGER = "ErrorReport";
+export const EMULATORREPORT = {
+  chartview: "chartview",
+  listview: "listview",
+};
 
 export class PushStateEnum {
   static get GENPARETO() {
@@ -88,5 +92,8 @@ export class PushStateEnum {
   }
   static get EMULATORSTATS() {
     return "emulatorstats";
+  }
+  static get EMULATORCHART() {
+    return "emulatorcharts";
   }
 }

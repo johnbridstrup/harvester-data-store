@@ -6,8 +6,12 @@ import Header from "components/layout/header";
 import { BackButton } from "components/common";
 import { LoaderDiv } from "components/styled";
 import { Loader, paramsToObject } from "utils/utils";
-import { queryEmulatorstats } from "features/emulatorstats/emulatorstatsSlice";
+import {
+  getEmulatorstatsTags,
+  queryEmulatorstats,
+} from "features/emulatorstats/emulatorstatsSlice";
 import EmulatorstatsChart from "components/emulatorstats/EmulatorstatsChart";
+import EmulatorstatsQuery from "components/emulatorstats/EmulatorstatsQuery";
 import { CopyGenericURL } from "components/copytoclipboard/CopyToClipboard";
 import "./styles.css";
 
@@ -20,7 +24,8 @@ function EmulatorstatsChartView(props) {
   useEffect(() => {
     // default to limit stats by 1000 entries
     // this can change for dynamic implementation
-    dispatch(queryEmulatorstats({ ...paramsToObject(search), limit: 1000 }));
+    dispatch(queryEmulatorstats({  ...paramsToObject(search), limit: 1000  }));
+    dispatch(getEmulatorstatsTags());
   }, [dispatch, search]);
 
   return (
@@ -38,6 +43,7 @@ function EmulatorstatsChartView(props) {
           </LoaderDiv>
         ) : (
           <>
+            <EmulatorstatsQuery view="chartview" />
             <EmulatorstatsChart />
             <CopyGenericURL
               paramsObj={paramsToObject(search)}

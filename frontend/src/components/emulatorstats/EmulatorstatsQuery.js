@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import Select from "react-select";
+import PropTypes from "prop-types";
 import { InputFormControl } from "components/styled";
 import {
   extractDateFromString,
@@ -13,7 +14,11 @@ import {
   transformTagsOptions,
 } from "utils/utils";
 import { queryEmulatorstats } from "features/emulatorstats/emulatorstatsSlice";
-import { PushStateEnum, THEME_MODES } from "features/base/constants";
+import {
+  EMULATORREPORT,
+  PushStateEnum,
+  THEME_MODES,
+} from "features/base/constants";
 
 function EmulatorstatsQuery(props) {
   const [fieldData, setFieldData] = useState({
@@ -91,8 +96,10 @@ function EmulatorstatsQuery(props) {
     if (fieldData.branch) {
       queryObj["branch"] = fieldData.branch;
     }
-    if (fieldData.limit) {
+    if (fieldData.limit && props.view === EMULATORREPORT.listview) {
       queryObj["limit"] = fieldData.limit;
+    } else if (fieldData.limit && props.view === EMULATORREPORT.chartview) {
+      queryObj["limit"] = 1000;
     }
     if (selectedTag && selectedTag.length > 0) {
       queryObj["tags"] = selectedTag.map((x) => x.value);
@@ -114,7 +121,11 @@ function EmulatorstatsQuery(props) {
     e.preventDefault();
     const queryObj = buildQueryObj();
     dispatch(queryEmulatorstats(queryObj));
-    pushState(queryObj, PushStateEnum.EMULATORSTATS);
+    if (props.view === EMULATORREPORT.listview) {
+      pushState(queryObj, PushStateEnum.EMULATORSTATS);
+    } else if (props.view === EMULATORREPORT.chartview) {
+      pushState(queryObj, PushStateEnum.EMULATORCHART);
+    }
   };
 
   const handleEmustatsChart = () => {
@@ -178,39 +189,66 @@ function EmulatorstatsQuery(props) {
           </div>
         </div>
         <div className="row mb-2">
-          <div className="col-md-6">
-            <div className="form-group">
-              <label htmlFor="tags">Tags</label>
-              <Select
-                isSearchable
-                isClearable
-                isMulti
-                placeholder="Invalid"
-                options={tagOptions}
-                name="tags"
-                inputId="tags"
-                onChange={handleTagSelect}
-                defaultValue={selectedTag}
-                value={selectedTag}
-                className="multi-select-container"
-                classNamePrefix="select"
-                styles={customStyles}
-              />
-            </div>
-          </div>
-          <div className="col-md-6">
-            <div className="form-group">
-              <label htmlFor="limit">Limit</label>
-              <InputFormControl
-                type="number"
-                name="limit"
-                id="limit"
-                value={fieldData.limit}
-                theme={theme}
-                onChange={handleFieldChange}
-              />
-            </div>
-          </div>
+          {props.view === EMULATORREPORT.chartview ? (
+            <>
+              <div className="col">
+                <div className="form-group">
+                  <label htmlFor="tags">Tags</label>
+                  <Select
+                    isSearchable
+                    isClearable
+                    isMulti
+                    placeholder="Invalid"
+                    options={tagOptions}
+                    name="tags"
+                    inputId="tags"
+                    onChange={handleTagSelect}
+                    defaultValue={selectedTag}
+                    value={selectedTag}
+                    className="multi-select-container"
+                    classNamePrefix="select"
+                    styles={customStyles}
+                  />
+                </div>
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="col-md-6">
+                <div className="form-group">
+                  <label htmlFor="tags">Tags</label>
+                  <Select
+                    isSearchable
+                    isClearable
+                    isMulti
+                    placeholder="Invalid"
+                    options={tagOptions}
+                    name="tags"
+                    inputId="tags"
+                    onChange={handleTagSelect}
+                    defaultValue={selectedTag}
+                    value={selectedTag}
+                    className="multi-select-container"
+                    classNamePrefix="select"
+                    styles={customStyles}
+                  />
+                </div>
+              </div>
+              <div className="col-md-6">
+                <div className="form-group">
+                  <label htmlFor="limit">Limit</label>
+                  <InputFormControl
+                    type="number"
+                    name="limit"
+                    id="limit"
+                    value={fieldData.limit}
+                    theme={theme}
+                    onChange={handleFieldChange}
+                  />
+                </div>
+              </div>
+            </>
+          )}
         </div>
         <div className="row mb-4">
           <div className="col-md-6">
@@ -246,19 +284,23 @@ function EmulatorstatsQuery(props) {
           <button type="submit" className="btn btn-primary">
             Submit
           </button>
-          <button
-            type="button"
-            className="btn btn-primary mx-2"
-            onClick={handleEmustatsChart}
-          >
-            Generate Chart
-          </button>
+          {props.view === EMULATORREPORT.listview && (
+            <button
+              type="button"
+              className="btn btn-primary mx-2"
+              onClick={handleEmustatsChart}
+            >
+              Generate Chart
+            </button>
+          )}
         </div>
       </form>
     </>
   );
 }
 
-EmulatorstatsQuery.propTypes = {};
+EmulatorstatsQuery.propTypes = {
+  view: PropTypes.string,
+};
 
 export default EmulatorstatsQuery;

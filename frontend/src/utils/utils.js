@@ -495,6 +495,10 @@ export const pushState = (queryObj, pareto = undefined) => {
     newurl = `${window.location.protocol}//${
       window.location.host
     }/emustats/?${params.toString()}`;
+  } else if (pareto === PushStateEnum.EMULATORCHART) {
+    newurl = `${window.location.protocol}//${
+      window.location.host
+    }/emucharts/?${params.toString()}`;
   } else {
     newurl = `${window.location.protocol}//${
       window.location.host
