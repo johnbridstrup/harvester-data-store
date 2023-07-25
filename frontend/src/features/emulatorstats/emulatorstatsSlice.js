@@ -2,6 +2,11 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { invalidateCache } from "features/auth/authSlice";
 import emulatorstatsService from "./emulatorstatsService";
 import { paginateRequest } from "features/base/service";
+import {
+  transformEmustatSeries,
+  transformEmustatAggs,
+} from "components/emulatorstats/EmulatorstatsHelpers";
+import { uniqueValues } from "utils/utils";
 
 const initialState = {
   loading: false,
@@ -15,6 +20,10 @@ const initialState = {
     limit: 10,
     next: null,
     previous: null,
+  },
+  internal: {
+    emuplots: {},
+    emuseries: {},
   },
 };
 
@@ -85,7 +94,14 @@ export const getEmulatorstatsTags = createAsyncThunk(
 const emulatorstatsSlice = createSlice({
   name: "emulatorstats",
   initialState,
-  reducers: {},
+  reducers: {
+    scenePickerAndCalc: (state, action) => {
+      const date = action.payload;
+      const filtered = state.emustats.filter((x) => x.date === date);
+      state.internal.emuseries = transformEmustatSeries(filtered);
+      state.internal.emuseries.dates = uniqueValues("date", state.emustats);
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(queryEmulatorstats.pending, (state) => {
@@ -97,6 +113,14 @@ const emulatorstatsSlice = createSlice({
         state.pagination.next = action.payload.next;
         state.pagination.previous = action.payload.previous;
         state.emustats = action.payload.results;
+        state.internal.emuplots = transformEmustatAggs(action.payload.results);
+        state.internal.emuseries = transformEmustatSeries(
+          action.payload.results
+        );
+        state.internal.emuseries.dates = uniqueValues(
+          "date",
+          action.payload.results
+        );
       })
       .addCase(queryEmulatorstats.rejected, (state, action) => {
         state.loading = false;
@@ -122,6 +146,14 @@ const emulatorstatsSlice = createSlice({
         state.pagination.next = action.payload.next;
         state.pagination.previous = action.payload.previous;
         state.reports = action.payload.results;
+        state.internal.emuplots = transformEmustatAggs(action.payload.results);
+        state.internal.emuseries = transformEmustatSeries(
+          action.payload.results
+        );
+        state.internal.emuseries.dates = uniqueValues(
+          "date",
+          action.payload.results
+        );
       })
       .addCase(paginateEmulatorstats.rejected, (state, action) => {
         state.loading = false;
@@ -141,4 +173,5 @@ const emulatorstatsSlice = createSlice({
   },
 });
 
+export const { scenePickerAndCalc } = emulatorstatsSlice.actions;
 export default emulatorstatsSlice.reducer;

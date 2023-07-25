@@ -1502,3 +1502,13 @@ export const mapTraces = (aggregate, resultObj = {}) => {
   }
   return tracesArr;
 };
+
+/**
+ * Get unique values for the given array of objects
+ * @param {String} key
+ * @param {Array} data
+ * @returns
+ */
+export const uniqueValues = (key, data = []) => {
+  return [...new Set(data.map((item) => item[key]))];
+};
