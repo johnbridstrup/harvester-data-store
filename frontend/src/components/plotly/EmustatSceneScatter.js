@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 import Plotly from "react-plotly.js";
 import { useMediaQuery } from "react-responsive";
 
-function EmustatsSeries(props) {
+function EmustatSceneScatter(props) {
   const { ydata, ylabel, xdata, hovers, title, theme } = props;
   const paper_bgcolor = theme === "dark" ? "#343434" : "#fff";
   const plot_bgcolor = theme === "dark" ? "#343434" : "#fff";
@@ -50,7 +50,7 @@ function EmustatsSeries(props) {
   return <Plotly data={data} layout={layout} />;
 }
 
-EmustatsSeries.propTypes = {
+EmustatSceneScatter.propTypes = {
   ydata: PropTypes.array,
   xdata: PropTypes.array,
   hovers: PropTypes.array,
@@ -60,4 +60,4 @@ EmustatsSeries.propTypes = {
   theme: PropTypes.string,
 };
 
-export default EmustatsSeries;
+export default EmustatSceneScatter;

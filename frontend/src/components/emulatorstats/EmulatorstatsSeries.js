@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Select from "react-select";
 import { NavTabItem, NavTabSpan, NavTabs } from "components/styled";
-import EmustatSeries from "components/plotly/EmustatsSeries";
+import EmustatSceneScatter from "components/plotly/EmustatSceneScatter";
 import { scenePickerAndCalc } from "features/emulatorstats/emulatorstatsSlice";
 import { darkThemeClass, selectDarkStyles } from "utils/utils";
 
@@ -98,7 +98,7 @@ function EmulatorstatsSeries(props) {
         styles={customStyles}
       />
       {activetab === "pickRateVsReportTime" && (
-        <EmustatSeries
+        <EmustatSceneScatter
           ydata={picksPerHour}
           xdata={timeSeries}
           hovers={hoverInfo}
@@ -109,7 +109,7 @@ function EmulatorstatsSeries(props) {
       )}
 
       {activetab === "thoroughnessVsReportTime" && (
-        <EmustatSeries
+        <EmustatSceneScatter
           ydata={thoroughnessPercent}
           xdata={timeSeries}
           hovers={hoverInfo}
@@ -120,7 +120,7 @@ function EmulatorstatsSeries(props) {
       )}
 
       {activetab === "gripSuccessVsReportTime" && (
-        <EmustatSeries
+        <EmustatSceneScatter
           ydata={gripSuccessPercent}
           xdata={timeSeries}
           hovers={hoverInfo}
@@ -131,7 +131,7 @@ function EmulatorstatsSeries(props) {
       )}
 
       {activetab === "pickSuccessVsReportTime" && (
-        <EmustatSeries
+        <EmustatSceneScatter
           ydata={pickSessionPercent}
           xdata={timeSeries}
           hovers={hoverInfo}

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import EmustatsPlot from "components/plotly/EmustatsPlot";
+import WeeklyEmustatPlot from "components/plotly/WeeklyEmustatPlot";
 import { NavTabItem, NavTabSpan, NavTabs } from "components/styled";
 
 function EmulatorstatsChart(props) {
@@ -66,7 +66,7 @@ function EmulatorstatsChart(props) {
         </NavTabItem>
       </NavTabs>
       {activetab === "pickRateVsScene" && (
-        <EmustatsPlot
+        <WeeklyEmustatPlot
           traces={picksPerHour}
           theme={theme}
           title="Pick Rate vs Scene"
@@ -74,7 +74,7 @@ function EmulatorstatsChart(props) {
         />
       )}
       {activetab === "thoroughnessVsScene" && (
-        <EmustatsPlot
+        <WeeklyEmustatPlot
           traces={thoroughnessPercent}
           theme={theme}
           title="Thoroughness vs Scene"
@@ -82,7 +82,7 @@ function EmulatorstatsChart(props) {
         />
       )}
       {activetab === "gripSuccessVsScene" && (
-        <EmustatsPlot
+        <WeeklyEmustatPlot
           traces={gripSuccessPercent}
           theme={theme}
           title="Grip Success vs Scene"
@@ -90,7 +90,7 @@ function EmulatorstatsChart(props) {
         />
       )}
       {activetab === "pickSuccessVsScene" && (
-        <EmustatsPlot
+        <WeeklyEmustatPlot
           traces={pickSessionPercent}
           theme={theme}
           title="Pick Success vs Scene"
