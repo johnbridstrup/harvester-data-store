@@ -1,5 +1,6 @@
 import axios from "axios";
 import { CSRF_URL, OPENAPI_URL } from "./constants";
+import { urlProtocol } from "./utils";
 
 export const axiosService = {
   config: {
@@ -9,7 +10,8 @@ export const axiosService = {
     },
     credentials: "include",
   },
-  post: async function (url, token, data = {}) {
+  post: async function (urlInput, token, data = {}) {
+    let url = urlProtocol(urlInput)
     let csrftoken = localStorage.getItem("csrftoken");
     if (typeof token === "string" && token.length > 0) {
       this.config["headers"]["Authorization"] = `Token ${token}`;
@@ -18,14 +20,16 @@ export const axiosService = {
     const res = await axios.post(url, data, this.config);
     return res.data;
   },
-  get: async function (url, token) {
+  get: async function (urlInput, token) { 
+    let url = urlProtocol(urlInput)
     if (typeof token === "string" && token.length > 0) {
       this.config["headers"]["Authorization"] = `Token ${token}`;
     }
     const res = await axios.get(url, this.config);
     return res.data.data;
   },
-  put: async function (url, token, data = {}) {
+  put: async function (urlInput, token, data = {}) {
+    let url = urlProtocol(urlInput)
     let csrftoken = localStorage.getItem("csrftoken");
     if (typeof token === "string" && token.length > 0) {
       this.config["headers"]["Authorization"] = `Token ${token}`;
@@ -34,7 +38,8 @@ export const axiosService = {
     const res = await axios.put(url, data, this.config);
     return res.data;
   },
-  patch: async function (url, token, data = {}) {
+  patch: async function (urlInput, token, data = {}) {
+    let url = urlProtocol(urlInput)
     let csrftoken = localStorage.getItem("csrftoken");
     if (typeof token === "string" && token.length > 0) {
       this.config["headers"]["Authorization"] = `Token ${token}`;
@@ -43,14 +48,16 @@ export const axiosService = {
     const res = await axios.patch(url, data, this.config);
     return res.data;
   },
-  delete: async function (url, token) {
+  delete: async function (urlInput, token) {
+    let url = urlProtocol(urlInput)
     if (typeof token === "string" && token.length > 0) {
       this.config["headers"]["Authorization"] = `Token ${token}`;
     }
     const res = await axios.delete(url, this.config);
     return res.data;
   },
-  upload: async function (url, token, data = {}) {
+  upload: async function (urlInput, token, data = {}) {
+    let url = urlProtocol(urlInput)
     let csrftoken = localStorage.getItem("csrftoken");
     if (typeof token === "string" && token.length > 0) {
       this.config["headers"]["Authorization"] = `Token ${token}`;
@@ -60,7 +67,8 @@ export const axiosService = {
     const res = await axios.post(url, data, this.config);
     return res.data;
   },
-  openapi: async function (url, token) {
+  openapi: async function (urlInput, token) {
+    let url = urlProtocol(urlInput)
     delete this.config["headers"]["Accept"];
     if (typeof token === "string" && token.length > 0) {
       this.config["headers"]["Authorization"] = `Token ${token}`;
