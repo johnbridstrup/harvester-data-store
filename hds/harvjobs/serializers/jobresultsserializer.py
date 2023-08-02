@@ -34,7 +34,7 @@ class JobResultsSerializer(EventSerializerMixin, ReportSerializerBase):
             event = self.get_or_create_event(UUID, creator, JobResults.__name__)
 
         data.update({
-            "job": job.id,
+            "job": job.id if job else None,
             "event": event.id,
         })
         return super().to_internal_value(data)
