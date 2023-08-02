@@ -11,7 +11,7 @@ export const axiosService = {
     credentials: "include",
   },
   post: async function (urlInput, token, data = {}) {
-    let url = urlProtocol(urlInput)
+    let url = urlProtocol(urlInput);
     let csrftoken = localStorage.getItem("csrftoken");
     if (typeof token === "string" && token.length > 0) {
       this.config["headers"]["Authorization"] = `Token ${token}`;
@@ -20,8 +20,8 @@ export const axiosService = {
     const res = await axios.post(url, data, this.config);
     return res.data;
   },
-  get: async function (urlInput, token) { 
-    let url = urlProtocol(urlInput)
+  get: async function (urlInput, token) {
+    let url = urlProtocol(urlInput);
     if (typeof token === "string" && token.length > 0) {
       this.config["headers"]["Authorization"] = `Token ${token}`;
     }
@@ -29,7 +29,7 @@ export const axiosService = {
     return res.data.data;
   },
   put: async function (urlInput, token, data = {}) {
-    let url = urlProtocol(urlInput)
+    let url = urlProtocol(urlInput);
     let csrftoken = localStorage.getItem("csrftoken");
     if (typeof token === "string" && token.length > 0) {
       this.config["headers"]["Authorization"] = `Token ${token}`;
@@ -39,7 +39,7 @@ export const axiosService = {
     return res.data;
   },
   patch: async function (urlInput, token, data = {}) {
-    let url = urlProtocol(urlInput)
+    let url = urlProtocol(urlInput);
     let csrftoken = localStorage.getItem("csrftoken");
     if (typeof token === "string" && token.length > 0) {
       this.config["headers"]["Authorization"] = `Token ${token}`;
@@ -49,7 +49,7 @@ export const axiosService = {
     return res.data;
   },
   delete: async function (urlInput, token) {
-    let url = urlProtocol(urlInput)
+    let url = urlProtocol(urlInput);
     if (typeof token === "string" && token.length > 0) {
       this.config["headers"]["Authorization"] = `Token ${token}`;
     }
@@ -57,7 +57,7 @@ export const axiosService = {
     return res.data;
   },
   upload: async function (urlInput, token, data = {}) {
-    let url = urlProtocol(urlInput)
+    let url = urlProtocol(urlInput);
     let csrftoken = localStorage.getItem("csrftoken");
     if (typeof token === "string" && token.length > 0) {
       this.config["headers"]["Authorization"] = `Token ${token}`;
@@ -68,7 +68,7 @@ export const axiosService = {
     return res.data;
   },
   openapi: async function (urlInput, token) {
-    let url = urlProtocol(urlInput)
+    let url = urlProtocol(urlInput);
     delete this.config["headers"]["Accept"];
     if (typeof token === "string" && token.length > 0) {
       this.config["headers"]["Authorization"] = `Token ${token}`;
