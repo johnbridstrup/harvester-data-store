@@ -39,6 +39,7 @@ class JobView(CreateModelViewSet):
         },
     }
     action_serializers = {
+        "list": JobDetailSerializer,
         "retrieve": JobDetailSerializer
     }
 
