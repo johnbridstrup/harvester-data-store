@@ -8,11 +8,13 @@ import { RightButtonGroup, JobStatusHistory } from "../helpers";
 import { handleDownload } from "utils/services";
 import DownloadModal from "components/modals/DownloadModal";
 import ConfirmModal from "components/modals/ConfirmModal";
+import PayloadModal from "components/modals/PayloadModal";
 import { rescheduleJob } from "features/harvjobs/harvjobSlice";
 import { SUCCESS } from "features/base/constants";
 
 function DetailJob(props) {
   const [scheduling, setScheduling] = useState(false);
+  const [payload, setPayload] = useState(null);
   const { job, jobresults, jobstatuses } = useSelector(
     (state) => state.harvjobs
   );
@@ -21,6 +23,7 @@ function DetailJob(props) {
   const dispatch = useDispatch();
   const downloadRef = useRef(null);
   const confirmRef = useRef(null);
+  const payloadRef = useRef(null);
 
   const downloadPopUp = () => {
     downloadRef.current.click();
@@ -32,6 +35,11 @@ function DetailJob(props) {
 
   const confirmPopUp = () => {
     confirmRef.current.click();
+  };
+
+  const handleClick = (obj) => {
+    setPayload(obj);
+    payloadRef.current.click();
   };
 
   const handleReschedule = async () => {
@@ -67,16 +75,31 @@ function DetailJob(props) {
               <div>{job.id}</div>
             </div>
             <div className="col-md-3 mb-2">
-              <div className="f-w-600">Targets</div>
-              <div>{job.payload?.targets?.join(", ")}</div>
+              <div className="f-w-600">Payload</div>
+              <div>
+                <button
+                  className="btn btn-sm"
+                  onClick={() => handleClick(job.payload)}
+                >
+                  View
+                </button>{" "}
+                <button
+                  ref={payloadRef}
+                  data-bs-toggle="modal"
+                  data-bs-target="#payloadModal"
+                  style={{ display: "none" }}
+                >
+                  View
+                </button>
+              </div>
             </div>
             <div className="col-md-3 mb-2">
               <div className="f-w-600">Job Type</div>
-              <div>{job.payload?.job_type}</div>
+              <div>{job.schema?.jobtype}</div>
             </div>
             <div className="col-md-3 mb-2">
-              <div className="f-w-600">Timeout</div>
-              <div>{job.payload?.timeout}</div>
+              <div className="f-w-600">Schema Version</div>
+              <div>{job.schema?.version}</div>
             </div>
             <div className="col-md-3 mb-2">
               <div className="f-w-600">Status</div>
@@ -170,6 +193,7 @@ function DetailJob(props) {
         loading={scheduling}
         theme={theme}
       />
+      <PayloadModal payload={payload} theme={theme} />
     </>
   );
 }

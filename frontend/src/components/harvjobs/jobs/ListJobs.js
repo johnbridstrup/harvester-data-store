@@ -1,13 +1,23 @@
 import moment from "moment";
+import { useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { darkThemeClass, getHarvId, getUrl, Loader } from "utils/utils";
 import { LoaderDiv } from "components/styled";
+import PayloadModal from "components/modals/PayloadModal";
 
 function ListJobs(props) {
   const { jobs, loading } = useSelector((state) => state.harvjobs);
   const { theme } = useSelector((state) => state.home);
+  const [payload, setPayload] = useState(null);
+  const payloadRef = useRef(null);
   const tabledt = darkThemeClass("dt-table", theme);
+
+  const handleClick = (obj) => {
+    setPayload(obj);
+    payloadRef.current.click();
+  };
+
   return (
     <>
       {loading ? (
@@ -20,13 +30,13 @@ function ListJobs(props) {
             <thead>
               <tr>
                 <th>ID</th>
-                <th>Targets</th>
                 <th>JobType</th>
-                <th>Timeout</th>
+                <th>Schema</th>
                 <th>Status</th>
                 <th>Target</th>
                 <th>Results</th>
                 <th>History</th>
+                <th>Payload</th>
                 <th>Created At</th>
                 <th>Updated At</th>
               </tr>
@@ -37,9 +47,9 @@ function ListJobs(props) {
                   <td>
                     <Link to={`/jobs/${job.id}`}>{job.id}</Link>
                   </td>
-                  <td>{job.payload.targets?.join(", ")}</td>
-                  <td>{job.payload.job_type}</td>
-                  <td>{job.payload.timeout}</td>
+
+                  <td>{job.schema?.jobtype}</td>
+                  <td>{job.schema?.version}</td>
                   <td
                     className={`${
                       job.jobstatus === "Success"
@@ -62,6 +72,22 @@ function ListJobs(props) {
                       <i className="las la-eye"></i>
                     </Link>
                   </td>
+                  <td>
+                    <button
+                      className="btn btn-sm"
+                      onClick={() => handleClick(job.payload)}
+                    >
+                      View Payload
+                    </button>{" "}
+                    <button
+                      ref={payloadRef}
+                      data-bs-toggle="modal"
+                      data-bs-target="#payloadModal"
+                      style={{ display: "none" }}
+                    >
+                      View Payload
+                    </button>
+                  </td>
                   <td>{moment(job.created).format("LLLL")}</td>
                   <td>{moment(job.lastModified).format("LLLL")}</td>
                 </tr>
@@ -70,6 +96,8 @@ function ListJobs(props) {
           </table>
         </div>
       )}
+
+      <PayloadModal payload={payload} />
     </>
   );
 }

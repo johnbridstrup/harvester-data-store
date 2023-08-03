@@ -1,20 +1,29 @@
 import moment from "moment";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import VSCodeEditor from "@monaco-editor/react";
 import { NavTabSpan, NavTabs, NavTabItem } from "components/styled";
+import PayloadModal from "components/modals/PayloadModal";
 import { darkThemeClass, getHarvId, getUrl, monacoOptions } from "utils/utils";
 import { THEME_MODES } from "features/base/constants";
 
 function DetailScheduledJob(props) {
   const [activetab, setActiveTab] = useState("clocked");
+  const [payload, setPayload] = useState(null);
   const { scheduledjob } = useSelector((state) => state.jobscheduler);
   const { theme } = useSelector((state) => state.home);
+  const payloadRef = useRef(null);
+
   const tabledt = darkThemeClass("dt-table", theme);
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
+  };
+
+  const handleClick = (obj) => {
+    setPayload(obj);
+    payloadRef.current.click();
   };
 
   return (
@@ -209,9 +218,9 @@ function DetailScheduledJob(props) {
           <thead>
             <tr>
               <th>ID</th>
-              <th>Targets</th>
+              <th>Payload</th>
               <th>JobType</th>
-              <th>Timeout</th>
+              <th>Schema Version</th>
               <th>Status</th>
               <th>Target</th>
               <th>Results</th>
@@ -226,9 +235,24 @@ function DetailScheduledJob(props) {
                 <td>
                   <Link to={`/jobs/${job.id}`}>{job.id}</Link>
                 </td>
-                <td>{job.payload.targets?.join(", ")}</td>
-                <td>{job.payload.job_type}</td>
-                <td>{job.payload.timeout}</td>
+                <td>
+                  <button
+                    className="btn btn-sm"
+                    onClick={() => handleClick(job.payload)}
+                  >
+                    View Payload
+                  </button>{" "}
+                  <button
+                    ref={payloadRef}
+                    data-bs-toggle="modal"
+                    data-bs-target="#payloadModal"
+                    style={{ display: "none" }}
+                  >
+                    View Payload
+                  </button>
+                </td>
+                <td>{job.schema?.jobtype}</td>
+                <td>{job.schema?.version}</td>
                 <td
                   className={`${
                     job.jobstatus === "Success"
@@ -258,6 +282,7 @@ function DetailScheduledJob(props) {
           </tbody>
         </table>
       </div>
+      <PayloadModal payload={payload} theme={theme} />
     </>
   );
 }
