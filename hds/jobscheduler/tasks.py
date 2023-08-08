@@ -38,6 +38,7 @@ def run_scheduled_job(sched_job_id):
         event.save()
         job_obj["event"] = event
         job_obj["payload"]["id"] = event.UUID
+        job_obj["payload"]["job_type"] = schema.jobtype.name
         job = Job(**job_obj)
         job.save()
         schedule_job.delay(job.id, harv.id, sched_job.creator.id)
