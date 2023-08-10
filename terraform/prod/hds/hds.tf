@@ -5,7 +5,7 @@ locals {
   frontend_url             = "https://hds.cloud.advanced.farm"
   service_port             = "8000"
   service_name             = "hds"
-  service_docker_image     = "838860823423.dkr.ecr.us-west-1.amazonaws.com/hds:hds-staging-ee7f8dc"
+  service_docker_image     = "838860823423.dkr.ecr.us-west-1.amazonaws.com/hds:hds-staging-589aa88"
   healthcheck_path         = "/api/v1/healthcheck/"
   silk_profiling           = "false"
   silk_cprofile            = "false"
