@@ -948,6 +948,12 @@ export const buildQueryObj = (
   if (fieldData.primary) {
     queryObj["primary"] = fieldData.primary;
   }
+  if (fieldData.start_hour) {
+    queryObj["start_hour"] = fieldData.start_hour;
+  }
+  if (fieldData.end_hour) {
+    queryObj["end_hour"] = fieldData.end_hour;
+  }
   return queryObj;
 };
 
@@ -1078,6 +1084,16 @@ export const mapParamsObject = (
     const groups = paramsObj.group_by.split(",");
     const newGroup = aggregateOptions.filter((x) => groups.includes(x.value));
     setSelectedAggregate((current) => newGroup);
+  }
+  if (paramsObj.start_hour) {
+    setFieldData((current) => {
+      return { ...current, start_hour: paramsObj.start_hour };
+    });
+  }
+  if (paramsObj.end_hour) {
+    setFieldData((current) => {
+      return { ...current, end_hour: paramsObj.end_hour };
+    });
   }
 };
 
