@@ -1,3 +1,5 @@
+import datetime
+
 from django_filters import rest_framework as filters
 from django_filters import Filter
 
@@ -124,6 +126,24 @@ class CommonInfoFilterset(filters.FilterSet):
             filter_dict["exceptions__code__code__in"] = codes
         filter_dict.update({name: value})
 
+        return queryset.filter(**filter_dict)
+
+    def filter_time_of_day(self, queryset, name, value):
+        """
+        Filters out errorreport that occur at given time intervals hours
+        e.g 3AM and 2PM
+        """
+        start_hour = self.request.query_params.get("start_hour", None)
+        end_hour = self.request.query_params.get("end_hour", None)
+        filter_dict = {}
+
+        # Create time objects for start hour
+        if start_hour:
+            start_hour = datetime.time(*DTimeFormatter.parse_time(start_hour))
+            filter_dict.update({ f'{name}__time__gte': start_hour })
+        if end_hour:
+            end_hour = datetime.time(*DTimeFormatter.parse_time(end_hour))
+            filter_dict.update({f'{name}__time__lte': end_hour})
         return queryset.filter(**filter_dict)
 
 

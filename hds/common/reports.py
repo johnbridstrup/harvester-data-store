@@ -36,7 +36,7 @@ class DTimeFormatter:
         fmt = '%Y-%m-%dT%H:%M:%S.%fZ'
         dt = cls.from_timestamp(ts)
         return dt.strftime(fmt)
-    
+
     @classmethod
     def fill_dt_with_zeros(cls, dt_str):
         """Fill with zeros if not all YYYYMMDDHHmmss are present"""
@@ -54,10 +54,10 @@ class DTimeFormatter:
                 return tz.localize(dt)
         except ValueError:
             pass
-        
+
         if format:
             return tz.localize(datetime.strptime(dt_str, format))
-        
+
         try:
             dt_str = cls.fill_dt_with_zeros(dt_str)
             return tz.localize(datetime.strptime(dt_str, LOG_TIMESTAMP_FMT))
@@ -83,3 +83,16 @@ class DTimeFormatter:
             DEFAULT_TZ
         )).strftime('%Y%m%dT%H%M%S.%f')
         return date_str
+
+    @classmethod
+    def parse_time(cls, time_str: str):
+        """
+        Parse time to individual entries e.g given "14:00" or "1400"
+        should return (14, 0) for time object construct
+        """
+        if ":" in time_str:
+            return [int(t) for t in time_str.split(":")]
+        elif len(time_str) == 4:
+            return [int(time_str[:2]), int(time_str[2:])]
+        else:
+            return [0, 0]

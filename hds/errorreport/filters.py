@@ -13,6 +13,8 @@ class ErrorReportFilterset(ReportFilterset):
     handled = filters.BooleanFilter(field_name="exceptions__handled")
     codes = ListFilter(field_type=int, field_name="exceptions__code__code")
     primary = filters.BooleanFilter(field_name="exceptions__primary", method="filter_primary_exception")
+    start_hour = DTimeFilter("reportTime", method="filter_time_of_day")
+    end_hour = DTimeFilter("reportTime", method="filter_time_of_day")
     generic = GenericFilter()
     uuid = EventUUIDFilter()
 
