@@ -214,3 +214,10 @@ export const Accordion = styled.div`
   transition: 0.5s;
   margin-bottom: 10px;
 `;
+
+export const QueryAccordion = styled.div`
+  position: relative;
+  height: ${(props) => (props.open === true ? "100px" : "0")};
+  transition: 0.5s;
+  margin-bottom: 10px;
+`;

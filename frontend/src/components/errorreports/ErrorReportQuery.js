@@ -42,6 +42,8 @@ function ErrorReportQuery(props) {
   const [fieldData, setFieldData] = useState({
     start_time: "",
     end_time: "",
+    start_hour: "",
+    end_hour: "",
     traceback: "",
     generic: "",
     is_emulator: "0",

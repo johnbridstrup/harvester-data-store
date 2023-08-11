@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import Select from "react-select";
-import { InputFormControl } from "../styled";
+import { InputFormControl, QueryAccordion } from "../styled";
 import {
   aggregateOptions,
   darkThemeClass,
@@ -673,13 +673,70 @@ export const GenericFormField = (props) => {
   );
 };
 
+export const AdvancedQueryField = ({
+  fieldData,
+  handleFieldChange,
+  theme,
+  queryToggle,
+  handleQueryToggle,
+}) => {
+  return (
+    <>
+      <span className="btn btn-sm btn-default mb-3" onClick={handleQueryToggle}>
+        {queryToggle ? "Hide" : "Show"} Advanced Query Options{" "}
+        <i className="las la-question-circle la-2x"></i>
+      </span>
+      <QueryAccordion open={queryToggle}>
+        {queryToggle && (
+          <div className="row">
+            <div className="col-md-6">
+              <label htmlFor="start_hour">Start Hour</label>
+              <InputFormControl
+                type="time"
+                name="start_hour"
+                id="start_hour"
+                value={fieldData?.start_hour}
+                onChange={handleFieldChange}
+                theme={theme}
+              />
+            </div>
+            <div className="col-md-6">
+              <label htmlFor="end_hour">End Hour</label>
+              <InputFormControl
+                type="time"
+                name="end_hour"
+                id="end_hour"
+                value={fieldData?.end_hour}
+                onChange={handleFieldChange}
+                theme={theme}
+              />
+            </div>
+          </div>
+        )}
+      </QueryAccordion>
+    </>
+  );
+};
+
 export const ParetoForm = (props) => {
+  const [queryToggle, setQueryToggle] = useState(false);
+  const handleQueryToggle = () => {
+    setQueryToggle((current) => !current);
+  };
+  const { fieldData, handleFieldChange, theme } = props;
   const dark = darkThemeClass("dark-theme", props.theme);
   const customStyles = dark ? selectDarkStyles : {};
   return (
     <div className="mb-4">
       <form onSubmit={props.handleSubmit} data-testid="query-form">
         <GenericFormField {...props} />
+        <AdvancedQueryField
+          fieldData={fieldData}
+          handleFieldChange={handleFieldChange}
+          handleQueryToggle={handleQueryToggle}
+          queryToggle={queryToggle}
+          theme={theme}
+        />
         <div className="row mb-3">
           <div className="col">
             <div className="form-group">
@@ -713,15 +770,29 @@ export const ParetoForm = (props) => {
 };
 
 export const FormQuery = (props) => {
+  const [queryToggle, setQueryToggle] = useState(false);
+  const handleQueryToggle = () => {
+    setQueryToggle((current) => !current);
+  };
   const {
     handleFormQuerySubmit,
     handleGenPareto,
     handleModalPopUp,
     notifyRef,
+    fieldData,
+    handleFieldChange,
+    theme,
   } = props;
   return (
     <form onSubmit={handleFormQuerySubmit} data-testid="query-form">
       <GenericFormField {...props} />
+      <AdvancedQueryField
+        fieldData={fieldData}
+        handleFieldChange={handleFieldChange}
+        handleQueryToggle={handleQueryToggle}
+        queryToggle={queryToggle}
+        theme={theme}
+      />
       <div className="form-group">
         <button type="submit" className="btn btn-primary btn-md">
           Submit
@@ -898,4 +969,12 @@ GenericLabel.propTypes = {
   field: PropTypes.string,
   extras: PropTypes.object,
   theme: PropTypes.string,
+};
+
+AdvancedQueryField.propTypes = {
+  theme: PropTypes.string,
+  queryToggle: PropTypes.bool,
+  fieldData: PropTypes.object,
+  handleFieldChange: PropTypes.func,
+  handleQueryToggle: PropTypes.func,
 };
