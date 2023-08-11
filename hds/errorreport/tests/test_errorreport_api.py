@@ -734,3 +734,87 @@ class ErrorReportAPITest(HDSAPITestBase):
             f'{self.error_url}?{urlencode(fruit_dict)}'
         )
         self.assertEqual(resp.json()['data']['count'], 0)
+
+    def test_filter_for_time_of_day(self):
+        self.post_error_report()
+        self.load_error_report()
+        ts = datetime.datetime(2023, 8, 1, 13, 0, 0).timestamp()
+        self.data["timestamp"] = ts
+        self.post_error_report(load=False)
+        ts = datetime.datetime(2023, 8, 7, 17, 0, 0).timestamp()
+        self.data["timestamp"] = ts
+        self.post_error_report(load=False)
+        ts = datetime.datetime(2023, 8, 15, 18, 0, 0).timestamp()
+        self.data["timestamp"] = ts
+        self.post_error_report(load=False)
+
+        # filter for errors that occured btw May 1 and May 30
+        # for time range between 8PM and 10PM
+        # should return 1 report
+        filter_dict = {
+            'start_time': '2022-05-01',
+            'end_time': '2022-05-30',
+            'start_hour': '20:00',
+            'end_hour': '22:00',
+        }
+        resp = self.client.get(
+            f'{self.error_url}?{urlencode(filter_dict)}'
+        )
+        self.assertEqual(resp.json()['data']['count'], 1)
+
+        # filter for errors that occured btw May 1 and May 2
+        # for time range between 8PM and 10PM
+        # should return 0 reports
+        filter_dict = {
+            'start_time': '2022-05-01',
+            'end_time': '2022-05-02',
+            'start_hour': '20:00',
+            'end_hour': '22:00',
+        }
+        resp = self.client.get(
+            f'{self.error_url}?{urlencode(filter_dict)}'
+        )
+        self.assertEqual(resp.json()['data']['count'], 0)
+
+        # filter for errors that occured btw May 1 and May 30
+        # for time range between 5AM and 8AM
+        # should return 0 reports
+        filter_dict = {
+            'start_time': '2022-05-01',
+            'end_time': '2022-05-02',
+            'start_hour': '05:00',
+            'end_hour': '08:00',
+        }
+        resp = self.client.get(
+            f'{self.error_url}?{urlencode(filter_dict)}'
+        )
+        self.assertEqual(resp.json()['data']['count'], 0)
+
+        # filter for errors that occured btw Aug 1 and Aug 7
+        # for time range between 1PM and 5PM
+        # should return 2 reports
+        filter_dict = {
+            'start_time': '2023-08-01',
+            'end_time': '2023-08-08',
+            'start_hour': '13:00',
+            'end_hour': '17:00',
+        }
+        resp = self.client.get(
+            f'{self.error_url}?{urlencode(filter_dict)}'
+        )
+        self.assertEqual(resp.json()['data']['count'], 2)
+
+        # filter for errors that occured btw Aug 15 and Aug 17
+        # for time range between 5PM and 8PM
+        # should return 1 reports
+        filter_dict = {
+            'start_time': '2023-08-15',
+            'end_time': '2023-08-17',
+            'start_hour': '17:00',
+            'end_hour': '19:00',
+        }
+        resp = self.client.get(
+            f'{self.error_url}?{urlencode(filter_dict)}'
+        )
+        self.assertEqual(resp.json()['data']['count'], 1)
+
