@@ -92,6 +92,8 @@ function ErrorReportDetail(props) {
   const [fieldData, setFieldData] = useState({
     start_time: "",
     end_time: "",
+    start_hour: "",
+    end_hour: "",
     traceback: "",
     generic: "",
     is_emulator: "0",
@@ -196,7 +198,8 @@ function ErrorReportDetail(props) {
       setSelectedFruit,
       setSelectedCode,
       setFieldData,
-      setSelectedTimezone
+      setSelectedTimezone,
+      () => {}
     );
     createNotifRef.current.click();
     await Promise.all([

@@ -1,11 +1,9 @@
 import PropTypes from "prop-types";
-import Select from "react-select";
-import { GenericFormField } from "../errorreports/ErrorHelpers";
-import { darkThemeClass, selectDarkStyles } from "utils/utils";
+import { ModalForm } from "../errorreports/ErrorHelpers";
+import { darkThemeClass } from "utils/utils";
 
 function CreateNotifModal(props) {
   const modal = darkThemeClass("dt-modal-content", props.theme);
-  const customStyles = modal ? selectDarkStyles : {};
   return (
     <div className="col-md-8">
       <div
@@ -39,31 +37,7 @@ function CreateNotifModal(props) {
             </div>
 
             <div className="modal-body px-5 pb-4">
-              <GenericFormField {...props} />
-              <div className="form-group">
-                <label htmlFor="recipients">Select Recipients</label>
-                <Select
-                  isMulti
-                  isSearchable
-                  placeholder="aft, noaft, ..."
-                  options={props.usersOptions}
-                  name="recipients"
-                  onChange={props.handleRecipientSelect}
-                  defaultValue={props.selectedRecipient}
-                  value={props.selectedRecipient}
-                  className="multi-select-container"
-                  classNamePrefix="select"
-                  styles={customStyles}
-                />
-              </div>
-              <div className="form-group text-center mt-4 mb-4">
-                <button
-                  onClick={props.handleSubmit}
-                  className="btn btn-primary"
-                >
-                  CREATE
-                </button>
-              </div>
+              <ModalForm {...props} />
             </div>
           </div>
         </div>

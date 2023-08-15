@@ -10,6 +10,7 @@ import {
   imagePath,
 } from "utils/utils";
 import useClickOutside from "hooks/clickOutSide";
+import { THEME_MODES } from "features/base/constants";
 
 export const HoverTabular = (props) => {
   const bg = darkThemeClass("bg-dark", props.theme);
@@ -858,6 +859,48 @@ export const RightButtonGroup = (props) => {
   );
 };
 
+export const ModalForm = (props) => {
+  const [queryToggle, setQueryToggle] = useState(false);
+  const handleQueryToggle = () => {
+    setQueryToggle((current) => !current);
+  };
+  const { fieldData, handleFieldChange, theme } = props;
+  const customStyles = theme === THEME_MODES.DARK_THEME ? selectDarkStyles : {};
+  return (
+    <>
+      <GenericFormField {...props} />
+      <AdvancedQueryField
+        fieldData={fieldData}
+        handleFieldChange={handleFieldChange}
+        handleQueryToggle={handleQueryToggle}
+        queryToggle={queryToggle}
+        theme={theme}
+      />
+      <div className="form-group">
+        <label htmlFor="recipients">Select Recipients</label>
+        <Select
+          isMulti
+          isSearchable
+          placeholder="aft, noaft, ..."
+          options={props.usersOptions}
+          name="recipients"
+          onChange={props.handleRecipientSelect}
+          defaultValue={props.selectedRecipient}
+          value={props.selectedRecipient}
+          className="multi-select-container"
+          classNamePrefix="select"
+          styles={customStyles}
+        />
+      </div>
+      <div className="form-group text-center mt-4 mb-4">
+        <button onClick={props.handleSubmit} className="btn btn-primary">
+          CREATE
+        </button>
+      </div>
+    </>
+  );
+};
+
 HoverTabular.propTypes = {
   hoverObj: PropTypes.object,
   theme: PropTypes.string,
@@ -977,4 +1020,29 @@ AdvancedQueryField.propTypes = {
   fieldData: PropTypes.object,
   handleFieldChange: PropTypes.func,
   handleQueryToggle: PropTypes.func,
+};
+
+ModalForm.propTypes = {
+  usersOptions: PropTypes.array,
+  handleRecipientSelect: PropTypes.func,
+  selectedRecipient: PropTypes.array,
+  handleSubmit: PropTypes.func,
+  harvesterOptions: PropTypes.array,
+  handleHarvestSelect: PropTypes.func,
+  selectedHarvId: PropTypes.array,
+  locationOptions: PropTypes.array,
+  handleLocationSelect: PropTypes.func,
+  selectedLocation: PropTypes.array,
+  fruitOptions: PropTypes.array,
+  handleFruitSelect: PropTypes.func,
+  selectedFruit: PropTypes.array,
+  codeOptions: PropTypes.array,
+  handleCodeSelect: PropTypes.func,
+  selectedCode: PropTypes.array,
+  timezoneOptions: PropTypes.array,
+  handleTimezoneSelect: PropTypes.func,
+  selectedTimezone: PropTypes.object,
+  fieldData: PropTypes.object,
+  handleFieldChange: PropTypes.func,
+  theme: PropTypes.string,
 };
