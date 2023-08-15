@@ -452,11 +452,12 @@ export const transformErroredServices = (errors = []) => {
 };
 
 /**
- *
+ * Construct the new URL for the history methods
  * @param {object} queryObj
  * @param {String} pareto
+ * @returns
  */
-export const pushState = (queryObj, pareto = undefined) => {
+const buildNewURL = (queryObj = {}, pareto = undefined) => {
   let newurl;
   let params = new URLSearchParams(queryObj);
   if (pareto === PushStateEnum.GENPARETO) {
@@ -504,7 +505,46 @@ export const pushState = (queryObj, pareto = undefined) => {
       window.location.host
     }/errorreports/?${params.toString()}`;
   }
-  window.history.pushState({ path: newurl }, "", newurl);
+  return newurl;
+};
+
+/**
+ * The `History.pushState()` method adds an entry to the
+ * browser's session history stack. This method is asynchronous.
+ *
+ * @description Note that the browser won't attempt to load
+ * the new history entry's URL after a call to pushState(),
+ * but it may attempt to load the URL later, for instance,
+ * after the user restarts the browser. The new URL does not
+ * need to be absolute; if it's relative, it's resolved relative
+ * to the current URL. The new URL must be of the same origin
+ * as the current URL; otherwise, pushState() will throw an
+ * exception. If this parameter isn't specified, it's set to the
+ * document's current URL.
+ * @param {object} queryObj
+ * @param {String} pareto
+ */
+export const pushState = (queryObj = {}, pareto = undefined) => {
+  let newurl = buildNewURL(queryObj, pareto);
+  window.history.pushState({}, "", newurl);
+};
+
+/**
+ * The `History.replaceState()` method modifies the current
+ * history entry, replacing it with the state object and URL
+ * passed in the method parameters. This method is particularly
+ * useful when you want to update the state object or URL of
+ * the current history entry in response to some user action.
+ *
+ * @description Note that the URL of the history entry must be
+ * of the same origin as the current URL; otherwise replaceState
+ * throws an exception.
+ * @param {object} queryObj
+ * @param {String} pareto
+ */
+export const replaceState = (queryObj = {}, pareto = undefined) => {
+  let newurl = buildNewURL(queryObj, pareto);
+  window.history.replaceState({}, "", newurl);
 };
 
 export const aggregateOptions = [

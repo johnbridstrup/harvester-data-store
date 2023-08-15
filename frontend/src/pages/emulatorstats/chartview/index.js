@@ -53,6 +53,12 @@ function EmulatorstatsChartView(props) {
           mb={"mb-4"}
           paramsObj={paramsToObject(search)}
         />
+        <EmulatorstatsQuery view="chartview" />
+        <SelectChart
+          chartOptions={chartOptions}
+          handleChartSelect={handleChartSelect}
+          selectedChart={selectedChart}
+        />
 
         {loading ? (
           <LoaderDiv>
@@ -60,12 +66,6 @@ function EmulatorstatsChartView(props) {
           </LoaderDiv>
         ) : (
           <>
-            <EmulatorstatsQuery view="chartview" />
-            <SelectChart
-              chartOptions={chartOptions}
-              handleChartSelect={handleChartSelect}
-              selectedChart={selectedChart}
-            />
             {selectedChart && selectedChart.value === "Time Series Chart" ? (
               <EmulatorstatsSeries />
             ) : (

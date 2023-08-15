@@ -8,7 +8,7 @@ import {
   extractDateFromString,
   handleSelectFactory,
   paramsToObject,
-  pushState,
+  replaceState,
   selectDarkStyles,
   timeStampFormat,
   transformTagsOptions,
@@ -122,16 +122,16 @@ function EmulatorstatsQuery(props) {
     const queryObj = buildQueryObj();
     dispatch(queryEmulatorstats(queryObj));
     if (props.view === EMULATORREPORT.listview) {
-      pushState(queryObj, PushStateEnum.EMULATORSTATS);
+      replaceState(queryObj, PushStateEnum.EMULATORSTATS);
     } else if (props.view === EMULATORREPORT.chartview) {
-      pushState(queryObj, PushStateEnum.EMULATORCHART);
+      replaceState(queryObj, PushStateEnum.EMULATORCHART);
     }
   };
 
   const handleEmustatsChart = () => {
     const queryObj = buildQueryObj();
     const params = new URLSearchParams(queryObj);
-    let url = `/emucharts?${params.toString()}`;
+    let url = `/emucharts/?${params.toString()}`;
     navigate(url);
   };
 
