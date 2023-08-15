@@ -111,7 +111,7 @@ export const transformEmustatAggs = (emustats = []) => {
 
   const weekStr = (dateStr, weekStart = 3) => {
     let mom = moment(dateStr);
-    let dayOfWeekMod = mom.day() + ((7 - weekStart) % 7);
+    let dayOfWeekMod = (mom.day() + (7 - weekStart)) % 7;
 
     const grpDate = mom.subtract(dayOfWeekMod, "days");
     return grpDate.format("YYYY-MM-DD");
