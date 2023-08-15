@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 import MainLayout from "components/layout/main";
 import Header from "components/layout/header";
-import { BackButton } from "components/common";
+import { CustomBackButton } from "components/common";
 import { LoaderDiv } from "components/styled";
 import { Loader, handleSelectFactory, paramsToObject } from "utils/utils";
 import {
@@ -47,7 +47,12 @@ function EmulatorstatsChartView(props) {
           title={"HDS Emulator Stats Chart"}
           className={"display-6 mt-4 mb-4"}
         />
-        <BackButton theme={theme} mb={"mb-4"} />
+        <CustomBackButton
+          routeTo="emustats"
+          theme={theme}
+          mb={"mb-4"}
+          paramsObj={paramsToObject(search)}
+        />
 
         {loading ? (
           <LoaderDiv>
