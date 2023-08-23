@@ -27,8 +27,8 @@ class EmustatsReport(PickSessionModelMixin, ReportBase):
     rmse_localization_mm = models.FloatField()
 
     num_fruit_collisions = models.IntegerField()
-    num_leaf_collisions = models.IntegerField()
-    num_bed_collisions = models.IntegerField()
+    num_leaf_collisions = models.IntegerField(null=True, blank=True)
+    num_bed_collisions = models.IntegerField(null=True, blank=True)
 
     num_pick_cands = models.IntegerField()
     num_no_pick_cands = models.IntegerField()
