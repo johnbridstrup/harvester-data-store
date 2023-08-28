@@ -20,5 +20,3 @@ def post_to_harv_dev(sender, instance_id, url, **kwargs):
 
     post_to_slack_task.delay(msg, channel)
     notify_operator_task.delay(instance_id)
-
-    

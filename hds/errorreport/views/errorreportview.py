@@ -25,7 +25,8 @@ class ErrorReportView(ReportModelViewSet):
     def perform_create(self, serializer):
         super().perform_create(serializer)
         report_id = serializer.data['id']
-        extract_exceptions_and_notify.delay(report_id)
+        beatbox_request = self.request.query_params.get("is_beatbox_request", None)
+        extract_exceptions_and_notify.delay(report_id, beatbox_request)
 
     @ERRORREPORT_LIST_QUERY_TIMER.time()
     def get_queryset(self):
