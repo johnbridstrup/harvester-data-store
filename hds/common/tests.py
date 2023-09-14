@@ -1,6 +1,8 @@
 import json
 import logging
 import os
+import random
+import string
 import unittest
 import uuid
 from collections import defaultdict
@@ -86,6 +88,22 @@ class HDSAPITestBase(APITestCase):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
         self.api_base_url = '/api/v1'
         self.setup_urls()
+
+    def create_new_user_client(self, role=None):
+        chars = string.ascii_letters + string.digits
+        username = ''.join(random.choice(chars) for _ in range(10))
+        if role is None:
+            role = RoleChoices.MANAGER
+        user = User.objects.create(username=username)
+        UserProfile.objects.create(
+            user=user,
+            slack_id="another-fake-id",
+            role=role,
+        )
+        token = Token.objects.create(user=user)
+        client = APIClient()
+        client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
+        return client, user
 
     def set_admin(self):
         self.user.is_superuser = True
