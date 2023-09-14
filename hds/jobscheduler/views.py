@@ -16,6 +16,7 @@ class ScheduledJobView(CreateModelViewSet):
     queryset = ScheduledJob.objects.all()
     serializer_class = ScheduledJobSerializer
     filterset_class = ScheduledJobFilterSet
+    ordering = ("-created",)
     view_permissions_update = {
         'create_scheduled_job': {
             RoleChoices.SUPPORT: True, #is_whitelisted
@@ -141,7 +142,7 @@ class ScheduledJobView(CreateModelViewSet):
     )
     def user_jobs(self, request):
         user = request.user
-        qs = ScheduledJob.objects.filter(creator=user)
+        qs = ScheduledJob.objects.filter(creator=user).order_by("-created")
         page = self.paginate_queryset(qs)
         if page is not None:
             serializer = self.get_serializer(page, many=True)
