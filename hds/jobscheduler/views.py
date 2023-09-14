@@ -20,16 +20,16 @@ class ScheduledJobView(CreateModelViewSet):
     filterset_class = ScheduledJobFilterSet
     view_permissions_update = {
         'create_scheduled_job': {
-            RoleChoices.DEVELOPER: True, #is_whitelisted
+            RoleChoices.SUPPORT: True, #is_whitelisted
         },
         'create': {
-            RoleChoices.DEVELOPER: True,
+            RoleChoices.SUPPORT: True,
         },
         'disable_job': {
-            RoleChoices.DEVELOPER: True,
+            RoleChoices.SUPPORT: True,
         },
         'enable_job': {
-            RoleChoices.DEVELOPER: True,
+            RoleChoices.SUPPORT: True,
         },
     }
     action_serializers = {
