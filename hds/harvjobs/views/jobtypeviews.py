@@ -14,12 +14,12 @@ class JobTypeView(CreateModelViewSet):
     view_permissions_update = {
         'create': {
             RoleChoices.JENKINS: True,
-            RoleChoices.DEVELOPER: True,
+            RoleChoices.MANAGER: True,
         },
         'destroy': {
-            RoleChoices.DEVELOPER: True,
+            RoleChoices.MANAGER: True,
         },
         'update': {
-            RoleChoices.DEVELOPER: True,
+            RoleChoices.MANAGER: True,
         },
     }
