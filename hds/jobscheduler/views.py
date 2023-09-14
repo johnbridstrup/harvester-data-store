@@ -1,5 +1,3 @@
-from sys import api_version
-from django.urls import reverse
 from rest_framework.decorators import action
 from rest_framework.renderers import JSONRenderer
 

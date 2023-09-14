@@ -2,7 +2,6 @@ from ..filters import JobTypeFilterset
 from ..models import JobType
 from ..serializers.jobtypeserializer import JobTypeSerializer
 
-from rest_framework.permissions import DjangoModelPermissions
 from common.viewsets import CreateModelViewSet
 from hds.roles import RoleChoices
 
