@@ -39,6 +39,37 @@ class JobSchedulerTestCase(HarvJobApiTestBase):
         r = self.client.post(self.url, self.jobsched_payload, format='json')
         self.assertEqual(r.status_code, status.HTTP_201_CREATED)
 
+    def test_myjobs(self):
+        self._create_defaults()
+
+        usr1_client, usr1 = self.create_new_user_client()
+        usr2_client, usr2 = self.create_new_user_client()
+
+        # two for user 1
+        r = usr1_client.post(self.url, self.jobsched_payload, format='json')
+        self.assertEqual(r.status_code, status.HTTP_201_CREATED)
+        r = usr1_client.post(self.url, self.jobsched_payload, format='json')
+        self.assertEqual(r.status_code, status.HTTP_201_CREATED)
+
+        # one for user 2
+        r = usr2_client.post(self.url, self.jobsched_payload, format='json')
+        self.assertEqual(r.status_code, status.HTTP_201_CREATED)
+
+        url = reverse("jobscheduler-myjobs")
+        r1 = usr1_client.get(url)
+        r2 = usr2_client.get(url)
+
+        # assert pagination keys are there
+        self.assertTrue("count" in r1.json()["data"])
+        self.assertTrue("count" in r2.json()["data"])
+
+        # assert filter works
+        for res in r1.json()["data"]["results"]:
+            self.assertEqual(res["creator"], usr1.id)
+
+        for res in r2.json()["data"]["results"]:
+            self.assertEqual(res["creator"], usr2.id)
+
     def test_period_task_created(self):
         self._create_defaults()
 
