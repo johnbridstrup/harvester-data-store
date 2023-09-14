@@ -22,7 +22,6 @@ from rest_framework.schemas import get_schema_view
 version = 'api/v1'
 
 urlpatterns = [
-    path('', include('common.urls.landingurls')),
     path('admin/', admin.site.urls),
     path(f'{version}/autodiagnostics/', include('autodiagnostics.urls.autodiagreporturls')),
     path(f'{version}/autodiagnosticsruns/', include('autodiagnostics.urls.autodiagrunurls')),

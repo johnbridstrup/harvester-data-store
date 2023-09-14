@@ -68,7 +68,7 @@ def get_endpoint(urlpattern):
         return str(urlpattern.pattern)
 
 def compare_patterns(keys, urls):
-    ignore = ['admin/', 'api/v1/openapi', 'api/v1/users/', 'prometheus/', '^media/(?P<path>.*)$', '^static/(?P<path>.*)$']
+    ignore = ['', 'admin/', 'api/v1/openapi', 'api/v1/users/', 'prometheus/', '^media/(?P<path>.*)$', '^static/(?P<path>.*)$']
     return all(['/' + u in keys if u not in ignore else True for u in urls])
 
 
