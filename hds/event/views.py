@@ -3,6 +3,7 @@ from rest_framework.renderers import JSONRenderer
 
 from common.utils import make_ok
 from common.viewsets import CreateModelViewSet
+from common.schema import HDSToRepAutoSchema
 from hds.roles import RoleChoices
 
 from .filters import EventFilterset, PickSessionFilterset
@@ -24,6 +25,36 @@ class TaggedUUIDViewBase(CreateModelViewSet):
             RoleChoices.BEATBOX: True, # Beatbox creates and deletes these as part of CI
         }
     }
+    schema = HDSToRepAutoSchema(extra_info={
+        'related_objects': {
+            'type': 'array',
+            'items': {
+                'type': 'object',
+                'properties': {
+                    'url': {
+                        'type': 'string'
+                    },
+                    'object': {
+                        'type': 'string'
+                    }
+                }
+            }
+        },
+        'related_files': {
+            'type': 'array',
+            'items': {
+                'type': 'object',
+                'properties': {
+                    'url': {
+                        'type': 'string'
+                    },
+                    'filetype': {
+                        'type': 'string'
+                    }
+                }
+            }
+        }
+    })
 
     def get_queryset(self):
         model = self.serializer_class.Meta.model

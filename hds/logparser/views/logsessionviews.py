@@ -1,5 +1,6 @@
 from common.async_metrics import ASYNC_UPLOAD_COUNTER
 from common.viewsets import CreateModelViewSet
+from common.schema import HDSToRepAutoSchema
 from hds.roles import RoleChoices
 from logparser.filters import LogSessionFilterset
 from logparser.tasks import perform_extraction
@@ -19,6 +20,56 @@ class LogSessionViewset(CreateModelViewSet):
             RoleChoices.SUPPORT: True,
         },
     }
+    schema = HDSToRepAutoSchema(extra_info={
+        'logs': {
+            'type': 'object',
+            'properties': {
+                'harv_id': {
+                    'type': 'number'
+                },
+                'robots': {
+                    'type': 'array',
+                    'items': {
+                        'type': 'number'
+                    }
+                },
+                'services': {
+                    'type': 'array',
+                    'items': {
+                        'type': 'object',
+                        'properties': {
+                            'id': {
+                                'type': 'number'
+                            },
+                            'service': {
+                                'type': 'string'
+                            },
+                            'robot': {
+                                'type': 'number'
+                            }
+                        }
+                    }
+                },
+                'videos': {
+                    'type': 'array',
+                    'items': {
+                        'type': 'object',
+                        'properties': {
+                            'id': {
+                                'type': 'number'
+                            },
+                            'category': {
+                                'type': 'string'
+                            },
+                            'robot': {
+                                'type': 'number'
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    })
 
     def create(self, request, *args, **kwargs):
         filesize_bytes = request.headers.get('Content-Length')
@@ -27,7 +78,7 @@ class LogSessionViewset(CreateModelViewSet):
             ASYNC_UPLOAD_COUNTER.labels(
                 'sessclip_zip',
             ).inc(zip_kb)
-        
+
         return super().create(request, *args, **kwargs)
 
     def perform_create(self, serializer):

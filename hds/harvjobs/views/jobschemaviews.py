@@ -4,6 +4,7 @@ from ..serializers.jobschemaserializer import JobSchemaSerializer
 
 from rest_framework.permissions import DjangoModelPermissions
 from common.viewsets import CreateModelViewSet
+from common.schema import HDSToRepAutoSchema
 from hds.roles import RoleChoices
 
 
@@ -21,3 +22,9 @@ class JobSchemaView(CreateModelViewSet):
             RoleChoices.MANAGER: True
         },
     }
+    schema = HDSToRepAutoSchema(extra_info={
+        'jobtype': {
+            'type': 'string',
+            'nullable': 'true'
+        }
+    })

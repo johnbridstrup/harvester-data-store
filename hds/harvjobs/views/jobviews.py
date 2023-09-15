@@ -12,6 +12,7 @@ from rest_framework.decorators import action
 from rest_framework.renderers import JSONRenderer
 from common.utils import make_ok
 from common.viewsets import CreateModelViewSet
+from common.schema import HDSToRepAutoSchema
 from hds.roles import RoleChoices
 
 
@@ -42,6 +43,16 @@ class JobView(CreateModelViewSet):
         "list": JobDetailSerializer,
         "retrieve": JobDetailSerializer
     }
+    schema = HDSToRepAutoSchema(extra_info={
+        'results': {
+            'type': 'string',
+            'nullable': 'true'
+        },
+        'history': {
+            'type': 'string',
+            'nullable': 'true'
+        }
+    })
 
     @action(
         methods=["get"],

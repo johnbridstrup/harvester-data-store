@@ -5,6 +5,7 @@ from rest_framework.renderers import JSONRenderer
 from aftconfigs.serializers import ConfigReportSerializer
 from common.utils import make_ok
 from common.viewsets import CreateModelViewSet
+from common.schema import HDSToRepAutoSchema
 from hds.roles import RoleChoices
 from harvassets.serializers import HarvesterAssetSerializer
 from harvdeploy.serializers import HarvesterVersionReportSerializer
@@ -24,6 +25,24 @@ class HarvesterView(CreateModelViewSet):
     serializer_class = HarvesterSerializer
     filterset_class = HarvesterFilterset
     ordering = ('-id',)
+    schema = HDSToRepAutoSchema(extra_info={
+        'harvester_history': {
+            'type': 'string',
+            'nullable': 'true'
+        },
+        'version_history': {
+            'type': 'string',
+            'nullable': 'true'
+        },
+        'assets': {
+            'type': 'string',
+            'nullable': 'true'
+        },
+        'config': {
+            'type': 'string',
+            'nullable': 'true'
+        },
+    })
     view_permissions_update = {
         "create": {
             RoleChoices.DEVELOPER: True,
