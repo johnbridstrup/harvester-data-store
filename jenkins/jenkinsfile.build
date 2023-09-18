@@ -1,0 +1,34 @@
+pipeline {
+    agent {
+        label "hds-deployer"
+    }
+
+    stages {
+        stage('env-check') {
+            steps {
+                echo sh(script: 'env|sort', returnStdout: true)
+            }
+        }
+
+        stage('Confirm and Build') {
+            steps {
+                script {
+                    def userConfirmation = input(
+                        id: 'confirm-build',
+                        message: 'Continue Build?',
+                        parameters: [
+                            choice(name: 'ACTION', choices: 'Proceed\nAbort', description: 'Choose an action')
+                        ]
+                    )
+
+                    if (userConfirmation == 'Proceed') {
+                        echo 'Building...'
+                        sh './jenkins/build.sh'
+                    } else {
+                        error('Pipeline aborted by user')
+                    }
+                }
+            }
+        }
+    }
+}
