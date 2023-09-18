@@ -9,7 +9,6 @@ terraform {
 }
 
 provider "aws" {
-  profile = "aft-prod"
   region  = "us-west-1"
 }
 

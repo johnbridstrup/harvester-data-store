@@ -1,0 +1,42 @@
+pipeline {
+    agent {
+        label "hds-deployer"
+    }
+
+    stages {
+        stage('Git variables') {
+            agent { label "master" }
+            steps {
+                script {
+                    withCredentials([sshUserPrivateKey(credentialsId: "githubapp-sshkey", keyFileVariable: "keyFile")]) {
+                        env.GIT_KEY = credentials("GitHub")
+                        env.GIT_SSH_COMMAND = "ssh -i \${GIT_KEY} -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"
+                    }
+                }
+            }
+        }
+        stage('Plan and Apply') {
+            steps {
+                withCredentials([sshUserPrivateKey(credentialsId: "GitHub", usernameVariable: "GIT_USER", keyFileVariable: "GIT_KEY")]) {
+                    sh "source ./jenkins/plan.sh"
+                }
+                script {
+                    def userConfirmation = input(
+                        id: 'confirm-deploy',
+                        message: 'Deploy HDS?',
+                        parameters: [
+                            choice(name: 'ACTION', choices: 'Proceed\nAbort', description: 'Choose an action')
+                        ]
+                    )
+
+                    if (userConfirmation == 'Proceed') {
+                        echo 'Deploying...'
+                        sh "./jenkins/apply.sh"
+                    } else {
+                        error('Pipeline aborted by user')
+                    }
+                }
+            }
+        }
+    }
+}
