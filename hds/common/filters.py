@@ -1,4 +1,5 @@
 import datetime
+import pytz
 
 from django_filters import rest_framework as filters
 from django_filters import Filter
@@ -135,14 +136,15 @@ class CommonInfoFilterset(filters.FilterSet):
         """
         start_hour = self.request.query_params.get("start_hour", None)
         end_hour = self.request.query_params.get("end_hour", None)
+        tz = pytz.timezone(self.request.query_params.get("tz", DEFAULT_TZ))
         filter_dict = {}
 
         # Create time objects for start hour
         if start_hour:
-            start_hour = datetime.time(*DTimeFormatter.parse_time(start_hour))
+            start_hour = datetime.time(*DTimeFormatter.parse_time(start_hour), tzinfo=tz)
             filter_dict.update({ f'{name}__time__gte': start_hour })
         if end_hour:
-            end_hour = datetime.time(*DTimeFormatter.parse_time(end_hour))
+            end_hour = datetime.time(*DTimeFormatter.parse_time(end_hour), tzinfo=tz)
             filter_dict.update({f'{name}__time__lte': end_hour})
         return queryset.filter(**filter_dict)
 
