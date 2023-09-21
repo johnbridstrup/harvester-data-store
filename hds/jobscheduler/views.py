@@ -132,7 +132,7 @@ class ScheduledJobView(CreateModelViewSet):
                 }
 
         return make_ok("Harvester Job Scheduler Interface", response_data=resp_data)
-    
+
     @action(
         methods=['get'],
         detail=False,
@@ -148,6 +148,6 @@ class ScheduledJobView(CreateModelViewSet):
             serializer = self.get_serializer(page, many=True)
             paginated = self.get_paginated_response(serializer.data)
             return make_ok(f"{user.username} scheduled jobs", response_data=paginated.data)
-        
+
         serializer = self.get_serializer(qs, many=True)
         return make_ok(f"{user.username} scheduled jobs", response_data=serializer.data)

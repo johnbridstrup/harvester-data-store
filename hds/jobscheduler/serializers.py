@@ -1,5 +1,10 @@
 from django.forms import ValidationError
-from django_celery_beat.models import PeriodicTask, CrontabSchedule, IntervalSchedule, ClockedSchedule
+from django_celery_beat.models import (
+    PeriodicTask,
+    CrontabSchedule,
+    IntervalSchedule,
+    ClockedSchedule
+)
 from rest_framework import serializers
 from timezone_field.rest_framework import TimeZoneSerializerField
 
@@ -142,12 +147,7 @@ class ScheduledJobSerializer(serializers.ModelSerializer):
         # to clients we can assume it was validated on the client side.
         targets = self._parse_targets(data["targets"])
         internal_data = {
-            "job_def": {
-                "jobtype": data["jobtype"],
-                "schema_version": data["schema_version"],
-                "schedule": data["schedule"],
-                "payload": data["payload"],
-            },
+            "job_def": { **data },
             "targets": targets,
         }
         return super().to_internal_value(internal_data)

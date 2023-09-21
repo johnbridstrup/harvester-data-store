@@ -26,6 +26,7 @@ def _get_schedule_instance(sched_def):
         inst = clocked_sched_ser.save()
         return {"clocked": inst, "one_off": True}
 
+
 def create_periodic_task(sched_job_id):
     sched_job = ScheduledJob.objects.get(id=sched_job_id)
     job_def = sched_job.job_def
