@@ -53,7 +53,7 @@ class ScheduledJobView(CreateModelViewSet):
         url_path="cancel",
         renderer_classes=[JSONRenderer],
     )
-    def disable_job(self, request):
+    def disable_job(self, request, pk=None):
         obj = self.get_object()
         task = obj.task
         if not task.enabled:
@@ -71,7 +71,7 @@ class ScheduledJobView(CreateModelViewSet):
         url_path="enable",
         renderer_classes=[JSONRenderer],
     )
-    def enable_job(self, request):
+    def enable_job(self, request, pk=None):
         obj = self.get_object()
         task = obj.task
         if task.enabled:
