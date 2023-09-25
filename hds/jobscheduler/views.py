@@ -35,7 +35,9 @@ class ScheduledJobView(CreateModelViewSet):
         }
     }
     action_serializers = {
-        "retrieve": ScheduledJobDetailSerializer
+        "retrieve": ScheduledJobDetailSerializer,
+        "list": ScheduledJobDetailSerializer,
+        "user_jobs": ScheduledJobDetailSerializer,
     }
 
     def perform_create(self, serializer):

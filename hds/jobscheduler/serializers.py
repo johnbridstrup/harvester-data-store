@@ -9,6 +9,7 @@ from rest_framework import serializers
 from timezone_field.rest_framework import TimeZoneSerializerField
 
 from harvester.models import Harvester
+from harvester.serializers.harvesterserializer import HarvesterMinimalSerializer
 from harvjobs.serializers.jobserializer import JobSerializer
 from .models import ScheduledJob
 
@@ -215,6 +216,7 @@ class ScheduledJobDetailSerializer(ScheduledJobSerializer):
     for any related objected.
     """
     jobs = JobSerializer(many=True)
+    targets = HarvesterMinimalSerializer(many=True)
 
     class Meta(ScheduledJobSerializer.Meta):
         pass
