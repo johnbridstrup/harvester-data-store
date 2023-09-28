@@ -4,8 +4,7 @@ sudo apt install -y \
     ca-certificates \
     curl \
     gnupg \
-    lsb-release \
-    prometheus
+    lsb-release 
 
 if [ ! -f "/usr/share/keyrings/docker-archive-keyring.gpg" ]
 then
