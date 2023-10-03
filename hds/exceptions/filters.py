@@ -26,6 +26,8 @@ class AFTExceptionFilter(CommonInfoFilterset):
     end_time = DTimeFilter("timestamp", lookup_expr="lte")
     is_emulator = filters.BooleanFilter(field_name="report__harvester__is_emulator")
     generic = GenericFilter(foreign_key_prefix="report")
+    start_hour = DTimeFilter(field_name="timestamp", method="filter_time_of_day")
+    end_hour = DTimeFilter(field_name="timestamp", method="filter_time_of_day")
 
     class Meta:
         model = AFTException
