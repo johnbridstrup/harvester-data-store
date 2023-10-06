@@ -1,5 +1,5 @@
 import zipfile
-from celery import chord, shared_task, Task
+from celery import chord, Task
 from collections import defaultdict
 from common.celery import monitored_shared_task
 from django.core.cache import cache
@@ -34,7 +34,7 @@ class CallbackTask(Task):
             "blocks": content_list,
         }
         post_to_slack(message)
-    
+
     def on_failure(self, exc, task_id, args, kwargs, einfo):
         self._get_slack_id(args[0])
         content = (
@@ -98,7 +98,7 @@ def perform_extraction(_id):
                     "filepath": extr_filepath,
                     "filename": file.filename,
                 }
-    
+
     # Create video extraction task signatures
     tasks = [extract_video_meta.si(vid_dict, _id) for vid_dict in vid_meta_pairs.values()]
     # Create clean_dir callback signature

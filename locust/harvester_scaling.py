@@ -1,7 +1,6 @@
 # Simulating harvesters as we scale
 import gevent
 import greenlet
-import logging
 import math
 import random
 import time
@@ -19,7 +18,7 @@ class HarvesterUser(UserBase):
        - Arming
        - Stop picking
        - Handled errors
-       - Version uploads  
+       - Version uploads
 
     """
     ENDPOINTS = {
@@ -63,7 +62,7 @@ class HarvesterUser(UserBase):
             self._version_upload()
         # Stop picking
         self._stop_picking()
-    
+
     ###########################
     ## Sub-Task Implementations
     ###########################
@@ -127,7 +126,7 @@ class HarvesterUser(UserBase):
         Use kinetic monte carlo to determine the next event. Right now,
         These are only error or handled error but could be anything.
 
-        Events here should occur on the order of 10s of minutes in frequency. 
+        Events here should occur on the order of 10s of minutes in frequency.
 
         Args:
             elapsed_time (int): _description_
@@ -163,7 +162,7 @@ class HarvesterUser(UserBase):
         self._load_error_report()
         self._load_version()
         self._load_picksess_report()
-    
+
     def _create_me_if_needed(self):
         ep = "/api/v1/harvesters/"
 
@@ -185,7 +184,7 @@ class HarvesterUser(UserBase):
     def _load_error_report(self):
         self.erreport = self._load_json("report.json")
         self._adjust_serial_num(self.erreport)
-    
+
     def _load_configs(self):
         self.config = self._load_json("configs-report_002_1675256694.218969.json")
         self._adjust_serial_num(self.config)
