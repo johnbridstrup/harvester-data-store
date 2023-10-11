@@ -29,15 +29,6 @@ services:
     networks:
       - "hds-network"
 
-  frontend:
-    build:
-     context: ./frontend
-    command: ./entrypoint.sh
-    ports:
-      - 3000:3000
-    networks:
-      - "hds-network"
-
 networks:
   hds-network:
     driver: bridge

@@ -34,8 +34,6 @@ any time by running `setport XXXX` or `./set_port.sh XXXX` from the project root
 These scripts are only verified in Ubuntu 20.04 but should run in other versions. On other 
 operating systems or linux distributions, you may have to install the dependencies manually.
 
-To run the frontend, you will also need to run `scripts/install-node.sh`.
-
 
 ## Running the development server
 The development server is created via `docker compose`, which should have installed when running the setup scripts. You can build the development server with the alias `runserver`. This will pull and create all of the necessary containers, which are defined in `docker-compose.yml`, and spin them all up. Logs for the various services defined in `docker-compose.yml` (eg. `web`, `db`, etc..) can be accessed by running `docker compose logs <service>`. For convenience, the alias `hds-logs` will display the logs from HDS services. You can tear down the server with `stopserver` or `docker compose down --remove-orphans(optional)`. 
@@ -44,8 +42,6 @@ It is also possible to run the server outside of docker (you must have `redis-se
 1. `redis-server`
 2. `python manage.py migrate && python manage.py loaddata ../fixtures/* && python manage.py runserver ${HDS_PORT}`
 3. `celery -A hds worker -l INFO`
-
-and from the `frontend/` folder run `npm start`. Logs for each service will be dumped in their respective terminals. 
 
 Interactions and changes to the database will be lost when rebuilding with `docker compose` but will persist when building manually. 
 
@@ -136,14 +132,14 @@ The typical development cycle is: Develop locally -> Create PR for review -> dep
 
 ### Deploying HDS
 #### Changes to Terraform only
-From `terraform/(dev,prod)/(backend,hds,frontend)/`
+From `terraform/(dev,prod)/(backend,hds)/`
 - `terraform init` if it is the first time or `terraform init -upgrade`
 - `terraform plan -out apply.tfplan`
   - Ensure that all of the changes are expected
 - `terraform apply apply.tfplan`
 
 #### Changes to source code
-From `make/(dev,prod)/` or `frontend/make/(dev,prod)/`
+From `make/(dev,prod)/`
 - `make all`
 - Copy the image url
   - e.g. `082346306812.dkr.ecr.us-west-1.amazonaws.com/hds:hds-staging-07fb69a9`

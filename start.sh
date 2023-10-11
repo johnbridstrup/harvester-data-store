@@ -22,7 +22,6 @@ alias jobserver="source $HDS_ROOT/scripts/set_jobserver_addr.sh"
 alias hds-logs="docker compose logs web"
 alias db-logs="docker compose logs db"
 alias install-node="$HDS_ROOT/scripts/install-node.sh"
-alias build="$HDS_ROOT/frontend/build.start.sh"
 
 PORT=$1
 if [ -z $PORT ]

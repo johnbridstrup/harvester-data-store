@@ -9,7 +9,7 @@ install-docker: ## Install docker and docker compose
 build-dev: ## Build local server in docker compose
 	docker compose up -d --build
 
-build-backend: ## Build backend for CI. Does not build the frontend.
+build-backend: ## Build backend for CI.
 	export HDS_PORT=${HDS_PORT}
 	docker compose -f docker-compose.base.yml up -d --build
 

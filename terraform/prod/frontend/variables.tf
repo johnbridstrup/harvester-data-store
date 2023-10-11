@@ -1,1 +1,0 @@
-variable "deploy_tag" {}
