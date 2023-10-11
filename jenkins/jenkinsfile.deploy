@@ -1,8 +1,5 @@
 pipeline {
-    agent {
-        label "hds-deployer"
-    }
-
+    agent none
     stages {
         stage('Git variables') {
             agent { label "master" }
@@ -16,6 +13,7 @@ pipeline {
             }
         }
         stage('Plan and Apply') {
+            agent { label "hds-deployer" }
             steps {
                 withCredentials([sshUserPrivateKey(credentialsId: "GitHub", usernameVariable: "GIT_USER", keyFileVariable: "GIT_KEY")]) {
                     sh "source ./jenkins/plan.sh"
