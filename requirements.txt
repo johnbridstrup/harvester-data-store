@@ -13,7 +13,6 @@ django-silk==5.0.3
 django-storages==1.13.1
 django-structlog[celery]==5.0.1
 rest-framework-roles==0.4.1
-flake8==4.0.1
 flask==2.1.3 # Must be pinned for locust to work properly
 gunicorn==20.1.0
 jsonschema==4.16.0
