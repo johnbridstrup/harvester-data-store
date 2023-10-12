@@ -11,7 +11,7 @@ from rest_framework.authtoken.models import Token
 
 from common.async_metrics import ASYNC_ERROR_COUNTER, TOTAL_ERROR_COUNTER
 from common.models import Tags
-from common.tests import HDSAPITestBase, create_user
+from common.tests import HDSAPITestBase
 from common.reports import DTimeFormatter
 from harvester.models import Harvester
 from event.models import Event, PickSession
@@ -33,7 +33,7 @@ class ErrorReportAPITest(HDSAPITestBase):
         return serv_split[0], serv_split[1]
 
     def test_create_no_permission(self):
-        user = create_user("user", "password")
+        user = self.create_user("user", "password")
         token = Token.objects.create(user=user)
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
         r = self.client.post(self.error_url, self.data, format='json')

@@ -38,34 +38,13 @@ from s3file.serializers import S3FileSerializer
 # Disable logging in unit tests
 logging.disable(level=logging.CRITICAL)
 
-USERS_URL = reverse('users:user-list')
-
-CHANGE_PASSWORD_URL = reverse('users:change_password')
-
-UNAUTHORIZED_CREATE_MSG = 'Unable to authorize user for create action'
-
-UNAUTHORIZED_UPDATE_MSG = 'Unable to authorize user for update action'
-
-
-def create_user(username, password, profile_kwargs = {}, **kwargs):
-    user = User.objects.create_user(
-        username=username,
-        password=password,
-        **kwargs
-        )
-    UserProfile.objects.create(user=user, **profile_kwargs)
-    return user
-
-
-def detail_url(user_id):
-    return reverse("users:user-detail", args=[user_id])
-
 
 def get_endpoint(urlpattern):
     try:
         return urlpattern.pattern._route
     except:
         return str(urlpattern.pattern)
+
 
 def compare_patterns(keys, urls):
     ignore = ['', 'admin/', 'api/v1/openapi', 'api/v1/users/', 'prometheus/', '^media/(?P<path>.*)$', '^static/(?P<path>.*)$']
@@ -171,6 +150,12 @@ class HDSAPITestBase(APITestCase):
         }
 
     def setup_urls(self):
+        # Users
+        self.user_url = reverse('users:user-list')
+        self.user_detail_url = lambda id_: reverse("users:user-detail", args=[id_])
+        self.change_pwd_url = reverse('users:change_password')
+
+
         # Autodiag
         self.ad_url = reverse("autodiagnostics-list")
         self.ad_det_url = lambda id_: reverse("autodiagnostics-detail", args=[id_])
@@ -359,6 +344,15 @@ class HDSAPITestBase(APITestCase):
         )
         return resp
 
+    def create_user(self, username, password, profile_kwargs = {}, **kwargs):
+            user = User.objects.create_user(
+            username=username,
+            password=password,
+            **kwargs
+            )
+            UserProfile.objects.create(user=user, **profile_kwargs)
+            return user
+
     def _load_report(self, relpath):
         fpath = os.path.join(self.BASE_PATH, relpath)
         with open(fpath, 'rb') as f:
@@ -459,6 +453,8 @@ class ManageUserTest(HDSAPITestBase):
                 'slack_id': 'slack@aft.aft'
             }
         }
+        self.unauthorized_create_msg = 'Unable to authorize user for create action'
+        self.unauthorized_update_msg = 'Unable to authorize user for update action'
         return super().setUp()
 
     def test_non_superuser_cannot_create_user(self):
@@ -469,11 +465,11 @@ class ManageUserTest(HDSAPITestBase):
         """
         self.user.is_superuser = False
         self.user.save()
-        res = self.client.post(USERS_URL, self.payload, format='json')
+        res = self.client.post(self.user_url, self.payload, format='json')
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(
             res.json()["errors"]["detail"][0],
-            UNAUTHORIZED_CREATE_MSG
+            self.unauthorized_create_msg
         )
 
     def test_non_superuser_cannot_update_user(self):
@@ -484,16 +480,16 @@ class ManageUserTest(HDSAPITestBase):
         """
         self.user.is_superuser = False
         self.user.save()
-        user = create_user(username='aftuser', password='testpass123')
+        user = self.create_user(username='aftuser', password='testpass123')
         self.payload.update({'username': user.username})
         self.payload.pop('password')
-        url = detail_url(user.id)
+        url = self.user_detail_url(user.id)
         res = self.client.patch(url, self.payload, format='json')
 
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(
             res.json()["errors"]["detail"][0],
-            UNAUTHORIZED_UPDATE_MSG
+            self.unauthorized_update_msg
         )
 
     def test_create_user_successfully(self):
@@ -502,7 +498,7 @@ class ManageUserTest(HDSAPITestBase):
         self.user.is_superuser = True
         self.user.save()
         self.user.refresh_from_db()
-        res = self.client.post(USERS_URL, self.payload, format='json')
+        res = self.client.post(self.user_url, self.payload, format='json')
 
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
         user = User.objects.get(username=self.payload['username'])
@@ -510,9 +506,9 @@ class ManageUserTest(HDSAPITestBase):
 
     def test_retrieve_user_successfully(self):
         """Test retrieve new user successfully"""
-        user = create_user(username='aftuser', password='testpass123')
+        user = self.create_user(username='aftuser', password='testpass123')
         serializer = UserSerializer(user).data
-        res = self.client.get(detail_url(user.id))
+        res = self.client.get(self.user_detail_url(user.id))
 
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(
@@ -526,10 +522,10 @@ class ManageUserTest(HDSAPITestBase):
         self.user.is_superuser = True
         self.user.save()
         self.user.refresh_from_db()
-        user = create_user(username='aftuser', password='testpass123')
+        user = self.create_user(username='aftuser', password='testpass123')
         self.payload.update({'username': user.username})
         self.payload.pop('password')
-        url = detail_url(user.id)
+        url = self.user_detail_url(user.id)
         res = self.client.patch(url, self.payload, format='json')
         user.refresh_from_db()
 
@@ -539,7 +535,7 @@ class ManageUserTest(HDSAPITestBase):
     def test_self_can_update_user_profile(self):
         """Test self can update his/her user profle."""
         self.payload.update({'username': self.user.username})
-        url = detail_url(self.user.id)
+        url = self.user_detail_url(self.user.id)
         res = self.client.patch(url, self.payload, format='json')
         self.user.refresh_from_db()
 
@@ -557,10 +553,11 @@ class ManageUserTest(HDSAPITestBase):
             'new_password': 'newpasswordtobeupdated',
             'current_password': og_user_password,
         })
-        res = self.client.post(CHANGE_PASSWORD_URL, self.payload, format='json')
+        res = self.client.post(self.change_pwd_url, self.payload, format='json')
         self.user.refresh_from_db()
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertTrue(self.user.check_password(self.payload['new_password']))
+
 
 class TestUtils(unittest.TestCase):
     def test_frontend_url(self):

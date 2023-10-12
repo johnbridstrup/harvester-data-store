@@ -3,7 +3,7 @@ from urllib.parse import urlencode
 
 from rest_framework import status
 
-from common.tests import HDSAPITestBase, create_user
+from common.tests import HDSAPITestBase
 from errorreport.models import ErrorReport
 from ..models import Notification
 
@@ -127,7 +127,7 @@ class NotificationAPITest(HDSAPITestBase):
         self.assertEqual(r.status_code, status.HTTP_200_OK)
 
     def test_filter_notifications(self):
-        user2 = create_user("new_user", "new_password")
+        user2 = self.create_user("new_user", "new_password")
         params = {
             "harvester__harv_id__in": [11],
             "harvester__fruit__name": "strawberry"
