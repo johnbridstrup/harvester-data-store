@@ -13,7 +13,7 @@ fi
 echo "" && echo "Activating venv"
 source $VENV/bin/activate
 
-pip install -r requirements.txt
+pip install -r requirements-dev.txt
 
 scripts/install_docker.sh
 
