@@ -1,3 +1,5 @@
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
 from rest_framework.decorators import action
 from rest_framework.renderers import JSONRenderer
 
@@ -142,6 +144,7 @@ class ScheduledJobView(CreateModelViewSet):
         url_name="myjobs",
         renderer_classes=[JSONRenderer],
     )
+    @method_decorator(cache_page(60*10))
     def user_jobs(self, request):
         user = request.user
         qs = ScheduledJob.objects.filter(creator=user).order_by("-created")
