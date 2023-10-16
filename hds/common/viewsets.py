@@ -1,4 +1,5 @@
 from django_filters.rest_framework import DjangoFilterBackend
+from django.utils.decorators import method_decorator
 from rest_framework import filters
 from rest_framework.decorators import action
 from rest_framework.renderers import JSONRenderer
@@ -7,6 +8,7 @@ from common.utils import make_ok, merge_nested_dict
 from hds.roles import RoleChoices
 from .renderers import HDSJSONRenderer
 from .signals import report_created
+from .decorators import cache_page_if_qp_exist
 
 
 class CreateModelViewSet(ModelViewSet):
@@ -57,6 +59,10 @@ class CreateModelViewSet(ModelViewSet):
         if serializer:
             return serializer
         return super().get_serializer_class()
+
+    @method_decorator(cache_page_if_qp_exist(60*10))
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
 
 
 class ReportModelViewSet(CreateModelViewSet):
