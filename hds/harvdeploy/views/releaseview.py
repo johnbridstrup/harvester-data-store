@@ -1,3 +1,5 @@
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
 from rest_framework.decorators import action
 from rest_framework.renderers import JSONRenderer
 
@@ -66,6 +68,7 @@ class HarvesterCodeReleaseView(CreateModelViewSet):
         url_path='harvesters',
         renderer_classes=[JSONRenderer]
     )
+    @method_decorator(cache_page(60*10))
     def harvester_view(self, request, pk=None):
         obj = self.get_object()
         queryset = obj.harvester_set.all()
