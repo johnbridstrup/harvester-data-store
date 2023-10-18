@@ -1,5 +1,5 @@
 pipeline {
-    agent none
+    agent { label "hds-deployer" }
     stages {
         stage('Git variables') {
             agent { label "master" }
@@ -13,7 +13,6 @@ pipeline {
             }
         }
         stage('Plan and Apply') {
-            agent { label "hds-deployer" }
             steps {
                 echo 'Planning HDS version $_AFT_DEPLOY_TAG'
                 withCredentials([sshUserPrivateKey(credentialsId: "GitHub", usernameVariable: "GIT_USER", keyFileVariable: "GIT_KEY")]) {
@@ -34,6 +33,32 @@ pipeline {
                     } else {
                         error('Pipeline aborted by user')
                     }
+                }
+            }
+        }
+    }
+    post {
+        success {
+            script {
+                try {
+                    echo "Delete local deployed tag if it exists"
+                    sh "git tag -d deployed"
+                } catch (err) {
+                    echo err.getMessage()
+                }
+                try {
+                    echo "Delete remote deployed tag if it exists"
+                    withCredentials([sshUserPrivateKey(credentialsId: "GitHub", usernameVariable: "GIT_USER", keyFileVariable: "GIT_KEY")]) {
+                        sh "git push --delete origin deployed"
+                    }
+                } catch (err) {
+                    echo err.getMessage()
+                }
+                echo "Tagging ${_AFT_DEPLOY_TAG} as deployed"
+                withCredentials([sshUserPrivateKey(credentialsId: "GitHub", usernameVariable: "GIT_USER", keyFileVariable: "GIT_KEY")]) {
+                    sh "git config --global user.email 'john@advanced.farm'"
+                    sh "git config --global user.name 'Jenkins Bot'"
+                    sh 'git checkout ${_AFT_DEPLOY_TAG} && git tag -a deployed -m "Automated Deployment: v${_AFT_DEPLOY_TAG}" && git push origin deployed'
                 }
             }
         }
