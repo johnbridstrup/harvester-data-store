@@ -5,6 +5,7 @@ from common.models import CommonInfo
 from common.utils import media_upload_path
 from harvester.models import Harvester
 from s3file.models import S3File, SessClip
+from event.models import Event
 
 
 TIMEZONE="US/Pacific"
@@ -15,6 +16,7 @@ class LogSession(CommonInfo):
     date_time = models.DateTimeField(blank=True, null=True)
     harv = models.ForeignKey(Harvester, on_delete=models.SET_NULL, blank=True, null=True)
     _zip_file = models.OneToOneField(SessClip, blank=True, null=True, on_delete=models.CASCADE)
+    event = models.ForeignKey(Event, on_delete=models.SET_NULL, blank=True, null=True)
     tags = TaggableManager(through='LogTag')
 
     def __str__(self):
