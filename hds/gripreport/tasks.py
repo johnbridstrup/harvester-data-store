@@ -2,7 +2,7 @@ import structlog
 
 from django.contrib.auth.models import User
 from common.celery import monitored_shared_task
-from common.FileLoader import get_client
+from common.fileloader import get_client
 
 from .serializers import GripReportSerializer
 
