@@ -2,15 +2,19 @@ import re
 import zipfile
 import structlog
 import uuid
+import os
+import shutil
+from django.conf import settings
 from django.core.cache import cache
 from rest_framework import serializers
 from taggit.serializers import TagListSerializerField, TaggitSerializer
-from common.async_metrics import ASYNC_ERROR_COUNTER, ASYNC_UPLOAD_COUNTER
+from common.async_metrics import ASYNC_ERROR_COUNTER
 from common.reports import DTimeFormatter
 from harvester.models import Harvester
 from logparser.models import LogSession, LogFile, TIMEZONE, LogVideo
 from s3file.models import SessClip
 from s3file.serializers import DirectUploadSerializer
+
 
 logger = structlog.get_logger(__name__)
 
@@ -162,3 +166,17 @@ class LogSessionSerializer(TaggitSerializer, serializers.ModelSerializer):
                 "Logsession does not exist"
             ).inc()
             logger.error(f"log session with id {_id} does not exist", logsession_id=_id)
+
+    @staticmethod
+    def create_logsession(s3file_obj):
+        data = {"zip_upload": {}}
+        serializer = LogSessionSerializer(data=data, s3file_obj=s3file_obj)
+        serializer.is_valid(raise_exception=True)
+        instance = serializer.save()
+        return instance.id
+
+    @staticmethod
+    def clean_downloads(path_id):
+        path = os.path.join(settings.DOWNLOAD_DIR, f"{path_id}")
+        if os.path.isdir(path):
+            shutil.rmtree(path)

@@ -1,9 +1,12 @@
-from django.dispatch import receiver, Signal
-from .models import S3File, SessClip
+from django.dispatch import Signal, receiver
+
+from logparser.tasks import download_create_logsession
+from .models import SessClip
+
 
 sessclip_uploaded = Signal()
 
-@receiver(sessclip_uploaded)
-def create_sessclip(sender, s3file_id, **kwargs):
-    s3file = S3File.objects.get(id=s3file_id)
-    SessClip.objects.create(file=s3file)
+
+@receiver(sessclip_uploaded, sender=SessClip)
+def download_sessclip(sender, s3file_id, **kwargs):
+    download_create_logsession.delay(s3file_id)

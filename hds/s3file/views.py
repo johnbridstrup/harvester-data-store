@@ -100,6 +100,7 @@ class SessClipView(S3FileView):
     def perform_create(self, serializer):
         inst = super().perform_create(serializer)
         event_id = serializer.data["event"]
+        SessClip.objects.create(file=inst)
         sessclip_uploaded.send(sender=SessClip, s3file_id=inst.id)
         update_event_tag.send(sender=SessClip, event_id=event_id, tag="sessclip")
         return inst

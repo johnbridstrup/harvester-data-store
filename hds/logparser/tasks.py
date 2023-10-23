@@ -1,15 +1,19 @@
+import os
 import zipfile
 from celery import chord, Task
 from collections import defaultdict
+from django.conf import settings
+from django.core.files.storage import default_storage
 from common.celery import monitored_shared_task
 from django.core.cache import cache
 from common.utils import build_frontend_url
+from s3file.models import S3File
 from notifications.slack import post_to_slack
 from .serializers.logfileserializers import LogFileSerializer
 from .serializers.logvideoserializers import LogVideoSerializer
 from .serializers.logsessionserializers import (
     LogSessionSerializer,
-    LogSession
+    LogSession,
 )
 
 
@@ -52,6 +56,15 @@ class CallbackTask(Task):
             f"{build_frontend_url('logfiles', args[0])}"
         )
         self._create_post_message(content, self.slack_id)
+
+
+class CBCleanTask(Task):
+    # Note: the order of the args while using this class -> (s3file_id, *args, **kwargs)
+    def after_return(self, status, retval, task_id, args, kwargs, einfo):
+        s3file = S3File.objects.get(id=args[0])
+        s3file.clean_download()
+        return super().after_return(status, retval, task_id, args, kwargs, einfo)
+
 
 @monitored_shared_task
 def async_upload_zip_file(_id):
@@ -108,4 +121,10 @@ def perform_extraction(_id):
     # Execute tasks -> callback as Celery chord
     chord(tasks, callback).delay()
 
-    return "Extracting Videos"
+
+@monitored_shared_task(base=CBCleanTask)
+def download_create_logsession(s3file_id):
+    s3file = S3File.objects.get(id=s3file_id)
+    s3file.download()
+    _id = LogSessionSerializer.create_logsession(s3file)
+    perform_extraction(_id, extract_video=False)

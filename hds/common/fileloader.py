@@ -1,7 +1,6 @@
 import json
 import os
 import structlog
-
 import boto3
 from botocore.exceptions import ClientError
 from django.conf import settings
@@ -74,3 +73,4 @@ class LocalClient(FileLoader):
             json_data = json.load(file_content)
 
         return json_data
+
