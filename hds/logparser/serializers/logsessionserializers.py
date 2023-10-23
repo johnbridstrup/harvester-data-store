@@ -47,6 +47,31 @@ class LogSessionUploadSerializer(serializers.ModelSerializer):
         read_only_fields = ['id']
 
 
+class LogSessionDetailSerializer(serializers.ModelSerializer):
+    """Detail serializer for log session model"""
+    class Meta:
+        model = LogSession
+        fields = ('__all__')
+        read_only_fields = ['id']
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        log_queryset = instance.logfile.all()
+        vid_queryset = instance.logvideo.all()
+        r_queryset = log_queryset.values_list('robot', flat=True).distinct()
+        robots = list(r_queryset)
+        services = ServiceSerializer(log_queryset, many=True).data
+        videos = VideoSerializer(vid_queryset, many=True).data
+        harv_id = instance.harv.harv_id if instance.harv else None
+        data["logs"] = {
+            'harv_id': harv_id,
+            'robots': robots,
+            'services': services,
+            'videos': videos
+        }
+        return data
+
+
 class LogSessionSerializer(TaggitSerializer, serializers.ModelSerializer):
     """Serializer for the log session model."""
     tags = TagListSerializerField(required=False)
@@ -72,23 +97,6 @@ class LogSessionSerializer(TaggitSerializer, serializers.ModelSerializer):
                 logger.error('Zip file is empty no files found')
 
         return super().to_internal_value(internal_data)
-
-    def to_representation(self, instance):
-        data = super().to_representation(instance)
-        queryset = LogFile.objects.filter(log_session=instance)
-        vid_queryset = LogVideo.objects.filter(log_session=instance)
-        r_queryset = queryset.values_list('robot', flat=True).distinct()
-        robots = list(r_queryset)
-        services = ServiceSerializer(queryset, many=True).data
-        videos = VideoSerializer(vid_queryset, many=True).data
-        harv_id = instance.harv.harv_id if instance.harv else None
-        data["logs"] = {
-            'harv_id': harv_id,
-            'robots': robots,
-            'services': services,
-            'videos': videos
-        }
-        return data
 
     @staticmethod
     def extract_harvester_and_date(file):

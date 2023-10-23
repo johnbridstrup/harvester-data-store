@@ -6,19 +6,25 @@ from logparser.filters import LogSessionFilterset
 from logparser.tasks import perform_extraction
 from logparser.serializers.logsessionserializers import (
     LogSessionSerializer,
+    LogSessionBaseSerializer,
+    LogSessionDetailSerializer
 )
 from logparser.models import LogSession
 
 
 class LogSessionViewset(CreateModelViewSet):
     queryset = LogSession.objects.all()
-    serializer_class = LogSessionSerializer
+    serializer_class = LogSessionBaseSerializer
     filterset_class = LogSessionFilterset
     ordering = ("-created",)
     view_permissions_update = {
         "create": {
             RoleChoices.SUPPORT: True,
         },
+    }
+    action_serializers = {
+        "create": LogSessionSerializer,
+        "retrieve": LogSessionDetailSerializer
     }
     schema = HDSToRepAutoSchema(extra_info={
         'logs': {
