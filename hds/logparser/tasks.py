@@ -3,9 +3,7 @@ import zipfile
 from celery import chord, Task
 from collections import defaultdict
 from django.conf import settings
-from django.core.files.storage import default_storage
 from common.celery import monitored_shared_task
-from django.core.cache import cache
 from common.utils import build_frontend_url
 from s3file.models import S3File
 from notifications.slack import post_to_slack
@@ -78,26 +76,28 @@ def extract_video_meta(vid_dict, _id):
     LogVideoSerializer.extract_video_log(avi_info['filename'], avi_info['filepath'], _id)
     LogVideoSerializer.extract_meta_json_data(meta_info['filepath'], meta_info['filename'])
 
+
 @monitored_shared_task
 def clean_dir(path_id):
     LogVideoSerializer.clean_extracts(path_id)
+    LogSessionSerializer.clean_downloads(path_id)
     return f"{path_id} Cleaned"
 
-@monitored_shared_task(base=CallbackTask)
-def perform_extraction(_id):
-    log_session = LogSession.objects.get(id=_id)
-    zip_file = cache.get(log_session.name)
-    async_upload_zip_file.delay(_id)
 
-    vid_meta_pairs = defaultdict(dict)
-    with zipfile.ZipFile(zip_file) as thezip:
-        zipfile_name = thezip.filename
-        extr_dir = LogVideoSerializer.extract_filepath(
-            zipfile_name, log_session._zip_file.file.pk
-        )
+@monitored_shared_task
+def extract_logs(_id, zippath):
+    with zipfile.ZipFile(zippath) as thezip:
         for file in thezip.filelist:
             if file.filename.endswith(".log") or file.filename.endswith(".dump"):
                 LogFileSerializer.extract_log_file(thezip, _id, file)
+
+
+def extract_with_video(zippath, path_id):
+    vid_meta_pairs = defaultdict(dict)
+    with zipfile.ZipFile(zippath) as thezip:
+        zipfile_name = thezip.filename
+        extr_dir = LogVideoSerializer.extract_filepath(zipfile_name, path_id)
+        for file in thezip.filelist:
             if file.filename.endswith(".avi"):
                 extr_filepath = thezip.extract(file, extr_dir)
                 basename = file.filename.split('.')[0]
@@ -112,9 +112,22 @@ def perform_extraction(_id):
                     "filepath": extr_filepath,
                     "filename": file.filename,
                 }
+    return vid_meta_pairs
 
-    # Create video extraction task signatures
-    tasks = [extract_video_meta.si(vid_dict, _id) for vid_dict in vid_meta_pairs.values()]
+
+@monitored_shared_task(base=CallbackTask)
+def perform_extraction(_id, extract_video=True):
+    log_session = LogSession.objects.get(id=_id)
+    zippath = os.path.join(
+        log_session._zip_file.file.download_dir, log_session.name
+    )
+    tasks = []
+    tasks.append(extract_logs.si(_id, zippath))
+    if extract_video:
+        vid_meta_pairs = extract_with_video(zippath, log_session._zip_file.file.pk)
+        # Create video extraction task signatures
+        tasks.extend([extract_video_meta.si(vid_dict, _id) for vid_dict in vid_meta_pairs.values()])
+
     # Create clean_dir callback signature
     callback = clean_dir.si(log_session._zip_file.file.pk)
     # Execute tasks -> callback as Celery chord

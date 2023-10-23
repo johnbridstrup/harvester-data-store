@@ -12,6 +12,7 @@ from rest_framework import serializers
 from logparser.models import LogVideo, LogSession
 from s3file.serializers import DirectUploadSerializer
 
+
 logger = structlog.get_logger(__name__)
 
 
