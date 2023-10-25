@@ -83,6 +83,7 @@ class EventSerializer(TaggedUUIDSerializerBase):
             ("job", "jobs", "Job"),
             ("jobresults", "jobstatus", "Job Status"),
             ("harvesterassetreport", "harvassetreport", "Asset Report"),
+            ("logsession", "logfiles", "LogSession"),
         ]
 
     def has_related_files(self) -> bool:
