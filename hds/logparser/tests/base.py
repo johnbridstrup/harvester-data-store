@@ -6,6 +6,7 @@ import tempfile
 from datetime import datetime
 from django.test import TestCase
 from django.utils.timezone import make_aware
+from django.conf import settings
 
 from common.tests import HDSAPITestBase
 from event.models import Event
@@ -22,6 +23,9 @@ class LogBaseTestCase(HDSAPITestBase):
         self.setup_basic()
 
         self.line_content = "[20220714T072500.013] [DEBUG] [autodrive.cand] -- Min Pos: 12492.610686305652, Cand: 4598"
+        self.bucket_name=settings.MEDIA_ROOT
+        self.zip_filename="example.zip"
+        self.log_filename="20220208105000_005_02_logrec.log"
 
     def create_log_session(self):
         """create log session object"""
