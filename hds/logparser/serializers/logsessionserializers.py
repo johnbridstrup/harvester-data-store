@@ -4,15 +4,18 @@ import structlog
 import os
 import shutil
 from django.conf import settings
-from django.core.cache import cache
+from django.core.files.uploadedfile import InMemoryUploadedFile
+from django.core.files.storage import FileSystemStorage
 from rest_framework import serializers
 from taggit.serializers import TagListSerializerField, TaggitSerializer
 from common.async_metrics import ASYNC_ERROR_COUNTER
 from common.reports import DTimeFormatter
 from harvester.models import Harvester
 from logparser.models import LogSession, LogFile, TIMEZONE, LogVideo
-from s3file.models import SessClip
+from s3file.models import SessClip, S3File
 from s3file.serializers import DirectUploadSerializer
+from event.models import Event
+from event.serializers import EventSerializerMixin
 
 
 logger = structlog.get_logger(__name__)
@@ -95,8 +98,7 @@ class LogSessionSerializer(TaggitSerializer, serializers.ModelSerializer):
             internal_data["creator"] = self.s3file_obj.creator.id
 
         with zipfile.ZipFile(zip_file) as thezip:
-            internal_data["name"] = thezip.filename
-            cache.set(thezip.filename, zip_file)
+            internal_data["name"] = os.path.basename(thezip.filename)
             try:
                 file = thezip.filelist[0]
                 harv, date_obj = self.extract_harvester_and_date(file)
@@ -106,8 +108,20 @@ class LogSessionSerializer(TaggitSerializer, serializers.ModelSerializer):
                 logger.error('Zip file is empty no files found')
 
         if not self.s3file_obj:
-            # Get user id from request if method is POST
-            internal_data["creator"] = self.context.get("request").user.id
+           # Get user id from request if method is POST
+           # create the event & s3file obj for the logsession
+           # write sessclip file to fs
+           creator = self.context.get("request").user
+           UUID = Event.generate_uuid()
+           event = EventSerializerMixin.get_or_create_event(UUID, creator, S3File.__name__)
+           s3file = S3File.objects.create(filetype="sessclip", creator=creator, event=event)
+           sess = SessClip.objects.create(file=s3file)
+           internal_data["creator"] = creator.id
+           internal_data["event"] = event.id
+           internal_data["_zip_file"] = sess.id
+           os.makedirs(s3file.download_dir, exist_ok=True)
+           fs = FileSystemStorage(location=s3file.download_dir, file_permissions_mode=0o777, directory_permissions_mode=0o777)
+           fs.save(zip_file.name, zip_file)
 
         return super().to_internal_value(internal_data)
 
@@ -163,22 +177,27 @@ class LogSessionSerializer(TaggitSerializer, serializers.ModelSerializer):
         return harv, date_obj
 
     @staticmethod
-    def async_zip_upload(_id, thezip, filename, user_id):
+    def async_zip_upload(_id):
         """upload zip file to s3 bucket."""
         try:
             log_session = LogSession.objects.get(id=_id)
-            data = {
-                    "key": filename,
-                    "file": thezip,
-                    "filetype": "sessclip",
-                    "creator": user_id,
-                }
-            serializer = DirectUploadSerializer(data=data)
-            serializer.is_valid(raise_exception=True)
-            s3file = serializer.save()
-            sessclip = SessClip.objects.create(file=s3file)
-            log_session._zip_file = sessclip
-            log_session.save()
+            s3file_obj = log_session._zip_file.file
+            zip_path = os.path.join(
+                log_session._zip_file.file.download_dir, log_session.name
+            )
+            file_size = os.path.getsize(zip_path)
+            with open(zip_path, "rb") as thezip:
+                in_mem_upload = InMemoryUploadedFile(thezip, field_name="file", name=log_session.name, size=file_size, content_type="application/zip", charset=None)
+                data = {
+                        "key": log_session.name,
+                        "file": in_mem_upload,
+                        "filetype": "sessclip",
+                        "creator": log_session.creator.id,
+                    }
+                serializer = DirectUploadSerializer(instance=s3file_obj, data=data)
+                serializer.is_valid(raise_exception=True)
+                serializer.save()
+                in_mem_upload.close()
 
         except LogSession.DoesNotExist:
             ASYNC_ERROR_COUNTER.labels(

@@ -68,9 +68,8 @@ class CBCleanTask(Task):
 
 @monitored_shared_task
 def async_upload_zip_file(_id):
-    log_session = LogSession.objects.get(id=_id)
-    zip_file = cache.get(log_session.name)
-    LogSessionSerializer.async_zip_upload(_id, zip_file, log_session.name, log_session.creator.id)
+    LogSessionSerializer.async_zip_upload(_id)
+
 
 @monitored_shared_task
 def extract_video_meta(vid_dict, _id):
