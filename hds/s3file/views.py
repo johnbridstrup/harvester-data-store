@@ -1,4 +1,10 @@
+import re
+
+from django.shortcuts import redirect
+from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework.status import HTTP_404_NOT_FOUND
+from urllib.parse import urljoin
 
 from event.signals import update_event_tag
 from common.viewsets import CreateModelViewSet
@@ -25,6 +31,9 @@ class S3FileView(CreateModelViewSet):
         "destroy": {
             RoleChoices.MANAGER: True,
             RoleChoices.DEVELOPER: True
+        },
+        "download_redirect": {
+            RoleChoices.SUPPORT: True,
         },
     }
     action_serializers = {
@@ -59,7 +68,24 @@ class S3FileView(CreateModelViewSet):
 
     def check_for_deleted(self, qp):
         return qp in ["True", "true", "1"]
-
+    
+    @action(
+        methods=['get'],
+        detail=True,
+        url_path='download',
+    )
+    def download_redirect(self, request, pk=None):
+        obj = self.get_object()
+        http_pattern = "^https?://"
+        if obj.file:
+            obj_url = obj.file.url
+            if re.search(http_pattern, obj_url):
+                url = obj_url
+            elif request is not None:
+                url = urljoin(urljoin("http://" + request.get_host(), "/api/v1/"), obj_url)
+        else:
+            return Response("File Does Not Exist", HTTP_404_NOT_FOUND)
+        return redirect(url)
 
 class SessClipView(S3FileView):
     def perform_create(self, serializer):

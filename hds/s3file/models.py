@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 from urllib.parse import urljoin
 
 from common.models import CommonInfo
@@ -15,14 +16,12 @@ class S3File(EventModelMixin, CommonInfo):
     def __str__(self) -> str:
         return str(self.file)
 
-    def url(self, request):
-        if self.file:
-            if any([x in self.file.url for x in ["http://", "https://"]]):
-                return self.file.url
-            if request is not None:
-                url = urljoin(urljoin("http://" + request.get_host(), "/api/v1/"), self.file.url)
-                return url
-        return None
+    def url(self, request, pk):
+        if request is None:
+            return None
+        url = request.build_absolute_uri(reverse("s3file-detail", args=[pk]))
+        redirect_url = urljoin(url, "download/")
+        return redirect_url
 
     def delete_from_s3(self):
         self.file.delete() # deletes file from storages
