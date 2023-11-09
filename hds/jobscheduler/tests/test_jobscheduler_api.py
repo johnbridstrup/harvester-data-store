@@ -7,8 +7,8 @@ from rest_framework import status
 from common.utils import build_api_url
 from harvjobs.models import Job
 from harvjobs.tests.HarvJobApiTestBase import HarvJobApiTestBase
-from .models import ScheduledJob
-from .tasks import run_scheduled_job
+from ..models import ScheduledJob
+from ..tasks import run_scheduled_job
 
 
 class JobSchedulerTestCase(HarvJobApiTestBase):
