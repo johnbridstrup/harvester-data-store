@@ -53,104 +53,32 @@ def compare_patterns(keys, urls):
     return all(['/' + u in keys if u not in ignore else True for u in urls])
 
 
-class HDSAPITestBase(APITestCase):
+class HDSTestAttributes:
     BASE_PATH = os.path.join(os.path.abspath(os.path.dirname(__file__)), "test_data")
+    
+    def _load_report(self, relpath):
+        fpath = os.path.join(self.BASE_PATH, relpath)
+        with open(fpath, 'rb') as f:
+            d = json.load(f)
+        return d
 
-    def setUp(self):
-        self.client = APIClient()
-        self.user = User.objects.create(username='test_user')
-        self.set_admin()
-        self.user_profile = UserProfile.objects.create(
-            user=self.user,
-            slack_id="fake-id",
-            role=RoleChoices.MANAGER
-        )
-        self.token = Token.objects.create(user=self.user)
-        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
-        self.api_base_url = '/api/v1'
-        self.setup_urls()
-        os.makedirs(settings.MEDIA_ROOT, exist_ok=True)
+    def load_error_report(self):
+        self.data = self._load_report('report.json')
 
-    def create_new_user_client(self, role=None):
-        chars = string.ascii_letters + string.digits
-        username = ''.join(random.choice(chars) for _ in range(10))
-        if role is None:
-            role = RoleChoices.MANAGER
-        user = User.objects.create(username=username)
-        UserProfile.objects.create(
-            user=user,
-            slack_id="another-fake-id",
-            role=role,
-        )
-        token = Token.objects.create(user=user)
-        client = APIClient()
-        client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
-        return client, user
+    def load_config_data(self):
+        self.conf_data = self._load_report('configs-report_002_1675256694.218969.json')
 
-    def set_admin(self):
-        self.user.is_superuser = True
-        self.user.save()
+    def load_autodiag_report(self):
+        self.ad_data = self._load_report('autodiag_report.json')
 
-    def set_user_role(self, role):
-        """set test user role.
+    def load_asset_report(self):
+        self.asset_data = self._load_report('serialnums.json')
 
-        Sets superuser to False as well
+    def load_picksess_report(self):
+        self.picksess_data = self._load_report('picksess.json')
 
-        Args:
-            role (models.TextChoices.Choice): The role to set
-        """
-        self.user.is_superuser = False
-        self.user.save()
-        self.user.profile.role = role.value
-        self.user.profile.save()
-
-    def set_user_support(self):
-        self.set_user_role(RoleChoices.SUPPORT)
-
-    def set_user_developer(self):
-        self.set_user_role(RoleChoices.DEVELOPER)
-
-    def set_user_manager(self):
-        self.set_user_role(RoleChoices.MANAGER)
-
-    def set_user_jenkins(self):
-        self.set_user_role(RoleChoices.JENKINS)
-
-    def set_user_beatbox(self):
-        self.set_user_role(RoleChoices.BEATBOX)
-
-    def setup_basic(self):
-        self.test_objects = {}
-        self.test_objects["fruit"] = self.create_fruit_object('strawberry')
-        self.test_objects["distributor"] = self.create_distributor_object('test_distrib')
-        self.test_objects["location"] = self.create_location_object(**{
-            "distributor": self.test_objects["distributor"],
-            "ranch": "Ranch A",
-            "country": "US",
-            "region": "California",
-            'creator': self.user
-        })
-        self.test_objects["harvester"] = self.create_harvester_object(**{
-            'harv_id': 11,
-            'fruit': self.test_objects["fruit"],
-            'location': self.test_objects["location"],
-            'name': 'Harvester 1',
-            'creator': self.user
-        })
-        self.test_objects["code"] = AFTExceptionCode.objects.create(**{
-            'code': 0,
-            'name': 'AFTBaseException',
-            'msg': 'test message',
-            'team': 'aft',
-            'cycle': False,
-            'creator': self.user
-        })
-        self.test_objects["dummy_report"] = {
-            "timestamp": time(),
-            "UUID": Event.generate_uuid(),
-            "serial_number": self.test_objects["harvester"].harv_id,
-            "data": {"hello": "there"}
-        }
+    def load_emustats_report(self):
+        self.emustats_data = self._load_report('emustats.json')
 
     def setup_urls(self):
         # Users
@@ -270,6 +198,104 @@ class HDSAPITestBase(APITestCase):
         self.sesscl_url = reverse("sessclip-list")
         self.sesscl_det_url = lambda id_: reverse("sessclip-detail", args=[id_])
 
+
+class HDSAPITestBase(APITestCase, HDSTestAttributes):
+    def setUp(self):
+        self.client = APIClient()
+        self.user = User.objects.create(username='test_user')
+        self.set_admin()
+        self.user_profile = UserProfile.objects.create(
+            user=self.user,
+            slack_id="fake-id",
+            role=RoleChoices.MANAGER
+        )
+        self.token = Token.objects.create(user=self.user)
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+        self.api_base_url = '/api/v1'
+        self.setup_urls()
+        os.makedirs(settings.MEDIA_ROOT, exist_ok=True)
+
+    def create_new_user_client(self, role=None):
+        chars = string.ascii_letters + string.digits
+        username = ''.join(random.choice(chars) for _ in range(10))
+        if role is None:
+            role = RoleChoices.MANAGER
+        user = User.objects.create(username=username)
+        UserProfile.objects.create(
+            user=user,
+            slack_id="another-fake-id",
+            role=role,
+        )
+        token = Token.objects.create(user=user)
+        client = APIClient()
+        client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
+        return client, user
+
+    def set_admin(self):
+        self.user.is_superuser = True
+        self.user.save()
+
+    def set_user_role(self, role):
+        """set test user role.
+
+        Sets superuser to False as well
+
+        Args:
+            role (models.TextChoices.Choice): The role to set
+        """
+        self.user.is_superuser = False
+        self.user.save()
+        self.user.profile.role = role.value
+        self.user.profile.save()
+
+    def set_user_support(self):
+        self.set_user_role(RoleChoices.SUPPORT)
+
+    def set_user_developer(self):
+        self.set_user_role(RoleChoices.DEVELOPER)
+
+    def set_user_manager(self):
+        self.set_user_role(RoleChoices.MANAGER)
+
+    def set_user_jenkins(self):
+        self.set_user_role(RoleChoices.JENKINS)
+
+    def set_user_beatbox(self):
+        self.set_user_role(RoleChoices.BEATBOX)
+
+    def setup_basic(self):
+        self.test_objects = {}
+        self.test_objects["fruit"] = self.create_fruit_object('strawberry')
+        self.test_objects["distributor"] = self.create_distributor_object('test_distrib')
+        self.test_objects["location"] = self.create_location_object(**{
+            "distributor": self.test_objects["distributor"],
+            "ranch": "Ranch A",
+            "country": "US",
+            "region": "California",
+            'creator': self.user
+        })
+        self.test_objects["harvester"] = self.create_harvester_object(**{
+            'harv_id': 11,
+            'fruit': self.test_objects["fruit"],
+            'location': self.test_objects["location"],
+            'name': 'Harvester 1',
+            'creator': self.user
+        })
+        self.test_objects["code"] = AFTExceptionCode.objects.create(**{
+            'code': 0,
+            'name': 'AFTBaseException',
+            'msg': 'test message',
+            'team': 'aft',
+            'cycle': False,
+            'creator': self.user
+        })
+        self.test_objects["dummy_report"] = {
+            "timestamp": time(),
+            "UUID": Event.generate_uuid(),
+            "serial_number": self.test_objects["harvester"].harv_id,
+            "data": {"hello": "there"}
+        }
+
     def create_fruit_object(self, name=None):
         name = name or "strawberry"
         return Fruit.objects.create(name=name, creator=self.user)
@@ -346,7 +372,7 @@ class HDSAPITestBase(APITestCase):
             format='json'
         )
         return resp
-
+    
     def create_user(self, username, password, profile_kwargs = {}, **kwargs):
             user = User.objects.create_user(
             username=username,
@@ -355,30 +381,6 @@ class HDSAPITestBase(APITestCase):
             )
             UserProfile.objects.create(user=user, **profile_kwargs)
             return user
-
-    def _load_report(self, relpath):
-        fpath = os.path.join(self.BASE_PATH, relpath)
-        with open(fpath, 'rb') as f:
-            d = json.load(f)
-        return d
-
-    def load_error_report(self):
-        self.data = self._load_report('report.json')
-
-    def load_config_data(self):
-        self.conf_data = self._load_report('configs-report_002_1675256694.218969.json')
-
-    def load_autodiag_report(self):
-        self.ad_data = self._load_report('autodiag_report.json')
-
-    def load_asset_report(self):
-        self.asset_data = self._load_report('serialnums.json')
-
-    def load_picksess_report(self):
-        self.picksess_data = self._load_report('picksess.json')
-
-    def load_emustats_report(self):
-        self.emustats_data = self._load_report('emustats.json')
 
     def post_emustats_report(self, load=True):
         if load:
