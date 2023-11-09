@@ -8,6 +8,7 @@ from common.utils import build_api_url
 from harvjobs.models import Job
 from harvjobs.tests.HarvJobApiTestBase import HarvJobApiTestBase
 from ..models import ScheduledJob
+from ..serializers import ScheduledJobSerializer
 from ..tasks import run_scheduled_job
 
 
@@ -38,6 +39,45 @@ class JobSchedulerTestCase(HarvJobApiTestBase):
         self._create_defaults()
         r = self.client.post(self.url, self.jobsched_payload, format='json')
         self.assertEqual(r.status_code, status.HTTP_201_CREATED)
+
+    def test_invalid_no_jobtype_or_schema(self):
+        self._create_defaults()
+        del self.jobsched_payload["jobtype"]
+        del self.jobsched_payload["schema_version"]
+        r = self.client.post(self.url, self.jobsched_payload, format='json')
+        self.assertEqual(r.status_code, status.HTTP_400_BAD_REQUEST)
+        err = r.json()["errors"]["detail"]
+        exp_err = {
+            ScheduledJobSerializer.Msgs.MISSING_KEY: [
+                ScheduledJobSerializer.Msgs.NO_JOBTYPE,
+                ScheduledJobSerializer.Msgs.NO_VERS,
+            ]
+        }
+        self.assertDictEqual(err, exp_err)
+
+    def test_invalid_missing_payload_schema(self):
+        self._create_defaults()
+        del self.jobsched_payload["payload"]["payload"]
+        BAD_VERS = "That Doesn't Exist"
+        self.jobsched_payload["schema_version"] = BAD_VERS
+        r = self.client.post(self.url, self.jobsched_payload, format='json')
+        self.assertEqual(r.status_code, status.HTTP_400_BAD_REQUEST)
+        err = r.json()["errors"]["detail"]
+        exp_err = {
+            ScheduledJobSerializer.Msgs.MISSING_KEY: ScheduledJobSerializer.Msgs.NO_PAYLOAD,
+            **ScheduledJobSerializer.Msgs.NO_SCHEMA("test", BAD_VERS),
+        }
+        self.assertDictEqual(err, exp_err)
+
+    def test_invalid_payload(self):
+        self._create_defaults()
+        del self.jobsched_payload["payload"]["payload"]["requiredArg"]
+        r = self.client.post(self.url, self.jobsched_payload, format='json')
+        self.assertEqual(r.status_code, status.HTTP_400_BAD_REQUEST)
+
+        err = r.json()["errors"]["detail"]
+        self.assertIn("invalid", err)
+        self.assertIn("'requiredArg' is a required property", err["invalid"])
 
     def test_myjobs(self):
         self._create_defaults()

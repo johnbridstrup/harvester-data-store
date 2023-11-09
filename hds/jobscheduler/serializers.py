@@ -1,3 +1,5 @@
+import jsonschema
+
 from django.forms import ValidationError
 from django_celery_beat.models import (
     PeriodicTask,
@@ -10,6 +12,7 @@ from timezone_field.rest_framework import TimeZoneSerializerField
 
 from harvester.models import Harvester
 from harvester.serializers.harvesterserializer import HarvesterMinimalSerializer
+from harvjobs.models import JobSchema
 from harvjobs.serializers.jobserializer import JobSerializer
 from .models import ScheduledJob
 
@@ -143,9 +146,58 @@ class ScheduledJobSerializer(serializers.ModelSerializer):
         fields = ('__all__')
         read_only_fields = ('creator',)
 
+    class Msgs:
+        MISSING_KEY = "missing"
+        NO_JOBTYPE = "jobtype"
+        NO_VERS = "schema_version"
+        NO_SCHEMA = lambda jt, sv: {"No Schema": f"{jt} version {sv} does not exist"}
+        NO_PAYLOAD = "payload"
+        NO_TARGETS = "targets"
+        NO_SCHEDULE = "schedule"
+
     def to_internal_value(self, data):
-        # We will do some validation, but since we send a full form to complete
-        # to clients we can assume it was validated on the client side.
+        missing = []
+
+        jobtype = data.get("jobtype")
+        if jobtype is None:
+            missing.append(self.Msgs.NO_JOBTYPE)
+        
+        schema_version = data.get("schema_version")
+        if schema_version is None:
+            missing.append(self.Msgs.NO_VERS)
+
+        targets = data.get("targets")
+        if targets is None:
+            missing.append(self.Msgs.NO_TARGETS)
+        
+        schedule = data.get("schedule")
+        if schedule is None:
+            missing.append(self.Msgs.NO_SCHEDULE)
+
+        if len(missing):
+            raise serializers.ValidationError({self.Msgs.MISSING_KEY: missing})
+        
+        errs = {}
+        try:
+            schema = JobSchema.objects.get(
+                jobtype__name=jobtype,
+                version=schema_version,
+            )
+        except JobSchema.DoesNotExist:
+            errs.update(self.Msgs.NO_SCHEMA(jobtype, schema_version))
+        
+        payload = data.get("payload", {}).get("payload")
+        if payload is None:
+            errs[self.Msgs.MISSING_KEY] = self.Msgs.NO_PAYLOAD
+
+        if errs:
+            raise serializers.ValidationError(errs)
+        
+        try:
+            jsonschema.validate(payload, schema.schema["properties"]["payload"])
+        except jsonschema.ValidationError as e:
+            raise serializers.ValidationError({"invalid": e})
+        
         targets = self._parse_targets(data["targets"])
         internal_data = {
             "job_def": { **data },
