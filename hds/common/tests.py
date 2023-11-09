@@ -55,7 +55,7 @@ def compare_patterns(keys, urls):
 
 class HDSTestAttributes:
     BASE_PATH = os.path.join(os.path.abspath(os.path.dirname(__file__)), "test_data")
-    
+
     def _load_report(self, relpath):
         fpath = os.path.join(self.BASE_PATH, relpath)
         with open(fpath, 'rb') as f:
@@ -79,6 +79,76 @@ class HDSTestAttributes:
 
     def load_emustats_report(self):
         self.emustats_data = self._load_report('emustats.json')
+
+    def setup_jobscheduler_data(self):
+        self.DEFAULT_JOBTYPE = "test"
+        self.DEFAULT_SCHEMA_VERSION = "0.1"
+        self.DEFAULT_SCHEMA = {
+            "type": "object",
+            "properties": {
+                "id": {"type": "string"},
+                "job_type": {"type": "string"},
+                "payload": {
+                    "type": "object",
+                    "properties": {
+                        "requiredArg": {
+                        "type": "string"
+                        },
+                        "optionalArg": {
+                        "type": "string"
+                        }
+                    },
+                    "required": ["requiredArg"],
+                }
+            },
+            "required": ["payload"],
+        }
+
+        self.DEFAULT_JOB_PAYLOAD = {
+            "payload": {
+                "requiredArg": "some value",
+                "optionalArg": "some other value",
+            }
+        }
+        self.DEFAULT_RESULT_SUCCESS = {
+            "data": {
+                "master": {
+                    "ts": 1666048158.12822,
+                    "exit_code": 0,
+                    "stdout": "",
+                    "stderr": "",
+                    "status": "success"
+                }
+            },
+            "timestamp": 1666048158.1355963,
+            "type": "jobresults"
+        }
+        self.DEFAULT_RESULT_FAIL = {
+            "data": {
+                "master": {
+                    "ts": 1666048159.12822,
+                    "exit_code": 1,
+                    "stdout": "",
+                    "stderr": "",
+                    "status": "failure"
+                }
+            },
+            "timestamp": 1666048158.1355963,
+            "type": "jobresults"
+        }
+        self.DEFAULT_RESULT_ERROR = {
+            "data": {
+                "master": {
+                    "ts": 1666048159.12822,
+                    "type": "Exception",
+                    "value": "An Exception occurred",
+                    "traceback": "Bad things happened on line 99",
+                    "status": "error"
+                }
+            },
+            "timestamp": 1666048158.1355963,
+            "type": "jobresults"
+        }
 
     def setup_urls(self):
         # Users
