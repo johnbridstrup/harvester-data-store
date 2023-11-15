@@ -38,7 +38,7 @@ class JobSchedulerTestCase(HarvJobApiTestBase):
     def test_create_sched_job_basic(self):
         self._create_defaults()
         r = self.client.post(self.url, self.jobsched_payload, format='json')
-        self.assertEqual(r.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(r.status_code, status.HTTP_202_ACCEPTED)
 
     def test_invalid_no_jobtype_or_schema(self):
         self._create_defaults()
@@ -87,13 +87,13 @@ class JobSchedulerTestCase(HarvJobApiTestBase):
 
         # two for user 1
         r = usr1_client.post(self.url, self.jobsched_payload, format='json')
-        self.assertEqual(r.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(r.status_code, status.HTTP_202_ACCEPTED)
         r = usr1_client.post(self.url, self.jobsched_payload, format='json')
-        self.assertEqual(r.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(r.status_code, status.HTTP_202_ACCEPTED)
 
         # one for user 2
         r = usr2_client.post(self.url, self.jobsched_payload, format='json')
-        self.assertEqual(r.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(r.status_code, status.HTTP_202_ACCEPTED)
 
         url = reverse("jobscheduler-myjobs")
         r1 = usr1_client.get(url)
@@ -178,7 +178,7 @@ class JobSchedulerTestCase(HarvJobApiTestBase):
     def test_filter_scheduledjobs(self):
         self._create_defaults()
         r = self.client.post(self.url, self.jobsched_payload, format='json')
-        self.assertEqual(r.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(r.status_code, status.HTTP_202_ACCEPTED)
 
         # filter by jobtype positive
         res = self.client.get(f'{self.url}?jobtype={self.jobsched_payload["jobtype"]}')

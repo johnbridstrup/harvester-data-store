@@ -1,5 +1,6 @@
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
+from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.renderers import JSONRenderer
 
@@ -57,6 +58,11 @@ class ScheduledJobView(CreateModelViewSet):
             inst.delete()
             raise
         return inst
+    
+    def create(self, request, *args, **kwargs):
+        resp = super().create(request, *args, **kwargs)
+        resp.status_code = status.HTTP_202_ACCEPTED
+        return resp
 
     @action(
         methods=['get'],
