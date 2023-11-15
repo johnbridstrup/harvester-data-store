@@ -141,6 +141,19 @@ class JobSchedulerTestCase(HarvJobApiTestBase):
         schedjob = ScheduledJob.objects.get(id=1)
         self.assertEqual(schedjob.num_runs, 1)
 
+    def test_max_jobs_reached(self):
+        self._create_defaults()
+        self.jobsched_payload["max_runs"] = 2
+        self.client.post(self.url, self.jobsched_payload, format='json')
+
+        run_scheduled_job(1)
+        run_scheduled_job(1)
+        
+        schedjob = ScheduledJob.objects.get(id=1)
+        self.assertEqual(schedjob.schedule_status, ScheduledJob.SchedJobStatusChoices.MAXRUNS)
+        self.assertFalse(schedjob.task.enabled)
+        
+
     def test_status_updates(self):
         self._create_defaults()
         r = self.client.post(self.url, self.jobsched_payload, format='json')

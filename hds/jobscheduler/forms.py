@@ -1,3 +1,5 @@
+from django.utils import timezone
+
 from harvester.models import Fruit, Harvester
 from harvjobs.models import JobSchema
 from location.models import Location
@@ -68,6 +70,10 @@ class JobschedulerForm:
                             }
                         },
                     ],
+                },
+                "max_runs": {
+                    "type": "integer",
+                    "default": 10,
                 },
                 "targets": {
                     "type": "object",

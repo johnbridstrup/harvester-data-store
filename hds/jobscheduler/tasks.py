@@ -65,5 +65,9 @@ def run_scheduled_job(self, sched_job_id):
         sched_job.jobs.add(job)
         sched_job.schedule_status = ScheduledJob.SchedJobStatusChoices.SCHEDULED
         sched_job.num_runs += 1
+        if sched_job.max_runs > 0 and sched_job.num_runs >= sched_job.max_runs:
+            sched_job.task.enabled = False
+            sched_job.task.save()
+            sched_job.schedule_status = ScheduledJob.SchedJobStatusChoices.MAXRUNS
         sched_job.save()
     return f"Scheduled job {sched_job_id} sent to jobserver"

@@ -198,10 +198,13 @@ class ScheduledJobSerializer(serializers.ModelSerializer):
         except jsonschema.ValidationError as e:
             raise serializers.ValidationError({"invalid": e})
         
+        max_runs = data.get("max_runs", 10)
+        
         targets = self._parse_targets(data["targets"])
         internal_data = {
             "job_def": { **data },
             "targets": targets,
+            "max_runs": max_runs,
         }
         return super().to_internal_value(internal_data)
 
