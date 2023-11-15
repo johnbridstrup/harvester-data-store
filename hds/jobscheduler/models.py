@@ -22,6 +22,7 @@ class ScheduledJob(CommonInfo):
         CANCELLED = "cancelled"
         RESCHEDWAITING = "waiting to re-schedule"
         SCHEDFAIL = "failed to schedule"
+        MAXRUNS = "Max runs reached"
 
     task = models.OneToOneField(PeriodicTask, on_delete=models.CASCADE, null=True, blank=True)
     targets = models.ManyToManyField(Harvester)
@@ -29,4 +30,6 @@ class ScheduledJob(CommonInfo):
     jobs = models.ManyToManyField(Job, blank=True)
     schedule_status = models.CharField(max_length=63, choices=SchedJobStatusChoices.choices, default=SchedJobStatusChoices.PENDING)
     history = HistoricalRecords()
+    num_runs = models.IntegerField(default=0)
+    max_runs = models.IntegerField(default=10)  # negative is no max
     
