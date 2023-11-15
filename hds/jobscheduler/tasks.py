@@ -64,5 +64,6 @@ def run_scheduled_job(self, sched_job_id):
 
         sched_job.jobs.add(job)
         sched_job.schedule_status = ScheduledJob.SchedJobStatusChoices.SCHEDULED
+        sched_job.num_runs += 1
         sched_job.save()
     return f"Scheduled job {sched_job_id} sent to jobserver"
