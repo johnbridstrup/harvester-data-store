@@ -26,6 +26,11 @@ def run_scheduled_job(self, sched_job_id):
         jobtype__name=sched_job.job_def["jobtype"],
         version=sched_job.job_def["schema_version"],
     )
+
+    job_def = sched_job.job_def["payload"]
+    if schema.is_dynamic:
+        job_def = schema.payload_from_dynamic(job_def)
+
     try:
         jsonschema.validate(sched_job.job_def["payload"], schema.schema)
     except jsonschema.ValidationError as e:

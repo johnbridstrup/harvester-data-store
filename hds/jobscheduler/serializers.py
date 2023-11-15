@@ -194,7 +194,7 @@ class ScheduledJobSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(errs)
         
         try:
-            jsonschema.validate(payload, schema.schema["properties"]["payload"])
+            jsonschema.validate(payload, schema.dynamic_schema["properties"]["payload"])
         except jsonschema.ValidationError as e:
             raise serializers.ValidationError({"invalid": e})
         

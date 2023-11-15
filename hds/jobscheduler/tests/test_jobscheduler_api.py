@@ -7,9 +7,13 @@ from rest_framework import status
 from common.utils import build_api_url
 from harvjobs.models import Job
 from harvjobs.tests.HarvJobApiTestBase import HarvJobApiTestBase
+from harvjobs.dynamic_keys import DynamicKeys
 from ..models import ScheduledJob
 from ..serializers import ScheduledJobSerializer
 from ..tasks import run_scheduled_job
+
+
+DT_REGEX = "(^2[0-9]{3}[0-1][0-9][0-3][0-9][0-2][0-9]{3}([0-5][0-9])?$)"
 
 
 class JobSchedulerTestCase(HarvJobApiTestBase):
@@ -204,3 +208,92 @@ class JobSchedulerTestCase(HarvJobApiTestBase):
         res = self.client.get(f'{self.url}?jobtype={self.jobsched_payload["jobtype"]}&schema_version={self.jobsched_payload["schema_version"]}')
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(res.json()['data']['count'], 1)
+
+    def test_dynamic_key_schema_updated(self):
+        self.DEFAULT_SCHEMA["allow_repeat_schedules"] = True
+        self.DEFAULT_SCHEMA["dynamic_keys"] = ["requiredArg"]
+        dyn_req_arg = DynamicKeys._create_dyn_key_name("requiredArg")
+
+        self.create_jobtype()
+        self.create_jobschema()
+
+        url = self.url + "create/"
+        r = self.client.get(url)
+        
+        form_url = r.json()['data']['jobs'][self.DEFAULT_JOBTYPE][self.DEFAULT_SCHEMA_VERSION]["url"]
+        form_r = self.client.get(form_url)
+
+        self.assertEqual(form_r.status_code, status.HTTP_200_OK, form_r.json())
+        
+        form_payload_schema = form_r.json()["data"]["form"]["properties"]["payload"]["properties"]["payload"]
+        self.assertIn(dyn_req_arg, form_payload_schema["properties"])
+        self.assertIn(dyn_req_arg, form_payload_schema["required"])
+
+    def test_dynamic_time_of_schedule(self):
+        self.DEFAULT_SCHEMA["allow_repeat_schedules"] = True
+        self.DEFAULT_SCHEMA["dynamic_keys"] = ["requiredArg"]
+        self.DEFAULT_SCHEMA["properties"]["payload"]["properties"]["requiredArg"]["pattern"] = DT_REGEX
+
+        self.create_jobtype()
+        self.create_jobschema()
+
+        url = self.url + "create/"
+        r = self.client.get(url)
+        form_url = r.json()['data']['jobs'][self.DEFAULT_JOBTYPE][self.DEFAULT_SCHEMA_VERSION]["url"]
+        form_r = self.client.get(form_url)
+        submit_url = form_r.json()["data"]["submit"]
+        
+        TOS_payload = {}
+        TOS_payload["payload"] = {
+            "__dynamic__requiredArg": {
+                "selection": "TimeOfSchedule",
+                "value": {
+                    "format": "%Y%m%d%H%M%S",
+                    "hours": -6
+                }
+            },
+            "optionalArg": "hello"
+        }
+
+        self.jobsched_payload["payload"] = TOS_payload
+        r = self.client.post(submit_url, self.jobsched_payload, format="json")
+
+        self.assertEqual(r.status_code, status.HTTP_202_ACCEPTED, {"code": r.status_code, "exc": r.json()})
+
+        run_scheduled_job(1)
+
+        job = ScheduledJob.objects.get(id=1)
+        self.assertEqual(job.schedule_status, ScheduledJob.SchedJobStatusChoices.SCHEDULED)
+
+    def test_dynamic_exact(self):
+        self.DEFAULT_SCHEMA["allow_repeat_schedules"] = True
+        self.DEFAULT_SCHEMA["dynamic_keys"] = ["requiredArg"]
+        self.DEFAULT_SCHEMA["properties"]["payload"]["properties"]["requiredArg"]["pattern"] = DT_REGEX
+
+        self.create_jobtype()
+        self.create_jobschema()
+
+        url = self.url + "create/"
+        r = self.client.get(url)
+        form_url = r.json()['data']['jobs'][self.DEFAULT_JOBTYPE][self.DEFAULT_SCHEMA_VERSION]["url"]
+        form_r = self.client.get(form_url)
+        submit_url = form_r.json()["data"]["submit"]
+        
+        TOS_payload = {}
+        TOS_payload["payload"] = {
+            "__dynamic__requiredArg": {
+                "selection": "Exact",
+                "value": "202311151112",
+            },
+            "optionalArg": "hello"
+        }
+
+        self.jobsched_payload["payload"] = TOS_payload
+        r = self.client.post(submit_url, self.jobsched_payload, format="json")
+
+        self.assertEqual(r.status_code, status.HTTP_202_ACCEPTED, {"code": r.status_code, "exc": r.json()})
+
+        run_scheduled_job(1)
+
+        job = ScheduledJob.objects.get(id=1)
+        self.assertEqual(job.schedule_status, ScheduledJob.SchedJobStatusChoices.SCHEDULED)

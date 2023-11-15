@@ -129,7 +129,7 @@ class JobschedulerForm:
                     ],
                 },
                 "payload": {
-                    **self.schema.schema,
+                    **self.schema.dynamic_schema,
                 },
             },
         }

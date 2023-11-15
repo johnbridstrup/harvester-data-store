@@ -6,7 +6,7 @@ from common.reports import ReportBase
 from event.models import EventModelMixin
 from harvester.models import Harvester
 
-from .dynamic_keys import ALLOW_REPEAT_KEY, DYN_KEY_LIST_KEY
+from .dynamic_keys import ALLOW_REPEAT_KEY, DYN_KEY_LIST_KEY, DynamicKeys
 
 
 class JobType(CommonInfo):
@@ -39,6 +39,19 @@ class JobSchema(CommonInfo):
     @property
     def is_dynamic(self):
         return len(self.dynamic_keys_list) > 0 and self.allows_repeats
+    
+    @property
+    def dynamic_schema(self):
+        if not self.is_dynamic:
+            return self.schema
+        
+        schema = self.schema.copy()
+        schema["properties"]["payload"] = DynamicKeys.create_dynamic_schema(schema["properties"]["payload"], self.dynamic_keys_list)
+        return schema
+    
+    def payload_from_dynamic(self, payload):
+        payload["payload"] = DynamicKeys.create_entries(payload["payload"])
+        return payload
 
 
 class Job(EventModelMixin, CommonInfo):

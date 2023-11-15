@@ -1,4 +1,8 @@
 import copy
+import jsonschema
+import pytz
+
+from django.utils import timezone
 
 from common.reports import LOG_TIMESTAMP_FMT, UTILITY_TIMESTAMP_FMT
 
@@ -22,6 +26,19 @@ class DynamicKey:
     @classmethod
     def name(cls):
         return cls.__name__
+    
+    @classmethod
+    def validate(cls, obj):
+        jsonschema.validate(obj, cls.schema())
+
+    @classmethod
+    def create_entry(cls, obj):
+        cls.validate(obj)
+        return cls.make_entry(obj)
+    
+    @classmethod
+    def make_entry(cls, obj):
+        raise NotImplementedError(f"make_entry not implemented for {cls.__name__}")
 
 
 class DynamicKeys:
@@ -53,6 +70,27 @@ class DynamicKeys:
             schema["properties"][dyn_key_name]["properties"].update(cls._generate_dynamic_options_prop())
             schema["properties"][dyn_key_name]["allOf"] = cls._create_allof_list(obj_schema)
         return schema
+    
+    @classmethod
+    def create_entries(cls, dynamic_obj):
+        obj = copy.deepcopy(dynamic_obj)
+        for key in dynamic_obj.keys():
+            if not cls.DYNAMIC_PREFIX in key:
+                continue
+            
+            val = obj.pop(key)
+            selection = val.pop(cls.DYNAMIC_SELECTION)
+            recovered_key = key.replace(cls.DYNAMIC_PREFIX, "")
+
+            if selection == cls.EXACT:
+                obj[recovered_key] = val["value"]
+                continue
+            
+            dyn_key: DynamicKey = cls._DYN_KEYS[selection]
+            obj[recovered_key] = dyn_key.create_entry(val["value"])
+        return obj
+
+
     
     @classmethod
     def _create_dyn_key_name(cls, prop):
@@ -142,3 +180,15 @@ class TimeOfSchedule(DynamicKey):
                 }
             }
         }
+    
+    @classmethod
+    def make_entry(cls, obj):
+        days = obj.get("days", 0)
+        hours = obj.get("hours", 0)
+        minutes = obj.get("minutes", 0)
+        dt_format = obj.get("format")
+        now = timezone.now().astimezone(pytz.timezone("US/PACIFIC"))
+        then = now + timezone.timedelta(days=days, hours=hours, minutes=minutes)
+        t_str = then.strftime(dt_format)
+
+        return t_str
