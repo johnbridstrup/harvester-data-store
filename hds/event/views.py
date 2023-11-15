@@ -53,6 +53,20 @@ class TaggedUUIDViewBase(CreateModelViewSet):
                     }
                 }
             }
+        },
+        'related_images': {
+            'type': 'array',
+            'items': {
+                'type': 'object',
+                'properties': {
+                    'url': {
+                        'type': 'string'
+                    },
+                    'filetype': {
+                        'type': 'string'
+                    }
+                }
+            }
         }
     })
 
