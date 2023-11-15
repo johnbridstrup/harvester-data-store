@@ -1,3 +1,5 @@
+import jsonschema
+import structlog
 from celery import Task
 
 from common.celery import monitored_shared_task
@@ -7,6 +9,9 @@ from harvjobs.tasks import schedule_job
 from .models import ScheduledJob
 
 
+logger = structlog.getLogger(__name__)
+
+
 class RunSchedCallback(Task):
     def on_failure(self, exc, task_id, args, kwargs, einfo):
         job = ScheduledJob.objects.get(id=args[0])
@@ -14,13 +19,22 @@ class RunSchedCallback(Task):
         job.save()
 
 
-@monitored_shared_task(base=RunSchedCallback)
-def run_scheduled_job(sched_job_id):
+@monitored_shared_task(base=RunSchedCallback, bind=True)
+def run_scheduled_job(self, sched_job_id):
     sched_job = ScheduledJob.objects.get(id=sched_job_id)
     schema = JobSchema.objects.get(
         jobtype__name=sched_job.job_def["jobtype"],
         version=sched_job.job_def["schema_version"],
     )
+    try:
+        jsonschema.validate(sched_job.job_def["payload"], schema.schema)
+    except jsonschema.ValidationError as e:
+        sched_job.schedule_status = ScheduledJob.SchedJobStatusChoices.SCHEDFAIL
+        sched_job.task.enabled = False
+        sched_job.save()
+        logger.exception(e)
+        return "Failed to validate payload"
+
     harvs = sched_job.targets.all()
     job_obj = {
         "schema": schema,
