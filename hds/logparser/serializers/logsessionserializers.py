@@ -1,7 +1,6 @@
 import re
 import zipfile
 import structlog
-import uuid
 import os
 import shutil
 from django.conf import settings
@@ -74,20 +73,30 @@ class LogSessionDetailSerializer(serializers.ModelSerializer):
 
 class LogSessionSerializer(TaggitSerializer, serializers.ModelSerializer):
     """Serializer for the log session model."""
+    def __init__(self, instance=None, data=..., s3file_obj=None, **kwargs):
+        super().__init__(instance, data, **kwargs)
+        self.s3file_obj = s3file_obj
+
     tags = TagListSerializerField(required=False)
     class Meta:
         model = LogSession
         fields = ('__all__')
-        read_only_fields = ['id', 'creator']
+        read_only_fields = ['id']
 
     def to_internal_value(self, data):
         zip_data = data.copy()
         zip_file = zip_data.get("zip_upload")
         internal_data = {}
+
+        if self.s3file_obj:
+            zip_file = self.s3file_obj.download_path
+            internal_data["event"] = self.s3file_obj.event.id
+            internal_data["_zip_file"] = self.s3file_obj.sessclip.id
+            internal_data["creator"] = self.s3file_obj.creator.id
+
         with zipfile.ZipFile(zip_file) as thezip:
-            filename = f'{thezip.filename}-{uuid.uuid4()}'
-            internal_data["name"] = filename
-            cache.set(filename, zip_file)
+            internal_data["name"] = thezip.filename
+            cache.set(thezip.filename, zip_file)
             try:
                 file = thezip.filelist[0]
                 harv, date_obj = self.extract_harvester_and_date(file)
@@ -95,6 +104,10 @@ class LogSessionSerializer(TaggitSerializer, serializers.ModelSerializer):
                 internal_data["harv"] = harv.pk if harv else None
             except IndexError:
                 logger.error('Zip file is empty no files found')
+
+        if not self.s3file_obj:
+            # Get user id from request if method is POST
+            internal_data["creator"] = self.context.get("request").user.id
 
         return super().to_internal_value(internal_data)
 
