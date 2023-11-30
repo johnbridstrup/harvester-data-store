@@ -4,10 +4,11 @@ import structlog
 
 import boto3
 from botocore.exceptions import ClientError
+from django.conf import settings
 
 
 def get_client():
-    if os.environ.get("USES3"):
+    if settings.USES3:
         return S3Client()
     return LocalClient()
 
@@ -36,7 +37,7 @@ class S3Client(FileLoader):
         s3_info = event_body["Records"][0].get("s3")
         if s3_info is None:
             raise ClientError("No S3 info in event")
-        
+
         bucket = s3_info["bucket"]["name"]
         key = s3_info["object"]["key"]
 

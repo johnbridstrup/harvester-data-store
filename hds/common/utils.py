@@ -20,6 +20,7 @@ def get_key(file):
     """return full key of s3 file"""
     return os.path.join(file.storage.location, file.name)
 
+
 def media_upload_path(instance, filename, username=None):
     """save media file to custom path."""
     if settings.USES3:
@@ -81,7 +82,7 @@ def custom_exception_handler(exc, context):
         basename = context['view'].basename
     except AttributeError:
         basename = context['view']
-    
+
     # Increment error counter
     TOTAL_ERROR_COUNTER.labels(exc.__class__.__name__, basename).inc()
 
@@ -108,7 +109,7 @@ def custom_exception_handler(exc, context):
 
     # Call REST framework's default exception handler
     # to get the standard error response.
-        
+
     response = exception_handler(exc, context)
     errors = {}
     error_status_code = 400
@@ -133,7 +134,7 @@ def custom_exception_handler(exc, context):
             # elif key == 'status_code':
             #     errors['status_code'] = str(value)
             # elif key == 'status':
-            #     errors['status'] = str(value)            
+            #     errors['status'] = str(value)
     else:
         errors['exception'] = str(exc)
 
@@ -183,7 +184,7 @@ def get_url_permissions(urlpatterns):
        - The actions available at this endpoint
        - The view_permissions dictionary for the view class
        - The view class
-    
+
     It will not parse generic API views, only DRF ModelViewSet classes.
 
     Args:
@@ -196,7 +197,7 @@ def get_url_permissions(urlpatterns):
     permission_matrix = []
     for pat in urlpatterns:
             if isinstance(pat, URLResolver):
-                # Recursively walk through URLResolvers 
+                # Recursively walk through URLResolvers
                 permission_matrix.extend(get_url_permissions(pat.url_patterns))
             elif isinstance(pat, URLPattern):
                 try:
@@ -214,7 +215,7 @@ def get_url_permissions(urlpatterns):
                     except NoReverseMatch:
                         logger.warning(f"Skipping: No reverse match", pattern_name=pat.name)
                         continue
-                
+
                 # Import the view class
                 view_mod = importlib.import_module(view_func.__module__)
                 view = getattr(view_mod, view_func.__name__)
