@@ -5,8 +5,23 @@ pipeline {
         stage('Initialization') {
 			steps {
 				script { env.totalExitCode = 0 }
+                sh script:'./jenkins/make_venv.sh'
 			}
 		}
+        stage('Check Migrations') {
+            when {
+				branch 'PR-*'
+			}
+            steps {
+                catchError(stageResult: 'FAILURE') {
+                    script {
+                        def exitCode = sh script:'./jenkins/check_migrations.sh', returnStatus:true
+                        env.totalExitCode = (env.totalExitCode).toInteger() + exitCode
+                        sh "exit ${exitCode}"
+                    }
+                }
+            }
+        }
         stage('Run tests') {
             when {
 				branch 'PR-*'
