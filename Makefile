@@ -7,27 +7,27 @@ install-docker: ## Install docker and docker compose
 	${DIR}/scripts/install_docker.sh
 
 build-dev: ## Build local server in docker compose
-	docker compose up -d --build
+	sudo docker compose up -d --build
 
 build-backend: ## Build backend for CI.
 	export HDS_PORT=${HDS_PORT}
-	docker compose -f docker-compose.base.yml up -d --build
+	sudo docker compose -f docker-compose.base.yml up -d --build
 
 migrate-dev: ## Migrate database in local compose server
-	docker compose exec web python hds/manage.py migrate
+	sudo docker compose exec web python hds/manage.py migrate
 
 load-fixtures: ## Load fixtures in local compose server
-	docker compose exec web python hds/manage.py loaddata fixtures/*
+	sudo docker compose exec web python hds/manage.py loaddata fixtures/*
 
 server: install-docker build-dev migrate-dev load-fixtures  ## Build, Migrate, Load
 
 ci: install-docker build-backend migrate-dev load-fixtures ## Create environment for integration testing the API in CI
 
 clean-server: ## Tear down containers
-	docker compose down --remove-orphans
+	sudo docker compose down --remove-orphans
 
 clean-ci:
-	docker compose -f docker-compose.base.yml down --remove-orphans
+	sudo docker compose -f docker-compose.base.yml down --remove-orphans
 
 help:
 	@echo Use these commands for setting up docker environment outside of python virtual environment
