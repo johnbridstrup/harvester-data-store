@@ -236,12 +236,6 @@ variable "frontend_url" {
   type        = string
 }
 
-variable "migrate_flag" {
-  description = "Flag to migrate the database on deployment"
-  type        = string
-  default     = "false"
-}
-
 variable "s3_bucket" {
   description = "Name of the S3 bucket for static and media files"
   type        = string
@@ -255,6 +249,14 @@ variable "silk_profiling" {
 
 variable "silk_cprofile" {
   description = "Enable CProfile via Silk"
+  type        = string
+  default     = "false"
+}
+
+# Deploy time variables
+
+variable "migrate_flag" {
+  description = "Flag to migrate the database on deployment"
   type        = string
   default     = "false"
 }
