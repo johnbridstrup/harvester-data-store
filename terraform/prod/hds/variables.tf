@@ -3,4 +3,9 @@ variable "migrate_flag" {
   type        = string
 }
 
+variable "git_hash" {
+  description = "Git hash being deployed"
+  type        = string
+}
+
 variable "deploy_tag" {}

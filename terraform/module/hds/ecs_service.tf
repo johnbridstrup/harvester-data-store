@@ -1,26 +1,3 @@
-module "git_info" {
-  source = "Invicton-Labs/git-info/external"
-
-  // The directory to check
-  working_dir = "../"
-
-  // Whether to fetch from the remote prior to getting the other data
-  fetch = false
-
-  // Whether to pull from the remote
-  pull = false
-
-  // None of these are required because they all default to `true` anyways,
-  // but this shows the options
-  get_commit_hash     = true
-  get_current_branch  = false
-  get_current_tags    = false
-  get_local_branches  = false
-  get_remote_branches = false
-  get_remotes         = false
-  get_tags            = false
-}
-
 locals {
   environment_variables = [
     { "name" : "POSTGRES_NAME", "value" : var.db_name },
@@ -51,7 +28,7 @@ locals {
     { "name" : "ASSET_QUEUE_URL", "value" : var.asset_queue_url },
     { "name" : "EMUSTATS_QUEUE_URL", "value" : var.emustats_queue_url },
     { "name" : "MIGRATE", "value" : var.migrate_flag },
-    { "name" : "GITHASH", "value" : module.git_info.commit_hash },
+    { "name" : "GITHASH", "value" : var.git_hash },
     { "name" : "AWS_STORAGE_BUCKET_NAME", "value" : var.s3_bucket },
     { "name" : "USES3", "value" : "true" },
     { "name" : "CLOUDWATCH", "value" : "true" },
@@ -85,5 +62,5 @@ module "hds_ecs" {
 }
 
 output "git_info" {
-  value = module.git_info
+  value = var.git_hash
 }

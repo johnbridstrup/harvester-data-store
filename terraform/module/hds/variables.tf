@@ -261,6 +261,11 @@ variable "migrate_flag" {
   default     = "false"
 }
 
+variable "git_hash" {
+  description = "Git hash being deployed"
+  type        = string
+}
+
 # SQS QUEUES
 
 variable "errorreport_queue_url" {

@@ -77,4 +77,5 @@ module "hds" {
   s3_bucket                 = local.bucket
   silk_profiling            = local.silk_profiling
   silk_cprofile             = local.silk_cprofile
+  git_hash                  = var.git_hash
 }
