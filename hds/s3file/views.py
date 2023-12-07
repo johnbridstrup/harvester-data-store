@@ -2,11 +2,13 @@ import re
 
 from django.shortcuts import redirect
 from rest_framework.decorators import action
+from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
 from rest_framework.status import HTTP_404_NOT_FOUND
 from urllib.parse import urljoin
 
 from event.signals import update_event_tag
+from common.utils import make_error, make_ok
 from common.viewsets import CreateModelViewSet
 from hds.roles import RoleChoices
 from .models import S3File, SessClip
@@ -73,6 +75,7 @@ class S3FileView(CreateModelViewSet):
         methods=['get'],
         detail=True,
         url_path='download',
+        renderer_classes=[JSONRenderer],
     )
     def download_redirect(self, request, pk=None):
         obj = self.get_object()
@@ -84,8 +87,14 @@ class S3FileView(CreateModelViewSet):
             elif request is not None:
                 url = urljoin(urljoin("http://" + request.get_host(), "/api/v1/"), obj_url)
         else:
-            return Response("File Does Not Exist", HTTP_404_NOT_FOUND)
-        return redirect(url)
+            return make_error("File Does Not Exist", HTTP_404_NOT_FOUND)
+        return make_ok(
+            "Download Url Retrieved.", 
+            {
+                "url": url,
+                "id": obj.id,
+            }
+        )
 
 class SessClipView(S3FileView):
     def perform_create(self, serializer):
