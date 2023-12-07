@@ -18,7 +18,7 @@ class ReportBase(CommonInfo):
     """ ReportBase Model """
     location = models.ForeignKey(Location, on_delete=models.SET_NULL, null=True, blank=True)
     harvester = models.ForeignKey(Harvester, on_delete=models.CASCADE, null=True, blank=True)
-    reportTime = models.DateTimeField(blank=True, null=True)
+    reportTime = models.DateTimeField(blank=True, null=True, db_index=True)
     report = models.JSONField(blank=True, null=True)
     tags = TaggableManager()
 
