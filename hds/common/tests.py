@@ -5,6 +5,7 @@ import random
 import string
 import unittest
 import uuid
+import shutil
 from collections import defaultdict
 from pprint import pprint
 from time import time
@@ -12,6 +13,7 @@ from unittest.mock import MagicMock
 
 from django.contrib.auth.models import User
 from django.urls import reverse
+from django.conf import settings
 from rest_framework import status
 from rest_framework.authtoken.models import Token
 from rest_framework.test import APITestCase
@@ -67,6 +69,7 @@ class HDSAPITestBase(APITestCase):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
         self.api_base_url = '/api/v1'
         self.setup_urls()
+        os.makedirs(settings.MEDIA_ROOT, exist_ok=True)
 
     def create_new_user_client(self, role=None):
         chars = string.ascii_letters + string.digits
@@ -414,6 +417,10 @@ class HDSAPITestBase(APITestCase):
     @property
     def canpath(self):
         return os.path.join(self.BASE_PATH, '20230131131250_010_03_CAN.dump')
+
+    def tearDown(self):
+        shutil.rmtree(settings.MEDIA_ROOT)
+        return super().tearDown()
 
 
 class OpenApiTest(HDSAPITestBase):

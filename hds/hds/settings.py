@@ -151,7 +151,7 @@ def ignore_healtcheck_metrics_get(logger, method_name, event_dict):
 def limit_test_logging(logger, method_name, event_dict):
     if event_dict.get('request') is None:
         return event_dict
-    
+
     parsed_url = urlparse(event_dict['request'])
     query_dict = parse_qs(parsed_url.query)
     if 'is_beatbox_request' in query_dict:
@@ -198,7 +198,7 @@ LOGGING = {
 structlog.configure(
     processors=[
         structlog.contextvars.merge_contextvars,
-            
+
         structlog.stdlib.filter_by_level,
         structlog.processors.TimeStamper(fmt="iso"),
         structlog.stdlib.add_logger_name,
@@ -355,13 +355,21 @@ PROMETHEUS_EXPORT_MIGRATIONS = os.environ.get(
 ) in ['true', 'True', '1']
 
 # Celery
+CELERY_RESULT_BACKEND = 'django-db'
+CELERY_CACHE_BACKEND = 'redis'
+CELERY_BROKER_URL = os.environ.get('BROKER_URL', REDIS_DEFAULT_URL)
+
+# Test vars
 if 'test' in sys.argv[1:]:
     BROKER_BACKEND = 'memory'
     CELERY_TASK_ALWAYS_EAGER = True
     CELERY_TASK_EAGER_PROPAGATES = True
-else:
-    CELERY_RESULT_BACKEND = 'django-db'
-    CELERY_CACHE_BACKEND = 'redis'
-    CELERY_BROKER_URL = os.environ.get('BROKER_URL', REDIS_DEFAULT_URL)
+    MEDIA_ROOT = os.path.join(BASE_DIR, 'test_media/')
 
+old_umask = os.umask(0)
+os.makedirs(MEDIA_ROOT, mode=0o777, exist_ok=True)
+os.umask(old_umask)
+
+DOWNLOAD_DIR = os.path.join(MEDIA_ROOT, "downloads")
+EXTRACT_DIR = os.path.join(MEDIA_ROOT, "extracts")
 FILE_UPLOAD_MAX_MEMORY_SIZE = 300 * 1024 * 1024 # bytes
