@@ -319,12 +319,12 @@ class HDSAPITestBase(APITestCase):
         })
 
     @staticmethod
-    def create_s3event(key, has_uuid=False):
-        if not has_uuid:
+    def create_s3event(key, tag_uuid=False):
+        if tag_uuid:
+            full_key = key
+        else:
             UUID = str(uuid.uuid1())
             full_key = f"{key}_{UUID}"
-        else:
-            full_key = key
         event = {
             "Records":[{
                     "s3":{
@@ -339,7 +339,7 @@ class HDSAPITestBase(APITestCase):
         return {"Body": json.dumps(event)}, *S3FileSerializer.get_filetype_uuid(full_key)
 
     def create_s3file(self, key, endpoint, has_uuid=False):
-        self.s3event, self.filetype, self.uuid = self.create_s3event(key, has_uuid=has_uuid)
+        self.s3event, self.filetype, self.uuid = self.create_s3event(key, tag_uuid=has_uuid)
         resp = self.client.post(
             endpoint,
             data=self.s3event,
@@ -405,7 +405,7 @@ class HDSAPITestBase(APITestCase):
         if load:
             self.load_picksess_report()
         fpath = os.path.join(self.BASE_PATH, "picksess.json")
-        event = self.create_s3event(key=fpath, has_uuid=True)[0]
+        event = self.create_s3event(key=fpath, tag_uuid=True)[0]
         resp = self.client.post(self.griprep_url, event, format='json')
         self.assertEqual(resp.status_code, resp_status, msg=resp.json())
         return resp.json()
