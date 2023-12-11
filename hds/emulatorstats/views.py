@@ -20,6 +20,16 @@ class EmuReportView(ReportModelViewSet):
         }
     }
 
+    def get_queryset(self):
+        return EmustatsReport.objects.select_related(
+            "event",
+            "harvester",
+            "location",
+            "pick_session",
+            "creator",
+            "modifiedBy",
+        )\
+        .prefetch_related("tags")
 
     @action(
         methods=['GET'],

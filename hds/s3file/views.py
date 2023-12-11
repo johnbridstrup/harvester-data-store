@@ -1,6 +1,7 @@
 import re
 
 from django.shortcuts import redirect
+from django.db.models import Prefetch
 from rest_framework.decorators import action
 from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
@@ -8,6 +9,7 @@ from rest_framework.status import HTTP_404_NOT_FOUND
 from urllib.parse import urljoin
 
 from event.signals import update_event_tag
+from event.models import Event
 from common.utils import make_error, make_ok
 from common.viewsets import CreateModelViewSet
 from hds.roles import RoleChoices
@@ -49,7 +51,18 @@ class S3FileView(CreateModelViewSet):
             deleted = self.check_for_deleted(
                 self.request.query_params.get("deleted")
             )
-        return self.queryset.filter(deleted=deleted)
+        return self.queryset.filter(deleted=deleted).select_related(
+            "creator",
+            "modifiedBy",
+        ).prefetch_related(
+            Prefetch(
+                lookup="event",
+                queryset=Event.objects.prefetch_related(
+                    "secondary_events",
+                    "tags",
+                )
+            )
+        )
 
     def perform_create(self, serializer):
         inst = super().perform_create(serializer)
@@ -70,7 +83,7 @@ class S3FileView(CreateModelViewSet):
 
     def check_for_deleted(self, qp):
         return qp in ["True", "true", "1"]
-    
+
     @action(
         methods=['get'],
         detail=True,
@@ -89,7 +102,7 @@ class S3FileView(CreateModelViewSet):
         else:
             return make_error("File Does Not Exist", HTTP_404_NOT_FOUND)
         return make_ok(
-            "Download Url Retrieved.", 
+            "Download Url Retrieved.",
             {
                 "url": url,
                 "id": obj.id,

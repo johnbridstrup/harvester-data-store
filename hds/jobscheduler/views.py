@@ -42,6 +42,13 @@ class ScheduledJobView(CreateModelViewSet):
         "user_jobs": ScheduledJobDetailSerializer,
     }
 
+    def get_queryset(self):
+        return ScheduledJob.objects.select_related(
+            "creator",
+            "modifiedBy",
+            "task",
+        ).prefetch_related("targets", "jobs",)
+
     def perform_create(self, serializer):
         inst = super().perform_create(serializer)
         try:

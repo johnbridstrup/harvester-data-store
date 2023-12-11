@@ -6,6 +6,7 @@ from common.viewsets import CreateModelViewSet
 from common.schema import HDSToRepAutoSchema
 from hds.roles import RoleChoices
 
+from .models import Event, PickSession
 from .filters import EventFilterset, PickSessionFilterset
 from .serializers import (
     EventSerializer,
@@ -70,10 +71,6 @@ class TaggedUUIDViewBase(CreateModelViewSet):
         }
     })
 
-    def get_queryset(self):
-        model = self.serializer_class.Meta.model
-        return model.objects.all()
-
     @action(
         methods=["get"],
         detail=False,
@@ -87,13 +84,30 @@ class TaggedUUIDViewBase(CreateModelViewSet):
 
 
 class EventView(TaggedUUIDViewBase):
+    queryset = Event.objects.all()
     filterset_class = EventFilterset
     serializer_class = EventSerializer
 
+    def get_queryset(self):
+        return Event.objects.prefetch_related(
+            "secondary_events",
+            "tags",
+            "s3file_set",
+        )
+
 
 class PickSessionView(TaggedUUIDViewBase):
+    queryset = PickSession.objects.all()
     filterset_class = PickSessionFilterset
     serializer_class = PickSessionSerializer
     action_serializers = {
         "retrieve": PickSessionDetailSerializer
     }
+
+    def get_queryset(self):
+        if self.action == "retrieve":
+            return PickSession.objects.select_related(
+                "harvester",
+                "location",
+            ).prefetch_related("tags")
+        return super().get_queryset()

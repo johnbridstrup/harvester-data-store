@@ -12,7 +12,7 @@ class JobSchemaView(CreateModelViewSet):
     queryset = JobSchema.objects.all()
     serializer_class = JobSchemaSerializer
     filterset_class = JobSchemaFilterset
-    ordering = ('-created',)
+    ordering = ('-created')
     view_permissions_update = {
         'create': {
             RoleChoices.JENKINS: True,

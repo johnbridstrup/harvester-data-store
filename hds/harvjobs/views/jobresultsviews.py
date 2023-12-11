@@ -18,6 +18,18 @@ class JobResultsView(ReportModelViewSet):
         "retrieve": JobResultsDetailSerializer
     }
 
+    def get_queryset(self):
+        if self.action == "retrieve":
+            return JobResults.objects.select_related(
+                "creator",
+                "modifiedBy",
+                "harvester",
+                "location",
+                "event",
+                "job",
+            ).prefetch_related("tags", "host_results")
+        return super().get_queryset()
+
 
     def perform_create(self, serializer):
         # Update Job Status in the background

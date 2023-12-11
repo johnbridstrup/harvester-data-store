@@ -10,10 +10,14 @@ from ..tasks import schedule_job
 
 from rest_framework.decorators import action
 from rest_framework.renderers import JSONRenderer
+from django.db.models import Prefetch
 from common.utils import make_ok
 from common.viewsets import CreateModelViewSet
 from common.schema import HDSToRepAutoSchema
 from hds.roles import RoleChoices
+from harvester.models import Harvester
+from location.models import Location
+from event.models import Event
 
 
 # Whitelists
@@ -53,6 +57,26 @@ class JobView(CreateModelViewSet):
             'nullable': 'true'
         }
     })
+
+    def get_queryset(self):
+        return Job.objects.prefetch_related(
+            Prefetch(
+                lookup="target",
+                queryset=Harvester.objects.prefetch_related(
+                    Prefetch(
+                        lookup="location",
+                        queryset=Location.objects.select_related("distributor")
+                    )
+                ).select_related("fruit", "release")
+            ),
+            Prefetch(
+                lookup="event",
+                queryset=Event.objects.prefetch_related(
+                    "s3file_set",
+                    "secondary_events",
+                )
+            ),
+        ).select_related("creator", "modifiedBy",)
 
     @action(
         methods=["get"],

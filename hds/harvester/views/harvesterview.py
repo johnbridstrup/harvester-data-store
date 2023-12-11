@@ -71,6 +71,15 @@ class HarvesterView(CreateModelViewSet):
         "retrieve": HarvesterDetailSerializer
     }
 
+    def get_queryset(self):
+        return Harvester.objects.select_related(
+            "creator",
+            "modifiedBy",
+            "fruit",
+            "location",
+            "release",
+        )
+
     @action(
         methods=["get"],
         detail=True,
@@ -116,7 +125,13 @@ class HarvesterView(CreateModelViewSet):
 
 
 class HarvesterHistoryView(CreateModelViewSet):
-    queryset = Harvester.history.model.objects.all()
+    queryset = Harvester.history.model.objects.select_related(
+        "creator",
+        "modifiedBy",
+        "fruit",
+        "location",
+        "release"
+    )
     serializer_class = HarvesterHistorySerializer
     filterset_fields = ('harv_id',)
     ordering = ('-history_date',)
