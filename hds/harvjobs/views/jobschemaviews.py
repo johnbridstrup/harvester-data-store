@@ -1,11 +1,10 @@
-from ..filters import JobSchemaFilterset
-from ..models import JobSchema
-from ..serializers.jobschemaserializer import JobSchemaSerializer
-
-from rest_framework.permissions import DjangoModelPermissions
 from common.viewsets import CreateModelViewSet
 from common.schema import HDSToRepAutoSchema
 from hds.roles import RoleChoices
+
+from ..filters import JobSchemaFilterset
+from ..models import JobSchema
+from ..serializers.jobschemaserializer import JobSchemaSerializer
 
 
 class JobSchemaView(CreateModelViewSet):
