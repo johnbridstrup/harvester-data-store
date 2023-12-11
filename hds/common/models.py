@@ -9,7 +9,7 @@ class CommonInfo(models.Model):
     creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name="%(app_label)s_%(class)s_creator_related")
     modifiedBy = models.ForeignKey(User, on_delete=models.CASCADE, related_name="%(app_label)s_%(class)s_modifiedby_related",
                                    blank=True, null=True)
-    created = models.DateTimeField(auto_now_add=True)
+    created = models.DateTimeField(auto_now_add=True, db_index=True)
     lastModified = models.DateTimeField(auto_now=True)
 
     def __str__(self):
