@@ -60,10 +60,6 @@ class CreateModelViewSet(ModelViewSet):
             return serializer
         return super().get_serializer_class()
 
-    @method_decorator(cache_page_if_qp_exist(60*10))
-    def list(self, request, *args, **kwargs):
-        return super().list(request, *args, **kwargs)
-
 
 class ReportModelViewSet(CreateModelViewSet):
     """ Viewset for error reports """
