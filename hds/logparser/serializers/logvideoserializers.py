@@ -3,9 +3,7 @@ import structlog
 import json
 import shutil
 import os
-import zipfile
 from django.conf import settings
-from django.core.cache import cache
 from django.core.files.uploadedfile import InMemoryUploadedFile
 import moviepy.editor as moviepy
 from common.async_metrics import ASYNC_ERROR_COUNTER
@@ -16,13 +14,6 @@ from s3file.serializers import DirectUploadSerializer
 
 logger = structlog.get_logger(__name__)
 
-
-EXTRACT_DIR = os.path.join(settings.MEDIA_ROOT, "extracts")
-
-def extract_filepath(filename):
-    full_dirpath = os.path.join(EXTRACT_DIR, os.path.splitext(filename)[0])
-    os.makedirs(full_dirpath, exist_ok=True)
-    return full_dirpath
 
 class LogVideoUploadSerializer(serializers.ModelSerializer):
     """Serializer for video upload"""
@@ -43,8 +34,20 @@ class LogVideoSerializer(serializers.ModelSerializer):
         ready_only_fields = ['id']
 
     @staticmethod
-    def clean_dir(filename:str):
-        shutil.rmtree(extract_filepath(filename))
+    def extract_filepath(file_name, path_id):
+        full_dirpath = os.path.join(
+            settings.EXTRACT_DIR,
+            f"{path_id}",
+            os.path.splitext(os.path.basename(file_name))[0]
+        )
+        os.makedirs(full_dirpath, exist_ok=True)
+        return full_dirpath
+
+    @staticmethod
+    def clean_extracts(path_id):
+        path = os.path.join(settings.EXTRACT_DIR, f"{path_id}")
+        if os.path.isdir(path):
+            shutil.rmtree(path)
 
     @staticmethod
     def extract_robot_category(filename):

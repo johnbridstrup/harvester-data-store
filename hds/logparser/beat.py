@@ -1,10 +1,10 @@
 import os, shutil, structlog
 
+from django.conf import settings
 from prometheus_client import Gauge
 
 from common.celery import monitored_shared_task
 from common.metrics import prometheus_get_registry
-from .serializers.logvideoserializers import EXTRACT_DIR
 
 logger = structlog.get_logger(__name__)
 
@@ -27,16 +27,16 @@ def get_dir_size(dir_path):
 
 @monitored_shared_task
 def check_extracts_dir_size():
-    dir_size = get_dir_size(EXTRACT_DIR)/1000.0
+    dir_size = get_dir_size(settings.EXTRACT_DIR)/1000.0
     EXTRACTS_SIZE_GAUGE.set(dir_size)
     return f"Extracts dir size: {dir_size} kB"
 
 @monitored_shared_task
 def clean_extracts_dir():
-    if not os.path.exists(EXTRACT_DIR):
-        raise OSError(f"{EXTRACT_DIR} does not exist.")
-    
-    for f in os.listdir(EXTRACT_DIR):
+    if not os.path.exists(settings.EXTRACT_DIR):
+        raise OSError(f"{settings.EXTRACT_DIR} does not exist.")
+
+    for f in os.listdir(settings.EXTRACT_DIR):
         try:
             if os.path.isfile(f):
                 os.unlink(f)

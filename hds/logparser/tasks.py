@@ -6,7 +6,7 @@ from django.core.cache import cache
 from common.utils import build_frontend_url
 from notifications.slack import post_to_slack
 from .serializers.logfileserializers import LogFileSerializer
-from .serializers.logvideoserializers import LogVideoSerializer, extract_filepath, EXTRACT_DIR
+from .serializers.logvideoserializers import LogVideoSerializer
 from .serializers.logsessionserializers import (
     LogSessionSerializer,
     LogSession
@@ -67,9 +67,9 @@ def extract_video_meta(vid_dict, _id):
     LogVideoSerializer.extract_meta_json_data(meta_info['filepath'], meta_info['filename'])
 
 @monitored_shared_task
-def clean_dir(dir_name):
-    LogVideoSerializer.clean_dir(dir_name)
-    return f"{dir_name} Cleaned"
+def clean_dir(path_id):
+    LogVideoSerializer.clean_extracts(path_id)
+    return f"{path_id} Cleaned"
 
 @monitored_shared_task(base=CallbackTask)
 def perform_extraction(_id):
@@ -80,7 +80,9 @@ def perform_extraction(_id):
     vid_meta_pairs = defaultdict(dict)
     with zipfile.ZipFile(zip_file) as thezip:
         zipfile_name = thezip.filename
-        extr_dir = extract_filepath(zipfile_name)
+        extr_dir = LogVideoSerializer.extract_filepath(
+            zipfile_name, log_session._zip_file.file.pk
+        )
         for file in thezip.filelist:
             if file.filename.endswith(".log") or file.filename.endswith(".dump"):
                 LogFileSerializer.extract_log_file(thezip, _id, file)
@@ -102,7 +104,7 @@ def perform_extraction(_id):
     # Create video extraction task signatures
     tasks = [extract_video_meta.si(vid_dict, _id) for vid_dict in vid_meta_pairs.values()]
     # Create clean_dir callback signature
-    callback = clean_dir.si(zipfile_name)
+    callback = clean_dir.si(log_session._zip_file.file.pk)
     # Execute tasks -> callback as Celery chord
     chord(tasks, callback).delay()
 
