@@ -171,6 +171,7 @@ class LogFileSerializer(serializers.ModelSerializer):
 
         content = []
         prev_content = None
+        content_dict = None
         for line in file_iter:
             try:
                 line = line.decode("ascii")
@@ -197,12 +198,13 @@ class LogFileSerializer(serializers.ModelSerializer):
                 full_line += f"\n{line}"
                 continue
         
-        content_dict['logfile_type'] = ext
-        content_dict['service'] = service
-        content_dict['robot'] = int(robot)
-        content_dict['harv_id'] = int(harv)
-        content_dict['log_message'] = full_line
-        content.append(content_dict)
+        if content_dict is not None:
+            content_dict['logfile_type'] = ext
+            content_dict['service'] = service
+            content_dict['robot'] = int(robot)
+            content_dict['harv_id'] = int(harv)
+            content_dict['log_message'] = full_line
+            content.append(content_dict)
         
         return content
 
