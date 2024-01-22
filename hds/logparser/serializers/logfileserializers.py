@@ -18,7 +18,7 @@ class DateMatchError(Exception):
     pass
 
 
-class LogMatchError(Exception):
+class LogDoesNotMatch(Exception):
     pass
 
 
@@ -101,23 +101,24 @@ class LogFileSerializer(serializers.ModelSerializer):
             "Failed date pattern match"
         ).inc()
         logger.error(f'No date match for the line {entry}')
-
+    
     @classmethod
     def _report_line_match_fail(cls, entry):
+        logger.error(f'No line match for the line {entry}')
         ASYNC_ERROR_COUNTER.labels(
             'extract_log_file',
-            LogMatchError.__name__,
+            LogDoesNotMatch.__name__,
             "Failed line pattern match"
         ).inc()
-        logger.error(f'Could not match line {entry}')
 
     @classmethod
     def _extract_can(cls, line):
         match = re.match(CAN_PATTERN, line)
 
         if not match:
-            logger.warning("Failed to match line in CAN file")
-            raise LogMatchError("Failed to match can line")
+            # We do not expect this in can dumps
+            cls._report_line_match_fail(line)
+            raise LogDoesNotMatch("Failed to match can line")
 
         date = match.group(1)
         dt = cls.convert_to_datetime(date)
@@ -136,7 +137,8 @@ class LogFileSerializer(serializers.ModelSerializer):
         matches = re.match(LOG_PATTERN, line)
 
         if not matches:
-            raise LogMatchError("failed to match log line")
+            # We expect this for multi-line logs
+            raise LogDoesNotMatch("failed to match log line")
 
         date = matches.group(1)
         level = matches.group(2)
@@ -191,8 +193,7 @@ class LogFileSerializer(serializers.ModelSerializer):
                 cls._report_date_match_fail(line)
                 full_line += f"\n{line}"
                 continue
-            except LogMatchError:
-                cls._report_line_match_fail(line)
+            except LogDoesNotMatch:
                 full_line += f"\n{line}"
                 continue
         
