@@ -53,7 +53,7 @@ pipeline {
 		always {
             script {
                 currentBuild.result = ((env.totalExitCode).toInteger() == 0) ? "SUCCESS" : "FAILURE"
-                sh "sudo docker compose down --remove-orphans"
+                sh "sudo docker compose -f docker-compose.base.yml down --remove-orphans"
             }
 		}
 	}
