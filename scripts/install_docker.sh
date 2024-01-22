@@ -19,6 +19,6 @@ then
     sudo apt update -y
 fi
 
-sudo apt install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
+sudo apt install -y --allow-downgrades docker-ce docker-ce-cli containerd.io docker-compose-plugin=2.21.0-1~ubuntu.20.04~focal
 sudo groupadd docker || true
 sudo usermod -aG docker $USER
