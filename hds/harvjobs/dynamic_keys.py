@@ -1,6 +1,7 @@
 import copy
 import jsonschema
 import pytz
+import structlog
 
 from django.utils import timezone
 
@@ -9,6 +10,8 @@ from common.reports import LOG_TIMESTAMP_FMT, UTILITY_TIMESTAMP_FMT
 
 ALLOW_REPEAT_KEY = "allow_repeat_schedules"
 DYN_KEY_LIST_KEY = "dynamic_keys"
+
+logger = structlog.getLogger(__name__)
 
 
 class DynamicKey:
@@ -24,12 +27,22 @@ class DynamicKey:
         raise NotImplementedError(f"schema not implemented for {cls.__name__}")
     
     @classmethod
+    def default_value_obj(cls):
+        raise NotImplementedError(f"default_value_obj not implemented for {cls.__name__}")
+    
+    @classmethod
     def name(cls):
         return cls.__name__
     
     @classmethod
     def validate(cls, obj):
         jsonschema.validate(obj, cls.schema())
+
+    @classmethod
+    def fill_with_defaults(cls, obj):
+        d = cls.default_value_obj()
+        d.update(obj)
+        return d
 
     @classmethod
     def create_entry(cls, obj):
@@ -87,7 +100,9 @@ class DynamicKeys:
                 continue
             
             dyn_key: DynamicKey = cls._DYN_KEYS[selection]
-            obj[recovered_key] = dyn_key.create_entry(val["value"])
+            value_obj = val.get("value", {})
+            full_val_obj = dyn_key.fill_with_defaults(value_obj)
+            obj[recovered_key] = dyn_key.create_entry(full_val_obj)
         return obj
 
 
@@ -154,11 +169,6 @@ class TimeOfSchedule(DynamicKey):
         return {
             "type": "object",
             "title": cls.name(),
-            "oneOf": [
-                {"required": ["days", "format"]},
-                {"required": ["hours", "format"]},
-                {"required": ["minutes", "format"]},
-            ],
             "properties": {
                 "days": {
                     "type": "integer",
@@ -179,6 +189,15 @@ class TimeOfSchedule(DynamicKey):
                     "enum": [LOG_TIMESTAMP_FMT, UTILITY_TIMESTAMP_FMT]
                 }
             }
+        }
+    
+    @classmethod
+    def default_value_obj(cls):
+        return {
+            "days": 0,
+            "hours": 0,
+            "minutes": 0,
+            "format": UTILITY_TIMESTAMP_FMT,
         }
     
     @classmethod
