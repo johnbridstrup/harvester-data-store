@@ -317,3 +317,9 @@ variable "emustats_queue_url" {
   description = "URL for emustats report queue"
   type        = string
 }
+
+variable "jobserver_address" {
+  description = "Address of the job server"
+  type        = string
+  default = "https://iot-job-server.cloud.advanced.farm"
+}

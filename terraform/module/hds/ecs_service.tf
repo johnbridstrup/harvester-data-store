@@ -34,6 +34,7 @@ locals {
     { "name" : "CLOUDWATCH", "value" : "true" },
     { "name" : "SILK_PROFILING", "value" : var.silk_profiling },
     { "name" : "SILK_CPROFILE", "value" : var.silk_cprofile },
+    { "name" : "JOB_SERVER_ADDRESS", "value": var.jobserver_address },
   ]
 }
 

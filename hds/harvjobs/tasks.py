@@ -37,7 +37,7 @@ FAILED_TO_SEND_FMT = (
 )
 
 JOB_SLACK_CHANNEL = "hds-jobs"
-JOB_SERVER_ADDRESS = os.environ.get("JOB_SERVER_ADDRESS", "https://iot-job-server.cloud.advanced.farm:8000")
+JOB_SERVER_ADDRESS = os.environ.get("JOB_SERVER_ADDRESS", "https://iot-job-server.cloud.advanced.farm")
 if test_env():
     JOB_SERVER_ADDRESS = "http://httpbin.org/anything"
 JOB_SUBSYSTEM = "http://localhost:5000"
