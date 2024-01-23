@@ -182,12 +182,12 @@ class LogFileSerializer(serializers.ModelSerializer):
             try:
                 content_dict = cls._extract_line(line, ext)
                 if prev_content:
-                    content_dict['logfile_type'] = ext
-                    content_dict['service'] = service
-                    content_dict['robot'] = int(robot)
-                    content_dict['harv_id'] = int(harv)
-                    content_dict['log_message'] = full_line
-                    content.append(content_dict)
+                    prev_content['logfile_type'] = ext
+                    prev_content['service'] = service
+                    prev_content['robot'] = int(robot)
+                    prev_content['harv_id'] = int(harv)
+                    prev_content['log_message'] = full_line
+                    content.append(prev_content)
                 prev_content = content_dict
                 full_line = line
             except DateMatchError:

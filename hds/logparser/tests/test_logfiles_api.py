@@ -33,6 +33,8 @@ class LogFileTestCase(LogBaseTestCase):
             content = LogFileSerializer._extract_lines(f, 'test', 1, 1, ext)
 
         self.assertEqual(numlines - self.extra_log_lines, len(content))
+        for entry in content:
+            self.assertIn(f"[{entry['log_level']}] ", entry['log_message'])
 
     def test_candump_extract(self):
         ext = os.path.splitext(self.canpath)[1]
