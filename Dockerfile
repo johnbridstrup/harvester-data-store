@@ -25,7 +25,8 @@ RUN rm /opt/app/aft-sqs-client_1.0-1_all.deb
 
 # Install pip packages
 COPY requirements.txt /opt/app/
-RUN pip install -r requirements.txt --no-cache-dir
+RUN pip install pip --upgrade && \
+    pip install -r requirements.txt --no-cache-dir
 
 # Copy source, scripts and configs
 COPY scripts/ /opt/app/scripts/
