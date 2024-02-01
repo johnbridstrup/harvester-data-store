@@ -2,12 +2,14 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
 from rest_framework.decorators import action
 from rest_framework.renderers import JSONRenderer
+from rest_framework import status
 
 from common.viewsets import CreateModelViewSet
-from common.utils import make_ok
+from common.utils import make_error, make_ok
 from hds.roles import RoleChoices
 
 from .filters import AFTExceptionFilter
+from .insights import create_traceback_groups
 from .models import (
     AFTExceptionCode,
     AFTExceptionCodeManifest,
@@ -23,6 +25,7 @@ from .serializers import (
 )
 from .tasks import update_exception_codes
 from .utils import create_pareto
+from .vars import MAX_NUM_TRACEBACKS
 
 
 class AFTExceptionCodeManifestView(CreateModelViewSet):
@@ -31,7 +34,7 @@ class AFTExceptionCodeManifestView(CreateModelViewSet):
     view_permissions_update = {
         'create': {
             RoleChoices.JENKINS: True,
-        }
+        },
     }
 
     def perform_create(self, serializer):
@@ -51,6 +54,9 @@ class AFTExceptionView(CreateModelViewSet):
     view_permissions_update = {
         'pareto': {
             RoleChoices.SUPPORT: True
+        },
+        'traceback_breakdown': {
+            RoleChoices.SUPPORT: "True",
         }
     }
     action_serializers = {
@@ -74,3 +80,23 @@ class AFTExceptionView(CreateModelViewSet):
             f"Pareto generated: {pareto_name if pareto_name else 'Exceptions'}",
             ParetoSerializer(query_set, many=True, new_name=pareto_name).data
         )
+    
+    @action(
+        methods=['get'],
+        url_path='tracebackBreakdown',
+        detail=False,
+        renderer_classes=[JSONRenderer],
+    )
+    def traceback_breakdown(self, request):
+        if "codes" not in request.query_params:
+            return make_error("No codes provided. Please restrict query")
+        if len(request.query_params["codes"].split(",")) > 1:
+            return make_error("Only one code can be provided at this time")
+        if not all([key in request.query_params for key in ["start_time", "end_time"]]):
+            return make_error("Start and end dates must be provided")
+        qs = self.filter_queryset(self.get_queryset())
+        if qs.count() > MAX_NUM_TRACEBACKS:
+            return make_error("Too many exceptions to process. Please restrict query")
+        resp_data = create_traceback_groups(qs.values("id", "traceback", "code__code"))
+        resp_data["params"] = request.query_params
+        return make_ok("Traceback Breakdown", resp_data)
