@@ -4,7 +4,7 @@ from django.core.paginator import Paginator
 from collections import defaultdict
 
 from common.celery import monitored_shared_task
-from notifications.slack import upload_file
+from notifications.slack import upload_content
 
 from .metrics import HarvAssetMonitor
 from .models import HarvesterAsset
@@ -44,7 +44,7 @@ def compile_asset_report():
 @monitored_shared_task
 def send_asset_manifest(channel="hds-test"):
     report = compile_asset_report()
-    r = upload_file(
+    r = upload_content(
         filename=f"asset_manifest_{datetime.now()}.txt",
         title="Asset Manifest",
         content=json.dumps(report, indent=4),

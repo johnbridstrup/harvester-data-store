@@ -40,7 +40,7 @@ def post_to_slack(message, channel='hds-test', client=None):
     ASYNC_ERROR_COUNTER.labels("post_to_slack", "none", "no_token").inc()
     return "No slack token"
 
-def upload_file(filename, title, content, channel='hds-test', client=None):
+def upload_content(filename, title, content, channel='hds-test', msg="ASSET MANIFEST", client=None):
     if TOKEN:
         if client is None:
             client = WebClient(token=TOKEN)
@@ -51,7 +51,28 @@ def upload_file(filename, title, content, channel='hds-test', client=None):
                 content=content,
             )
             file_url = file.get("file").get("permalink")
-            msg = f"ASSET MANIFEST: {file_url}"
+            msg = f"{msg}: {file_url}"
+            post_to_slack(msg, channel, client=client)
+        except SlackApiError as e:
+            ASYNC_ERROR_COUNTER.labels("upload_file", "SlackApiError", e.response['error']).inc()
+            raise SlackError(e.response['error'])
+        return "Posted to slack"
+    
+    ASYNC_ERROR_COUNTER.labels("upload_file", "none", "no_token").inc()
+    return "No slack token"
+
+def upload_file(filename, title, file, channel='hds-test', msg="", client=None):
+    if TOKEN:
+        if client is None:
+            client = WebClient(token=TOKEN)
+        try:
+            file = client.files_upload(
+                title=title,
+                filename=filename,
+                file=file,
+            )
+            file_url = file.get("file").get("permalink")
+            msg = f"{msg}: {file_url}"
             post_to_slack(msg, channel, client=client)
         except SlackApiError as e:
             ASYNC_ERROR_COUNTER.labels("upload_file", "SlackApiError", e.response['error']).inc()
