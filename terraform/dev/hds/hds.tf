@@ -76,6 +76,8 @@ module "hds" {
   silk_profiling            = local.silk_profiling
   silk_cprofile             = local.silk_cprofile
   git_hash                  = var.git_hash
+
+  service_container_instance_count = 0
 }
 
 output "broker" {

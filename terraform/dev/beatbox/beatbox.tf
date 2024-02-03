@@ -45,6 +45,8 @@ module "hds-beatbox" {
     "80,tcp,${data.aws_security_group.pritunl_sg.id},web traffic from pritunl",
     "443,tcp,${data.aws_security_group.pritunl_sg.id},ssl traffic from pritunl"
   ]
+
+  service_container_instance_count = 0
 }
 
 output "target_url" {

@@ -34,32 +34,33 @@ locals {
     { "name" : "CLOUDWATCH", "value" : "true" },
     { "name" : "SILK_PROFILING", "value" : var.silk_profiling },
     { "name" : "SILK_CPROFILE", "value" : var.silk_cprofile },
-    { "name" : "JOB_SERVER_ADDRESS", "value": var.jobserver_address },
+    { "name" : "JOB_SERVER_ADDRESS", "value" : var.jobserver_address },
   ]
 }
 
 module "hds_ecs" {
-  source                         = "git@github.com:AdvancedFarm/infrastructure.git//terraform/modules/ecs-service?ref=master"
-  env                            = var.env
-  service_dns_name               = var.service_dns_name
-  service_name                   = var.service_name
-  service_subnets                = var.service_subnets
-  load_balancer_subnets          = var.load_balancer_subnets
-  service_port                   = var.service_port
-  vpc_id                         = var.vpc_id
-  ecs_cluster_arn                = var.ecs_cluster_arn
-  enable_prometheus_scrape       = var.enable_prometheus_scrape
-  additional_prometheus_ports    = var.additional_prometheus_ports
-  service_docker_image           = var.service_docker_image
-  service_health_check_path      = var.service_health_check_path
-  service_environments_variables = local.environment_variables
-  route53_priv_zone_id           = var.route53_priv_zone_id
-  route53_pub_zone_id            = var.route53_pub_zone_id
-  service_iam_policy_document    = var.service_iam_policy_document
-  service_alb_ingress_sg_rules   = var.service_alb_ingress_sg_rules
-  service_ingress_sg_rules       = var.service_ingress_sg_rules
-  service_container_memory       = var.service_container_memory
-  service_container_cpu          = var.service_container_cpu
+  source                           = "git@github.com:AdvancedFarm/infrastructure.git//terraform/modules/ecs-service?ref=master"
+  env                              = var.env
+  service_dns_name                 = var.service_dns_name
+  service_name                     = var.service_name
+  service_subnets                  = var.service_subnets
+  load_balancer_subnets            = var.load_balancer_subnets
+  service_port                     = var.service_port
+  vpc_id                           = var.vpc_id
+  ecs_cluster_arn                  = var.ecs_cluster_arn
+  enable_prometheus_scrape         = var.enable_prometheus_scrape
+  additional_prometheus_ports      = var.additional_prometheus_ports
+  service_docker_image             = var.service_docker_image
+  service_health_check_path        = var.service_health_check_path
+  service_environments_variables   = local.environment_variables
+  route53_priv_zone_id             = var.route53_priv_zone_id
+  route53_pub_zone_id              = var.route53_pub_zone_id
+  service_iam_policy_document      = var.service_iam_policy_document
+  service_alb_ingress_sg_rules     = var.service_alb_ingress_sg_rules
+  service_ingress_sg_rules         = var.service_ingress_sg_rules
+  service_container_memory         = var.service_container_memory
+  service_container_cpu            = var.service_container_cpu
+  service_container_instance_count = var.service_container_instance_count
 }
 
 output "git_info" {
