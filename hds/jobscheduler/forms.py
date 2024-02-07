@@ -52,7 +52,7 @@ class JobschedulerForm:
                             "properties": {
                                 "interval": IntervalScheduleSerializer.get_schema(),
                             },
-                            "additionalProperties": False,
+                            "additionalProperties": True,
                         },
                         {
                             "title": "Crontab",
@@ -60,14 +60,15 @@ class JobschedulerForm:
                             "properties": {
                                 "crontab": CronTabScheduleSerializer.get_schema(),
                             },
-                            "additionalProperties": False,
+                            "additionalProperties": True,
                         },
                         {
                             "title": "Clocked",
                             "required": ["clocked"],
                             "properties": {
                                 "clocked": ClockedScheduleSerializer.get_schema(),
-                            }
+                            },
+                            "additionalProperties": True,
                         },
                     ],
                 },
