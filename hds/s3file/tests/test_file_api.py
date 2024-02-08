@@ -189,3 +189,18 @@ class S3FileTestCase(HDSAPITestBase):
                 self.assertTrue(inst.deleted)
                 with self.assertRaises(ValueError):
                     inst.file.url
+
+    def test_related_imgs_files(self):
+        self.setup_basic()
+        self.post_error_report()
+        self.create_s3file("test.png", self.s3file_url, has_uuid=True)
+        report = ErrorReport.objects.get()
+        s3file = S3File.objects.get()
+        report.event = s3file.event
+        report.save()
+        report.refresh_from_db()
+        res = self.client.get(self.error_det_url(report.id)).json()["data"]
+        self.assertEqual(len(res["event"]["related_images"]), 1)
+        self.assertEqual(len(res["event"]["related_files"]), 1)
+        self.assertEqual(res["event"]["related_images"][0]["url"], "http://testserver/media/test.png")
+        self.assertEqual(res["event"]["related_files"][0]["url"], "http://testserver/api/v1/s3files/1/download/")
