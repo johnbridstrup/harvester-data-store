@@ -27,7 +27,7 @@ class TaggedUUIDSerializerBase(serializers.ModelSerializer):
 
         if self.has_related_files():
             s3files = [{'url': f.url(self.context.get('request', None), f.id), 'filetype': f.filetype} for f in instance.s3file_set.all()]
-            images = [{'url': f.file.url, 'filetype': f.filetype} for f in instance.s3file_set.all() if f.file.name.endswith((".png", ".jpg", ".jpeg"))]
+            images = [{'url': f.file_url(self.context.get('request', None)), 'filetype': f.filetype} for f in instance.s3file_set.all() if f.key.endswith((".png", ".jpg", ".jpeg"))]
             data['related_files'] = [
                 *s3files,
             ]

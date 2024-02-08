@@ -27,6 +27,15 @@ class S3File(EventModelMixin, CommonInfo):
         redirect_url = urljoin(url, "download/")
         return redirect_url
 
+    def file_url(self, request):
+        if self.file:
+            if any([x in self.file.url for x in ["http://", "https://"]]):
+                return self.file.url
+            if request is not None:
+                url = urljoin("http://" + request.get_host(), self.file.url)
+                return url
+        return None
+
     def delete_from_s3(self):
         self.file.delete() # deletes file from storages
         self.save()
