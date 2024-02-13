@@ -73,6 +73,7 @@ class EventSerializer(TaggedUUIDSerializerBase):
             aux_ev_data = super().to_representation(event)
             data["related_objects"].extend(aux_ev_data["related_objects"])
             data["related_files"].extend(aux_ev_data["related_files"])
+            data["related_images"].extend(aux_ev_data["related_images"])
         return data
 
     def related_objects(self):
