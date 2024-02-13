@@ -56,7 +56,7 @@ class AFTExceptionView(CreateModelViewSet):
             RoleChoices.SUPPORT: True
         },
         'traceback_breakdown': {
-            RoleChoices.SUPPORT: "True",
+            RoleChoices.SUPPORT: True,
         }
     }
     action_serializers = {
@@ -80,7 +80,7 @@ class AFTExceptionView(CreateModelViewSet):
             f"Pareto generated: {pareto_name if pareto_name else 'Exceptions'}",
             ParetoSerializer(query_set, many=True, new_name=pareto_name).data
         )
-    
+
     @action(
         methods=['get'],
         url_path='tracebackBreakdown',
