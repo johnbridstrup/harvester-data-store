@@ -32,7 +32,7 @@ def run_scheduled_job(self, sched_job_id):
         job_def = schema.payload_from_dynamic(job_def)
 
     try:
-        jsonschema.validate(sched_job.job_def["payload"], schema.schema)
+        jsonschema.validate(job_def["payload"], schema.schema)
     except jsonschema.ValidationError as e:
         sched_job.schedule_status = ScheduledJob.SchedJobStatusChoices.SCHEDFAIL
         sched_job.task.enabled = False
