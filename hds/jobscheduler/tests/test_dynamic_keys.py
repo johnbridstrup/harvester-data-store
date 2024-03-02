@@ -10,14 +10,14 @@ class DynamicFormBuilderTestCase(TestCase, HDSTestAttributes):
     def setUp(self):
         super().setUp()
         self.setup_jobscheduler_data()
-        self.DEFAULT_SCHEMA[ALLOW_REPEAT_KEY] = True
-        self.DEFAULT_SCHEMA[DYN_KEY_LIST_KEY] = ["requiredArg"]
-    
+        self.DEFAULT_SCHEMA["properties"]["payload"][ALLOW_REPEAT_KEY] = True
+        self.DEFAULT_SCHEMA["properties"]["payload"][DYN_KEY_LIST_KEY] = ["requiredArg"]
+
     def test_dynamic_properties(self):
         jt = JobType(self.DEFAULT_JOBTYPE)
         js = JobSchema(
             jobtype=jt,
-            schema=self.DEFAULT_SCHEMA,
+            schema=self.DEFAULT_SCHEMA["properties"]["payload"],
             version=self.DEFAULT_SCHEMA_VERSION,
         )
         form = JobschedulerForm(
@@ -48,7 +48,7 @@ class DynamicKeysTestCase(TestCase):
                 }
             }
         }
-    
+
     def test_register(self):
         self.assertGreater(len(DynamicKeys._DYN_KEYS), 0)
 
@@ -72,4 +72,3 @@ class DynamicKeysTestCase(TestCase):
         for dk in DynamicKeys._DYN_KEYS.values():
             if_then = DynamicKeys._create_dk_if_then(dk)
             self.assertIn(if_then, updated["properties"][dyn_key_name]["allOf"])
-        

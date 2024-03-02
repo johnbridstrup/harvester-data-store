@@ -137,22 +137,22 @@ class JobSchedulerTestCase(HarvJobApiTestBase):
 
         run_scheduled_job(1)
         self.assertEqual(Job.objects.count(), 1)
-        
+
         schedjob = ScheduledJob.objects.get(id=1)
         self.assertEqual(schedjob.num_runs, 1)
 
     def test_max_jobs_reached(self):
         self._create_defaults()
         self.jobsched_payload["max_runs"] = 2
-        self.client.post(self.url, self.jobsched_payload, format='json')
+        res = self.client.post(self.url, self.jobsched_payload, format='json')
 
         run_scheduled_job(1)
         run_scheduled_job(1)
-        
+
         schedjob = ScheduledJob.objects.get(id=1)
         self.assertEqual(schedjob.schedule_status, ScheduledJob.SchedJobStatusChoices.MAXRUNS)
         self.assertFalse(schedjob.task.enabled)
-        
+
 
     def test_status_updates(self):
         self._create_defaults()
@@ -200,7 +200,7 @@ class JobSchedulerTestCase(HarvJobApiTestBase):
 
         # Using correct schema in payload
         resp_schema = form_r.json()['data']['form']['properties']['payload']
-        self.assertDictEqual(resp_schema, self.DEFAULT_SCHEMA)
+        self.assertDictEqual(resp_schema, self.DEFAULT_SCHEMA["properties"]["payload"])
 
     def test_filter_scheduledjobs(self):
         self._create_defaults()
@@ -233,8 +233,8 @@ class JobSchedulerTestCase(HarvJobApiTestBase):
         self.assertEqual(res.json()['data']['count'], 1)
 
     def test_dynamic_key_schema_updated(self):
-        self.DEFAULT_SCHEMA["allow_repeat_schedules"] = True
-        self.DEFAULT_SCHEMA["dynamic_keys"] = ["requiredArg"]
+        self.DEFAULT_SCHEMA["properties"]["payload"]["allow_repeat_schedules"] = True
+        self.DEFAULT_SCHEMA["properties"]["payload"]["dynamic_keys"] = ["requiredArg"]
         dyn_req_arg = DynamicKeys._create_dyn_key_name("requiredArg")
 
         self.create_jobtype()
@@ -242,19 +242,19 @@ class JobSchedulerTestCase(HarvJobApiTestBase):
 
         url = self.url + "create/"
         r = self.client.get(url)
-        
+
         form_url = r.json()['data']['jobs'][self.DEFAULT_JOBTYPE][self.DEFAULT_SCHEMA_VERSION]["url"]
         form_r = self.client.get(form_url)
 
         self.assertEqual(form_r.status_code, status.HTTP_200_OK, form_r.json())
-        
-        form_payload_schema = form_r.json()["data"]["form"]["properties"]["payload"]["properties"]["payload"]
+
+        form_payload_schema = form_r.json()["data"]["form"]["properties"]["payload"]
         self.assertIn(dyn_req_arg, form_payload_schema["properties"])
         self.assertIn(dyn_req_arg, form_payload_schema["required"])
 
     def test_dynamic_time_of_schedule(self):
-        self.DEFAULT_SCHEMA["allow_repeat_schedules"] = True
-        self.DEFAULT_SCHEMA["dynamic_keys"] = ["requiredArg"]
+        self.DEFAULT_SCHEMA["properties"]["payload"]["allow_repeat_schedules"] = True
+        self.DEFAULT_SCHEMA["properties"]["payload"]["dynamic_keys"] = ["requiredArg"]
         self.DEFAULT_SCHEMA["properties"]["payload"]["properties"]["requiredArg"]["pattern"] = DT_REGEX
 
         self.create_jobtype()
@@ -265,7 +265,7 @@ class JobSchedulerTestCase(HarvJobApiTestBase):
         form_url = r.json()['data']['jobs'][self.DEFAULT_JOBTYPE][self.DEFAULT_SCHEMA_VERSION]["url"]
         form_r = self.client.get(form_url)
         submit_url = form_r.json()["data"]["submit"]
-        
+
         TOS_payload = {}
         TOS_payload["payload"] = {
             "__dynamic__requiredArg": {
@@ -289,8 +289,8 @@ class JobSchedulerTestCase(HarvJobApiTestBase):
         self.assertEqual(job.schedule_status, ScheduledJob.SchedJobStatusChoices.SCHEDULED)
 
     def test_dynamic_exact(self):
-        self.DEFAULT_SCHEMA["allow_repeat_schedules"] = True
-        self.DEFAULT_SCHEMA["dynamic_keys"] = ["requiredArg"]
+        self.DEFAULT_SCHEMA["properties"]["payload"]["allow_repeat_schedules"] = True
+        self.DEFAULT_SCHEMA["properties"]["payload"]["dynamic_keys"] = ["requiredArg"]
         self.DEFAULT_SCHEMA["properties"]["payload"]["properties"]["requiredArg"]["pattern"] = DT_REGEX
 
         self.create_jobtype()
@@ -301,7 +301,7 @@ class JobSchedulerTestCase(HarvJobApiTestBase):
         form_url = r.json()['data']['jobs'][self.DEFAULT_JOBTYPE][self.DEFAULT_SCHEMA_VERSION]["url"]
         form_r = self.client.get(form_url)
         submit_url = form_r.json()["data"]["submit"]
-        
+
         TOS_payload = {}
         TOS_payload["payload"] = {
             "__dynamic__requiredArg": {

@@ -27,28 +27,28 @@ class JobSchema(CommonInfo):
 
     def __str__(self):
         return f"{self.jobtype.name} job type: version {self.version}"
-    
+
     @property
     def dynamic_keys_list(self):
         return self.schema.get(DYN_KEY_LIST_KEY, [])
-    
+
     @property
     def allows_repeats(self):
         return self.schema.get(ALLOW_REPEAT_KEY, False)
-    
+
     @property
     def is_dynamic(self):
         return len(self.dynamic_keys_list) > 0 and self.allows_repeats
-    
+
     @property
     def dynamic_schema(self):
         if not self.is_dynamic:
             return self.schema
-        
+
         schema = self.schema.copy()
-        schema["properties"]["payload"] = DynamicKeys.create_dynamic_schema(schema["properties"]["payload"], self.dynamic_keys_list)
+        schema = DynamicKeys.create_dynamic_schema(schema, self.dynamic_keys_list)
         return schema
-    
+
     def payload_from_dynamic(self, payload):
         payload["payload"] = DynamicKeys.create_entries(payload["payload"])
         return payload
