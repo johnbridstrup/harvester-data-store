@@ -1,3 +1,5 @@
+import pytz, time
+
 from django.test.client import RequestFactory
 from django.urls import reverse
 from django.utils import timezone
@@ -267,12 +269,14 @@ class JobSchedulerTestCase(HarvJobApiTestBase):
         submit_url = form_r.json()["data"]["submit"]
         
         TOS_payload = {}
+        fmt = "%Y%m%d%H%M%S"
+        hrs_sub = -6
         TOS_payload["payload"] = {
             "__dynamic__requiredArg": {
                 "selection": "TimeOfSchedule",
                 "value": {
-                    "format": "%Y%m%d%H%M%S",
-                    "hours": -6
+                    "format": fmt,
+                    "hours": hrs_sub,
                 }
             },
             "optionalArg": "hello"
@@ -283,10 +287,51 @@ class JobSchedulerTestCase(HarvJobApiTestBase):
 
         self.assertEqual(r.status_code, status.HTTP_202_ACCEPTED, {"code": r.status_code, "exc": r.json()})
 
+        # Schedule once
+        now = timezone.now()
         run_scheduled_job(1)
 
-        job = ScheduledJob.objects.get(id=1)
-        self.assertEqual(job.schedule_status, ScheduledJob.SchedJobStatusChoices.SCHEDULED)
+        # Assert Basics
+        sched_job = ScheduledJob.objects.get(id=1)
+        initial_update = sched_job.lastModified
+        self.assertEqual(sched_job.schedule_status, ScheduledJob.SchedJobStatusChoices.SCHEDULED)
+        self.assertEqual(1, Job.objects.count())
+        job1 = Job.objects.latest("id")
+        self.assertEqual(job1.jobstatus, Job.StatusChoices.PENDING)
+
+        dyn_time_t_str = job1.payload["requiredArg"]
+        dyn_time_dt = timezone.datetime.strptime(dyn_time_t_str, fmt)
+        uspac_tz = pytz.timezone("US/Pacific")
+        localized_dyn_time_dt = uspac_tz.localize(dyn_time_dt)
+        utc_dyn_time_dt = localized_dyn_time_dt.astimezone(pytz.utc)
+        exp_dyn_time_dt = now + timezone.timedelta(hours=hrs_sub)
+        delta = timezone.timedelta(seconds=2)
+        self.assertAlmostEqual(exp_dyn_time_dt, utc_dyn_time_dt, delta=delta, msg=f"Expected: {exp_dyn_time_dt}, Actual: {utc_dyn_time_dt}")
+
+        time.sleep(3) ## long enough to catch > 2 second delta
+        now = timezone.now()
+        run_scheduled_job(1)
+
+        # Make sure scheduled job object updated
+        sched_job.refresh_from_db()
+        this_update = sched_job.lastModified
+        self.assertNotEqual(initial_update, this_update)
+        self.assertEqual(sched_job.schedule_status, ScheduledJob.SchedJobStatusChoices.SCHEDULED)
+
+        # Make sure new job was created
+        self.assertEqual(2, Job.objects.count())
+        job2 = Job.objects.latest("id")
+        self.assertNotEqual(job1.id, job2.id)
+        self.assertEqual(job2.jobstatus, Job.StatusChoices.PENDING)
+
+        dyn_time_t_str = job2.payload["requiredArg"]
+        dyn_time_dt = timezone.datetime.strptime(dyn_time_t_str, fmt)
+        uspac_tz = pytz.timezone("US/Pacific")
+        localized_dyn_time_dt = uspac_tz.localize(dyn_time_dt)
+        utc_dyn_time_dt = localized_dyn_time_dt.astimezone(pytz.utc)
+        exp_dyn_time_dt = now + timezone.timedelta(hours=hrs_sub)
+        delta = timezone.timedelta(seconds=2)
+        self.assertAlmostEqual(exp_dyn_time_dt, utc_dyn_time_dt, delta=delta, msg=f"Expected: {exp_dyn_time_dt}, Actual: {utc_dyn_time_dt}")
 
     def test_dynamic_exact(self):
         self.DEFAULT_SCHEMA["allow_repeat_schedules"] = True
