@@ -27,7 +27,7 @@ class HarvJobApiTestBase(HDSAPITestBase):
     ):
         jobtype = jobtype or self.DEFAULT_JOBTYPE
         version = version or self.DEFAULT_SCHEMA_VERSION
-        schema = schema or self.DEFAULT_SCHEMA["properties"]["payload"]
+        schema = schema or self.DEFAULT_SCHEMA
 
         jobschema = {
             "jobtype": jobtype,

@@ -43,7 +43,7 @@ class JobSerializer(EventSerializerMixin, serializers.ModelSerializer):
 
         job_payload = self.construct_job_payload(jobtype.name, data["payload"])
         UUID = job_payload["id"]
-        self._validate_payload(job_payload["payload"], jobschema.schema)
+        self._validate_payload(job_payload, jobschema.schema)
 
         creator = self.context['request'].user
         event = self.get_or_create_event(UUID, creator, Job.__name__)

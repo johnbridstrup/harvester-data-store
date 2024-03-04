@@ -92,10 +92,10 @@ class HDSTestAttributes:
                     "type": "object",
                     "properties": {
                         "requiredArg": {
-                            "type": "string"
+                        "type": "string"
                         },
                         "optionalArg": {
-                            "type": "string"
+                        "type": "string"
                         }
                     },
                     "required": ["requiredArg"],
@@ -442,7 +442,7 @@ class HDSAPITestBase(APITestCase, HDSTestAttributes):
             format='json'
         )
         return resp
-
+    
     def create_user(self, username, password, profile_kwargs = {}, **kwargs):
             user = User.objects.create_user(
             username=username,
