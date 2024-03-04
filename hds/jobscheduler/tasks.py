@@ -27,23 +27,23 @@ def run_scheduled_job(self, sched_job_id):
         version=sched_job.job_def["schema_version"],
     )
 
-    job_def = sched_job.job_def["payload"]
+    job_def = sched_job.job_def["payload"].copy()
     if schema.is_dynamic:
         job_def = schema.payload_from_dynamic(job_def)
 
     try:
-        jsonschema.validate(sched_job.job_def["payload"], schema.schema)
+        jsonschema.validate(job_def["payload"], schema.schema["properties"]["payload"])
     except jsonschema.ValidationError as e:
         sched_job.schedule_status = ScheduledJob.SchedJobStatusChoices.SCHEDFAIL
         sched_job.task.enabled = False
         sched_job.save()
         logger.exception(e)
         return "Failed to validate payload"
-
+    
     harvs = sched_job.targets.all()
     job_obj = {
         "schema": schema,
-        "payload": sched_job.job_def["payload"],
+        "payload": job_def["payload"],
         "creator": sched_job.creator,
     }
     for harv in harvs:
