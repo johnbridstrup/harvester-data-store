@@ -161,7 +161,7 @@ class ScheduledJobSerializer(serializers.ModelSerializer):
         jobtype = data.get("jobtype")
         if jobtype is None:
             missing.append(self.Msgs.NO_JOBTYPE)
-
+        
         schema_version = data.get("schema_version")
         if schema_version is None:
             missing.append(self.Msgs.NO_VERS)
@@ -169,14 +169,14 @@ class ScheduledJobSerializer(serializers.ModelSerializer):
         targets = data.get("targets")
         if targets is None:
             missing.append(self.Msgs.NO_TARGETS)
-
+        
         schedule = data.get("schedule")
         if schedule is None:
             missing.append(self.Msgs.NO_SCHEDULE)
 
         if len(missing):
             raise serializers.ValidationError({self.Msgs.MISSING_KEY: missing})
-
+        
         errs = {}
         try:
             schema = JobSchema.objects.get(
@@ -185,21 +185,21 @@ class ScheduledJobSerializer(serializers.ModelSerializer):
             )
         except JobSchema.DoesNotExist:
             errs.update(self.Msgs.NO_SCHEMA(jobtype, schema_version))
-
+        
         payload = data.get("payload", {}).get("payload")
         if payload is None:
             errs[self.Msgs.MISSING_KEY] = self.Msgs.NO_PAYLOAD
 
         if errs:
             raise serializers.ValidationError(errs)
-
+        
         try:
-            jsonschema.validate(payload, schema.dynamic_schema)
+            jsonschema.validate(payload, schema.dynamic_schema["properties"]["payload"])
         except jsonschema.ValidationError as e:
             raise serializers.ValidationError({"invalid": e})
-
+        
         max_runs = data.get("max_runs", 10)
-
+        
         targets = self._parse_targets(data["targets"])
         internal_data = {
             "job_def": { **data },
