@@ -22,16 +22,22 @@
         "schema": {
             "type": "object",
             "properties": {
-                "targets": {
-                    "type": "array",
-                    "items": {
-                        "type": "string",
-                        "pattern": "^(master|((robot|stereo)\\d+))$"
-                    }
+                "payload": {
+                    "type": "object",
+                    "properties": {
+                        "targets": {
+                            "type": "array",
+                            "items": {
+                                "type": "string",
+                                "pattern": "^(master|((robot|stereo)\\d+))$"
+                            }
+                        }
+                    },
+                    "required": ["targets"]
                 }
             },
             "required": [
-                "targets"
+                "payload"
             ]
         },
         "version": "1.0",
