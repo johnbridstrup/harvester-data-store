@@ -1,7 +1,8 @@
 from django.contrib.auth.models import User
+from django.utils import timezone
 
-from common.reports import DTimeFormatter
-from common.serializers.reportserializer import ReportSerializerBase
+from common.reports import DTimeFormatter, ReportBase
+from common.serializers.reportserializer import ExtractionError, ReportSerializerBase
 from common.serializers.userserializer import UserCustomSerializer
 from event.serializers import (
     PickSessionSerializerMixin,
@@ -11,7 +12,7 @@ from event.serializers import (
 from harvester.serializers.harvesterserializer import HarvesterMinimalSerializer
 from location.serializers.locationserializer import LocationMinimalSerializer
 
-from ..models import GripReport
+from ..models import Candidate, GripReport
 
 class GripReportSerializer(PickSessionSerializerMixin, ReportSerializerBase):
     class Meta:
@@ -45,6 +46,56 @@ class GripReportSerializer(PickSessionSerializerMixin, ReportSerializerBase):
         self.set_picksess_time(pick_session, pick_session_start_time, pick_session_end_time)
         data['pick_session'] = pick_session.id
         return super().to_internal_value(data)
+    
+    @classmethod
+    def extract(cls, report_obj: ReportBase):
+        harv = report_obj.harvester
+        fruit = harv.fruit
+        data = report_obj.report.get("data")
+
+        if data is None:
+            raise ExtractionError("No data in report")
+        
+        cand_list = data.get("cand")
+        if cand_list is None or not isinstance(cand_list, list):
+            raise ExtractionError("No candidates in report")
+
+        cls.extract_candidates(cand_list, harv, fruit, report_obj)
+    
+    @classmethod
+    def extract_candidates(cls, cand_list, harv, fruit, report_obj: ReportBase):
+        cands = []
+        for cand_dict in cand_list:        
+            cands.append(cls._get_cand(cand_dict, harv, fruit, report_obj))
+            if len(cands) >= 100: # 100 seems fine for a batch not sure what is optimal
+                Candidate.objects.bulk_create(cands)
+                cands = []
+        
+        # Create the rest
+        Candidate.objects.bulk_create(cands)
+    
+    @staticmethod
+    def _get_cand(cand_dict, harv, fruit, report_obj):
+        cand_id = cand_dict["cand_id"]
+        robot_id = cand_dict["robot_id"]
+        ripeness = cand_dict["ripeness"]
+        score = cand_dict["score"]
+        created = timezone.now()
+        cand = Candidate(
+                report=report_obj,
+                fruit=fruit,
+                harvester=harv,
+                location = harv.location,
+                robot_id=robot_id,
+                score=score,
+                ripeness=ripeness,
+                cand_id=cand_id,
+                candidate_data=cand_dict,
+                creator=report_obj.creator,
+                created=created,
+                lastModified=created,
+            )
+        return cand
     
 
 class GripReportListSerializer(GripReportSerializer):

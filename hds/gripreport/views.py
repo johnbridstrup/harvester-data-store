@@ -10,7 +10,7 @@ from .serializers.gripreportserializers import (
     GripReportDetailSerializer,
     GripReportListSerializer,
 )
-from .tasks import download_gripreport
+from .tasks import download_gripreport, extract_grip_report
 
 
 class GripReportView(ReportModelViewSet):
@@ -24,5 +24,5 @@ class GripReportView(ReportModelViewSet):
 
     def create(self, request, *args, **kwargs):
         event = request.data
-        download_gripreport.delay(event, creator=request.user.id)
+        download_gripreport.apply_async(args=(event, request.user.id), link=extract_grip_report.s())
         return Response(status=status.HTTP_202_ACCEPTED)
