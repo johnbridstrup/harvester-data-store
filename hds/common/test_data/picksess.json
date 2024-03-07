@@ -15,7 +15,7 @@
                 },
                 "score": -220.9350905829982,
                 "bed_pos": null,
-                "cand_id": 22173,
+                "cand_id": 100,
                 "harv_id": 9,
                 "obs_ids": [
                     38756,
@@ -237,7 +237,7 @@
                 },
                 "score": -452.4380131964908,
                 "bed_pos": null,
-                "cand_id": 22245,
+                "cand_id": 101,
                 "harv_id": 9,
                 "obs_ids": [
                     26526,
@@ -490,7 +490,7 @@
                 },
                 "score": -149.1016987439774,
                 "bed_pos": null,
-                "cand_id": 22805,
+                "cand_id": 102,
                 "harv_id": 9,
                 "obs_ids": [
                     51078,
@@ -700,7 +700,7 @@
                     "topic": "grip_attempt"
                 },
                 "random": false,
-                "cand_id": 401,
+                "cand_id": 100,
                 "harv_id": 9,
                 "sess_ts": {},
                 "success": true,
@@ -729,7 +729,7 @@
                     "vaclift_max_vac": -59.562992125984245,
                     "vaclift_min_vac": -60.77133717660292
                 },
-                "robot_id": 1,
+                "robot_id": 4,
                 "sess_num": 0,
                 "touchData": {
                     "gpos": {
@@ -817,7 +817,7 @@
                     "topic": "grip_attempt"
                 },
                 "random": false,
-                "cand_id": 128,
+                "cand_id": 101,
                 "harv_id": 9,
                 "sess_ts": {},
                 "success": true,
