@@ -1,4 +1,4 @@
-from django.utils.timezone import datetime
+from django.utils import timezone
 from rest_framework import status
 
 from common.tests import HDSAPITestBase
@@ -169,7 +169,8 @@ class AFTExceptionCodeManifestTestCase(ExceptionTestBase):
 
         self.assertEqual(code_0["msg"], aft_code_0.msg)
         self.assertNotEqual(original_0_msg, aft_code_0.msg)
-        self.assertAlmostEqual(datetime.now().timestamp(), aft_code_0.lastModified.timestamp(), 1)
+        delta = timezone.timedelta(seconds=1)
+        self.assertAlmostEqual(timezone.now(), aft_code_0.lastModified, delta=delta)
         self.assertEqual(code_3["name"], aft_code_3.name)
         self.assertGreater(aft_code_3.lastModified, aft_code_3.created)
 
