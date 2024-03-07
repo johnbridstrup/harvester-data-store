@@ -45,6 +45,32 @@ class GripReportSerializer(PickSessionSerializerMixin, ReportSerializerBase):
         self.set_picksess_time(pick_session, pick_session_start_time, pick_session_end_time)
         data['pick_session'] = pick_session.id
         return super().to_internal_value(data)
+    
+
+class GripReportListSerializer(GripReportSerializer):
+    """
+    Return a response with minimal nesting to the list view
+    for any related objected.
+    """
+
+    event = EventSerializer(read_only=True)
+    harvester = HarvesterMinimalSerializer(read_only=True)
+    location = LocationMinimalSerializer(read_only=True)
+    pick_session = PickSessionMinimalSerializer(read_only=True)
+    creator = UserCustomSerializer(read_only=True)
+    modifiedBy = UserCustomSerializer(read_only=True)
+
+    class Meta(GripReportSerializer.Meta):
+        model = GripReport
+        fields = [
+            "reportTime",
+            "event",
+            "harvester",
+            "location",
+            "pick_session",
+            "creator",
+            "modifiedBy",
+        ]
 
 
 class GripReportDetailSerializer(GripReportSerializer):

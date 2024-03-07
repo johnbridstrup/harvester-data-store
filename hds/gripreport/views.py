@@ -7,7 +7,8 @@ from .models import GripReport
 from .filters import PickSessionReportFilterset
 from .serializers import (
     GripReportSerializer,
-    GripReportDetailSerializer
+    GripReportDetailSerializer,
+    GripReportListSerializer,
 )
 from .tasks import download_gripreport
 
@@ -17,7 +18,8 @@ class GripReportView(ReportModelViewSet):
     serializer_class = GripReportSerializer
     filterset_class = PickSessionReportFilterset
     action_serializers = {
-        "retrieve": GripReportDetailSerializer
+        "retrieve": GripReportDetailSerializer,
+        "list": GripReportListSerializer,
     }
 
     def create(self, request, *args, **kwargs):
