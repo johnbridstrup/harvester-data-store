@@ -5,7 +5,7 @@ from common.viewsets import ReportModelViewSet
 
 from .models import GripReport
 from .filters import PickSessionReportFilterset
-from .serializers import (
+from .serializers.gripreportserializers import (
     GripReportSerializer,
     GripReportDetailSerializer,
     GripReportListSerializer,

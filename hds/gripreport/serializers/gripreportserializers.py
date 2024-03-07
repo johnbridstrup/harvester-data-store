@@ -11,7 +11,7 @@ from event.serializers import (
 from harvester.serializers.harvesterserializer import HarvesterMinimalSerializer
 from location.serializers.locationserializer import LocationMinimalSerializer
 
-from .models import GripReport
+from ..models import GripReport
 
 class GripReportSerializer(PickSessionSerializerMixin, ReportSerializerBase):
     class Meta:

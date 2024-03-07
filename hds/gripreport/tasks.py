@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from common.celery import monitored_shared_task
 from common.fileloader import get_client
 
-from .serializers import GripReportSerializer
+from .serializers.gripreportserializers import GripReportSerializer
 
 
 logger = structlog.getLogger(__name__)
