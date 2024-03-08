@@ -4,7 +4,7 @@ from rest_framework import status
 from common.tests import HDSAPITestBase
 from hds.urls import version
 
-from .models import Candidate, GripReport
+from .models import Candidate, Grip, GripReport
 
 
 class GripReportTestCase(HDSAPITestBase):
@@ -16,6 +16,7 @@ class GripReportTestCase(HDSAPITestBase):
         self.post_picksess_report()
         self.assertEqual(GripReport.objects.count(), 1)
         self.assertGreater(Candidate.objects.count(), 0)
+        self.assertGreater(Grip.objects.count(), 0)
 
     def test_event(self):
         self.post_picksess_report()

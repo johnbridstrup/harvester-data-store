@@ -12,7 +12,7 @@ from event.serializers import (
 from harvester.serializers.harvesterserializer import HarvesterMinimalSerializer
 from location.serializers.locationserializer import LocationMinimalSerializer
 
-from ..models import Candidate, GripReport
+from ..models import Candidate, Grip, GripReport
 
 class GripReportSerializer(PickSessionSerializerMixin, ReportSerializerBase):
     class Meta:
@@ -61,6 +61,12 @@ class GripReportSerializer(PickSessionSerializerMixin, ReportSerializerBase):
             raise ExtractionError("No candidates in report")
 
         cls.extract_candidates(cand_list, harv, fruit, report_obj)
+
+        grip_list = data.get("grip") # get a grip
+        if grip_list is None or not isinstance(grip_list, list):
+            raise ExtractionError("No grips in report")
+        
+        cls.extract_grips(grip_list, harv, fruit, report_obj)
     
     @classmethod
     def extract_candidates(cls, cand_list, harv, fruit, report_obj: ReportBase):
@@ -96,6 +102,54 @@ class GripReportSerializer(PickSessionSerializerMixin, ReportSerializerBase):
                 lastModified=created,
             )
         return cand
+    
+    @classmethod
+    def extract_grips(cls, grip_list, harv, fruit, report_obj: ReportBase):
+        grips = []
+        for grip_dict in grip_list:
+            grips.append(cls._get_grip(grip_dict, harv, fruit, report_obj))
+            if len(grips) >= 100:
+                Grip.objects.bulk_create(grips)
+                grips = []
+        Grip.objects.bulk_create(grips)
+    
+    @staticmethod
+    def _get_grip(grip_dict, harv, fruit, report_obj):
+        success=grip_dict["success"]
+        robot_id=grip_dict["robot_id"]
+        grip_start_ts=grip_dict["grip_start_ts"]
+        grip_end_ts=grip_dict["grip_end_ts"]
+        pick_result=grip_dict["pick_result"]
+        grip_result=grip_dict["grip_result"]
+        created = timezone.now()
+
+        cand_id = grip_dict["cand_id"]
+        cands = Candidate.objects.filter(report=report_obj, cand_id=cand_id, robot_id=robot_id)
+        delta = 10000000
+        cand = None
+        for c in cands:
+            if (c.candidate_data["ts"] - grip_start_ts)**2 < delta**2:
+                delta = (c.candidate_data["ts"] - grip_start_ts)
+                cand = c
+        
+        grip = Grip(
+            report=report_obj,
+            fruit=fruit,
+            harvester=harv,
+            location=harv.location,
+            candidate=cand,
+            success=success,
+            robot_id=robot_id,
+            grip_start_ts=grip_start_ts,
+            grip_end_ts=grip_end_ts,
+            pick_result=pick_result,
+            grip_result=grip_result,
+            grip_data=grip_dict,
+            creator=report_obj.creator,
+            created=created,
+            lastModified=created,
+        )
+        return grip
     
 
 class GripReportListSerializer(GripReportSerializer):
