@@ -1,5 +1,5 @@
 from rest_framework import routers
-from .views import GripReportView
+from ..views import GripReportView
 
 
 router = routers.SimpleRouter()

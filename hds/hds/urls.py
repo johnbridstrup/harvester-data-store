@@ -38,7 +38,7 @@ urlpatterns = [
     path(f'{version}/exceptioncodes/', include('exceptions.urls.exceptioncodeurls')),
     path(f'{version}/exceptioncodemanifests/', include('exceptions.urls.exceptioncodemanifesturls')),
     path(f'{version}/exceptions/', include('exceptions.urls.exceptionurls')),
-    path(f'{version}/gripreports/', include('gripreport.urls')),
+    path(f'{version}/gripreports/', include('gripreport.urls.gripreporturls')),
     path(f'{version}/scheduledjobs/', include('jobscheduler.urls')),
     path(f'{version}/migrations/', include('hdsmigrations.urls')),
     path(f'{version}/notifications/', include('notifications.urls')),
