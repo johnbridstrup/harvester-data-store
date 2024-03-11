@@ -87,3 +87,16 @@ class GripReportTestCase(HDSAPITestBase):
         
         cand_obj = Candidate.objects.get(cand_id=exp_cand["cand_id"], robot_id=exp_cand["robot_id"])
         self.assertEqual(grip.candidate, cand_obj)
+
+    def test_grip_view(self):
+        self.post_picksess_report()
+        url = reverse("grips-list")
+        resp = self.client.get(url)
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(resp.json()["data"]["results"]), len(self.picksess_data["data"]["grip"]))
+
+        id_ = resp.json()["data"]["results"][0]["id"]
+        url = reverse("grips-detail", args=[id_])
+        resp = self.client.get(url)
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        self.assertEqual(resp.json()["data"]["id"], id_)

@@ -36,6 +36,7 @@ urlpatterns = [
     path(f'{version}/exceptions/', include('exceptions.urls.exceptionurls')),
     path(f'{version}/fruits/', include('harvester.urls.fruiturls')),
     path(f'{version}/gripreports/', include('gripreport.urls.gripreporturls')),
+    path(f'{version}/grips/', include('gripreport.urls.gripurls')),
     path(f'{version}/harvassetreport/', include('harvassets.urls.harvesterassetreporturls')),
     path(f'{version}/harvassets/', include('harvassets.urls.harvesterasseturls')),
     path(f'{version}/harvesters/', include('harvester.urls.harvesterurls')),

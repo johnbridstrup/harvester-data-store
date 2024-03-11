@@ -5,9 +5,10 @@ from common.renderers import HDSJSONRenderer
 from common.viewsets import CreateModelViewSet, ReportModelViewSet
 from hds.roles import RoleChoices
 
-from .models import Candidate, GripReport
+from .models import Candidate, Grip, GripReport
 from .filters import PickSessionReportFilterset
 from .serializers.candidateserializers import CandidateFullSerializer, CandidateMinimalSerializer
+from .serializers.gripserializers import GripFullSerializer, GripMinimalSerializer
 from .serializers.gripreportserializers import (
     GripReportSerializer,
     GripReportDetailSerializer,
@@ -38,6 +39,21 @@ class CandidateView(CreateModelViewSet):
     action_serializers = {
         "list": CandidateMinimalSerializer,
         "retrieve": CandidateFullSerializer,
+    }
+    view_permissions_update = {
+        "full": {
+            RoleChoices.SUPPORT: True,
+        },
+    }
+
+
+class GripView(CreateModelViewSet):
+    queryset = Grip.objects.all()
+    http_method_names = ["get", "head"]
+    serializer_class = GripMinimalSerializer
+    action_serializers = {
+        "list": GripMinimalSerializer,
+        "retrieve": GripFullSerializer,
     }
     view_permissions_update = {
         "full": {
