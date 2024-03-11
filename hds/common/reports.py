@@ -1,6 +1,7 @@
 from datetime import datetime
 import pytz
 
+from dateutil.parser import parse
 from django.db import models
 from django.utils.dateparse import parse_datetime
 from taggit.managers import TaggableManager
@@ -49,9 +50,13 @@ class DTimeFormatter:
         # try standard parse datetime first
         tz = pytz.timezone(tz_str)
         try:
-            dt = parse_datetime(dt_str)
+            dt = parse(dt_str)
             if dt:  # parse datetime will return None if it doesn't match
-                return tz.localize(dt)
+                is_naive = dt.tzinfo is None or dt.tzinfo.utcoffset(dt) is None
+                if is_naive:
+                    return tz.localize(dt)
+                else:
+                    return dt  # We don't need a specific timezone, we just need real tz info
         except ValueError:
             pass
 
