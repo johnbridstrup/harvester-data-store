@@ -26,6 +26,7 @@ urlpatterns = [
     path(f'{version}/autodiagnostics/', include('autodiagnostics.urls.autodiagreporturls')),
     path(f'{version}/autodiagnosticsruns/', include('autodiagnostics.urls.autodiagrunurls')),
     path(f'{version}/aftconfigs/', include('aftconfigs.urls')),
+    path(f'{version}/candidates/', include('gripreport.urls.candidateurls')),
     path(f'{version}/distributors/', include('location.urls.distributorurls')),
     path(f'{version}/emustats/', include('emulatorstats.urls')),
     path(f'{version}/errorreports/', include('errorreport.urls')),

@@ -1,4 +1,5 @@
 import os
+from django.urls import reverse
 from rest_framework import status
 
 from common.tests import HDSAPITestBase
@@ -43,6 +44,19 @@ class GripReportTestCase(HDSAPITestBase):
         self.assertEqual(cand.robot_id, exp_cand["robot_id"])
         self.assertEqual(cand.score, exp_cand["score"])
         self.assertDictEqual(cand.candidate_data, exp_cand)
+
+    def test_cand_view(self):
+        self.post_picksess_report()
+        url = reverse("candidates-list")
+        resp = self.client.get(url)
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(resp.json()["data"]["results"]), len(self.picksess_data["data"]["cand"]))
+
+        id_ = resp.json()["data"]["results"][0]["id"]
+        url = reverse("candidates-detail", args=[id_])
+        resp = self.client.get(url)
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        self.assertEqual(resp.json()["data"]["id"], id_)
 
     def test_grip_extraction(self):
         self.post_picksess_report()
