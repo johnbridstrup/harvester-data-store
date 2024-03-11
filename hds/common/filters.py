@@ -151,15 +151,15 @@ class CommonInfoFilterset(filters.FilterSet):
 
 class ReportFilterset(CommonInfoFilterset):
     FIELDS_BASE = CommonInfoFilterset.FIELDS_BASE + [
-        "reporttime_after",
-        "reporttime_before",
+        "start_time",
+        "end_time",
         "locations",
         "harv_ids",
         "fruits"
     ]
 
-    reporttime_after = DTimeFilter(field_name='reportTime', lookup_expr='gte')
-    reporttime_before = DTimeFilter(field_name='reportTime', lookup_expr='lte')
+    start_time = DTimeFilter(field_name='reportTime', lookup_expr='gte')
+    end_time = DTimeFilter(field_name='reportTime', lookup_expr='lte')
     locations = ListFilter(field_name="location__ranch")
     harv_ids = ListFilter(field_type=int, field_name="harvester__harv_id")
     fruits = ListFilter(field_name="harvester__fruit__name")

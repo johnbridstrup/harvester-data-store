@@ -47,8 +47,6 @@ class AutodiagnosticsReportFilter(ReportFilterset):
     robot = filters.NumberFilter(field_name="robot")
     gripper_sn = filters.NumberFilter(field_name="gripper_sn")
     uuid = EventUUIDFilter()
-    start_time = DTimeFilter(field_name="reportTime", lookup_expr="gte")
-    end_time = DTimeFilter(field_name="reportTime", lookup_expr="lte")
 
     class Meta:
         model = AutodiagnosticsReport

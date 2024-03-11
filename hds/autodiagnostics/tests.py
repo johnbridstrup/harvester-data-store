@@ -160,19 +160,19 @@ class AutodiagnosticsApiTestCase(HDSAPITestBase):
         t3 = time.time()
         dt3 = timezone.datetime.fromtimestamp(t3)
 
-        r1_before = self.client.get(f"{self.ad_url}?reporttime_before={dt1}&tz=utc")
+        r1_before = self.client.get(f"{self.ad_url}?end_time={dt1}&tz=utc")
         self.assertEqual(r1_before.json()['data']['count'], 0)
-        r1_after = self.client.get(f"{self.ad_url}?reporttime_after={dt1}&tz=utc")
+        r1_after = self.client.get(f"{self.ad_url}?start_time={dt1}&tz=utc")
         self.assertEqual(r1_after.json()['data']['count'], 2)
 
-        r2_before = self.client.get(f"{self.ad_url}?reporttime_before={dt2}&tz=utc")
+        r2_before = self.client.get(f"{self.ad_url}?end_time={dt2}&tz=utc")
         self.assertEqual(r2_before.json()['data']['count'], 1)
-        r2_after = self.client.get(f"{self.ad_url}?reporttime_after={dt2}&tz=utc")
+        r2_after = self.client.get(f"{self.ad_url}?start_time={dt2}&tz=utc")
         self.assertEqual(r2_after.json()['data']['count'], 1)
 
-        r3_before = self.client.get(f"{self.ad_url}?reporttime_before={dt3}&tz=utc")
+        r3_before = self.client.get(f"{self.ad_url}?end_time={dt3}&tz=utc")
         self.assertEqual(r3_before.json()['data']['count'], 2)
-        r3_after = self.client.get(f"{self.ad_url}?reporttime_after={dt3}&tz=utc")
+        r3_after = self.client.get(f"{self.ad_url}?start_time={dt3}&tz=utc")
         self.assertEqual(r3_after.json()['data']['count'], 0)
 
         # Fruit and ranch
