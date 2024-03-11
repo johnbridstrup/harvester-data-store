@@ -39,3 +39,31 @@ class CandidateFullSerializer(serializers.ModelSerializer):
     class Meta:
         model = Candidate
         fields = ("__all__")
+
+
+class CandidateFlattenedListSerializer(serializers.ModelSerializer):
+    report = GripReportListSerializer(read_only=True)
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+
+        # Get pick session UUID from report
+        ps_uuid = data["report"]["pick_session"]["UUID"]
+        data["pick_session"] = ps_uuid
+        del data["report"]
+
+        # Flatten candidate_data
+        nested_data = data["candidate_data"]
+        for key, value in nested_data.items():
+            data[key] = value
+        del data["candidate_data"]
+        return data
+
+
+    class Meta:
+        model = Candidate
+        fields = (
+            "id",
+            "candidate_data",
+            "report",
+        )

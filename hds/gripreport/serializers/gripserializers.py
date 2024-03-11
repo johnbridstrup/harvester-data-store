@@ -45,3 +45,31 @@ class GripFullSerializer(serializers.ModelSerializer):
     class Meta:
         model = Grip
         fields = ("__all__")
+
+
+class GripFlattenedListSerializer(serializers.ModelSerializer):
+    report = GripReportListSerializer(read_only=True)
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+
+        # Get pick session UUID from report
+        ps_uuid = data["report"]["pick_session"]["UUID"]
+        data["pick_session"] = ps_uuid
+        del data["report"]
+
+        # Flatten grip_data
+        nested_data = data["grip_data"]
+        for key, value in nested_data.items():
+            data[key] = value
+        del data["grip_data"]
+        return data
+
+
+    class Meta:
+        model = Grip
+        fields = (
+            "id",
+            "grip_data",
+            "report",
+        )

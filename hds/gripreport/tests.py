@@ -7,6 +7,7 @@ from common.tests import HDSAPITestBase
 from hds.urls import version
 
 from .models import Candidate, Grip, GripReport
+from .views import CandidateView
 
 
 class GripReportTestCase(HDSAPITestBase):
@@ -114,6 +115,28 @@ class GripReportTestCase(HDSAPITestBase):
         resp = self.client.get(url, {"uuid": "bad_uuid"})
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         self.assertEqual(len(resp.json()["data"]["results"]), 0)
+
+    def test_cand_full(self):
+        self.post_picksess_report()
+
+        # Check normal get first
+        url = reverse("candidates-list")
+        resp = self.client.get(url)
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(resp.json()["data"]["results"]), len(self.picksess_data["data"]["cand"]))
+        for c in resp.json()["data"]["results"]:
+            self.assertNotIn("candidate_data", c)
+
+        # Now check its there in the full response
+        url = reverse("candidates-full")
+        resp = self.client.get(url)
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(resp.json()["data"]["results"]), len(self.picksess_data["data"]["cand"]))
+        
+        for c in resp.json()["data"]["results"]:
+            self.assertIn("bbox", c)
+            self.assertIn("gpos", c)
+            self.assertIn("pick_session", c)
 
     def test_grip_extraction(self):
         self.post_picksess_report()
@@ -226,3 +249,25 @@ class GripReportTestCase(HDSAPITestBase):
         fail_id = resp.json()["data"]["results"][0]["id"]
 
         self.assertNotEqual(succ_id, fail_id)
+
+    def test_grip_full(self):
+        self.post_picksess_report()
+
+        # Check normal get first
+        url = reverse("grips-list")
+        resp = self.client.get(url)
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(resp.json()["data"]["results"]), len(self.picksess_data["data"]["grip"]))
+        for c in resp.json()["data"]["results"]:
+            self.assertNotIn("grip_data", c)
+
+        # Now check its there in the full response
+        url = reverse("grips-full")
+        resp = self.client.get(url)
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(resp.json()["data"]["results"]), len(self.picksess_data["data"]["grip"]))
+        
+        for c in resp.json()["data"]["results"]:
+            self.assertIn("touchData", c)
+            self.assertIn("acquireData", c)
+            self.assertIn("pick_session", c)
