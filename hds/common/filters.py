@@ -82,7 +82,45 @@ class EventUUIDFilter(ListFilter):
     def filter(self, qs, value):
         self.field_name += "__UUID"
         return super().filter(qs, value)
+    
 
+####################################################################################################
+# Filter Mixins
+####################################################################################################
+    
+class ReportStartEndFilter(filters.FilterSet):
+    start_time = DTimeFilter(field_name="reportTime", lookup_expr="gte")
+    end_time = DTimeFilter(field_name="reportTime", lookup_expr="lte")
+
+    FIELDS = ["start_time", "end_time"]
+
+
+class LinkedReportStartEndFilter(filters.FilterSet):
+    start_time = DTimeFilter(field_name="report__reportTime", lookup_expr="gte")
+    end_time = DTimeFilter(field_name="report__reportTime", lookup_expr="lte")
+
+    FIELDS = ["start_time", "end_time"]
+
+
+class HarvesterFilter(filters.FilterSet):
+    harv_ids = ListFilter(field_type=int, field_name="harvester__harv_id")
+    fruits = ListFilter(field_name="harvester__fruit__name")
+    is_emulator = filters.BooleanFilter(field_name="harvester__is_emulator")
+
+    FIELDS = ["harv_ids", "fruits", "is_emulator"]
+
+
+class LinkedReportHarvesterFilter(filters.FilterSet):
+    harv_ids = ListFilter(field_type=int, field_name="report__harvester__harv_id")
+    fruits = ListFilter(field_name="report__harvester__fruit__name")
+    is_emulator = filters.BooleanFilter(field_name="report__harvester__is_emulator")
+
+    FIELDS = ["harv_ids", "fruits", "is_emulator"]
+
+
+####################################################################################################
+# Filtersets
+####################################################################################################
 
 class CommonInfoFilterset(filters.FilterSet):
     FIELDS_BASE = [
@@ -149,18 +187,12 @@ class CommonInfoFilterset(filters.FilterSet):
         return queryset.filter(**filter_dict)
 
 
-class ReportFilterset(CommonInfoFilterset):
+class ReportFilterset(CommonInfoFilterset, ReportStartEndFilter, HarvesterFilter):
     FIELDS_BASE = CommonInfoFilterset.FIELDS_BASE + [
-        "start_time",
-        "end_time",
+        *ReportStartEndFilter.FIELDS,
+        *HarvesterFilter.FIELDS,
         "locations",
-        "harv_ids",
-        "fruits"
     ]
 
-    start_time = DTimeFilter(field_name='reportTime', lookup_expr='gte')
-    end_time = DTimeFilter(field_name='reportTime', lookup_expr='lte')
     locations = ListFilter(field_name="location__ranch")
-    harv_ids = ListFilter(field_type=int, field_name="harvester__harv_id")
-    fruits = ListFilter(field_name="harvester__fruit__name")
     tags = TagListFilter()

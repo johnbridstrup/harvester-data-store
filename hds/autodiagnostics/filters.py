@@ -3,6 +3,7 @@ from django_filters import rest_framework as filters
 from common.filters import (
     DTimeFilter,
     EventUUIDFilter,
+    LinkedReportHarvesterFilter,
     ListFilter,
     CommonInfoFilterset,
     ReportFilterset
@@ -10,7 +11,7 @@ from common.filters import (
 from .models import AutodiagnosticsRun, AutodiagnosticsReport
 
 
-class AutodiagnosticsRunFilter(CommonInfoFilterset):
+class AutodiagnosticsRunFilter(CommonInfoFilterset, LinkedReportHarvesterFilter):
     # Special method filters
     datetime_range = filters.CharFilter(field_name="run_timestamp", method="filter_datetime_range") # start,end
     start_time = DTimeFilter(field_name="run_timestamp", lookup_expr="gte")
@@ -18,7 +19,6 @@ class AutodiagnosticsRunFilter(CommonInfoFilterset):
 
     # Comma separated lists
     gripper_sns = ListFilter(field_name="gripper__serial_number")
-    harv_ids = ListFilter(field_name="report__harvester__harv_id")
 
     # Autodiag filters
     result = filters.BooleanFilter(field_name="result")
@@ -37,6 +37,7 @@ class AutodiagnosticsRunFilter(CommonInfoFilterset):
         fields = CommonInfoFilterset.FIELDS_BASE + [
             'robot_id',
             'report__harvester__location__ranch',
+            *LinkedReportHarvesterFilter.FIELDS,
         ]
 
 
