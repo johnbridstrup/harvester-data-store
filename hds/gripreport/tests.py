@@ -115,8 +115,6 @@ class GripReportTestCase(HDSAPITestBase):
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         self.assertEqual(len(resp.json()["data"]["results"]), 0)
 
-
-
     def test_grip_extraction(self):
         self.post_picksess_report()
         num_exp_grips = len(self.picksess_data["data"]["grip"])
@@ -159,3 +157,72 @@ class GripReportTestCase(HDSAPITestBase):
         resp = self.client.get(url)
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         self.assertEqual(resp.json()["data"]["id"], id_)
+
+    def test_grip_filters(self):
+        self.post_picksess_report()
+        rep = GripReport.objects.first()
+        url = reverse("grips-list")
+
+        # Robot ID filter
+        resp = self.client.get(url, {"robot_ids": 4})
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(resp.json()["data"]["results"]), 2)
+
+        resp = self.client.get(url, {"robot_ids": 2})
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(resp.json()["data"]["results"]), 0)
+
+        # Start End Filter
+        rep_time: timezone.datetime = rep.reportTime
+        good_start = rep_time - timezone.timedelta(days=1)
+        good_end = rep_time + timezone.timedelta(days=1)
+        resp = self.client.get(url, {"start_time": good_start.strftime("%Y-%m-%dT%H:%M:%S%z"), "end_time": good_end.strftime("%Y-%m-%dT%H:%M:%S%z")})
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(resp.json()["data"]["results"]), 2)
+
+        bad_start = rep_time + timezone.timedelta(days=2)
+        resp = self.client.get(url, {"start_time": bad_start.strftime("%Y-%m-%dT%H:%M:%S%z")})
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(resp.json()["data"]["results"]), 0)
+
+        # Harvester Filter
+        resp = self.client.get(url, {"harv_ids": self.test_objects["harvester"].harv_id})
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(resp.json()["data"]["results"]), 2)
+
+        resp = self.client.get(url, {"harv_ids": 8000})
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(resp.json()["data"]["results"]), 0)
+
+        # Pick Session Filter
+        ps_uuid = rep.pick_session_uuid
+        resp = self.client.get(url, {"picksess": ps_uuid})
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(resp.json()["data"]["results"]), 2)
+
+        resp = self.client.get(url, {"picksess": "bad_uuid"})
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(resp.json()["data"]["results"]), 0)
+
+        # Event Filter
+        event_uuid = rep.event_uuid
+        resp = self.client.get(url, {"uuid": event_uuid})
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(resp.json()["data"]["results"]), 2)
+
+        resp = self.client.get(url, {"uuid": "bad_uuid"})
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(resp.json()["data"]["results"]), 0)
+
+        # Success Filter
+        resp = self.client.get(url, {"success": True})
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(resp.json()["data"]["results"]), 1)
+        succ_id = resp.json()["data"]["results"][0]["id"]
+
+        resp = self.client.get(url, {"success": False})
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(resp.json()["data"]["results"]), 1)
+        fail_id = resp.json()["data"]["results"][0]["id"]
+
+        self.assertNotEqual(succ_id, fail_id)

@@ -820,7 +820,7 @@
                 "cand_id": 101,
                 "harv_id": 9,
                 "sess_ts": {},
-                "success": true,
+                "success": false,
                 "index_ts": 1680727820.419935,
                 "modality": {
                     "DROP_CHILD": "BASIC",

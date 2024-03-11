@@ -6,7 +6,7 @@ from common.viewsets import CreateModelViewSet, ReportModelViewSet
 from hds.roles import RoleChoices
 
 from .models import Candidate, Grip, GripReport
-from .filters import CandidateFilterset, PickSessionReportFilterset
+from .filters import CandidateFilterset, GripFilterset, PickSessionReportFilterset
 from .serializers.candidateserializers import CandidateFullSerializer, CandidateMinimalSerializer
 from .serializers.gripserializers import GripFullSerializer, GripMinimalSerializer
 from .serializers.gripreportserializers import (
@@ -50,6 +50,7 @@ class CandidateView(CreateModelViewSet):
 
 class GripView(CreateModelViewSet):
     queryset = Grip.objects.all()
+    filterset_class = GripFilterset
     http_method_names = ["get", "head"]
     serializer_class = GripMinimalSerializer
     action_serializers = {
