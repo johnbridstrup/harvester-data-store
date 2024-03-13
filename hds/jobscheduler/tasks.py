@@ -43,7 +43,7 @@ def run_scheduled_job(self, sched_job_id):
     harvs = sched_job.targets.all()
     job_obj = {
         "schema": schema,
-        "payload": job_def["payload"],
+        "payload": job_def,
         "creator": sched_job.creator,
     }
     for harv in harvs:
