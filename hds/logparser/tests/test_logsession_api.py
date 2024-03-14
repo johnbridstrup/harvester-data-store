@@ -7,14 +7,14 @@ from rest_framework import status
 from django.core.files.uploadedfile import SimpleUploadedFile
 
 from s3file.models import S3File, SessClip
-from ..models import LogSession
+from ..models import LogSession, LogFile
 from .base import LogBaseTestCase
 
 
 class LogSessionTestCase(LogBaseTestCase):
     """Test logsession api endpoints."""
 
-    def _create_zip_file(self, tag_uuid=False):
+    def _create_zip_file(self, tag_uuid=False, empty_content=False):
         if tag_uuid:
             root, ext = os.path.splitext(self.zip_filename)
             self.zip_filename = f"{root}_{uuid.uuid4()}{ext}"
@@ -22,7 +22,10 @@ class LogSessionTestCase(LogBaseTestCase):
             with tempfile.TemporaryDirectory(dir=self.bucket_name) as temp_dir:
                 log_file_path = os.path.join(temp_dir, self.log_filename)
                 with open(log_file_path, 'w') as log_file:
-                    log_file.write(self.line_content)
+                    if empty_content:
+                        log_file.write("")
+                    else:
+                        log_file.write(self.line_content)
 
                 zip_path = os.path.join(self.bucket_name, self.zip_filename)
                 with zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED) as zip_file:
@@ -112,5 +115,23 @@ class LogSessionTestCase(LogBaseTestCase):
         self.assertEqual(logsession._zip_file, sess)
         self.assertEqual(sess.file, s3file)
         self.assertEqual(logsession.logfile.count(), 1)
+
+        self._rm_file(os.path.join(self.bucket_name, zipname))
+
+    def test_return_on_empty_logfiles(self):
+        """
+        No need to save logfiles with empty content - does not look good
+        on presentation. These error logs occurs during initial boot
+        when the robot computers are not yet up!
+        """
+        zipname = self._create_zip_file(empty_content=True)
+        self.assertIsNotNone(zipname)
+        data = self.create_s3event(zipname, tag_uuid=True)[0]
+        res = self.client.post(self.sesscl_url, data=data)
+        self.assertEqual(res.status_code, status.HTTP_201_CREATED)
+        logsession = LogSession.objects.get()
+        self.assertEqual(logsession.logfile.count(), 0)
+        with self.assertRaises(LogFile.DoesNotExist):
+            LogFile.objects.get()
 
         self._rm_file(os.path.join(self.bucket_name, zipname))
