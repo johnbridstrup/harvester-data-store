@@ -299,7 +299,7 @@ class JobSchedulerTestCase(HarvJobApiTestBase):
         job1 = Job.objects.latest("id")
         self.assertEqual(job1.jobstatus, Job.StatusChoices.PENDING)
 
-        dyn_time_t_str = job1.payload["requiredArg"]
+        dyn_time_t_str = job1.payload["payload"]["requiredArg"]
         dyn_time_dt = timezone.datetime.strptime(dyn_time_t_str, fmt)
         uspac_tz = pytz.timezone("US/Pacific")
         localized_dyn_time_dt = uspac_tz.localize(dyn_time_dt)
@@ -324,7 +324,7 @@ class JobSchedulerTestCase(HarvJobApiTestBase):
         self.assertNotEqual(job1.id, job2.id)
         self.assertEqual(job2.jobstatus, Job.StatusChoices.PENDING)
 
-        dyn_time_t_str = job2.payload["requiredArg"]
+        dyn_time_t_str = job2.payload["payload"]["requiredArg"]
         dyn_time_dt = timezone.datetime.strptime(dyn_time_t_str, fmt)
         uspac_tz = pytz.timezone("US/Pacific")
         localized_dyn_time_dt = uspac_tz.localize(dyn_time_dt)
