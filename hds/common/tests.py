@@ -1,3 +1,4 @@
+import copy
 import json
 import logging
 import os
@@ -7,6 +8,7 @@ import unittest
 import uuid
 import shutil
 from collections import defaultdict
+from contextlib import contextmanager
 from pprint import pprint
 from time import time
 from unittest.mock import MagicMock
@@ -62,6 +64,11 @@ class HDSTestAttributes:
             d = json.load(f)
         return d
 
+    def _write_report(self, relpath, data):
+        fpath = os.path.join(self.BASE_PATH, relpath)
+        with open(fpath, 'w') as f:
+            json.dump(data, f, indent=4)
+
     def load_error_report(self):
         self.data = self._load_report('report.json')
 
@@ -76,6 +83,16 @@ class HDSTestAttributes:
 
     def load_picksess_report(self):
         self.picksess_data = self._load_report('picksess.json')
+    
+    @contextmanager
+    def update_picksess_report(self, data):
+        self.load_picksess_report()
+        original = copy.deepcopy(self.picksess_data)
+        try:
+            self._write_report('picksess.json', data)
+            yield
+        finally:
+            self._write_report('picksess.json', original)
 
     def load_emustats_report(self):
         self.emustats_data = self._load_report('emustats.json')
