@@ -377,7 +377,7 @@ class ErrorReportAPITest(HDSAPITestBase):
         # Assert tag assigned
         report = ErrorReport.objects.get()
         tags = report.tags.all()
-        self.assertEqual(len(tags), 1)
+        self.assertEqual(len(tags), 2)
         self.assertIn(Tags.INCOMPLETE.value, [tag.name for tag in tags])
 
         # Assert tags in response

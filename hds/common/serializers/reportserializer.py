@@ -162,8 +162,13 @@ class ReportSerializerBase(serializers.ModelSerializer):
     def extract_report(cls, report_id, *args, **kwargs):
         model = cls.Meta.model
         report_obj = model.objects.get(id=report_id)
+        if report_obj.tags.filter(name=Tags.EXTRACTED.value).exists():
+            logger.info(f"Report already extracted: {report_id}")
+            return
         try:
             cls.extract(report_obj, *args, **kwargs)
+            report_obj.tags.add(Tags.EXTRACTED.value)
+            report_obj.save()
         except Exception as e:
             exc = type(e).__name__
             ASYNC_ERROR_COUNTER.labels("report_extraction", exc, f"{cls.__name__}").inc()

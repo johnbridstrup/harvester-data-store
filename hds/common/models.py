@@ -28,6 +28,7 @@ class Tags(Enum):
     # WARNING!!!
     # Changing any of these will require a migration.
     # Adding new ones is fine.
+    EXTRACTED = "extracted"
     INCOMPLETE = "incomplete"
     INVALID = "invalid"
     INVALIDSCHEMA = "invalid schema"
