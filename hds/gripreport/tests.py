@@ -3,11 +3,13 @@ from django.urls import reverse
 from django.utils import timezone
 from rest_framework import status
 
+from common.serializers.reportserializer import Tags
 from common.tests import HDSAPITestBase
 from hds.urls import version
 
 from .models import Candidate, Grip, GripReport
 from .views import CandidateView
+from .serializers.gripreportserializers import GripReportSerializer
 
 
 class GripReportTestCase(HDSAPITestBase):
@@ -137,6 +139,29 @@ class GripReportTestCase(HDSAPITestBase):
             self.assertIn("bbox", c)
             self.assertIn("gpos", c)
             self.assertIn("pick_session", c)
+
+    def test_cand_broken_extract(self):
+        self.load_picksess_report()
+        sample_cand = self.picksess_data["data"]["cand"][0]
+        sample_grip = self.picksess_data["data"]["grip"][0]
+
+        for _ in range(200):
+            self.picksess_data["data"]["cand"].append(sample_cand)
+            self.picksess_data["data"]["grip"].append(sample_grip)
+        
+        self.picksess_data["data"]["cand"].append({"broken": "cand"})
+        with self.update_picksess_report(self.picksess_data):
+            self.post_picksess_report()
+
+        tags = GripReport.objects.first().tags.all()   
+        tags = [t.name for t in tags]
+        self.assertIn(Tags.INCOMPLETE.value, tags)
+        self.assertIn(GripReportSerializer.ExtractTags.CAND_FAILED, tags)
+
+        # Make sure we rolled back
+        self.assertEqual(Candidate.objects.count(), 0)
+        self.assertEqual(Grip.objects.count(), 0)
+
 
     def test_grip_extraction(self):
         self.post_picksess_report()
@@ -271,3 +296,31 @@ class GripReportTestCase(HDSAPITestBase):
             self.assertIn("touchData", c)
             self.assertIn("acquireData", c)
             self.assertIn("pick_session", c)
+    
+    def test_grip_broken_extract(self):
+        self.load_picksess_report()
+        sample_cand = self.picksess_data["data"]["cand"][0]
+        sample_grip = self.picksess_data["data"]["grip"][0]
+
+        for _ in range(200):
+            self.picksess_data["data"]["cand"].append(sample_cand)
+            self.picksess_data["data"]["grip"].append(sample_grip)
+        
+        self.picksess_data["data"]["grip"].append({"broken": "grip"})
+        with self.update_picksess_report(self.picksess_data):
+            self.post_picksess_report()
+
+        tags = GripReport.objects.first().tags.all()   
+        tags = [t.name for t in tags]
+        self.assertIn(Tags.INCOMPLETE.value, tags)
+        self.assertIn(GripReportSerializer.ExtractTags.GRIP_FAILED, tags)
+
+        # Make sure we rolled back
+        self.assertNotEqual(Candidate.objects.count(), 0)  # We should have some cands
+        self.assertEqual(Grip.objects.count(), 0)
+    
+    def test_data_cleared(self):
+        self.post_picksess_report()
+        rep = GripReport.objects.first()
+        self.assertNotIn("cand", rep.report["data"])
+        self.assertNotIn("grip", rep.report["data"])

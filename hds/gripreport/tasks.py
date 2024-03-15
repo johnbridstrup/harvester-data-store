@@ -26,6 +26,5 @@ def download_gripreport(event, creator):
 
 @monitored_shared_task
 def extract_grip_report(report_id):
-    report = GripReport.objects.get(id=report_id)
-    GripReportSerializer.extract(report)
+    GripReportSerializer.extract_report(report_id)
     logger.info(f"Grip report {report_id} extracted")

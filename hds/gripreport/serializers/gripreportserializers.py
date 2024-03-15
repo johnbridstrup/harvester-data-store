@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from django.db import transaction
 from django.utils import timezone
 
 from common.reports import DTimeFormatter, ReportBase
@@ -12,9 +13,17 @@ from event.serializers import (
 from harvester.serializers.harvesterserializer import HarvesterMinimalSerializer
 from location.serializers.locationserializer import LocationMinimalSerializer
 
+from ..exceptions import CandExtractionError, GripExtractionError
 from ..models import Candidate, Grip, GripReport
 
+
 class GripReportSerializer(PickSessionSerializerMixin, ReportSerializerBase):
+    class ExtractTags:
+        CAND_DONE = "extracted-candidates"
+        CAND_FAILED = "failed-extract-candidates"
+        GRIP_DONE = "extracted-grips"
+        GRIP_FAILED = "failed-extract-grips"
+    
     class Meta:
         model = GripReport
         fields = ('__all__')
@@ -58,27 +67,42 @@ class GripReportSerializer(PickSessionSerializerMixin, ReportSerializerBase):
         
         cand_list = data.get("cand")
         if cand_list is None or not isinstance(cand_list, list):
-            raise ExtractionError("No candidates in report")
+            report_obj.tags.add(cls.ExtractTags.CAND_FAILED)
+            raise CandExtractionError("No candidates in report")
 
         cls.extract_candidates(cand_list, harv, fruit, report_obj)
+        report_obj.tags.add(cls.ExtractTags.CAND_DONE)
+        del data["cand"]
 
         grip_list = data.get("grip") # get a grip
         if grip_list is None or not isinstance(grip_list, list):
-            raise ExtractionError("No grips in report")
+            report_obj.tags.add(cls.ExtractTags.GRIP_FAILED)
+            raise GripExtractionError("No grips in report")
         
         cls.extract_grips(grip_list, harv, fruit, report_obj)
+        report_obj.tags.add(cls.ExtractTags.GRIP_DONE)
+        del data["grip"]
+
+        report_obj.save()
     
     @classmethod
     def extract_candidates(cls, cand_list, harv, fruit, report_obj: ReportBase):
         cands = []
-        for cand_dict in cand_list:        
-            cands.append(cls._get_cand(cand_dict, harv, fruit, report_obj))
-            if len(cands) >= 100: # 100 seems fine for a batch not sure what is optimal
+        try:
+            with transaction.atomic():  # if the extraction fails, we roll back entirely to avoid conflicts
+                for cand_dict in cand_list:
+                    cands.append(cls._get_cand(cand_dict, harv, fruit, report_obj))
+                    if len(cands) >= 100: # 100 seems fine for a batch not sure what is optimal
+                        Candidate.objects.bulk_create(cands)
+                        cands = []
+                
+                # Create the rest
                 Candidate.objects.bulk_create(cands)
-                cands = []
-        
-        # Create the rest
-        Candidate.objects.bulk_create(cands)
+        except Exception as e:
+            report_obj.tags.add(cls.ExtractTags.CAND_FAILED)
+            report_obj.save()
+            raise CandExtractionError(f"Failed to extract candidates: {e}")
+
     
     @staticmethod
     def _get_cand(cand_dict, harv, fruit, report_obj):
@@ -106,12 +130,18 @@ class GripReportSerializer(PickSessionSerializerMixin, ReportSerializerBase):
     @classmethod
     def extract_grips(cls, grip_list, harv, fruit, report_obj: ReportBase):
         grips = []
-        for grip_dict in grip_list:
-            grips.append(cls._get_grip(grip_dict, harv, fruit, report_obj))
-            if len(grips) >= 100:
+        try:
+            with transaction.atomic():
+                for grip_dict in grip_list:
+                    grips.append(cls._get_grip(grip_dict, harv, fruit, report_obj))
+                    if len(grips) >= 100:
+                        Grip.objects.bulk_create(grips)
+                        grips = []
                 Grip.objects.bulk_create(grips)
-                grips = []
-        Grip.objects.bulk_create(grips)
+        except Exception as e:
+            report_obj.tags.add(cls.ExtractTags.GRIP_FAILED)
+            report_obj.save()
+            raise GripExtractionError(f"Failed to extract grips: {e}")
     
     @staticmethod
     def _get_grip(grip_dict, harv, fruit, report_obj):
