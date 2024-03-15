@@ -65,23 +65,28 @@ class GripReportSerializer(PickSessionSerializerMixin, ReportSerializerBase):
         if data is None:
             raise ExtractionError("No data in report")
         
-        cand_list = data.get("cand")
-        if cand_list is None or not isinstance(cand_list, list):
-            report_obj.tags.add(cls.ExtractTags.CAND_FAILED)
-            raise CandExtractionError("No candidates in report")
-
-        cls.extract_candidates(cand_list, harv, fruit, report_obj)
-        report_obj.tags.add(cls.ExtractTags.CAND_DONE)
-        del data["cand"]
-
-        grip_list = data.get("grip") # get a grip
-        if grip_list is None or not isinstance(grip_list, list):
-            report_obj.tags.add(cls.ExtractTags.GRIP_FAILED)
-            raise GripExtractionError("No grips in report")
+        extr_cands = not report_obj.tags.filter(name=cls.ExtractTags.CAND_DONE).exists()
+        extr_grips = not report_obj.tags.filter(name=cls.ExtractTags.GRIP_DONE).exists()
         
-        cls.extract_grips(grip_list, harv, fruit, report_obj)
-        report_obj.tags.add(cls.ExtractTags.GRIP_DONE)
-        del data["grip"]
+        if extr_cands:
+            cand_list = data.get("cand")
+            if cand_list is None or not isinstance(cand_list, list):
+                report_obj.tags.add(cls.ExtractTags.CAND_FAILED)
+                raise CandExtractionError("No candidates in report")
+
+            cls.extract_candidates(cand_list, harv, fruit, report_obj)
+            report_obj.tags.add(cls.ExtractTags.CAND_DONE)
+            del data["cand"]
+
+        if extr_grips:
+            grip_list = data.get("grip") # get a grip
+            if grip_list is None or not isinstance(grip_list, list):
+                report_obj.tags.add(cls.ExtractTags.GRIP_FAILED)
+                raise GripExtractionError("No grips in report")
+            
+            cls.extract_grips(grip_list, harv, fruit, report_obj)
+            report_obj.tags.add(cls.ExtractTags.GRIP_DONE)
+            del data["grip"]
 
         report_obj.save()
     
