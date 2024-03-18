@@ -18,11 +18,14 @@ from ..models import Candidate, Grip, GripReport
 
 
 class GripReportSerializer(PickSessionSerializerMixin, ReportSerializerBase):
+    MALFORMED_RESULT = "Result is malformed"
     class ExtractTags:
         CAND_DONE = "extracted-candidates"
         CAND_FAILED = "failed-extract-candidates"
         GRIP_DONE = "extracted-grips"
         GRIP_FAILED = "failed-extract-grips"
+        MALFORMED = "malformed-result"
+        TRUNCATED = "result-truncated"
     
     class Meta:
         model = GripReport
@@ -148,14 +151,14 @@ class GripReportSerializer(PickSessionSerializerMixin, ReportSerializerBase):
             report_obj.save()
             raise GripExtractionError(f"Failed to extract grips: {e}")
     
-    @staticmethod
-    def _get_grip(grip_dict, harv, fruit, report_obj):
+    @classmethod
+    def _get_grip(cls, grip_dict, harv, fruit, report_obj):
         success=grip_dict["success"]
         robot_id=grip_dict["robot_id"]
         grip_start_ts=grip_dict["grip_start_ts"]
         grip_end_ts=grip_dict["grip_end_ts"]
-        pick_result=grip_dict["pick_result"]
-        grip_result=grip_dict["grip_result"]
+        pick_result, pick_result_dirty = cls._grip_pick_dirty_check(grip_dict["pick_result"])
+        grip_result, grip_result_dirty = cls._grip_pick_dirty_check(grip_dict["grip_result"])
         created = timezone.now()
 
         cand_id = grip_dict["cand_id"]
@@ -178,13 +181,29 @@ class GripReportSerializer(PickSessionSerializerMixin, ReportSerializerBase):
             grip_start_ts=grip_start_ts,
             grip_end_ts=grip_end_ts,
             pick_result=pick_result,
+            pick_result_dirty=pick_result_dirty,
             grip_result=grip_result,
+            grip_result_dirty=grip_result_dirty,
             grip_data=grip_dict,
             creator=report_obj.creator,
             created=created,
             lastModified=created,
         )
         return grip
+
+    @classmethod
+    def _grip_pick_dirty_check(cls, result, report: GripReport):
+        if not isinstance(result, str):
+            report.tags.add(GripReportSerializer.ExtractTags.MALFORMED)
+            report.save()
+            return cls.MALFORMED_RESULT, True
+        
+        if len(result) > 255:
+            report.tags.add(GripReportSerializer.ExtractTags.TRUNCATED)
+            report.save()
+            return f"{result[:100]} (trunc)", True
+        
+        return result, False
     
 
 class GripReportListSerializer(GripReportSerializer):

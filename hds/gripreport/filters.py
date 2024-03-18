@@ -44,6 +44,8 @@ class GripFilterset(CommonInfoFilterset, LinkedReportHarvesterFilter, LinkedRepo
     picksess = EventUUIDFilter(field_name="report__pick_session")
     robot_ids = ListFilter(field_type=int, field_name="robot_id")
     success = filters.BooleanFilter(field_name="success")
+    pick_result_dirty = filters.BooleanFilter(field_name="pick_result_dirty")
+    grip_result_dirty = filters.BooleanFilter(field_name="grip_result_dirty")
 
     class Meta:
         model = Grip
@@ -52,6 +54,8 @@ class GripFilterset(CommonInfoFilterset, LinkedReportHarvesterFilter, LinkedRepo
             'picksess',
             'robot_ids',
             'success',
+            'pick_result_dirty',
+            'grip_result_dirty',
             *LinkedReportHarvesterFilter.FIELDS,
             *LinkedReportStartEndFilter.FIELDS,
         ]

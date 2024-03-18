@@ -35,7 +35,9 @@ class Grip(CommonInfo):
     grip_start_ts = models.FloatField()
     grip_end_ts = models.FloatField()
     pick_result = models.CharField(max_length=255, blank=True, null=True)
+    pick_result_dirty = models.BooleanField(default=False)
     grip_result = models.CharField(max_length=255, blank=True, null=True)
+    grip_result_dirty = models.BooleanField(default=False)
     grip_data = models.JSONField()
 
     @property
