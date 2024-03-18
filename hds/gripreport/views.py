@@ -5,7 +5,7 @@ from rest_framework.response import Response
 
 from common.renderers import HDSJSONRenderer
 from common.utils import make_ok
-from common.viewsets import CreateModelViewSet, ReportModelViewSet
+from common.viewsets import CountActionMixin, CreateModelViewSet, ReportModelViewSet
 from hds.roles import RoleChoices
 
 from .models import Candidate, Grip, GripReport
@@ -35,7 +35,7 @@ class GripReportView(ReportModelViewSet):
         return Response(status=status.HTTP_202_ACCEPTED)
     
 
-class CandidateView(CreateModelViewSet):
+class CandidateView(CreateModelViewSet, CountActionMixin):
     queryset = Candidate.objects.all()
     filterset_class = CandidateFilterset
     http_method_names = ["get", "head"]
@@ -47,6 +47,9 @@ class CandidateView(CreateModelViewSet):
     }
     view_permissions_update = {
         "full": {
+            RoleChoices.SUPPORT: True,
+        },
+        "count": {
             RoleChoices.SUPPORT: True,
         },
     }
@@ -71,7 +74,7 @@ class CandidateView(CreateModelViewSet):
         return make_ok(f"Detailed candidate list", response_data=serializer.data)
 
 
-class GripView(CreateModelViewSet):
+class GripView(CreateModelViewSet, CountActionMixin):
     queryset = Grip.objects.all()
     filterset_class = GripFilterset
     http_method_names = ["get", "head"]
@@ -83,6 +86,9 @@ class GripView(CreateModelViewSet):
     }
     view_permissions_update = {
         "full": {
+            RoleChoices.SUPPORT: True,
+        },
+        "count": {
             RoleChoices.SUPPORT: True,
         },
     }

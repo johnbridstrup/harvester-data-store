@@ -116,3 +116,21 @@ class ReportModelViewSet(CreateModelViewSet):
         schema = self.serializer_class().get_schema()
         msg = f"{self.report_type} schema retrieved"
         return make_ok(msg, schema)
+
+
+####################################################################################################
+# Mixins
+####################################################################################################
+    
+class CountActionMixin(ModelViewSet):
+    @action(
+        detail=False, 
+        methods=["get"], 
+        url_path="count", 
+        url_name="count",
+        renderer_classes=[JSONRenderer]
+    )
+    def count(self, request, *args, **kwargs):
+        qs = self.filter_queryset(self.get_queryset())
+        count = qs.count()
+        return make_ok(f"Count of {self.serializer_class.Meta.model.__name__}", response_data={"count": count})

@@ -62,6 +62,12 @@ class GripReportTestCase(HDSAPITestBase):
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         self.assertEqual(resp.json()["data"]["id"], id_)
 
+        # count
+        url = reverse("candidates-count")
+        resp = self.client.get(url)
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        self.assertEqual(resp.json()["data"]["count"], len(self.picksess_data["data"]["cand"]))
+
     def test_cand_filters(self):
         self.post_picksess_report()
         rep = GripReport.objects.first()
@@ -205,6 +211,12 @@ class GripReportTestCase(HDSAPITestBase):
         resp = self.client.get(url)
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         self.assertEqual(resp.json()["data"]["id"], id_)
+
+        # count
+        url = reverse("grips-count")
+        resp = self.client.get(url)
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        self.assertEqual(resp.json()["data"]["count"], len(self.picksess_data["data"]["grip"]))
 
     def test_grip_filters(self):
         self.post_picksess_report()
