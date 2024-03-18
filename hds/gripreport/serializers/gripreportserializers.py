@@ -157,8 +157,8 @@ class GripReportSerializer(PickSessionSerializerMixin, ReportSerializerBase):
         robot_id=grip_dict["robot_id"]
         grip_start_ts=grip_dict["grip_start_ts"]
         grip_end_ts=grip_dict["grip_end_ts"]
-        pick_result, pick_result_dirty = cls._grip_pick_dirty_check(grip_dict["pick_result"])
-        grip_result, grip_result_dirty = cls._grip_pick_dirty_check(grip_dict["grip_result"])
+        pick_result, pick_result_dirty = cls._grip_pick_dirty_check(grip_dict["pick_result"], report_obj)
+        grip_result, grip_result_dirty = cls._grip_pick_dirty_check(grip_dict["grip_result"], report_obj)
         created = timezone.now()
 
         cand_id = grip_dict["cand_id"]
