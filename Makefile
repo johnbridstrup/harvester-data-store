@@ -19,7 +19,7 @@ migrate-dev: ## Migrate database in local compose server
 load-fixtures: ## Load fixtures in local compose server
 	sudo docker compose exec web python hds/manage.py loaddata fixtures/*
 
-server: install-docker build-dev migrate-dev load-fixtures  ## Build, Migrate, Load
+server: build-dev migrate-dev load-fixtures  ## Build, Migrate, Load
 
 ci: install-docker build-backend migrate-dev load-fixtures ## Create environment for integration testing the API in CI
 
