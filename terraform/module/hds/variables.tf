@@ -323,3 +323,16 @@ variable "jobserver_address" {
   type        = string
   default = "https://iot-job-server.cloud.advanced.farm"
 }
+
+# Supervisor Monitor
+variable "monitor_loglevel" {
+  description = "loglevel for supervisor monitor"
+  type        = string
+  default     = "INFO"
+}
+
+variable "monitor_port" {
+  description = "port for supervisor monitor"
+  type        = number
+  default     = 9151
+}

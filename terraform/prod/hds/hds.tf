@@ -9,13 +9,22 @@ locals {
   healthcheck_path         = "/api/v1/healthcheck/"
   silk_profiling           = "false"
   silk_cprofile            = "false"
-  sqs_client_metrics_ports = [9104]
   enable_prometheus_scrape = true
   service_container_memory = 8192
   service_container_cpu    = 4096
   migrate                  = var.migrate_flag
   s3_bucket                = local.bucket
   jobserver_port           = "8000"
+  sqs_client_port          = 9104
+  monitor_port             = 9151
+  monitor_loglevel         = "INFO"
+}
+
+locals {
+  additional_prom_ports = [
+    local.sqs_client_port,
+    local.monitor_port
+  ]
 }
 
 resource "random_password" "sqs_pwd" {
@@ -35,7 +44,7 @@ module "hds" {
   load_balancer_subnets       = data.aws_subnets.priv_subnets.ids
   ecs_cluster_arn             = data.aws_ecs_cluster.hds-cluster.arn
   enable_prometheus_scrape    = local.enable_prometheus_scrape
-  additional_prometheus_ports = local.sqs_client_metrics_ports
+  additional_prometheus_ports = local.additional_prom_ports
   route53_priv_zone_id        = data.aws_route53_zone.private_cloud_zone.id
   route53_pub_zone_id         = data.aws_route53_zone.cloud_zone.id
   service_health_check_path   = local.healthcheck_path
@@ -48,7 +57,7 @@ module "hds" {
   ]
   service_ingress_sg_rules = concat(
     ["${local.service_port},tcp,${data.aws_security_group.vm_metrics_security_group.id},django prometheus scraping"],
-    [for port in local.sqs_client_metrics_ports : "${port},tcp,${data.aws_security_group.vm_metrics_security_group.id},sqs client prometheus scraping"]
+    [for port in local.additional_prom_ports : "${port},tcp,${data.aws_security_group.vm_metrics_security_group.id},additional prometheus scraping"]
   )
   service_container_cpu     = local.service_container_cpu
   service_container_memory  = local.service_container_memory
@@ -78,4 +87,6 @@ module "hds" {
   silk_profiling            = local.silk_profiling
   silk_cprofile             = local.silk_cprofile
   git_hash                  = var.git_hash
+  monitor_loglevel          = local.monitor_loglevel
+  monitor_port              = local.monitor_port
 }
