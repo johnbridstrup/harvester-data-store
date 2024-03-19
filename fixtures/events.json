@@ -248,6 +248,18 @@
     }
 },
 {
+    "model": "event.event",
+    "pk": 16,
+    "fields": {
+        "creator": 1,
+        "modifiedBy": null,
+        "created": "2023-06-07T17:13:18.797Z",
+        "lastModified": "2023-06-07T17:13:18.797Z",
+        "UUID": "990a1737-0556-11ee-81c0-d72458f3d2e9",
+        "secondary_events": []
+    }
+},
+{
     "model": "event.picksessiontag",
     "pk": 1,
     "fields": {
@@ -279,6 +291,21 @@
         "created": "2023-02-14T19:23:23.547Z",
         "lastModified": "2023-02-14T19:23:23.547Z",
         "UUID": "2225cd5a-444a-11ed-9d09-677a59a17003",
+        "harvester": null,
+        "location": null,
+        "start_time": null,
+        "session_length": null
+    }
+},
+{
+    "model": "event.picksession",
+    "pk": 2,
+    "fields": {
+        "creator": 1,
+        "modifiedBy": null,
+        "created": "2023-02-14T19:23:23.547Z",
+        "lastModified": "2023-02-14T19:23:23.547Z",
+        "UUID": "2225cd5a-765b-11ed-9d09-677a59a17003",
         "harvester": null,
         "location": null,
         "start_time": null,
