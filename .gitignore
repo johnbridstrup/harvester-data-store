@@ -158,3 +158,6 @@ artifacts
 # Celery
 dump.rdb
 multiproc-tmp
+
+# pyinstaller
+build/
