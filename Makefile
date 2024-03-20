@@ -24,10 +24,10 @@ server: build-dev migrate-dev load-fixtures  ## Build, Migrate, Load
 ci: install-docker build-backend migrate-dev load-fixtures ## Create environment for integration testing the API in CI
 
 clean-server: ## Tear down containers
-	sudo docker compose down --remove-orphans
+	sudo docker compose down -v --remove-orphans
 
 clean-ci:
-	sudo docker compose -f docker-compose.base.yml down --remove-orphans
+	sudo docker compose -f docker-compose.base.yml down -v --remove-orphans
 
 help:
 	@echo Use these commands for setting up docker environment outside of python virtual environment

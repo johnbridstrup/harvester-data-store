@@ -9,7 +9,7 @@ export HDS_ROOT="$( git rev-parse --show-toplevel )"
 export GITHASH="$( git rev-parse HEAD )"
 
 alias runserver="$HDS_ROOT/scripts/start-dev-server.sh"
-alias stopserver="docker compose down -v"
+alias stopserver="docker compose down -v --remove-orphans"
 alias migrations="docker compose exec web python hds/manage.py makemigrations"
 alias migrate="docker compose exec web python hds/manage.py migrate --noinput"
 alias createsuperuser="docker compose exec web python hds/manage.py createsuperuser"
