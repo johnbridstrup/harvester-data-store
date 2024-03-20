@@ -9,6 +9,9 @@ install-docker: ## Install docker and docker compose
 build-dev: ## Build local server in docker compose
 	sudo docker compose up -d --build
 
+build-image: ## Build local image
+	sudo docker compose build
+
 build-backend: ## Build backend for CI.
 	export HDS_PORT=${HDS_PORT}
 	sudo docker compose -f docker-compose.base.yml up -d --build
