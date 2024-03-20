@@ -34,6 +34,10 @@ COPY sqs.yml /opt/app/sqs.yml
 COPY supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY hds /opt/app/hds/
 
+# Copy monitor service
+COPY supervisor/monitor/dist/monitor /opt/app/monitor/monitor.service
+COPY supervisor/monitor/entrypoint.sh /opt/app/monitor/entrypoint.sh
+
 RUN chown -R www-data:www-data /opt/app
 
 CMD ["supervisord"]

@@ -28,6 +28,11 @@ COPY scripts/ /opt/app/scripts/
 COPY supervisor/supervisord.local.conf /etc/supervisor/conf.d/supervisord.conf
 COPY hds /opt/app/hds/
 
+# Copy monitor service
+COPY supervisor/monitor/dist/monitor /opt/app/monitor/monitor.service
+COPY supervisor/monitor/entrypoint.sh /opt/app/monitor/entrypoint.sh
+
+# Own Directory
 RUN chown -R www-data:www-data /opt/app
 
 CMD ["supervisord"]

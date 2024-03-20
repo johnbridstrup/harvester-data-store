@@ -16,15 +16,18 @@ build-backend: ## Build backend for CI.
 	export HDS_PORT=${HDS_PORT}
 	sudo docker compose -f docker-compose.base.yml up -d --build
 
+build-monitor: ## Build monitor service
+	${DIR}/supervisor/monitor/build.sh
+
 migrate-dev: ## Migrate database in local compose server
 	sudo docker compose exec web python hds/manage.py migrate
 
 load-fixtures: ## Load fixtures in local compose server
 	sudo docker compose exec web python hds/manage.py loaddata fixtures/*
 
-server: build-dev migrate-dev load-fixtures  ## Build, Migrate, Load
+server: build-monitor build-dev migrate-dev load-fixtures  ## Build, Migrate, Load
 
-ci: install-docker build-backend migrate-dev load-fixtures ## Create environment for integration testing the API in CI
+ci: build-monitor install-docker build-backend migrate-dev load-fixtures ## Create environment for integration testing the API in CI
 
 clean-server: ## Tear down containers
 	sudo docker compose down -v --remove-orphans

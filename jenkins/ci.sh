@@ -11,6 +11,7 @@ source ./scripts/set_port.sh
 
 echo ""
 echo "Spinning up test server"
+make build-monitor
 sudo docker compose -f docker-compose.base.yml up -d --build --force-recreate
 sleep 10 # Ensure spin-up before curl
 
