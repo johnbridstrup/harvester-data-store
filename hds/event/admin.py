@@ -8,7 +8,7 @@ class EventAdmin(admin.ModelAdmin):
     search_fields = ('created', 'UUID')
 
     def get_queryset(self, request):
-        return super().get_queryset(request).prefetch_related('tags')
+        return super().get_queryset(request).prefetch_related('tags', 'secondary_events',)
 
     def tag_list(self, obj):
         return u", ".join(o.name for o in obj.tags.all())

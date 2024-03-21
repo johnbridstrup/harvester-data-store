@@ -1,4 +1,7 @@
-from django.contrib import admin 
+from typing import Any
+from django.contrib import admin
+from django.db.models.query import QuerySet
+from django.http import HttpRequest
 
 from .models import JobType, JobSchema, JobResults, Job
 
@@ -12,7 +15,7 @@ class JobTypeAdmin(admin.ModelAdmin):
     ordering = ('created',)
     search_fields = ('created', 'name')
     inlines = [JobSchemaInline]
-    
+
 
 class JobSchemaAdmin(admin.ModelAdmin):
     list_display = ('created', 'get_jobtype', 'version', 'schema')
@@ -29,6 +32,17 @@ class JobResultsAdmin(admin.ModelAdmin):
     ordering = ('created',)
     search_fields = ('created', 'status')
 
+    def get_queryset(self, request: HttpRequest) -> QuerySet[Any]:
+        qs = super().get_queryset(request)
+        return qs.select_related(
+            "creator",
+            "modifiedBy",
+            "harvester",
+            "location",
+            "event",
+            "job",
+        ).prefetch_related("tags", "host_results")
+
 
 class JobAdmin(admin.ModelAdmin):
     list_display = ('created', 'get_jobtype', 'get_target', 'jobstatus')
@@ -40,6 +54,17 @@ class JobAdmin(admin.ModelAdmin):
     @admin.display(ordering='name', description='job type')
     def get_jobtype(self, obj):
         return obj.schema.jobtype.name
+
+    def get_queryset(self, request: HttpRequest) -> QuerySet[Any]:
+        qs = super().get_queryset(request)
+        return qs.select_related(
+            "schema",
+            "target",
+            "event",
+            "creator",
+            "modifiedBy",
+        )
+
 
 admin.site.register(JobType, JobTypeAdmin)
 admin.site.register(JobSchema, JobSchemaAdmin)
