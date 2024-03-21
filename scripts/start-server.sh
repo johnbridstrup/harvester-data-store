@@ -14,4 +14,4 @@ chown -R www-data:www-data /opt/app/multiproc-tmp/
 export PROMETHEUS_MULTIPROC_DIR=/opt/app/multiproc-tmp
 
 echo "Starting"
-gunicorn -c /opt/app/hds/gunicorn_conf.py hds.wsgi --user www-data --bind 0.0.0.0:$1 --workers 3
+gunicorn -c /opt/app/hds/gunicorn_conf.py hds.wsgi --user www-data --bind 0.0.0.0:$1 --workers 4 --timeout 120
