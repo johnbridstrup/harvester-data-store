@@ -26,5 +26,4 @@ cd $ROOTDIR
 ./scripts/wait-for-multiproc.sh
 
 cd $ROOTDIR/hds
-celery -A hds beat -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler &
 celery -A hds worker -l INFO
