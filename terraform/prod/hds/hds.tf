@@ -57,7 +57,8 @@ module "hds" {
   ]
   service_ingress_sg_rules = concat(
     ["${local.service_port},tcp,${data.aws_security_group.vm_metrics_security_group.id},django prometheus scraping"],
-    [for port in local.additional_prom_ports : "${port},tcp,${data.aws_security_group.vm_metrics_security_group.id},additional prometheus scraping"]
+    ["${local.sqs_client_port},tcp,${data.aws_security_group.vm_metrics_security_group.id},sqs client prometheus scraping"],
+    ["${local.monitor_port},tcp,${data.aws_security_group.vm_metrics_security_group.id},monitor metrics"]
   )
   service_container_cpu     = local.service_container_cpu
   service_container_memory  = local.service_container_memory
