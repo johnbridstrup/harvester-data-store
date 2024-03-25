@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import AFTExceptionCode, AFTException
+from .models import AFTExceptionCode, AFTException, AFTExceptionCodeManifest
 
 
 class AFTExceptionCodeAdmin(admin.ModelAdmin):
@@ -15,5 +15,12 @@ class AFTExceptionAdmin(admin.ModelAdmin):
     search_fields = ('timestamp', 'code', 'name')
 
 
+class AFTExceptionCodeManifestAdmin(admin.ModelAdmin):
+    list_display = ('created', 'version')
+    ordering = ('created',)
+    search_fields = ('version',)
+
+
 admin.site.register(AFTExceptionCode, AFTExceptionCodeAdmin)
 admin.site.register(AFTException, AFTExceptionAdmin)
+admin.site.register(AFTExceptionCodeManifest, AFTExceptionCodeManifestAdmin)

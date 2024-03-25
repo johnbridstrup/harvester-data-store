@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.db.models.query import QuerySet
 from django.http import HttpRequest
 
-from .models import JobType, JobSchema, JobResults, Job
+from .models import JobType, JobSchema, JobResults, Job, JobHostResult
 
 
 class JobSchemaInline(admin.TabularInline):
@@ -66,7 +66,14 @@ class JobAdmin(admin.ModelAdmin):
         )
 
 
+class JobHostResultAdmin(admin.ModelAdmin):
+    list_display = ('parent', 'host', 'timestamp')
+    ordering = ('timestamp',)
+    search_fields = ('host', 'timestamp')
+
+
 admin.site.register(JobType, JobTypeAdmin)
 admin.site.register(JobSchema, JobSchemaAdmin)
 admin.site.register(JobResults, JobResultsAdmin)
 admin.site.register(Job, JobAdmin)
+admin.site.register(JobHostResult, JobHostResultAdmin)

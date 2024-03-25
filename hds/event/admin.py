@@ -1,5 +1,8 @@
+from typing import Any
 from django.contrib import admin
-from .models import Event
+from django.db.models.query import QuerySet
+from django.http import HttpRequest
+from .models import Event, PickSession
 
 
 class EventAdmin(admin.ModelAdmin):
@@ -14,4 +17,18 @@ class EventAdmin(admin.ModelAdmin):
         return u", ".join(o.name for o in obj.tags.all())
 
 
+class PickSessionAdmin(admin.ModelAdmin):
+    list_display = ('created', 'UUID', 'start_time', 'session_length', 'tag_list')
+    ordering = ('created',)
+    search_fields = ('created', 'UUID', 'start_time')
+
+    def get_queryset(self, request: HttpRequest) -> QuerySet[Any]:
+        qs = super().get_queryset(request)
+        return qs.select_related("harvester","location").prefetch_related("tags")
+
+    def tag_list(self, obj):
+        return u", ".join(o.name for o in obj.tags.all())
+
+
 admin.site.register(Event, EventAdmin)
+admin.site.register(PickSession, PickSessionAdmin)
