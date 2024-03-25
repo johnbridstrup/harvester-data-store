@@ -1,7 +1,5 @@
 set -eo pipefail
 
-# Install Terraform
-./scripts/install-terraform.sh
 SHA=$(git rev-parse --short HEAD)
 
 pushd terraform/prod/hds
