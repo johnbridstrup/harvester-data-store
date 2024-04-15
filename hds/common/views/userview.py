@@ -1,12 +1,15 @@
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.exceptions import AuthenticationFailed
 from django.contrib.auth.models import update_last_login, User
 from django.contrib.auth import authenticate
 from django.middleware.csrf import get_token
 from rest_framework.authtoken.models import Token
 from common.renderers import HDSJSONRenderer
 from common.utils import make_ok
+from common.github import GithubClient
+from common.models import UserProfile
 from common.serializers.userserializer import UserCreateSerializer, UserSerializer
 
 
@@ -95,3 +98,47 @@ class ChangePasswordView(APIView):
             raise Exception("could not authenticate with given credentials")
         except Exception as e:
             raise Exception(str(e))
+
+
+class GithubOauthView(APIView):
+    """
+    Authenticate with Github Oauth
+    """
+    renderer_classes = (HDSJSONRenderer,)
+
+    def post(self, request, *args, **kwargs):
+        try:
+            code = request.data.get("code", None)
+            if not code:
+                raise AuthenticationFailed("code is required for login")
+            access_token = GithubClient.exchange_code_for_token(code)
+            if access_token:
+                github_user = GithubClient.retrieve_github_user(access_token)
+                username = github_user.get("login")
+
+                try:
+                    # try and get existing user by github username
+                    user = User.objects.get(username=username)
+                except User.DoesNotExist:
+                    full_name = github_user.get("name")
+                    avatar_url = github_user.get("avatar_url")
+                    name_list = full_name.split(" ")
+                    first_name, last_name = None, None
+                    if len(name_list) == 2:
+                        first_name, last_name = name_list
+                    elif len(name_list) == 3:
+                        first_name, _, last_name = name_list
+
+                    user = User.objects.create_user(
+                        username=username,
+                        first_name=first_name,
+                        last_name=last_name
+                    )
+                    UserProfile.objects.create(user=user, avatar_url=avatar_url)
+                update_last_login(None, user)
+                token, _ = Token.objects.get_or_create(user=user)
+                serializer = UserSerializer(user)
+                return make_ok("Login successful", {"token": token.key, "user": serializer.data})
+            raise AuthenticationFailed(detail="Token is invalid or has expired")
+        except Exception as e:
+            raise AuthenticationFailed(detail=str(e))

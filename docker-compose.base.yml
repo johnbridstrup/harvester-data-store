@@ -32,6 +32,8 @@ services:
       - PAGE_CACHING=true
       - MIGRATE=true
       - SILK_PROFILING=true
+      - GITHUB_CLIENT_ID=${GITHUB_CLIENT_ID:-unknown}
+      - GITHUB_CLIENT_SECRET=${GITHUB_CLIENT_SECRET:-unknown}
     volumes:
       - ./fixtures:/opt/app/fixtures
     depends_on:
