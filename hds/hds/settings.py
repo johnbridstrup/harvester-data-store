@@ -373,3 +373,7 @@ os.umask(old_umask)
 DOWNLOAD_DIR = os.path.join(MEDIA_ROOT, "downloads")
 EXTRACT_DIR = os.path.join(MEDIA_ROOT, "extracts")
 FILE_UPLOAD_MAX_MEMORY_SIZE = 300 * 1024 * 1024 # bytes
+
+# Github creds
+GITHUB_CLIENT_ID = os.environ.get("GITHUB_CLIENT_ID")
+GITHUB_CLIENT_SECRET = os.environ.get("GITHUB_CLIENT_SECRET")
