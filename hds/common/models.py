@@ -22,6 +22,7 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     slack_id = models.CharField(max_length=15, blank=True, null=True)
     role = models.CharField(max_length=31, choices=RoleChoices.choices, default=RoleChoices.SUPPORT)
+    avatar_url = models.CharField(max_length=500, blank=True, null=True)
 
 
 class Tags(Enum):
