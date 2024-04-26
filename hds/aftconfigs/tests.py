@@ -23,7 +23,7 @@ class ConfigReportTestCase(HDSAPITestBase):
         self.client.post(self.config_url, data=self.conf_data, format='json')
 
         self.set_user_role(RoleChoices.SUPPORT)
-        r = self.client.get(f"{self.api_base_url}/harvesters/1/config/")
+        r = self.client.get(f"{self.harv_det_url(1)}config/")
         self.assertEqual(r.json()["data"]["report"]["timestamp"], ts1)
 
         self.set_user_role(RoleChoices.SQS)
@@ -32,7 +32,5 @@ class ConfigReportTestCase(HDSAPITestBase):
         self.client.post(self.config_url, data=self.conf_data, format='json')
 
         self.set_user_role(RoleChoices.SUPPORT)
-        r = self.client.get(f"{self.api_base_url}/harvesters/1/config/")
+        r = self.client.get(f"{self.harv_det_url(1)}config/")
         self.assertEqual(r.json()["data"]["report"]["timestamp"], ts2)
-
-        
