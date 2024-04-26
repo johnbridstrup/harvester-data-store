@@ -83,7 +83,7 @@ class HDSTestAttributes:
 
     def load_picksess_report(self):
         self.picksess_data = self._load_report('picksess.json')
-    
+
     @contextmanager
     def update_picksess_report(self, data):
         self.load_picksess_report()
@@ -190,7 +190,7 @@ class HDSTestAttributes:
 
         # Configs
         self.config_url = reverse("configreports-list")
-        self.config_det_url = lambda id_: reverse("configreports-list", args=[id_])
+        self.config_det_url = lambda id_: reverse("configreports-detail", args=[id_])
 
         # Emustats
         self.emustats_url = reverse("emustatsreports-list")
@@ -459,7 +459,7 @@ class HDSAPITestBase(APITestCase, HDSTestAttributes):
             format='json'
         )
         return resp
-    
+
     def create_user(self, username, password, profile_kwargs = {}, **kwargs):
             user = User.objects.create_user(
             username=username,
