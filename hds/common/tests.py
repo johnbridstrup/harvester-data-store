@@ -289,7 +289,7 @@ class HDSTestAttributes:
 class HDSAPITestBase(APITestCase, HDSTestAttributes):
     def setUp(self):
         self.client = APIClient()
-        self.user = User.objects.create(username='test_user')
+        self.user = User.objects.create_user(username='test_user')
         self.set_admin()
         self.user_profile = UserProfile.objects.create(
             user=self.user,
@@ -307,7 +307,7 @@ class HDSAPITestBase(APITestCase, HDSTestAttributes):
         username = ''.join(random.choice(chars) for _ in range(10))
         if role is None:
             role = RoleChoices.MANAGER
-        user = User.objects.create(username=username)
+        user = User.objects.create_user(username=username)
         UserProfile.objects.create(
             user=user,
             slack_id="another-fake-id",
