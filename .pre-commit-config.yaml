@@ -1,0 +1,18 @@
+repos:
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v2.3.0
+    hooks:
+    -   id: check-yaml
+        name: Check Correctly Formatted YAML
+    -   id: end-of-file-fixer
+        name: Fix EOL In Files
+    -   id: trailing-whitespace
+        name: Trim Trailing Whitespace
+    -   id: check-added-large-files
+        name: Check For Added Large Files
+-   repo: https://github.com/psf/black
+    rev: 22.10.0
+    hooks:
+    -   id: black
+        name: Standard Codebase Formatter
+        exclude: ^(venv|debian_packages)/
