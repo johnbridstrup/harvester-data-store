@@ -97,6 +97,6 @@ class AFTExceptionView(CreateModelViewSet):
         qs = self.filter_queryset(self.get_queryset())
         if qs.count() > MAX_NUM_TRACEBACKS:
             return make_error("Too many exceptions to process. Please restrict query")
-        resp_data = create_traceback_groups(qs.values("id", "traceback", "code__code"))
+        resp_data = create_traceback_groups(qs.values("id", "timestamp", "traceback", "code__code", "report__report__data__sysmon_report__emu_info__agent_label"))
         resp_data["params"] = request.query_params
         return make_ok("Traceback Breakdown", resp_data)

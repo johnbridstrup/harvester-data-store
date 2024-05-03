@@ -40,7 +40,7 @@ def update_exception_codes(manifest_id, user_id):
             serializer = AFTExceptionCodeSerializer(data=ser_data)
             if serializer.is_valid(raise_exception=True):
                 serializer.save(creator=user)
-            
+
 @monitored_shared_task
 def traceback_breakdown_task(subtitle, lookback_days=7, code=0, channel="hds-test", emulator=False, **params):
     end_dt = datetime.now()
@@ -53,7 +53,7 @@ def traceback_breakdown_task(subtitle, lookback_days=7, code=0, channel="hds-tes
             code__code=code,
             report__harvester__is_emulator=emulator,
             **params,
-        ).values("id", "traceback", "code")
+        ).values("id", "timestamp", "traceback", "code__code", "report__report__data__sysmon_report__emu_info__agent_label")
         if len(excs) == 0:
             return post_to_slack(f"No exceptions found for the given code ({code}) and lookback period.", channel)
         if len(excs) > MAX_NUM_TRACEBACKS:
