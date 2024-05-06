@@ -24,7 +24,7 @@ def create_traceback_groups(exc_dicts):
     for exc, cluster in zip(exc_dicts, clusters):
         cluster_key = int(cluster)
         tb_dict[cluster_key]["count"] += 1
-        tb_dict[cluster_key]["instances"].append({"id": exc["id"], "ts": exc["timestamp"], "hostname": exc["report__report__data__sysmon_report__emu_info__agent_label"]})
+        tb_dict[cluster_key]["instances"].append({"id": exc["id"], "ts": str(exc["timestamp"]), "hostname": exc["report__report__data__sysmon_report__emu_info__agent_label"]})
         if not tb_dict[cluster_key]["example"]:
             tb_dict[cluster_key]["example"] = exc["traceback"]
     num_clusters = len(set(clusters))
