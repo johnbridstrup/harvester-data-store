@@ -56,7 +56,8 @@ urlpatterns = [
     path(f'{version}/picksessions/', include('event.urls.picksessionurls')),
     path(f'{version}/release/', include('harvdeploy.urls.harvestercodereleaseurls')),
     path(f'{version}/s3files/', include('s3file.urls.s3fileurls')),
-    path(f'{version}/scheduledjobs/', include('jobscheduler.urls')),
+    path(f'{version}/scheduledjobs/', include('jobscheduler.urls.jobschedulerurls')),
+    path(f'{version}/periodictasks/', include('jobscheduler.urls.periodictaskurls')),
     path(f'{version}/sessclip/', include('s3file.urls.sessclipurls')),
     path(f'{version}/users/', include('common.urls.userurls')),
     path(

@@ -1,5 +1,5 @@
 from rest_framework import routers
-from .views import ScheduledJobView
+from jobscheduler.views import ScheduledJobView
 
 
 router = routers.SimpleRouter()
