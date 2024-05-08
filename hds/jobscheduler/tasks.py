@@ -1,6 +1,8 @@
 import jsonschema
 import structlog
-from celery import Task
+from celery import Task, current_app as celery_app
+from kombu.utils.json import loads
+from django.template.defaultfilters import pluralize
 
 from common.celery import monitored_shared_task
 from event.models import Event
@@ -39,7 +41,7 @@ def run_scheduled_job(self, sched_job_id):
         sched_job.save()
         logger.exception(e)
         return "Failed to validate payload"
-    
+
     harvs = sched_job.targets.all()
     job_obj = {
         "schema": schema,
@@ -71,3 +73,49 @@ def run_scheduled_job(self, sched_job_id):
             sched_job.schedule_status = ScheduledJob.SchedJobStatusChoices.MAXRUNS
         sched_job.save()
     return f"Scheduled job {sched_job_id} sent to jobserver"
+
+
+def run_tasks(queryset):
+    """
+    Utility function to manually run the tasks.
+
+    Args:
+        queryset: Queryset[PeriodicTask]
+
+    Returns:
+        str
+    """
+    celery_app.loader.import_default_modules()
+    tasks = [(celery_app.tasks.get(task.task),
+                loads(task.args),
+                loads(task.kwargs),
+                task.queue,
+                task.name)
+                for task in queryset]
+
+    if any(t[0] is None for t in tasks):
+        for i, t in enumerate(tasks):
+            if t[0] is None:
+                break
+
+        # variable "i" will be set because list "tasks" is not empty
+        not_found_task_name = queryset[i].task
+
+        err_msg = f"task {not_found_task_name} not found"
+        logger.error(err_msg)
+        return err_msg
+
+    task_ids = [
+        task.apply_async(args=args, kwargs=kwargs, queue=queue,
+                            periodic_task_name=periodic_task_name)
+        if queue and len(queue)
+        else task.apply_async(args=args, kwargs=kwargs,
+                                periodic_task_name=periodic_task_name)
+        for task, args, kwargs, queue, periodic_task_name in tasks
+    ]
+    tasks_run = len(task_ids)
+    return ('{0} task{1} {2} successfully run').format(
+            tasks_run,
+            pluralize(tasks_run),
+            pluralize(tasks_run, ('was,were')),
+    )

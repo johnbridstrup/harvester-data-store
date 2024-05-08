@@ -3,16 +3,23 @@ from django.views.decorators.cache import cache_page
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.renderers import JSONRenderer
+from rest_framework.response import Response
+from django_celery_beat.models import PeriodicTask
 
 from common.utils import make_error, make_ok, build_api_url
-from common.viewsets import CreateModelViewSet
+from common.viewsets import CreateModelViewSet, AdminActionMixin
 from harvjobs.models import JobSchema, JobType
 from hds.roles import RoleChoices
 from .forms import create_job_scheduler_form
 from .models import ScheduledJob
-from .serializers import ScheduledJobSerializer, ScheduledJobDetailSerializer
+from .serializers import (
+    ScheduledJobSerializer,
+    ScheduledJobDetailSerializer,
+    PeriodicTaskSerializer
+)
 from .utils import create_periodic_task
 from .filters import ScheduledJobFilterSet
+from .tasks import run_tasks
 
 
 class ScheduledJobView(CreateModelViewSet):
@@ -58,7 +65,7 @@ class ScheduledJobView(CreateModelViewSet):
             inst.delete()
             raise
         return inst
-    
+
     def create(self, request, *args, **kwargs):
         resp = super().create(request, *args, **kwargs)
         resp.status_code = status.HTTP_202_ACCEPTED
@@ -169,3 +176,63 @@ class ScheduledJobView(CreateModelViewSet):
 
         serializer = self.get_serializer(qs, many=True)
         return make_ok(f"{user.username} scheduled jobs", response_data=serializer.data)
+
+
+class PeriodicTaskView(CreateModelViewSet, AdminActionMixin):
+    queryset = PeriodicTask.objects.all()
+    serializer_class = PeriodicTaskSerializer
+    http_method_names = ['get', 'head']
+    view_permissions_update = {
+        "actionables": {
+            "admin": True
+        },
+        "action_item_view": {
+            "admin": True
+        },
+    }
+
+    def action_items(self) -> list:
+        return [
+            "run_tasks",
+            "delete_tasks",
+            "enable_tasks",
+            "disable_tasks"
+        ]
+
+    def run_actions(self, request) -> Response:
+        action = request.query_params.get("action", None)
+        task_ids = request.query_params.get("ids", None)
+
+        if action is not None and task_ids is not None:
+            task_ids = task_ids.split(",")
+            if action in self.action_items() and action == "enable_tasks":
+                periodic_tasks = PeriodicTask.objects.filter(pk__in=task_ids)
+                for task in periodic_tasks:
+                    if not task.enabled:
+                        task.enabled = True
+                        task.save()
+                return make_ok(f"{action} executed successfully")
+            elif action in self.action_items() and action == "disable_tasks":
+                periodic_tasks = PeriodicTask.objects.filter(pk__in=task_ids)
+                for task in periodic_tasks:
+                    if task.enabled:
+                        task.enabled = False
+                        task.save()
+                return make_ok(f"{action} executed successfully")
+            elif action in self.action_items() and action == "run_tasks":
+                periodic_tasks = PeriodicTask.objects.filter(pk__in=task_ids)
+                msg = run_tasks(periodic_tasks)
+                return make_ok(msg)
+            elif action in self.action_items() and action == "delete_tasks":
+                periodic_tasks = PeriodicTask.objects.filter(pk__in=task_ids).delete()
+                return make_ok(f"{action} executed successfully")
+        return make_error("Query params (action, ids) should not be None")
+
+    @action(
+        methods=['get'],
+        detail=False,
+        url_path="actionables",
+        renderer_classes=[JSONRenderer],
+    )
+    def actionables(self, request):
+        return self.run_actions(request)
