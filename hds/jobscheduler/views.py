@@ -3,7 +3,6 @@ from django.views.decorators.cache import cache_page
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.renderers import JSONRenderer
-from django_celery_beat.models import PeriodicTasks
 
 from common.utils import make_error, make_ok, build_api_url
 from common.viewsets import CreateModelViewSet
@@ -59,7 +58,7 @@ class ScheduledJobView(CreateModelViewSet):
             inst.delete()
             raise
         return inst
-
+    
     def create(self, request, *args, **kwargs):
         resp = super().create(request, *args, **kwargs)
         resp.status_code = status.HTTP_202_ACCEPTED
@@ -79,7 +78,6 @@ class ScheduledJobView(CreateModelViewSet):
 
         task.enabled = False
         task.save()
-        PeriodicTasks.update_changed()
         obj.schedule_status = ScheduledJob.SchedJobStatusChoices.CANCELLED
         obj.save()
         return make_ok("Task disabled")
@@ -98,7 +96,6 @@ class ScheduledJobView(CreateModelViewSet):
 
         task.enabled = True
         task.save()
-        PeriodicTasks.update_changed()
         obj.schedule_status = ScheduledJob.SchedJobStatusChoices.WAITING
         obj.save()
         return make_ok("Task enabled")
