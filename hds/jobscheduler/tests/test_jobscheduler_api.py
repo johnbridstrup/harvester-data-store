@@ -139,7 +139,7 @@ class JobSchedulerTestCase(HarvJobApiTestBase):
 
         run_scheduled_job(1)
         self.assertEqual(Job.objects.count(), 1)
-        
+
         schedjob = ScheduledJob.objects.get(id=1)
         self.assertEqual(schedjob.num_runs, 1)
 
@@ -150,11 +150,11 @@ class JobSchedulerTestCase(HarvJobApiTestBase):
 
         run_scheduled_job(1)
         run_scheduled_job(1)
-        
+
         schedjob = ScheduledJob.objects.get(id=1)
         self.assertEqual(schedjob.schedule_status, ScheduledJob.SchedJobStatusChoices.MAXRUNS)
         self.assertFalse(schedjob.task.enabled)
-        
+
 
     def test_status_updates(self):
         self._create_defaults()
@@ -244,12 +244,12 @@ class JobSchedulerTestCase(HarvJobApiTestBase):
 
         url = self.url + "create/"
         r = self.client.get(url)
-        
+
         form_url = r.json()['data']['jobs'][self.DEFAULT_JOBTYPE][self.DEFAULT_SCHEMA_VERSION]["url"]
         form_r = self.client.get(form_url)
 
         self.assertEqual(form_r.status_code, status.HTTP_200_OK, form_r.json())
-        
+
         form_payload_schema = form_r.json()["data"]["form"]["properties"]["payload"]["properties"]["payload"]
         self.assertIn(dyn_req_arg, form_payload_schema["properties"])
         self.assertIn(dyn_req_arg, form_payload_schema["required"])
@@ -267,7 +267,7 @@ class JobSchedulerTestCase(HarvJobApiTestBase):
         form_url = r.json()['data']['jobs'][self.DEFAULT_JOBTYPE][self.DEFAULT_SCHEMA_VERSION]["url"]
         form_r = self.client.get(form_url)
         submit_url = form_r.json()["data"]["submit"]
-        
+
         TOS_payload = {}
         fmt = "%Y%m%d%H%M%S"
         hrs_sub = -6
@@ -346,7 +346,7 @@ class JobSchedulerTestCase(HarvJobApiTestBase):
         form_url = r.json()['data']['jobs'][self.DEFAULT_JOBTYPE][self.DEFAULT_SCHEMA_VERSION]["url"]
         form_r = self.client.get(form_url)
         submit_url = form_r.json()["data"]["submit"]
-        
+
         TOS_payload = {}
         TOS_payload["payload"] = {
             "__dynamic__requiredArg": {
@@ -365,3 +365,45 @@ class JobSchedulerTestCase(HarvJobApiTestBase):
 
         job = ScheduledJob.objects.get(id=1)
         self.assertEqual(job.schedule_status, ScheduledJob.SchedJobStatusChoices.SCHEDULED)
+
+    def test_periodic_task_actions(self):
+        self.set_admin()
+        self._create_defaults()
+
+        self.assertEqual(PeriodicTask.objects.count(), 0)
+        res = self.client.post(self.url, self.jobsched_payload, format='json')
+        self.assertEqual(PeriodicTask.objects.count(), 1)
+
+        # Query params should be provided
+        url = f"{self.periodic_task_url}actionables/"
+        res = self.client.get(url)
+        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+        msg = "Query params (action, ids) should not be None"
+        self.assertEqual(res.json()["errors"], msg)
+
+        # enable task via actionable urls
+        url = f"{self.periodic_task_url}actionables/?action=enable_tasks&ids=1"
+        res = self.client.get(url)
+        task = PeriodicTask.objects.get()
+        self.assertTrue(task.enabled)
+        self.assertEqual(res.json()["message"], "enable_tasks executed successfully")
+
+        # disable task via actionable urls
+        url = f"{self.periodic_task_url}actionables/?action=disable_tasks&ids=1"
+        res = self.client.get(url)
+        task.refresh_from_db()
+        self.assertFalse(task.enabled)
+        self.assertEqual(res.json()["message"], "disable_tasks executed successfully")
+
+        # run task via actionable urls
+        url = f"{self.periodic_task_url}actionables/?action=run_tasks&ids=1"
+        res = self.client.get(url)
+        task.refresh_from_db()
+        self.assertEqual(task.scheduledjob.num_runs, 1)
+        self.assertEqual(res.json()["message"], "1 task was successfully run")
+
+        # delete task via actionable urls
+        url = f"{self.periodic_task_url}actionables/?action=delete_tasks&ids=1"
+        res = self.client.get(url)
+        self.assertEqual(PeriodicTask.objects.count(), 0)
+        self.assertEqual(res.json()["message"], "delete_tasks executed successfully")

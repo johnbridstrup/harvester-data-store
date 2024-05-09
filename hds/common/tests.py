@@ -285,6 +285,11 @@ class HDSTestAttributes:
         self.sesscl_url = reverse("sessclip-list")
         self.sesscl_det_url = lambda id_: reverse("sessclip-detail", args=[id_])
 
+        # PeriodicTask
+        self.periodic_task_url = reverse("periodictask-list")
+        self.periodic_task_det_url = lambda id_: reverse("periodictask-detail", args=[id_])
+
+
 
 class HDSAPITestBase(APITestCase, HDSTestAttributes):
     def setUp(self):
