@@ -285,6 +285,10 @@ class HDSTestAttributes:
         self.sesscl_url = reverse("sessclip-list")
         self.sesscl_det_url = lambda id_: reverse("sessclip-detail", args=[id_])
 
+        # Jobscheduler
+        self.job_sched_url = reverse("jobscheduler-list")
+        self.job_sched_det_url = lambda id_: reverse("jobscheduler-detail", args=[id_])
+
         # PeriodicTask
         self.periodic_task_url = reverse("periodictask-list")
         self.periodic_task_det_url = lambda id_: reverse("periodictask-detail", args=[id_])
