@@ -7,6 +7,7 @@ from rest_framework import filters
 from rest_framework.decorators import action
 from rest_framework.renderers import JSONRenderer
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.response import Response
 from admin_utils.metrics import AdminMetrics
 from common.utils import make_ok, merge_nested_dict
 from hds.roles import RoleChoices
@@ -53,13 +54,13 @@ class CreateModelViewSet(ModelViewSet):
         inst = serializer.save(creator=self.request.user)
         self._log_on_create(serializer)
         return inst
-    
+
     def perform_update(self, serializer):
         """Update the instance and log the updated data."""
         inst = serializer.save(modifiedBy=self.request.user)
         self._log_on_update(serializer)
         return inst
-    
+
     def perform_destroy(self, instance):
         """Delete the instance and log the deletion."""
         self._log_on_destroy(instance)
@@ -87,7 +88,7 @@ class CreateModelViewSet(ModelViewSet):
         action_message = _(msg)
 
         AdminMetrics.incr_crud_operation(
-            model=instance.__class__.__name__, 
+            model=instance.__class__.__name__,
             operation=operation,
             user=self.request.user.username
         )
@@ -172,12 +173,12 @@ class ReportModelViewSet(CreateModelViewSet):
 ####################################################################################################
 # Mixins
 ####################################################################################################
-    
+
 class CountActionMixin(ModelViewSet):
     @action(
-        detail=False, 
-        methods=["get"], 
-        url_path="count", 
+        detail=False,
+        methods=["get"],
+        url_path="count",
         url_name="count",
         renderer_classes=[JSONRenderer]
     )
@@ -185,3 +186,34 @@ class CountActionMixin(ModelViewSet):
         qs = self.filter_queryset(self.get_queryset())
         count = qs.count()
         return make_ok(f"Count of {self.serializer_class.Meta.model.__name__}", response_data={"count": count})
+
+
+class AdminActionMixin(ModelViewSet):
+
+    def action_items(self) -> list:
+        """
+        Provide a list action items that needs to be implemented as part of the
+        actions endpoint input query params.
+
+        Returns:
+            a list of actions
+        """
+        raise NotImplementedError("action items should be provided for this view")
+
+    @action(
+        methods=["get"],
+        detail=False,
+        url_name="actionitems",
+        url_path="actionitems",
+        renderer_classes=[JSONRenderer],
+    )
+    def action_item_view(self, request):
+        return make_ok("successfully retrieved actions items", self.action_items())
+
+
+    def run_actions(self, request) -> Response:
+        """
+        Implements the view's logic and return response to client
+        """
+
+        raise NotImplementedError("View's logic should be implemented!")
