@@ -7,6 +7,7 @@ from rest_framework import filters
 from rest_framework.decorators import action
 from rest_framework.renderers import JSONRenderer
 from rest_framework.viewsets import ModelViewSet
+from admin_utils.metrics import AdminMetrics
 from common.utils import make_ok, merge_nested_dict
 from hds.roles import RoleChoices
 from .renderers import HDSJSONRenderer
@@ -84,6 +85,12 @@ class CreateModelViewSet(ModelViewSet):
         if operation == DELETION:
             msg = 'Deleted'
         action_message = _(msg)
+
+        AdminMetrics.incr_crud_operation(
+            model=instance.__class__.__name__, 
+            operation=operation,
+            user=self.request.user.username
+        )
         LogEntry.objects.log_action(
             user_id=self.request.user.id,
             content_type_id=ContentType.objects.get_for_model(instance).pk,
