@@ -1,7 +1,9 @@
+import json
 import pytz
 from datetime import datetime
 
 from ..models import AFTException
+from ..insights import create_traceback_groups
 from .test_exc_code_api import ExceptionTestBase
 
 
@@ -83,6 +85,16 @@ class AFTExceptionTest(ExceptionTestBase):
 
         resp = self.client.get(f'{self.exc_url}?start_time=202201010001&end_time=20220430235955')
         self.assertEqual(resp.json()['data']['count'], 1)
+
+    def test_tb_breakdown_task(self):
+        self.post_error_report()
+        excs = AFTException.objects.all().values("id", "timestamp", "traceback", "code__code", "report__report__data__sysmon_report__emu_info__agent_label")
+        groups = create_traceback_groups(excs)
+        try:
+            json.dumps(groups)
+            assert True
+        except Exception as e:
+            assert False, f"Failed to serialize traceback groups: {e}"
 
     def test_get_harv_ids(self):
         self.post_error_report()
