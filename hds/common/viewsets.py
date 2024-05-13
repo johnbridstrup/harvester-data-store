@@ -1,5 +1,8 @@
+from django.contrib.admin.models import LogEntry, ADDITION, CHANGE, DELETION
+from django.contrib.contenttypes.models import ContentType
 from django_filters.rest_framework import DjangoFilterBackend
 from django.utils.decorators import method_decorator
+from django.utils.translation import gettext as _
 from rest_framework import filters
 from rest_framework.decorators import action
 from rest_framework.renderers import JSONRenderer
@@ -46,7 +49,20 @@ class CreateModelViewSet(ModelViewSet):
         super().__init__(**kwargs)
 
     def perform_create(self, serializer):
-        return serializer.save(creator=self.request.user)
+        inst = serializer.save(creator=self.request.user)
+        self._log_on_create(serializer)
+        return inst
+    
+    def perform_update(self, serializer):
+        """Update the instance and log the updated data."""
+        inst = serializer.save(modifiedBy=self.request.user)
+        self._log_on_update(serializer)
+        return inst
+    
+    def perform_destroy(self, instance):
+        """Delete the instance and log the deletion."""
+        self._log_on_destroy(instance)
+        instance.delete()
 
     def get_serializer_class(self):
         """
@@ -59,6 +75,34 @@ class CreateModelViewSet(ModelViewSet):
         if serializer:
             return serializer
         return super().get_serializer_class()
+
+    def log(self, operation, instance):
+        if operation == ADDITION:
+            msg = 'Created'
+        if operation == CHANGE:
+            msg = 'Updated'
+        if operation == DELETION:
+            msg = 'Deleted'
+        action_message = _(msg)
+        LogEntry.objects.log_action(
+            user_id=self.request.user.id,
+            content_type_id=ContentType.objects.get_for_model(instance).pk,
+            object_id=instance.pk,
+            object_repr=str(instance),
+            action_flag=operation,
+            change_message=action_message + ' ' + str(instance))
+
+    def _log_on_create(self, serializer):
+        """Log the up-to-date serializer.data."""
+        self.log(operation=ADDITION, instance=serializer.instance)
+
+    def _log_on_update(self, serializer):
+        """Log data from the updated serializer instance."""
+        self.log(operation=CHANGE, instance=serializer.instance)
+
+    def _log_on_destroy(self, instance):
+        """Log data from the instance before it gets deleted."""
+        self.log(operation=DELETION, instance=instance)
 
 
 class ReportModelViewSet(CreateModelViewSet):
