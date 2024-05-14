@@ -4,6 +4,7 @@ from errorreport.models import ErrorReport
 
 
 DEFAULT_OPERATOR_MSG = "Please cycle the harvester"
+EXC_TRUNC = 120 # Number of characters to truncate exception info to
 class AFTExceptionCodeManifest(CommonInfo):
     """Manifest of exception codes.
 
@@ -64,8 +65,8 @@ class AFTException(CommonInfo):
         if self.primary is not None:
             primary_str = "Primary" if self.primary else "Secondary"
         if self.info is not None:
-            if len(self.info) > 60:
-                value_str = self.info[:54] + "(trunc)"
+            if len(self.info) > EXC_TRUNC:
+                value_str = self.info[:(EXC_TRUNC - 6)] + "(trunc)"
             else:
                 value_str = self.info
         
