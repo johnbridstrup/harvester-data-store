@@ -1,60 +1,55 @@
 pipeline {
-    agent { label 'aft-nuc || aft-gpu || aft-swemu' }
-    
+    agent { label 'aft-nuc || aft-cloud-nuc' }
+
     stages {
         stage('Initialization') {
-			steps {
-				script { env.totalExitCode = 0 }
-                sh script:'./jenkins/make_venv.sh'
-			}
-		}
+            steps {
+                script {
+                    env.totalExitCode = 0
+                    sh './jenkins/make_venv.sh'
+                }
+            }
+        }
         stage('Check Migrations') {
-            when {
-				branch 'PR-*'
-			}
+            when { branch 'PR-*' }
             steps {
                 catchError(stageResult: 'FAILURE') {
                     script {
-                        def exitCode = sh script:'./jenkins/check_migrations.sh', returnStatus:true
-                        env.totalExitCode = (env.totalExitCode).toInteger() + exitCode
-                        sh "exit ${exitCode}"
+                        env.totalExitCode = sh script:'./jenkins/check_migrations.sh', returnStatus:true
+                        sh "exit ${env.totalExitCode}"
                     }
                 }
             }
         }
         stage('Run tests') {
-            when {
-				branch 'PR-*'
-			}
+            when { branch 'PR-*' }
             steps {
                 catchError(stageResult: 'FAILURE') {
                     script {
-                        def exitCode = sh script:'./jenkins/run_tests.sh', returnStatus:true
-                        env.totalExitCode = (env.totalExitCode).toInteger() + exitCode
-                        sh "exit ${exitCode}"
+                        env.totalExitCode = sh script:'./jenkins/run_tests.sh', returnStatus:true
+                        sh "exit ${env.totalExitCode}"
                     }
                 }
             }
         }
         stage('Check build') {
-            when {branch 'PR-*'}
+            when { branch 'PR-*' }
             steps {
                 catchError(stageResult: 'FAILURE') {
                     script {
-                        def exitCode = sh script:'./jenkins/ci.sh', returnStatus:true
-                        env.totalExitCode = (env.totalExitCode).toInteger() + exitCode
-                        sh "exit ${exitCode}"
+                        env.totalExitCode = sh script:'./jenkins/ci.sh', returnStatus:true
+                        sh "exit ${env.totalExitCode}"
                     }
                 }
             }
         }
     }
     post {
-		always {
+        always {
             script {
-                currentBuild.result = ((env.totalExitCode).toInteger() == 0) ? "SUCCESS" : "FAILURE"
-                sh "sudo docker compose -f docker-compose.base.yml down --remove-orphans"
+                currentBuild.result = ((env.totalExitCode).toInteger() == 0) ? 'SUCCESS' : 'FAILURE'
+                sh 'sudo docker compose -f docker-compose.base.yml down --remove-orphans'
             }
-		}
-	}
+        }
+    }
 }
