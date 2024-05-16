@@ -15,7 +15,7 @@ from .models import ScheduledJob
 from .serializers import (
     ScheduledJobSerializer,
     ScheduledJobDetailSerializer,
-    PeriodicTaskSerializer
+    PeriodicTaskSerializer,
 )
 from .utils import create_periodic_task
 from .filters import ScheduledJobFilterSet
@@ -28,21 +28,21 @@ class ScheduledJobView(CreateModelViewSet):
     filterset_class = ScheduledJobFilterSet
     ordering = ("-created",)
     view_permissions_update = {
-        'create_scheduled_job': {
-            RoleChoices.SUPPORT: True, #is_whitelisted
+        "create_scheduled_job": {
+            RoleChoices.SUPPORT: True,  # is_whitelisted
         },
-        'create': {
+        "create": {
             RoleChoices.SUPPORT: True,
         },
-        'disable_job': {
+        "disable_job": {
             RoleChoices.SUPPORT: True,
         },
-        'enable_job': {
+        "enable_job": {
             RoleChoices.SUPPORT: True,
         },
         "user_jobs": {
             RoleChoices.SUPPORT: True,
-        }
+        },
     }
     action_serializers = {
         "retrieve": ScheduledJobDetailSerializer,
@@ -55,7 +55,10 @@ class ScheduledJobView(CreateModelViewSet):
             "creator",
             "modifiedBy",
             "task",
-        ).prefetch_related("targets", "jobs",)
+        ).prefetch_related(
+            "targets",
+            "jobs",
+        )
 
     def perform_create(self, serializer):
         inst = super().perform_create(serializer)
@@ -72,7 +75,7 @@ class ScheduledJobView(CreateModelViewSet):
         return resp
 
     @action(
-        methods=['get'],
+        methods=["get"],
         detail=True,
         url_path="cancel",
         renderer_classes=[JSONRenderer],
@@ -90,7 +93,7 @@ class ScheduledJobView(CreateModelViewSet):
         return make_ok("Task disabled")
 
     @action(
-        methods=['get'],
+        methods=["get"],
         detail=True,
         url_path="enable",
         renderer_classes=[JSONRenderer],
@@ -108,7 +111,7 @@ class ScheduledJobView(CreateModelViewSet):
         return make_ok("Task enabled")
 
     @action(
-        methods=['get'],
+        methods=["get"],
         detail=False,
         url_path="create",
         renderer_classes=[JSONRenderer],
@@ -129,7 +132,7 @@ class ScheduledJobView(CreateModelViewSet):
                         request,
                         "scheduledjobs",
                         api_version="current",
-                        params={"jobtype": jobtype, "schema_version": schema_version}
+                        params={"jobtype": jobtype, "schema_version": schema_version},
                     ),
                 },
             )
@@ -138,18 +141,24 @@ class ScheduledJobView(CreateModelViewSet):
         if SCH_VERS_QP in qps:
             return make_error("Missing jobtype parameter.")
 
-        jobtypes = JobType.objects.values_list('name', flat=True)
+        jobtypes = JobType.objects.values_list("name", flat=True)
         rel_path = "scheduledjobs/create/"
         resp_data = {"jobs": {}}
         for jobtype in jobtypes:
-            versions = JobSchema.objects.filter(jobtype__name=jobtype).order_by("-created").values_list("version", flat=True)
+            versions = (
+                JobSchema.objects.filter(jobtype__name=jobtype)
+                .order_by("-created")
+                .values_list("version", flat=True)
+            )
             resp_data["jobs"][jobtype] = {}
             for version in versions:
                 params = {
                     "jobtype": jobtype,
                     "schema_version": version,
                 }
-                get_url = build_api_url(request, rel_path, params=params, api_version="current")
+                get_url = build_api_url(
+                    request, rel_path, params=params, api_version="current"
+                )
                 resp_data["jobs"][jobtype][version] = {
                     "url": get_url,
                     "method": "GET",
@@ -158,13 +167,13 @@ class ScheduledJobView(CreateModelViewSet):
         return make_ok("Harvester Job Scheduler Interface", response_data=resp_data)
 
     @action(
-        methods=['get'],
+        methods=["get"],
         detail=False,
         url_path="myjobs",
         url_name="myjobs",
         renderer_classes=[JSONRenderer],
     )
-    @method_decorator(cache_page(60*10))
+    @method_decorator(cache_page(60 * 10))
     def user_jobs(self, request):
         user = request.user
         qs = ScheduledJob.objects.filter(creator=user).order_by("-created")
@@ -172,7 +181,9 @@ class ScheduledJobView(CreateModelViewSet):
         if page is not None:
             serializer = self.get_serializer(page, many=True)
             paginated = self.get_paginated_response(serializer.data)
-            return make_ok(f"{user.username} scheduled jobs", response_data=paginated.data)
+            return make_ok(
+                f"{user.username} scheduled jobs", response_data=paginated.data
+            )
 
         serializer = self.get_serializer(qs, many=True)
         return make_ok(f"{user.username} scheduled jobs", response_data=serializer.data)
@@ -181,23 +192,14 @@ class ScheduledJobView(CreateModelViewSet):
 class PeriodicTaskView(CreateModelViewSet, AdminActionMixin):
     queryset = PeriodicTask.objects.all()
     serializer_class = PeriodicTaskSerializer
-    http_method_names = ['get', 'head']
+    http_method_names = ["get", "head"]
     view_permissions_update = {
-        "actionables": {
-            "admin": True
-        },
-        "action_item_view": {
-            "admin": True
-        },
+        "actionables": {"admin": True},
+        "action_item_view": {"admin": True},
     }
 
     def action_items(self) -> list:
-        return [
-            "run_tasks",
-            "delete_tasks",
-            "enable_tasks",
-            "disable_tasks"
-        ]
+        return ["run_tasks", "delete_tasks", "enable_tasks", "disable_tasks"]
 
     def run_actions(self, request) -> Response:
         action = request.query_params.get("action", None)
@@ -229,7 +231,7 @@ class PeriodicTaskView(CreateModelViewSet, AdminActionMixin):
         return make_error("Query params (action, ids) should not be None")
 
     @action(
-        methods=['get'],
+        methods=["get"],
         detail=False,
         url_path="actionables",
         renderer_classes=[JSONRenderer],

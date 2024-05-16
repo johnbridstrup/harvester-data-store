@@ -4,13 +4,13 @@ from .models import S3File, SessClip
 
 
 class S3FileAdmin(admin.ModelAdmin):
-    list_display = ('created', 'filetype', 'event')
-    ordering = ('created', 'filetype')
-    search_fields = ('filetype', 'created')
+    list_display = ("created", "filetype", "event")
+    ordering = ("created", "filetype")
+    search_fields = ("filetype", "created")
 
 
 class SessClipAdmin(admin.ModelAdmin):
-    list_display = ('get_created', 'get_creator', 'file')
+    list_display = ("get_created", "get_creator", "file")
 
     def get_created(self, obj):
         return obj.file.created

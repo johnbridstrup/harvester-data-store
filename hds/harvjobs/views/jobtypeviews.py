@@ -11,14 +11,14 @@ class JobTypeView(CreateModelViewSet):
     serializer_class = JobTypeSerializer
     filterset_class = JobTypeFilterset
     view_permissions_update = {
-        'create': {
+        "create": {
             RoleChoices.JENKINS: True,
             RoleChoices.MANAGER: True,
         },
-        'destroy': {
+        "destroy": {
             RoleChoices.MANAGER: True,
         },
-        'update': {
+        "update": {
             RoleChoices.MANAGER: True,
         },
     }

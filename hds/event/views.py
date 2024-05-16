@@ -11,71 +11,58 @@ from .filters import EventFilterset, PickSessionFilterset
 from .serializers import (
     EventSerializer,
     PickSessionSerializer,
-    PickSessionDetailSerializer
+    PickSessionDetailSerializer,
 )
 
 
 class TaggedUUIDViewBase(CreateModelViewSet):
-    ordering = ('-id',)
+    ordering = ("-id",)
     view_permissions_update = {
-        'get_tags': {
-            RoleChoices.SUPPORT: True, #is_whitelisted,
+        "get_tags": {
+            RoleChoices.SUPPORT: True,  # is_whitelisted,
             RoleChoices.JENKINS: True,
         },
-        'destroy': {
-            RoleChoices.BEATBOX: True, # Beatbox creates and deletes these as part of CI
-        }
+        "destroy": {
+            RoleChoices.BEATBOX: True,  # Beatbox creates and deletes these as part of CI
+        },
     }
-    schema = HDSToRepAutoSchema(extra_info={
-        'related_objects': {
-            'type': 'array',
-            'items': {
-                'type': 'object',
-                'properties': {
-                    'url': {
-                        'type': 'string'
+    schema = HDSToRepAutoSchema(
+        extra_info={
+            "related_objects": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "url": {"type": "string"},
+                        "object": {"type": "string"},
                     },
-                    'object': {
-                        'type': 'string'
-                    }
-                }
-            }
-        },
-        'related_files': {
-            'type': 'array',
-            'items': {
-                'type': 'object',
-                'properties': {
-                    'url': {
-                        'type': 'string'
+                },
+            },
+            "related_files": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "url": {"type": "string"},
+                        "filetype": {"type": "string"},
                     },
-                    'filetype': {
-                        'type': 'string'
-                    }
-                }
-            }
-        },
-        'related_images': {
-            'type': 'array',
-            'items': {
-                'type': 'object',
-                'properties': {
-                    'url': {
-                        'type': 'string'
+                },
+            },
+            "related_images": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "url": {"type": "string"},
+                        "filetype": {"type": "string"},
                     },
-                    'filetype': {
-                        'type': 'string'
-                    }
-                }
-            }
+                },
+            },
         }
-    })
+    )
 
     @action(
-        methods=["get"],
-        detail=False,
-        url_path="tags",
-        renderer_classes=[JSONRenderer]
+        methods=["get"], detail=False, url_path="tags", renderer_classes=[JSONRenderer]
     )
     def get_tags(self, request):
         model = self.serializer_class.Meta.model
@@ -100,9 +87,7 @@ class PickSessionView(TaggedUUIDViewBase):
     queryset = PickSession.objects.all()
     filterset_class = PickSessionFilterset
     serializer_class = PickSessionSerializer
-    action_serializers = {
-        "retrieve": PickSessionDetailSerializer
-    }
+    action_serializers = {"retrieve": PickSessionDetailSerializer}
 
     def get_queryset(self):
         if self.action == "retrieve":

@@ -8,16 +8,35 @@ from common.reports import DTimeFormatter, DEFAULT_TZ
 
 
 class ListFilter(Filter):
-    def __init__(self, field_type=str, field_name=None, lookup_expr=None, *, label=None, method=None, distinct=False, exclude=False, **kwargs):
+    def __init__(
+        self,
+        field_type=str,
+        field_name=None,
+        lookup_expr=None,
+        *,
+        label=None,
+        method=None,
+        distinct=False,
+        exclude=False,
+        **kwargs,
+    ):
         self.field_type = field_type
-        super().__init__(field_name, lookup_expr, label=label, method=method, distinct=distinct, exclude=exclude, **kwargs)
+        super().__init__(
+            field_name,
+            lookup_expr,
+            label=label,
+            method=method,
+            distinct=distinct,
+            exclude=exclude,
+            **kwargs,
+        )
 
     def filter(self, qs, value):
         if not value:
             return qs
 
         self.lookup_expr = "in"
-        values = [self.field_type(v) for v in value.split(',')]
+        values = [self.field_type(v) for v in value.split(",")]
         return super().filter(qs, values).distinct()
 
 
@@ -34,15 +53,34 @@ class DTimeFilter(Filter):
 
 
 class TagListFilter(Filter):
-    def __init__(self, field_name="tags__name", lookup_expr=None, *, label=None, method=None, distinct=False, exclude=False, **kwargs):
-        super().__init__(field_name=field_name, lookup_expr=lookup_expr, label=label, method=method, distinct=distinct, exclude=exclude, **kwargs)
+    def __init__(
+        self,
+        field_name="tags__name",
+        lookup_expr=None,
+        *,
+        label=None,
+        method=None,
+        distinct=False,
+        exclude=False,
+        **kwargs,
+    ):
+        super().__init__(
+            field_name=field_name,
+            lookup_expr=lookup_expr,
+            label=label,
+            method=method,
+            distinct=distinct,
+            exclude=exclude,
+            **kwargs,
+        )
 
     """Filter by list of tags"""
+
     def filter(self, qs, value):
         if not value:
             return qs
 
-        for val in value.split(','):
+        for val in value.split(","):
             filt = {f"{self.field_name}": val}
             qs = qs.filter(**filt)
         return qs
@@ -55,39 +93,83 @@ class GenericFilter(Filter):
     example: client.get(<url>/?jsonfield__key1__key2=3,jsonfield2__key3__key4=hello)
     """
 
-    def __init__(self, field_name=None, lookup_expr=None, *, label=None, method=None, distinct=False, exclude=False, foreign_key_prefix=None, **kwargs):
-        super().__init__(field_name, lookup_expr, label=label, method=method, distinct=distinct, exclude=exclude, **kwargs)
+    def __init__(
+        self,
+        field_name=None,
+        lookup_expr=None,
+        *,
+        label=None,
+        method=None,
+        distinct=False,
+        exclude=False,
+        foreign_key_prefix=None,
+        **kwargs,
+    ):
+        super().__init__(
+            field_name,
+            lookup_expr,
+            label=label,
+            method=method,
+            distinct=distinct,
+            exclude=exclude,
+            **kwargs,
+        )
         self.foreign_key_prefix = foreign_key_prefix
 
     def filter(self, qs, value):
         if not value:
             return qs
         query_filter = {}
-        for item in value.split(','):
-                try:
-                    key, value = item.split('=')
-                    key = f"{self.foreign_key_prefix}__{key}" if self.foreign_key_prefix else key
-                except ValueError:
-                    # too many or not enough values to unpack
-                    return qs
-                query_filter[key.strip()] = value.strip()
+        for item in value.split(","):
+            try:
+                key, value = item.split("=")
+                key = (
+                    f"{self.foreign_key_prefix}__{key}"
+                    if self.foreign_key_prefix
+                    else key
+                )
+            except ValueError:
+                # too many or not enough values to unpack
+                return qs
+            query_filter[key.strip()] = value.strip()
 
         return qs.filter(**query_filter)
 
 
 class EventUUIDFilter(ListFilter):
-    def __init__(self, field_type=str, field_name="event", lookup_expr=None, *, label=None, method=None, distinct=False, exclude=False, **kwargs):
-        super().__init__(field_type, field_name, lookup_expr, label=label, method=method, distinct=distinct, exclude=exclude, **kwargs)
+    def __init__(
+        self,
+        field_type=str,
+        field_name="event",
+        lookup_expr=None,
+        *,
+        label=None,
+        method=None,
+        distinct=False,
+        exclude=False,
+        **kwargs,
+    ):
+        super().__init__(
+            field_type,
+            field_name,
+            lookup_expr,
+            label=label,
+            method=method,
+            distinct=distinct,
+            exclude=exclude,
+            **kwargs,
+        )
 
     def filter(self, qs, value):
         self.field_name += "__UUID"
         return super().filter(qs, value)
-    
+
 
 ####################################################################################################
 # Filter Mixins
 ####################################################################################################
-    
+
+
 class ReportStartEndFilter(filters.FilterSet):
     start_time = DTimeFilter(field_name="reportTime", lookup_expr="gte")
     end_time = DTimeFilter(field_name="reportTime", lookup_expr="lte")
@@ -122,17 +204,18 @@ class LinkedReportHarvesterFilter(filters.FilterSet):
 # Filtersets
 ####################################################################################################
 
+
 class CommonInfoFilterset(filters.FilterSet):
     FIELDS_BASE = [
-        'created_after',
-        'created_before',
+        "created_after",
+        "created_before",
     ]
 
-    created_after = DTimeFilter(field_name='created', lookup_expr='gte')
-    created_before = DTimeFilter(field_name='created', lookup_expr='lte')
+    created_after = DTimeFilter(field_name="created", lookup_expr="gte")
+    created_before = DTimeFilter(field_name="created", lookup_expr="lte")
 
     def filter_datetime_range(self, queryset, name, value):
-        split_dates = value.split(',')
+        split_dates = value.split(",")
         if len(split_dates) != 2:
             return queryset
 
@@ -147,7 +230,6 @@ class CommonInfoFilterset(filters.FilterSet):
             end = DTimeFormatter.convert_to_datetime(end_str, tz)
             filter_dict[f"{name}__lte"] = end
         return queryset.filter(**filter_dict)
-
 
     def filter_primary_exception(self, queryset, name, value):
         """
@@ -179,11 +261,13 @@ class CommonInfoFilterset(filters.FilterSet):
 
         # Create time objects for start hour
         if start_hour:
-            start_hour = datetime.time(*DTimeFormatter.parse_time(start_hour), tzinfo=tz)
-            filter_dict.update({ f'{name}__time__gte': start_hour })
+            start_hour = datetime.time(
+                *DTimeFormatter.parse_time(start_hour), tzinfo=tz
+            )
+            filter_dict.update({f"{name}__time__gte": start_hour})
         if end_hour:
             end_hour = datetime.time(*DTimeFormatter.parse_time(end_hour), tzinfo=tz)
-            filter_dict.update({f'{name}__time__lte': end_hour})
+            filter_dict.update({f"{name}__time__lte": end_hour})
         return queryset.filter(**filter_dict)
 
 

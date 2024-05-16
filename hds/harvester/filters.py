@@ -13,7 +13,7 @@ class HarvesterFilterset(CommonInfoFilterset):
     class Meta:
         model = Harvester
         fields = CommonInfoFilterset.FIELDS_BASE + [
-            'harv_id', 
-            'fruit__name',
-            'name',
+            "harv_id",
+            "fruit__name",
+            "name",
         ]

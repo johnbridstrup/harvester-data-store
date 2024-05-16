@@ -3,7 +3,6 @@ from .views import ConfigReportView
 
 
 router = routers.SimpleRouter()
-router.register(r'', ConfigReportView, basename='configreports')
+router.register(r"", ConfigReportView, basename="configreports")
 
-urlpatterns = [
-] + router.urls
+urlpatterns = [] + router.urls

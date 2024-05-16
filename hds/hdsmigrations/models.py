@@ -8,9 +8,13 @@ class MigrationLog(CommonInfo):
         FAIL = "failed"
         PENDING = "pending"
         SUCCESS = "success"
-    
-    result = models.CharField(choices=ResultChoices.choices, default=ResultChoices.PENDING, max_length=31)
-    startTime = models.DateTimeField(null=True) # Null allowed since this will be started by a task
+
+    result = models.CharField(
+        choices=ResultChoices.choices, default=ResultChoices.PENDING, max_length=31
+    )
+    startTime = models.DateTimeField(
+        null=True
+    )  # Null allowed since this will be started by a task
     endTime = models.DateTimeField(null=True)
     output = models.TextField(null=True)
     githash = models.CharField(max_length=40)

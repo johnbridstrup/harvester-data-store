@@ -6,18 +6,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('event', '0006_picksession_harvester_picksession_location_and_more'),
+        ("event", "0006_picksession_harvester_picksession_location_and_more"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='event',
-            name='created',
+            model_name="event",
+            name="created",
             field=models.DateTimeField(auto_now_add=True, db_index=True),
         ),
         migrations.AlterField(
-            model_name='picksession',
-            name='created',
+            model_name="picksession",
+            name="created",
             field=models.DateTimeField(auto_now_add=True, db_index=True),
         ),
     ]

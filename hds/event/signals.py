@@ -10,6 +10,7 @@ logger = structlog.get_logger(__name__)
 
 update_event_tag = Signal()
 
+
 @receiver(update_event_tag)
 def add_event_tag(sender, event_id, tag, **kwargs):
     try:
@@ -22,7 +23,7 @@ def add_event_tag(sender, event_id, tag, **kwargs):
             f"Event with id {event_id} does not exist!",
             event_id=event_id,
             exception_name=exc,
-            exception_info=str(e)
+            exception_info=str(e),
         )
         raise
     except Exception as e:
@@ -36,7 +37,7 @@ def add_event_tag(sender, event_id, tag, **kwargs):
         )
         raise
 
+
 @receiver(report_created)
 def collect_linked_events(sender, app_label, pk, **kwargs):
     collect_aux_uuids.delay(app_label, sender, pk)
-    

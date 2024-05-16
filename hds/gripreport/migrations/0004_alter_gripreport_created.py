@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('gripreport', '0003_alter_gripreport_reporttime'),
+        ("gripreport", "0003_alter_gripreport_reporttime"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='gripreport',
-            name='created',
+            model_name="gripreport",
+            name="created",
             field=models.DateTimeField(auto_now_add=True, db_index=True),
         ),
     ]

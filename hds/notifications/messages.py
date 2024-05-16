@@ -3,8 +3,5 @@
 
 
 REPORT_MSG_FMT = (
-    "{code} on {harvester}\n"
-    "ts: {ts}\n"
-    "location: {location}\n"
-    "{url}\n"
+    "{code} on {harvester}\n" "ts: {ts}\n" "location: {location}\n" "{url}\n"
 )

@@ -10,13 +10,13 @@ class NoContextError(Exception):
 
 
 class HDSJSONRenderer(JSONRenderer):
-    media_type="application/json"
+    media_type = "application/json"
     METHODS = {
-        'GET': 'retrieved',
-        'PUT': 'updated',
-        'PATCH': 'updated',
-        'POST': 'created',
-        'DELETE': 'deleted'
+        "GET": "retrieved",
+        "PUT": "updated",
+        "PATCH": "updated",
+        "POST": "created",
+        "DELETE": "deleted",
     }
 
     SUCCESS = "success"
@@ -33,16 +33,16 @@ class HDSJSONRenderer(JSONRenderer):
 
         else:
             try:
-                """ some endpoints may not have context['view']
-                    resulting in Attribute Error
+                """some endpoints may not have context['view']
+                resulting in Attribute Error
                 """
-                model = context['view'].basename
+                model = context["view"].basename
             except AttributeError:
                 model = ""
-            method = context['request']._request.method
+            method = context["request"]._request.method
 
             if isinstance(data, dict):
-                status = data.get('status', HDSJSONRenderer.SUCCESS)
+                status = data.get("status", HDSJSONRenderer.SUCCESS)
             else:
                 status = HDSJSONRenderer.SUCCESS
 
@@ -54,14 +54,9 @@ class HDSJSONRenderer(JSONRenderer):
 
             else:
                 msg = "{} {} successfully".format(
-                    model,
-                    self.METHODS.get(method, f'{method} completed')
+                    model, self.METHODS.get(method, f"{method} completed")
                 )
 
-        response = {
-            'status': status,
-            'message': msg,
-            'data': data
-        }
+        response = {"status": status, "message": msg, "data": data}
 
         return response

@@ -6,23 +6,23 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('s3file', '0001_initial'),
+        ("s3file", "0001_initial"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='s3file',
-            name='bucket',
+            model_name="s3file",
+            name="bucket",
             field=models.CharField(max_length=255),
         ),
         migrations.AlterField(
-            model_name='s3file',
-            name='filetype',
+            model_name="s3file",
+            name="filetype",
             field=models.CharField(max_length=255),
         ),
         migrations.AlterField(
-            model_name='s3file',
-            name='key',
+            model_name="s3file",
+            name="key",
             field=models.CharField(max_length=255),
         ),
     ]

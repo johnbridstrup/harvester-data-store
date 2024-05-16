@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('s3file', '0007_auto_20230127_1857'),
+        ("s3file", "0007_auto_20230127_1857"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='s3file',
-            name='deleted',
+            model_name="s3file",
+            name="deleted",
             field=models.BooleanField(default=False),
         ),
     ]

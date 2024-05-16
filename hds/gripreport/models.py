@@ -10,19 +10,19 @@ from location.models import Location
 class GripReport(PickSessionModelMixin, ReportBase):
     def __str__(self):
         return f"Grip report: {self.reportTime}"
-    
+
 
 class Candidate(CommonInfo):
     report = models.ForeignKey(GripReport, on_delete=models.CASCADE)
     fruit = models.ForeignKey(Fruit, on_delete=models.CASCADE)
     harvester = models.ForeignKey(Harvester, on_delete=models.CASCADE)
     location = models.ForeignKey(Location, on_delete=models.CASCADE)
-    robot_id  = models.IntegerField()
+    robot_id = models.IntegerField()
     score = models.FloatField()
     ripeness = models.FloatField()
     cand_id = models.IntegerField()
     candidate_data = models.JSONField()
-    
+
 
 class Grip(CommonInfo):
     report = models.ForeignKey(GripReport, on_delete=models.CASCADE)

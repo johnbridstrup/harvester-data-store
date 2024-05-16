@@ -3,7 +3,6 @@ from ..views import AFTExceptionView
 
 
 router = routers.SimpleRouter()
-router.register(r'', AFTExceptionView, basename='exception')
+router.register(r"", AFTExceptionView, basename="exception")
 
-urlpatterns = [
-] + router.urls
+urlpatterns = [] + router.urls

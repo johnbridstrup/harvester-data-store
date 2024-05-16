@@ -7,14 +7,19 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('event', '0006_picksession_harvester_picksession_location_and_more'),
-        ('logparser', '0006_remove_logvideo_video_avi'),
+        ("event", "0006_picksession_harvester_picksession_location_and_more"),
+        ("logparser", "0006_remove_logvideo_video_avi"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='logsession',
-            name='event',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='event.event'),
+            model_name="logsession",
+            name="event",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                to="event.event",
+            ),
         ),
     ]

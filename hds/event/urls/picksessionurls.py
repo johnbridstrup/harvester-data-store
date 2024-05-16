@@ -3,7 +3,6 @@ from ..views import PickSessionView
 
 
 router = routers.SimpleRouter()
-router.register(r'', PickSessionView, basename="picksession")
+router.register(r"", PickSessionView, basename="picksession")
 
-urlpatterns = [
-] + router.urls
+urlpatterns = [] + router.urls

@@ -4,7 +4,7 @@ from ..filters import DistributorFilterset
 from ..models import Distributor
 from ..serializers.distributorserializer import (
     DistributorSerializer,
-    DistributorListSerializer
+    DistributorListSerializer,
 )
 
 
@@ -13,9 +13,7 @@ class DistributorView(CreateModelViewSet):
     serializer_class = DistributorSerializer
     filterset_class = DistributorFilterset
     view_permissions_update = {
-        "create": {
-            RoleChoices.DEVELOPER: True
-        },
+        "create": {RoleChoices.DEVELOPER: True},
         "update": {
             RoleChoices.DEVELOPER: True,
         },
@@ -25,5 +23,5 @@ class DistributorView(CreateModelViewSet):
     }
     action_serializers = {
         "list": DistributorListSerializer,
-        "retrieve": DistributorListSerializer
+        "retrieve": DistributorListSerializer,
     }

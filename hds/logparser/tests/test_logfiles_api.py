@@ -26,31 +26,31 @@ class LogFileTestCase(LogBaseTestCase):
 
     def test_logfile_extract(self):
         ext = os.path.splitext(self.logpath)[1]
-        with open(self.logpath, 'r') as f:
+        with open(self.logpath, "r") as f:
             numlines = len(f.readlines())
 
-        with open(self.logpath, 'r') as f:
-            content = LogFileSerializer._extract_lines(f, 'test', 1, 1, ext)
+        with open(self.logpath, "r") as f:
+            content = LogFileSerializer._extract_lines(f, "test", 1, 1, ext)
 
         self.assertEqual(numlines - self.extra_log_lines, len(content))
         for entry in content:
-            self.assertIn(f"[{entry['log_level']}] ", entry['log_message'])
+            self.assertIn(f"[{entry['log_level']}] ", entry["log_message"])
 
     def test_candump_extract(self):
         ext = os.path.splitext(self.canpath)[1]
-        with open(self.canpath, 'r') as f:
+        with open(self.canpath, "r") as f:
             numlines = len(f.readlines())
 
-        with open(self.canpath, 'r') as f:
-            content = LogFileSerializer._extract_lines(f, 'test', 1, 1, ext)
+        with open(self.canpath, "r") as f:
+            content = LogFileSerializer._extract_lines(f, "test", 1, 1, ext)
 
         self.assertEqual(numlines, len(content))
 
     def test_robot_service_extr(self):
         _, filename = os.path.split(self.logpath)
-        _, harv_str, robot_str, serv_str = filename.split('.')[0].split('_')
+        _, harv_str, robot_str, serv_str = filename.split(".")[0].split("_")
         ext_str = os.path.splitext(filename)[1]
-        
+
         service, robot, harv, ext = LogFileSerializer.extract_filename(filename)
         self.assertEqual(service, serv_str)
         self.assertEqual(robot, robot_str)
@@ -61,9 +61,11 @@ class LogFileTestCase(LogBaseTestCase):
         filename = "20240111112355_013_04_picker.log"
         logpath = os.path.join(self.BASE_PATH, filename)
         ext = os.path.splitext(logpath)[-1]
-        with open(logpath, 'r') as f:
+        with open(logpath, "r") as f:
             lines = f.readlines()
-        with open(logpath, 'r') as f:
-            extracted = LogFileSerializer._extract_lines(f, 'test', 1, 1, ext)
-        
-        self.assertEqual(''.join(lines).strip("\n"), extracted[0]["log_message"].strip("\n"))
+        with open(logpath, "r") as f:
+            extracted = LogFileSerializer._extract_lines(f, "test", 1, 1, ext)
+
+        self.assertEqual(
+            "".join(lines).strip("\n"), extracted[0]["log_message"].strip("\n")
+        )

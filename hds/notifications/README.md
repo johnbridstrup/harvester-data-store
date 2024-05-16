@@ -9,7 +9,7 @@ of the app is the `Notification` object, which contains the columns:
 In addition to these columns, the model also defines a `notify` method, which will notify each of the `recipients` if the triggering criteria is met.
 
 ### Criteria types
-To add a new `criteria_type` to an existing `trigger`, update the corresponding key in `serializers.NotificationSerializer.TRIGGER_MAP` with 
+To add a new `criteria_type` to an existing `trigger`, update the corresponding key in `serializers.NotificationSerializer.TRIGGER_MAP` with
 the appropriate model and serializer. In general, these will be models for which the `trigger` model has a foreign key. Then,
 update the appropriate handler function in `signals.py` to account for this new `criteria` model. Generally, these handler functions
 will check if the criteria matches the foreign key in the `instance` of the `trigger` object.

@@ -8,58 +8,166 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('harvester', '0008_alter_fruit_created_alter_harvester_created_and_more'),
-        ('location', '0003_alter_distributor_created_alter_location_created'),
+        ("harvester", "0008_alter_fruit_created_alter_harvester_created_and_more"),
+        ("location", "0003_alter_distributor_created_alter_location_created"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('gripreport', '0004_alter_gripreport_created'),
+        ("gripreport", "0004_alter_gripreport_created"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Candidate',
+            name="Candidate",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created', models.DateTimeField(auto_now_add=True, db_index=True)),
-                ('lastModified', models.DateTimeField(auto_now=True)),
-                ('robot_id', models.IntegerField()),
-                ('score', models.FloatField()),
-                ('ripeness', models.FloatField()),
-                ('cand_id', models.IntegerField()),
-                ('candidate_data', models.JSONField()),
-                ('creator', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='%(app_label)s_%(class)s_creator_related', to=settings.AUTH_USER_MODEL)),
-                ('fruit', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='harvester.fruit')),
-                ('harvester', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='harvester.harvester')),
-                ('location', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='location.location')),
-                ('modifiedBy', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='%(app_label)s_%(class)s_modifiedby_related', to=settings.AUTH_USER_MODEL)),
-                ('report', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='gripreport.gripreport')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("created", models.DateTimeField(auto_now_add=True, db_index=True)),
+                ("lastModified", models.DateTimeField(auto_now=True)),
+                ("robot_id", models.IntegerField()),
+                ("score", models.FloatField()),
+                ("ripeness", models.FloatField()),
+                ("cand_id", models.IntegerField()),
+                ("candidate_data", models.JSONField()),
+                (
+                    "creator",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="%(app_label)s_%(class)s_creator_related",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
+                (
+                    "fruit",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="harvester.fruit",
+                    ),
+                ),
+                (
+                    "harvester",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="harvester.harvester",
+                    ),
+                ),
+                (
+                    "location",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="location.location",
+                    ),
+                ),
+                (
+                    "modifiedBy",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="%(app_label)s_%(class)s_modifiedby_related",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
+                (
+                    "report",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="gripreport.gripreport",
+                    ),
+                ),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
         ),
         migrations.CreateModel(
-            name='Grip',
+            name="Grip",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created', models.DateTimeField(auto_now_add=True, db_index=True)),
-                ('lastModified', models.DateTimeField(auto_now=True)),
-                ('success', models.BooleanField(db_index=True, default=False)),
-                ('robot_id', models.IntegerField()),
-                ('grip_start_ts', models.FloatField()),
-                ('grip_end_ts', models.FloatField()),
-                ('pick_result', models.CharField(blank=True, max_length=255, null=True)),
-                ('grip_result', models.CharField(blank=True, max_length=255, null=True)),
-                ('grip_data', models.JSONField()),
-                ('candidate', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='gripreport.candidate')),
-                ('creator', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='%(app_label)s_%(class)s_creator_related', to=settings.AUTH_USER_MODEL)),
-                ('fruit', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='harvester.fruit')),
-                ('harvester', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='harvester.harvester')),
-                ('location', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='location.location')),
-                ('modifiedBy', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='%(app_label)s_%(class)s_modifiedby_related', to=settings.AUTH_USER_MODEL)),
-                ('report', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='gripreport.gripreport')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("created", models.DateTimeField(auto_now_add=True, db_index=True)),
+                ("lastModified", models.DateTimeField(auto_now=True)),
+                ("success", models.BooleanField(db_index=True, default=False)),
+                ("robot_id", models.IntegerField()),
+                ("grip_start_ts", models.FloatField()),
+                ("grip_end_ts", models.FloatField()),
+                (
+                    "pick_result",
+                    models.CharField(blank=True, max_length=255, null=True),
+                ),
+                (
+                    "grip_result",
+                    models.CharField(blank=True, max_length=255, null=True),
+                ),
+                ("grip_data", models.JSONField()),
+                (
+                    "candidate",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="gripreport.candidate",
+                    ),
+                ),
+                (
+                    "creator",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="%(app_label)s_%(class)s_creator_related",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
+                (
+                    "fruit",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="harvester.fruit",
+                    ),
+                ),
+                (
+                    "harvester",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="harvester.harvester",
+                    ),
+                ),
+                (
+                    "location",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="location.location",
+                    ),
+                ),
+                (
+                    "modifiedBy",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="%(app_label)s_%(class)s_modifiedby_related",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
+                (
+                    "report",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="gripreport.gripreport",
+                    ),
+                ),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
         ),
     ]

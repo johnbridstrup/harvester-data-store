@@ -15,6 +15,7 @@ from event.models import Event
 
 logger = structlog.get_logger(__name__)
 
+
 class ExtractionError(Exception):
     pass
 
@@ -27,7 +28,7 @@ class ReportSerializerBase(serializers.ModelSerializer):
                 "type": "object",
                 "properties": {},
                 "patternProperties": {},
-                "required": [],     
+                "required": [],
             },
             "timestamp": {
                 "type": "number",
@@ -35,16 +36,14 @@ class ReportSerializerBase(serializers.ModelSerializer):
             "type": {
                 "type": "string",
             },
-            "serial_number": {
-                "type": ["string", "number"]   
-            }
+            "serial_number": {"type": ["string", "number"]},
         },
         "required": ["data", "timestamp", "serial_number"],
     }
     # Override these in new report serializers
     REPORT_DATA_PROPERTIES = {}
     REPORT_DATA_PATTERN_PROPERTIES = {}
-    REPORT_DATA_REQUIRED = [] 
+    REPORT_DATA_REQUIRED = []
     REPORT_DATA_ALLOW_EXTRA = True
 
     @property
@@ -52,24 +51,28 @@ class ReportSerializerBase(serializers.ModelSerializer):
         raise NotImplementedError
 
     def get_user_from_request(self):
-        return self.context['request'].user
+        return self.context["request"].user
 
     def get_user_from_id(self, user_id):
         return User.objects.get(id=user_id)
-    
+
     def get_schema(self):
-        schema = deepcopy(self.REPORT_BASE_SCHEMA)        
+        schema = deepcopy(self.REPORT_BASE_SCHEMA)
         try:
             schema["properties"]["data"] = self.data_schema
             return schema
         except NotImplementedError:
             pass
-       
+
         # This should be deprecated in favor of only using DATA_SCHEMA
         schema["properties"]["data"]["properties"] = self.REPORT_DATA_PROPERTIES
-        schema["properties"]["data"]["patternProperties"] = self.REPORT_DATA_PATTERN_PROPERTIES
+        schema["properties"]["data"][
+            "patternProperties"
+        ] = self.REPORT_DATA_PATTERN_PROPERTIES
         schema["properties"]["data"]["required"] = self.REPORT_DATA_REQUIRED
-        schema["properties"]["data"]["additionalProperties"] = self.REPORT_DATA_ALLOW_EXTRA
+        schema["properties"]["data"][
+            "additionalProperties"
+        ] = self.REPORT_DATA_ALLOW_EXTRA
         return schema
 
     def validate_incoming_report(self, data):
@@ -78,14 +81,13 @@ class ReportSerializerBase(serializers.ModelSerializer):
             jsonschema.validate(data, schema)
         except jsonschema.ValidationError as e:
             if e.validator == "type":
-                err = { 
-                    "path": e.json_path,
-                    "error": f"Must be {e.validator_value}"
-                }
+                err = {"path": e.json_path, "error": f"Must be {e.validator_value}"}
             else:
                 err = str(e.message)
-            msg = f"Failed to validate: {e.validator}"       
-            ERROR_COUNTER.labels(serializers.ValidationError.__name__, msg, self.__class__.__name__).inc()
+            msg = f"Failed to validate: {e.validator}"
+            ERROR_COUNTER.labels(
+                serializers.ValidationError.__name__, msg, self.__class__.__name__
+            ).inc()
             logger.error(err, serializer=self.__class__.__name__)
             raise serializers.ValidationError(detail={"validation error": err})
 
@@ -105,7 +107,7 @@ class ReportSerializerBase(serializers.ModelSerializer):
         except KeyError:
             try:
                 UUID = report["data"].get(key, None)
-            except AttributeError: # some reports have lists in data key
+            except AttributeError:  # some reports have lists in data key
                 UUID = Event.generate_uuid()
         if UUID is None and not allow_null:
             UUID = Event.generate_uuid()
@@ -119,10 +121,14 @@ class ReportSerializerBase(serializers.ModelSerializer):
             try:
                 sn = report["data"]["serial_number"]
             except KeyError:
-                ERROR_COUNTER.labels(KeyError.__name__, "Serial number not found!", cls.__name__)
+                ERROR_COUNTER.labels(
+                    KeyError.__name__, "Serial number not found!", cls.__name__
+                )
                 logger.error(f"Serial number not found!", serializer=cls.__name__)
                 raise
-            ERROR_COUNTER.labels(KeyError.__name__, "Serial number not at top level", cls.__name__)
+            ERROR_COUNTER.labels(
+                KeyError.__name__, "Serial number not at top level", cls.__name__
+            )
         return int(sn)
 
     @classmethod
@@ -146,12 +152,12 @@ class ReportSerializerBase(serializers.ModelSerializer):
         is_emulator = report.get("is_emulator", False)
         if is_emulator:
             fruit = report.get(fruit_key)
-            # This is something of a hack. Our emulator runners have overlapping 
+            # This is something of a hack. Our emulator runners have overlapping
             # harv ids, so we should grab a single "fruit" emulator for now.
             harv = Harvester.objects.get(is_emulator=True, fruit__name=fruit)
         else:
             harv = Harvester.objects.get(harv_id=harv_id)
-        
+
         return harv
 
     @classmethod
@@ -171,13 +177,15 @@ class ReportSerializerBase(serializers.ModelSerializer):
             report_obj.save()
         except Exception as e:
             exc = type(e).__name__
-            ASYNC_ERROR_COUNTER.labels("report_extraction", exc, f"{cls.__name__}").inc()
-            report_obj.tags.add(Tags.INCOMPLETE.value) 
+            ASYNC_ERROR_COUNTER.labels(
+                "report_extraction", exc, f"{cls.__name__}"
+            ).inc()
+            report_obj.tags.add(Tags.INCOMPLETE.value)
             report_obj.save()
-            
+
             logger.exception(
-                f"Exception while extracting.", 
+                f"Exception while extracting.",
                 exception_name=str(exc),
-                exception_info=str(e), 
+                exception_info=str(e),
                 serializer=cls.__name__,
             )

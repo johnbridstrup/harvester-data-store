@@ -1,10 +1,7 @@
 # import serializers
 from rest_framework import serializers
 
-from common.serializers.userserializer import (
-    UserCustomSerializer,
-    UsernameSerializer
-)
+from common.serializers.userserializer import UserCustomSerializer, UsernameSerializer
 from .models import Notification
 from .utils import build_list_filter
 
@@ -12,8 +9,8 @@ from .utils import build_list_filter
 class NotificationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Notification
-        fields = ('__all__')
-        read_only_fields = ('creator',)
+        fields = "__all__"
+        read_only_fields = ("creator",)
 
     def to_internal_value(self, data):
         request = self.context["request"]
@@ -24,7 +21,7 @@ class NotificationSerializer(serializers.ModelSerializer):
             "criteria": criteria,
             "trigger_on": trigger_on,
             "recipients": recipients,
-            "creator": request.user.id
+            "creator": request.user.id,
         }
         return super().to_internal_value(notification)
 

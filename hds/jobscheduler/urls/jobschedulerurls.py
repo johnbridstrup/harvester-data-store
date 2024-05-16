@@ -3,7 +3,6 @@ from jobscheduler.views import ScheduledJobView
 
 
 router = routers.SimpleRouter()
-router.register(r'', ScheduledJobView, basename='jobscheduler')
+router.register(r"", ScheduledJobView, basename="jobscheduler")
 
-urlpatterns = [
-] + router.urls
+urlpatterns = [] + router.urls

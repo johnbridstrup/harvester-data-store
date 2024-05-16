@@ -7,14 +7,19 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('event', '0004_picksession_picksessiontag_picksession_tags_and_more'),
-        ('errorreport', '0008_alter_errorreport_harvester_and_more'),
+        ("event", "0004_picksession_picksessiontag_picksession_tags_and_more"),
+        ("errorreport", "0008_alter_errorreport_harvester_and_more"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='errorreport',
-            name='pick_session',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='event.picksession'),
+            model_name="errorreport",
+            name="pick_session",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to="event.picksession",
+            ),
         ),
     ]

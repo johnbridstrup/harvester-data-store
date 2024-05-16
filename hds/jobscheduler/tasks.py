@@ -86,12 +86,16 @@ def run_tasks(queryset):
         str
     """
     celery_app.loader.import_default_modules()
-    tasks = [(celery_app.tasks.get(task.task),
-                loads(task.args),
-                loads(task.kwargs),
-                task.queue,
-                task.name)
-                for task in queryset]
+    tasks = [
+        (
+            celery_app.tasks.get(task.task),
+            loads(task.args),
+            loads(task.kwargs),
+            task.queue,
+            task.name,
+        )
+        for task in queryset
+    ]
 
     if any(t[0] is None for t in tasks):
         for i, t in enumerate(tasks):
@@ -106,16 +110,18 @@ def run_tasks(queryset):
         return err_msg
 
     task_ids = [
-        task.apply_async(args=args, kwargs=kwargs, queue=queue,
-                            periodic_task_name=periodic_task_name)
+        task.apply_async(
+            args=args, kwargs=kwargs, queue=queue, periodic_task_name=periodic_task_name
+        )
         if queue and len(queue)
-        else task.apply_async(args=args, kwargs=kwargs,
-                                periodic_task_name=periodic_task_name)
+        else task.apply_async(
+            args=args, kwargs=kwargs, periodic_task_name=periodic_task_name
+        )
         for task, args, kwargs, queue, periodic_task_name in tasks
     ]
     tasks_run = len(task_ids)
-    return ('{0} task{1} {2} successfully run').format(
-            tasks_run,
-            pluralize(tasks_run),
-            pluralize(tasks_run, ('was,were')),
+    return ("{0} task{1} {2} successfully run").format(
+        tasks_run,
+        pluralize(tasks_run),
+        pluralize(tasks_run, ("was,were")),
     )

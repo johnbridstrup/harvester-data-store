@@ -6,18 +6,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('errorreport', '0005_errorreport_tags'),
+        ("errorreport", "0005_errorreport_tags"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='errorreport',
-            name='gitbranch',
-            field=models.CharField(default='unknown', max_length=50),
+            model_name="errorreport",
+            name="gitbranch",
+            field=models.CharField(default="unknown", max_length=50),
         ),
         migrations.AddField(
-            model_name='errorreport',
-            name='githash',
-            field=models.CharField(default='unknown', max_length=20),
+            model_name="errorreport",
+            name="githash",
+            field=models.CharField(default="unknown", max_length=20),
         ),
     ]

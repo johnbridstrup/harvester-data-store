@@ -11,8 +11,9 @@ logger = structlog.get_logger(__name__)
 EXTRACTS_SIZE_GAUGE = Gauge(
     "extracts_dir_size",
     "The size, in kB, of the extracts directory",
-    registry=prometheus_get_registry()
+    registry=prometheus_get_registry(),
 )
+
 
 def get_dir_size(dir_path):
     total_size = 0
@@ -25,11 +26,13 @@ def get_dir_size(dir_path):
                 total_size += os.path.getsize(fp)
     return total_size
 
+
 @monitored_shared_task
 def check_extracts_dir_size():
-    dir_size = get_dir_size(settings.EXTRACT_DIR)/1000.0
+    dir_size = get_dir_size(settings.EXTRACT_DIR) / 1000.0
     EXTRACTS_SIZE_GAUGE.set(dir_size)
     return f"Extracts dir size: {dir_size} kB"
+
 
 @monitored_shared_task
 def clean_extracts_dir():
@@ -47,6 +50,6 @@ def clean_extracts_dir():
             logger.error(
                 f"Failed to delete {f}:\n\t{e}",
                 exception_name=exc,
-                exception_info=str(e)
+                exception_info=str(e),
             )
     return "Clean extracts directory."

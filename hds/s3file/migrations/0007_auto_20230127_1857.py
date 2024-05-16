@@ -9,7 +9,7 @@ logger = structlog.get_logger(__name__)
 
 
 def update_file_key(apps, schema_editor):
-    S3File = apps.get_model('s3file', 'S3File')
+    S3File = apps.get_model("s3file", "S3File")
     paginator = Paginator(S3File.objects.all(), 1000)
     logger.info("Updating S3 File Table")
     for page in range(1, paginator.num_pages + 1):
@@ -17,15 +17,16 @@ def update_file_key(apps, schema_editor):
         for s3file in paginator.page(page).object_list:
             # We've updated the MediaStorage class so files need to be pointed correctly
             key = s3file.key
-            if str(key).startswith('uploads'):
+            if str(key).startswith("uploads"):
                 key = f"media/{key}"
             s3file.file = s3file.key
             s3file.save()
 
+
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('s3file', '0006_alter_s3file_file'),
+        ("s3file", "0006_alter_s3file_file"),
     ]
 
     operations = [

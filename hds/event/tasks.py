@@ -20,9 +20,7 @@ def collect_aux_uuids(app, report_model, pk):
             event = Event.objects.get(UUID=aux_uuid)
         except Event.DoesNotExist:
             event = Event(
-                creator=report_inst.creator,
-                UUID=aux_uuid,
-                tags=["secondary"]
+                creator=report_inst.creator, UUID=aux_uuid, tags=["secondary"]
             )
             event.save()
         report_inst.event.secondary_events.add(event)

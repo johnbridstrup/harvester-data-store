@@ -11,6 +11,7 @@ CRUDCOUNTER = Counter(
     registry=REGISTRY,
 )
 
+
 class AdminMetrics:
     @classmethod
     def incr_crud_operation(cls, model, operation, user):

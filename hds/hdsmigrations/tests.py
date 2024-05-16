@@ -13,6 +13,7 @@ from .tasks import TEST_OUTPUT
 
 GIT_HASH = "test-git-hash"
 
+
 class HDSMigrationsTestCase(HDSAPITestBase):
     def setUp(self):
         super().setUp()
@@ -41,7 +42,9 @@ class HDSMigrationsTestCase(HDSAPITestBase):
         status_codes.append(self.client.patch(self.migr_url).status_code)
         status_codes.append(self.client.delete(self.migr_url).status_code)
 
-        self.assertTrue(all([s == status.HTTP_405_METHOD_NOT_ALLOWED for s in status_codes]))
+        self.assertTrue(
+            all([s == status.HTTP_405_METHOD_NOT_ALLOWED for s in status_codes])
+        )
 
     @patch.dict(os.environ, {"GITHASH": GIT_HASH})
     def test_migrate(self):

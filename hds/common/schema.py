@@ -17,7 +17,7 @@ class HDSAutoSchema(AutoSchema):
                     "status": {"type": "string"},
                     "message": {"type": "string"},
                     "data": schema,
-                }
+                },
             }
         return base
 
@@ -27,11 +27,13 @@ class HDSToRepAutoSchema(HDSAutoSchema):
     If an option applies to many view classes, rather than creating a specific subclass per-view, you may find it more convenient to allow specifying the option as an __init__() kwarg to your base AutoSchema subclass:
     """
 
-    def __init__(self, tags=None, operation_id_base=None, component_name=None, extra_info=None):
+    def __init__(
+        self, tags=None, operation_id_base=None, component_name=None, extra_info=None
+    ):
         super().__init__(tags, operation_id_base, component_name)
         self.extra_info = extra_info
 
     def map_serializer(self, serializer):
-        result =  super().map_serializer(serializer)
+        result = super().map_serializer(serializer)
         result["properties"].update(self.extra_info)
         return result

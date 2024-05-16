@@ -8,7 +8,6 @@ from common.tests import HDSAPITestBase
 from ..models import HarvesterCodeRelease, HarvesterVersionReport
 
 
-
 class ReleaseApiTestCase(HDSAPITestBase):
     def setUp(self):
         super().setUp()
@@ -19,7 +18,7 @@ class ReleaseApiTestCase(HDSAPITestBase):
             "master": {},
             "robot": {},
             "stereo": {},
-            "project": self.test_objects["fruit"].name
+            "project": self.test_objects["fruit"].name,
         }
 
         self.versions = {
@@ -31,7 +30,7 @@ class ReleaseApiTestCase(HDSAPITestBase):
                 "stereo01": {"version": 1.0, "dirty": {}, "unexpected": {}},
                 "robot02": {"version": 1.0, "dirty": {}, "unexpected": {}},
                 "stereo02": {"version": 1.0, "dirty": {}, "unexpected": {}},
-            }
+            },
         }
 
         self.version2 = {
@@ -43,7 +42,7 @@ class ReleaseApiTestCase(HDSAPITestBase):
                 "stereo01": {"version": 2.0, "dirty": {}, "unexpected": {}},
                 "robot02": {"version": 2.0, "dirty": {}, "unexpected": {}},
                 "stereo02": {"version": 2.0, "dirty": {}, "unexpected": {}},
-            }
+            },
         }
 
     ## HarvesterCodeRelease
@@ -51,11 +50,7 @@ class ReleaseApiTestCase(HDSAPITestBase):
     def create_release(self, release=None):
         if release is None:
             release = self.release
-        resp = self.client.post(
-            self.release_url,
-            data=release,
-            format='json'
-        )
+        resp = self.client.post(self.release_url, data=release, format="json")
 
         return resp, release
 
@@ -67,18 +62,14 @@ class ReleaseApiTestCase(HDSAPITestBase):
     def test_get_releases(self):
         self.create_release()
 
-        resp = self.client.get(
-            self.release_url
-        )
+        resp = self.client.get(self.release_url)
 
         self.assertEqual(resp.status_code, 200)
 
     def test_get_release_by_id(self):
         self.create_release()
 
-        resp = self.client.get(
-            self.release_det_url(1)
-        )
+        resp = self.client.get(self.release_det_url(1))
 
         self.assertEqual(resp.status_code, 200)
 
@@ -88,43 +79,27 @@ class ReleaseApiTestCase(HDSAPITestBase):
         fruit2 = "apple"
         fruit2_obj = self.create_fruit_object(fruit2)
         release2 = self.release
-        release2['project'] = fruit2
-        release2['version'] = 1.111
+        release2["project"] = fruit2
+        release2["version"] = 1.111
         self.create_release(release2)
 
         # assert both are there
-        resp = self.client.get(
-            self.release_url
-        )
-        data = resp.json()['data']
-        self.assertEqual(
-            data['count'],
-            2
-        )
+        resp = self.client.get(self.release_url)
+        data = resp.json()["data"]
+        self.assertEqual(data["count"], 2)
 
-        #assert only apple release retrieved
-        resp = self.client.get(
-            f"{self.release_url}?fruit=apple"
-        )
-        data = resp.json()['data']
-        self.assertEqual(
-            data['count'],
-            1
-        )
-        self.assertEqual(
-            data['results'][0]['fruit'],
-            fruit2_obj.id
-        )
-
+        # assert only apple release retrieved
+        resp = self.client.get(f"{self.release_url}?fruit=apple")
+        data = resp.json()["data"]
+        self.assertEqual(data["count"], 1)
+        self.assertEqual(data["results"][0]["fruit"], fruit2_obj.id)
 
     def test_delete_release(self):
         self.create_release()
 
         self.assertEqual(HarvesterCodeRelease.objects.count(), 1)
 
-        resp = self.client.delete(
-            self.release_det_url(1)
-        )
+        resp = self.client.delete(self.release_det_url(1))
 
         self.assertEqual(resp.status_code, 204)
         self.assertEqual(HarvesterCodeRelease.objects.count(), 0)
@@ -139,22 +114,18 @@ class ReleaseApiTestCase(HDSAPITestBase):
 
         data = resp.json()["data"]
         self.assertEqual(data["release"]["version"], str(self.release["version"]))
+
     ## HarvesterVersionReport
 
     def create_version(self, versions=None, ts=None):
         if versions is None:
             versions = self.versions
         if ts is None:
-            versions['timestamp'] = time.time()
+            versions["timestamp"] = time.time()
         else:
-            versions['timestamp'] = ts
+            versions["timestamp"] = ts
 
-
-        resp = self.client.post(
-            self.version_url,
-            data=versions,
-            format='json'
-        )
+        resp = self.client.post(self.version_url, data=versions, format="json")
 
         return resp, versions
 
@@ -209,7 +180,7 @@ class ReleaseApiTestCase(HDSAPITestBase):
         self.assertEqual(HarvesterVersionReport.objects.count(), 1)
 
         # Someone has changed a package version.
-        self.versions['data']['robot01']['dirty']['reverted-package'] = 'bad-version'
+        self.versions["data"]["robot01"]["dirty"]["reverted-package"] = "bad-version"
         self.create_version()
         self.assertEqual(HarvesterVersionReport.objects.count(), 2)
 
@@ -248,47 +219,44 @@ class ReleaseApiTestCase(HDSAPITestBase):
         self.create_version(versions=self.version2)
 
         resp = self.client.get(self.version_url)
-        self.assertEqual(resp.json()['data']['count'], 2)
+        self.assertEqual(resp.json()["data"]["count"], 2)
 
     def test_get_version_by_id(self):
         self.create_version()
         self.create_version(versions=self.version2)
 
         resp = self.client.get(self.version_det_url(2))
-        data = resp.json()['data']
+        data = resp.json()["data"]
 
-        self.assertDictEqual(data['report'], self.version2)
+        self.assertDictEqual(data["report"], self.version2)
 
     def test_version_history_by_harv_id(self):
         harv = self.create_harvester_object(
             15,
-            self.test_objects['fruit'],
-            self.test_objects['location'],
-            'new_harv',
-            self.user
+            self.test_objects["fruit"],
+            self.test_objects["location"],
+            "new_harv",
+            self.user,
         )
-        resp,_ = self.create_version()
+        resp, _ = self.create_version()
 
-        self.versions['serial_number'] = harv.harv_id
-        resp,_ = self.create_version()
+        self.versions["serial_number"] = harv.harv_id
+        resp, _ = self.create_version()
 
         resp = self.client.get(self.version_url)
-        data = resp.json()['data']
-        self.assertEqual(data['count'], 2)
+        data = resp.json()["data"]
+        self.assertEqual(data["count"], 2)
 
         resp = self.client.get(f"{self.version_url}?harv_id={harv.harv_id}")
-        data = resp.json()['data']
-        self.assertEqual(data['count'], 1)
-        self.assertEqual(
-            data['results'][0]['harvester'],
-            harv.id
-        )
+        data = resp.json()["data"]
+        self.assertEqual(data["count"], 1)
+        self.assertEqual(data["results"][0]["harvester"], harv.id)
 
     ## Integration with Harvester
 
     def test_harv_version_release(self):
         # Create release
-        r,_=self.create_release()
+        r, _ = self.create_release()
 
         # Set to harvester
         self.client.patch(self.harv_det_url(1), data={"release": 1})
@@ -356,11 +324,15 @@ class ReleaseApiTestCase(HDSAPITestBase):
         harv_resp = self.client.get(harv_url)
 
         # Release history is relative to the API root endpoint
-        harv_hist_url = self.api_base_url + harv_resp.json()["data"]["harvester_history"]
+        harv_hist_url = (
+            self.api_base_url + harv_resp.json()["data"]["harvester_history"]
+        )
         hist_resp = self.client.get(harv_hist_url)
         hist_data = hist_resp.json()["data"]
 
-        self.assertEqual(hist_data["count"], 3) # The initial PATCH also introduced a history entry
+        self.assertEqual(
+            hist_data["count"], 3
+        )  # The initial PATCH also introduced a history entry
         for res in hist_data["results"]:
             self.assertEqual(res["harv_id"], self.test_objects["harvester"].harv_id)
 
@@ -413,7 +385,7 @@ class ReleaseApiTestCase(HDSAPITestBase):
         resp = self.client.patch(
             f"{self.release_url}{resp.data['id']}/update_tags/",
             self.release,
-            format='json'
+            format="json",
         )
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         self.assertEqual(len(resp.data["data"]["tags"]), 1)
@@ -425,24 +397,17 @@ class ReleaseApiTestCase(HDSAPITestBase):
 
         self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
 
-        release_obj = HarvesterCodeRelease.objects.get(
-            pk=resp.data["id"]
-        )
+        release_obj = HarvesterCodeRelease.objects.get(pk=resp.data["id"])
         harvester = self.test_objects["harvester"]
         harvester.release = release_obj
         harvester.save()
         harvester.refresh_from_db()
 
-        resp = self.client.get(
-            f"{self.release_det_url(release_obj.id)}harvesters/"
-        )
+        resp = self.client.get(f"{self.release_det_url(release_obj.id)}harvesters/")
 
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         self.assertEqual(resp.data["data"]["count"], 1)
-        self.assertEqual(
-            resp.data["data"]["results"][0]["harv_id"],
-            harvester.harv_id
-        )
+        self.assertEqual(resp.data["data"]["results"][0]["harv_id"], harvester.harv_id)
 
     def test_release_tags_endpoint(self):
         """Test release tags endpoint."""
@@ -452,9 +417,7 @@ class ReleaseApiTestCase(HDSAPITestBase):
 
         self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
 
-        resp = self.client.get(
-            f"{self.release_url}tags/"
-        )
+        resp = self.client.get(f"{self.release_url}tags/")
 
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         self.assertEqual(len(resp.data["data"]["tags"]), 3)

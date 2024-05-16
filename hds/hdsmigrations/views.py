@@ -17,27 +17,29 @@ class MigrationLogView(CreateModelViewSet):
     queryset = MigrationLog.objects.all()
     serializer_class = MigrationLogSerializer
     filterset_class = MigrationLogFilterset
-    ordering = ('-id',)
-    http_method_names = ['get']
+    ordering = ("-id",)
+    http_method_names = ["get"]
     view_permissions_update = {
-        'queue_migrations': {
+        "queue_migrations": {
             RoleChoices.MANAGER: True,
         },
-        'retrieve': {
+        "retrieve": {
             RoleChoices.DEVELOPER: True,
         },
-        'create': None,
-        'destroy': None,
-        'update': None,
+        "create": None,
+        "destroy": None,
+        "update": None,
     }
 
     @action(
-        methods=['get'],
+        methods=["get"],
         detail=False,
-        url_path='migrate',
-        renderer_classes=[JSONRenderer,],
+        url_path="migrate",
+        renderer_classes=[
+            JSONRenderer,
+        ],
     )
-    def queue_migrations(self, request): 
+    def queue_migrations(self, request):
         log = MigrationLog(
             creator=self.request.user,
             result=MigrationLog.ResultChoices.PENDING,
@@ -47,8 +49,7 @@ class MigrationLogView(CreateModelViewSet):
 
         execute_migrations.delay(log.id)
         return make_ok(
-            "Migration queued.", 
+            "Migration queued.",
             response_status=status.HTTP_202_ACCEPTED,
-            response_data={"id": log.id}
+            response_data={"id": log.id},
         )
-

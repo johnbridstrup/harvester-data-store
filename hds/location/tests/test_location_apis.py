@@ -2,18 +2,22 @@
 from common.tests import HDSAPITestBase
 from location.models import Location, Distributor
 
+
 class LocationAPITest(HDSAPITestBase):
-    """ Test Location APIs """
+    """Test Location APIs"""
+
     def setUp(self):
         super().setUp()
-        self.distributor = Distributor.objects.create(name='Distributor 1', creator=self.user)
+        self.distributor = Distributor.objects.create(
+            name="Distributor 1", creator=self.user
+        )
         # initialize data
         # to create via objects.create()
         self.data = {
             "distributor": self.distributor.id,
             "ranch": "Ranch A",
             "country": "US",
-            "region": "California"
+            "region": "California",
         }
         # to create via APIs
         self.data1 = {
@@ -21,53 +25,53 @@ class LocationAPITest(HDSAPITestBase):
             "ranch": "Ranch A",
             "country": "US",
             "region": "California",
-            'creator': self.user
+            "creator": self.user,
         }
         self.data2 = {
             "distributor": self.distributor,
             "ranch": "Ranch B",
             "country": "US",
             "region": "Texas",
-            'creator': self.user
+            "creator": self.user,
         }
 
     def test_create_location(self):
-        """ create location and assert it exists """
+        """create location and assert it exists"""
         self.client.post(self.loc_url, self.data)
         self.assertEqual(Location.objects.count(), 1)
-        self.assertEqual(Location.objects.get().ranch, 'Ranch A')
+        self.assertEqual(Location.objects.get().ranch, "Ranch A")
 
     def test_create_location_with_invalid_data(self):
-        """ create harvester with invalid data """
+        """create harvester with invalid data"""
         data = self.data
         data["distributor"] = 99
         response = self.client.post(self.loc_url, data)
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.data['status'], 'error')
+        self.assertEqual(response.data["status"], "error")
         self.assertEqual(Location.objects.count(), 0)
 
     def test_update_location(self):
-        """ update location and assert it exists """
+        """update location and assert it exists"""
         Location.objects.create(**self.data1)
-        self.client.patch(self.loc_det_url(1), {'ranch': 'New Ranch'})
+        self.client.patch(self.loc_det_url(1), {"ranch": "New Ranch"})
         self.assertEqual(Location.objects.count(), 1)
-        self.assertEqual(Location.objects.get().ranch, 'New Ranch')
+        self.assertEqual(Location.objects.get().ranch, "New Ranch")
 
     def test_update_location_with_invalid_data(self):
-        """ update location with invalid data """
+        """update location with invalid data"""
         Location.objects.create(**self.data1)
-        response = self.client.patch(self.loc_det_url(1), {'distributor': 11})
-        self.assertEqual(response.data['status'], 'error')
+        response = self.client.patch(self.loc_det_url(1), {"distributor": 11})
+        self.assertEqual(response.data["status"], "error")
         self.assertEqual(response.status_code, 400)
 
     def test_delete_location(self):
-        """ delete location and assert it does not exist """
+        """delete location and assert it does not exist"""
         Location.objects.create(**self.data1)
         self.client.delete(self.loc_det_url(1))
         self.assertEqual(Location.objects.count(), 0)
 
     def test_get_all_locations(self):
-        """ get all locations """
+        """get all locations"""
         Location.objects.create(**self.data1)
         Location.objects.create(**self.data2)
         response = self.client.get(self.loc_url)
@@ -75,10 +79,8 @@ class LocationAPITest(HDSAPITestBase):
         self.assertEqual(response.data["count"], 2)
 
     def test_get_location_by_id(self):
-        """ get location by id """
+        """get location by id"""
         Location.objects.create(**self.data1)
         response = self.client.get(self.loc_det_url(1))
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data['ranch'], 'Ranch A')
-
-
+        self.assertEqual(response.data["ranch"], "Ranch A")

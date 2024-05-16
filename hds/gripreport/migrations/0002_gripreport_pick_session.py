@@ -7,14 +7,19 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('event', '0004_picksession_picksessiontag_picksession_tags_and_more'),
-        ('gripreport', '0001_initial'),
+        ("event", "0004_picksession_picksessiontag_picksession_tags_and_more"),
+        ("gripreport", "0001_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='gripreport',
-            name='pick_session',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='event.picksession'),
+            model_name="gripreport",
+            name="pick_session",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to="event.picksession",
+            ),
         ),
     ]

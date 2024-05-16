@@ -11,9 +11,7 @@ class FruitView(CreateModelViewSet):
     serializer_class = FruitSerializer
     filterset_class = FruitFilterset
     view_permissions_update = {
-        "create": {
-            RoleChoices.DEVELOPER: True
-        },
+        "create": {RoleChoices.DEVELOPER: True},
         "destroy": {
             RoleChoices.MANAGER: True,
         },
@@ -21,4 +19,3 @@ class FruitView(CreateModelViewSet):
             RoleChoices.DEVELOPER: True,
         },
     }
-

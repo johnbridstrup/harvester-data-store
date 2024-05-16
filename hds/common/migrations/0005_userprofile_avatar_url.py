@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('common', '0004_alter_userprofile_role'),
+        ("common", "0004_alter_userprofile_role"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='userprofile',
-            name='avatar_url',
+            model_name="userprofile",
+            name="avatar_url",
             field=models.CharField(blank=True, max_length=500, null=True),
         ),
     ]

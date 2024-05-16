@@ -5,5 +5,5 @@ from ..models import JobType
 class JobTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = JobType
-        fields = ('__all__')
-        read_only_fields = ('creator',)
+        fields = "__all__"
+        read_only_fields = ("creator",)

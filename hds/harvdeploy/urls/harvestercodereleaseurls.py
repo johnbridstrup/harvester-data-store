@@ -3,7 +3,6 @@ from ..views.releaseview import HarvesterCodeReleaseView
 
 
 router = routers.SimpleRouter()
-router.register(r'', HarvesterCodeReleaseView, basename='harvcoderelease')
+router.register(r"", HarvesterCodeReleaseView, basename="harvcoderelease")
 
-urlpatterns = [
-] + router.urls
+urlpatterns = [] + router.urls

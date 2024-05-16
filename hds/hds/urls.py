@@ -19,57 +19,73 @@ from django.conf.urls.static import static
 from django.urls import path, include
 from rest_framework.schemas import get_schema_view
 
-version = 'api/v1'
+version = "api/v1"
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path(f'{version}/autodiagnostics/', include('autodiagnostics.urls.autodiagreporturls')),
-    path(f'{version}/autodiagnosticsruns/', include('autodiagnostics.urls.autodiagrunurls')),
-    path(f'{version}/aftconfigs/', include('aftconfigs.urls')),
-    path(f'{version}/candidates/', include('gripreport.urls.candidateurls')),
-    path(f'{version}/distributors/', include('location.urls.distributorurls')),
-    path(f'{version}/emustats/', include('emulatorstats.urls')),
-    path(f'{version}/errorreports/', include('errorreport.urls')),
-    path(f'{version}/events/', include('event.urls.eventurls')),
-    path(f'{version}/exceptioncodes/', include('exceptions.urls.exceptioncodeurls')),
-    path(f'{version}/exceptioncodemanifests/', include('exceptions.urls.exceptioncodemanifesturls')),
-    path(f'{version}/exceptions/', include('exceptions.urls.exceptionurls')),
-    path(f'{version}/fruits/', include('harvester.urls.fruiturls')),
-    path(f'{version}/gripreports/', include('gripreport.urls.gripreporturls')),
-    path(f'{version}/grips/', include('gripreport.urls.gripurls')),
-    path(f'{version}/harvassetreport/', include('harvassets.urls.harvesterassetreporturls')),
-    path(f'{version}/harvassets/', include('harvassets.urls.harvesterasseturls')),
-    path(f'{version}/harvesters/', include('harvester.urls.harvesterurls')),
-    path(f'{version}/harvesterhistory/', include('harvester.urls.harvesterhistoryurls')),
-    path(f'{version}/harvversion/', include('harvdeploy.urls.harvesterversionreporturls')),
-    path(f'{version}/harvjobs/', include('harvjobs.urls.joburls')),
-    path(f'{version}/healthcheck/', include('healthcheck.urls')),
-    path(f'{version}/jobresults/', include('harvjobs.urls.jobresultsurls')),
-    path(f'{version}/jobschemas/', include('harvjobs.urls.jobschemaurls')),
-    path(f'{version}/jobtypes/', include('harvjobs.urls.jobtypeurls')),
-    path(f'{version}/locations/', include('location.urls.locationurls')),
-    path(f'{version}/logfiles/', include('logparser.urls.logfileurls')),
-    path(f'{version}/logsessions/', include('logparser.urls.logsessionurls')),
-    path(f'{version}/logvideos/', include('logparser.urls.logvideourls')),
-    path(f'{version}/migrations/', include('hdsmigrations.urls')),
-    path(f'{version}/notifications/', include('notifications.urls')),
-    path(f'{version}/picksessions/', include('event.urls.picksessionurls')),
-    path(f'{version}/release/', include('harvdeploy.urls.harvestercodereleaseurls')),
-    path(f'{version}/s3files/', include('s3file.urls.s3fileurls')),
-    path(f'{version}/scheduledjobs/', include('jobscheduler.urls.jobschedulerurls')),
-    path(f'{version}/periodictasks/', include('jobscheduler.urls.periodictaskurls')),
-    path(f'{version}/sessclip/', include('s3file.urls.sessclipurls')),
-    path(f'{version}/users/', include('common.urls.userurls')),
+    path("admin/", admin.site.urls),
     path(
-        f'{version}/openapi',
+        f"{version}/autodiagnostics/",
+        include("autodiagnostics.urls.autodiagreporturls"),
+    ),
+    path(
+        f"{version}/autodiagnosticsruns/",
+        include("autodiagnostics.urls.autodiagrunurls"),
+    ),
+    path(f"{version}/aftconfigs/", include("aftconfigs.urls")),
+    path(f"{version}/candidates/", include("gripreport.urls.candidateurls")),
+    path(f"{version}/distributors/", include("location.urls.distributorurls")),
+    path(f"{version}/emustats/", include("emulatorstats.urls")),
+    path(f"{version}/errorreports/", include("errorreport.urls")),
+    path(f"{version}/events/", include("event.urls.eventurls")),
+    path(f"{version}/exceptioncodes/", include("exceptions.urls.exceptioncodeurls")),
+    path(
+        f"{version}/exceptioncodemanifests/",
+        include("exceptions.urls.exceptioncodemanifesturls"),
+    ),
+    path(f"{version}/exceptions/", include("exceptions.urls.exceptionurls")),
+    path(f"{version}/fruits/", include("harvester.urls.fruiturls")),
+    path(f"{version}/gripreports/", include("gripreport.urls.gripreporturls")),
+    path(f"{version}/grips/", include("gripreport.urls.gripurls")),
+    path(
+        f"{version}/harvassetreport/",
+        include("harvassets.urls.harvesterassetreporturls"),
+    ),
+    path(f"{version}/harvassets/", include("harvassets.urls.harvesterasseturls")),
+    path(f"{version}/harvesters/", include("harvester.urls.harvesterurls")),
+    path(
+        f"{version}/harvesterhistory/", include("harvester.urls.harvesterhistoryurls")
+    ),
+    path(
+        f"{version}/harvversion/", include("harvdeploy.urls.harvesterversionreporturls")
+    ),
+    path(f"{version}/harvjobs/", include("harvjobs.urls.joburls")),
+    path(f"{version}/healthcheck/", include("healthcheck.urls")),
+    path(f"{version}/jobresults/", include("harvjobs.urls.jobresultsurls")),
+    path(f"{version}/jobschemas/", include("harvjobs.urls.jobschemaurls")),
+    path(f"{version}/jobtypes/", include("harvjobs.urls.jobtypeurls")),
+    path(f"{version}/locations/", include("location.urls.locationurls")),
+    path(f"{version}/logfiles/", include("logparser.urls.logfileurls")),
+    path(f"{version}/logsessions/", include("logparser.urls.logsessionurls")),
+    path(f"{version}/logvideos/", include("logparser.urls.logvideourls")),
+    path(f"{version}/migrations/", include("hdsmigrations.urls")),
+    path(f"{version}/notifications/", include("notifications.urls")),
+    path(f"{version}/picksessions/", include("event.urls.picksessionurls")),
+    path(f"{version}/release/", include("harvdeploy.urls.harvestercodereleaseurls")),
+    path(f"{version}/s3files/", include("s3file.urls.s3fileurls")),
+    path(f"{version}/scheduledjobs/", include("jobscheduler.urls.jobschedulerurls")),
+    path(f"{version}/periodictasks/", include("jobscheduler.urls.periodictaskurls")),
+    path(f"{version}/sessclip/", include("s3file.urls.sessclipurls")),
+    path(f"{version}/users/", include("common.urls.userurls")),
+    path(
+        f"{version}/openapi",
         get_schema_view(
             title="Harvester Data Store",
             description="Home of reports and files generated by AFT harvester",
-            version='1.0'
+            version="1.0",
         ),
-        name='openapi-schema'
+        name="openapi-schema",
     ),
-    path('', include('django_prometheus.urls')), #/metrics, etc...
+    path("", include("django_prometheus.urls")),  # /metrics, etc...
 ]
 
 if settings.DEBUG is True:
@@ -77,4 +93,4 @@ if settings.DEBUG is True:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 if settings.SILK_PROFILING is True:
-    urlpatterns.append(path('silk/', include('silk.urls', namespace='silk')))
+    urlpatterns.append(path("silk/", include("silk.urls", namespace="silk")))

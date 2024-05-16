@@ -6,23 +6,25 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('harvester', '0006_harvester_harvester_h_harv_id_23a708_idx_and_more'),
+        ("harvester", "0006_harvester_harvester_h_harv_id_23a708_idx_and_more"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='fruit',
-            name='name',
+            model_name="fruit",
+            name="name",
             field=models.CharField(max_length=255, unique=True),
         ),
         migrations.AlterField(
-            model_name='harvester',
-            name='name',
+            model_name="harvester",
+            name="name",
             field=models.CharField(blank=True, max_length=255, null=True, unique=True),
         ),
         migrations.AlterField(
-            model_name='historicalharvester',
-            name='name',
-            field=models.CharField(blank=True, db_index=True, max_length=255, null=True),
+            model_name="historicalharvester",
+            name="name",
+            field=models.CharField(
+                blank=True, db_index=True, max_length=255, null=True
+            ),
         ),
     ]

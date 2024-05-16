@@ -4,7 +4,9 @@ from errorreport.models import ErrorReport
 
 
 DEFAULT_OPERATOR_MSG = "Please cycle the harvester"
-EXC_TRUNC = 120 # Number of characters to truncate exception info to
+EXC_TRUNC = 120  # Number of characters to truncate exception info to
+
+
 class AFTExceptionCodeManifest(CommonInfo):
     """Manifest of exception codes.
 
@@ -14,6 +16,7 @@ class AFTExceptionCodeManifest(CommonInfo):
     the exception codes, and allow reverting to a previous set if there
     is a mistake.
     """
+
     version = models.CharField(max_length=31)
     manifest = models.JSONField()
 
@@ -26,8 +29,9 @@ class AFTExceptionCode(CommonInfo):
         name (str): The name of the exception in code (eg. GophrDeviceException)
         msg (str): A message associated with the exception.
         description (str): A brief description of the exception.
-        
+
     """
+
     code = models.IntegerField(unique=True)
     name = models.TextField(unique=True, max_length=255)
     msg = models.TextField(max_length=255, blank=True)
@@ -35,8 +39,8 @@ class AFTExceptionCode(CommonInfo):
     cycle = models.BooleanField()
     operator_msg = models.CharField(max_length=255, default=DEFAULT_OPERATOR_MSG)
     manifest = models.ForeignKey(
-        AFTExceptionCodeManifest, 
-        null=True, 
+        AFTExceptionCodeManifest,
+        null=True,
         on_delete=models.SET_NULL,
     )
 
@@ -52,7 +56,9 @@ class AFTException(CommonInfo):
     traceback = models.TextField(blank=True, null=True)
     info = models.TextField(blank=True, null=True)
     timestamp = models.DateTimeField(blank=True, null=True)
-    report = models.ForeignKey(ErrorReport, on_delete=models.CASCADE, null=True, related_name="exceptions")
+    report = models.ForeignKey(
+        ErrorReport, on_delete=models.CASCADE, null=True, related_name="exceptions"
+    )
     handled = models.BooleanField(default=False)
     primary = models.BooleanField(null=True, blank=True)
 
@@ -66,8 +72,8 @@ class AFTException(CommonInfo):
             primary_str = "Primary" if self.primary else "Secondary"
         if self.info is not None:
             if len(self.info) > EXC_TRUNC:
-                value_str = self.info[:(EXC_TRUNC - 6)] + "(trunc)"
+                value_str = self.info[: (EXC_TRUNC - 6)] + "(trunc)"
             else:
                 value_str = self.info
-        
+
         return f"*{self.service}.{self.robot}* {handled_str} error: *{self.code.name}* ({primary_str}): {value_str}"

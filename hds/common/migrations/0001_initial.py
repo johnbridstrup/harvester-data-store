@@ -4,14 +4,15 @@ from django.conf import settings
 from django.db import migrations, models
 import django.db.models.deletion
 
+
 def create_profiles(apps, schema_editor):
-    User = apps.get_model('auth', 'User')
-    Profile = apps.get_model('common', 'UserProfile')
+    User = apps.get_model("auth", "User")
+    Profile = apps.get_model("common", "UserProfile")
 
     for user in User.objects.all():
-        Profile.objects.create(
-            user=user
-        )
+        Profile.objects.create(user=user)
+
+
 class Migration(migrations.Migration):
 
     initial = True
@@ -22,12 +23,27 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='UserProfile',
+            name="UserProfile",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('slack_id', models.CharField(blank=True, max_length=15, null=True)),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='profile', to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("slack_id", models.CharField(blank=True, max_length=15, null=True)),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="profile",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
-        migrations.RunPython(create_profiles)
+        migrations.RunPython(create_profiles),
     ]

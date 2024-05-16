@@ -6,38 +6,38 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('harvjobs', '0005_alter_jobresults_reporttime'),
+        ("harvjobs", "0005_alter_jobresults_reporttime"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='historicaljob',
-            name='created',
+            model_name="historicaljob",
+            name="created",
             field=models.DateTimeField(blank=True, db_index=True, editable=False),
         ),
         migrations.AlterField(
-            model_name='job',
-            name='created',
+            model_name="job",
+            name="created",
             field=models.DateTimeField(auto_now_add=True, db_index=True),
         ),
         migrations.AlterField(
-            model_name='jobhostresult',
-            name='created',
+            model_name="jobhostresult",
+            name="created",
             field=models.DateTimeField(auto_now_add=True, db_index=True),
         ),
         migrations.AlterField(
-            model_name='jobresults',
-            name='created',
+            model_name="jobresults",
+            name="created",
             field=models.DateTimeField(auto_now_add=True, db_index=True),
         ),
         migrations.AlterField(
-            model_name='jobschema',
-            name='created',
+            model_name="jobschema",
+            name="created",
             field=models.DateTimeField(auto_now_add=True, db_index=True),
         ),
         migrations.AlterField(
-            model_name='jobtype',
-            name='created',
+            model_name="jobtype",
+            name="created",
             field=models.DateTimeField(auto_now_add=True, db_index=True),
         ),
     ]

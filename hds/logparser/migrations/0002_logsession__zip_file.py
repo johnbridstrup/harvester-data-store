@@ -7,14 +7,19 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('s3file', '0005_sessclip'),
-        ('logparser', '0001_initial'),
+        ("s3file", "0005_sessclip"),
+        ("logparser", "0001_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='logsession',
-            name='_zip_file',
-            field=models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='s3file.sessclip'),
+            model_name="logsession",
+            name="_zip_file",
+            field=models.OneToOneField(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to="s3file.sessclip",
+            ),
         ),
     ]

@@ -2,7 +2,7 @@
 
 This is a simple python service which utilizes the `supervisord` RPC interface to monitor
 the services running in the container. It uses the `prometheus_client` to host a metrics
-endpoint and pushes uptime, service state and service crash count metrics. 
+endpoint and pushes uptime, service state and service crash count metrics.
 
 ### Usage
 ```

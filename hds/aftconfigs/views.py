@@ -6,23 +6,18 @@ from location.models import Location
 from event.models import Event
 
 from .models import ConfigReport
-from .serializers import (
-    ConfigReportSerializer,
-    ConfigReportDetailSerializer
-)
+from .serializers import ConfigReportSerializer, ConfigReportDetailSerializer
 
 
 class ConfigReportView(ReportModelViewSet):
     queryset = ConfigReport.objects.all()
     serializer_class = ConfigReportSerializer
     filterset_fields = (
-        'harvester__harv_id',
-        'event__UUID',
-        'location__ranch',
+        "harvester__harv_id",
+        "event__UUID",
+        "location__ranch",
     )
-    action_serializers = {
-        "retrieve": ConfigReportDetailSerializer
-    }
+    action_serializers = {"retrieve": ConfigReportDetailSerializer}
 
     def get_queryset(self):
         if self.action == "retrieve":
@@ -32,20 +27,20 @@ class ConfigReportView(ReportModelViewSet):
                     queryset=Harvester.objects.prefetch_related(
                         Prefetch(
                             lookup="location",
-                            queryset=Location.objects.select_related("distributor")
+                            queryset=Location.objects.select_related("distributor"),
                         )
-                    ).select_related("fruit", "release")
+                    ).select_related("fruit", "release"),
                 ),
                 Prefetch(
                     lookup="location",
-                    queryset=Location.objects.select_related("distributor")
+                    queryset=Location.objects.select_related("distributor"),
                 ),
                 Prefetch(
                     lookup="event",
                     queryset=Event.objects.prefetch_related(
                         "s3file_set",
                         "secondary_events",
-                    )
+                    ),
                 ),
             ).select_related("creator", "modifiedBy")
         return super().get_queryset()

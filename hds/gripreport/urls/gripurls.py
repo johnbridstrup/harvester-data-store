@@ -3,7 +3,6 @@ from ..views import GripView
 
 
 router = routers.SimpleRouter()
-router.register(r'', GripView, basename='grips')
+router.register(r"", GripView, basename="grips")
 
-urlpatterns = [
-] + router.urls
+urlpatterns = [] + router.urls

@@ -3,7 +3,6 @@ from ..views import AutodiagnosticsRunView
 
 
 router = routers.SimpleRouter()
-router.register(r'', AutodiagnosticsRunView, basename='autodiagnosticsrun')
+router.register(r"", AutodiagnosticsRunView, basename="autodiagnosticsrun")
 
-urlpatterns = [
-] + router.urls
+urlpatterns = [] + router.urls

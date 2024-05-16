@@ -5,15 +5,15 @@ from common.serializers.userserializer import UserCustomSerializer
 from harvdeploy.models import HarvesterVersionReport
 from harvdeploy.serializers import (
     HarvesterCodeReleaseSerializer,
-    HarvesterVersionReportSerializer
+    HarvesterVersionReportSerializer,
 )
 from location.serializers.locationserializer import (
-    LocationSerializer, 
+    LocationSerializer,
     LocationMinimalSerializer,
     LocationListSerializer,
 )
 from .fruitserializer import (
-    FruitSerializer, 
+    FruitSerializer,
     FruitMinimalSerializer,
 )
 from ..models import Harvester
@@ -22,23 +22,24 @@ from ..models import Harvester
 class HarvesterMinimalSerializer(serializers.ModelSerializer):
     fruit = FruitMinimalSerializer(read_only=True)
     location = LocationMinimalSerializer(read_only=True)
+
     class Meta:
         model = Harvester
-        fields = ('id', 'url', 'harv_id', 'location', 'fruit', 'is_emulator')
+        fields = ("id", "url", "harv_id", "location", "fruit", "is_emulator")
 
 
 class HarvesterSerializer(serializers.ModelSerializer):
     class Meta:
         model = Harvester
-        fields = ('__all__')
-        read_only_fields = ('creator',)
+        fields = "__all__"
+        read_only_fields = ("creator",)
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
-        data['harvester_history'] = f"/harvesterhistory/?harv_id={instance.harv_id}"
-        data['version_history'] = 'versions/'
+        data["harvester_history"] = f"/harvesterhistory/?harv_id={instance.harv_id}"
+        data["version_history"] = "versions/"
         data["assets"] = "assets/"
-        data['config'] = 'config/'
+        data["config"] = "config/"
         return data
 
 
@@ -76,9 +77,9 @@ class HarvesterDetailSerializer(HarvesterSerializer):
         data = super().to_representation(instance)
         try:
             vers = instance.current_version()
-            data['version'] = HarvesterVersionReportSerializer(vers).data
+            data["version"] = HarvesterVersionReportSerializer(vers).data
         except HarvesterVersionReport.DoesNotExist:
-            data['version'] = None
+            data["version"] = None
         return data
 
 
@@ -86,7 +87,8 @@ class HarvesterHistorySerializer(serializers.ModelSerializer):
     fruit = FruitSerializer()
     location = LocationSerializer()
     release = HarvesterCodeReleaseSerializer()
+
     class Meta:
         model = Harvester.history.model
-        fields = ('__all__')
-        read_only_fields = ('__all__',)
+        fields = "__all__"
+        read_only_fields = ("__all__",)

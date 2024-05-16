@@ -7,20 +7,30 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('harvester', '0005_harvester_thingname_historicalharvester_thingname'),
-        ('location', '0002_location_site_channel'),
-        ('harvdeploy', '0005_harvestercoderelease_tags'),
+        ("harvester", "0005_harvester_thingname_historicalharvester_thingname"),
+        ("location", "0002_location_site_channel"),
+        ("harvdeploy", "0005_harvestercoderelease_tags"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='harvesterversionreport',
-            name='location',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='location.location'),
+            model_name="harvesterversionreport",
+            name="location",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                to="location.location",
+            ),
         ),
         migrations.AlterField(
-            model_name='harvesterversionreport',
-            name='harvester',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='harvester.harvester'),
+            model_name="harvesterversionreport",
+            name="harvester",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to="harvester.harvester",
+            ),
         ),
     ]

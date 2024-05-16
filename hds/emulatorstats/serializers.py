@@ -4,7 +4,10 @@ from common.serializers.reportserializer import ReportSerializerBase
 from event.serializers import EventSerializerMixin
 from .models import EmustatsReport
 
-class EmustatsReportSerializer(TaggitSerializer, EventSerializerMixin, ReportSerializerBase):
+
+class EmustatsReportSerializer(
+    TaggitSerializer, EventSerializerMixin, ReportSerializerBase
+):
     tags = TagListSerializerField()
 
     M_TO_MM = 1000
@@ -12,8 +15,8 @@ class EmustatsReportSerializer(TaggitSerializer, EventSerializerMixin, ReportSer
 
     class Meta:
         model = EmustatsReport
-        fields = ('__all__')
-        read_only_fields = ('creator',)
+        fields = "__all__"
+        read_only_fields = ("creator",)
 
     def to_internal_value(self, data):
         report = data.copy()
@@ -21,7 +24,7 @@ class EmustatsReportSerializer(TaggitSerializer, EventSerializerMixin, ReportSer
         UUID = self.extract_uuid(report)
         creator = self.get_user_from_request()
         event = self.get_or_create_event(UUID, creator, EmustatsReport.__name__)
-        data['event'] = event.id
+        data["event"] = event.id
 
         data = {
             **data,

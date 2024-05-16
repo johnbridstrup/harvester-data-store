@@ -3,7 +3,6 @@ from .views import NotificationView
 
 
 router = routers.SimpleRouter()
-router.register(r'', NotificationView, basename="notification")
+router.register(r"", NotificationView, basename="notification")
 
-urlpatterns = [
-] + router.urls
+urlpatterns = [] + router.urls

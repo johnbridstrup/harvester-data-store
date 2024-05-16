@@ -6,13 +6,15 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('exceptions', '0007_aftexception_handled'),
+        ("exceptions", "0007_aftexception_handled"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='aftexceptioncode',
-            name='operator_msg',
-            field=models.CharField(default='Please cycle the harvester', max_length=255),
+            model_name="aftexceptioncode",
+            name="operator_msg",
+            field=models.CharField(
+                default="Please cycle the harvester", max_length=255
+            ),
         ),
     ]

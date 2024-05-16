@@ -6,12 +6,12 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('aftconfigs', '0001_initial'),
+        ("aftconfigs", "0001_initial"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='configreport',
-            options={'get_latest_by': 'reportTime'},
+            name="configreport",
+            options={"get_latest_by": "reportTime"},
         ),
     ]

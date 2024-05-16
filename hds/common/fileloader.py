@@ -14,7 +14,7 @@ def get_client():
 
 class FileLoader:
     def _load_body(self, event):
-        event_body = json.loads(event['Body'])
+        event_body = json.loads(event["Body"])
         return event_body
 
     def download_json_from_event(self, event):
@@ -28,7 +28,7 @@ class S3Client(FileLoader):
     def __init__(self):
         self._bucket = os.environ.get("S3_BUCKET")
         self._session = boto3.Session(profile_name=os.environ.get("AWS_PROFILE"))
-        self._client = self._session.client('s3')
+        self._client = self._session.client("s3")
         self._logger = structlog.getLogger(__name__)
 
     def _get_key_bucket(self, event):
@@ -69,8 +69,7 @@ class LocalClient(FileLoader):
             raise ClientError("No S3 info in event")
 
         key = s3_info["object"]["key"]
-        with open(key, 'r') as file_content:
+        with open(key, "r") as file_content:
             json_data = json.load(file_content)
 
         return json_data
-

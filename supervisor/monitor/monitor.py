@@ -8,10 +8,28 @@ from pkg.supervisor import SupervisorServer
 from pkg.utils import available_port
 
 parser = ArgumentParser()
-parser.add_argument("-l", "--log-level", help="Log level", default="INFO", choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"])
+parser.add_argument(
+    "-l",
+    "--log-level",
+    help="Log level",
+    default="INFO",
+    choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
+)
 parser.add_argument("-c", "--config", help="Path to supervisord.conf", required=True)
-parser.add_argument("-p", "--port", help="Port to run the prometheus server", default=9151, type=available_port)
-parser.add_argument("-w", "--wait-time", help="Time (seconds) to wait before attempting to reconnect to supervisor", default=15, type=int)
+parser.add_argument(
+    "-p",
+    "--port",
+    help="Port to run the prometheus server",
+    default=9151,
+    type=available_port,
+)
+parser.add_argument(
+    "-w",
+    "--wait-time",
+    help="Time (seconds) to wait before attempting to reconnect to supervisor",
+    default=15,
+    type=int,
+)
 
 
 def main():
@@ -23,8 +41,7 @@ def main():
     start_http_server(port)
     logger = get_logger("supervisor-monitor", log_level)
     logger.info(f"Prometheus server started on port {port}")
-    
-    
+
     metrics = SupervisorMetrics(opts)
     metrics.set_supervisor_connected(0)
     server = SupervisorServer(config, opts)
@@ -57,6 +74,7 @@ def main():
         logger.error("Monitor Service Stopped")
     finally:
         metrics.set_supervisor_connected(0)
+
 
 if __name__ == "__main__":
     main()

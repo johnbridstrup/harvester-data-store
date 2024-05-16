@@ -6,18 +6,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('harvdeploy', '0007_alter_harvesterversionreport_reporttime'),
+        ("harvdeploy", "0007_alter_harvesterversionreport_reporttime"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='harvestercoderelease',
-            name='created',
+            model_name="harvestercoderelease",
+            name="created",
             field=models.DateTimeField(auto_now_add=True, db_index=True),
         ),
         migrations.AlterField(
-            model_name='harvesterversionreport',
-            name='created',
+            model_name="harvesterversionreport",
+            name="created",
             field=models.DateTimeField(auto_now_add=True, db_index=True),
         ),
     ]

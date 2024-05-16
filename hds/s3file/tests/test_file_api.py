@@ -14,6 +14,7 @@ from event.serializers import EventSerializer
 from ..models import S3File, SessClip
 from ..serializers import DirectUploadSerializer
 
+
 @contextmanager
 def remove_after(fp):
     try:
@@ -33,43 +34,41 @@ class S3FileTestCase(HDSAPITestBase):
         self.assertEqual(resp.status_code, 201)
         resp = self.client.get(self.s3file_det_url(resp.data["id"]))
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
-        self.assertEqual(resp.json()['data']['event']['UUID'], self.uuid)
+        self.assertEqual(resp.json()["data"]["event"]["UUID"], self.uuid)
 
         exp_url = urljoin(
             "http://testserver/",
-            urljoin(settings.MEDIA_URL, f"{self.filetype}_{self.uuid}")
+            urljoin(settings.MEDIA_URL, f"{self.filetype}_{self.uuid}"),
         )
-        self.assertEqual(
-            resp.json()['data']['file'],
-            exp_url
-        )
+        self.assertEqual(resp.json()["data"]["file"], exp_url)
 
         # Assert initial tag applied
         data = resp.json()["data"]
         self.assertIn(S3File.__name__, data["event"]["tags"])
 
         # Assert filetype tag added
-        resp = self.client.get(self.event_det_url(data['event']['id']))
+        resp = self.client.get(self.event_det_url(data["event"]["id"]))
         data = resp.json()["data"]
         self.assertIn(self.filetype, data["tags"])
 
     def test_download_file(self):
         UUID = str(uuid.uuid1())
         os.makedirs(settings.MEDIA_ROOT, exist_ok=True)
-        with tempfile.NamedTemporaryFile(dir=settings.MEDIA_ROOT, suffix=f"_{UUID}") as f:
-            fname = f.name.split('/')[-1]
+        with tempfile.NamedTemporaryFile(
+            dir=settings.MEDIA_ROOT, suffix=f"_{UUID}"
+        ) as f:
+            fname = f.name.split("/")[-1]
             resp = self.create_s3file(fname, self.s3file_url, has_uuid=True)
 
             url = resp.json()["data"]["file"]
             resp = self.client.get(url)
             self.assertEqual(
-                resp.get('Content-Disposition'),
-                f'inline; filename="{fname}"'
+                resp.get("Content-Disposition"), f'inline; filename="{fname}"'
             )
 
     def test_upload_file_ser(self):
         with tempfile.NamedTemporaryFile() as tf:
-            with open(tf.name, 'rb') as f:
+            with open(tf.name, "rb") as f:
                 file = InMemoryUploadedFile(
                     file=f,
                     field_name="test",
@@ -78,7 +77,7 @@ class S3FileTestCase(HDSAPITestBase):
                     size=8,
                     charset="UTF-8",
                 )
-                fname = f.name.split('/')[-1]
+                fname = f.name.split("/")[-1]
                 data = {
                     "key": fname,
                     "file": file,
@@ -94,7 +93,7 @@ class S3FileTestCase(HDSAPITestBase):
 
     def test_file_ser_no_key(self):
         with tempfile.NamedTemporaryFile() as tf:
-            with open(tf.name, 'rb') as f:
+            with open(tf.name, "rb") as f:
                 file = InMemoryUploadedFile(
                     file=f,
                     field_name="test",
@@ -123,13 +122,12 @@ class S3FileTestCase(HDSAPITestBase):
         file_resp = self.client.get(self.s3file_det_url(file_resp.data["id"]))
         self.setup_basic()
         self.load_error_report()
-        self.data['uuid'] = self.uuid
+        self.data["uuid"] = self.uuid
         rep_resp = self.post_error_report(load=False)
         rep_resp = self.client.get(self.error_det_url(rep_resp["data"]["id"])).json()
 
         self.assertEqual(
-            file_resp.json()['data']['event']['UUID'],
-            rep_resp['data']['event']['UUID']
+            file_resp.json()["data"]["event"]["UUID"], rep_resp["data"]["event"]["UUID"]
         )
 
         # Assert all tags are there
@@ -150,7 +148,7 @@ class S3FileTestCase(HDSAPITestBase):
         self.create_s3file(sec_key, self.s3file_url, has_uuid=True)
 
         self.load_error_report()
-        self.data['uuid'] = PRIM_UUID
+        self.data["uuid"] = PRIM_UUID
         self.data["aux_uuids"] = [SEC_UUID]
         self.post_error_report(load=False)
 
@@ -164,7 +162,7 @@ class S3FileTestCase(HDSAPITestBase):
 
     def test_delete_file(self):
         with tempfile.NamedTemporaryFile() as tf:
-            with open(tf.name, 'rb') as f:
+            with open(tf.name, "rb") as f:
                 file = InMemoryUploadedFile(
                     file=f,
                     field_name="test",
@@ -173,7 +171,7 @@ class S3FileTestCase(HDSAPITestBase):
                     size=8,
                     charset="UTF-8",
                 )
-                fname = f.name.split('/')[-1]
+                fname = f.name.split("/")[-1]
                 data = {
                     "key": fname,
                     "file": file,
@@ -184,7 +182,9 @@ class S3FileTestCase(HDSAPITestBase):
                 file_upload.is_valid(raise_exception=True)
                 inst = file_upload.save()
                 self.assertFalse(inst.deleted)
-                self.client.delete(self.s3file_det_url(inst.id)) #file.delete() cleans up fs
+                self.client.delete(
+                    self.s3file_det_url(inst.id)
+                )  # file.delete() cleans up fs
                 inst.refresh_from_db()
                 self.assertTrue(inst.deleted)
                 with self.assertRaises(ValueError):
@@ -202,5 +202,10 @@ class S3FileTestCase(HDSAPITestBase):
         res = self.client.get(self.error_det_url(report.id)).json()["data"]
         self.assertEqual(len(res["event"]["related_images"]), 1)
         self.assertEqual(len(res["event"]["related_files"]), 1)
-        self.assertEqual(res["event"]["related_images"][0]["url"], "http://testserver/media/test.png")
-        self.assertEqual(res["event"]["related_files"][0]["url"], "http://testserver/api/v1/s3files/1/download/")
+        self.assertEqual(
+            res["event"]["related_images"][0]["url"], "http://testserver/media/test.png"
+        )
+        self.assertEqual(
+            res["event"]["related_files"][0]["url"],
+            "http://testserver/api/v1/s3files/1/download/",
+        )

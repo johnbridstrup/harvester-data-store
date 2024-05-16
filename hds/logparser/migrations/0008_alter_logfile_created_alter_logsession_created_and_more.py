@@ -6,23 +6,23 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('logparser', '0007_logsession_event'),
+        ("logparser", "0007_logsession_event"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='logfile',
-            name='created',
+            model_name="logfile",
+            name="created",
             field=models.DateTimeField(auto_now_add=True, db_index=True),
         ),
         migrations.AlterField(
-            model_name='logsession',
-            name='created',
+            model_name="logsession",
+            name="created",
             field=models.DateTimeField(auto_now_add=True, db_index=True),
         ),
         migrations.AlterField(
-            model_name='logvideo',
-            name='created',
+            model_name="logvideo",
+            name="created",
             field=models.DateTimeField(auto_now_add=True, db_index=True),
         ),
     ]

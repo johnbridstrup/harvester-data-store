@@ -37,7 +37,9 @@ FAILED_TO_SEND_FMT = (
 )
 
 JOB_SLACK_CHANNEL = "hds-jobs"
-JOB_SERVER_ADDRESS = os.environ.get("JOB_SERVER_ADDRESS", "https://iot-job-server.cloud.advanced.farm")
+JOB_SERVER_ADDRESS = os.environ.get(
+    "JOB_SERVER_ADDRESS", "https://iot-job-server.cloud.advanced.farm"
+)
 if test_env():
     JOB_SERVER_ADDRESS = "http://httpbin.org/anything"
 JOB_SUBSYSTEM = "http://localhost:5000"
@@ -69,7 +71,7 @@ def job_status_update(UUID, results, jobresult_pk, user_pk, url):
         elif result_str in ["canceled", "cancelled"]:
             hostresult = JobHostResult.JobResult.CANCELED
             canceled = True
-        
+
         JobHostResult.objects.create(
             parent=jobresults,
             host=host,
@@ -98,10 +100,11 @@ def job_status_update(UUID, results, jobresult_pk, user_pk, url):
     )
     if job.creator.profile.slack_id is not None:
         msg += f"<@{job.creator.profile.slack_id}>"
-        
+
     post_to_slack(msg, channel=JOB_SLACK_CHANNEL)
 
     return f"Job {UUID} complete. Status: {status}"
+
 
 @monitored_shared_task
 def schedule_job(job_id, harv_pk, user_pk):
@@ -110,33 +113,42 @@ def schedule_job(job_id, harv_pk, user_pk):
     harv = Harvester.objects.get(id=harv_pk)
     hv_name = harv.thingName or f"hv-{harv.harv_id:03}"
     identity = User.objects.get(id=user_pk).username
-    
+
     request_payload = {
         "hv_name": hv_name,
         "operator": identity,
         "hv_subsystem": JOB_SUBSYSTEM,
         "job_payload": json.dumps(job.payload),
-        "valid_until": (datetime.datetime.now(pytz.utc) + datetime.timedelta(seconds=3600)).strftime(JOB_DATETIME_FMT)
+        "valid_until": (
+            datetime.datetime.now(pytz.utc) + datetime.timedelta(seconds=3600)
+        ).strftime(JOB_DATETIME_FMT),
     }
-    logger.info("Sending job to server.", jobserver="/".join([JOB_SERVER_ADDRESS, "job"]))
+    logger.info(
+        "Sending job to server.", jobserver="/".join([JOB_SERVER_ADDRESS, "job"])
+    )
     logger.debug(json.dumps(request_payload))
 
     retry = Retry(
         total=MAX_RETRIES,
         backoff_factor=0.1,
         status_forcelist=[
-            500, # Internal server error (generic)
-            502, # Bad gateway
-            503, # Service unavailable
-            504, # Gateway timeout
+            500,  # Internal server error (generic)
+            502,  # Bad gateway
+            503,  # Service unavailable
+            504,  # Gateway timeout
         ],
-        allowed_methods=frozenset(['POST'])
+        allowed_methods=frozenset(["POST"]),
     )
     session = requests.session()
     session.mount("http://", HTTPAdapter(max_retries=retry))
 
     try:
-        r = session.post("/".join([JOB_SERVER_ADDRESS, "job"]), json=request_payload, timeout=5, verify=True)
+        r = session.post(
+            "/".join([JOB_SERVER_ADDRESS, "job"]),
+            json=request_payload,
+            timeout=5,
+            verify=True,
+        )
         r.raise_for_status()
         return f"Job {job.event.UUID} sent to server."
 
@@ -145,9 +157,9 @@ def schedule_job(job_id, harv_pk, user_pk):
         job.save()
         url = build_frontend_url("jobs", _id=job_id)
         msg = FAILED_TO_SEND_FMT.format(
-            harv=harv.name, 
+            harv=harv.name,
             UUID=job.event.UUID,
-            exc=err.__class__.__name__, 
+            exc=err.__class__.__name__,
             url=url,
         )
 

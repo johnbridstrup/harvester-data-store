@@ -9,16 +9,17 @@ from ..models import JobResults, Job, JobHostResult
 class JobHostResultSerializer(serializers.ModelSerializer):
     class Meta:
         model = JobHostResult
-        fields = ('__all__')
-        read_only_fields = ('creator',)
+        fields = "__all__"
+        read_only_fields = ("creator",)
 
 
 class JobResultsSerializer(EventSerializerMixin, ReportSerializerBase):
     host_results = JobHostResultSerializer(many=True, read_only=True)
+
     class Meta:
         model = JobResults
-        fields = ('__all__')
-        read_only_fields = ('creator',)
+        fields = "__all__"
+        read_only_fields = ("creator",)
 
     def to_internal_value(self, data):
         report = data.copy()
@@ -33,10 +34,12 @@ class JobResultsSerializer(EventSerializerMixin, ReportSerializerBase):
             creator = self.get_user_from_request()
             event = self.get_or_create_event(UUID, creator, JobResults.__name__)
 
-        data.update({
-            "job": job.id if job else None,
-            "event": event.id,
-        })
+        data.update(
+            {
+                "job": job.id if job else None,
+                "event": event.id,
+            }
+        )
         return super().to_internal_value(data)
 
 

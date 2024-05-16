@@ -16,32 +16,26 @@ class ExceptionTestBase(HDSAPITestBase):
         self.CODE = 0
         self.CODES = [
             {
-                'code': 0,
-                'name': 'AFTBaseException',
-                'msg': 'test message',
-                'team': 'aft',
-                'cycle': False
+                "code": 0,
+                "name": "AFTBaseException",
+                "msg": "test message",
+                "team": "aft",
+                "cycle": False,
             },
             {
-                'code': 1,
-                'name': 'PickerBaseException',
-                'msg': 'Picker message',
-                'team': 'aft',
-                'cycle': False
-            }
+                "code": 1,
+                "name": "PickerBaseException",
+                "msg": "Picker message",
+                "team": "aft",
+                "cycle": False,
+            },
         ]
-        self.MANIFEST = {
-            'version': '1.0.111',
-            'manifest': self.CODES
-        }
+        self.MANIFEST = {"version": "1.0.111", "manifest": self.CODES}
 
-    def _send_code(self, code=None, name='TestException'):
+    def _send_code(self, code=None, name="TestException"):
         if not code:
             code = self.CODE
-        resp = self.client.post(
-            self.exc_code_url,
-            self.CODES[code]
-        )
+        resp = self.client.post(self.exc_code_url, self.CODES[code])
 
         return resp
 
@@ -61,8 +55,8 @@ class AFTExceptionCodeTest(ExceptionTestBase):
         r2 = self._send_code()
         self.assertEqual(r2.status_code, 400)
         self.assertEqual(
-            r2.json()['errors']['detail']['code'][0],
-            'aft exception code with this code already exists.'
+            r2.json()["errors"]["detail"]["code"][0],
+            "aft exception code with this code already exists.",
         )
 
     def test_delete_code(self):
@@ -74,7 +68,7 @@ class AFTExceptionCodeTest(ExceptionTestBase):
 
     def test_get_all_codes(self):
         self._send_code(0)
-        self._send_code(1, 'testexc2')
+        self._send_code(1, "testexc2")
 
         resp = self.client.get(self.exc_code_url)
         self.assertEqual(resp.status_code, 200)
@@ -84,17 +78,17 @@ class AFTExceptionCodeTest(ExceptionTestBase):
         self._send_code()
         resp = self.client.get(self.exc_code_det_url(1))
         self.assertEqual(resp.status_code, 200)
-        self.assertEqual(resp.data['code'], self.CODE)
+        self.assertEqual(resp.data["code"], self.CODE)
 
     def test_update_code(self):
         self._send_code()
         self.client.patch(
             self.exc_code_det_url(1),
-            {'name': 'NewName'},
-            HTTP_ACCEPT='application/json'
+            {"name": "NewName"},
+            HTTP_ACCEPT="application/json",
         )
         self.assertEqual(AFTExceptionCode.objects.count(), 1)
-        self.assertEqual(AFTExceptionCode.objects.get().name, 'NewName')
+        self.assertEqual(AFTExceptionCode.objects.get().name, "NewName")
 
 
 class AFTExceptionCodeManifestTestCase(ExceptionTestBase):
@@ -137,18 +131,18 @@ class AFTExceptionCodeManifestTestCase(ExceptionTestBase):
         self._send_manifest()
         new_codes = [
             {
-                'code': 2,
-                'name': 'NewExceptionTwo',
-                'msg': 'test message',
-                'team': 'aft',
-                'cycle': False
+                "code": 2,
+                "name": "NewExceptionTwo",
+                "msg": "test message",
+                "team": "aft",
+                "cycle": False,
             },
             {
-                'code': 3,
-                'name': 'NewExceptionThree',
-                'msg': 'test message',
-                'team': 'aft',
-                'cycle': False
+                "code": 3,
+                "name": "NewExceptionThree",
+                "msg": "test message",
+                "team": "aft",
+                "cycle": False,
             },
         ]
 

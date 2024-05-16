@@ -6,13 +6,24 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('common', '0003_userprofile_role'),
+        ("common", "0003_userprofile_role"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='userprofile',
-            name='role',
-            field=models.CharField(choices=[('support', 'Support'), ('developer', 'Developer'), ('manager', 'Manager'), ('sqs', 'Sqs'), ('jenkins', 'Jenkins'), ('beatbox', 'Beatbox')], default='support', max_length=31),
+            model_name="userprofile",
+            name="role",
+            field=models.CharField(
+                choices=[
+                    ("support", "Support"),
+                    ("developer", "Developer"),
+                    ("manager", "Manager"),
+                    ("sqs", "Sqs"),
+                    ("jenkins", "Jenkins"),
+                    ("beatbox", "Beatbox"),
+                ],
+                default="support",
+                max_length=31,
+            ),
         ),
     ]

@@ -7,5 +7,5 @@ class MigrationLogFilterset(CommonInfoFilterset):
     class Meta:
         model = MigrationLog
         fields = CommonInfoFilterset.FIELDS_BASE + [
-            'result',
+            "result",
         ]

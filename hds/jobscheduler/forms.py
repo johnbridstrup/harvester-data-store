@@ -4,19 +4,23 @@ from harvester.models import Fruit, Harvester
 from harvjobs.models import JobSchema
 from location.models import Location
 
-from .serializers import CronTabScheduleSerializer, IntervalScheduleSerializer, ClockedScheduleSerializer
+from .serializers import (
+    CronTabScheduleSerializer,
+    IntervalScheduleSerializer,
+    ClockedScheduleSerializer,
+)
 
 
 class JobschedulerForm:
     def __init__(
-            self,
-            jobtype,
-            version,
-            schema,
-            fruits,
-            locations,
-            harvesters,
-        ):
+        self,
+        jobtype,
+        version,
+        schema,
+        fruits,
+        locations,
+        harvesters,
+    ):
         self.jobtype = jobtype
         self.version = version
         self.schema: JobSchema = schema
@@ -34,7 +38,7 @@ class JobschedulerForm:
             "title": f"Schedule {self.jobtype}: version {self.version}",
             "required": ["payload", "schedule", "targets", "jobtype", "schema_version"],
             "properties": {
-                "jobtype":{
+                "jobtype": {
                     "type": "string",
                     "default": self.jobtype,
                 },
@@ -97,7 +101,7 @@ class JobschedulerForm:
                         {
                             "title": "Fruit",
                             "required": ["fruits"],
-                            "properties":{
+                            "properties": {
                                 "fruits": {
                                     "type": "array",
                                     "items": {
@@ -143,20 +147,15 @@ class JobschedulerForm:
 
 
 def create_job_scheduler_form(jobtype, schema_version):
-    schema = JobSchema.objects.get(jobtype__name=jobtype,
-                                   version=schema_version)
+    schema = JobSchema.objects.get(jobtype__name=jobtype, version=schema_version)
     fruits = list(Fruit.objects.values_list("name", flat=True))
     locations = list(Location.objects.values_list("ranch", flat=True))
-    harvesters = list(Harvester.objects.filter(is_emulator=False).values_list("name", flat=True))
+    harvesters = list(
+        Harvester.objects.filter(is_emulator=False).values_list("name", flat=True)
+    )
 
     form = JobschedulerForm(
-        jobtype,
-        schema_version,
-        schema,
-        fruits,
-        locations,
-        harvesters
+        jobtype, schema_version, schema, fruits, locations, harvesters
     )
 
     return form.create()
-    

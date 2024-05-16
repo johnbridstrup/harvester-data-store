@@ -12,30 +12,83 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('taggit', '0005_auto_20220424_2025'),
-        ('location', '0002_location_site_channel'),
-        ('harvester', '0005_harvester_thingname_historicalharvester_thingname'),
-        ('event', '0002_eventtag_event_tags_eventtag_content_object_and_more'),
+        ("taggit", "0005_auto_20220424_2025"),
+        ("location", "0002_location_site_channel"),
+        ("harvester", "0005_harvester_thingname_historicalharvester_thingname"),
+        ("event", "0002_eventtag_event_tags_eventtag_content_object_and_more"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='ConfigReport',
+            name="ConfigReport",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created', models.DateTimeField(auto_now_add=True)),
-                ('lastModified', models.DateTimeField(auto_now=True)),
-                ('reportTime', models.DateTimeField(blank=True, null=True)),
-                ('report', models.JSONField(blank=True, null=True)),
-                ('creator', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='%(app_label)s_%(class)s_creator_related', to=settings.AUTH_USER_MODEL)),
-                ('event', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='event.event')),
-                ('harvester', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='harvester.harvester')),
-                ('location', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='location.location')),
-                ('modifiedBy', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='%(app_label)s_%(class)s_modifiedby_related', to=settings.AUTH_USER_MODEL)),
-                ('tags', taggit.managers.TaggableManager(help_text='A comma-separated list of tags.', through='taggit.TaggedItem', to='taggit.Tag', verbose_name='Tags')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("created", models.DateTimeField(auto_now_add=True)),
+                ("lastModified", models.DateTimeField(auto_now=True)),
+                ("reportTime", models.DateTimeField(blank=True, null=True)),
+                ("report", models.JSONField(blank=True, null=True)),
+                (
+                    "creator",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="%(app_label)s_%(class)s_creator_related",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
+                (
+                    "event",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to="event.event"
+                    ),
+                ),
+                (
+                    "harvester",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="harvester.harvester",
+                    ),
+                ),
+                (
+                    "location",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        to="location.location",
+                    ),
+                ),
+                (
+                    "modifiedBy",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="%(app_label)s_%(class)s_modifiedby_related",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
+                (
+                    "tags",
+                    taggit.managers.TaggableManager(
+                        help_text="A comma-separated list of tags.",
+                        through="taggit.TaggedItem",
+                        to="taggit.Tag",
+                        verbose_name="Tags",
+                    ),
+                ),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
         ),
     ]

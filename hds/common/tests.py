@@ -51,8 +51,16 @@ def get_endpoint(urlpattern):
 
 
 def compare_patterns(keys, urls):
-    ignore = ['', 'admin/', 'api/v1/openapi', 'api/v1/users/', 'prometheus/', '^media/(?P<path>.*)$', '^static/(?P<path>.*)$']
-    return all(['/' + u in keys if u not in ignore else True for u in urls])
+    ignore = [
+        "",
+        "admin/",
+        "api/v1/openapi",
+        "api/v1/users/",
+        "prometheus/",
+        "^media/(?P<path>.*)$",
+        "^static/(?P<path>.*)$",
+    ]
+    return all(["/" + u in keys if u not in ignore else True for u in urls])
 
 
 class HDSTestAttributes:
@@ -60,42 +68,42 @@ class HDSTestAttributes:
 
     def _load_report(self, relpath):
         fpath = os.path.join(self.BASE_PATH, relpath)
-        with open(fpath, 'rb') as f:
+        with open(fpath, "rb") as f:
             d = json.load(f)
         return d
 
     def _write_report(self, relpath, data):
         fpath = os.path.join(self.BASE_PATH, relpath)
-        with open(fpath, 'w') as f:
+        with open(fpath, "w") as f:
             json.dump(data, f, indent=4)
 
     def load_error_report(self):
-        self.data = self._load_report('report.json')
+        self.data = self._load_report("report.json")
 
     def load_config_data(self):
-        self.conf_data = self._load_report('configs-report_002_1675256694.218969.json')
+        self.conf_data = self._load_report("configs-report_002_1675256694.218969.json")
 
     def load_autodiag_report(self):
-        self.ad_data = self._load_report('autodiag_report.json')
+        self.ad_data = self._load_report("autodiag_report.json")
 
     def load_asset_report(self):
-        self.asset_data = self._load_report('serialnums.json')
+        self.asset_data = self._load_report("serialnums.json")
 
     def load_picksess_report(self):
-        self.picksess_data = self._load_report('picksess.json')
+        self.picksess_data = self._load_report("picksess.json")
 
     @contextmanager
     def update_picksess_report(self, data):
         self.load_picksess_report()
         original = copy.deepcopy(self.picksess_data)
         try:
-            self._write_report('picksess.json', data)
+            self._write_report("picksess.json", data)
             yield
         finally:
-            self._write_report('picksess.json', original)
+            self._write_report("picksess.json", original)
 
     def load_emustats_report(self):
-        self.emustats_data = self._load_report('emustats.json')
+        self.emustats_data = self._load_report("emustats.json")
 
     def setup_jobscheduler_data(self):
         self.DEFAULT_JOBTYPE = "test"
@@ -108,15 +116,11 @@ class HDSTestAttributes:
                 "payload": {
                     "type": "object",
                     "properties": {
-                        "requiredArg": {
-                        "type": "string"
-                        },
-                        "optionalArg": {
-                        "type": "string"
-                        }
+                        "requiredArg": {"type": "string"},
+                        "optionalArg": {"type": "string"},
                     },
                     "required": ["requiredArg"],
-                }
+                },
             },
             "required": ["payload"],
         }
@@ -134,11 +138,11 @@ class HDSTestAttributes:
                     "exit_code": 0,
                     "stdout": "",
                     "stderr": "",
-                    "status": "success"
+                    "status": "success",
                 }
             },
             "timestamp": 1666048158.1355963,
-            "type": "jobresults"
+            "type": "jobresults",
         }
         self.DEFAULT_RESULT_FAIL = {
             "data": {
@@ -147,11 +151,11 @@ class HDSTestAttributes:
                     "exit_code": 1,
                     "stdout": "",
                     "stderr": "",
-                    "status": "failure"
+                    "status": "failure",
                 }
             },
             "timestamp": 1666048158.1355963,
-            "type": "jobresults"
+            "type": "jobresults",
         }
         self.DEFAULT_RESULT_ERROR = {
             "data": {
@@ -160,33 +164,36 @@ class HDSTestAttributes:
                     "type": "Exception",
                     "value": "An Exception occurred",
                     "traceback": "Bad things happened on line 99",
-                    "status": "error"
+                    "status": "error",
                 }
             },
             "timestamp": 1666048158.1355963,
-            "type": "jobresults"
+            "type": "jobresults",
         }
 
     def setup_urls(self):
         # Users
-        self.user_url = reverse('users:user-list')
+        self.user_url = reverse("users:user-list")
         self.user_detail_url = lambda id_: reverse("users:user-detail", args=[id_])
-        self.change_pwd_url = reverse('users:change_password')
-
+        self.change_pwd_url = reverse("users:change_password")
 
         # Autodiag
         self.ad_url = reverse("autodiagnostics-list")
         self.ad_det_url = lambda id_: reverse("autodiagnostics-detail", args=[id_])
 
         self.ad_run_url = reverse("autodiagnosticsrun-list")
-        self.ad_run_det_url = lambda id_: reverse("autodiagnosticsrun-detail", args=[id_])
+        self.ad_run_det_url = lambda id_: reverse(
+            "autodiagnosticsrun-detail", args=[id_]
+        )
 
         # Assets
         self.asset_url = reverse("harvassets-list")
         self.asset_det_url = lambda id_: reverse("harvassets-detail", args=[id_])
 
         self.assetrep_url = reverse("harvassetreport-list")
-        self.assetrep_det_url = lambda id_: reverse("harvassetreport-detail", args=[id_])
+        self.assetrep_det_url = lambda id_: reverse(
+            "harvassetreport-detail", args=[id_]
+        )
 
         # Configs
         self.config_url = reverse("configreports-list")
@@ -194,7 +201,9 @@ class HDSTestAttributes:
 
         # Emustats
         self.emustats_url = reverse("emustatsreports-list")
-        self.emustats_det_url = lambda id_: reverse("emustatsreports-detail", args=[id_])
+        self.emustats_det_url = lambda id_: reverse(
+            "emustatsreports-detail", args=[id_]
+        )
 
         # Error report
         self.error_url = reverse("errorreport-list")
@@ -245,7 +254,7 @@ class HDSTestAttributes:
 
         self.jobs_url = reverse("job-list")
         self.job_det_urls = lambda id_: reverse("job-detail", args=[id_])
-        self.reschedule_url = lambda id_ : reverse("job-reschedule", args=[id_])
+        self.reschedule_url = lambda id_: reverse("job-reschedule", args=[id_])
 
         self.jobresults_url = reverse("jobresults-list")
         self.jobresults_det_url = lambda id_: reverse("jobresults-detail", args=[id_])
@@ -262,17 +271,11 @@ class HDSTestAttributes:
 
         # Logparser
         self.log_session_url = reverse("logsession-list")
-        self.log_session_det_url = lambda _id : reverse(
-          "logsession-detail", args=[_id]
-        )
+        self.log_session_det_url = lambda _id: reverse("logsession-detail", args=[_id])
         self.log_file_url = reverse("logfile-list")
-        self.log_file_det_url = lambda _id : reverse(
-          "logfile-detail", args=[_id]
-        )
+        self.log_file_det_url = lambda _id: reverse("logfile-detail", args=[_id])
         self.log_video_url = reverse("logvideo-list")
-        self.log_video_det_url = lambda _id: reverse(
-          "logvideo-detail",args=[_id]
-        )
+        self.log_video_det_url = lambda _id: reverse("logvideo-detail", args=[_id])
 
         # Notification
         self.notif_url = reverse("notification-list")
@@ -291,29 +294,28 @@ class HDSTestAttributes:
 
         # PeriodicTask
         self.periodic_task_url = reverse("periodictask-list")
-        self.periodic_task_det_url = lambda id_: reverse("periodictask-detail", args=[id_])
-
+        self.periodic_task_det_url = lambda id_: reverse(
+            "periodictask-detail", args=[id_]
+        )
 
 
 class HDSAPITestBase(APITestCase, HDSTestAttributes):
     def setUp(self):
         self.client = APIClient()
-        self.user = User.objects.create_user(username='test_user')
+        self.user = User.objects.create_user(username="test_user")
         self.set_admin()
         self.user_profile = UserProfile.objects.create(
-            user=self.user,
-            slack_id="fake-id",
-            role=RoleChoices.MANAGER
+            user=self.user, slack_id="fake-id", role=RoleChoices.MANAGER
         )
         self.token = Token.objects.create(user=self.user)
-        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
-        self.api_base_url = '/api/v1'
+        self.client.credentials(HTTP_AUTHORIZATION="Token " + self.token.key)
+        self.api_base_url = "/api/v1"
         self.setup_urls()
         os.makedirs(settings.MEDIA_ROOT, exist_ok=True)
 
     def create_new_user_client(self, role=None):
         chars = string.ascii_letters + string.digits
-        username = ''.join(random.choice(chars) for _ in range(10))
+        username = "".join(random.choice(chars) for _ in range(10))
         if role is None:
             role = RoleChoices.MANAGER
         user = User.objects.create_user(username=username)
@@ -324,7 +326,7 @@ class HDSAPITestBase(APITestCase, HDSTestAttributes):
         )
         token = Token.objects.create(user=user)
         client = APIClient()
-        client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
+        client.credentials(HTTP_AUTHORIZATION="Token " + token.key)
         return client, user
 
     def set_admin(self):
@@ -361,35 +363,43 @@ class HDSAPITestBase(APITestCase, HDSTestAttributes):
 
     def setup_basic(self):
         self.test_objects = {}
-        self.test_objects["fruit"] = self.create_fruit_object('strawberry')
-        self.test_objects["distributor"] = self.create_distributor_object('test_distrib')
-        self.test_objects["location"] = self.create_location_object(**{
-            "distributor": self.test_objects["distributor"],
-            "ranch": "Ranch A",
-            "country": "US",
-            "region": "California",
-            'creator': self.user
-        })
-        self.test_objects["harvester"] = self.create_harvester_object(**{
-            'harv_id': 11,
-            'fruit': self.test_objects["fruit"],
-            'location': self.test_objects["location"],
-            'name': 'Harvester 1',
-            'creator': self.user
-        })
-        self.test_objects["code"] = AFTExceptionCode.objects.create(**{
-            'code': 0,
-            'name': 'AFTBaseException',
-            'msg': 'test message',
-            'team': 'aft',
-            'cycle': False,
-            'creator': self.user
-        })
+        self.test_objects["fruit"] = self.create_fruit_object("strawberry")
+        self.test_objects["distributor"] = self.create_distributor_object(
+            "test_distrib"
+        )
+        self.test_objects["location"] = self.create_location_object(
+            **{
+                "distributor": self.test_objects["distributor"],
+                "ranch": "Ranch A",
+                "country": "US",
+                "region": "California",
+                "creator": self.user,
+            }
+        )
+        self.test_objects["harvester"] = self.create_harvester_object(
+            **{
+                "harv_id": 11,
+                "fruit": self.test_objects["fruit"],
+                "location": self.test_objects["location"],
+                "name": "Harvester 1",
+                "creator": self.user,
+            }
+        )
+        self.test_objects["code"] = AFTExceptionCode.objects.create(
+            **{
+                "code": 0,
+                "name": "AFTBaseException",
+                "msg": "test message",
+                "team": "aft",
+                "cycle": False,
+                "creator": self.user,
+            }
+        )
         self.test_objects["dummy_report"] = {
             "timestamp": time(),
             "UUID": Event.generate_uuid(),
             "serial_number": self.test_objects["harvester"].harv_id,
-            "data": {"hello": "there"}
+            "data": {"hello": "there"},
         }
 
     def create_fruit_object(self, name=None):
@@ -400,45 +410,55 @@ class HDSAPITestBase(APITestCase, HDSTestAttributes):
         name = name or "test"
         return Distributor.objects.create(name=name, creator=self.user)
 
-    def create_location_object(self, distributor=None, ranch=None, country=None, region=None, creator=None):
+    def create_location_object(
+        self, distributor=None, ranch=None, country=None, region=None, creator=None
+    ):
         distributor = distributor or self.create_distributor_object()
         ranch = ranch or "test ranch"
         country = country or "USA"
         region = region or "Philadelphia"
         creator = creator or self.user
-        return Location.objects.create(**{
-            "distributor": distributor,
-            "ranch": ranch,
-            "country": country,
-            "region": region,
-            'creator': creator
-        })
+        return Location.objects.create(
+            **{
+                "distributor": distributor,
+                "ranch": ranch,
+                "country": country,
+                "region": region,
+                "creator": creator,
+            }
+        )
 
-    def create_harvester_object(self, harv_id, fruit=None, location=None, name=None, creator=None, is_emu=False):
+    def create_harvester_object(
+        self, harv_id, fruit=None, location=None, name=None, creator=None, is_emu=False
+    ):
         creator = None or self.user
         fruit = fruit or self.create_fruit_object()
         location = location or self.create_location_object()
         name = name or "test-harv"
         creator = creator or self.user
 
-        return Harvester.objects.create(**{
-            'harv_id': harv_id,
-            'fruit': fruit,
-            'location': location,
-            'name': name,
-            'creator': creator,
-            'is_emulator': is_emu,
-        })
+        return Harvester.objects.create(
+            **{
+                "harv_id": harv_id,
+                "fruit": fruit,
+                "location": location,
+                "name": name,
+                "creator": creator,
+                "is_emulator": is_emu,
+            }
+        )
 
     def create_exception_code_object(self, code, name, msg, team, cycle, creator):
-        return AFTExceptionCode.objects.create(**{
-            'code': code,
-            'name': name,
-            'msg': msg,
-            'team': team,
-            'cycle': cycle,
-            'creator': creator
-        })
+        return AFTExceptionCode.objects.create(
+            **{
+                "code": code,
+                "name": name,
+                "msg": msg,
+                "team": team,
+                "cycle": cycle,
+                "creator": creator,
+            }
+        )
 
     @staticmethod
     def create_s3event(key, tag_uuid=False):
@@ -448,54 +468,45 @@ class HDSAPITestBase(APITestCase, HDSTestAttributes):
             UUID = str(uuid.uuid1())
             full_key = f"{key}_{UUID}"
         event = {
-            "Records":[{
-                    "s3":{
-                        "bucket":{
-                            "name":"test-bucket"
-                        },
-                        "object":{"key": full_key}
-                    }
-                }]
-            }
+            "Records": [
+                {"s3": {"bucket": {"name": "test-bucket"}, "object": {"key": full_key}}}
+            ]
+        }
 
-        return {"Body": json.dumps(event)}, *S3FileSerializer.get_filetype_uuid(full_key)
+        return {"Body": json.dumps(event)}, *S3FileSerializer.get_filetype_uuid(
+            full_key
+        )
 
     def create_s3file(self, key, endpoint, has_uuid=False):
-        self.s3event, self.filetype, self.uuid = self.create_s3event(key, tag_uuid=has_uuid)
-        resp = self.client.post(
-            endpoint,
-            data=self.s3event,
-            format='json'
+        self.s3event, self.filetype, self.uuid = self.create_s3event(
+            key, tag_uuid=has_uuid
         )
+        resp = self.client.post(endpoint, data=self.s3event, format="json")
         return resp
 
-    def create_user(self, username, password, profile_kwargs = {}, **kwargs):
-            user = User.objects.create_user(
-            username=username,
-            password=password,
-            **kwargs
-            )
-            UserProfile.objects.create(user=user, **profile_kwargs)
-            return user
+    def create_user(self, username, password, profile_kwargs={}, **kwargs):
+        user = User.objects.create_user(username=username, password=password, **kwargs)
+        UserProfile.objects.create(user=user, **profile_kwargs)
+        return user
 
     def post_emustats_report(self, load=True):
         if load:
             self.load_emustats_report()
-        resp = self.client.post(self.emustats_url, self.emustats_data, format='json')
+        resp = self.client.post(self.emustats_url, self.emustats_data, format="json")
         self.assertEqual(resp.status_code, status.HTTP_201_CREATED, resp.json())
         return resp.json()
 
     def post_error_report(self, load=True):
         if load:
             self.load_error_report()
-        resp = self.client.post(self.error_url, self.data, format='json')
+        resp = self.client.post(self.error_url, self.data, format="json")
         self.assertEqual(resp.status_code, status.HTTP_201_CREATED, resp.json())
         return resp.json()
 
     def post_autodiag_report(self, load=True, resp_status=status.HTTP_201_CREATED):
         if load:
             self.load_autodiag_report()
-        resp = self.client.post(self.ad_url, self.ad_data, format='json')
+        resp = self.client.post(self.ad_url, self.ad_data, format="json")
         self.assertEqual(resp.status_code, resp_status)
         return resp.json()
 
@@ -504,13 +515,13 @@ class HDSAPITestBase(APITestCase, HDSTestAttributes):
             self.load_picksess_report()
         fpath = os.path.join(self.BASE_PATH, "picksess.json")
         event = self.create_s3event(key=fpath, tag_uuid=True)[0]
-        resp = self.client.post(self.griprep_url, event, format='json')
+        resp = self.client.post(self.griprep_url, event, format="json")
         self.assertEqual(resp.status_code, resp_status, msg=resp.json())
         return resp.json()
 
     @property
     def logpath(self):
-        return os.path.join(self.BASE_PATH, '20230614134221_013_00_harvester.log')
+        return os.path.join(self.BASE_PATH, "20230614134221_013_00_harvester.log")
 
     @property
     def extra_log_lines(self):
@@ -520,7 +531,7 @@ class HDSAPITestBase(APITestCase, HDSTestAttributes):
 
     @property
     def canpath(self):
-        return os.path.join(self.BASE_PATH, '20230131131250_010_03_CAN.dump')
+        return os.path.join(self.BASE_PATH, "20230131131250_010_03_CAN.dump")
 
     def tearDown(self):
         shutil.rmtree(settings.MEDIA_ROOT)
@@ -528,25 +539,25 @@ class HDSAPITestBase(APITestCase, HDSTestAttributes):
 
 
 class OpenApiTest(HDSAPITestBase):
-    """ Test OpenAPI Schema Generation """
+    """Test OpenAPI Schema Generation"""
 
     def test_get_schema(self):
-        resp = self.client.get(f'{self.api_base_url}/openapi')
+        resp = self.client.get(f"{self.api_base_url}/openapi")
         data = resp.data
-        keys = list(data['paths'].keys())
+        keys = list(data["paths"].keys())
         endpoints = [get_endpoint(p) for p in urlpatterns]
 
         assert compare_patterns(keys, endpoints)
 
-        assert data['info']['title'] == "Harvester Data Store"
+        assert data["info"]["title"] == "Harvester Data Store"
 
 
 class PrometheusTest(HDSAPITestBase):
-    """ Test Prometheus Endpoint """
+    """Test Prometheus Endpoint"""
 
     def test_get_prometheus(self):
-        """ create fruit and assert it exists """
-        resp = self.client.get('/metrics')
+        """create fruit and assert it exists"""
+        resp = self.client.get("/metrics")
         assert resp.status_code == 200
 
 
@@ -555,17 +566,15 @@ class ManageUserTest(HDSAPITestBase):
 
     def setUp(self):
         self.payload = {
-            'username': 'afttest',
-            'first_name': 'Aft',
-            'last_name': 'Aft',
-            'email': 'aft@aft.aft',
-            'password': 'password',
-            'profile': {
-                'slack_id': 'slack@aft.aft'
-            }
+            "username": "afttest",
+            "first_name": "Aft",
+            "last_name": "Aft",
+            "email": "aft@aft.aft",
+            "password": "password",
+            "profile": {"slack_id": "slack@aft.aft"},
         }
-        self.unauthorized_create_msg = 'Unable to authorize user for create action'
-        self.unauthorized_update_msg = 'Unable to authorize user for update action'
+        self.unauthorized_create_msg = "Unable to authorize user for create action"
+        self.unauthorized_update_msg = "Unable to authorize user for update action"
         return super().setUp()
 
     def test_non_superuser_cannot_create_user(self):
@@ -576,11 +585,10 @@ class ManageUserTest(HDSAPITestBase):
         """
         self.user.is_superuser = False
         self.user.save()
-        res = self.client.post(self.user_url, self.payload, format='json')
+        res = self.client.post(self.user_url, self.payload, format="json")
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(
-            res.json()["errors"]["detail"][0],
-            self.unauthorized_create_msg
+            res.json()["errors"]["detail"][0], self.unauthorized_create_msg
         )
 
     def test_non_superuser_cannot_update_user(self):
@@ -591,16 +599,15 @@ class ManageUserTest(HDSAPITestBase):
         """
         self.user.is_superuser = False
         self.user.save()
-        user = self.create_user(username='aftuser', password='testpass123')
-        self.payload.update({'username': user.username})
-        self.payload.pop('password')
+        user = self.create_user(username="aftuser", password="testpass123")
+        self.payload.update({"username": user.username})
+        self.payload.pop("password")
         url = self.user_detail_url(user.id)
-        res = self.client.patch(url, self.payload, format='json')
+        res = self.client.patch(url, self.payload, format="json")
 
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(
-            res.json()["errors"]["detail"][0],
-            self.unauthorized_update_msg
+            res.json()["errors"]["detail"][0], self.unauthorized_update_msg
         )
 
     def test_create_user_successfully(self):
@@ -609,23 +616,20 @@ class ManageUserTest(HDSAPITestBase):
         self.user.is_superuser = True
         self.user.save()
         self.user.refresh_from_db()
-        res = self.client.post(self.user_url, self.payload, format='json')
+        res = self.client.post(self.user_url, self.payload, format="json")
 
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
-        user = User.objects.get(username=self.payload['username'])
-        self.assertEqual(user.email, self.payload['email'])
+        user = User.objects.get(username=self.payload["username"])
+        self.assertEqual(user.email, self.payload["email"])
 
     def test_retrieve_user_successfully(self):
         """Test retrieve new user successfully"""
-        user = self.create_user(username='aftuser', password='testpass123')
+        user = self.create_user(username="aftuser", password="testpass123")
         serializer = UserSerializer(user).data
         res = self.client.get(self.user_detail_url(user.id))
 
         self.assertEqual(res.status_code, status.HTTP_200_OK)
-        self.assertEqual(
-            res.json()['data']['first_name'],
-            serializer.get('first_name')
-        )
+        self.assertEqual(res.json()["data"]["first_name"], serializer.get("first_name"))
 
     def test_update_user_detail_successfully(self):
         """Test updating user detail."""
@@ -633,25 +637,25 @@ class ManageUserTest(HDSAPITestBase):
         self.user.is_superuser = True
         self.user.save()
         self.user.refresh_from_db()
-        user = self.create_user(username='aftuser', password='testpass123')
-        self.payload.update({'username': user.username})
-        self.payload.pop('password')
+        user = self.create_user(username="aftuser", password="testpass123")
+        self.payload.update({"username": user.username})
+        self.payload.pop("password")
         url = self.user_detail_url(user.id)
-        res = self.client.patch(url, self.payload, format='json')
+        res = self.client.patch(url, self.payload, format="json")
         user.refresh_from_db()
 
         self.assertEqual(res.status_code, status.HTTP_200_OK)
-        self.assertEqual(user.first_name, self.payload['first_name'])
+        self.assertEqual(user.first_name, self.payload["first_name"])
 
     def test_self_can_update_user_profile(self):
         """Test self can update his/her user profle."""
-        self.payload.update({'username': self.user.username})
+        self.payload.update({"username": self.user.username})
         url = self.user_detail_url(self.user.id)
-        res = self.client.patch(url, self.payload, format='json')
+        res = self.client.patch(url, self.payload, format="json")
         self.user.refresh_from_db()
 
         self.assertEqual(res.status_code, status.HTTP_200_OK)
-        self.assertEqual(self.user.email, self.payload['email'])
+        self.assertEqual(self.user.email, self.payload["email"])
 
     def test_user_can_change_password(self):
         """Test user can change password."""
@@ -659,20 +663,22 @@ class ManageUserTest(HDSAPITestBase):
         self.user.set_password(og_user_password)
         self.user.save()
         self.user.refresh_from_db()
-        self.payload.update({
-            'username': self.user.username,
-            'new_password': 'newpasswordtobeupdated',
-            'current_password': og_user_password,
-        })
-        res = self.client.post(self.change_pwd_url, self.payload, format='json')
+        self.payload.update(
+            {
+                "username": self.user.username,
+                "new_password": "newpasswordtobeupdated",
+                "current_password": og_user_password,
+            }
+        )
+        res = self.client.post(self.change_pwd_url, self.payload, format="json")
         self.user.refresh_from_db()
         self.assertEqual(res.status_code, status.HTTP_200_OK)
-        self.assertTrue(self.user.check_password(self.payload['new_password']))
+        self.assertTrue(self.user.check_password(self.payload["new_password"]))
 
 
 class TestUtils(unittest.TestCase):
     def test_frontend_url(self):
-        url = build_frontend_url('test_endpoint', 1)
+        url = build_frontend_url("test_endpoint", 1)
 
         self.assertEqual(url, "http://localhost:3000/test_endpoint/1/")
 
@@ -702,29 +708,27 @@ class TestUtils(unittest.TestCase):
 
 
 class TestRoles(HDSAPITestBase):
-    IGNORE = ["/api/v1/sessclip/0/mock/"]  # We really need to stop using this sessclip endpoint anyway...
+    IGNORE = [
+        "/api/v1/sessclip/0/mock/"
+    ]  # We really need to stop using this sessclip endpoint anyway...
 
     def test_create_model_perms(self):
         class TestView(CreateModelViewSet):
-            view_permissions_update = {
-                'create': {
-                    RoleChoices.SUPPORT: True
-                }
-            }
+            view_permissions_update = {"create": {RoleChoices.SUPPORT: True}}
 
-        exp = merge_nested_dict(CreateModelViewSet.view_permissions, TestView.view_permissions_update)
+        exp = merge_nested_dict(
+            CreateModelViewSet.view_permissions, TestView.view_permissions_update
+        )
 
         self.assertDictEqual(exp, TestView().view_permissions)
 
     def test_report_model_perms(self):
         class TestView(ReportModelViewSet):
-            view_permissions_update = {
-                'create': {
-                    RoleChoices.SUPPORT: True
-                }
-            }
+            view_permissions_update = {"create": {RoleChoices.SUPPORT: True}}
 
-        exp = merge_nested_dict(ReportModelViewSet.view_permissions, TestView.view_permissions_update)
+        exp = merge_nested_dict(
+            ReportModelViewSet.view_permissions, TestView.view_permissions_update
+        )
 
         self.assertDictEqual(exp, TestView().view_permissions)
 
@@ -768,21 +772,25 @@ class TestRoles(HDSAPITestBase):
                 requester = getattr(self.client, http_method)
 
                 # Loop through all roles + admin
-                for role in list(RoleChoices) + ['admin']:
-                    if role == 'admin':
+                for role in list(RoleChoices) + ["admin"]:
+                    if role == "admin":
                         self.set_admin()
                     else:
                         self.set_user_role(role)
 
                     response = requester(url, **kwargs)
                     request = response.wsgi_request
-                    setattr(request, "data", MagicMock()) # whitelist method requires data in the request
+                    setattr(
+                        request, "data", MagicMock()
+                    )  # whitelist method requires data in the request
                     for allowed_role, condition in permissions[action].items():
                         # Go through permission dict for this action, check if role allowed.
                         is_allowed = ROLES[allowed_role]
                         if callable(condition):
                             # There are special conditions in some views
-                            allowed = is_allowed(request, view) and condition(request, view)
+                            allowed = is_allowed(request, view) and condition(
+                                request, view
+                            )
                         else:
                             allowed = is_allowed(request, view)
                         if allowed:
@@ -790,8 +798,10 @@ class TestRoles(HDSAPITestBase):
                             break
                     # Check allowed vs 403
                     if (
-                        (allowed and response.status_code == status.HTTP_403_FORBIDDEN) or
-                        (response.status_code != status.HTTP_403_FORBIDDEN and not allowed)
+                        allowed and response.status_code == status.HTTP_403_FORBIDDEN
+                    ) or (
+                        response.status_code != status.HTTP_403_FORBIDDEN
+                        and not allowed
                     ):
                         raise_for_broken_perm = True
                         broken_permissions[(view.__name__, action)][role] = {

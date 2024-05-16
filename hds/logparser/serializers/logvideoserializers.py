@@ -20,26 +20,27 @@ class LogVideoUploadSerializer(serializers.ModelSerializer):
     """Serializer for video upload"""
 
     class Meta:
-      model = LogVideo
-      fields = ['video_avi']
-      read_only_fields = ['id']
+        model = LogVideo
+        fields = ["video_avi"]
+        read_only_fields = ["id"]
 
 
 class LogVideoSerializer(serializers.ModelSerializer):
     """Serializer for log video model"""
+
     video_avi = serializers.FileField()
 
     class Meta:
         model = LogVideo
-        fields = ('__all__')
-        ready_only_fields = ['id']
+        fields = "__all__"
+        ready_only_fields = ["id"]
 
     @staticmethod
     def extract_filepath(file_name, path_id):
         full_dirpath = os.path.join(
             settings.EXTRACT_DIR,
             f"{path_id}",
-            os.path.splitext(os.path.basename(file_name))[0]
+            os.path.splitext(os.path.basename(file_name))[0],
         )
         os.makedirs(full_dirpath, exist_ok=True)
         return full_dirpath
@@ -56,8 +57,8 @@ class LogVideoSerializer(serializers.ModelSerializer):
         robot = None
         category = None
 
-        robot_pattern = re.compile(r'_\d{2}_')
-        cat_pattern = re.compile(r'[a-z]+(\-[a-z]+)?')
+        robot_pattern = re.compile(r"_\d{2}_")
+        cat_pattern = re.compile(r"[a-z]+(\-[a-z]+)?")
         robot_match = robot_pattern.search(filename)
         cat_match = cat_pattern.search(filename)
 
@@ -65,9 +66,9 @@ class LogVideoSerializer(serializers.ModelSerializer):
             robot = int(robot_match.group(0).replace("_", ""))
         else:
             ASYNC_ERROR_COUNTER.labels(
-                'extract_robot_category',
+                "extract_robot_category",
                 AttributeError.__name__,
-                "Failed robot pattern match"
+                "Failed robot pattern match",
             ).inc()
             logger.error(f"could not match robot on file", filename=filename)
 
@@ -75,9 +76,9 @@ class LogVideoSerializer(serializers.ModelSerializer):
             category = cat_match.group(0)
         else:
             ASYNC_ERROR_COUNTER.labels(
-                'extract_robot_category',
+                "extract_robot_category",
                 AttributeError.__name__,
-                "Failed category pattern match"
+                "Failed category pattern match",
             ).inc()
             logger.error(f"could not match category on file", filename=filename)
 
@@ -94,7 +95,14 @@ class LogVideoSerializer(serializers.ModelSerializer):
             stream.write_videofile(mp4_file_path)
             file_size = os.path.getsize(mp4_file_path)
             with open(mp4_file_path, "rb") as fh:
-                in_mem_upload = InMemoryUploadedFile(fh, field_name="video_avi", name=mp4_file_name, size=file_size, content_type="video/x-msvideo", charset=None)
+                in_mem_upload = InMemoryUploadedFile(
+                    fh,
+                    field_name="video_avi",
+                    name=mp4_file_name,
+                    size=file_size,
+                    content_type="video/x-msvideo",
+                    charset=None,
+                )
                 data = {
                     "key": media_upload_path(log_session, mp4_file_name),
                     "filetype": "mp4",
@@ -118,9 +126,7 @@ class LogVideoSerializer(serializers.ModelSerializer):
         except Exception as e:
             exc = type(e).__name__
             ASYNC_ERROR_COUNTER.labels(
-                'extract_video_log',
-                e.__class__.__name__,
-                "Could not save log video"
+                "extract_video_log", e.__class__.__name__, "Could not save log video"
             ).inc()
             logger.error(
                 f"could not save the log video",
@@ -134,7 +140,7 @@ class LogVideoSerializer(serializers.ModelSerializer):
         """extract meta json data from .json files."""
         ext = ".avi"
         first = filename.split(".")[0]
-        filename = f'{first}{ext}'
+        filename = f"{first}{ext}"
         try:
             log_vid_obj = LogVideo.objects.get(file_name=filename)
             meta_content = []
@@ -147,9 +153,9 @@ class LogVideoSerializer(serializers.ModelSerializer):
             log_vid_obj.save()
         except LogVideo.DoesNotExist:
             ASYNC_ERROR_COUNTER.labels(
-                'extract_meta_json_data',
+                "extract_meta_json_data",
                 LogVideo.DoesNotExist.__name__,
-                "Log video does not exist"
+                "Log video does not exist",
             ).inc()
             logger.error(
                 f"could not find log video with given name",

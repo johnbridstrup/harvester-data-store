@@ -10,9 +10,11 @@ class AdminUtilsTestCase(HDSAPITestBase):
     def setUp(self):
         super().setUp()
         self.setup_basic()
-    
+
     def test_clean_beatbox(self):
-        self.create_harvester_object(10000, name="sb-beatbox", fruit=self.test_objects["fruit"])
+        self.create_harvester_object(
+            10000, name="sb-beatbox", fruit=self.test_objects["fruit"]
+        )
         self.load_error_report()
         self.data["serial_number"] = 10000
 

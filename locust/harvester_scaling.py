@@ -21,6 +21,7 @@ class HarvesterUser(UserBase):
        - Version uploads
 
     """
+
     ENDPOINTS = {
         "error": "/api/v1/errorreports/",
         "config": "/api/v1/aftconfigs/",
@@ -32,10 +33,10 @@ class HarvesterUser(UserBase):
         "version": "/api/v1/harvversion/",
     }
 
-    wait_time = between(20, 120) # Range of times between harvester arm/pick cycles
+    wait_time = between(20, 120)  # Range of times between harvester arm/pick cycles
     ERR_PER_HR = 1  # One error per hour of picking. Maybe generous...
     HANDLED_ERR_PERCENT = 0.3  # Rough percentage of errors that are handled
-    FULL_ROW_TIME = 30*60  # Seconds spent picking if all goes well
+    FULL_ROW_TIME = 30 * 60  # Seconds spent picking if all goes well
     VERSION_CADENCE = 60  # Every minute we upload version
 
     def on_start(self):
@@ -58,7 +59,9 @@ class HarvesterUser(UserBase):
                 if not do_continue:
                     break
                 event_t, event, do_continue = self._next_event(elapsed_time)
-            self.async_wait(self.VERSION_CADENCE) # Let's assume for now the version cadence is high enough resolution.
+            self.async_wait(
+                self.VERSION_CADENCE
+            )  # Let's assume for now the version cadence is high enough resolution.
             self._version_upload()
         # Stop picking
         self._stop_picking()
@@ -136,12 +139,12 @@ class HarvesterUser(UserBase):
         """
         # Kinetic Monte Carlo
         # https://en.wikipedia.org/wiki/Kinetic_Monte_Carlo
-        r_err = self.ERR_PER_HR/3600
+        r_err = self.ERR_PER_HR / 3600
         r_hand = r_err * (1 + self.HANDLED_ERR_PERCENT)
 
         Q = r_err + r_hand
         uQ = Q * random.random()
-        evt_t = round((1/Q) * math.log(1/random.random())) + elapsed_time
+        evt_t = round((1 / Q) * math.log(1 / random.random())) + elapsed_time
 
         if uQ < r_err:
             return evt_t, self._error, False
@@ -170,13 +173,12 @@ class HarvesterUser(UserBase):
         if r.json()["data"]["count"] > 0:
             return
         harv = {
-			"harv_id": self.worker_id,
-			"fruit": 1,
-			"location": 1,
-			"name": f"worker_{self.worker_id}",
-		}
+            "harv_id": self.worker_id,
+            "fruit": 1,
+            "location": 1,
+            "name": f"worker_{self.worker_id}",
+        }
         self.post(ep, json=harv, name="Create Harv")
-
 
     def _adjust_serial_num(self, report):
         report["serial_number"] = self.worker_id

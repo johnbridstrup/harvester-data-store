@@ -2,49 +2,45 @@ from rest_framework import serializers
 
 from common.serializers.userserializer import UserCustomSerializer
 from harvester.serializers.harvesterserializer import HarvesterMinimalSerializer
-from .models import (
-    AFTExceptionCode,
-    AFTExceptionCodeManifest,
-    AFTException
-)
+from .models import AFTExceptionCode, AFTExceptionCodeManifest, AFTException
 
 
 class AFTExceptionCodeManifestSerializer(serializers.ModelSerializer):
     class Meta:
         model = AFTExceptionCodeManifest
-        fields = ('__all__')
-        read_only_fields = ('creator',)
+        fields = "__all__"
+        read_only_fields = ("creator",)
 
 
 class AFTExceptionCodeSerializer(serializers.ModelSerializer):
     class Meta:
         model = AFTExceptionCode
-        fields = ('__all__')
-        read_only_fields = ('creator',)
+        fields = "__all__"
+        read_only_fields = ("creator",)
 
 
 class AFTExceptionSerializer(serializers.ModelSerializer):
     def to_internal_value(self, data):
-        code = AFTExceptionCode.objects.get(code=data['code'])
+        code = AFTExceptionCode.objects.get(code=data["code"])
         data._mutable = True
-        data['code'] = code.pk
+        data["code"] = code.pk
         data._mutable = False
         return super().to_internal_value(data)
 
     class Meta:
         model = AFTException
-        fields = ('__all__')
-        read_only_fields = ('creator',)
+        fields = "__all__"
+        read_only_fields = ("creator",)
 
 
 class ParetoSerializer(serializers.Serializer):
     # Turns queryset into data with value and count
-    value = serializers.CharField() # Can be int or str
+    value = serializers.CharField()  # Can be int or str
     count = serializers.IntegerField()
 
     def __init__(self, instance=None, data=..., new_name=None, **kwargs):
         super().__init__(instance, data, **kwargs)
-        self.new_name=new_name
+        self.new_name = new_name
 
     def to_representation(self, instance):
         data = super().to_representation(instance)

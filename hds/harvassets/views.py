@@ -5,7 +5,7 @@ from .models import HarvesterAsset, HarvesterAssetReport
 from .serializers import (
     HarvesterAssetReportSerializer,
     HarvesterAssetSerializer,
-    HarvesterAssetReportDetailSerializer
+    HarvesterAssetReportDetailSerializer,
 )
 from .tasks import extract_assets
 
@@ -14,14 +14,12 @@ class HarvesterAssetReportView(ReportModelViewSet):
     queryset = HarvesterAssetReport.objects.all()
     serializer_class = HarvesterAssetReportSerializer
     filterset_class = HarvesterAssetReportFilterset
-    action_serializers = {
-        "retrieve": HarvesterAssetReportDetailSerializer
-    }
+    action_serializers = {"retrieve": HarvesterAssetReportDetailSerializer}
 
     def perform_create(self, serializer):
         super().perform_create(serializer)
         data = serializer.data
-        extract_assets.delay(data['id'])
+        extract_assets.delay(data["id"])
 
 
 class HarvesterAssetView(CreateModelViewSet):

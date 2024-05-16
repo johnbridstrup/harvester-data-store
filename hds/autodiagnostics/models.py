@@ -13,7 +13,9 @@ class AutodiagnosticsReport(PickSessionModelMixin, ReportBase):
 
 
 class AutodiagnosticsRun(CommonInfo):
-    report = models.OneToOneField(AutodiagnosticsReport, on_delete=models.CASCADE, related_name="run_data")
+    report = models.OneToOneField(
+        AutodiagnosticsReport, on_delete=models.CASCADE, related_name="run_data"
+    )
     gripper = models.ForeignKey(HarvesterAsset, on_delete=models.CASCADE)
     robot_id = models.IntegerField()
     run_timestamp = models.DateTimeField()

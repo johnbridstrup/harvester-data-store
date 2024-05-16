@@ -6,11 +6,12 @@ from location.serializers.locationserializer import LocationMinimalSerializer
 
 from .models import ConfigReport
 
+
 class ConfigReportSerializer(EventSerializerMixin, ReportSerializerBase):
     class Meta:
         model = ConfigReport
-        fields = ('__all__')
-        read_only_fields = ('creator',)
+        fields = "__all__"
+        read_only_fields = ("creator",)
 
     def to_internal_value(self, data):
         report = data.copy()
@@ -18,7 +19,7 @@ class ConfigReportSerializer(EventSerializerMixin, ReportSerializerBase):
         UUID = self.extract_uuid(report)
         creator = self.get_user_from_request()
         event = self.get_or_create_event(UUID, creator, ConfigReport.__name__)
-        data['event'] = event.id
+        data["event"] = event.id
         return super().to_internal_value(data)
 
 

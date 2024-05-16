@@ -3,9 +3,7 @@ from django.views.decorators.cache import cache_page
 from rest_framework.decorators import action
 from rest_framework.renderers import JSONRenderer
 
-from harvester.serializers.harvesterserializer import (
-    HarvesterSerializer
-)
+from harvester.serializers.harvesterserializer import HarvesterSerializer
 from common.viewsets import CreateModelViewSet
 from common.utils import make_ok
 from hds.roles import RoleChoices
@@ -14,7 +12,7 @@ from ..filters import ReleaseFilter
 from ..models import HarvesterCodeRelease
 from ..serializers import (
     HarvesterCodeReleaseSerializer,
-    HarvesterCodeReleaseDetailSerializer
+    HarvesterCodeReleaseDetailSerializer,
 )
 
 
@@ -24,34 +22,32 @@ class HarvesterCodeReleaseView(CreateModelViewSet):
     filterset_class = ReleaseFilter
     ordering = ("-created",)
     view_permissions_update = {
-        'create': {
+        "create": {
             RoleChoices.JENKINS: True,
         },
-        'destroy': {
+        "destroy": {
             RoleChoices.MANAGER: True,
         },
-        'update': {
+        "update": {
             RoleChoices.DEVELOPER: True,
-        }, # This should handle only updating tags
-        'update_tags': {
+        },  # This should handle only updating tags
+        "update_tags": {
             RoleChoices.DEVELOPER: True,
         },
-        'harvester_view': {
+        "harvester_view": {
             RoleChoices.SUPPORT: True,
         },
-        'tags_view': {
+        "tags_view": {
             RoleChoices.SUPPORT: True,
         },
     }
-    action_serializers = {
-        "retrieve": HarvesterCodeReleaseDetailSerializer
-    }
+    action_serializers = {"retrieve": HarvesterCodeReleaseDetailSerializer}
 
     @action(
         methods=["post", "patch"],
         detail=True,
         url_path="update_tags",
-        renderer_classes=[JSONRenderer]
+        renderer_classes=[JSONRenderer],
     )
     def update_tags(self, request, pk=None):
         obj = self.get_object()
@@ -63,12 +59,12 @@ class HarvesterCodeReleaseView(CreateModelViewSet):
         return make_ok("Tags updated", response_data=serializer.data)
 
     @action(
-        methods=['GET'],
+        methods=["GET"],
         detail=True,
-        url_path='harvesters',
-        renderer_classes=[JSONRenderer]
+        url_path="harvesters",
+        renderer_classes=[JSONRenderer],
     )
-    @method_decorator(cache_page(60*10))
+    @method_decorator(cache_page(60 * 10))
     def harvester_view(self, request, pk=None):
         obj = self.get_object()
         queryset = obj.harvester_set.all()
@@ -84,14 +80,8 @@ class HarvesterCodeReleaseView(CreateModelViewSet):
         return make_ok(f"Harvesters release retrieved successfully", data)
 
     @action(
-        methods=['GET'],
-        detail=False,
-        url_path='tags',
-        renderer_classes=[JSONRenderer]
+        methods=["GET"], detail=False, url_path="tags", renderer_classes=[JSONRenderer]
     )
     def tags_view(self, request, pk=None):
         queryset = HarvesterCodeRelease.tags.all().values_list("name", flat=True)
-        return make_ok(
-            f"Release tags retrieved successfully",
-            {'tags': list(queryset)}
-        )
+        return make_ok(f"Release tags retrieved successfully", {"tags": list(queryset)})

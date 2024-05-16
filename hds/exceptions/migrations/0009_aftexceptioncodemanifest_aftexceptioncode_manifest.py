@@ -9,28 +9,56 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('exceptions', '0008_aftexceptioncode_operator_msg'),
+        ("exceptions", "0008_aftexceptioncode_operator_msg"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='AFTExceptionCodeManifest',
+            name="AFTExceptionCodeManifest",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created', models.DateTimeField(auto_now_add=True)),
-                ('lastModified', models.DateTimeField(auto_now=True)),
-                ('version', models.CharField(max_length=31)),
-                ('manifest', models.JSONField()),
-                ('creator', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='%(app_label)s_%(class)s_creator_related', to=settings.AUTH_USER_MODEL)),
-                ('modifiedBy', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='%(app_label)s_%(class)s_modifiedby_related', to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("created", models.DateTimeField(auto_now_add=True)),
+                ("lastModified", models.DateTimeField(auto_now=True)),
+                ("version", models.CharField(max_length=31)),
+                ("manifest", models.JSONField()),
+                (
+                    "creator",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="%(app_label)s_%(class)s_creator_related",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
+                (
+                    "modifiedBy",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="%(app_label)s_%(class)s_modifiedby_related",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
         ),
         migrations.AddField(
-            model_name='aftexceptioncode',
-            name='manifest',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='exceptions.aftexceptioncodemanifest'),
+            model_name="aftexceptioncode",
+            name="manifest",
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                to="exceptions.aftexceptioncodemanifest",
+            ),
         ),
     ]

@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('exceptions', '0010_aftexception_primary'),
+        ("exceptions", "0010_aftexception_primary"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='aftexception',
-            name='primary',
+            model_name="aftexception",
+            name="primary",
             field=models.BooleanField(blank=True, null=True),
         ),
     ]

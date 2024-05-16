@@ -6,23 +6,23 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('harvester', '0007_alter_fruit_name_alter_harvester_name_and_more'),
+        ("harvester", "0007_alter_fruit_name_alter_harvester_name_and_more"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='fruit',
-            name='created',
+            model_name="fruit",
+            name="created",
             field=models.DateTimeField(auto_now_add=True, db_index=True),
         ),
         migrations.AlterField(
-            model_name='harvester',
-            name='created',
+            model_name="harvester",
+            name="created",
             field=models.DateTimeField(auto_now_add=True, db_index=True),
         ),
         migrations.AlterField(
-            model_name='historicalharvester',
-            name='created',
+            model_name="historicalharvester",
+            name="created",
             field=models.DateTimeField(blank=True, db_index=True, editable=False),
         ),
     ]

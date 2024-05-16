@@ -7,25 +7,23 @@ from .models import AutodiagnosticsReport, AutodiagnosticsRun
 from .serializers import (
     AutodiagnosticsReportDetailSerializer,
     AutodiagnosticsReportSerializer,
-    AutodiagnosticsRunSerializer
+    AutodiagnosticsRunSerializer,
 )
 from .tasks import extract_autodiag_run
 
 
 MAGIC_GRIPPER_SN = 1297
-MAGIC_GRIPPER_MSG = f'Magic gripper {MAGIC_GRIPPER_SN} ignored.'
+MAGIC_GRIPPER_MSG = f"Magic gripper {MAGIC_GRIPPER_SN} ignored."
 
 
 class AutodiagnosticsReportView(ReportModelViewSet):
     queryset = AutodiagnosticsReport.objects.all()
     serializer_class = AutodiagnosticsReportSerializer
     filterset_class = AutodiagnosticsReportFilter
-    action_serializers = {
-        "retrieve": AutodiagnosticsReportDetailSerializer
-    }
+    action_serializers = {"retrieve": AutodiagnosticsReportDetailSerializer}
 
     def create(self, request, *args, **kwargs):
-        gripper_sn = int(request.data['data']['serial_no'])
+        gripper_sn = int(request.data["data"]["serial_no"])
         if gripper_sn == MAGIC_GRIPPER_SN:
             return Response(MAGIC_GRIPPER_MSG)
         return super().create(request, *args, **kwargs)

@@ -12,9 +12,10 @@ class ReleaseFilter(CommonInfoFilterset):
     class Meta:
         model = HarvesterCodeRelease
         fields = CommonInfoFilterset.FIELDS_BASE + [
-            'fruit', 
-            'tags',
+            "fruit",
+            "tags",
         ]
+
 
 class VersionFilterset(ReportFilterset):
     class Meta:

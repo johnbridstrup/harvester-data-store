@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('event', '0004_picksession_picksessiontag_picksession_tags_and_more'),
+        ("event", "0004_picksession_picksessiontag_picksession_tags_and_more"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='event',
-            name='secondary_events',
-            field=models.ManyToManyField(blank=True, to='event.event'),
+            model_name="event",
+            name="secondary_events",
+            field=models.ManyToManyField(blank=True, to="event.event"),
         ),
     ]

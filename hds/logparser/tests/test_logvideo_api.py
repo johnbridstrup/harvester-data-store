@@ -21,4 +21,3 @@ class LogVideoTestCase(LogBaseTestCase):
         res = self.client.get(self.log_video_det_url(log.id))
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(res.data["file_name"], log.file_name)
-

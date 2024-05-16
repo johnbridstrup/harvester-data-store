@@ -6,9 +6,11 @@ from .tasks import check_notifications, notify_operator_task, post_to_slack_task
 
 error_report_created = Signal()
 
+
 @receiver(error_report_created)
 def check_notify_reports(sender, instance_id, url, **kwargs):
-    check_notifications.delay('errorreport', ErrorReport.__name__, instance_id, url)
+    check_notifications.delay("errorreport", ErrorReport.__name__, instance_id, url)
+
 
 @receiver(error_report_created)
 def post_to_harv_dev(sender, instance_id, url, **kwargs):

@@ -32,39 +32,39 @@ def build_list_filter(request):
             listfilter["harvester__fruit__name__in"] = fruits
 
     # get exception codes from query_params
-    if 'codes' in request.query_params:
+    if "codes" in request.query_params:
         codes = request.query_params["codes"].split(",")
         if len(codes) > 0:
-            listfilter['exceptions__code__code__in'] = codes
+            listfilter["exceptions__code__code__in"] = codes
 
     # get traceback from query_params
-    if 'traceback' in request.query_params:
+    if "traceback" in request.query_params:
         traceback = request.query_params["traceback"]
-        listfilter['exceptions__traceback'] = traceback
+        listfilter["exceptions__traceback"] = traceback
 
     # get traceback from query_params
-    if 'generic' in request.query_params:
+    if "generic" in request.query_params:
         generic = request.query_params["generic"]
-        for item in generic.split(','):
+        for item in generic.split(","):
             try:
-                key, value = item.split('=')
+                key, value = item.split("=")
             except ValueError:
                 pass
             listfilter[key.strip()] = value.strip()
 
     # get is_emulator from query params
-    if 'is_emulator' in request.query_params:
-        is_emulator = request.query_params['is_emulator'].lower() in ['1', 'true']
-        listfilter['harvester__is_emulator'] = is_emulator
+    if "is_emulator" in request.query_params:
+        is_emulator = request.query_params["is_emulator"].lower() in ["1", "true"]
+        listfilter["harvester__is_emulator"] = is_emulator
 
     # get handled from query params
-    if 'handled' in request.query_params:
-        handled = request.query_params['handled'].lower() in ['1', 'true']
-        listfilter['exceptions__handled'] = handled
+    if "handled" in request.query_params:
+        handled = request.query_params["handled"].lower() in ["1", "true"]
+        listfilter["exceptions__handled"] = handled
 
     # get primary exceptions flag
-    if 'primary' in request.query_params:
-        primary = request.query_params['primary'].lower() in ['1', 'true']
-        listfilter['exceptions__primary'] = primary
+    if "primary" in request.query_params:
+        primary = request.query_params["primary"].lower() in ["1", "true"]
+        listfilter["exceptions__primary"] = primary
 
     return listfilter

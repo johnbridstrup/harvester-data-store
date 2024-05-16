@@ -25,15 +25,17 @@ class DynamicKey:
     @classmethod
     def schema(cls, required):
         raise NotImplementedError(f"schema not implemented for {cls.__name__}")
-    
+
     @classmethod
     def default_value_obj(cls):
-        raise NotImplementedError(f"default_value_obj not implemented for {cls.__name__}")
-    
+        raise NotImplementedError(
+            f"default_value_obj not implemented for {cls.__name__}"
+        )
+
     @classmethod
     def name(cls):
         return cls.__name__
-    
+
     @classmethod
     def validate(cls, obj):
         jsonschema.validate(obj, cls.schema())
@@ -48,7 +50,7 @@ class DynamicKey:
     def create_entry(cls, obj):
         cls.validate(obj)
         return cls.make_entry(obj)
-    
+
     @classmethod
     def make_entry(cls, obj):
         raise NotImplementedError(f"make_entry not implemented for {cls.__name__}")
@@ -78,19 +80,23 @@ class DynamicKeys:
             schema["properties"][dyn_key_name] = {
                 "type": "object",
                 "title": prop,
-                "properties": {}
+                "properties": {},
             }
-            schema["properties"][dyn_key_name]["properties"].update(cls._generate_dynamic_options_prop())
-            schema["properties"][dyn_key_name]["allOf"] = cls._create_allof_list(obj_schema)
+            schema["properties"][dyn_key_name]["properties"].update(
+                cls._generate_dynamic_options_prop()
+            )
+            schema["properties"][dyn_key_name]["allOf"] = cls._create_allof_list(
+                obj_schema
+            )
         return schema
-    
+
     @classmethod
     def create_entries(cls, dynamic_obj):
         obj = copy.deepcopy(dynamic_obj)
         for key in dynamic_obj.keys():
             if not cls.DYNAMIC_PREFIX in key:
                 continue
-            
+
             val = obj.pop(key)
             selection = val.pop(cls.DYNAMIC_SELECTION)
             recovered_key = key.replace(cls.DYNAMIC_PREFIX, "")
@@ -98,15 +104,13 @@ class DynamicKeys:
             if selection == cls.EXACT:
                 obj[recovered_key] = val["value"]
                 continue
-            
+
             dyn_key: DynamicKey = cls._DYN_KEYS[selection]
             value_obj = val.get("value", {})
             full_val_obj = dyn_key.fill_with_defaults(value_obj)
             obj[recovered_key] = dyn_key.create_entry(full_val_obj)
         return obj
 
-
-    
     @classmethod
     def _create_dyn_key_name(cls, prop):
         return f"{cls.DYNAMIC_PREFIX}{prop}"
@@ -116,11 +120,11 @@ class DynamicKeys:
         opts = [cls.EXACT]
         opts += [name for name in cls._DYN_KEYS.keys()]
         return {
-            cls.DYNAMIC_SELECTION:{
+            cls.DYNAMIC_SELECTION: {
                 "enum": opts,
             }
         }
-    
+
     @classmethod
     def _create_allof_list(cls, original):
         if_thens = [
@@ -132,16 +136,12 @@ class DynamicKeys:
                         },
                     },
                 },
-                "then": {
-                    "properties": {
-                        "value": {**original}
-                    }
-                }
+                "then": {"properties": {"value": {**original}}},
             }
         ]
         if_thens.extend([cls._create_dk_if_then(dk) for dk in cls._DYN_KEYS.values()])
         return if_thens
-    
+
     @classmethod
     def _create_dk_if_then(cls, dk: DynamicKey):
         dkschem = dk.schema()
@@ -159,7 +159,7 @@ class DynamicKeys:
                 },
             },
         }
-    
+
 
 @DynamicKeys.register
 class TimeOfSchedule(DynamicKey):
@@ -185,12 +185,10 @@ class TimeOfSchedule(DynamicKey):
                     "default": 0,
                     "help": neg_help,
                 },
-                "format": {
-                    "enum": [LOG_TIMESTAMP_FMT, UTILITY_TIMESTAMP_FMT]
-                }
-            }
+                "format": {"enum": [LOG_TIMESTAMP_FMT, UTILITY_TIMESTAMP_FMT]},
+            },
         }
-    
+
     @classmethod
     def default_value_obj(cls):
         return {
@@ -199,7 +197,7 @@ class TimeOfSchedule(DynamicKey):
             "minutes": 0,
             "format": UTILITY_TIMESTAMP_FMT,
         }
-    
+
     @classmethod
     def make_entry(cls, obj):
         days = obj.get("days", 0)

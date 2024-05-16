@@ -16,6 +16,7 @@ import traceback
 
 logger = structlog.get_logger(__name__)
 
+
 def get_key(file):
     """return full key of s3 file"""
     return os.path.join(file.storage.location, file.name)
@@ -35,6 +36,7 @@ def media_upload_path(instance, filename, username=None):
         return os.path.join("media", "uploads", subdir, filename)
     return f"uploads/{filename}"
 
+
 def build_frontend_url(endpoint, _id=None):
     frontend_url = os.environ.get("FRONTEND_URL", "http://localhost:3000")
     frontend_url = frontend_url + f"/{endpoint}/"
@@ -42,46 +44,51 @@ def build_frontend_url(endpoint, _id=None):
         frontend_url = frontend_url + f"{_id}/"
     return frontend_url
 
-def build_api_url(request, rel_path, api_version=None, params: dict=None):
+
+def build_api_url(request, rel_path, api_version=None, params: dict = None):
     base = request._current_scheme_host
     if api_version == "current":
         api_version = "api/v1/"
     api_base_url = urljoin(base, api_version)
     api_url = urljoin(api_base_url, rel_path)
-    if not api_url.endswith('/'):
-        api_url += '/'
+    if not api_url.endswith("/"):
+        api_url += "/"
 
     if params:
         api_url += f"?{urlencode(params)}"
 
     return api_url
 
+
 def make_ok(response_message, response_data=None, response_status=200):
-    """ generate success response """
+    """generate success response"""
     response = {
-        'status': 'success',
-        'message': response_message,
+        "status": "success",
+        "message": response_message,
     }
     if response_data is not None:
-        response['data'] = response_data
+        response["data"] = response_data
     return Response(response, status=response_status)
 
 
 def make_error(errors, response_status=400):
-    """ generate error response """
-    return Response({
-        'status': 'error',
-        'errors': errors,
-    }, status=response_status)
+    """generate error response"""
+    return Response(
+        {
+            "status": "error",
+            "errors": errors,
+        },
+        status=response_status,
+    )
 
 
 def custom_exception_handler(exc, context):
-    """ custom exception handler """
+    """custom exception handler"""
     # to check if view does not have basename
     try:
-        basename = context['view'].basename
+        basename = context["view"].basename
     except AttributeError:
-        basename = context['view']
+        basename = context["view"]
 
     # Increment error counter
     TOTAL_ERROR_COUNTER.labels(exc.__class__.__name__, basename).inc()
@@ -89,22 +96,22 @@ def custom_exception_handler(exc, context):
     # Log exception information
     logger.error(
         "An exception occurred during a request.",
-        http_method=context['request']._request.method,
+        http_method=context["request"]._request.method,
         view=basename,
-        user=context['request'].user.username,
+        user=context["request"].user.username,
     )
     logger.error(
         exc,
-        http_method=context['request']._request.method,
+        http_method=context["request"]._request.method,
         view=basename,
-        user=context['request'].user.username,
+        user=context["request"].user.username,
     )
     for tb in traceback.format_tb(exc.__traceback__):
         logger.debug(
             tb,
-            http_method=context['request']._request.method,
+            http_method=context["request"]._request.method,
             view=basename,
-            user=context['request'].user.username,
+            user=context["request"].user.username,
         )
 
     # Call REST framework's default exception handler
@@ -136,7 +143,7 @@ def custom_exception_handler(exc, context):
             # elif key == 'status':
             #     errors['status'] = str(value)
     else:
-        errors['exception'] = str(exc)
+        errors["exception"] = str(exc)
 
     # Now add the HTTP status code to the response.
     if response is not None:
@@ -144,10 +151,12 @@ def custom_exception_handler(exc, context):
 
     return make_error(errors, error_status_code)
 
+
 def test_env():
     if sys.argv[1:2] == ["test"]:
         return True
     return False
+
 
 def merge_nested_dict(d1, d2, overwrite_none=False):
     """Right merge two nested dicts.
@@ -175,6 +184,7 @@ def merge_nested_dict(d1, d2, overwrite_none=False):
                 d[k] = v
     return dict(d)
 
+
 ## Roles utility functions
 def get_url_permissions(urlpatterns):
     """Retrieve role permissions per endpoint.
@@ -196,34 +206,35 @@ def get_url_permissions(urlpatterns):
 
     permission_matrix = []
     for pat in urlpatterns:
-            if isinstance(pat, URLResolver):
-                # Recursively walk through URLResolvers
-                permission_matrix.extend(get_url_permissions(pat.url_patterns))
-            elif isinstance(pat, URLPattern):
+        if isinstance(pat, URLResolver):
+            # Recursively walk through URLResolvers
+            permission_matrix.extend(get_url_permissions(pat.url_patterns))
+        elif isinstance(pat, URLPattern):
+            try:
+                actions = pat.callback.actions
+            except:
+                # There are no actions defined, rest-framework-roles doesn't apply
+                continue
+            try:
+                url = reverse(pat.name)
+                view_func = resolve(url).func
+            except NoReverseMatch:
                 try:
-                    actions = pat.callback.actions
-                except:
-                    # There are no actions defined, rest-framework-roles doesn't apply
-                    continue
-                try:
-                    url = reverse(pat.name)
+                    url = reverse(pat.name, args=[0])
                     view_func = resolve(url).func
                 except NoReverseMatch:
-                    try:
-                        url = reverse(pat.name, args=[0])
-                        view_func = resolve(url).func
-                    except NoReverseMatch:
-                        logger.warning(f"Skipping: No reverse match", pattern_name=pat.name)
-                        continue
-
-                # Import the view class
-                view_mod = importlib.import_module(view_func.__module__)
-                view = getattr(view_mod, view_func.__name__)
-                try:
-                    view_permissions = view().view_permissions
-                except Exception as e:
-                    logger.exception("There are no view permisions for this view", view=view.__name__)
+                    logger.warning(f"Skipping: No reverse match", pattern_name=pat.name)
                     continue
-                permission_matrix.append((url, actions, view_permissions, view))
-    return permission_matrix
 
+            # Import the view class
+            view_mod = importlib.import_module(view_func.__module__)
+            view = getattr(view_mod, view_func.__name__)
+            try:
+                view_permissions = view().view_permissions
+            except Exception as e:
+                logger.exception(
+                    "There are no view permisions for this view", view=view.__name__
+                )
+                continue
+            permission_matrix.append((url, actions, view_permissions, view))
+    return permission_matrix

@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('aftconfigs', '0002_alter_configreport_options'),
+        ("aftconfigs", "0002_alter_configreport_options"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='configreport',
-            name='reportTime',
+            model_name="configreport",
+            name="reportTime",
             field=models.DateTimeField(blank=True, db_index=True, null=True),
         ),
     ]

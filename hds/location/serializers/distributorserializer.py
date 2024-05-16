@@ -8,15 +8,19 @@ from ..models import Distributor
 class DistributorMinimalSerializer(serializers.ModelSerializer):
     class Meta:
         model = Distributor
-        fields = ('id', 'url', 'name',)
-        read_only_fields = ('creator',)
+        fields = (
+            "id",
+            "url",
+            "name",
+        )
+        read_only_fields = ("creator",)
 
 
 class DistributorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Distributor
-        fields = ('__all__')
-        read_only_fields = ('creator',)
+        fields = "__all__"
+        read_only_fields = ("creator",)
 
 
 class DistributorListSerializer(DistributorSerializer):

@@ -7,14 +7,19 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('harvester', '0005_harvester_thingname_historicalharvester_thingname'),
-        ('autodiagnostics', '0001_initial'),
+        ("harvester", "0005_harvester_thingname_historicalharvester_thingname"),
+        ("autodiagnostics", "0001_initial"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='autodiagnosticsreport',
-            name='harvester',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='harvester.harvester'),
+            model_name="autodiagnosticsreport",
+            name="harvester",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to="harvester.harvester",
+            ),
         ),
     ]

@@ -7,16 +7,18 @@ from django.db import migrations
 
 from common.utils import get_key
 from event.models import Event as Ev
+
 # from s3file.models import S3File, SessClip
 
 logger = structlog.get_logger(__name__)
 
+
 def create_s3files(apps, schema_editor):
-    Event = apps.get_model('event', 'event')
-    LogSession = apps.get_model('logparser', 'LogSession')
-    SessClip = apps.get_model('s3file', 'SessClip')
-    S3File = apps.get_model('s3file', 's3file')
-    User = apps.get_model('auth', 'User')
+    Event = apps.get_model("event", "event")
+    LogSession = apps.get_model("logparser", "LogSession")
+    SessClip = apps.get_model("s3file", "SessClip")
+    S3File = apps.get_model("s3file", "s3file")
+    User = apps.get_model("auth", "User")
 
     paginator = Paginator(LogSession.objects.all(), 1000)
     logger.info("Creating S3Files from LogSessions")
@@ -37,7 +39,9 @@ def create_s3files(apps, schema_editor):
                 continue
 
             event_uuid = Ev.generate_uuid()
-            event = Event.objects.create(UUID=event_uuid, tags=["sessclip"], creator=creator)
+            event = Event.objects.create(
+                UUID=event_uuid, tags=["sessclip"], creator=creator
+            )
             s3file = S3File.objects.create(**s3file_data, event=event)
             sessclip = SessClip.objects.create(file=s3file)
             logsession._zip_file = sessclip
@@ -47,7 +51,7 @@ def create_s3files(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('logparser', '0002_logsession__zip_file'),
+        ("logparser", "0002_logsession__zip_file"),
     ]
 
     operations = [

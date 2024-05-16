@@ -40,7 +40,7 @@ class EmustatsReport(PickSessionModelMixin, ReportBase):
     avg_ripeness_no_pick = models.FloatField(null=True, blank=True)
 
     total_targets = models.IntegerField()
-    tags = TaggableManager(through='EmustatsTag')
+    tags = TaggableManager(through="EmustatsTag")
 
 
 class EmustatsTag(TaggedItemBase):

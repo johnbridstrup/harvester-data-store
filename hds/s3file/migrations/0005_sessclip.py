@@ -7,18 +7,31 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('s3file', '0004_auto_20230111_1843'),
+        ("s3file", "0004_auto_20230111_1843"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='SessClip',
+            name="SessClip",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('file', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to='s3file.s3file')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "file",
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE, to="s3file.s3file"
+                    ),
+                ),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
         ),
     ]

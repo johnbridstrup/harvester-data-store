@@ -6,6 +6,7 @@ from common.models import CommonInfo
 from common.reports import ReportBase
 from harvester.models import Fruit
 
+
 class HarvesterCodeRelease(CommonInfo):
     version = models.CharField(max_length=40)
     release = models.JSONField()

@@ -6,13 +6,12 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('logparser', '0003_create_s3files'),
+        ("logparser", "0003_create_s3files"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='logsession',
-            name='zip_file',
+            model_name="logsession",
+            name="zip_file",
         ),
     ]
-

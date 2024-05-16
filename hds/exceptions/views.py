@@ -10,11 +10,7 @@ from hds.roles import RoleChoices
 
 from .filters import AFTExceptionFilter
 from .insights import create_traceback_groups
-from .models import (
-    AFTExceptionCode,
-    AFTExceptionCodeManifest,
-    AFTException
-)
+from .models import AFTExceptionCode, AFTExceptionCodeManifest, AFTException
 from .serializers import (
     AFTExceptionCodeSerializer,
     AFTExceptionCodeManifestSerializer,
@@ -32,7 +28,7 @@ class AFTExceptionCodeManifestView(CreateModelViewSet):
     queryset = AFTExceptionCodeManifest.objects.all()
     serializer_class = AFTExceptionCodeManifestSerializer
     view_permissions_update = {
-        'create': {
+        "create": {
             RoleChoices.JENKINS: True,
         },
     }
@@ -52,25 +48,23 @@ class AFTExceptionView(CreateModelViewSet):
     serializer_class = AFTExceptionSerializer
     filterset_class = AFTExceptionFilter
     view_permissions_update = {
-        'pareto': {
-            RoleChoices.SUPPORT: True
-        },
-        'traceback_breakdown': {
+        "pareto": {RoleChoices.SUPPORT: True},
+        "traceback_breakdown": {
             RoleChoices.SUPPORT: True,
-        }
+        },
     }
     action_serializers = {
         "list": AFTExceptionListSerializer,
-        "retrieve": AFTExceptionDetailSerializer
+        "retrieve": AFTExceptionDetailSerializer,
     }
 
     @action(
-        methods=['get'],
-        url_path='pareto',
+        methods=["get"],
+        url_path="pareto",
         detail=False,
         renderer_classes=[JSONRenderer],
     )
-    @method_decorator(cache_page(60*20))
+    @method_decorator(cache_page(60 * 20))
     def pareto(self, request):
         pareto_group = request.query_params.get("aggregate_query", "code__code")
         pareto_name = request.query_params.get("aggregate_name", None)
@@ -78,12 +72,12 @@ class AFTExceptionView(CreateModelViewSet):
         query_set = create_pareto(qs, pareto_group)
         return make_ok(
             f"Pareto generated: {pareto_name if pareto_name else 'Exceptions'}",
-            ParetoSerializer(query_set, many=True, new_name=pareto_name).data
+            ParetoSerializer(query_set, many=True, new_name=pareto_name).data,
         )
 
     @action(
-        methods=['get'],
-        url_path='tracebackBreakdown',
+        methods=["get"],
+        url_path="tracebackBreakdown",
         detail=False,
         renderer_classes=[JSONRenderer],
     )
@@ -97,6 +91,14 @@ class AFTExceptionView(CreateModelViewSet):
         qs = self.filter_queryset(self.get_queryset())
         if qs.count() > MAX_NUM_TRACEBACKS:
             return make_error("Too many exceptions to process. Please restrict query")
-        resp_data = create_traceback_groups(qs.values("id", "timestamp", "traceback", "code__code", "report__report__data__sysmon_report__emu_info__agent_label"))
+        resp_data = create_traceback_groups(
+            qs.values(
+                "id",
+                "timestamp",
+                "traceback",
+                "code__code",
+                "report__report__data__sysmon_report__emu_info__agent_label",
+            )
+        )
         resp_data["params"] = request.query_params
         return make_ok("Traceback Breakdown", resp_data)

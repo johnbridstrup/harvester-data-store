@@ -3,7 +3,6 @@ from jobscheduler.views import PeriodicTaskView
 
 
 router = routers.SimpleRouter()
-router.register(r'', PeriodicTaskView, basename='periodictask')
+router.register(r"", PeriodicTaskView, basename="periodictask")
 
-urlpatterns = [
-] + router.urls
+urlpatterns = [] + router.urls

@@ -1,7 +1,10 @@
 from rest_framework import serializers
 
 from gripreport.serializers.gripreportserializers import GripReportListSerializer
-from harvester.serializers.harvesterserializer import FruitMinimalSerializer, HarvesterMinimalSerializer
+from harvester.serializers.harvesterserializer import (
+    FruitMinimalSerializer,
+    HarvesterMinimalSerializer,
+)
 from location.serializers.locationserializer import LocationMinimalSerializer
 
 from ..models import Candidate
@@ -38,7 +41,7 @@ class CandidateFullSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Candidate
-        fields = ("__all__")
+        fields = "__all__"
 
 
 class CandidateFlattenedListSerializer(serializers.ModelSerializer):
@@ -58,7 +61,6 @@ class CandidateFlattenedListSerializer(serializers.ModelSerializer):
             data[key] = value
         del data["candidate_data"]
         return data
-
 
     class Meta:
         model = Candidate

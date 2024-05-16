@@ -5,24 +5,26 @@ from .models import Job, JobResults, JobSchema, JobType
 
 class JobFilterset(CommonInfoFilterset):
     uuid = EventUUIDFilter()
+
     class Meta:
         model = Job
         fields = CommonInfoFilterset.FIELDS_BASE + [
-            'target__harv_id',
-            'schema__id',
-            'schema__version',
-            'event__UUID',
-            'jobstatus',
+            "target__harv_id",
+            "schema__id",
+            "schema__version",
+            "event__UUID",
+            "jobstatus",
         ]
 
 
 class JobResultsFilterset(ReportFilterset):
     uuid = EventUUIDFilter()
+
     class Meta:
         model = JobResults
         fields = ReportFilterset.FIELDS_BASE + [
-            'job__target__harv_id', 
-            'job__event__UUID',
+            "job__target__harv_id",
+            "job__event__UUID",
         ]
 
 
@@ -30,8 +32,9 @@ class JobSchemaFilterset(CommonInfoFilterset):
     class Meta:
         model = JobSchema
         fields = CommonInfoFilterset.FIELDS_BASE + [
-            'jobtype__name',
+            "jobtype__name",
         ]
+
 
 class JobTypeFilterset(CommonInfoFilterset):
     class Meta:

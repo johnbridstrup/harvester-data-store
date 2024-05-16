@@ -26,8 +26,8 @@ push-jenkins:
 	sudo docker push $(AWS_ACCOUNT_ID).dkr.ecr.$(AWS_REGION).amazonaws.com/hds:api-$(_AFT_DEPLOY_TAG)
 
 clean:
-	-rm -f $(HDS_ROOT)/hds/.sqstoken; 
-	-rm $(HDS_ROOT)/hds/db.sqlite3; 
+	-rm -f $(HDS_ROOT)/hds/.sqstoken;
+	-rm $(HDS_ROOT)/hds/db.sqlite3;
 	-rm -rf $(HDS_ROOT)/hds/media/extracts/*;
 	-rm -rf $(HDS_ROOT)/hds/media/uploads/*;
 	-rm -rf $(HDS_ROOT)/hds/uploads/*;

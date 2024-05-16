@@ -2,6 +2,7 @@ import socket
 
 from argparse import ArgumentTypeError
 
+
 def available_port(port):
     port = int(port)
     try:

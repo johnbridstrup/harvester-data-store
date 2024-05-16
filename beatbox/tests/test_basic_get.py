@@ -6,7 +6,7 @@ class TestBasic(BaseTestCase):
     def _test_get(self, endpoint):
         r = self.client.get(endpoint, params=self.BASE_TEST_PARAMS)
         self.assertOk(r)
-    
+
     def test_get_errorreports(self):
         self._test_get(Endpoints.ERROR)
 
@@ -18,6 +18,6 @@ class TestBasic(BaseTestCase):
 
     def test_get_events(self):
         self._test_get(Endpoints.EVENTS)
-    
+
     def test_get_picksessions(self):
         self._test_get(Endpoints.PICKSESSIONS)

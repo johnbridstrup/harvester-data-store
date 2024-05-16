@@ -4,17 +4,15 @@ from django.db import migrations, models
 from errorreport.serializers.errorreportserializer import NO_VALUE_STR
 
 
-NODEMAP = {
-    'apple': 6,
-    'strawberry': 4
-}
+NODEMAP = {"apple": 6, "strawberry": 4}
+
 
 def extract_node_robot(apps, schema_editor):
-    AFTException = apps.get_model('exceptions', 'aftexception')
+    AFTException = apps.get_model("exceptions", "aftexception")
 
     for exc in AFTException.objects.all():
         exc.robot = exc.node
-        if exc.service == 'obscore':
+        if exc.service == "obscore":
             exc.node = exc.robot + NODEMAP[exc.report.harvester.fruit.name]
 
         exc.save()
@@ -23,13 +21,13 @@ def extract_node_robot(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('exceptions', '0004_alter_aftexception_report'),
+        ("exceptions", "0004_alter_aftexception_report"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='aftexception',
-            name='robot',
+            model_name="aftexception",
+            name="robot",
             field=models.IntegerField(blank=True, null=True),
         ),
         migrations.RunPython(extract_node_robot),

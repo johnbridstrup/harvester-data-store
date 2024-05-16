@@ -6,18 +6,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('gripreport', '0005_candidate_grip'),
+        ("gripreport", "0005_candidate_grip"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='grip',
-            name='grip_result_dirty',
+            model_name="grip",
+            name="grip_result_dirty",
             field=models.BooleanField(default=False),
         ),
         migrations.AddField(
-            model_name='grip',
-            name='pick_result_dirty',
+            model_name="grip",
+            name="pick_result_dirty",
             field=models.BooleanField(default=False),
         ),
     ]

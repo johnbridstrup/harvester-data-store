@@ -3,7 +3,6 @@ from ..views.versionview import HarvesterVersionReportView
 
 
 router = routers.SimpleRouter()
-router.register(r'', HarvesterVersionReportView, basename='harvcodeversion')
+router.register(r"", HarvesterVersionReportView, basename="harvcodeversion")
 
-urlpatterns = [
-] + router.urls
+urlpatterns = [] + router.urls

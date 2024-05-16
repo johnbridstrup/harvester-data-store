@@ -9,26 +9,57 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('exceptions', '0001_initial'),
+        ("exceptions", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='AFTException',
+            name="AFTException",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created', models.DateTimeField(auto_now_add=True)),
-                ('lastModified', models.DateTimeField(auto_now=True)),
-                ('service', models.TextField(blank=True, max_length=20, null=True)),
-                ('node', models.IntegerField(blank=True, null=True)),
-                ('traceback', models.TextField(blank=True, null=True)),
-                ('timestamp', models.DateTimeField(blank=True, null=True)),
-                ('code', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='exceptions.aftexceptioncode')),
-                ('creator', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='%(app_label)s_%(class)s_creator_related', to=settings.AUTH_USER_MODEL)),
-                ('modifiedBy', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='%(app_label)s_%(class)s_modifiedby_related', to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("created", models.DateTimeField(auto_now_add=True)),
+                ("lastModified", models.DateTimeField(auto_now=True)),
+                ("service", models.TextField(blank=True, max_length=20, null=True)),
+                ("node", models.IntegerField(blank=True, null=True)),
+                ("traceback", models.TextField(blank=True, null=True)),
+                ("timestamp", models.DateTimeField(blank=True, null=True)),
+                (
+                    "code",
+                    models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        to="exceptions.aftexceptioncode",
+                    ),
+                ),
+                (
+                    "creator",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="%(app_label)s_%(class)s_creator_related",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
+                (
+                    "modifiedBy",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="%(app_label)s_%(class)s_modifiedby_related",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
         ),
     ]

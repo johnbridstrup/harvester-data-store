@@ -3,7 +3,6 @@ from ..views import CandidateView
 
 
 router = routers.SimpleRouter()
-router.register(r'', CandidateView, basename='candidates')
+router.register(r"", CandidateView, basename="candidates")
 
-urlpatterns = [
-] + router.urls
+urlpatterns = [] + router.urls

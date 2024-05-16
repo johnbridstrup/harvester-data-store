@@ -5,7 +5,7 @@ from ..filters import JobResultsFilterset
 from ..models import JobResults, Job
 from ..serializers.jobresultsserializer import (
     JobResultsSerializer,
-    JobResultsDetailSerializer
+    JobResultsDetailSerializer,
 )
 from ..tasks import job_status_update
 
@@ -14,9 +14,7 @@ class JobResultsView(ReportModelViewSet):
     queryset = JobResults.objects.all()
     serializer_class = JobResultsSerializer
     filterset_class = JobResultsFilterset
-    action_serializers = {
-        "retrieve": JobResultsDetailSerializer
-    }
+    action_serializers = {"retrieve": JobResultsDetailSerializer}
 
     def get_queryset(self):
         if self.action == "retrieve":
@@ -29,7 +27,6 @@ class JobResultsView(ReportModelViewSet):
                 "job",
             ).prefetch_related("tags", "host_results")
         return super().get_queryset()
-
 
     def perform_create(self, serializer):
         # Update Job Status in the background

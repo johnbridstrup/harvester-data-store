@@ -17,38 +17,44 @@ class JobType(CommonInfo):
 
 
 class JobSchema(CommonInfo):
-    jobtype = models.ForeignKey(JobType, on_delete=models.CASCADE, related_name="schemas")
+    jobtype = models.ForeignKey(
+        JobType, on_delete=models.CASCADE, related_name="schemas"
+    )
     schema = models.JSONField()
     version = models.CharField(max_length=10)
-    comment = models.CharField(max_length=280, default="") # Twitter max char count should be enough
+    comment = models.CharField(
+        max_length=280, default=""
+    )  # Twitter max char count should be enough
 
     class Meta:
-        unique_together = ('jobtype', 'version')
+        unique_together = ("jobtype", "version")
 
     def __str__(self):
         return f"{self.jobtype.name} job type: version {self.version}"
-    
+
     @property
     def dynamic_keys_list(self):
         return self.schema.get(DYN_KEY_LIST_KEY, [])
-    
+
     @property
     def allows_repeats(self):
         return self.schema.get(ALLOW_REPEAT_KEY, False)
-    
+
     @property
     def is_dynamic(self):
         return len(self.dynamic_keys_list) > 0 and self.allows_repeats
-    
+
     @property
     def dynamic_schema(self):
         if not self.is_dynamic:
             return self.schema
-        
+
         schema = self.schema.copy()
-        schema["properties"]["payload"] = DynamicKeys.create_dynamic_schema(schema["properties"]["payload"], self.dynamic_keys_list)
+        schema["properties"]["payload"] = DynamicKeys.create_dynamic_schema(
+            schema["properties"]["payload"], self.dynamic_keys_list
+        )
         return schema
-    
+
     def payload_from_dynamic(self, payload):
         payload["payload"] = DynamicKeys.create_entries(payload["payload"])
         return payload
@@ -79,7 +85,9 @@ class Job(EventModelMixin, CommonInfo):
 
 
 class JobResults(EventModelMixin, ReportBase):
-    job = models.ForeignKey(Job, on_delete=models.CASCADE, related_name="results", null=True, blank=True)
+    job = models.ForeignKey(
+        Job, on_delete=models.CASCADE, related_name="results", null=True, blank=True
+    )
 
     def __str__(self):
         return f"{self.job.schema.version} job {self.event.UUID}: {self.job.jobstatus}"
@@ -92,8 +100,9 @@ class JobHostResult(CommonInfo):
         ERROR = "Error"
         CANCELED = "canceled"
 
-
-    parent = models.ForeignKey(JobResults, on_delete=models.CASCADE, related_name="host_results")
+    parent = models.ForeignKey(
+        JobResults, on_delete=models.CASCADE, related_name="host_results"
+    )
     host = models.CharField(max_length=30)
     result = models.CharField(choices=JobResult.choices, max_length=30)
     details = models.JSONField()

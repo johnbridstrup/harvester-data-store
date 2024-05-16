@@ -23,13 +23,15 @@ class CallbackTask(Task):
     @staticmethod
     def _create_post_message(content, slack_id=None):
         content += f"\n<@{slack_id}>"
-        content_list = [{
-            "type": "section",
-            "text": {
-                "type": "mrkdwn",
-                "text": content,
+        content_list = [
+            {
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": content,
+                },
             }
-        }]
+        ]
         message = {
             "channel": "hds-notifications",
             "text": "*SESSCLIP RESULTS*",
@@ -71,10 +73,14 @@ def async_upload_zip_file(_id):
 
 @monitored_shared_task
 def extract_video_meta(vid_dict, _id):
-    avi_info = vid_dict['avi']
-    meta_info = vid_dict['meta']
-    LogVideoSerializer.extract_video_log(avi_info['filename'], avi_info['filepath'], _id)
-    LogVideoSerializer.extract_meta_json_data(meta_info['filepath'], meta_info['filename'])
+    avi_info = vid_dict["avi"]
+    meta_info = vid_dict["meta"]
+    LogVideoSerializer.extract_video_log(
+        avi_info["filename"], avi_info["filepath"], _id
+    )
+    LogVideoSerializer.extract_meta_json_data(
+        meta_info["filepath"], meta_info["filename"]
+    )
 
 
 @monitored_shared_task
@@ -100,15 +106,15 @@ def extract_with_video(zippath, path_id):
         for file in thezip.filelist:
             if file.filename.endswith(".avi"):
                 extr_filepath = thezip.extract(file, extr_dir)
-                basename = file.filename.split('.')[0]
-                vid_meta_pairs[basename]['avi'] = {
+                basename = file.filename.split(".")[0]
+                vid_meta_pairs[basename]["avi"] = {
                     "filepath": extr_filepath,
                     "filename": file.filename,
                 }
             if file.filename.endswith(".json"):
                 extr_filepath = thezip.extract(file, extr_dir)
-                basename = file.filename.split('.')[0]
-                vid_meta_pairs[basename]['meta'] = {
+                basename = file.filename.split(".")[0]
+                vid_meta_pairs[basename]["meta"] = {
                     "filepath": extr_filepath,
                     "filename": file.filename,
                 }
@@ -118,15 +124,18 @@ def extract_with_video(zippath, path_id):
 @monitored_shared_task(base=CallbackTask)
 def perform_extraction(_id, extract_video=True):
     log_session = LogSession.objects.get(id=_id)
-    zippath = os.path.join(
-        log_session._zip_file.file.download_dir, log_session.name
-    )
+    zippath = os.path.join(log_session._zip_file.file.download_dir, log_session.name)
     tasks = []
     tasks.append(extract_logs.si(_id, zippath))
     if extract_video:
         vid_meta_pairs = extract_with_video(zippath, log_session._zip_file.file.pk)
         # Create video extraction task signatures
-        tasks.extend([extract_video_meta.si(vid_dict, _id) for vid_dict in vid_meta_pairs.values()])
+        tasks.extend(
+            [
+                extract_video_meta.si(vid_dict, _id)
+                for vid_dict in vid_meta_pairs.values()
+            ]
+        )
 
     # Create clean_dir callback signature
     callback = clean_dir.si(log_session._zip_file.file.pk)

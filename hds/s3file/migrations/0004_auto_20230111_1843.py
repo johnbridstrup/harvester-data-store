@@ -9,8 +9,9 @@ import common.utils
 
 logger = structlog.get_logger(__name__)
 
+
 def update_file_key(apps, schema_editor):
-    S3File = apps.get_model('s3file', 'S3File')
+    S3File = apps.get_model("s3file", "S3File")
     paginator = Paginator(S3File.objects.all(), 1000)
     logger.info("Updating S3 File Table")
     for page in range(1, paginator.num_pages + 1):
@@ -22,18 +23,24 @@ def update_file_key(apps, schema_editor):
             s3file.file = s3file.key
             s3file.save()
 
+
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('s3file', '0003_s3file_file'),
+        ("s3file", "0003_s3file_file"),
     ]
 
     # This alter field needed to be added here after dev account migration already happened
     operations = [
         migrations.AlterField(
-            model_name='s3file',
-            name='file',
-            field=models.FileField(blank=True, max_length=500, null=True, upload_to=common.utils.media_upload_path),
+            model_name="s3file",
+            name="file",
+            field=models.FileField(
+                blank=True,
+                max_length=500,
+                null=True,
+                upload_to=common.utils.media_upload_path,
+            ),
         ),
         migrations.RunPython(update_file_key),
     ]

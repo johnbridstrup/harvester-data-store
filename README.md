@@ -22,28 +22,28 @@ The central hub for all AFT Harvester data.
 * [beatbox](beatbox/README.md) (Continuous integration in the cloud)
 
 ## Bootstrapping
-Clone the repo, `cd` in and run `./setup-venv.sh`. This script will create a `venv` and 
+Clone the repo, `cd` in and run `./setup-venv.sh`. This script will create a `venv` and
 install python requirements, `Docker` and `Docker Compose`. Enter the development environment with `source start.sh`.
-This will activate the venv, define some useful aliases and create the `.env` file. 
+This will activate the venv, define some useful aliases and create the `.env` file.
 To see what aliases are defined, run `HELP` in your terminal.
 
 Some environment variables will be set automatically. `HDS_PORT` is set by being passed directly to to the start script `source start.sh XXXX`, sourced from your local environment,
 set to the default `8085` or chosen randomly from open ports on the system, in that order of priority. It can be changed at
 any time by running `setport XXXX` or `./set_port.sh XXXX` from the project root.
 
-These scripts are only verified in Ubuntu 20.04 but should run in other versions. On other 
+These scripts are only verified in Ubuntu 20.04 but should run in other versions. On other
 operating systems or linux distributions, you may have to install the dependencies manually.
 
 
 ## Running the development server
-The development server is created via `docker compose`, which should have installed when running the setup scripts. You can build the development server with the alias `runserver`. This will pull and create all of the necessary containers, which are defined in `docker-compose.yml`, and spin them all up. Logs for the various services defined in `docker-compose.yml` (eg. `web`, `db`, etc..) can be accessed by running `docker compose logs <service>`. For convenience, the alias `hds-logs` will display the logs from HDS services. You can tear down the server with `stopserver` or `docker compose down --remove-orphans(optional)`. 
+The development server is created via `docker compose`, which should have installed when running the setup scripts. You can build the development server with the alias `runserver`. This will pull and create all of the necessary containers, which are defined in `docker-compose.yml`, and spin them all up. Logs for the various services defined in `docker-compose.yml` (eg. `web`, `db`, etc..) can be accessed by running `docker compose logs <service>`. For convenience, the alias `hds-logs` will display the logs from HDS services. You can tear down the server with `stopserver` or `docker compose down --remove-orphans(optional)`.
 
 It is also possible to run the server outside of docker (you must have `redis-server` installed to do this). To do that, run these commands from the `hds` folder in separate terminals:
 1. `redis-server`
 2. `python manage.py migrate && python manage.py loaddata ../fixtures/* && python manage.py runserver ${HDS_PORT}`
 3. `celery -A hds worker -l INFO`
 
-Interactions and changes to the database will be lost when rebuilding with `docker compose` but will persist when building manually. 
+Interactions and changes to the database will be lost when rebuilding with `docker compose` but will persist when building manually.
 
 
 ## Creating a new Django app
@@ -120,7 +120,7 @@ In the [infrastructure](https://github.com/AdvancedFarm/infrastructure) repo, ad
     "hds-files-queue"      = "hdsfiles"
     "hds-jobresults-queue" = "jobresults"
     "hds-versions-queue"   = "versions"
-    "your-queue-name-from-step-1" = "[The S3 prefix where the uploader will place the files]" 
+    "your-queue-name-from-step-1" = "[The S3 prefix where the uploader will place the files]"
   }
 ```
 
@@ -154,7 +154,7 @@ This can be done either by setting the `MIGRATE` flag to `true` when creating th
 
 ## Postman
 [Postman](https://www.postman.com/) is a software tool for testing API endpoints and workflows. We currently use it primarily
-for testing new endpoints as we develop. Included in this repo in the `postman` directory are JSON configs for the Postman 
+for testing new endpoints as we develop. Included in this repo in the `postman` directory are JSON configs for the Postman
 environment variables and HTTP collections. To get set up with postman:
 1. Install postman
     - snap: `$ snap install postman` (easiest, you may also need to install snap)
@@ -165,9 +165,8 @@ environment variables and HTTP collections. To get set up with postman:
     - File -> import -> upload -> select both jsons
 
 You will now see `hds` in the collections tab and `hds local` in the environments tab. Set `hds local` as the active environment.
-Each endpoint is organized into it's own folder, with `GET`/`POST`/etc.. methods defined. If changes are made to the environment 
+Each endpoint is organized into it's own folder, with `GET`/`POST`/etc.. methods defined. If changes are made to the environment
 or the collection, they should be exported and stored in the `postman` directory.
 
-You can now run the HDS server and execute requests from Postman. By default, the port is set to `8085`. If HDS is running on a 
+You can now run the HDS server and execute requests from Postman. By default, the port is set to `8085`. If HDS is running on a
 different port, it must be changed to match in postman.
- 

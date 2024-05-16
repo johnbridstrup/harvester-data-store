@@ -7,15 +7,19 @@ from common.serializers.userserializer import UserCustomSerializer
 
 from .models import Event, PickSession
 
+
 class TaggedUUIDSerializerBase(serializers.ModelSerializer):
     tags = TagListSerializerField(required=False, read_only=True)
 
     def related_objects(self):
-        raise NotImplementedError(f"Must define related_objects property for {self.__class__}.")
+        raise NotImplementedError(
+            f"Must define related_objects property for {self.__class__}."
+        )
 
     def has_related_files(self) -> bool:
-        raise NotImplementedError(f"Must define has_related_files property for {self.__class__}")
-
+        raise NotImplementedError(
+            f"Must define has_related_files property for {self.__class__}"
+        )
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
@@ -26,28 +30,42 @@ class TaggedUUIDSerializerBase(serializers.ModelSerializer):
         data["related_objects"] = objs
 
         if self.has_related_files():
-            s3files = [{'url': f.url(self.context.get('request', None), f.id), 'filetype': f.filetype} for f in instance.s3file_set.all()]
-            images = [{'url': f.file_url(self.context.get('request', None)), 'filetype': f.filetype} for f in instance.s3file_set.all() if f.key.endswith((".png", ".jpg", ".jpeg"))]
-            data['related_files'] = [
+            s3files = [
+                {
+                    "url": f.url(self.context.get("request", None), f.id),
+                    "filetype": f.filetype,
+                }
+                for f in instance.s3file_set.all()
+            ]
+            images = [
+                {
+                    "url": f.file_url(self.context.get("request", None)),
+                    "filetype": f.filetype,
+                }
+                for f in instance.s3file_set.all()
+                if f.key.endswith((".png", ".jpg", ".jpeg"))
+            ]
+            data["related_files"] = [
                 *s3files,
             ]
-            data["related_images"] = [
-                *images
-            ]
+            data["related_images"] = [*images]
         return data
 
     def _validate_related_obj_format(self):
         for rel_obj in self.related_objects():
-            assert len(rel_obj) == 3, "Related object defintion should match [(model name, endpoint, type for response), ...]."
+            assert (
+                len(rel_obj) == 3
+            ), "Related object defintion should match [(model name, endpoint, type for response), ...]."
 
     @staticmethod
     def _related_object_list(obj_set, endpoint, object):
         return [
             {
-                'url': f'/{endpoint}/{obj.id}/',
-                'object': object,
+                "url": f"/{endpoint}/{obj.id}/",
+                "object": object,
             }
-        for obj in obj_set.all()]
+            for obj in obj_set.all()
+        ]
 
     @staticmethod
     def get_or_create_uuid_tagged_obj(creator, uuid_model, model_tag, UUID=None):
@@ -64,8 +82,8 @@ class TaggedUUIDSerializerBase(serializers.ModelSerializer):
 class EventSerializer(TaggedUUIDSerializerBase):
     class Meta:
         model = Event
-        fields = ('__all__')
-        read_only_fields = ('creator',)
+        fields = "__all__"
+        read_only_fields = ("creator",)
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
@@ -94,8 +112,8 @@ class EventSerializer(TaggedUUIDSerializerBase):
 class PickSessionSerializer(TaggedUUIDSerializerBase):
     class Meta:
         model = PickSession
-        fields = ('__all__')
-        read_only_fields = ('creator',)
+        fields = "__all__"
+        read_only_fields = ("creator",)
 
     def related_objects(self):
         return [
@@ -116,17 +134,23 @@ class EventSerializerMixin(serializers.Serializer):
 
     @classmethod
     def get_or_create_event(cls, event_uuid, creator, tag):
-        return TaggedUUIDSerializerBase.get_or_create_uuid_tagged_obj(creator, Event, tag, event_uuid)
+        return TaggedUUIDSerializerBase.get_or_create_uuid_tagged_obj(
+            creator, Event, tag, event_uuid
+        )
 
 
-class PickSessionSerializerMixin(EventSerializerMixin): # Pick session uploads are also events
+class PickSessionSerializerMixin(
+    EventSerializerMixin
+):  # Pick session uploads are also events
     @classmethod
     def serialize_picksession(cls, picksession):
         return PickSessionSerializer(instance=picksession).data
 
     @classmethod
     def get_or_create_picksession(cls, ps_uuid, creator, tag):
-        return TaggedUUIDSerializerBase.get_or_create_uuid_tagged_obj(creator, PickSession, tag, ps_uuid)
+        return TaggedUUIDSerializerBase.get_or_create_uuid_tagged_obj(
+            creator, PickSession, tag, ps_uuid
+        )
 
     @classmethod
     def set_picksess_harv_location(cls, picksess, harv):
@@ -164,4 +188,4 @@ class PickSessionMinimalSerializer(PickSessionSerializer):
 
     class Meta:
         model = PickSession
-        fields = ('UUID', 'start_time', 'session_length', 'harvester', 'location')
+        fields = ("UUID", "start_time", "session_length", "harvester", "location")

@@ -7,15 +7,16 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('event', '0001_initial'),
-        ('errorreport', '0003_errorreport_event'),
+        ("event", "0001_initial"),
+        ("errorreport", "0003_errorreport_event"),
     ]
 
     operations = [
-        
         migrations.AlterField(
-            model_name='errorreport',
-            name='event',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='event.event')
+            model_name="errorreport",
+            name="event",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to="event.event"
+            ),
         )
     ]

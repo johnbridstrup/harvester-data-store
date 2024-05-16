@@ -5,29 +5,29 @@ from errorreport.serializers.errorreportserializer import ErrorReportSerializer
 
 
 def create_exceptions(apps, schema_editor):
-    Report = apps.get_model('errorreport', 'ErrorReport')
-    Code = apps.get_model('exceptions', 'AFTExceptionCode')
-    Exc = apps.get_model('exceptions', 'AFTException')
-    User = apps.get_model('auth', 'User')
+    Report = apps.get_model("errorreport", "ErrorReport")
+    Code = apps.get_model("exceptions", "AFTExceptionCode")
+    Exc = apps.get_model("exceptions", "AFTException")
+    User = apps.get_model("auth", "User")
 
     for report in Report.objects.all():
-        errors = ErrorReportSerializer._extract_exception_data(report.report['data']['sysmon_report'])
+        errors = ErrorReportSerializer._extract_exception_data(
+            report.report["data"]["sysmon_report"]
+        )
         creator = User.objects.get(username=report.creator.username)
         if errors is not None:
             for error in errors:
-                error['report'] = report
-                error['timestamp'] = error['timestamp']
-                error['code'] = Code.objects.get(code=error['code'])
+                error["report"] = report
+                error["timestamp"] = error["timestamp"]
+                error["code"] = Code.objects.get(code=error["code"])
                 Exc.objects.create(**error, creator=creator)
 
 
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('errorreport', '0001_initial'),
-        ('exceptions', '0003_aftexception_report')
+        ("errorreport", "0001_initial"),
+        ("exceptions", "0003_aftexception_report"),
     ]
 
-    operations = [
-        migrations.RunPython(create_exceptions)
-    ]
+    operations = [migrations.RunPython(create_exceptions)]

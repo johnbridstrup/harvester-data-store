@@ -6,20 +6,18 @@ from .models import Notification
 from .serializers import (
     NotificationSerializer,
     NotificationListSerializer,
-    NotificationDetailSerializer
+    NotificationDetailSerializer,
 )
 
 
 class NotificationView(CreateModelViewSet):
     queryset = Notification.objects.all()
     serializer_class = NotificationSerializer
-    http_method_names = ['get', 'delete', 'post']
+    http_method_names = ["get", "delete", "post"]
     filterset_class = NotificationFilter
-    ordering = ('-id',)
+    ordering = ("-id",)
     view_permissions_update = {
-        "create": {
-            RoleChoices.DEVELOPER: True
-        },
+        "create": {RoleChoices.DEVELOPER: True},
         "update": None,
         "destroy": {
             RoleChoices.DEVELOPER: True,
@@ -27,5 +25,5 @@ class NotificationView(CreateModelViewSet):
     }
     action_serializers = {
         "list": NotificationListSerializer,
-        "retrieve": NotificationDetailSerializer
+        "retrieve": NotificationDetailSerializer,
     }

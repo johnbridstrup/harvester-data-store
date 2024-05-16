@@ -33,6 +33,7 @@ class HarvAssetMonitor:
         labelnames=["asset_type", "serial_number"],
         registry=REGISTRY,
     )
+
     @classmethod
     def get_fruit(cls, asset):
         # Get fruit from history, harvester field can be None
@@ -41,11 +42,9 @@ class HarvAssetMonitor:
         except:
             # This can only happen if an asset is created manually via API or admin panel
             fruit = "unknown"
-            cls.ASSET_NO_HISTORY.labels(
-                asset.asset.name,
-                asset.serial_number
-            ).inc()
-        return fruit 
+            cls.ASSET_NO_HISTORY.labels(asset.asset.name, asset.serial_number).inc()
+        return fruit
+
     @classmethod
     def _get_gauges(cls, asset):
         fruit = cls.get_fruit(asset)
@@ -68,7 +67,7 @@ class HarvAssetMonitor:
         hgauge, rgauge = cls._get_gauges(asset)
         hgauge.set(-1)
         rgauge.set(-1)
-    
+
     @classmethod
     def set_gauges(cls, asset):
         hgauge, rgauge = cls._get_gauges(asset)

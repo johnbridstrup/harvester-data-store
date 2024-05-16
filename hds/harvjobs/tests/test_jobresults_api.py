@@ -28,20 +28,23 @@ class JobResultApiTestCase(HarvJobApiTestBase):
 
         # Check host results. These are extracted asynchronously so wont
         # be in the POST response
-        host_resp = self.client.get(self.jobresults_det_url(result_data['id']))
+        host_resp = self.client.get(self.jobresults_det_url(result_data["id"]))
         self.assertEqual(host_resp.status_code, status.HTTP_200_OK)
-        host_data = host_resp.json()['data']
-        self.assertEqual(len(host_data['host_results']), 1)
+        host_data = host_resp.json()["data"]
+        self.assertEqual(len(host_data["host_results"]), 1)
 
         # Check filtering by harv id
-        endpoint = self.jobresults_url + f'?job__target__harv_id={self.test_objects["harvester"].harv_id}'
+        endpoint = (
+            self.jobresults_url
+            + f'?job__target__harv_id={self.test_objects["harvester"].harv_id}'
+        )
         harv_resp = self.client.get(endpoint)
         self.assertEqual(harv_resp.status_code, status.HTTP_200_OK)
         harv_data = harv_resp.json()["data"]
         self.assertEqual(len(harv_data["results"]), 1)
 
         # Non-existent harvester should have no job results...
-        endpoint2 = self.jobresults_url + '?job__target__harv_id=1111111'
+        endpoint2 = self.jobresults_url + "?job__target__harv_id=1111111"
         harv_resp2 = self.client.get(endpoint2)
         self.assertEqual(harv_resp2.status_code, status.HTTP_200_OK)
         harv_data2 = harv_resp2.json()["data"]
@@ -56,12 +59,15 @@ class JobResultApiTestCase(HarvJobApiTestBase):
         # Assert post_to_slack called correctly
         self.assertEqual(slack.call_count, 1)
 
-        expect_msg = JOB_STATUS_MSG_FMT.format(
-            harv=self.test_objects["harvester"].name,
-            result=Job.StatusChoices.SUCCESS,
-            UUID=UUID,
-            url=build_frontend_url("jobs", 1)
-        ) + f"<@{self.user_profile.slack_id}>"
+        expect_msg = (
+            JOB_STATUS_MSG_FMT.format(
+                harv=self.test_objects["harvester"].name,
+                result=Job.StatusChoices.SUCCESS,
+                UUID=UUID,
+                url=build_frontend_url("jobs", 1),
+            )
+            + f"<@{self.user_profile.slack_id}>"
+        )
 
         self.assertEqual(slack.call_args[0][0], expect_msg)
         self.assertDictEqual(slack.call_args[1], {"channel": JOB_SLACK_CHANNEL})
@@ -77,7 +83,9 @@ class JobResultApiTestCase(HarvJobApiTestBase):
 
         UUID = job_data["event"]["UUID"]
 
-        _, result_resp = self.create_jobresult(UUID=UUID, results=self.DEFAULT_RESULT_FAIL)
+        _, result_resp = self.create_jobresult(
+            UUID=UUID, results=self.DEFAULT_RESULT_FAIL
+        )
         result_data = result_resp.json()["data"]
 
         self.assertEqual(result_resp.status_code, status.HTTP_201_CREATED)
@@ -99,7 +107,9 @@ class JobResultApiTestCase(HarvJobApiTestBase):
 
         UUID = job_data["event"]["UUID"]
 
-        _, result_resp = self.create_jobresult(UUID=UUID, results=self.DEFAULT_RESULT_ERROR)
+        _, result_resp = self.create_jobresult(
+            UUID=UUID, results=self.DEFAULT_RESULT_ERROR
+        )
         result_data = result_resp.json()["data"]
 
         self.assertEqual(result_resp.status_code, status.HTTP_201_CREATED)
@@ -145,7 +155,9 @@ class JobResultApiTestCase(HarvJobApiTestBase):
         self.create_jobschema(jobtype="other-job")
 
         # View jobs for a harvester
-        harv_jobs_url = f"{self.jobs_url}?target__harv_id={self.test_objects['harvester'].harv_id}"
+        harv_jobs_url = (
+            f"{self.jobs_url}?target__harv_id={self.test_objects['harvester'].harv_id}"
+        )
         resp = self.client.get(harv_jobs_url)
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         self.assertEqual(len(resp.json()["data"]["results"]), 0)
@@ -170,7 +182,9 @@ class JobResultApiTestCase(HarvJobApiTestBase):
         resp = self.client.get(harv_jobs_url)
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         self.assertEqual(len(resp.json()["data"]["results"]), 1)
-        self.assertEqual(resp.json()["data"]["results"][0]["jobstatus"], Job.StatusChoices.PENDING)
+        self.assertEqual(
+            resp.json()["data"]["results"][0]["jobstatus"], Job.StatusChoices.PENDING
+        )
 
         # No results yet
         results_url = resp.json()["data"]["results"][0]["results"]
@@ -186,7 +200,9 @@ class JobResultApiTestCase(HarvJobApiTestBase):
         resp = self.client.get(harv_jobs_url)
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         self.assertEqual(len(resp.json()["data"]["results"]), 1)
-        self.assertEqual(resp.json()["data"]["results"][0]["jobstatus"], Job.StatusChoices.SUCCESS)
+        self.assertEqual(
+            resp.json()["data"]["results"][0]["jobstatus"], Job.StatusChoices.SUCCESS
+        )
 
         # View results
         resp = self.client.get(results_url)
@@ -204,7 +220,7 @@ class JobResultApiTestCase(HarvJobApiTestBase):
         UUID = job_data["event"]["UUID"]
         COUNT = 40
         for i in range(COUNT):
-            if i%2 == 0:
+            if i % 2 == 0:
                 self.create_jobresult(UUID=UUID)
             else:
                 self.create_jobresult(results=self.DEFAULT_RESULT_FAIL, UUID=UUID)
@@ -212,7 +228,7 @@ class JobResultApiTestCase(HarvJobApiTestBase):
         r1 = self.client.get(url1)
         self.assertEqual(r1.status_code, status.HTTP_200_OK)
         d1 = r1.json()["data"]
-        self.assertEqual(d1["count"], COUNT+1)
+        self.assertEqual(d1["count"], COUNT + 1)
         self.assertIsNone(d1["previous"])
         self.assertIsNotNone(d1["next"])
 
@@ -224,5 +240,10 @@ class JobResultApiTestCase(HarvJobApiTestBase):
         self.assertIsNotNone(d2["next"])
 
         # check all history ids in d1 are greater than all in d2 (more recent)
-        check = all([[id1["history_id"] > id2["history_id"] for id2 in d2["results"]] for id1 in d1["results"]])
+        check = all(
+            [
+                [id1["history_id"] > id2["history_id"] for id2 in d2["results"]]
+                for id1 in d1["results"]
+            ]
+        )
         self.assertTrue(check)

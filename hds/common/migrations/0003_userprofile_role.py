@@ -4,7 +4,7 @@ from django.db import migrations, models
 from hds.roles import RoleChoices
 
 KNOWN_USER_MAPPING = {
-    "aft": RoleChoices.MANAGER, # aft is admin but should still have a higher than support role
+    "aft": RoleChoices.MANAGER,  # aft is admin but should still have a higher than support role
     "sqs": RoleChoices.SQS,
     "jenkins": RoleChoices.JENKINS,
     "James": RoleChoices.MANAGER,
@@ -14,9 +14,10 @@ KNOWN_USER_MAPPING = {
     "ruben": RoleChoices.DEVELOPER,
 }
 
+
 def set_user_roles(apps, schema_editor):
-    User = apps.get_model('auth', 'User')
-    Profile = apps.get_model('common', 'UserProfile')
+    User = apps.get_model("auth", "User")
+    Profile = apps.get_model("common", "UserProfile")
 
     for user in User.objects.all():
         username = user.username
@@ -28,19 +29,29 @@ def set_user_roles(apps, schema_editor):
         else:
             user.profile.role = role
             user.profile.save()
-        
+
 
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('common', '0002_alter_userprofile_user'),
+        ("common", "0002_alter_userprofile_user"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='userprofile',
-            name='role',
-            field=models.CharField(choices=[('support', 'Support'), ('developer', 'Developer'), ('manager', 'Manager'), ('sqs', 'Sqs'), ('jenkins', 'Jenkins')], default='support', max_length=31),
+            model_name="userprofile",
+            name="role",
+            field=models.CharField(
+                choices=[
+                    ("support", "Support"),
+                    ("developer", "Developer"),
+                    ("manager", "Manager"),
+                    ("sqs", "Sqs"),
+                    ("jenkins", "Jenkins"),
+                ],
+                default="support",
+                max_length=31,
+            ),
         ),
-        migrations.RunPython(set_user_roles)
+        migrations.RunPython(set_user_roles),
     ]

@@ -11,26 +11,26 @@ class JobSchemaInline(admin.TabularInline):
 
 
 class JobTypeAdmin(admin.ModelAdmin):
-    list_display = ('created', 'name')
-    ordering = ('created',)
-    search_fields = ('created', 'name')
+    list_display = ("created", "name")
+    ordering = ("created",)
+    search_fields = ("created", "name")
     inlines = [JobSchemaInline]
 
 
 class JobSchemaAdmin(admin.ModelAdmin):
-    list_display = ('created', 'get_jobtype', 'version', 'schema')
-    ordering = ('created',)
-    search_fields = ('created', 'get_jobtype', 'version')
+    list_display = ("created", "get_jobtype", "version", "schema")
+    ordering = ("created",)
+    search_fields = ("created", "get_jobtype", "version")
 
-    @admin.display(ordering='name', description='job type')
+    @admin.display(ordering="name", description="job type")
     def get_jobtype(self, obj):
         return obj.jobtype.name
 
 
 class JobResultsAdmin(admin.ModelAdmin):
-    list_display = ('created', 'report')
-    ordering = ('created',)
-    search_fields = ('created', 'status')
+    list_display = ("created", "report")
+    ordering = ("created",)
+    search_fields = ("created", "status")
 
     def get_queryset(self, request: HttpRequest) -> QuerySet[Any]:
         qs = super().get_queryset(request)
@@ -45,13 +45,13 @@ class JobResultsAdmin(admin.ModelAdmin):
 
 
 class JobAdmin(admin.ModelAdmin):
-    list_display = ('created', 'get_jobtype', 'get_target', 'jobstatus')
+    list_display = ("created", "get_jobtype", "get_target", "jobstatus")
 
-    @admin.display(ordering='harv_id', description='Harv ID')
+    @admin.display(ordering="harv_id", description="Harv ID")
     def get_target(self, obj):
         return obj.target.harv_id
 
-    @admin.display(ordering='name', description='job type')
+    @admin.display(ordering="name", description="job type")
     def get_jobtype(self, obj):
         return obj.schema.jobtype.name
 
@@ -67,9 +67,9 @@ class JobAdmin(admin.ModelAdmin):
 
 
 class JobHostResultAdmin(admin.ModelAdmin):
-    list_display = ('parent', 'host', 'timestamp')
-    ordering = ('timestamp',)
-    search_fields = ('host', 'timestamp')
+    list_display = ("parent", "host", "timestamp")
+    ordering = ("timestamp",)
+    search_fields = ("host", "timestamp")
 
 
 admin.site.register(JobType, JobTypeAdmin)

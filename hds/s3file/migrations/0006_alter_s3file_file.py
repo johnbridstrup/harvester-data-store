@@ -7,13 +7,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('s3file', '0005_sessclip'),
+        ("s3file", "0005_sessclip"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='s3file',
-            name='file',
-            field=models.FileField(blank=True, max_length=500, null=True, upload_to=common.utils.media_upload_path),
+            model_name="s3file",
+            name="file",
+            field=models.FileField(
+                blank=True,
+                max_length=500,
+                null=True,
+                upload_to=common.utils.media_upload_path,
+            ),
         ),
     ]

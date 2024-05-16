@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('harvester', '0001_initial'),
+        ("harvester", "0001_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='harvester',
-            name='is_emulator',
+            model_name="harvester",
+            name="is_emulator",
             field=models.BooleanField(default=False),
         ),
     ]

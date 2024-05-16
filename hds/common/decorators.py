@@ -1,6 +1,7 @@
 from django.views.decorators.cache import cache_page
 from functools import wraps
 
+
 def cache_page_if_qp_exist(timeout):
     """
     Decorator for caching response.
@@ -8,6 +9,7 @@ def cache_page_if_qp_exist(timeout):
     This decorator extends the cache_page decorator to cache the response
     if query params exists.
     """
+
     def cache_wrapper(view_func):
         @wraps(view_func)
         def _wrapped_view(request, *args, **kwargs):

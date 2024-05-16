@@ -7,14 +7,19 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('errorreport', '0009_errorreport_pick_session'),
-        ('exceptions', '0011_alter_aftexception_primary'),
+        ("errorreport", "0009_errorreport_pick_session"),
+        ("exceptions", "0011_alter_aftexception_primary"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='aftexception',
-            name='report',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='exceptions', to='errorreport.errorreport'),
+            model_name="aftexception",
+            name="report",
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="exceptions",
+                to="errorreport.errorreport",
+            ),
         ),
     ]

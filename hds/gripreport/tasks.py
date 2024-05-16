@@ -11,6 +11,7 @@ from .serializers.gripreportserializers import GripReportSerializer
 
 logger = structlog.getLogger(__name__)
 
+
 @monitored_shared_task
 def download_gripreport(event, creator):
     client = get_client()
@@ -25,15 +26,17 @@ def download_gripreport(event, creator):
     client.delete_file(event)
     return rep.id
 
+
 @monitored_shared_task
 def extract_grip_report(report_id, log=True):
     GripReportSerializer.extract_report(report_id)
     if log:
         logger.info(f"Grip report {report_id} extracted")
 
+
 @monitored_shared_task
 def extract_grip_reports(per_page=500, **filters):
-    qs = GripReport.objects.filter(**filters) 
+    qs = GripReport.objects.filter(**filters)
     paginator = Paginator(qs, per_page)
     logger.info(f"Extracting {paginator.count} grip reports")
     for page in range(1, paginator.num_pages + 1):
@@ -41,4 +44,3 @@ def extract_grip_reports(per_page=500, **filters):
         for report in paginator.page(page).object_list:
             extract_grip_report(report.id, log=False)
         logger.info(f"Page {page} extracted")
-        

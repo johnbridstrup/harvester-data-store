@@ -6,13 +6,15 @@ from ..models import Fruit
 class FruitMinimalSerializer(serializers.ModelSerializer):
     class Meta:
         model = Fruit
-        fields = ('id', 'url', 'name',)
+        fields = (
+            "id",
+            "url",
+            "name",
+        )
 
 
 class FruitSerializer(serializers.ModelSerializer):
     class Meta:
         model = Fruit
-        fields = ('__all__')
-        read_only_fields = ('creator',)
-
-
+        fields = "__all__"
+        read_only_fields = ("creator",)

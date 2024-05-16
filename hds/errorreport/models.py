@@ -8,7 +8,8 @@ DEFAULT_UNKNOWN = "unknown"
 
 
 class ErrorReport(PickSessionModelMixin, ReportBase):
-    """ ErrorReport Model """
+    """ErrorReport Model"""
+
     githash = models.CharField(max_length=20, default=DEFAULT_UNKNOWN)
     gitbranch = models.CharField(max_length=50, default=DEFAULT_UNKNOWN)
 
@@ -43,5 +44,5 @@ class ErrorReport(PickSessionModelMixin, ReportBase):
         else:
             action_msg = "*Unable to handle.*"
             handle_emoji = Emojis.UNHANDLED.value
-        
+
         return self._slack_msg(action_msg, handle_emoji, exc_strs)

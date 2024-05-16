@@ -6,18 +6,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('jobscheduler', '0001_initial'),
+        ("jobscheduler", "0001_initial"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='historicalscheduledjob',
-            name='created',
+            model_name="historicalscheduledjob",
+            name="created",
             field=models.DateTimeField(blank=True, db_index=True, editable=False),
         ),
         migrations.AlterField(
-            model_name='scheduledjob',
-            name='created',
+            model_name="scheduledjob",
+            name="created",
             field=models.DateTimeField(auto_now_add=True, db_index=True),
         ),
     ]

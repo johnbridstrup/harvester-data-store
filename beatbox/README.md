@@ -20,7 +20,7 @@ For operations other than `GET`, the beatbox role (`hds.roles.RoleChoices.BEATBO
 views `view_permissions_update` object for the action in question.
 
 ## Beatbox container environment
-Beatbox relies on three main environment variables added in this project (see [beatbox](https://github.com/AdvancedFarm/beatbox) 
+Beatbox relies on three main environment variables added in this project (see [beatbox](https://github.com/AdvancedFarm/beatbox)
 documentation for implementation details of builtin variables)
 | Var | Description| builtin/custom |
 | --- | ---------- | -------------- |
@@ -31,5 +31,5 @@ documentation for implementation details of builtin variables)
 | SLACK_CHANNEL | Channel to send reports to | builtin |
 | SERVER_ADDRESS | Address at which beatbox is hosted | builtin |
 
-These are supplied via terraform for cloud hosted HDS, or in `docker-compose.beatbox.yml` if running locally with docker 
-compose. Do not version control any sensitive information. 
+These are supplied via terraform for cloud hosted HDS, or in `docker-compose.beatbox.yml` if running locally with docker
+compose. Do not version control any sensitive information.

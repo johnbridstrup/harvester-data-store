@@ -9,9 +9,9 @@ from .logsessionserializers import LogSessionBaseSerializer
 
 logger = structlog.get_logger(__name__)
 
-LOG_PATTERN = r'\[(.*?)\]\s*\[(.*?)\]\s*\[(.*?)\]\s*--\s*(.*)'
-CAN_PATTERN = r'\[(.*?)\]'
-ESC_SEQ_PATTERN = r'\x1B\[[0-9;]*[m|K]'
+LOG_PATTERN = r"\[(.*?)\]\s*\[(.*?)\]\s*\[(.*?)\]\s*--\s*(.*)"
+CAN_PATTERN = r"\[(.*?)\]"
+ESC_SEQ_PATTERN = r"\x1B\[[0-9;]*[m|K]"
 
 
 class DateMatchError(Exception):
@@ -28,15 +28,16 @@ class FilenameMatchError(Exception):
 
 class LogFileSerializer(serializers.ModelSerializer):
     """Serializer for log file model."""
+
     log_session = LogSessionBaseSerializer()
 
     class Meta:
         model = LogFile
-        fields = ('__all__')
-        read_only_fields = ['id']
+        fields = "__all__"
+        read_only_fields = ["id"]
 
     @staticmethod
-    def convert_to_datetime(date_str:str):
+    def convert_to_datetime(date_str: str):
         """
         extract date str from line e.g
 
@@ -48,15 +49,11 @@ class LogFileSerializer(serializers.ModelSerializer):
         date_obj = None
         try:
             date_obj = DTimeFormatter.convert_to_datetime(
-              date_str,
-              TIMEZONE,
-              format='%Y%m%dT%H%M%S.%f'
+                date_str, TIMEZONE, format="%Y%m%dT%H%M%S.%f"
             )
         except Exception as e:
             ASYNC_ERROR_COUNTER.labels(
-                'convert_to_datetime',
-                e.__class__.__name__,
-                "Failed date pattern match"
+                "convert_to_datetime", e.__class__.__name__, "Failed date pattern match"
             ).inc()
             logger.error(f"could not match the date string {date_str}")
         return date_obj
@@ -74,14 +71,16 @@ class LogFileSerializer(serializers.ModelSerializer):
         robot = None
         harv = None
 
-        pattern = r'^(.*?)_(.*?)_(.*?)_(.*?)\.(.*)$'  #(ts)_(harvid)_(robotid)_(serv)(.ext)
+        pattern = (
+            r"^(.*?)_(.*?)_(.*?)_(.*?)\.(.*)$"  # (ts)_(harvid)_(robotid)_(serv)(.ext)
+        )
 
         matches = re.match(pattern, filename)
         if not matches:
             ASYNC_ERROR_COUNTER.labels(
-                'extract_filename',
+                "extract_filename",
                 FilenameMatchError.__name__,
-                "Failed to match filename"
+                "Failed to match filename",
             ).inc()
             raise FilenameMatchError(f"Failed to match filename: {filename}")
 
@@ -90,25 +89,20 @@ class LogFileSerializer(serializers.ModelSerializer):
         service = matches.group(4)
         ext = matches.group(5)
 
-
         return service, robot, harv, f".{ext}"
 
     @classmethod
     def _report_date_match_fail(cls, entry):
         ASYNC_ERROR_COUNTER.labels(
-            'extract_log_file',
-            DateMatchError.__name__,
-            "Failed date pattern match"
+            "extract_log_file", DateMatchError.__name__, "Failed date pattern match"
         ).inc()
-        logger.error(f'No date match for the line {entry}')
+        logger.error(f"No date match for the line {entry}")
 
     @classmethod
     def _report_line_match_fail(cls, entry):
-        logger.error(f'No line match for the line {entry}')
+        logger.error(f"No line match for the line {entry}")
         ASYNC_ERROR_COUNTER.labels(
-            'extract_log_file',
-            LogDoesNotMatch.__name__,
-            "Failed line pattern match"
+            "extract_log_file", LogDoesNotMatch.__name__, "Failed line pattern match"
         ).inc()
 
     @classmethod
@@ -126,9 +120,9 @@ class LogFileSerializer(serializers.ModelSerializer):
             raise DateMatchError
 
         content_dict = {
-            'timestamp': dt.timestamp(),
-            'log_date': str(dt),
-            'log_message': line,
+            "timestamp": dt.timestamp(),
+            "log_date": str(dt),
+            "log_message": line,
         }
         return content_dict
 
@@ -148,25 +142,25 @@ class LogFileSerializer(serializers.ModelSerializer):
             raise DateMatchError
 
         content_dict = {
-            'timestamp': dt.timestamp(),
-            'log_date': str(dt),
-            'log_level': level,
-            'logger': serv_logger
+            "timestamp": dt.timestamp(),
+            "log_date": str(dt),
+            "log_level": level,
+            "logger": serv_logger,
         }
         return content_dict
 
     @classmethod
     def _extract_line(cls, line, ext):
-        if ext == '.log':
+        if ext == ".log":
             return cls._extract_log(line)
-        elif ext == '.dump':
+        elif ext == ".dump":
             return cls._extract_can(line)
 
     @classmethod
     def _extract_lines(cls, file_iter, service, robot, harv, ext):
         def clean_line(line):
-            cleaned_line = re.sub(ESC_SEQ_PATTERN, '', line)
-            cleaned_line = cleaned_line.rstrip().strip('\n')
+            cleaned_line = re.sub(ESC_SEQ_PATTERN, "", line)
+            cleaned_line = cleaned_line.rstrip().strip("\n")
             return cleaned_line
 
         content = []
@@ -182,11 +176,11 @@ class LogFileSerializer(serializers.ModelSerializer):
             try:
                 content_dict = cls._extract_line(line, ext)
                 if prev_content:
-                    prev_content['logfile_type'] = ext
-                    prev_content['service'] = service
-                    prev_content['robot'] = int(robot)
-                    prev_content['harv_id'] = int(harv)
-                    prev_content['log_message'] = full_line
+                    prev_content["logfile_type"] = ext
+                    prev_content["service"] = service
+                    prev_content["robot"] = int(robot)
+                    prev_content["harv_id"] = int(harv)
+                    prev_content["log_message"] = full_line
                     content.append(prev_content)
                 prev_content = content_dict
                 full_line = line
@@ -199,11 +193,11 @@ class LogFileSerializer(serializers.ModelSerializer):
                 continue
 
         if content_dict is not None:
-            content_dict['logfile_type'] = ext
-            content_dict['service'] = service
-            content_dict['robot'] = int(robot)
-            content_dict['harv_id'] = int(harv)
-            content_dict['log_message'] = full_line
+            content_dict["logfile_type"] = ext
+            content_dict["service"] = service
+            content_dict["robot"] = int(robot)
+            content_dict["harv_id"] = int(harv)
+            content_dict["log_message"] = full_line
             content.append(content_dict)
 
         return content
@@ -228,11 +222,11 @@ class LogFileSerializer(serializers.ModelSerializer):
             return
 
         log_file = LogFile(
-          file_name=file.filename,
-          log_session=log_session,
-          creator=log_session.creator,
-          service=service,
-          robot=robot
+            file_name=file.filename,
+            log_session=log_session,
+            creator=log_session.creator,
+            service=service,
+            robot=robot,
         )
         log_file.content = content
         log_file.save()

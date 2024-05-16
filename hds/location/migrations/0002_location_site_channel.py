@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('location', '0001_initial'),
+        ("location", "0001_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='location',
-            name='site_channel',
-            field=models.CharField(default='harvs-dev', max_length=40),
+            model_name="location",
+            name="site_channel",
+            field=models.CharField(default="harvs-dev", max_length=40),
         ),
     ]

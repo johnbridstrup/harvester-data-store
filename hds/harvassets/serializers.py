@@ -6,7 +6,10 @@ from common.reports import ReportBase
 from common.serializers.reportserializer import ReportSerializerBase
 from common.serializers.userserializer import UserCustomSerializer
 from event.serializers import PickSessionSerializerMixin, EventSerializer
-from harvester.serializers.harvesterserializer import HarvesterSerializer, HarvesterMinimalSerializer
+from harvester.serializers.harvesterserializer import (
+    HarvesterSerializer,
+    HarvesterMinimalSerializer,
+)
 
 from .metrics import MISSING_SERIAL_NUMBER
 from .models import HarvesterAssetReport, HarvesterAssetType, HarvesterAsset
@@ -15,8 +18,8 @@ from .models import HarvesterAssetReport, HarvesterAssetType, HarvesterAsset
 class HarvesterAssetTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = HarvesterAssetType
-        fields = ('__all__')
-        read_only_fields = ('creator',)
+        fields = "__all__"
+        read_only_fields = ("creator",)
 
 
 class HarvesterAssetSerializer(serializers.ModelSerializer):
@@ -24,11 +27,13 @@ class HarvesterAssetSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = HarvesterAsset
-        fields = ('__all__')
-        read_only_fields = ('creator',)
+        fields = "__all__"
+        read_only_fields = ("creator",)
 
 
-class HarvesterAssetReportSerializer(TaggitSerializer, PickSessionSerializerMixin, ReportSerializerBase):
+class HarvesterAssetReportSerializer(
+    TaggitSerializer, PickSessionSerializerMixin, ReportSerializerBase
+):
     tags = TagListSerializerField(required=False)
     assets = HarvesterAssetSerializer(many=True, read_only=True)
 
@@ -59,8 +64,12 @@ class HarvesterAssetReportSerializer(TaggitSerializer, PickSessionSerializerMixi
         meta, _ = self.extract_basic(data)
         creator = self.get_user_from_request()
         event_uuid = self.extract_uuid(data)
-        picksess_uuid = self.extract_uuid(data, key="pick_session_uuid", allow_null=True)
-        event = self.get_or_create_event(event_uuid, creator, HarvesterAssetReport.__name__)
+        picksess_uuid = self.extract_uuid(
+            data, key="pick_session_uuid", allow_null=True
+        )
+        event = self.get_or_create_event(
+            event_uuid, creator, HarvesterAssetReport.__name__
+        )
 
         internal_data = {
             **meta,
@@ -69,7 +78,9 @@ class HarvesterAssetReportSerializer(TaggitSerializer, PickSessionSerializerMixi
             "event": event.id,
         }
         if picksess_uuid:
-            picksess = self.get_or_create_picksession(picksess_uuid, creator, HarvesterAssetReport.__name__)
+            picksess = self.get_or_create_picksession(
+                picksess_uuid, creator, HarvesterAssetReport.__name__
+            )
             internal_data["pick_session"] = picksess.id
         return super().to_internal_value(internal_data)
 
@@ -92,8 +103,12 @@ class HarvesterAssetReportSerializer(TaggitSerializer, PickSessionSerializerMixi
             asset["serial_number"] = serial_number
 
             version = asset.get("version", None)
-            asset_type_obj = HarvesterAssetType.get_or_create(asset_type=asset_type, user=user)
-            asset_obj = HarvesterAsset.update_or_create_and_get(asset_type_obj, harv, index, serial_number, user, version)
+            asset_type_obj = HarvesterAssetType.get_or_create(
+                asset_type=asset_type, user=user
+            )
+            asset_obj = HarvesterAsset.update_or_create_and_get(
+                asset_type_obj, harv, index, serial_number, user, version
+            )
             report_obj.assets.add(asset_obj)
 
         # Save the report
@@ -101,8 +116,8 @@ class HarvesterAssetReportSerializer(TaggitSerializer, PickSessionSerializerMixi
 
     class Meta:
         model = HarvesterAssetReport
-        fields = ('__all__')
-        read_only_fields = ('creator',)
+        fields = "__all__"
+        read_only_fields = ("creator",)
 
 
 class HarvesterAssetReportDetailSerializer(HarvesterAssetReportSerializer):

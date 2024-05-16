@@ -3,7 +3,6 @@ from ..views.jobtypeviews import JobTypeView
 
 
 router = routers.SimpleRouter()
-router.register(r'', JobTypeView, basename='jobtype')
+router.register(r"", JobTypeView, basename="jobtype")
 
-urlpatterns = [
-] + router.urls
+urlpatterns = [] + router.urls

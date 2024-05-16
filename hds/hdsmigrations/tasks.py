@@ -9,16 +9,18 @@ from common.utils import test_env
 from .models import MigrationLog
 
 
-
 logger = structlog.get_logger(__name__)
 
 TEST_OUTPUT = "We faked a migration"
+
 
 @monitored_shared_task
 def execute_migrations(id):
     log = MigrationLog.objects.get(id=id)
     try:
-        last_success = MigrationLog.objects.filter(result=MigrationLog.ResultChoices.SUCCESS).latest("endTime")
+        last_success = MigrationLog.objects.filter(
+            result=MigrationLog.ResultChoices.SUCCESS
+        ).latest("endTime")
         last_hash = last_success.githash or "UNKNOWN"
     except MigrationLog.DoesNotExist:
         last_hash = "INITIAL"

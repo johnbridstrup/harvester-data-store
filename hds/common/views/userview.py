@@ -15,20 +15,28 @@ from common.serializers.userserializer import UserCreateSerializer, UserSerializ
 
 class LoginAPIView(APIView):
     """Login and generate auth token"""
+
     renderer_classes = (HDSJSONRenderer,)
 
     def post(self, request, *args, **kwargs):
         try:
             # username and password are required
-            if "username" not in request.data.keys() or "password" not in request.data.keys():
+            if (
+                "username" not in request.data.keys()
+                or "password" not in request.data.keys()
+            ):
                 raise Exception("username and password are required")
 
-            user = authenticate(username=request.data['username'], password=request.data['password'])
+            user = authenticate(
+                username=request.data["username"], password=request.data["password"]
+            )
             if user is not None:
                 update_last_login(None, user)
                 token, created = Token.objects.get_or_create(user=user)
                 serializer = UserSerializer(user)
-                return make_ok("Login successful", {"token": token.key, "user": serializer.data})
+                return make_ok(
+                    "Login successful", {"token": token.key, "user": serializer.data}
+                )
             else:
                 raise Exception("invalid username or password")
         except Exception as e:
@@ -37,6 +45,7 @@ class LoginAPIView(APIView):
 
 class LogoutAPIView(APIView):
     """Logout and invalidate auth token"""
+
     renderer_classes = (HDSJSONRenderer,)
 
     def post(self, request, *args, **kwargs):
@@ -45,7 +54,7 @@ class LogoutAPIView(APIView):
                 raise Exception("token is required")
             else:
                 # delete token
-                token = Token.objects.filter(key=request.data['token'])
+                token = Token.objects.filter(key=request.data["token"])
                 if token.exists():
                     token.delete()
                     return make_ok("Logout successful", {})
@@ -57,10 +66,11 @@ class LogoutAPIView(APIView):
 
 class CSRFAPIView(APIView):
     """get csrf token for every post request"""
+
     renderer_classes = (HDSJSONRenderer,)
 
     def get(self, request, *args, **kwargs):
-        return make_ok("CSRF successful", {'csrftoken': get_token(request)})
+        return make_ok("CSRF successful", {"csrftoken": get_token(request)})
 
     def post(self, request, *args, **kwargs):
         return make_ok("result successful", {"result": "ok"})
@@ -68,6 +78,7 @@ class CSRFAPIView(APIView):
 
 class ManageUserView(ModelViewSet):
     """manage user api viewset"""
+
     serializer_class = UserSerializer
     renderer_classes = (HDSJSONRenderer,)
     permission_classes = (IsAuthenticated,)
@@ -81,15 +92,20 @@ class ManageUserView(ModelViewSet):
             self.serializer_class = UserCreateSerializer
         return self.serializer_class
 
+
 class ChangePasswordView(APIView):
     """validate user password and update new password"""
+
     renderer_classes = (HDSJSONRenderer,)
     permission_classes = (IsAuthenticated,)
 
     def post(self, request, *args, **kwargs):
         try:
             # current_password and new_password are required
-            if "current_password" not in request.data.keys() or "new_password" not in request.data.keys():
+            if (
+                "current_password" not in request.data.keys()
+                or "new_password" not in request.data.keys()
+            ):
                 raise Exception("current_password and new_password are required")
             if request.user.check_password(request.data["current_password"]):
                 request.user.set_password(request.data["new_password"])
@@ -104,6 +120,7 @@ class GithubOauthView(APIView):
     """
     Authenticate with Github Oauth
     """
+
     renderer_classes = (HDSJSONRenderer,)
 
     def post(self, request, *args, **kwargs):
@@ -130,15 +147,15 @@ class GithubOauthView(APIView):
                         first_name, _, last_name = name_list
 
                     user = User.objects.create_user(
-                        username=username,
-                        first_name=first_name,
-                        last_name=last_name
+                        username=username, first_name=first_name, last_name=last_name
                     )
                     UserProfile.objects.create(user=user, avatar_url=avatar_url)
                 update_last_login(None, user)
                 token, _ = Token.objects.get_or_create(user=user)
                 serializer = UserSerializer(user)
-                return make_ok("Login successful", {"token": token.key, "user": serializer.data})
+                return make_ok(
+                    "Login successful", {"token": token.key, "user": serializer.data}
+                )
             raise AuthenticationFailed(detail="Token is invalid or has expired")
         except Exception as e:
             raise AuthenticationFailed(detail=str(e))

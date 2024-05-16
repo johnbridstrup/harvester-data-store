@@ -12,7 +12,9 @@ from event.models import EventModelMixin
 
 
 class S3File(EventModelMixin, CommonInfo):
-    file = models.FileField(upload_to=media_upload_path, blank=True, null=True, max_length=500)
+    file = models.FileField(
+        upload_to=media_upload_path, blank=True, null=True, max_length=500
+    )
     filetype = models.CharField(max_length=255)
     key = models.CharField(max_length=255, null=True, blank=True)
     deleted = models.BooleanField(default=False)
@@ -37,7 +39,7 @@ class S3File(EventModelMixin, CommonInfo):
         return None
 
     def delete_from_s3(self):
-        self.file.delete() # deletes file from storages
+        self.file.delete()  # deletes file from storages
         self.save()
 
     @property
@@ -61,6 +63,7 @@ class S3File(EventModelMixin, CommonInfo):
 
 class S3FileMixin(models.Model):
     file = models.OneToOneField(S3File, on_delete=models.CASCADE)
+
     class Meta:
         abstract = True
 

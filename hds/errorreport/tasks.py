@@ -16,9 +16,13 @@ class SendSignalCallback(Task):
         # limit message from beatbox request and emulator from being sent
         # beatbox_request can be None or True
         # we can toggle for emulators esp for development messages
-        if beatbox_request is None or (not beatbox_request and \
-                                        not report.harvester.is_emulator):
-            error_report_created.send(sender=ErrorReport, instance_id=report_id, url=url)
+        if beatbox_request is None or (
+            not beatbox_request and not report.harvester.is_emulator
+        ):
+            error_report_created.send(
+                sender=ErrorReport, instance_id=report_id, url=url
+            )
+
 
 @monitored_shared_task(base=SendSignalCallback)
 def extract_exceptions_and_notify(report_id, beatbox_request):

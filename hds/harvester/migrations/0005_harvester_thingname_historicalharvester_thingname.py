@@ -6,18 +6,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('harvester', '0004_historicalharvester'),
+        ("harvester", "0004_historicalharvester"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='harvester',
-            name='thingName',
+            model_name="harvester",
+            name="thingName",
             field=models.CharField(blank=True, max_length=20, null=True),
         ),
         migrations.AddField(
-            model_name='historicalharvester',
-            name='thingName',
+            model_name="historicalharvester",
+            name="thingName",
             field=models.CharField(blank=True, max_length=20, null=True),
         ),
     ]

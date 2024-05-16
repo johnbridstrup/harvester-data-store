@@ -6,38 +6,62 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('jobscheduler', '0002_alter_historicalscheduledjob_created_and_more'),
+        ("jobscheduler", "0002_alter_historicalscheduledjob_created_and_more"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='historicalscheduledjob',
-            name='max_runs',
+            model_name="historicalscheduledjob",
+            name="max_runs",
             field=models.IntegerField(default=10),
         ),
         migrations.AddField(
-            model_name='historicalscheduledjob',
-            name='num_runs',
+            model_name="historicalscheduledjob",
+            name="num_runs",
             field=models.IntegerField(default=0),
         ),
         migrations.AddField(
-            model_name='scheduledjob',
-            name='max_runs',
+            model_name="scheduledjob",
+            name="max_runs",
             field=models.IntegerField(default=10),
         ),
         migrations.AddField(
-            model_name='scheduledjob',
-            name='num_runs',
+            model_name="scheduledjob",
+            name="num_runs",
             field=models.IntegerField(default=0),
         ),
         migrations.AlterField(
-            model_name='historicalscheduledjob',
-            name='schedule_status',
-            field=models.CharField(choices=[('pending', 'Pending'), ('waiting to schedule', 'Waiting'), ('scheduled', 'Scheduled'), ('cancelled', 'Cancelled'), ('waiting to re-schedule', 'Reschedwaiting'), ('failed to schedule', 'Schedfail'), ('Max runs reached', 'Maxruns')], default='pending', max_length=63),
+            model_name="historicalscheduledjob",
+            name="schedule_status",
+            field=models.CharField(
+                choices=[
+                    ("pending", "Pending"),
+                    ("waiting to schedule", "Waiting"),
+                    ("scheduled", "Scheduled"),
+                    ("cancelled", "Cancelled"),
+                    ("waiting to re-schedule", "Reschedwaiting"),
+                    ("failed to schedule", "Schedfail"),
+                    ("Max runs reached", "Maxruns"),
+                ],
+                default="pending",
+                max_length=63,
+            ),
         ),
         migrations.AlterField(
-            model_name='scheduledjob',
-            name='schedule_status',
-            field=models.CharField(choices=[('pending', 'Pending'), ('waiting to schedule', 'Waiting'), ('scheduled', 'Scheduled'), ('cancelled', 'Cancelled'), ('waiting to re-schedule', 'Reschedwaiting'), ('failed to schedule', 'Schedfail'), ('Max runs reached', 'Maxruns')], default='pending', max_length=63),
+            model_name="scheduledjob",
+            name="schedule_status",
+            field=models.CharField(
+                choices=[
+                    ("pending", "Pending"),
+                    ("waiting to schedule", "Waiting"),
+                    ("scheduled", "Scheduled"),
+                    ("cancelled", "Cancelled"),
+                    ("waiting to re-schedule", "Reschedwaiting"),
+                    ("failed to schedule", "Schedfail"),
+                    ("Max runs reached", "Maxruns"),
+                ],
+                default="pending",
+                max_length=63,
+            ),
         ),
     ]

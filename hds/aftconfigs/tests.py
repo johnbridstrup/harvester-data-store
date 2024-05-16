@@ -13,14 +13,14 @@ class ConfigReportTestCase(HDSAPITestBase):
         self.load_config_data()
 
     def test_basic(self):
-        r = self.client.post(self.config_url, data=self.conf_data, format='json')
+        r = self.client.post(self.config_url, data=self.conf_data, format="json")
         self.assertEqual(r.status_code, status.HTTP_201_CREATED)
         self.assertEqual(ConfigReport.objects.count(), 1)
 
     def test_harvester_latest(self):
         self.set_user_role(RoleChoices.SQS)
         ts1 = self.conf_data["timestamp"]
-        self.client.post(self.config_url, data=self.conf_data, format='json')
+        self.client.post(self.config_url, data=self.conf_data, format="json")
 
         self.set_user_role(RoleChoices.SUPPORT)
         r = self.client.get(f"{self.harv_det_url(1)}config/")
@@ -29,7 +29,7 @@ class ConfigReportTestCase(HDSAPITestBase):
         self.set_user_role(RoleChoices.SQS)
         ts2 = self.conf_data["timestamp"] + 100
         self.conf_data["timestamp"] = ts2
-        self.client.post(self.config_url, data=self.conf_data, format='json')
+        self.client.post(self.config_url, data=self.conf_data, format="json")
 
         self.set_user_role(RoleChoices.SUPPORT)
         r = self.client.get(f"{self.harv_det_url(1)}config/")

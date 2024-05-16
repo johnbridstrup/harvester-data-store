@@ -22,32 +22,34 @@ class CreateModelViewSet(ModelViewSet):
     view_permissions_update = {}
     action_serializers = {}
     view_permissions = {
-            'create': {
-                'admin': True, # Must whitelist permission below admin for creating
-            },
-            'list': {
-                RoleChoices.SUPPORT: True,
-                RoleChoices.JENKINS: True,
-                RoleChoices.BEATBOX: True,
-            },
-            'retrieve': {
-                RoleChoices.SUPPORT: True,
-                RoleChoices.JENKINS: True,
-                RoleChoices.BEATBOX: True,
-            },
-            'destroy': {
-                'admin': True,
-            },
-            'update': {
-                'admin': True,
-            },
-            'partial_update': {
-                'admin': True,
-            }
-        }
+        "create": {
+            "admin": True,  # Must whitelist permission below admin for creating
+        },
+        "list": {
+            RoleChoices.SUPPORT: True,
+            RoleChoices.JENKINS: True,
+            RoleChoices.BEATBOX: True,
+        },
+        "retrieve": {
+            RoleChoices.SUPPORT: True,
+            RoleChoices.JENKINS: True,
+            RoleChoices.BEATBOX: True,
+        },
+        "destroy": {
+            "admin": True,
+        },
+        "update": {
+            "admin": True,
+        },
+        "partial_update": {
+            "admin": True,
+        },
+    }
 
     def __init__(self, **kwargs):
-        self.view_permissions = merge_nested_dict(self.view_permissions, self.view_permissions_update, overwrite_none=True)
+        self.view_permissions = merge_nested_dict(
+            self.view_permissions, self.view_permissions_update, overwrite_none=True
+        )
         super().__init__(**kwargs)
 
     def perform_create(self, serializer):
@@ -80,17 +82,17 @@ class CreateModelViewSet(ModelViewSet):
 
     def log(self, operation, instance):
         if operation == ADDITION:
-            msg = 'Created'
+            msg = "Created"
         if operation == CHANGE:
-            msg = 'Updated'
+            msg = "Updated"
         if operation == DELETION:
-            msg = 'Deleted'
+            msg = "Deleted"
         action_message = _(msg)
 
         AdminMetrics.incr_crud_operation(
             model=instance.__class__.__name__,
             operation=operation,
-            user=self.request.user.username
+            user=self.request.user.username,
         )
         LogEntry.objects.log_action(
             user_id=self.request.user.id,
@@ -98,7 +100,8 @@ class CreateModelViewSet(ModelViewSet):
             object_id=instance.pk,
             object_repr=str(instance),
             action_flag=operation,
-            change_message=action_message + ' ' + str(instance))
+            change_message=action_message + " " + str(instance),
+        )
 
     def _log_on_create(self, serializer):
         """Log the up-to-date serializer.data."""
@@ -114,33 +117,34 @@ class CreateModelViewSet(ModelViewSet):
 
 
 class ReportModelViewSet(CreateModelViewSet):
-    """ Viewset for error reports """
-    ordering = ('-reportTime',)
+    """Viewset for error reports"""
+
+    ordering = ("-reportTime",)
     view_permissions = {
-        'create': {
-            'admin': True,
+        "create": {
+            "admin": True,
             RoleChoices.SQS: True,
         },
-        'list': {
+        "list": {
             RoleChoices.SUPPORT: True,
             RoleChoices.JENKINS: True,
             RoleChoices.BEATBOX: True,
         },
-        'retrieve': {
+        "retrieve": {
             RoleChoices.SUPPORT: True,
             RoleChoices.JENKINS: True,
             RoleChoices.BEATBOX: True,
         },
-        'destroy': {
-            'admin': True,
+        "destroy": {
+            "admin": True,
         },
-        'update': {
-            'admin': True,
+        "update": {
+            "admin": True,
         },
-        'partial_update': {
-            'admin': True,
+        "partial_update": {
+            "admin": True,
         },
-        'get_schema': {
+        "get_schema": {
             RoleChoices.SUPPORT: True,
             RoleChoices.JENKINS: True,
             RoleChoices.SQS: True,
@@ -159,10 +163,12 @@ class ReportModelViewSet(CreateModelViewSet):
         return self.serializer_class.report_type
 
     @action(
-        methods=['get'],
+        methods=["get"],
         detail=False,
-        url_path='getschema',
-        renderer_classes=[JSONRenderer,]
+        url_path="getschema",
+        renderer_classes=[
+            JSONRenderer,
+        ],
     )
     def get_schema(self, request):
         schema = self.serializer_class().get_schema()
@@ -174,22 +180,25 @@ class ReportModelViewSet(CreateModelViewSet):
 # Mixins
 ####################################################################################################
 
+
 class CountActionMixin(ModelViewSet):
     @action(
         detail=False,
         methods=["get"],
         url_path="count",
         url_name="count",
-        renderer_classes=[JSONRenderer]
+        renderer_classes=[JSONRenderer],
     )
     def count(self, request, *args, **kwargs):
         qs = self.filter_queryset(self.get_queryset())
         count = qs.count()
-        return make_ok(f"Count of {self.serializer_class.Meta.model.__name__}", response_data={"count": count})
+        return make_ok(
+            f"Count of {self.serializer_class.Meta.model.__name__}",
+            response_data={"count": count},
+        )
 
 
 class AdminActionMixin(ModelViewSet):
-
     def action_items(self) -> list:
         """
         Provide a list action items that needs to be implemented as part of the
@@ -209,7 +218,6 @@ class AdminActionMixin(ModelViewSet):
     )
     def action_item_view(self, request):
         return make_ok("successfully retrieved actions items", self.action_items())
-
 
     def run_actions(self, request) -> Response:
         """

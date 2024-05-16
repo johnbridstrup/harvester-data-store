@@ -3,7 +3,6 @@ from .views import MigrationLogView
 
 
 router = routers.SimpleRouter()
-router.register(r'', MigrationLogView, basename='hdsmigrations')
+router.register(r"", MigrationLogView, basename="hdsmigrations")
 
-urlpatterns = [
-] + router.urls
+urlpatterns = [] + router.urls

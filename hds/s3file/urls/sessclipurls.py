@@ -3,7 +3,6 @@ from ..views import SessClipView
 
 
 router = routers.SimpleRouter()
-router.register(r'', SessClipView, basename="sessclip")
+router.register(r"", SessClipView, basename="sessclip")
 
-urlpatterns = [
-] + router.urls
+urlpatterns = [] + router.urls

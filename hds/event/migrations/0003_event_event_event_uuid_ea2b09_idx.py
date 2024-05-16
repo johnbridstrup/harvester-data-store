@@ -6,12 +6,12 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('event', '0002_eventtag_event_tags_eventtag_content_object_and_more'),
+        ("event", "0002_eventtag_event_tags_eventtag_content_object_and_more"),
     ]
 
     operations = [
         migrations.AddIndex(
-            model_name='event',
-            index=models.Index(fields=['UUID'], name='event_event_UUID_ea2b09_idx'),
+            model_name="event",
+            index=models.Index(fields=["UUID"], name="event_event_UUID_ea2b09_idx"),
         ),
     ]

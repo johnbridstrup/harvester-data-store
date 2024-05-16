@@ -15,6 +15,7 @@ from .serializers import HarvesterAssetReportSerializer
 def extract_assets(report_id):
     HarvesterAssetReportSerializer.extract_report(report_id)
 
+
 def compile_asset_report():
     report = defaultdict(lambda: defaultdict(list))
     assets = HarvesterAsset.objects.all()
@@ -35,11 +36,12 @@ def compile_asset_report():
                 "rev": asset.version or "",
             }
         )
-    
+
     # defaultdict is not serializable
     for k, v in report.items():
         report[k] = dict(v)
     return dict(report)
+
 
 @monitored_shared_task
 def send_asset_manifest(channel="hds-test"):
@@ -52,13 +54,15 @@ def send_asset_manifest(channel="hds-test"):
     )
     return r
 
+
 @monitored_shared_task
 def clear_asset_gauges():
     HarvAssetMonitor.clear()
 
+
 @monitored_shared_task
 def refresh_asset_gauges(clear=False):
-    """Loop through all assets and set their gauges. 
+    """Loop through all assets and set their gauges.
 
     Args:
         clear (bool, optional): Flag to remove all gauges prior to update. Defaults to False.

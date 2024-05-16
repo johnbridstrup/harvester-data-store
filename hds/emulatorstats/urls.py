@@ -3,7 +3,6 @@ from .views import EmuReportView
 
 
 router = routers.SimpleRouter()
-router.register(r'', EmuReportView, basename='emustatsreports')
+router.register(r"", EmuReportView, basename="emustatsreports")
 
-urlpatterns = [
-] + router.urls
+urlpatterns = [] + router.urls

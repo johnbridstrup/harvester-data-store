@@ -19,12 +19,12 @@ DEFAULT_JOB_TIMEOUT = 6000
 class JobSerializer(EventSerializerMixin, serializers.ModelSerializer):
     class Meta:
         model = Job
-        fields = ('__all__')
-        read_only_fields = ('creator',)
+        fields = "__all__"
+        read_only_fields = ("creator",)
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
-        data['results'] = reverse("jobresults-list") + (
+        data["results"] = reverse("jobresults-list") + (
             f"?job__target__harv_id={instance.target.harv_id}"
             f"&job__event__UUID={instance.event.UUID}"
         )
@@ -33,9 +33,9 @@ class JobSerializer(EventSerializerMixin, serializers.ModelSerializer):
 
     def to_internal_value(self, data):
         # Expects a job type, schema version
-        jobtype_name = data['jobtype']
-        jobschema_vers = data['schema_version']
-        harv_id = data['target']
+        jobtype_name = data["jobtype"]
+        jobschema_vers = data["schema_version"]
+        harv_id = data["target"]
 
         jobtype = JobType.objects.get(name=jobtype_name)
         jobschema = JobSchema.objects.get(jobtype=jobtype, version=jobschema_vers)
@@ -45,7 +45,7 @@ class JobSerializer(EventSerializerMixin, serializers.ModelSerializer):
         UUID = job_payload["id"]
         self._validate_payload(job_payload, jobschema.schema)
 
-        creator = self.context['request'].user
+        creator = self.context["request"].user
         event = self.get_or_create_event(UUID, creator, Job.__name__)
 
         data = {
@@ -63,14 +63,13 @@ class JobSerializer(EventSerializerMixin, serializers.ModelSerializer):
             jsonschema.validate(payload, schema)
         except jsonschema.ValidationError as e:
             if e.validator == "type":
-                err = {
-                    "path": e.json_path,
-                    "error": f"Must be {e.validator_value}"
-                }
+                err = {"path": e.json_path, "error": f"Must be {e.validator_value}"}
             elif e.validator == "required":
                 err = {
                     "required": e.validator_value,
-                    "missing": re.findall(r"'(?:[^']|'')*'* is a required property", str(e)),
+                    "missing": re.findall(
+                        r"'(?:[^']|'')*'* is a required property", str(e)
+                    ),
                 }
             else:
                 err = str(e)
@@ -85,7 +84,6 @@ class JobSerializer(EventSerializerMixin, serializers.ModelSerializer):
         if "timeout" not in payload:
             payload["timeout"] = DEFAULT_JOB_TIMEOUT
 
-
         return payload
 
 
@@ -94,6 +92,7 @@ class JobDetailSerializer(JobSerializer):
     Return a response with full nesting to the detail view
     for any related objected.
     """
+
     event = EventSerializer(read_only=True)
     schema = JobSchemaSerializer(read_only=True)
     target = HarvesterMinimalSerializer(read_only=True)
@@ -106,7 +105,8 @@ class JobDetailSerializer(JobSerializer):
 
 class JobHistorySerializer(serializers.ModelSerializer):
     """Serialize jobstatus history from HistoricalRecords"""
+
     class Meta:
         model = Job.history.model
-        fields = ('jobstatus', 'history_id', 'history_date')
-        read_only_fields = ('__all__',)
+        fields = ("jobstatus", "history_id", "history_date")
+        read_only_fields = ("__all__",)

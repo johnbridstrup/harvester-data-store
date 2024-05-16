@@ -68,4 +68,3 @@ class EmustatsReportTestCase(HDSAPITestBase):
 
         r1 = self.client.get(f"{self.emustats_url}?runner={runner1}")
         self.assertEqual(r1.json()["data"]["count"], 1)
-    

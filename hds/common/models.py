@@ -6,9 +6,18 @@ from hds.roles import RoleChoices
 
 
 class CommonInfo(models.Model):
-    creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name="%(app_label)s_%(class)s_creator_related")
-    modifiedBy = models.ForeignKey(User, on_delete=models.CASCADE, related_name="%(app_label)s_%(class)s_modifiedby_related",
-                                   blank=True, null=True)
+    creator = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="%(app_label)s_%(class)s_creator_related",
+    )
+    modifiedBy = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="%(app_label)s_%(class)s_modifiedby_related",
+        blank=True,
+        null=True,
+    )
     created = models.DateTimeField(auto_now_add=True, db_index=True)
     lastModified = models.DateTimeField(auto_now=True)
 
@@ -18,10 +27,13 @@ class CommonInfo(models.Model):
     class Meta:
         abstract = True
 
+
 class UserProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
     slack_id = models.CharField(max_length=15, blank=True, null=True)
-    role = models.CharField(max_length=31, choices=RoleChoices.choices, default=RoleChoices.SUPPORT)
+    role = models.CharField(
+        max_length=31, choices=RoleChoices.choices, default=RoleChoices.SUPPORT
+    )
     avatar_url = models.CharField(max_length=500, blank=True, null=True)
 
 

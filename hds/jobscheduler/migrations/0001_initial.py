@@ -11,53 +11,162 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('harvjobs', '0004_jobresults_harvester_jobresults_location'),
-        ('django_celery_beat', '0016_alter_crontabschedule_timezone'),
+        ("harvjobs", "0004_jobresults_harvester_jobresults_location"),
+        ("django_celery_beat", "0016_alter_crontabschedule_timezone"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('harvester', '0007_alter_fruit_name_alter_harvester_name_and_more'),
+        ("harvester", "0007_alter_fruit_name_alter_harvester_name_and_more"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='ScheduledJob',
+            name="ScheduledJob",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created', models.DateTimeField(auto_now_add=True)),
-                ('lastModified', models.DateTimeField(auto_now=True)),
-                ('job_def', models.JSONField()),
-                ('schedule_status', models.CharField(choices=[('pending', 'Pending'), ('waiting to schedule', 'Waiting'), ('scheduled', 'Scheduled'), ('cancelled', 'Cancelled'), ('waiting to re-schedule', 'Reschedwaiting'), ('failed to schedule', 'Schedfail')], default='pending', max_length=63)),
-                ('creator', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='%(app_label)s_%(class)s_creator_related', to=settings.AUTH_USER_MODEL)),
-                ('jobs', models.ManyToManyField(blank=True, to='harvjobs.job')),
-                ('modifiedBy', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='%(app_label)s_%(class)s_modifiedby_related', to=settings.AUTH_USER_MODEL)),
-                ('targets', models.ManyToManyField(to='harvester.harvester')),
-                ('task', models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='django_celery_beat.periodictask')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("created", models.DateTimeField(auto_now_add=True)),
+                ("lastModified", models.DateTimeField(auto_now=True)),
+                ("job_def", models.JSONField()),
+                (
+                    "schedule_status",
+                    models.CharField(
+                        choices=[
+                            ("pending", "Pending"),
+                            ("waiting to schedule", "Waiting"),
+                            ("scheduled", "Scheduled"),
+                            ("cancelled", "Cancelled"),
+                            ("waiting to re-schedule", "Reschedwaiting"),
+                            ("failed to schedule", "Schedfail"),
+                        ],
+                        default="pending",
+                        max_length=63,
+                    ),
+                ),
+                (
+                    "creator",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="%(app_label)s_%(class)s_creator_related",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
+                ("jobs", models.ManyToManyField(blank=True, to="harvjobs.job")),
+                (
+                    "modifiedBy",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="%(app_label)s_%(class)s_modifiedby_related",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
+                ("targets", models.ManyToManyField(to="harvester.harvester")),
+                (
+                    "task",
+                    models.OneToOneField(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="django_celery_beat.periodictask",
+                    ),
+                ),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
         ),
         migrations.CreateModel(
-            name='HistoricalScheduledJob',
+            name="HistoricalScheduledJob",
             fields=[
-                ('id', models.BigIntegerField(auto_created=True, blank=True, db_index=True, verbose_name='ID')),
-                ('created', models.DateTimeField(blank=True, editable=False)),
-                ('lastModified', models.DateTimeField(blank=True, editable=False)),
-                ('job_def', models.JSONField()),
-                ('schedule_status', models.CharField(choices=[('pending', 'Pending'), ('waiting to schedule', 'Waiting'), ('scheduled', 'Scheduled'), ('cancelled', 'Cancelled'), ('waiting to re-schedule', 'Reschedwaiting'), ('failed to schedule', 'Schedfail')], default='pending', max_length=63)),
-                ('history_id', models.AutoField(primary_key=True, serialize=False)),
-                ('history_date', models.DateTimeField(db_index=True)),
-                ('history_change_reason', models.CharField(max_length=100, null=True)),
-                ('history_type', models.CharField(choices=[('+', 'Created'), ('~', 'Changed'), ('-', 'Deleted')], max_length=1)),
-                ('creator', models.ForeignKey(blank=True, db_constraint=False, null=True, on_delete=django.db.models.deletion.DO_NOTHING, related_name='+', to=settings.AUTH_USER_MODEL)),
-                ('history_user', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to=settings.AUTH_USER_MODEL)),
-                ('modifiedBy', models.ForeignKey(blank=True, db_constraint=False, null=True, on_delete=django.db.models.deletion.DO_NOTHING, related_name='+', to=settings.AUTH_USER_MODEL)),
-                ('task', models.ForeignKey(blank=True, db_constraint=False, null=True, on_delete=django.db.models.deletion.DO_NOTHING, related_name='+', to='django_celery_beat.periodictask')),
+                (
+                    "id",
+                    models.BigIntegerField(
+                        auto_created=True, blank=True, db_index=True, verbose_name="ID"
+                    ),
+                ),
+                ("created", models.DateTimeField(blank=True, editable=False)),
+                ("lastModified", models.DateTimeField(blank=True, editable=False)),
+                ("job_def", models.JSONField()),
+                (
+                    "schedule_status",
+                    models.CharField(
+                        choices=[
+                            ("pending", "Pending"),
+                            ("waiting to schedule", "Waiting"),
+                            ("scheduled", "Scheduled"),
+                            ("cancelled", "Cancelled"),
+                            ("waiting to re-schedule", "Reschedwaiting"),
+                            ("failed to schedule", "Schedfail"),
+                        ],
+                        default="pending",
+                        max_length=63,
+                    ),
+                ),
+                ("history_id", models.AutoField(primary_key=True, serialize=False)),
+                ("history_date", models.DateTimeField(db_index=True)),
+                ("history_change_reason", models.CharField(max_length=100, null=True)),
+                (
+                    "history_type",
+                    models.CharField(
+                        choices=[("+", "Created"), ("~", "Changed"), ("-", "Deleted")],
+                        max_length=1,
+                    ),
+                ),
+                (
+                    "creator",
+                    models.ForeignKey(
+                        blank=True,
+                        db_constraint=False,
+                        null=True,
+                        on_delete=django.db.models.deletion.DO_NOTHING,
+                        related_name="+",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
+                (
+                    "history_user",
+                    models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        related_name="+",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
+                (
+                    "modifiedBy",
+                    models.ForeignKey(
+                        blank=True,
+                        db_constraint=False,
+                        null=True,
+                        on_delete=django.db.models.deletion.DO_NOTHING,
+                        related_name="+",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
+                (
+                    "task",
+                    models.ForeignKey(
+                        blank=True,
+                        db_constraint=False,
+                        null=True,
+                        on_delete=django.db.models.deletion.DO_NOTHING,
+                        related_name="+",
+                        to="django_celery_beat.periodictask",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'historical scheduled job',
-                'verbose_name_plural': 'historical scheduled jobs',
-                'ordering': ('-history_date', '-history_id'),
-                'get_latest_by': ('history_date', 'history_id'),
+                "verbose_name": "historical scheduled job",
+                "verbose_name_plural": "historical scheduled jobs",
+                "ordering": ("-history_date", "-history_id"),
+                "get_latest_by": ("history_date", "history_id"),
             },
             bases=(simple_history.models.HistoricalChanges, models.Model),
         ),

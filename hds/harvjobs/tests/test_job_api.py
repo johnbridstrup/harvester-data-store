@@ -20,7 +20,7 @@ class JobApiTestCase(HarvJobApiTestBase):
 
         # Assert status is pending
         job_data = job_resp.json()["data"]
-        self.assertEqual(job_data['jobstatus'], Job.StatusChoices.PENDING)
+        self.assertEqual(job_data["jobstatus"], Job.StatusChoices.PENDING)
 
         # Assert an event is created
         event_resp = self.client.get(self.event_det_url(1))
@@ -60,7 +60,7 @@ class JobApiTestCase(HarvJobApiTestBase):
         self.assertContains(
             response=resp,
             text="'requiredArg' is a required property",
-            status_code=status.HTTP_400_BAD_REQUEST
+            status_code=status.HTTP_400_BAD_REQUEST,
         )
 
     def test_missing_optional_arg(self):
@@ -84,7 +84,7 @@ class JobApiTestCase(HarvJobApiTestBase):
         self.assertContains(
             response=resp,
             text="Must be string",
-            status_code=status.HTTP_400_BAD_REQUEST
+            status_code=status.HTTP_400_BAD_REQUEST,
         )
 
     def test_get_jobs(self):
@@ -125,7 +125,5 @@ class JobApiTestCase(HarvJobApiTestBase):
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(patched_task.call_count, 2)
         patched_task.assert_called_with(
-            job_resp.data['id'],
-            job_resp.data['target'],
-            job_resp.data['creator']
+            job_resp.data["id"], job_resp.data["target"], job_resp.data["creator"]
         )

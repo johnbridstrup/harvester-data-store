@@ -2,5 +2,5 @@ from django.apps import AppConfig
 
 
 class AftconfigsConfig(AppConfig):
-    default_auto_field = 'django.db.models.BigAutoField'
-    name = 'aftconfigs'
+    default_auto_field = "django.db.models.BigAutoField"
+    name = "aftconfigs"

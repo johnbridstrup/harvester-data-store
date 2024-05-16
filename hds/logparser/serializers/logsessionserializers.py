@@ -24,67 +24,72 @@ logger = structlog.get_logger(__name__)
 class VideoSerializer(serializers.ModelSerializer):
     class Meta:
         model = LogVideo
-        fields = ['id', 'category', 'robot']
+        fields = ["id", "category", "robot"]
 
 
 class ServiceSerializer(serializers.ModelSerializer):
     class Meta:
         model = LogFile
-        fields = ['id', 'service', 'robot']
+        fields = ["id", "service", "robot"]
 
 
 class LogSessionBaseSerializer(serializers.ModelSerializer):
     """Base serializer for log session model"""
+
     class Meta:
         model = LogSession
-        fields = ('__all__')
-        read_only_fields = ['id']
+        fields = "__all__"
+        read_only_fields = ["id"]
 
 
 class LogSessionUploadSerializer(serializers.ModelSerializer):
     """Logsession upload zip serializer."""
+
     class Meta:
         model = LogSession
-        fields = ['zip_file']
-        read_only_fields = ['id']
+        fields = ["zip_file"]
+        read_only_fields = ["id"]
 
 
 class LogSessionDetailSerializer(serializers.ModelSerializer):
     """Detail serializer for log session model"""
+
     class Meta:
         model = LogSession
-        fields = ('__all__')
-        read_only_fields = ['id']
+        fields = "__all__"
+        read_only_fields = ["id"]
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
         log_queryset = instance.logfile.all()
         vid_queryset = instance.logvideo.all()
-        r_queryset = log_queryset.values_list('robot', flat=True).distinct()
+        r_queryset = log_queryset.values_list("robot", flat=True).distinct()
         robots = list(r_queryset)
         services = ServiceSerializer(log_queryset, many=True).data
         videos = VideoSerializer(vid_queryset, many=True).data
         harv_id = instance.harv.harv_id if instance.harv else None
         data["logs"] = {
-            'harv_id': harv_id,
-            'robots': robots,
-            'services': services,
-            'videos': videos
+            "harv_id": harv_id,
+            "robots": robots,
+            "services": services,
+            "videos": videos,
         }
         return data
 
 
 class LogSessionSerializer(TaggitSerializer, serializers.ModelSerializer):
     """Serializer for the log session model."""
+
     def __init__(self, instance=None, data=..., s3file_obj=None, **kwargs):
         super().__init__(instance, data, **kwargs)
         self.s3file_obj = s3file_obj
 
     tags = TagListSerializerField(required=False)
+
     class Meta:
         model = LogSession
-        fields = ('__all__')
-        read_only_fields = ['id']
+        fields = "__all__"
+        read_only_fields = ["id"]
 
     def to_internal_value(self, data):
         zip_data = data.copy()
@@ -105,31 +110,39 @@ class LogSessionSerializer(TaggitSerializer, serializers.ModelSerializer):
                 internal_data["date_time"] = str(date_obj)
                 internal_data["harv"] = harv.pk if harv else None
             except IndexError:
-                logger.error('Zip file is empty no files found')
+                logger.error("Zip file is empty no files found")
 
         if not self.s3file_obj:
-           # Get user id from request if method is POST
-           # create the event & s3file obj for the logsession
-           # write sessclip file to fs
-           creator = self.context.get("request").user
-           UUID = Event.generate_uuid()
-           event = EventSerializerMixin.get_or_create_event(UUID, creator, S3File.__name__)
-           s3file = S3File.objects.create(filetype="sessclip", creator=creator, event=event)
-           sess = SessClip.objects.create(file=s3file)
-           internal_data["creator"] = creator.id
-           internal_data["event"] = event.id
-           internal_data["_zip_file"] = sess.id
-           os.makedirs(s3file.download_dir, exist_ok=True)
-           fs = FileSystemStorage(location=s3file.download_dir, file_permissions_mode=0o777, directory_permissions_mode=0o777)
-           fs.save(zip_file.name, zip_file)
+            # Get user id from request if method is POST
+            # create the event & s3file obj for the logsession
+            # write sessclip file to fs
+            creator = self.context.get("request").user
+            UUID = Event.generate_uuid()
+            event = EventSerializerMixin.get_or_create_event(
+                UUID, creator, S3File.__name__
+            )
+            s3file = S3File.objects.create(
+                filetype="sessclip", creator=creator, event=event
+            )
+            sess = SessClip.objects.create(file=s3file)
+            internal_data["creator"] = creator.id
+            internal_data["event"] = event.id
+            internal_data["_zip_file"] = sess.id
+            os.makedirs(s3file.download_dir, exist_ok=True)
+            fs = FileSystemStorage(
+                location=s3file.download_dir,
+                file_permissions_mode=0o777,
+                directory_permissions_mode=0o777,
+            )
+            fs.save(zip_file.name, zip_file)
 
         return super().to_internal_value(internal_data)
 
     @staticmethod
     def extract_harvester_and_date(file):
         """extract harvester and datestring from filename."""
-        date_pattern = re.compile(r'\d{14}')
-        harv_pattern = re.compile(r'_\d{3}')
+        date_pattern = re.compile(r"\d{14}")
+        harv_pattern = re.compile(r"_\d{3}")
 
         date_match = date_pattern.search(file.filename)
         harv_match = harv_pattern.search(file.filename)
@@ -139,13 +152,13 @@ class LogSessionSerializer(TaggitSerializer, serializers.ModelSerializer):
 
         if date_match:
             date_obj = DTimeFormatter.convert_to_datetime(
-            date_match.group(0), TIMEZONE, format='%Y%m%d%H%M%S'
+                date_match.group(0), TIMEZONE, format="%Y%m%d%H%M%S"
             )
         else:
             ASYNC_ERROR_COUNTER.labels(
-                'extract_harvester_and_date',
+                "extract_harvester_and_date",
                 AttributeError.__name__,
-                "Failed date pattern match"
+                "Failed date pattern match",
             ).inc()
             logger.error(
                 f"could not match date pattern on file",
@@ -159,16 +172,18 @@ class LogSessionSerializer(TaggitSerializer, serializers.ModelSerializer):
             except Harvester.DoesNotExist:
                 harv = None
                 ASYNC_ERROR_COUNTER.labels(
-                    'extract_harvester_and_date',
+                    "extract_harvester_and_date",
                     Harvester.DoesNotExist.__name__,
-                    "Harvester does not exist"
+                    "Harvester does not exist",
                 ).inc()
-                logger.error(f"could not find harvester with harv_id {harv_id}", harv_id=harv_id)
+                logger.error(
+                    f"could not find harvester with harv_id {harv_id}", harv_id=harv_id
+                )
         else:
             ASYNC_ERROR_COUNTER.labels(
-                'extract_harvester_and_date',
+                "extract_harvester_and_date",
                 AttributeError.__name__,
-                "Failed harvester pattern match"
+                "Failed harvester pattern match",
             ).inc()
             logger.error(
                 f"could not match harv_id pattern on file",
@@ -187,13 +202,20 @@ class LogSessionSerializer(TaggitSerializer, serializers.ModelSerializer):
             )
             file_size = os.path.getsize(zip_path)
             with open(zip_path, "rb") as thezip:
-                in_mem_upload = InMemoryUploadedFile(thezip, field_name="file", name=log_session.name, size=file_size, content_type="application/zip", charset=None)
+                in_mem_upload = InMemoryUploadedFile(
+                    thezip,
+                    field_name="file",
+                    name=log_session.name,
+                    size=file_size,
+                    content_type="application/zip",
+                    charset=None,
+                )
                 data = {
-                        "key": log_session.name,
-                        "file": in_mem_upload,
-                        "filetype": "sessclip",
-                        "creator": log_session.creator.id,
-                    }
+                    "key": log_session.name,
+                    "file": in_mem_upload,
+                    "filetype": "sessclip",
+                    "creator": log_session.creator.id,
+                }
                 serializer = DirectUploadSerializer(instance=s3file_obj, data=data)
                 serializer.is_valid(raise_exception=True)
                 serializer.save()
@@ -201,9 +223,9 @@ class LogSessionSerializer(TaggitSerializer, serializers.ModelSerializer):
 
         except LogSession.DoesNotExist:
             ASYNC_ERROR_COUNTER.labels(
-                'async_zip_upload',
+                "async_zip_upload",
                 LogSession.DoesNotExist.__name__,
-                "Logsession does not exist"
+                "Logsession does not exist",
             ).inc()
             logger.error(f"log session with id {_id} does not exist", logsession_id=_id)
 

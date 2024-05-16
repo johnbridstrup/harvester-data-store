@@ -10,10 +10,11 @@ from common.utils import get_key
 
 logger = structlog.get_logger(__name__)
 
+
 def create_s3files(apps, schema_editor):
-    LogVideo = apps.get_model('logparser', 'LogVideo')
-    S3File = apps.get_model('s3file', 's3file')
-    User = apps.get_model('auth', 'User')
+    LogVideo = apps.get_model("logparser", "LogVideo")
+    S3File = apps.get_model("s3file", "s3file")
+    User = apps.get_model("auth", "User")
 
     paginator = Paginator(LogVideo.objects.all(), 1000)
     logger.info("Creating S3Files from LogVideos")
@@ -41,15 +42,20 @@ def create_s3files(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('s3file', '0005_sessclip'),
-        ('logparser', '0004_remove_logsession_zip_file'),
+        ("s3file", "0005_sessclip"),
+        ("logparser", "0004_remove_logsession_zip_file"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='logvideo',
-            name='_video_avi',
-            field=models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='s3file.s3file'),
+            model_name="logvideo",
+            name="_video_avi",
+            field=models.OneToOneField(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to="s3file.s3file",
+            ),
         ),
         migrations.RunPython(create_s3files),
     ]

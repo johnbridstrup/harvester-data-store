@@ -4,7 +4,8 @@ from ..models import HarvesterVersionReport
 
 
 class HarvesterVersionReportTestCase(TestCase):
-    """ Test HarvesterVersionReport model """
+    """Test HarvesterVersionReport model"""
+
     @classmethod
     def setUpTestData(cls):
         cls.clean = {
@@ -26,7 +27,7 @@ class HarvesterVersionReportTestCase(TestCase):
         }
 
     def test_is_dirty(self):
-        """ check if created fruit exits """
+        """check if created fruit exits"""
 
         is_clean = HarvesterVersionReport.check_dirty(self.clean)
         is_dirty = HarvesterVersionReport.check_dirty(self.dirty)
@@ -47,4 +48,3 @@ class HarvesterVersionReportTestCase(TestCase):
 
         self.assertFalse(is_clean)
         self.assertTrue(is_dirty)
-        

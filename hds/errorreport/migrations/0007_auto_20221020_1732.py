@@ -9,7 +9,7 @@ logger = structlog.get_logger(__name__)
 
 
 def extract_branch_hash(apps, schema_editor):
-    ErrorReport = apps.get_model('errorreport', 'errorreport')
+    ErrorReport = apps.get_model("errorreport", "errorreport")
 
     paginator = Paginator(ErrorReport.objects.all(), 1000)
     for page in range(1, paginator.num_pages + 1):
@@ -29,22 +29,26 @@ def extract_branch_hash(apps, schema_editor):
                 if githash is None:
                     githash = DEFAULT_UNKNOWN
             except KeyError:
-                logger.error((
-                    f"Report {report.id} has no 'githash' key.\n" 
-                    f"Continuing with default: {DEFAULT_UNKNOWN}."
-                ))
+                logger.error(
+                    (
+                        f"Report {report.id} has no 'githash' key.\n"
+                        f"Continuing with default: {DEFAULT_UNKNOWN}."
+                    )
+                )
                 githash = DEFAULT_UNKNOWN
             try:
                 gitbranch = data["branch_name"]
                 if gitbranch is None:
                     gitbranch = DEFAULT_UNKNOWN
             except KeyError:
-                logger.error((
-                    f"Report {report.id} has no 'branch_name' key.\n" 
-                    f"Continuing with default: {DEFAULT_UNKNOWN}."
-                ))
+                logger.error(
+                    (
+                        f"Report {report.id} has no 'branch_name' key.\n"
+                        f"Continuing with default: {DEFAULT_UNKNOWN}."
+                    )
+                )
                 gitbranch = DEFAULT_UNKNOWN
-            
+
             report.githash = githash
             report.gitbranch = gitbranch
             report.save()
@@ -53,9 +57,7 @@ def extract_branch_hash(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('errorreport', '0006_errorreport_gitbranch_errorreport_githash'),
+        ("errorreport", "0006_errorreport_gitbranch_errorreport_githash"),
     ]
 
-    operations = [
-        migrations.RunPython(extract_branch_hash)
-    ]
+    operations = [migrations.RunPython(extract_branch_hash)]

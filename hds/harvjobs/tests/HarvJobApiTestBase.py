@@ -13,9 +13,7 @@ class HarvJobApiTestBase(HDSAPITestBase):
     def create_jobtype(self, name=None):
         name = name or self.DEFAULT_JOBTYPE
 
-        jobtype = {
-            "name": name
-        }
+        jobtype = {"name": name}
         resp = self.client.post(self.jobtype_url, data=jobtype, format="json")
         return jobtype, resp
 
@@ -38,12 +36,7 @@ class HarvJobApiTestBase(HDSAPITestBase):
         resp = self.client.post(self.jobschema_url, data=jobschema, format="json")
         return jobschema, resp
 
-    def create_job(
-        self,
-        jobtype=None,
-        version=None,
-        job_payload=None
-    ):
+    def create_job(self, jobtype=None, version=None, job_payload=None):
         jobtype = jobtype or self.DEFAULT_JOBTYPE
         version = version or self.DEFAULT_SCHEMA_VERSION
         job_payload = job_payload or self.DEFAULT_JOB_PAYLOAD
@@ -59,11 +52,7 @@ class HarvJobApiTestBase(HDSAPITestBase):
 
         return job, resp
 
-    def create_jobresult(
-        self,
-        UUID=None,
-        results=None
-    ):
+    def create_jobresult(self, UUID=None, results=None):
         self.set_admin()
         results = results or self.DEFAULT_RESULT_SUCCESS
         UUID = UUID or Event.generate_uuid()
@@ -71,7 +60,7 @@ class HarvJobApiTestBase(HDSAPITestBase):
         jobresult = {
             **results,
             "uuid": UUID,
-            "serial_number": str(self.test_objects["harvester"].harv_id)
+            "serial_number": str(self.test_objects["harvester"].harv_id),
         }
 
         resp = self.client.post(self.jobresults_url, data=jobresult, format="json")

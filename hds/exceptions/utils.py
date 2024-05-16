@@ -25,10 +25,6 @@ def create_pareto(qs, field_lookup):
 
     value_dict = {"value": F(field_lookup)}
     count_dict = {"count": Count(field_lookup)}
-    qs = qs.filter().values(
-        **value_dict
-    ).annotate(
-        **count_dict
-    )
+    qs = qs.filter().values(**value_dict).annotate(**count_dict)
 
     return qs

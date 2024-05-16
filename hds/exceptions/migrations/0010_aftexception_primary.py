@@ -11,7 +11,7 @@ logger = structlog.get_logger(__name__)
 
 
 def get_primary_errors(apps, schema_editor):
-    ErrorReport = apps.get_model('errorreport', 'errorreport')
+    ErrorReport = apps.get_model("errorreport", "errorreport")
     paginator = Paginator(ErrorReport.objects.all(), 1000)
 
     for page in range(1, paginator.num_pages + 1):
@@ -22,16 +22,17 @@ def get_primary_errors(apps, schema_editor):
                 excs[0].primary = True
                 excs[0].save()
 
+
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('exceptions', '0009_aftexceptioncodemanifest_aftexceptioncode_manifest'),
+        ("exceptions", "0009_aftexceptioncodemanifest_aftexceptioncode_manifest"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='aftexception',
-            name='primary',
+            model_name="aftexception",
+            name="primary",
             field=models.BooleanField(default=False),
         ),
         migrations.RunPython(get_primary_errors),

@@ -3,7 +3,6 @@ from ..views.locationview import LocationView
 
 
 router = routers.SimpleRouter()
-router.register(r'', LocationView, basename="location")
+router.register(r"", LocationView, basename="location")
 
-urlpatterns = [
-] + router.urls
+urlpatterns = [] + router.urls

@@ -23,16 +23,17 @@ GRIPPER_ASSET_NAME = "gripper"
 class AutodiagnosticsRunSerializer(serializers.ModelSerializer):
     class Meta:
         model = AutodiagnosticsRun
-        fields = ('__all__')
-        read_only_fields = ('creator',)
+        fields = "__all__"
+        read_only_fields = ("creator",)
 
 
-class AutodiagnosticsReportSerializer(TaggitSerializer, PickSessionSerializerMixin, ReportSerializerBase):
-
+class AutodiagnosticsReportSerializer(
+    TaggitSerializer, PickSessionSerializerMixin, ReportSerializerBase
+):
     class Meta:
         model = AutodiagnosticsReport
-        fields = ('__all__')
-        read_only_fields = ('creator',)
+        fields = "__all__"
+        read_only_fields = ("creator",)
 
     def to_internal_value(self, data):
         try:
@@ -54,16 +55,20 @@ class AutodiagnosticsReportSerializer(TaggitSerializer, PickSessionSerializerMix
         pick_session_uuid = self.extract_uuid(report, "pick_session_uuid")
         UUID = self.extract_uuid(report)
         event = self.get_or_create_event(UUID, creator, AutodiagnosticsReport.__name__)
-        pick_session = self.get_or_create_picksession(pick_session_uuid, creator, AutodiagnosticsReport.__name__)
+        pick_session = self.get_or_create_picksession(
+            pick_session_uuid, creator, AutodiagnosticsReport.__name__
+        )
         self.set_picksess_harv_location(pick_session, harv_obj)
-        data.update({
-            "result": result,
-            "robot": robot_id,
-            "gripper_sn": gripper_sn,
-            "tags": tags,
-            "pick_session": pick_session.id,
-            "event": event.id,
-        })
+        data.update(
+            {
+                "result": result,
+                "robot": robot_id,
+                "gripper_sn": gripper_sn,
+                "tags": tags,
+                "pick_session": pick_session.id,
+                "event": event.id,
+            }
+        )
         return super().to_internal_value(data)
 
     @classmethod
@@ -78,7 +83,9 @@ class AutodiagnosticsReportSerializer(TaggitSerializer, PickSessionSerializerMix
 
         # Retrieve or create gripper HarvesterAssetType.
         # We can do this regardless of whether we can extract the actual gripper asset
-        gripper_asset_type = HarvesterAssetType.get_or_create(GRIPPER_ASSET_NAME, creator)
+        gripper_asset_type = HarvesterAssetType.get_or_create(
+            GRIPPER_ASSET_NAME, creator
+        )
 
         # Get gripper serial number
         gripper_sn = data.pop("serial_no", None)
@@ -88,7 +95,9 @@ class AutodiagnosticsReportSerializer(TaggitSerializer, PickSessionSerializerMix
                 report.tags.add(Tags.INCOMPLETE.value)
                 report.tags.add(Tags.MISSINGVALUE.value)
                 report.save()
-                raise ExtractionError(f"No gripper serial number in autodiag report {report_obj.id}")
+                raise ExtractionError(
+                    f"No gripper serial number in autodiag report {report_obj.id}"
+                )
 
         # Get robot ID
         robot_id = data.pop("robot_id", None)
@@ -118,9 +127,13 @@ class AutodiagnosticsReportSerializer(TaggitSerializer, PickSessionSerializerMix
         autodiag_run["run_timestamp"] = cls.extract_timestamp(data, "ts", pop=True)
 
         # Boolean results
-        autodiag_run["result"] = data.pop("passed_autodiag") # This and the following are the only guaranteed non-null
+        autodiag_run["result"] = data.pop(
+            "passed_autodiag"
+        )  # This and the following are the only guaranteed non-null
         autodiag_run["ball_found_result"] = data.pop("passed_autodiag_ball_found")
-        autodiag_run["template_match_result"] = data.pop("passed_autodiag_template_match", None)
+        autodiag_run["template_match_result"] = data.pop(
+            "passed_autodiag_template_match", None
+        )
 
         # Threshold values
         autodiag_run["min_vac"] = data.pop("min_vac", None)
@@ -139,7 +152,7 @@ class AutodiagnosticsReportSerializer(TaggitSerializer, PickSessionSerializerMix
         run.save()
 
         # Update report with any leftover additional data
-        report['data'] = data
+        report["data"] = data
         report_obj.report = report
         report_obj.save()
         return "Extracted Autodiagnostics Run"

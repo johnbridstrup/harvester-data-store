@@ -11,19 +11,14 @@ class JobSchemaView(CreateModelViewSet):
     queryset = JobSchema.objects.all()
     serializer_class = JobSchemaSerializer
     filterset_class = JobSchemaFilterset
-    ordering = ('-created')
+    ordering = "-created"
     view_permissions_update = {
-        'create': {
+        "create": {
             RoleChoices.JENKINS: True,
             RoleChoices.MANAGER: True,
         },
-        'destroy': {
-            RoleChoices.MANAGER: True
-        },
+        "destroy": {RoleChoices.MANAGER: True},
     }
-    schema = HDSToRepAutoSchema(extra_info={
-        'jobtype': {
-            'type': 'string',
-            'nullable': 'true'
-        }
-    })
+    schema = HDSToRepAutoSchema(
+        extra_info={"jobtype": {"type": "string", "nullable": "true"}}
+    )

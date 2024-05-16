@@ -14,11 +14,11 @@ SERVICE_STATE_VALUES = {
 
 # Possible we are also okay with STARTING, but if every time we check its trying to start
 # then that's not really okay.
-OK_STATES = ["RUNNING", "STARTING"] 
+OK_STATES = ["RUNNING", "STARTING"]
 
 ServiceStateGauge = Gauge(
-    "supervisor_service_state", 
-    "Supervisor Service State", 
+    "supervisor_service_state",
+    "Supervisor Service State",
     labelnames=["service"],
 )
 
@@ -29,15 +29,16 @@ ServiceUptime = Gauge(
 )
 
 ServiceCrashCount = Counter(
-    "supervisor_service_crash_count", 
-    "Supervisor Service Crash Count", 
-    labelnames=["service"], 
+    "supervisor_service_crash_count",
+    "Supervisor Service Crash Count",
+    labelnames=["service"],
 )
 
 SupervisorConnected = Gauge(
     "supervisor_connected",
     "Supervisor Connected",
 )
+
 
 class SupervisorMetrics:
     def __init__(self, opts):
@@ -53,13 +54,13 @@ class SupervisorMetrics:
 
         if is_new_state and not is_ok:
             ServiceCrashCount.labels(service).inc()
-        
+
         self.service_last_state[service] = state
 
     def service_uptime_update(self, service, uptime, state):
         if not state in OK_STATES:
             uptime = 0
         ServiceUptime.labels(service).set(uptime)
-    
+
     def set_supervisor_connected(self, connected: int):
         SupervisorConnected.set(connected)

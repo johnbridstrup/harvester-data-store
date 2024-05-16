@@ -8,7 +8,7 @@ logger = structlog.get_logger(__name__)
 
 
 def bugfix_mm_conversion(apps, schema_editor):
-    EmuStatsReport = apps.get_model('emulatorstats', 'emustatsreport')
+    EmuStatsReport = apps.get_model("emulatorstats", "emustatsreport")
     correction_factor = 10**6  ## Incorrectly divided m by 1000 to get mm
     paginator = Paginator(EmuStatsReport.objects.all(), 1000)
     for page in range(1, paginator.num_pages + 1):
@@ -21,12 +21,12 @@ def bugfix_mm_conversion(apps, schema_editor):
                 logger.error(f"Report {report.id} couldn't adjust mm_travelled")
                 logger.error(f"{report.mm_travelled}")
                 raise  # We want to abort this migrtion if it fails
+
+
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('emulatorstats', '0001_initial'),
+        ("emulatorstats", "0001_initial"),
     ]
 
-    operations = [
-        migrations.RunPython(bugfix_mm_conversion)
-    ]
+    operations = [migrations.RunPython(bugfix_mm_conversion)]

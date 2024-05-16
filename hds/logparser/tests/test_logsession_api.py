@@ -21,14 +21,14 @@ class LogSessionTestCase(LogBaseTestCase):
         try:
             with tempfile.TemporaryDirectory(dir=self.bucket_name) as temp_dir:
                 log_file_path = os.path.join(temp_dir, self.log_filename)
-                with open(log_file_path, 'w') as log_file:
+                with open(log_file_path, "w") as log_file:
                     if empty_content:
                         log_file.write("")
                     else:
                         log_file.write(self.line_content)
 
                 zip_path = os.path.join(self.bucket_name, self.zip_filename)
-                with zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED) as zip_file:
+                with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as zip_file:
                     zip_file.write(log_file_path, os.path.basename(log_file_path))
 
             return self.zip_filename
@@ -49,13 +49,15 @@ class LogSessionTestCase(LogBaseTestCase):
         with open(zippath, "rb") as thezip:
             file_content = thezip.read()
         sample_file = SimpleUploadedFile(zipname, file_content)
-        res = self.client.post(self.log_session_url, data={'zip_upload': sample_file}, format="multipart")
+        res = self.client.post(
+            self.log_session_url, data={"zip_upload": sample_file}, format="multipart"
+        )
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
         logsession = LogSession.objects.get()
         self.assertEqual(logsession.name, zipname)
         self.assertEqual(logsession.logfile.count(), 1)
         patched_upload.assert_called_once()
-        patched_upload.assert_called_with(res.data['id'])
+        patched_upload.assert_called_with(res.data["id"])
 
         self._rm_file(zippath)
 
