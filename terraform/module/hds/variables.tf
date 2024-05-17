@@ -231,6 +231,16 @@ variable "slack_token" {
   type        = string
 }
 
+variable "github_client_id" {
+  description = "Github client ID"
+  type        = string
+}
+
+variable "github_client_secret" {
+  description = "Github client secret"
+  type        = string
+}
+
 variable "frontend_url" {
   description = "URL for frontend app"
   type        = string

@@ -90,4 +90,6 @@ module "hds" {
   git_hash                  = var.git_hash
   monitor_loglevel          = local.monitor_loglevel
   monitor_port              = local.monitor_port
+  github_client_id          = jsondecode(data.aws_secretsmanager_secret_version.service_secrets.secret_string)["github_client_id"]
+  github_client_secret      = jsondecode(data.aws_secretsmanager_secret_version.service_secrets.secret_string)["github_client_secret"]
 }

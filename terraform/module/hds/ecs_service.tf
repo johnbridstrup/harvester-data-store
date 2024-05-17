@@ -36,7 +36,9 @@ locals {
     { "name" : "SILK_CPROFILE", "value" : var.silk_cprofile },
     { "name" : "JOB_SERVER_ADDRESS", "value" : var.jobserver_address },
     { "name" : "MONITOR_LOG_LEVEL", "value": var.monitor_loglevel},
-    { "name" : "MONITOR_PORT", "value": var.monitor_port}
+    { "name" : "MONITOR_PORT", "value": var.monitor_port},
+    { "name" : "GITHUB_CLIENT_ID", "value": var.github_client_id},
+    { "name" : "GITHUB_CLIENT_SECRET", "value": var.github_client_secret}
   ]
 }
 
