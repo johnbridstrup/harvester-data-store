@@ -36,3 +36,18 @@ class GithubClient:
             return response.json()
         except Exception as e:
             raise AuthenticationFailed(detail=e)
+
+    @staticmethod
+    def get_user_orgs(access_token):
+        user_orgs_url = "https://api.github.com/user/orgs"
+        headers = {"Authorization": f"Bearer {access_token}"}
+        response = requests.get(user_orgs_url, headers=headers)
+        response.raise_for_status()
+        return response.json()
+
+    @staticmethod
+    def is_user_in_organization(user_orgs):
+        for org in user_orgs:
+            if org["login"].lower() == settings.GITHUB_ORG.lower():
+                return True
+        return False

@@ -409,3 +409,4 @@ FILE_UPLOAD_MAX_MEMORY_SIZE = 300 * 1024 * 1024  # bytes
 # Github creds
 GITHUB_CLIENT_ID = os.environ.get("GITHUB_CLIENT_ID")
 GITHUB_CLIENT_SECRET = os.environ.get("GITHUB_CLIENT_SECRET")
+GITHUB_ORG = os.environ.get("GITHUB_ORG", "AdvancedFarm")

@@ -5,6 +5,7 @@ from rest_framework.exceptions import AuthenticationFailed
 from django.contrib.auth.models import update_last_login, User
 from django.contrib.auth import authenticate
 from django.middleware.csrf import get_token
+from django.conf import settings
 from rest_framework.authtoken.models import Token
 from common.renderers import HDSJSONRenderer
 from common.utils import make_ok
@@ -137,6 +138,13 @@ class GithubOauthView(APIView):
                 raise AuthenticationFailed("code is required for login")
             access_token = GithubClient.exchange_code_for_token(code)
             if access_token:
+                # check if the user is in the organization
+                user_orgs = GithubClient.get_user_orgs(access_token)
+                if not GithubClient.is_user_in_organization(user_orgs):
+                    raise AuthenticationFailed(
+                        f"Only members of the organization ({settings.GITHUB_ORG}) allowed"
+                    )
+
                 github_user = GithubClient.retrieve_github_user(access_token)
                 username = github_user.get("login")
 
