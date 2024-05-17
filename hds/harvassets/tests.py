@@ -92,15 +92,21 @@ class HarvesterAssetsTestCase(HDSAPITestBase):
         self.assertEqual(r_all.json()["data"]["count"], 4)
 
         A_11_params = {"asset": "A,11"}  # There should be two
-        r_A_11 = self.client.get(f"{self.assetrep_url}?{urlencode(A_11_params)}")
+        r_A_11 = self.client.get(
+            f"{self.assetrep_url}?{urlencode(A_11_params)}"
+        )
         self.assertEqual(r_A_11.json()["data"]["count"], 2)
 
         A_12_params = {"asset": "A,12"}  # There should be one
-        r_A_11 = self.client.get(f"{self.assetrep_url}?{urlencode(A_12_params)}")
+        r_A_11 = self.client.get(
+            f"{self.assetrep_url}?{urlencode(A_12_params)}"
+        )
         self.assertEqual(r_A_11.json()["data"]["count"], 1)
 
     def test_extraction_multi_sn(self):
-        report = self.create_report(*[self.asset(serial_number=i) for i in range(5)])
+        report = self.create_report(
+            *[self.asset(serial_number=i) for i in range(5)]
+        )
 
         self.client.post(self.assetrep_url, report, format="json")
         self.assertEqual(HarvesterAssetType.objects.count(), 1)
@@ -132,9 +138,13 @@ class HarvesterAssetsTestCase(HDSAPITestBase):
         r = self.client.post(self.assetrep_url, self.asset_data, format="json")
         self.assertEqual(r.status_code, status.HTTP_201_CREATED)
 
-        self.assertEqual(HarvesterAsset.objects.count(), len(self.asset_data["data"]))
+        self.assertEqual(
+            HarvesterAsset.objects.count(), len(self.asset_data["data"])
+        )
 
-        exp_asset_types = len(set([i["asset"] for i in self.asset_data["data"]]))
+        exp_asset_types = len(
+            set([i["asset"] for i in self.asset_data["data"]])
+        )
         self.assertEqual(HarvesterAssetType.objects.count(), exp_asset_types)
 
     def test_get_assets_basic(self):

@@ -10,7 +10,10 @@ from common.renderers import HDSJSONRenderer
 from common.utils import make_ok
 from common.github import GithubClient
 from common.models import UserProfile
-from common.serializers.userserializer import UserCreateSerializer, UserSerializer
+from common.serializers.userserializer import (
+    UserCreateSerializer,
+    UserSerializer,
+)
 
 
 class LoginAPIView(APIView):
@@ -28,14 +31,16 @@ class LoginAPIView(APIView):
                 raise Exception("username and password are required")
 
             user = authenticate(
-                username=request.data["username"], password=request.data["password"]
+                username=request.data["username"],
+                password=request.data["password"],
             )
             if user is not None:
                 update_last_login(None, user)
                 token, created = Token.objects.get_or_create(user=user)
                 serializer = UserSerializer(user)
                 return make_ok(
-                    "Login successful", {"token": token.key, "user": serializer.data}
+                    "Login successful",
+                    {"token": token.key, "user": serializer.data},
                 )
             else:
                 raise Exception("invalid username or password")
@@ -106,7 +111,9 @@ class ChangePasswordView(APIView):
                 "current_password" not in request.data.keys()
                 or "new_password" not in request.data.keys()
             ):
-                raise Exception("current_password and new_password are required")
+                raise Exception(
+                    "current_password and new_password are required"
+                )
             if request.user.check_password(request.data["current_password"]):
                 request.user.set_password(request.data["new_password"])
                 request.user.save()
@@ -147,14 +154,17 @@ class GithubOauthView(APIView):
                         first_name, _, last_name = name_list
 
                     user = User.objects.create_user(
-                        username=username, first_name=first_name, last_name=last_name
+                        username=username,
+                        first_name=first_name,
+                        last_name=last_name,
                     )
                     UserProfile.objects.create(user=user, avatar_url=avatar_url)
                 update_last_login(None, user)
                 token, _ = Token.objects.get_or_create(user=user)
                 serializer = UserSerializer(user)
                 return make_ok(
-                    "Login successful", {"token": token.key, "user": serializer.data}
+                    "Login successful",
+                    {"token": token.key, "user": serializer.data},
                 )
             raise AuthenticationFailed(detail="Token is invalid or has expired")
         except Exception as e:

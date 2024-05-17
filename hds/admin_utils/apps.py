@@ -6,4 +6,6 @@ class AdminUtilsConfig(AppConfig):
     name = "admin_utils"
 
     def ready(self) -> None:
-        from .tasks import clean_beatbox  # tasks need to be imported to register
+        from .tasks import (
+            clean_beatbox,
+        )  # tasks need to be imported to register

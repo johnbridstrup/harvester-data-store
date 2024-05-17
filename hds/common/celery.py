@@ -1,7 +1,11 @@
 from celery import shared_task
 from functools import wraps
 
-from .async_metrics import ASYNC_TASK_COUNTER, ASYNC_ERROR_COUNTER, ASYNC_TASK_TIMER
+from .async_metrics import (
+    ASYNC_TASK_COUNTER,
+    ASYNC_ERROR_COUNTER,
+    ASYNC_TASK_TIMER,
+)
 
 
 def monitored_shared_task(*args, **kwargs):

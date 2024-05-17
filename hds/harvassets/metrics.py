@@ -42,7 +42,9 @@ class HarvAssetMonitor:
         except:
             # This can only happen if an asset is created manually via API or admin panel
             fruit = "unknown"
-            cls.ASSET_NO_HISTORY.labels(asset.asset.name, asset.serial_number).inc()
+            cls.ASSET_NO_HISTORY.labels(
+                asset.asset.name, asset.serial_number
+            ).inc()
         return fruit
 
     @classmethod

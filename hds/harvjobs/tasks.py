@@ -124,7 +124,8 @@ def schedule_job(job_id, harv_pk, user_pk):
         ).strftime(JOB_DATETIME_FMT),
     }
     logger.info(
-        "Sending job to server.", jobserver="/".join([JOB_SERVER_ADDRESS, "job"])
+        "Sending job to server.",
+        jobserver="/".join([JOB_SERVER_ADDRESS, "job"]),
     )
     logger.debug(json.dumps(request_payload))
 

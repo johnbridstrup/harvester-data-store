@@ -64,7 +64,9 @@ def compare_patterns(keys, urls):
 
 
 class HDSTestAttributes:
-    BASE_PATH = os.path.join(os.path.abspath(os.path.dirname(__file__)), "test_data")
+    BASE_PATH = os.path.join(
+        os.path.abspath(os.path.dirname(__file__)), "test_data"
+    )
 
     def _load_report(self, relpath):
         fpath = os.path.join(self.BASE_PATH, relpath)
@@ -81,7 +83,9 @@ class HDSTestAttributes:
         self.data = self._load_report("report.json")
 
     def load_config_data(self):
-        self.conf_data = self._load_report("configs-report_002_1675256694.218969.json")
+        self.conf_data = self._load_report(
+            "configs-report_002_1675256694.218969.json"
+        )
 
     def load_autodiag_report(self):
         self.ad_data = self._load_report("autodiag_report.json")
@@ -174,12 +178,16 @@ class HDSTestAttributes:
     def setup_urls(self):
         # Users
         self.user_url = reverse("users:user-list")
-        self.user_detail_url = lambda id_: reverse("users:user-detail", args=[id_])
+        self.user_detail_url = lambda id_: reverse(
+            "users:user-detail", args=[id_]
+        )
         self.change_pwd_url = reverse("users:change_password")
 
         # Autodiag
         self.ad_url = reverse("autodiagnostics-list")
-        self.ad_det_url = lambda id_: reverse("autodiagnostics-detail", args=[id_])
+        self.ad_det_url = lambda id_: reverse(
+            "autodiagnostics-detail", args=[id_]
+        )
 
         self.ad_run_url = reverse("autodiagnosticsrun-list")
         self.ad_run_det_url = lambda id_: reverse(
@@ -188,7 +196,9 @@ class HDSTestAttributes:
 
         # Assets
         self.asset_url = reverse("harvassets-list")
-        self.asset_det_url = lambda id_: reverse("harvassets-detail", args=[id_])
+        self.asset_det_url = lambda id_: reverse(
+            "harvassets-detail", args=[id_]
+        )
 
         self.assetrep_url = reverse("harvassetreport-list")
         self.assetrep_det_url = lambda id_: reverse(
@@ -197,7 +207,9 @@ class HDSTestAttributes:
 
         # Configs
         self.config_url = reverse("configreports-list")
-        self.config_det_url = lambda id_: reverse("configreports-detail", args=[id_])
+        self.config_det_url = lambda id_: reverse(
+            "configreports-detail", args=[id_]
+        )
 
         # Emustats
         self.emustats_url = reverse("emustatsreports-list")
@@ -207,28 +219,38 @@ class HDSTestAttributes:
 
         # Error report
         self.error_url = reverse("errorreport-list")
-        self.error_det_url = lambda id_: reverse("errorreport-detail", args=[id_])
+        self.error_det_url = lambda id_: reverse(
+            "errorreport-detail", args=[id_]
+        )
 
         # Exceptions
         self.code_manif_url = reverse("codemanifest-list")
-        self.code_manif_det_url = lambda id_: reverse("codemanifest-detail", args=[id_])
+        self.code_manif_det_url = lambda id_: reverse(
+            "codemanifest-detail", args=[id_]
+        )
 
         self.exc_url = reverse("exception-list")
         self.exc_det_url = lambda id_: reverse("exception-detail", args=[id_])
 
         self.exc_code_url = reverse("exceptioncode-list")
-        self.exc_code_det_url = lambda id_: reverse("exceptioncode-detail", args=[id_])
+        self.exc_code_det_url = lambda id_: reverse(
+            "exceptioncode-detail", args=[id_]
+        )
 
         # Event/Picksession
         self.event_url = reverse("event-list")
         self.event_det_url = lambda id_: reverse("event-detail", args=[id_])
 
         self.picksess_url = reverse("picksession-list")
-        self.picksess_det_url = lambda id_: reverse("picksession-detail", args=[id_])
+        self.picksess_det_url = lambda id_: reverse(
+            "picksession-detail", args=[id_]
+        )
 
         # Grip Report
         self.griprep_url = reverse("gripreports-list")
-        self.griprep_det_url = lambda id_: reverse("gripreports-detail", args=[id_])
+        self.griprep_det_url = lambda id_: reverse(
+            "gripreports-detail", args=[id_]
+        )
 
         # Harvester
         self.harv_url = reverse("harvester-list")
@@ -239,10 +261,14 @@ class HDSTestAttributes:
 
         # HarvDeploy
         self.release_url = reverse("harvcoderelease-list")
-        self.release_det_url = lambda id_: reverse("harvcoderelease-detail", args=[id_])
+        self.release_det_url = lambda id_: reverse(
+            "harvcoderelease-detail", args=[id_]
+        )
 
         self.version_url = reverse("harvcodeversion-list")
-        self.version_det_url = lambda id_: reverse("harvcodeversion-detail", args=[id_])
+        self.version_det_url = lambda id_: reverse(
+            "harvcodeversion-detail", args=[id_]
+        )
 
         # HarvJobs
 
@@ -250,36 +276,50 @@ class HDSTestAttributes:
         self.jobtype_det_url = lambda id_: reverse("jobtype-detail", args=[id_])
 
         self.jobschema_url = reverse("jobschema-list")
-        self.jobschema_det_url = lambda id_: reverse("jobschema-detail", args=[id_])
+        self.jobschema_det_url = lambda id_: reverse(
+            "jobschema-detail", args=[id_]
+        )
 
         self.jobs_url = reverse("job-list")
         self.job_det_urls = lambda id_: reverse("job-detail", args=[id_])
         self.reschedule_url = lambda id_: reverse("job-reschedule", args=[id_])
 
         self.jobresults_url = reverse("jobresults-list")
-        self.jobresults_det_url = lambda id_: reverse("jobresults-detail", args=[id_])
+        self.jobresults_det_url = lambda id_: reverse(
+            "jobresults-detail", args=[id_]
+        )
 
         # Migrations
         self.migr_url = reverse("hdsmigrations-list")
 
         # Location
         self.distr_url = reverse("distributor-list")
-        self.distr_det_url = lambda id_: reverse("distributor-detail", args=[id_])
+        self.distr_det_url = lambda id_: reverse(
+            "distributor-detail", args=[id_]
+        )
 
         self.loc_url = reverse("location-list")
         self.loc_det_url = lambda id_: reverse("location-detail", args=[id_])
 
         # Logparser
         self.log_session_url = reverse("logsession-list")
-        self.log_session_det_url = lambda _id: reverse("logsession-detail", args=[_id])
+        self.log_session_det_url = lambda _id: reverse(
+            "logsession-detail", args=[_id]
+        )
         self.log_file_url = reverse("logfile-list")
-        self.log_file_det_url = lambda _id: reverse("logfile-detail", args=[_id])
+        self.log_file_det_url = lambda _id: reverse(
+            "logfile-detail", args=[_id]
+        )
         self.log_video_url = reverse("logvideo-list")
-        self.log_video_det_url = lambda _id: reverse("logvideo-detail", args=[_id])
+        self.log_video_det_url = lambda _id: reverse(
+            "logvideo-detail", args=[_id]
+        )
 
         # Notification
         self.notif_url = reverse("notification-list")
-        self.notif_det_url = lambda id_: reverse("notification-detail", args=[id_])
+        self.notif_det_url = lambda id_: reverse(
+            "notification-detail", args=[id_]
+        )
 
         # S3File
         self.s3file_url = reverse("s3file-list")
@@ -290,7 +330,9 @@ class HDSTestAttributes:
 
         # Jobscheduler
         self.job_sched_url = reverse("jobscheduler-list")
-        self.job_sched_det_url = lambda id_: reverse("jobscheduler-detail", args=[id_])
+        self.job_sched_det_url = lambda id_: reverse(
+            "jobscheduler-detail", args=[id_]
+        )
 
         # PeriodicTask
         self.periodic_task_url = reverse("periodictask-list")
@@ -411,7 +453,12 @@ class HDSAPITestBase(APITestCase, HDSTestAttributes):
         return Distributor.objects.create(name=name, creator=self.user)
 
     def create_location_object(
-        self, distributor=None, ranch=None, country=None, region=None, creator=None
+        self,
+        distributor=None,
+        ranch=None,
+        country=None,
+        region=None,
+        creator=None,
     ):
         distributor = distributor or self.create_distributor_object()
         ranch = ranch or "test ranch"
@@ -429,7 +476,13 @@ class HDSAPITestBase(APITestCase, HDSTestAttributes):
         )
 
     def create_harvester_object(
-        self, harv_id, fruit=None, location=None, name=None, creator=None, is_emu=False
+        self,
+        harv_id,
+        fruit=None,
+        location=None,
+        name=None,
+        creator=None,
+        is_emu=False,
     ):
         creator = None or self.user
         fruit = fruit or self.create_fruit_object()
@@ -448,7 +501,9 @@ class HDSAPITestBase(APITestCase, HDSTestAttributes):
             }
         )
 
-    def create_exception_code_object(self, code, name, msg, team, cycle, creator):
+    def create_exception_code_object(
+        self, code, name, msg, team, cycle, creator
+    ):
         return AFTExceptionCode.objects.create(
             **{
                 "code": code,
@@ -469,7 +524,12 @@ class HDSAPITestBase(APITestCase, HDSTestAttributes):
             full_key = f"{key}_{UUID}"
         event = {
             "Records": [
-                {"s3": {"bucket": {"name": "test-bucket"}, "object": {"key": full_key}}}
+                {
+                    "s3": {
+                        "bucket": {"name": "test-bucket"},
+                        "object": {"key": full_key},
+                    }
+                }
             ]
         }
 
@@ -485,14 +545,18 @@ class HDSAPITestBase(APITestCase, HDSTestAttributes):
         return resp
 
     def create_user(self, username, password, profile_kwargs={}, **kwargs):
-        user = User.objects.create_user(username=username, password=password, **kwargs)
+        user = User.objects.create_user(
+            username=username, password=password, **kwargs
+        )
         UserProfile.objects.create(user=user, **profile_kwargs)
         return user
 
     def post_emustats_report(self, load=True):
         if load:
             self.load_emustats_report()
-        resp = self.client.post(self.emustats_url, self.emustats_data, format="json")
+        resp = self.client.post(
+            self.emustats_url, self.emustats_data, format="json"
+        )
         self.assertEqual(resp.status_code, status.HTTP_201_CREATED, resp.json())
         return resp.json()
 
@@ -503,14 +567,18 @@ class HDSAPITestBase(APITestCase, HDSTestAttributes):
         self.assertEqual(resp.status_code, status.HTTP_201_CREATED, resp.json())
         return resp.json()
 
-    def post_autodiag_report(self, load=True, resp_status=status.HTTP_201_CREATED):
+    def post_autodiag_report(
+        self, load=True, resp_status=status.HTTP_201_CREATED
+    ):
         if load:
             self.load_autodiag_report()
         resp = self.client.post(self.ad_url, self.ad_data, format="json")
         self.assertEqual(resp.status_code, resp_status)
         return resp.json()
 
-    def post_picksess_report(self, load=True, resp_status=status.HTTP_202_ACCEPTED):
+    def post_picksess_report(
+        self, load=True, resp_status=status.HTTP_202_ACCEPTED
+    ):
         if load:
             self.load_picksess_report()
         fpath = os.path.join(self.BASE_PATH, "picksess.json")
@@ -521,7 +589,9 @@ class HDSAPITestBase(APITestCase, HDSTestAttributes):
 
     @property
     def logpath(self):
-        return os.path.join(self.BASE_PATH, "20230614134221_013_00_harvester.log")
+        return os.path.join(
+            self.BASE_PATH, "20230614134221_013_00_harvester.log"
+        )
 
     @property
     def extra_log_lines(self):
@@ -573,8 +643,12 @@ class ManageUserTest(HDSAPITestBase):
             "password": "password",
             "profile": {"slack_id": "slack@aft.aft"},
         }
-        self.unauthorized_create_msg = "Unable to authorize user for create action"
-        self.unauthorized_update_msg = "Unable to authorize user for update action"
+        self.unauthorized_create_msg = (
+            "Unable to authorize user for create action"
+        )
+        self.unauthorized_update_msg = (
+            "Unable to authorize user for update action"
+        )
         return super().setUp()
 
     def test_non_superuser_cannot_create_user(self):
@@ -629,7 +703,9 @@ class ManageUserTest(HDSAPITestBase):
         res = self.client.get(self.user_detail_url(user.id))
 
         self.assertEqual(res.status_code, status.HTTP_200_OK)
-        self.assertEqual(res.json()["data"]["first_name"], serializer.get("first_name"))
+        self.assertEqual(
+            res.json()["data"]["first_name"], serializer.get("first_name")
+        )
 
     def test_update_user_detail_successfully(self):
         """Test updating user detail."""
@@ -696,7 +772,9 @@ class TestUtils(unittest.TestCase):
 
         exp = {"1": "11", "2": {}, "6": "6"}
 
-        self.assertDictEqual(merge_nested_dict(d1, d2, overwrite_none=True), exp)
+        self.assertDictEqual(
+            merge_nested_dict(d1, d2, overwrite_none=True), exp
+        )
 
     def test_merged_nested_mismatched_schema(self):
         d1 = {"1": "1", "2": {"3": "3", "4": "4"}, "6": "6"}
@@ -717,7 +795,8 @@ class TestRoles(HDSAPITestBase):
             view_permissions_update = {"create": {RoleChoices.SUPPORT: True}}
 
         exp = merge_nested_dict(
-            CreateModelViewSet.view_permissions, TestView.view_permissions_update
+            CreateModelViewSet.view_permissions,
+            TestView.view_permissions_update,
         )
 
         self.assertDictEqual(exp, TestView().view_permissions)
@@ -727,7 +806,8 @@ class TestRoles(HDSAPITestBase):
             view_permissions_update = {"create": {RoleChoices.SUPPORT: True}}
 
         exp = merge_nested_dict(
-            ReportModelViewSet.view_permissions, TestView.view_permissions_update
+            ReportModelViewSet.view_permissions,
+            TestView.view_permissions_update,
         )
 
         self.assertDictEqual(exp, TestView().view_permissions)
@@ -798,7 +878,8 @@ class TestRoles(HDSAPITestBase):
                             break
                     # Check allowed vs 403
                     if (
-                        allowed and response.status_code == status.HTTP_403_FORBIDDEN
+                        allowed
+                        and response.status_code == status.HTTP_403_FORBIDDEN
                     ) or (
                         response.status_code != status.HTTP_403_FORBIDDEN
                         and not allowed

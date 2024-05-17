@@ -63,7 +63,9 @@ class CBCleanTask(Task):
     def after_return(self, status, retval, task_id, args, kwargs, einfo):
         s3file = S3File.objects.get(id=args[0])
         s3file.clean_download()
-        return super().after_return(status, retval, task_id, args, kwargs, einfo)
+        return super().after_return(
+            status, retval, task_id, args, kwargs, einfo
+        )
 
 
 @monitored_shared_task
@@ -94,7 +96,9 @@ def clean_dir(path_id):
 def extract_logs(_id, zippath):
     with zipfile.ZipFile(zippath) as thezip:
         for file in thezip.filelist:
-            if file.filename.endswith(".log") or file.filename.endswith(".dump"):
+            if file.filename.endswith(".log") or file.filename.endswith(
+                ".dump"
+            ):
                 LogFileSerializer.extract_log_file(thezip, _id, file)
 
 
@@ -124,11 +128,15 @@ def extract_with_video(zippath, path_id):
 @monitored_shared_task(base=CallbackTask)
 def perform_extraction(_id, extract_video=True):
     log_session = LogSession.objects.get(id=_id)
-    zippath = os.path.join(log_session._zip_file.file.download_dir, log_session.name)
+    zippath = os.path.join(
+        log_session._zip_file.file.download_dir, log_session.name
+    )
     tasks = []
     tasks.append(extract_logs.si(_id, zippath))
     if extract_video:
-        vid_meta_pairs = extract_with_video(zippath, log_session._zip_file.file.pk)
+        vid_meta_pairs = extract_with_video(
+            zippath, log_session._zip_file.file.pk
+        )
         # Create video extraction task signatures
         tasks.extend(
             [

@@ -54,7 +54,9 @@ class Harvester(CommonInfo):
                 if (
                     harv.id != self.id
                 ):  # Alow updating emulator but not creating duplicate
-                    raise ValueError(f"There can only be one {self.fruit} emulator")
+                    raise ValueError(
+                        f"There can only be one {self.fruit} emulator"
+                    )
             except Harvester.DoesNotExist:
                 pass
         super(Harvester, self).save(*args, **kwargs)

@@ -26,7 +26,10 @@ def get_primary_errors(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("exceptions", "0009_aftexceptioncodemanifest_aftexceptioncode_manifest"),
+        (
+            "exceptions",
+            "0009_aftexceptioncodemanifest_aftexceptioncode_manifest",
+        ),
     ]
 
     operations = [

@@ -38,7 +38,9 @@ class JobSerializer(EventSerializerMixin, serializers.ModelSerializer):
         harv_id = data["target"]
 
         jobtype = JobType.objects.get(name=jobtype_name)
-        jobschema = JobSchema.objects.get(jobtype=jobtype, version=jobschema_vers)
+        jobschema = JobSchema.objects.get(
+            jobtype=jobtype, version=jobschema_vers
+        )
         harvester = Harvester.objects.get(harv_id=harv_id)
 
         job_payload = self.construct_job_payload(jobtype.name, data["payload"])
@@ -63,7 +65,10 @@ class JobSerializer(EventSerializerMixin, serializers.ModelSerializer):
             jsonschema.validate(payload, schema)
         except jsonschema.ValidationError as e:
             if e.validator == "type":
-                err = {"path": e.json_path, "error": f"Must be {e.validator_value}"}
+                err = {
+                    "path": e.json_path,
+                    "error": f"Must be {e.validator_value}",
+                }
             elif e.validator == "required":
                 err = {
                     "required": e.validator_value,

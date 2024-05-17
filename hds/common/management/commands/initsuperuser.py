@@ -13,6 +13,8 @@ class Command(BaseCommand):
             email = os.environ.get("DJANGO_SUPERUSER_EMAIL")
             pwd = os.environ.get("DJANGO_SUPERUSER_PASSWORD")
 
-            User.objects.create_superuser(username=username, email=email, password=pwd)
+            User.objects.create_superuser(
+                username=username, email=email, password=pwd
+            )
         else:
             print(f"Username {username} exists")

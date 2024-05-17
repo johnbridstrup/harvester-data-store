@@ -18,7 +18,10 @@ from event.models import Event, PickSession
 from exceptions.models import AFTException
 
 from ..models import ErrorReport, DEFAULT_UNKNOWN
-from ..serializers.errorreportserializer import ErrorReportSerializer, FAILED_SPLIT_MSG
+from ..serializers.errorreportserializer import (
+    ErrorReportSerializer,
+    FAILED_SPLIT_MSG,
+)
 
 
 class ErrorReportAPITest(HDSAPITestBase):
@@ -109,7 +112,9 @@ class ErrorReportAPITest(HDSAPITestBase):
 
         # Check counter increments
         expected_error = Harvester.DoesNotExist.__name__
-        total_counter = TOTAL_ERROR_COUNTER.labels(expected_error, "errorreport")
+        total_counter = TOTAL_ERROR_COUNTER.labels(
+            expected_error, "errorreport"
+        )
         self.assertEqual(total_counter._value.get(), 1)
 
     def test_update_errorreport(self):
@@ -117,7 +122,9 @@ class ErrorReportAPITest(HDSAPITestBase):
         self.post_error_report()
 
         # updating reportTime
-        current_time = make_aware(datetime.datetime.now().replace(microsecond=0))
+        current_time = make_aware(
+            datetime.datetime.now().replace(microsecond=0)
+        )
         new_timestamp = current_time.timestamp()
         self.data["timestamp"] = new_timestamp
 
@@ -134,14 +141,18 @@ class ErrorReportAPITest(HDSAPITestBase):
         self.post_error_report()
         self.data["serial_number"] = "99"
         # updating harv_id
-        response = self.client.patch(self.error_det_url(1), self.data, format="json")
+        response = self.client.patch(
+            self.error_det_url(1), self.data, format="json"
+        )
         self.assertEqual(response.status_code, 400)
 
     def test_delete_errorreport(self):
         """delete error report and assert it does not exist"""
         self.post_error_report()
 
-        self.client.delete(self.error_det_url(1), HTTP_ACCEPT="application/json")
+        self.client.delete(
+            self.error_det_url(1), HTTP_ACCEPT="application/json"
+        )
         self.assertEqual(ErrorReport.objects.count(), 0)
 
     def test_get_all_errorreports(self):
@@ -151,7 +162,9 @@ class ErrorReportAPITest(HDSAPITestBase):
         self.post_error_report()
         self.post_error_report()
 
-        response = self.client.get(self.error_url, HTTP_ACCEPT="application/json")
+        response = self.client.get(
+            self.error_url, HTTP_ACCEPT="application/json"
+        )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data["count"], 2)
 
@@ -173,8 +186,12 @@ class ErrorReportAPITest(HDSAPITestBase):
 
         self.assertEqual(hand_data["count"], 1)
         self.assertEqual(unhand_data["count"], 1)
-        self.assertEqual(hand_data["results"][0]["exceptions"][0]["handled"], True)
-        self.assertEqual(unhand_data["results"][0]["exceptions"][0]["handled"], False)
+        self.assertEqual(
+            hand_data["results"][0]["exceptions"][0]["handled"], True
+        )
+        self.assertEqual(
+            unhand_data["results"][0]["exceptions"][0]["handled"], False
+        )
 
         r_loc = self.client.get(
             f'{self.error_url}?locations={self.test_objects["location"].ranch}'
@@ -251,7 +268,9 @@ class ErrorReportAPITest(HDSAPITestBase):
 
         # Handled error
         data = self.data.copy()
-        data["data"]["sysmon_report"]["sysmon.0"]["errors"][serv_str]["handled"] = True
+        data["data"]["sysmon_report"]["sysmon.0"]["errors"][serv_str][
+            "handled"
+        ] = True
         self.client.post(self.error_url, data, format="json")
         report = ErrorReport.objects.get(id=2)
         errs = ErrorReportSerializer._extract_exception_data(report)
@@ -363,7 +382,9 @@ class ErrorReportAPITest(HDSAPITestBase):
         self.assertEqual(AFTException.objects.count(), 0)
         self.assertEqual(counter._value.get(), 1)
 
-        mock_logger.exception.assert_called_with(FAILED_SPLIT_MSG, key="traychg_0")
+        mock_logger.exception.assert_called_with(
+            FAILED_SPLIT_MSG, key="traychg_0"
+        )
 
         # Assert tag assigned
         report = ErrorReport.objects.get()
@@ -411,7 +432,9 @@ class ErrorReportAPITest(HDSAPITestBase):
         msg = resp.json()["message"]
         data = resp.json()["data"]
 
-        self.assertEqual(msg, f"{ErrorReportSerializer.report_type} schema retrieved")
+        self.assertEqual(
+            msg, f"{ErrorReportSerializer.report_type} schema retrieved"
+        )
 
         self.assertDictEqual(data, ErrorReportSerializer().get_schema())
 
@@ -451,7 +474,9 @@ class ErrorReportAPITest(HDSAPITestBase):
         ranch_dict = {"locations": ",".join(map(str, [ranch]))}
         resp = self.client.get(f"{self.error_url}?{urlencode(ranch_dict)}")
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
-        self.assertEqual(resp.json()["data"]["results"][0]["location"]["ranch"], ranch)
+        self.assertEqual(
+            resp.json()["data"]["results"][0]["location"]["ranch"], ranch
+        )
 
         # query ranches not associated with report
         location = self.create_location_object(
@@ -487,14 +512,18 @@ class ErrorReportAPITest(HDSAPITestBase):
         self.assertEqual(len(resp.json()["data"]["results"]), 0)
 
         # query end_time
-        end_dict = {"end_time": DTimeFormatter.localize_to_tz(self.data["timestamp"])}
+        end_dict = {
+            "end_time": DTimeFormatter.localize_to_tz(self.data["timestamp"])
+        }
         resp = self.client.get(f"{self.error_url}?{urlencode(end_dict)}")
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         self.assertEqual(len(resp.json()["data"]["results"]), 1)
 
         # query end_time subtract 1
         end_dict = {
-            "end_time": DTimeFormatter.localize_to_tz(self.data["timestamp"], dec=True)
+            "end_time": DTimeFormatter.localize_to_tz(
+                self.data["timestamp"], dec=True
+            )
         }
         resp = self.client.get(f"{self.error_url}?{urlencode(end_dict)}")
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
@@ -506,7 +535,8 @@ class ErrorReportAPITest(HDSAPITestBase):
         resp = self.client.get(f"{self.error_url}?{urlencode(fruit_dict)}")
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         self.assertEqual(
-            resp.json()["data"]["results"][0]["harvester"]["fruit"]["id"], fruit.id
+            resp.json()["data"]["results"][0]["harvester"]["fruit"]["id"],
+            fruit.id,
         )
 
         # query fruits not associated with report
@@ -522,7 +552,8 @@ class ErrorReportAPITest(HDSAPITestBase):
         resp = self.client.get(f"{self.error_url}?{urlencode(codes_dict)}")
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         self.assertEqual(
-            resp.json()["data"]["results"][0]["exceptions"][0]["code"]["code"], code
+            resp.json()["data"]["results"][0]["exceptions"][0]["code"]["code"],
+            code,
         )
 
         self.data["data"]["sysmon_report"]["sysmon.0"]["errors"]["harvester.0"][
@@ -538,7 +569,9 @@ class ErrorReportAPITest(HDSAPITestBase):
         # generic
         self.data["data"]["sysmon_report"]["sysmon.0"]["PID"] = "111"
         self.post_error_report(load=False)
-        generic_dict = {"generic": "report__data__sysmon_report__sysmon.0__PID=111"}
+        generic_dict = {
+            "generic": "report__data__sysmon_report__sysmon.0__PID=111"
+        }
 
         r_gen = self.client.get(f"{self.error_url}?{urlencode(generic_dict)}")
         self.assertEqual(r_gen.json()["data"]["count"], 1)

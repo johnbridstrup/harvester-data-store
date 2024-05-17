@@ -27,7 +27,9 @@ class ConfigReportView(ReportModelViewSet):
                     queryset=Harvester.objects.prefetch_related(
                         Prefetch(
                             lookup="location",
-                            queryset=Location.objects.select_related("distributor"),
+                            queryset=Location.objects.select_related(
+                                "distributor"
+                            ),
                         )
                     ).select_related("fruit", "release"),
                 ),

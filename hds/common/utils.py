@@ -223,7 +223,9 @@ def get_url_permissions(urlpatterns):
                     url = reverse(pat.name, args=[0])
                     view_func = resolve(url).func
                 except NoReverseMatch:
-                    logger.warning(f"Skipping: No reverse match", pattern_name=pat.name)
+                    logger.warning(
+                        f"Skipping: No reverse match", pattern_name=pat.name
+                    )
                     continue
 
             # Import the view class
@@ -233,7 +235,8 @@ def get_url_permissions(urlpatterns):
                 view_permissions = view().view_permissions
             except Exception as e:
                 logger.exception(
-                    "There are no view permisions for this view", view=view.__name__
+                    "There are no view permisions for this view",
+                    view=view.__name__,
                 )
                 continue
             permission_matrix.append((url, actions, view_permissions, view))

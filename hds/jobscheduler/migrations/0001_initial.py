@@ -88,11 +88,17 @@ class Migration(migrations.Migration):
                 (
                     "id",
                     models.BigIntegerField(
-                        auto_created=True, blank=True, db_index=True, verbose_name="ID"
+                        auto_created=True,
+                        blank=True,
+                        db_index=True,
+                        verbose_name="ID",
                     ),
                 ),
                 ("created", models.DateTimeField(blank=True, editable=False)),
-                ("lastModified", models.DateTimeField(blank=True, editable=False)),
+                (
+                    "lastModified",
+                    models.DateTimeField(blank=True, editable=False),
+                ),
                 ("job_def", models.JSONField()),
                 (
                     "schedule_status",
@@ -109,13 +115,23 @@ class Migration(migrations.Migration):
                         max_length=63,
                     ),
                 ),
-                ("history_id", models.AutoField(primary_key=True, serialize=False)),
+                (
+                    "history_id",
+                    models.AutoField(primary_key=True, serialize=False),
+                ),
                 ("history_date", models.DateTimeField(db_index=True)),
-                ("history_change_reason", models.CharField(max_length=100, null=True)),
+                (
+                    "history_change_reason",
+                    models.CharField(max_length=100, null=True),
+                ),
                 (
                     "history_type",
                     models.CharField(
-                        choices=[("+", "Created"), ("~", "Changed"), ("-", "Deleted")],
+                        choices=[
+                            ("+", "Created"),
+                            ("~", "Changed"),
+                            ("-", "Deleted"),
+                        ],
                         max_length=1,
                     ),
                 ),

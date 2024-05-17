@@ -41,7 +41,9 @@ class ClockedScheduleSerializer(serializers.ModelSerializer, ScheduleFormMixin):
         }
 
 
-class IntervalScheduleSerializer(serializers.ModelSerializer, ScheduleFormMixin):
+class IntervalScheduleSerializer(
+    serializers.ModelSerializer, ScheduleFormMixin
+):
     class Meta:
         model = IntervalSchedule
         fields = "__all__"
@@ -151,7 +153,9 @@ class ScheduledJobSerializer(serializers.ModelSerializer):
         MISSING_KEY = "missing"
         NO_JOBTYPE = "jobtype"
         NO_VERS = "schema_version"
-        NO_SCHEMA = lambda jt, sv: {"No Schema": f"{jt} version {sv} does not exist"}
+        NO_SCHEMA = lambda jt, sv: {
+            "No Schema": f"{jt} version {sv} does not exist"
+        }
         NO_PAYLOAD = "payload"
         NO_TARGETS = "targets"
         NO_SCHEDULE = "schedule"
@@ -195,7 +199,9 @@ class ScheduledJobSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(errs)
 
         try:
-            jsonschema.validate(payload, schema.dynamic_schema["properties"]["payload"])
+            jsonschema.validate(
+                payload, schema.dynamic_schema["properties"]["payload"]
+            )
         except jsonschema.ValidationError as e:
             raise serializers.ValidationError({"invalid": e})
 
@@ -216,7 +222,16 @@ class ScheduledJobSerializer(serializers.ModelSerializer):
         ranches = target_dict.get("ranches", None)
         fruits = target_dict.get("fruits", None)
         harvesters = target_dict.get("harvesters", None)
-        if sum([ranches is not None, fruits is not None, harvesters is not None]) > 1:
+        if (
+            sum(
+                [
+                    ranches is not None,
+                    fruits is not None,
+                    harvesters is not None,
+                ]
+            )
+            > 1
+        ):
             raise ValidationError("Provided multiple target options.")
 
         if ranches:
@@ -228,7 +243,9 @@ class ScheduledJobSerializer(serializers.ModelSerializer):
         if harvesters:
             return self._harv_pks_from_harvname(harvesters)
 
-        raise serializers.ValidationError("Target options incorrect or not provided.")
+        raise serializers.ValidationError(
+            "Target options incorrect or not provided."
+        )
 
     @staticmethod
     def _harv_pks_from_ranch(ranches):

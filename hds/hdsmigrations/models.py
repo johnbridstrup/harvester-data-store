@@ -10,7 +10,9 @@ class MigrationLog(CommonInfo):
         SUCCESS = "success"
 
     result = models.CharField(
-        choices=ResultChoices.choices, default=ResultChoices.PENDING, max_length=31
+        choices=ResultChoices.choices,
+        default=ResultChoices.PENDING,
+        max_length=31,
     )
     startTime = models.DateTimeField(
         null=True

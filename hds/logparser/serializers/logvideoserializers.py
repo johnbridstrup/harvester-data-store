@@ -126,7 +126,9 @@ class LogVideoSerializer(serializers.ModelSerializer):
         except Exception as e:
             exc = type(e).__name__
             ASYNC_ERROR_COUNTER.labels(
-                "extract_video_log", e.__class__.__name__, "Could not save log video"
+                "extract_video_log",
+                e.__class__.__name__,
+                "Could not save log video",
             ).inc()
             logger.error(
                 f"could not save the log video",

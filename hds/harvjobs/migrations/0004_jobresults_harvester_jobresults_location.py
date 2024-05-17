@@ -9,7 +9,10 @@ class Migration(migrations.Migration):
     dependencies = [
         ("harvester", "0005_harvester_thingname_historicalharvester_thingname"),
         ("location", "0002_location_site_channel"),
-        ("harvjobs", "0003_alter_historicaljob_jobstatus_alter_job_jobstatus_and_more"),
+        (
+            "harvjobs",
+            "0003_alter_historicaljob_jobstatus_alter_job_jobstatus_and_more",
+        ),
     ]
 
     operations = [

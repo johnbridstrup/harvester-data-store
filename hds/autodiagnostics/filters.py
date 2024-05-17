@@ -11,7 +11,9 @@ from common.filters import (
 from .models import AutodiagnosticsRun, AutodiagnosticsReport
 
 
-class AutodiagnosticsRunFilter(CommonInfoFilterset, LinkedReportHarvesterFilter):
+class AutodiagnosticsRunFilter(
+    CommonInfoFilterset, LinkedReportHarvesterFilter
+):
     # Special method filters
     datetime_range = filters.CharFilter(
         field_name="run_timestamp", method="filter_datetime_range"
@@ -24,7 +26,9 @@ class AutodiagnosticsRunFilter(CommonInfoFilterset, LinkedReportHarvesterFilter)
 
     # Autodiag filters
     result = filters.BooleanFilter(field_name="result")
-    template_match_result = filters.BooleanFilter(field_name="template_match_result")
+    template_match_result = filters.BooleanFilter(
+        field_name="template_match_result"
+    )
     ball_found_result = filters.BooleanFilter(field_name="ball_found_result")
     min_vac_gte = filters.NumberFilter(field_name="min_vac", lookup_expr="gte")
     min_vac_lte = filters.NumberFilter(field_name="min_vac", lookup_expr="lte")

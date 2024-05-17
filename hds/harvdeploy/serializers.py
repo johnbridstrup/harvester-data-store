@@ -10,7 +10,9 @@ from harvester.serializers.fruitserializer import FruitSerializer
 from .models import HarvesterCodeRelease, HarvesterVersionReport
 
 
-class HarvesterCodeReleaseSerializer(TaggitSerializer, serializers.ModelSerializer):
+class HarvesterCodeReleaseSerializer(
+    TaggitSerializer, serializers.ModelSerializer
+):
     tags = TagListSerializerField(required=False)
 
     class Meta:
@@ -25,7 +27,12 @@ class HarvesterCodeReleaseSerializer(TaggitSerializer, serializers.ModelSerializ
         tags = release.pop("tags", [])
         fruit = Fruit.objects.get(name=fruit_str)
 
-        data = {"version": version, "release": release, "fruit": fruit.id, "tags": tags}
+        data = {
+            "version": version,
+            "release": release,
+            "fruit": fruit.id,
+            "tags": tags,
+        }
         return super().to_internal_value(data)
 
 
@@ -82,7 +89,9 @@ class HarvesterVersionReportSerializer(TaggitSerializer, ReportSerializerBase):
         harv = validated_data["harvester"]
         # Check if version hasn't changed
         try:
-            last_vers = harv.current_version(before=validated_data["reportTime"])
+            last_vers = harv.current_version(
+                before=validated_data["reportTime"]
+            )
             if HarvesterVersionReport.is_duplicate_version(
                 validated_data["report"]["data"], last_vers.report["data"]
             ):
@@ -114,7 +123,9 @@ class HarvesterVersionReportSerializer(TaggitSerializer, ReportSerializerBase):
         data.update(
             {
                 "is_dirty": self.Meta.model.check_dirty(report["data"]),
-                "has_unexpected": self.Meta.model.check_unexpected(report["data"]),
+                "has_unexpected": self.Meta.model.check_unexpected(
+                    report["data"]
+                ),
                 "tags": tags,
             }
         )

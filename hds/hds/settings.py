@@ -146,7 +146,8 @@ def ignore_healtcheck_metrics_get(logger, method_name, event_dict):
         event_dict.get("request")
         and "GET" in event_dict["request"]
         and (
-            "healthcheck" in event_dict["request"] or "metrics" in event_dict["request"]
+            "healthcheck" in event_dict["request"]
+            or "metrics" in event_dict["request"]
         )
     ):
         # Ignore if we are in cloudwatch environment
@@ -268,7 +269,9 @@ REST_FRAMEWORK_ROLES = {
 
 DATABASES = {
     "default": {
-        "ENGINE": os.environ.get("SQL_ENGINE", "django_prometheus.db.backends.sqlite3"),
+        "ENGINE": os.environ.get(
+            "SQL_ENGINE", "django_prometheus.db.backends.sqlite3"
+        ),
         "NAME": os.environ.get("POSTGRES_NAME", BASE_DIR / "db.sqlite3"),
         "USER": os.environ.get("POSTGRES_USER", "user"),
         "PASSWORD": os.environ.get("POSTGRES_PASSWORD", "password"),

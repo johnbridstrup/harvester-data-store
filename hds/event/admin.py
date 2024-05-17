@@ -25,13 +25,21 @@ class EventAdmin(admin.ModelAdmin):
 
 
 class PickSessionAdmin(admin.ModelAdmin):
-    list_display = ("created", "UUID", "start_time", "session_length", "tag_list")
+    list_display = (
+        "created",
+        "UUID",
+        "start_time",
+        "session_length",
+        "tag_list",
+    )
     ordering = ("created",)
     search_fields = ("created", "UUID", "start_time")
 
     def get_queryset(self, request: HttpRequest) -> QuerySet[Any]:
         qs = super().get_queryset(request)
-        return qs.select_related("harvester", "location").prefetch_related("tags")
+        return qs.select_related("harvester", "location").prefetch_related(
+            "tags"
+        )
 
     def tag_list(self, obj):
         return ", ".join(o.name for o in obj.tags.all())

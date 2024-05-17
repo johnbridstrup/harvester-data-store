@@ -42,14 +42,18 @@ class JobSchedulerTestCase(HarvJobApiTestBase):
 
     def test_create_sched_job_basic(self):
         self._create_defaults()
-        r = self.client.post(self.job_sched_url, self.jobsched_payload, format="json")
+        r = self.client.post(
+            self.job_sched_url, self.jobsched_payload, format="json"
+        )
         self.assertEqual(r.status_code, status.HTTP_202_ACCEPTED)
 
     def test_invalid_no_jobtype_or_schema(self):
         self._create_defaults()
         del self.jobsched_payload["jobtype"]
         del self.jobsched_payload["schema_version"]
-        r = self.client.post(self.job_sched_url, self.jobsched_payload, format="json")
+        r = self.client.post(
+            self.job_sched_url, self.jobsched_payload, format="json"
+        )
         self.assertEqual(r.status_code, status.HTTP_400_BAD_REQUEST)
         err = r.json()["errors"]["detail"]
         exp_err = {
@@ -65,7 +69,9 @@ class JobSchedulerTestCase(HarvJobApiTestBase):
         del self.jobsched_payload["payload"]["payload"]
         BAD_VERS = "That Doesn't Exist"
         self.jobsched_payload["schema_version"] = BAD_VERS
-        r = self.client.post(self.job_sched_url, self.jobsched_payload, format="json")
+        r = self.client.post(
+            self.job_sched_url, self.jobsched_payload, format="json"
+        )
         self.assertEqual(r.status_code, status.HTTP_400_BAD_REQUEST)
         err = r.json()["errors"]["detail"]
         exp_err = {
@@ -77,7 +83,9 @@ class JobSchedulerTestCase(HarvJobApiTestBase):
     def test_invalid_payload(self):
         self._create_defaults()
         del self.jobsched_payload["payload"]["payload"]["requiredArg"]
-        r = self.client.post(self.job_sched_url, self.jobsched_payload, format="json")
+        r = self.client.post(
+            self.job_sched_url, self.jobsched_payload, format="json"
+        )
         self.assertEqual(r.status_code, status.HTTP_400_BAD_REQUEST)
 
         err = r.json()["errors"]["detail"]
@@ -91,13 +99,19 @@ class JobSchedulerTestCase(HarvJobApiTestBase):
         usr2_client, usr2 = self.create_new_user_client()
 
         # two for user 1
-        r = usr1_client.post(self.job_sched_url, self.jobsched_payload, format="json")
+        r = usr1_client.post(
+            self.job_sched_url, self.jobsched_payload, format="json"
+        )
         self.assertEqual(r.status_code, status.HTTP_202_ACCEPTED)
-        r = usr1_client.post(self.job_sched_url, self.jobsched_payload, format="json")
+        r = usr1_client.post(
+            self.job_sched_url, self.jobsched_payload, format="json"
+        )
         self.assertEqual(r.status_code, status.HTTP_202_ACCEPTED)
 
         # one for user 2
-        r = usr2_client.post(self.job_sched_url, self.jobsched_payload, format="json")
+        r = usr2_client.post(
+            self.job_sched_url, self.jobsched_payload, format="json"
+        )
         self.assertEqual(r.status_code, status.HTTP_202_ACCEPTED)
 
         url = reverse("jobscheduler-myjobs")
@@ -119,12 +133,16 @@ class JobSchedulerTestCase(HarvJobApiTestBase):
         self._create_defaults()
 
         self.assertEqual(PeriodicTask.objects.count(), 0)
-        self.client.post(self.job_sched_url, self.jobsched_payload, format="json")
+        self.client.post(
+            self.job_sched_url, self.jobsched_payload, format="json"
+        )
         self.assertEqual(PeriodicTask.objects.count(), 1)
 
     def test_run_scheduled_job(self):
         self._create_defaults()
-        self.client.post(self.job_sched_url, self.jobsched_payload, format="json")
+        self.client.post(
+            self.job_sched_url, self.jobsched_payload, format="json"
+        )
 
         run_scheduled_job(1)
         self.assertEqual(Job.objects.count(), 1)
@@ -134,7 +152,9 @@ class JobSchedulerTestCase(HarvJobApiTestBase):
 
     def test_num_jobs_incr(self):
         self._create_defaults()
-        self.client.post(self.job_sched_url, self.jobsched_payload, format="json")
+        self.client.post(
+            self.job_sched_url, self.jobsched_payload, format="json"
+        )
 
         run_scheduled_job(1)
         self.assertEqual(Job.objects.count(), 1)
@@ -145,7 +165,9 @@ class JobSchedulerTestCase(HarvJobApiTestBase):
     def test_max_jobs_reached(self):
         self._create_defaults()
         self.jobsched_payload["max_runs"] = 2
-        self.client.post(self.job_sched_url, self.jobsched_payload, format="json")
+        self.client.post(
+            self.job_sched_url, self.jobsched_payload, format="json"
+        )
 
         run_scheduled_job(1)
         run_scheduled_job(1)
@@ -158,7 +180,9 @@ class JobSchedulerTestCase(HarvJobApiTestBase):
 
     def test_status_updates(self):
         self._create_defaults()
-        r = self.client.post(self.job_sched_url, self.jobsched_payload, format="json")
+        r = self.client.post(
+            self.job_sched_url, self.jobsched_payload, format="json"
+        )
 
         # Response will have pending since it is created before perform_create
         self.assertEqual(
@@ -169,14 +193,16 @@ class JobSchedulerTestCase(HarvJobApiTestBase):
         # Job should then be waiting to schedule
         job = ScheduledJob.objects.get()
         self.assertEqual(
-            job.schedule_status, ScheduledJob.SchedJobStatusChoices.WAITING.value
+            job.schedule_status,
+            ScheduledJob.SchedJobStatusChoices.WAITING.value,
         )
 
         # Job should become scheduled
         run_scheduled_job(1)
         job.refresh_from_db()
         self.assertEqual(
-            job.schedule_status, ScheduledJob.SchedJobStatusChoices.SCHEDULED.value
+            job.schedule_status,
+            ScheduledJob.SchedJobStatusChoices.SCHEDULED.value,
         )
 
         # It is not trivial to test the failure cases... Maybe we don't need to but we can revisit.
@@ -200,7 +226,9 @@ class JobSchedulerTestCase(HarvJobApiTestBase):
 
         # select jobtype, select schema, get form
         form_url = r.json()["data"]["jobs"]["job1"].get(j1_schem_vers)["url"]
-        self.assertIsNotNone(url, f"Missing URL for job1 schema {j1_schem_vers}")
+        self.assertIsNotNone(
+            url, f"Missing URL for job1 schema {j1_schem_vers}"
+        )
 
         form_r = self.client.get(form_url)
         self.assertEqual(form_r.status_code, status.HTTP_200_OK)
@@ -219,7 +247,9 @@ class JobSchedulerTestCase(HarvJobApiTestBase):
 
     def test_filter_scheduledjobs(self):
         self._create_defaults()
-        r = self.client.post(self.job_sched_url, self.jobsched_payload, format="json")
+        r = self.client.post(
+            self.job_sched_url, self.jobsched_payload, format="json"
+        )
         self.assertEqual(r.status_code, status.HTTP_202_ACCEPTED)
 
         # filter by jobtype positive
@@ -271,18 +301,18 @@ class JobSchedulerTestCase(HarvJobApiTestBase):
 
         self.assertEqual(form_r.status_code, status.HTTP_200_OK, form_r.json())
 
-        form_payload_schema = form_r.json()["data"]["form"]["properties"]["payload"][
-            "properties"
-        ]["payload"]
+        form_payload_schema = form_r.json()["data"]["form"]["properties"][
+            "payload"
+        ]["properties"]["payload"]
         self.assertIn(dyn_req_arg, form_payload_schema["properties"])
         self.assertIn(dyn_req_arg, form_payload_schema["required"])
 
     def test_dynamic_time_of_schedule(self):
         self.DEFAULT_SCHEMA["allow_repeat_schedules"] = True
         self.DEFAULT_SCHEMA["dynamic_keys"] = ["requiredArg"]
-        self.DEFAULT_SCHEMA["properties"]["payload"]["properties"]["requiredArg"][
-            "pattern"
-        ] = DT_REGEX
+        self.DEFAULT_SCHEMA["properties"]["payload"]["properties"][
+            "requiredArg"
+        ]["pattern"] = DT_REGEX
 
         self.create_jobtype()
         self.create_jobschema()
@@ -326,7 +356,8 @@ class JobSchedulerTestCase(HarvJobApiTestBase):
         sched_job = ScheduledJob.objects.get(id=1)
         initial_update = sched_job.lastModified
         self.assertEqual(
-            sched_job.schedule_status, ScheduledJob.SchedJobStatusChoices.SCHEDULED
+            sched_job.schedule_status,
+            ScheduledJob.SchedJobStatusChoices.SCHEDULED,
         )
         self.assertEqual(1, Job.objects.count())
         job1 = Job.objects.latest("id")
@@ -355,7 +386,8 @@ class JobSchedulerTestCase(HarvJobApiTestBase):
         this_update = sched_job.lastModified
         self.assertNotEqual(initial_update, this_update)
         self.assertEqual(
-            sched_job.schedule_status, ScheduledJob.SchedJobStatusChoices.SCHEDULED
+            sched_job.schedule_status,
+            ScheduledJob.SchedJobStatusChoices.SCHEDULED,
         )
 
         # Make sure new job was created
@@ -381,9 +413,9 @@ class JobSchedulerTestCase(HarvJobApiTestBase):
     def test_dynamic_exact(self):
         self.DEFAULT_SCHEMA["allow_repeat_schedules"] = True
         self.DEFAULT_SCHEMA["dynamic_keys"] = ["requiredArg"]
-        self.DEFAULT_SCHEMA["properties"]["payload"]["properties"]["requiredArg"][
-            "pattern"
-        ] = DT_REGEX
+        self.DEFAULT_SCHEMA["properties"]["payload"]["properties"][
+            "requiredArg"
+        ]["pattern"] = DT_REGEX
 
         self.create_jobtype()
         self.create_jobschema()
@@ -426,7 +458,9 @@ class JobSchedulerTestCase(HarvJobApiTestBase):
         self._create_defaults()
 
         self.assertEqual(PeriodicTask.objects.count(), 0)
-        res = self.client.post(self.job_sched_url, self.jobsched_payload, format="json")
+        res = self.client.post(
+            self.job_sched_url, self.jobsched_payload, format="json"
+        )
         self.assertEqual(PeriodicTask.objects.count(), 1)
 
         # Query params should be provided
@@ -441,14 +475,18 @@ class JobSchedulerTestCase(HarvJobApiTestBase):
         res = self.client.get(url)
         task = PeriodicTask.objects.get()
         self.assertTrue(task.enabled)
-        self.assertEqual(res.json()["message"], "enable_tasks executed successfully")
+        self.assertEqual(
+            res.json()["message"], "enable_tasks executed successfully"
+        )
 
         # disable task via actionable urls
         url = f"{self.periodic_task_url}actionables/?action=disable_tasks&ids=1"
         res = self.client.get(url)
         task.refresh_from_db()
         self.assertFalse(task.enabled)
-        self.assertEqual(res.json()["message"], "disable_tasks executed successfully")
+        self.assertEqual(
+            res.json()["message"], "disable_tasks executed successfully"
+        )
 
         # run task via actionable urls
         url = f"{self.periodic_task_url}actionables/?action=run_tasks&ids=1"
@@ -461,4 +499,6 @@ class JobSchedulerTestCase(HarvJobApiTestBase):
         url = f"{self.periodic_task_url}actionables/?action=delete_tasks&ids=1"
         res = self.client.get(url)
         self.assertEqual(PeriodicTask.objects.count(), 0)
-        self.assertEqual(res.json()["message"], "delete_tasks executed successfully")
+        self.assertEqual(
+            res.json()["message"], "delete_tasks executed successfully"
+        )

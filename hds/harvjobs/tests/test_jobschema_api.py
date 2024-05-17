@@ -45,7 +45,9 @@ class JobSchemaApiTestCase(HarvJobApiTestBase):
     def get_jobschemas(self):
         self.create_jobtype()
         self.create_jobschema()
-        payload, _ = self.create_jobschema(version="0.2", schema={"new": "schema"})
+        payload, _ = self.create_jobschema(
+            version="0.2", schema={"new": "schema"}
+        )
         r = self.client.get(self.jobschema_url)
 
         self.assertEqual(r.status_code, status.HTTP_200_OK)

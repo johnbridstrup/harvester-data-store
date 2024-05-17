@@ -53,7 +53,9 @@ class Client:
             "password": self.password,
         }
 
-        r = self.post(Endpoints.LOGIN, login_info, params=self._base_test_params)
+        r = self.post(
+            Endpoints.LOGIN, login_info, params=self._base_test_params
+        )
         r.raise_for_status()
 
         data = r.json()["data"]["data"]

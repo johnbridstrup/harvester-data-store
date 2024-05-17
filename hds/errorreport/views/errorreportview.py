@@ -31,7 +31,9 @@ class ErrorReportView(ReportModelViewSet):
     def perform_create(self, serializer):
         super().perform_create(serializer)
         report_id = serializer.data["id"]
-        beatbox_request = self.request.query_params.get("is_beatbox_request", None)
+        beatbox_request = self.request.query_params.get(
+            "is_beatbox_request", None
+        )
         extract_exceptions_and_notify.delay(report_id, beatbox_request)
 
     @ERRORREPORT_LIST_QUERY_TIMER.time()
@@ -48,7 +50,9 @@ class ErrorReportView(ReportModelViewSet):
                         queryset=Harvester.objects.prefetch_related(
                             Prefetch(
                                 lookup="location",
-                                queryset=Location.objects.select_related("distributor"),
+                                queryset=Location.objects.select_related(
+                                    "distributor"
+                                ),
                             )
                         ).select_related("fruit", "release"),
                     ),
@@ -72,7 +76,9 @@ class ErrorReportView(ReportModelViewSet):
                     queryset=Harvester.objects.prefetch_related(
                         Prefetch(
                             lookup="location",
-                            queryset=Location.objects.select_related("distributor"),
+                            queryset=Location.objects.select_related(
+                                "distributor"
+                            ),
                         )
                     ).select_related("fruit", "release"),
                 ),
@@ -103,7 +109,9 @@ class ErrorReportView(ReportModelViewSet):
                         ),
                         Prefetch(
                             lookup="location",
-                            queryset=Location.objects.select_related("distributor"),
+                            queryset=Location.objects.select_related(
+                                "distributor"
+                            ),
                         ),
                     ),
                 ),

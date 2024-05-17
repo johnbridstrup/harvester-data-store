@@ -25,7 +25,12 @@ class NotificationAPITest(HDSAPITestBase):
 
     def test_create_notification(self):
         """create notifications and assert it exists"""
-        params = {"harv_ids": 11, "locations": "Ranch A", "fruits": "apple", "codes": 0}
+        params = {
+            "harv_ids": 11,
+            "locations": "Ranch A",
+            "fruits": "apple",
+            "codes": 0,
+        }
         criteria = {
             "harvester__harv_id__in": ["11"],
             "location__ranch": ["Ranch A"],
@@ -53,7 +58,9 @@ class NotificationAPITest(HDSAPITestBase):
         """update notifications and assert it exists"""
 
         # PUT not allowed
-        resp = self.client.put(self.notif_det_url(1), self.notification, format="json")
+        resp = self.client.put(
+            self.notif_det_url(1), self.notification, format="json"
+        )
 
         self.assertEqual(resp.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
 
@@ -116,13 +123,17 @@ class NotificationAPITest(HDSAPITestBase):
         }
 
         notification2 = Notification.objects.create(
-            creator=user2, trigger_on=self.notification["trigger_on"], criteria=params
+            creator=user2,
+            trigger_on=self.notification["trigger_on"],
+            criteria=params,
         )
         notification2.recipients.add(self.user)
         notification2.save()
 
         notification3 = Notification.objects.create(
-            creator=user2, trigger_on=self.notification["trigger_on"], criteria=params
+            creator=user2,
+            trigger_on=self.notification["trigger_on"],
+            criteria=params,
         )
         notification3.recipients.add(user2)
         notification3.save()

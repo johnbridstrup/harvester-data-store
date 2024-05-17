@@ -13,7 +13,11 @@ from common.utils import make_error, make_ok
 from common.viewsets import CreateModelViewSet
 from hds.roles import RoleChoices
 from .models import S3File, SessClip
-from .serializers import S3FileSerializer, S3FileListSerializer, S3FileDetailSerializer
+from .serializers import (
+    S3FileSerializer,
+    S3FileListSerializer,
+    S3FileDetailSerializer,
+)
 from .signals import sessclip_uploaded
 from .filters import S3FileFilter
 
@@ -41,7 +45,9 @@ class S3FileView(CreateModelViewSet):
     def get_queryset(self):
         deleted = False
         if "deleted" in self.request.query_params:
-            deleted = self.check_for_deleted(self.request.query_params.get("deleted"))
+            deleted = self.check_for_deleted(
+                self.request.query_params.get("deleted")
+            )
         return (
             self.queryset.filter(deleted=deleted)
             .select_related(
@@ -113,5 +119,7 @@ class SessClipView(S3FileView):
         event_id = serializer.data["event"]
         SessClip.objects.create(file=inst)
         sessclip_uploaded.send(sender=SessClip, s3file_id=inst.id)
-        update_event_tag.send(sender=SessClip, event_id=event_id, tag="sessclip")
+        update_event_tag.send(
+            sender=SessClip, event_id=event_id, tag="sessclip"
+        )
         return inst

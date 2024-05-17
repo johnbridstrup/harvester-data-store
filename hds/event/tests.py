@@ -156,28 +156,39 @@ class PickSessionApiTestCase(TaggedUUIDModelTestBase):
             )
 
         # Filter by harvester
-        resp = self.client.get(self.picksess_url + f"?harv_ids={harvs[0].harv_id}")
+        resp = self.client.get(
+            self.picksess_url + f"?harv_ids={harvs[0].harv_id}"
+        )
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
-        self.assertEqual(resp.json()["data"]["count"], 2)  # Two for each harvester
+        self.assertEqual(
+            resp.json()["data"]["count"], 2
+        )  # Two for each harvester
 
         # Filter by location
         resp = self.client.get(
             self.picksess_url + f"?locations={harvs[0].location.ranch}"
         )
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
-        self.assertEqual(resp.json()["data"]["count"], 2)  # Two for each harvester
+        self.assertEqual(
+            resp.json()["data"]["count"], 2
+        )  # Two for each harvester
 
         # Filter by start and end time
         start_str = timezone.datetime.fromtimestamp(ts[0] + 10)
-        resp = self.client.get(self.picksess_url + f"?start_time={start_str}&tz=utc")
+        resp = self.client.get(
+            self.picksess_url + f"?start_time={start_str}&tz=utc"
+        )
         self.assertEqual(resp.json()["data"]["count"], 3)
 
         end_str = timezone.datetime.fromtimestamp(ts[-1] - 10)
-        resp = self.client.get(self.picksess_url + f"?end_time={end_str}&tz=utc")
+        resp = self.client.get(
+            self.picksess_url + f"?end_time={end_str}&tz=utc"
+        )
         self.assertEqual(resp.json()["data"]["count"], 3)
 
         resp = self.client.get(
-            self.picksess_url + f"?start_time={start_str}&end_time={end_str}&tz=utc"
+            self.picksess_url
+            + f"?start_time={start_str}&end_time={end_str}&tz=utc"
         )
         self.assertEqual(resp.json()["data"]["count"], 2)
 
@@ -226,7 +237,8 @@ class EventPicksessIntegrationTestCase(TaggedUUIDModelTestBase):
 
         # From autodiag report
         self.assertEqual(
-            self.test_objects["harvester"].harv_id, psdata["harvester"]["harv_id"]
+            self.test_objects["harvester"].harv_id,
+            psdata["harvester"]["harv_id"],
         )
         self.assertEqual(
             self.test_objects["location"].ranch, psdata["location"]["ranch"]

@@ -53,7 +53,9 @@ class AutodiagnosticsApiTestCase(HDSAPITestBase):
     def test_magic_gripper(self):
         self.load_autodiag_report()
         self.ad_data["data"]["serial_no"] = 1297
-        r_json = self.post_autodiag_report(load=False, resp_status=status.HTTP_200_OK)
+        r_json = self.post_autodiag_report(
+            load=False, resp_status=status.HTTP_200_OK
+        )
         self.assertEqual(r_json["data"], MAGIC_GRIPPER_MSG)
 
         r = self.client.get(self.ad_url)
@@ -85,7 +87,9 @@ class AutodiagnosticsApiTestCase(HDSAPITestBase):
         self.assertDictEqual(run.sensors, self.ad_data["data"]["sensors"])
 
         self.assertNotEqual(self.ad_data["data"], report.report["data"])
-        self.assertDictContainsSubset(report.report["data"], self.ad_data["data"])
+        self.assertDictContainsSubset(
+            report.report["data"], self.ad_data["data"]
+        )
 
     def test_run_data(self):
         init_resp_data = self.post_autodiag_report()
@@ -212,7 +216,9 @@ class AutodiagnosticsApiTestCase(HDSAPITestBase):
     def test_filter_harv_id(self):
         fruit = self.test_objects["fruit"]
         self.create_harvester_object(harv_id=101, fruit=fruit)
-        self.create_harvester_object(harv_id=201, fruit=fruit, name="other-harv")
+        self.create_harvester_object(
+            harv_id=201, fruit=fruit, name="other-harv"
+        )
         self.post_autodiag_report()
         self.ad_data["serial_number"] = "101"
         self.post_autodiag_report(load=False)

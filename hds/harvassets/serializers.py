@@ -95,10 +95,14 @@ class HarvesterAssetReportSerializer(
             asset_type = asset.pop("asset")
             serial_number = asset.pop("asset-tag", None)
             if serial_number is None:
-                MISSING_SERIAL_NUMBER.labels(harv.harv_id, index, asset_type).set(1)
+                MISSING_SERIAL_NUMBER.labels(
+                    harv.harv_id, index, asset_type
+                ).set(1)
                 continue
             else:
-                MISSING_SERIAL_NUMBER.labels(harv.harv_id, index, asset_type).set(0)
+                MISSING_SERIAL_NUMBER.labels(
+                    harv.harv_id, index, asset_type
+                ).set(0)
 
             asset["serial_number"] = serial_number
 

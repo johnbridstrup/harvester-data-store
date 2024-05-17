@@ -37,7 +37,10 @@ urlpatterns = [
     path(f"{version}/emustats/", include("emulatorstats.urls")),
     path(f"{version}/errorreports/", include("errorreport.urls")),
     path(f"{version}/events/", include("event.urls.eventurls")),
-    path(f"{version}/exceptioncodes/", include("exceptions.urls.exceptioncodeurls")),
+    path(
+        f"{version}/exceptioncodes/",
+        include("exceptions.urls.exceptioncodeurls"),
+    ),
     path(
         f"{version}/exceptioncodemanifests/",
         include("exceptions.urls.exceptioncodemanifesturls"),
@@ -50,13 +53,17 @@ urlpatterns = [
         f"{version}/harvassetreport/",
         include("harvassets.urls.harvesterassetreporturls"),
     ),
-    path(f"{version}/harvassets/", include("harvassets.urls.harvesterasseturls")),
+    path(
+        f"{version}/harvassets/", include("harvassets.urls.harvesterasseturls")
+    ),
     path(f"{version}/harvesters/", include("harvester.urls.harvesterurls")),
     path(
-        f"{version}/harvesterhistory/", include("harvester.urls.harvesterhistoryurls")
+        f"{version}/harvesterhistory/",
+        include("harvester.urls.harvesterhistoryurls"),
     ),
     path(
-        f"{version}/harvversion/", include("harvdeploy.urls.harvesterversionreporturls")
+        f"{version}/harvversion/",
+        include("harvdeploy.urls.harvesterversionreporturls"),
     ),
     path(f"{version}/harvjobs/", include("harvjobs.urls.joburls")),
     path(f"{version}/healthcheck/", include("healthcheck.urls")),
@@ -70,10 +77,19 @@ urlpatterns = [
     path(f"{version}/migrations/", include("hdsmigrations.urls")),
     path(f"{version}/notifications/", include("notifications.urls")),
     path(f"{version}/picksessions/", include("event.urls.picksessionurls")),
-    path(f"{version}/release/", include("harvdeploy.urls.harvestercodereleaseurls")),
+    path(
+        f"{version}/release/",
+        include("harvdeploy.urls.harvestercodereleaseurls"),
+    ),
     path(f"{version}/s3files/", include("s3file.urls.s3fileurls")),
-    path(f"{version}/scheduledjobs/", include("jobscheduler.urls.jobschedulerurls")),
-    path(f"{version}/periodictasks/", include("jobscheduler.urls.periodictaskurls")),
+    path(
+        f"{version}/scheduledjobs/",
+        include("jobscheduler.urls.jobschedulerurls"),
+    ),
+    path(
+        f"{version}/periodictasks/",
+        include("jobscheduler.urls.periodictaskurls"),
+    ),
     path(f"{version}/sessclip/", include("s3file.urls.sessclipurls")),
     path(f"{version}/users/", include("common.urls.userurls")),
     path(
@@ -90,7 +106,9 @@ urlpatterns = [
 
 if settings.DEBUG is True:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns += static(
+        settings.STATIC_URL, document_root=settings.STATIC_ROOT
+    )
 
 if settings.SILK_PROFILING is True:
     urlpatterns.append(path("silk/", include("silk.urls", namespace="silk")))

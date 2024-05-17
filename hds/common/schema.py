@@ -28,7 +28,11 @@ class HDSToRepAutoSchema(HDSAutoSchema):
     """
 
     def __init__(
-        self, tags=None, operation_id_base=None, component_name=None, extra_info=None
+        self,
+        tags=None,
+        operation_id_base=None,
+        component_name=None,
+        extra_info=None,
     ):
         super().__init__(tags, operation_id_base, component_name)
         self.extra_info = extra_info

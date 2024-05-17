@@ -177,7 +177,8 @@ class LogSessionSerializer(TaggitSerializer, serializers.ModelSerializer):
                     "Harvester does not exist",
                 ).inc()
                 logger.error(
-                    f"could not find harvester with harv_id {harv_id}", harv_id=harv_id
+                    f"could not find harvester with harv_id {harv_id}",
+                    harv_id=harv_id,
                 )
         else:
             ASYNC_ERROR_COUNTER.labels(
@@ -216,7 +217,9 @@ class LogSessionSerializer(TaggitSerializer, serializers.ModelSerializer):
                     "filetype": "sessclip",
                     "creator": log_session.creator.id,
                 }
-                serializer = DirectUploadSerializer(instance=s3file_obj, data=data)
+                serializer = DirectUploadSerializer(
+                    instance=s3file_obj, data=data
+                )
                 serializer.is_valid(raise_exception=True)
                 serializer.save()
                 in_mem_upload.close()
@@ -227,7 +230,9 @@ class LogSessionSerializer(TaggitSerializer, serializers.ModelSerializer):
                 LogSession.DoesNotExist.__name__,
                 "Logsession does not exist",
             ).inc()
-            logger.error(f"log session with id {_id} does not exist", logsession_id=_id)
+            logger.error(
+                f"log session with id {_id} does not exist", logsession_id=_id
+            )
 
     @staticmethod
     def create_logsession(s3file_obj):

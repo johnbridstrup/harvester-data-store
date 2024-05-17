@@ -23,6 +23,8 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name="historicalharvester",
             name="created",
-            field=models.DateTimeField(blank=True, db_index=True, editable=False),
+            field=models.DateTimeField(
+                blank=True, db_index=True, editable=False
+            ),
         ),
     ]

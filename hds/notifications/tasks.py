@@ -17,7 +17,9 @@ def check_notifications(app_label, model_name, instance_id, url):
     num_notifications = 0
     for notification in notifications:
         try:
-            match = model.objects.filter(**notification.criteria).get(id=instance_id)
+            match = model.objects.filter(**notification.criteria).get(
+                id=instance_id
+            )
             notification.notify(str(match), url)
             num_notifications += 1
 
@@ -85,7 +87,9 @@ def notify_operator_task(report_id):
             "elements": [
                 {
                     "type": "mrkdwn",
-                    "text": ":warning: *{}* ERROR! :warning:".format(harv_inst.name),
+                    "text": ":warning: *{}* ERROR! :warning:".format(
+                        harv_inst.name
+                    ),
                 }
             ],
         }

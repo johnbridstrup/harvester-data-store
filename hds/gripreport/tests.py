@@ -55,7 +55,8 @@ class GripReportTestCase(HDSAPITestBase):
         resp = self.client.get(url)
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         self.assertEqual(
-            len(resp.json()["data"]["results"]), len(self.picksess_data["data"]["cand"])
+            len(resp.json()["data"]["results"]),
+            len(self.picksess_data["data"]["cand"]),
         )
 
         id_ = resp.json()["data"]["results"][0]["id"]
@@ -69,7 +70,8 @@ class GripReportTestCase(HDSAPITestBase):
         resp = self.client.get(url)
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         self.assertEqual(
-            resp.json()["data"]["count"], len(self.picksess_data["data"]["cand"])
+            resp.json()["data"]["count"],
+            len(self.picksess_data["data"]["cand"]),
         )
 
     def test_cand_filters(self):
@@ -146,7 +148,8 @@ class GripReportTestCase(HDSAPITestBase):
         resp = self.client.get(url)
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         self.assertEqual(
-            len(resp.json()["data"]["results"]), len(self.picksess_data["data"]["cand"])
+            len(resp.json()["data"]["results"]),
+            len(self.picksess_data["data"]["cand"]),
         )
         for c in resp.json()["data"]["results"]:
             self.assertNotIn("candidate_data", c)
@@ -156,7 +159,8 @@ class GripReportTestCase(HDSAPITestBase):
         resp = self.client.get(url)
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         self.assertEqual(
-            len(resp.json()["data"]["results"]), len(self.picksess_data["data"]["cand"])
+            len(resp.json()["data"]["results"]),
+            len(self.picksess_data["data"]["cand"]),
         )
 
         for c in resp.json()["data"]["results"]:
@@ -204,7 +208,8 @@ class GripReportTestCase(HDSAPITestBase):
         self.assertDictEqual(grip.grip_data, exp_grip)
         self.assertTrue(grip.success)
         self.assertEqual(
-            grip.grip_duration, exp_grip["grip_end_ts"] - exp_grip["grip_start_ts"]
+            grip.grip_duration,
+            exp_grip["grip_end_ts"] - exp_grip["grip_start_ts"],
         )
 
         # make sure the right cand was linked
@@ -229,7 +234,8 @@ class GripReportTestCase(HDSAPITestBase):
         resp = self.client.get(url)
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         self.assertEqual(
-            len(resp.json()["data"]["results"]), len(self.picksess_data["data"]["grip"])
+            len(resp.json()["data"]["results"]),
+            len(self.picksess_data["data"]["grip"]),
         )
 
         id_ = resp.json()["data"]["results"][0]["id"]
@@ -243,7 +249,8 @@ class GripReportTestCase(HDSAPITestBase):
         resp = self.client.get(url)
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         self.assertEqual(
-            resp.json()["data"]["count"], len(self.picksess_data["data"]["grip"])
+            resp.json()["data"]["count"],
+            len(self.picksess_data["data"]["grip"]),
         )
 
     def test_grip_filters(self):
@@ -333,7 +340,8 @@ class GripReportTestCase(HDSAPITestBase):
         resp = self.client.get(url)
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         self.assertEqual(
-            len(resp.json()["data"]["results"]), len(self.picksess_data["data"]["grip"])
+            len(resp.json()["data"]["results"]),
+            len(self.picksess_data["data"]["grip"]),
         )
         for c in resp.json()["data"]["results"]:
             self.assertNotIn("grip_data", c)
@@ -343,7 +351,8 @@ class GripReportTestCase(HDSAPITestBase):
         resp = self.client.get(url)
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         self.assertEqual(
-            len(resp.json()["data"]["results"]), len(self.picksess_data["data"]["grip"])
+            len(resp.json()["data"]["results"]),
+            len(self.picksess_data["data"]["grip"]),
         )
 
         for c in resp.json()["data"]["results"]:
@@ -370,7 +379,9 @@ class GripReportTestCase(HDSAPITestBase):
         self.assertIn(GripReportSerializer.ExtractTags.GRIP_FAILED, tags)
 
         # Make sure we rolled back
-        self.assertNotEqual(Candidate.objects.count(), 0)  # We should have some cands
+        self.assertNotEqual(
+            Candidate.objects.count(), 0
+        )  # We should have some cands
         self.assertEqual(Grip.objects.count(), 0)
 
     def test_data_cleared(self):

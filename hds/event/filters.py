@@ -1,4 +1,9 @@
-from common.filters import CommonInfoFilterset, DTimeFilter, ListFilter, TagListFilter
+from common.filters import (
+    CommonInfoFilterset,
+    DTimeFilter,
+    ListFilter,
+    TagListFilter,
+)
 
 from .models import Event, PickSession
 

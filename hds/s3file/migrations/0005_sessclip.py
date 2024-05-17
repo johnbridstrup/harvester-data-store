@@ -26,7 +26,8 @@ class Migration(migrations.Migration):
                 (
                     "file",
                     models.OneToOneField(
-                        on_delete=django.db.models.deletion.CASCADE, to="s3file.s3file"
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="s3file.s3file",
                     ),
                 ),
             ],

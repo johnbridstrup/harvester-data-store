@@ -89,17 +89,25 @@ class HarvesterView(CreateModelViewSet):
         return make_ok(f"Harvester {harv.harv_id} version history", data)
 
     @action(
-        methods=["get"], detail=True, url_path="assets", renderer_classes=[JSONRenderer]
+        methods=["get"],
+        detail=True,
+        url_path="assets",
+        renderer_classes=[JSONRenderer],
     )
     def get_assets(self, request, pk=None):
         harv = self.get_object()
-        assets = [HarvesterAssetSerializer(asset).data for asset in harv.assets.all()]
+        assets = [
+            HarvesterAssetSerializer(asset).data for asset in harv.assets.all()
+        ]
         return make_ok(
             f"Harvester {harv.harv_id} assets retrieved", response_data=assets
         )
 
     @action(
-        methods=["get"], detail=True, url_path="config", renderer_classes=[JSONRenderer]
+        methods=["get"],
+        detail=True,
+        url_path="config",
+        renderer_classes=[JSONRenderer],
     )
     def latest_config(self, request, pk=None):
         harv = self.get_object()

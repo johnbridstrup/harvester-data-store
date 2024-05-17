@@ -62,7 +62,10 @@ class TaggedUUIDViewBase(CreateModelViewSet):
     )
 
     @action(
-        methods=["get"], detail=False, url_path="tags", renderer_classes=[JSONRenderer]
+        methods=["get"],
+        detail=False,
+        url_path="tags",
+        renderer_classes=[JSONRenderer],
     )
     def get_tags(self, request):
         model = self.serializer_class.Meta.model

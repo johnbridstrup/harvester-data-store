@@ -53,7 +53,9 @@ class DynamicKey:
 
     @classmethod
     def make_entry(cls, obj):
-        raise NotImplementedError(f"make_entry not implemented for {cls.__name__}")
+        raise NotImplementedError(
+            f"make_entry not implemented for {cls.__name__}"
+        )
 
 
 class DynamicKeys:
@@ -85,9 +87,9 @@ class DynamicKeys:
             schema["properties"][dyn_key_name]["properties"].update(
                 cls._generate_dynamic_options_prop()
             )
-            schema["properties"][dyn_key_name]["allOf"] = cls._create_allof_list(
-                obj_schema
-            )
+            schema["properties"][dyn_key_name][
+                "allOf"
+            ] = cls._create_allof_list(obj_schema)
         return schema
 
     @classmethod
@@ -139,7 +141,9 @@ class DynamicKeys:
                 "then": {"properties": {"value": {**original}}},
             }
         ]
-        if_thens.extend([cls._create_dk_if_then(dk) for dk in cls._DYN_KEYS.values()])
+        if_thens.extend(
+            [cls._create_dk_if_then(dk) for dk in cls._DYN_KEYS.values()]
+        )
         return if_thens
 
     @classmethod

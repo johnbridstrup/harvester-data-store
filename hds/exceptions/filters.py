@@ -18,7 +18,9 @@ class AFTExceptionFilter(CommonInfoFilterset, LinkedReportHarvesterFilter):
     )  # start,end
     handled = filters.BooleanFilter(field_name="handled")
     codes = ListFilter(field_name="code__code")
-    traceback = filters.CharFilter(field_name="traceback", lookup_expr="icontains")
+    traceback = filters.CharFilter(
+        field_name="traceback", lookup_expr="icontains"
+    )
 
     # Report Filters
     locations = ListFilter(field_name="report__location__ranch")
@@ -26,7 +28,9 @@ class AFTExceptionFilter(CommonInfoFilterset, LinkedReportHarvesterFilter):
     start_time = DTimeFilter("timestamp", lookup_expr="gte")
     end_time = DTimeFilter("timestamp", lookup_expr="lte")
     generic = GenericFilter(foreign_key_prefix="report")
-    start_hour = DTimeFilter(field_name="timestamp", method="filter_time_of_day")
+    start_hour = DTimeFilter(
+        field_name="timestamp", method="filter_time_of_day"
+    )
     end_hour = DTimeFilter(field_name="timestamp", method="filter_time_of_day")
 
     class Meta:

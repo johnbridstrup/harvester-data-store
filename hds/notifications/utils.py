@@ -54,7 +54,10 @@ def build_list_filter(request):
 
     # get is_emulator from query params
     if "is_emulator" in request.query_params:
-        is_emulator = request.query_params["is_emulator"].lower() in ["1", "true"]
+        is_emulator = request.query_params["is_emulator"].lower() in [
+            "1",
+            "true",
+        ]
         listfilter["harvester__is_emulator"] = is_emulator
 
     # get handled from query params

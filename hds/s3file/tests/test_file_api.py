@@ -124,10 +124,13 @@ class S3FileTestCase(HDSAPITestBase):
         self.load_error_report()
         self.data["uuid"] = self.uuid
         rep_resp = self.post_error_report(load=False)
-        rep_resp = self.client.get(self.error_det_url(rep_resp["data"]["id"])).json()
+        rep_resp = self.client.get(
+            self.error_det_url(rep_resp["data"]["id"])
+        ).json()
 
         self.assertEqual(
-            file_resp.json()["data"]["event"]["UUID"], rep_resp["data"]["event"]["UUID"]
+            file_resp.json()["data"]["event"]["UUID"],
+            rep_resp["data"]["event"]["UUID"],
         )
 
         # Assert all tags are there
@@ -203,7 +206,8 @@ class S3FileTestCase(HDSAPITestBase):
         self.assertEqual(len(res["event"]["related_images"]), 1)
         self.assertEqual(len(res["event"]["related_files"]), 1)
         self.assertEqual(
-            res["event"]["related_images"][0]["url"], "http://testserver/media/test.png"
+            res["event"]["related_images"][0]["url"],
+            "http://testserver/media/test.png",
         )
         self.assertEqual(
             res["event"]["related_files"][0]["url"],

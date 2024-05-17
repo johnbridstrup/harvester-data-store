@@ -60,7 +60,9 @@ class AFTExceptionListSerializer(AFTExceptionSerializer):
     """
 
     code = AFTExceptionCodeSerializer(read_only=True)
-    harvester = HarvesterMinimalSerializer(source="report.harvester", read_only=True)
+    harvester = HarvesterMinimalSerializer(
+        source="report.harvester", read_only=True
+    )
 
     class Meta(AFTExceptionSerializer.Meta):
         pass
@@ -74,7 +76,9 @@ class AFTExceptionDetailSerializer(AFTExceptionSerializer):
 
     code = AFTExceptionCodeSerializer(read_only=True)
     creator = UserCustomSerializer(read_only=True)
-    harvester = HarvesterMinimalSerializer(source="report.harvester", read_only=True)
+    harvester = HarvesterMinimalSerializer(
+        source="report.harvester", read_only=True
+    )
     modifiedBy = UserCustomSerializer(read_only=True)
 
     class Meta(AFTExceptionSerializer.Meta):

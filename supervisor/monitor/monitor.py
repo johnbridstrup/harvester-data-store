@@ -15,7 +15,9 @@ parser.add_argument(
     default="INFO",
     choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
 )
-parser.add_argument("-c", "--config", help="Path to supervisord.conf", required=True)
+parser.add_argument(
+    "-c", "--config", help="Path to supervisord.conf", required=True
+)
 parser.add_argument(
     "-p",
     "--port",

@@ -12,6 +12,8 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AddIndex(
             model_name="event",
-            index=models.Index(fields=["UUID"], name="event_event_UUID_ea2b09_idx"),
+            index=models.Index(
+                fields=["UUID"], name="event_event_UUID_ea2b09_idx"
+            ),
         ),
     ]

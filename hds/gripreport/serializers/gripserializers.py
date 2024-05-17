@@ -1,6 +1,8 @@
 from rest_framework import serializers
 
-from gripreport.serializers.gripreportserializers import GripReportListSerializer
+from gripreport.serializers.gripreportserializers import (
+    GripReportListSerializer,
+)
 from harvester.serializers.harvesterserializer import (
     FruitMinimalSerializer,
     HarvesterMinimalSerializer,

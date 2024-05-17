@@ -33,7 +33,11 @@ def update_exception_codes(manifest_id, user_id):
                 serializer.save()
             code = AFTExceptionCode.objects.get(code=data["code"])
         except AFTExceptionCode.DoesNotExist:
-            ser_data = {"created": datetime.now(), "manifest": manifest_id, **data}
+            ser_data = {
+                "created": datetime.now(),
+                "manifest": manifest_id,
+                **data,
+            }
             serializer = AFTExceptionCodeSerializer(data=ser_data)
             if serializer.is_valid(raise_exception=True):
                 serializer.save(creator=user)
@@ -41,7 +45,12 @@ def update_exception_codes(manifest_id, user_id):
 
 @monitored_shared_task
 def traceback_breakdown_task(
-    subtitle, lookback_days=7, code=0, channel="hds-test", emulator=False, **params
+    subtitle,
+    lookback_days=7,
+    code=0,
+    channel="hds-test",
+    emulator=False,
+    **params,
 ):
     end_dt = datetime.now()
     start_dt = end_dt - timedelta(days=int(lookback_days))
@@ -66,7 +75,9 @@ def traceback_breakdown_task(
                 channel,
             )
         if len(excs) > MAX_NUM_TRACEBACKS:
-            return post_to_slack("Too many exceptions to process, aborting.", channel)
+            return post_to_slack(
+                "Too many exceptions to process, aborting.", channel
+            )
         groups = create_traceback_groups(excs)
         groups["params"] = {
             **params,

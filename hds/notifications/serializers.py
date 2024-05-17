@@ -1,7 +1,10 @@
 # import serializers
 from rest_framework import serializers
 
-from common.serializers.userserializer import UserCustomSerializer, UsernameSerializer
+from common.serializers.userserializer import (
+    UserCustomSerializer,
+    UsernameSerializer,
+)
 from .models import Notification
 from .utils import build_list_filter
 

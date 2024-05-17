@@ -20,7 +20,9 @@ class LogSession(CommonInfo):
     _zip_file = models.OneToOneField(
         SessClip, blank=True, null=True, on_delete=models.CASCADE
     )
-    event = models.ForeignKey(Event, on_delete=models.SET_NULL, blank=True, null=True)
+    event = models.ForeignKey(
+        Event, on_delete=models.SET_NULL, blank=True, null=True
+    )
     tags = TaggableManager(through="LogTag")
 
     def __str__(self):

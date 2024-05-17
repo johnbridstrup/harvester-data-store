@@ -5,11 +5,19 @@ from rest_framework.response import Response
 
 from common.renderers import HDSJSONRenderer
 from common.utils import make_ok
-from common.viewsets import CountActionMixin, CreateModelViewSet, ReportModelViewSet
+from common.viewsets import (
+    CountActionMixin,
+    CreateModelViewSet,
+    ReportModelViewSet,
+)
 from hds.roles import RoleChoices
 
 from .models import Candidate, Grip, GripReport
-from .filters import CandidateFilterset, GripFilterset, PickSessionReportFilterset
+from .filters import (
+    CandidateFilterset,
+    GripFilterset,
+    PickSessionReportFilterset,
+)
 from .serializers.candidateserializers import (
     CandidateFullSerializer,
     CandidateMinimalSerializer,
@@ -80,10 +88,14 @@ class CandidateView(CreateModelViewSet, CountActionMixin):
                 paginated_qs, many=True, context={"request": request}
             )
             paginated = self.get_paginated_response(serializer.data)
-            return make_ok(f"Detailed candidate list", response_data=paginated.data)
+            return make_ok(
+                f"Detailed candidate list", response_data=paginated.data
+            )
 
         serializer = SerializerClass(qs, many=True)
-        return make_ok(f"Detailed candidate list", response_data=serializer.data)
+        return make_ok(
+            f"Detailed candidate list", response_data=serializer.data
+        )
 
 
 class GripView(CreateModelViewSet, CountActionMixin):

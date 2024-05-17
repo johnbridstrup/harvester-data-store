@@ -13,7 +13,9 @@ class ConfigReportTestCase(HDSAPITestBase):
         self.load_config_data()
 
     def test_basic(self):
-        r = self.client.post(self.config_url, data=self.conf_data, format="json")
+        r = self.client.post(
+            self.config_url, data=self.conf_data, format="json"
+        )
         self.assertEqual(r.status_code, status.HTTP_201_CREATED)
         self.assertEqual(ConfigReport.objects.count(), 1)
 

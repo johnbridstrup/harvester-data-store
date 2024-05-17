@@ -64,21 +64,40 @@ class Migration(migrations.Migration):
                 (
                     "id",
                     models.BigIntegerField(
-                        auto_created=True, blank=True, db_index=True, verbose_name="ID"
+                        auto_created=True,
+                        blank=True,
+                        db_index=True,
+                        verbose_name="ID",
                     ),
                 ),
                 ("created", models.DateTimeField(blank=True, editable=False)),
-                ("lastModified", models.DateTimeField(blank=True, editable=False)),
+                (
+                    "lastModified",
+                    models.DateTimeField(blank=True, editable=False),
+                ),
                 ("index", models.IntegerField()),
                 ("serial_number", models.CharField(max_length=63)),
-                ("version", models.CharField(blank=True, max_length=31, null=True)),
-                ("history_id", models.AutoField(primary_key=True, serialize=False)),
+                (
+                    "version",
+                    models.CharField(blank=True, max_length=31, null=True),
+                ),
+                (
+                    "history_id",
+                    models.AutoField(primary_key=True, serialize=False),
+                ),
                 ("history_date", models.DateTimeField(db_index=True)),
-                ("history_change_reason", models.CharField(max_length=100, null=True)),
+                (
+                    "history_change_reason",
+                    models.CharField(max_length=100, null=True),
+                ),
                 (
                     "history_type",
                     models.CharField(
-                        choices=[("+", "Created"), ("~", "Changed"), ("-", "Deleted")],
+                        choices=[
+                            ("+", "Created"),
+                            ("~", "Changed"),
+                            ("-", "Deleted"),
+                        ],
                         max_length=1,
                     ),
                 ),
@@ -171,7 +190,8 @@ class Migration(migrations.Migration):
                 (
                     "event",
                     models.ForeignKey(
-                        on_delete=django.db.models.deletion.CASCADE, to="event.event"
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="event.event",
                     ),
                 ),
                 (
@@ -232,7 +252,10 @@ class Migration(migrations.Migration):
                 ("lastModified", models.DateTimeField(auto_now=True)),
                 ("index", models.IntegerField()),
                 ("serial_number", models.CharField(max_length=63)),
-                ("version", models.CharField(blank=True, max_length=31, null=True)),
+                (
+                    "version",
+                    models.CharField(blank=True, max_length=31, null=True),
+                ),
                 (
                     "asset",
                     models.ForeignKey(

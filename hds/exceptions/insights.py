@@ -20,7 +20,9 @@ def cluster_tracebacks(tbs):
 
 
 def create_traceback_groups(exc_dicts):
-    tb_dict = defaultdict(lambda: {"count": 0, "example": None, "instances": []})
+    tb_dict = defaultdict(
+        lambda: {"count": 0, "example": None, "instances": []}
+    )
     tbs = [
         exc.get("traceback") if exc.get("traceback") else "No Traceback"
         for exc in exc_dicts

@@ -25,7 +25,9 @@ def execute_migrations(id):
     except MigrationLog.DoesNotExist:
         last_hash = "INITIAL"
 
-    logger.info("Beginning Migration", last_hash=last_hash, new_hash=log.githash)
+    logger.info(
+        "Beginning Migration", last_hash=last_hash, new_hash=log.githash
+    )
 
     output = StringIO()
     startTime = make_aware(datetime.now())

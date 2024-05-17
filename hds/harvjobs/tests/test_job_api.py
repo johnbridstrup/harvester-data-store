@@ -125,5 +125,7 @@ class JobApiTestCase(HarvJobApiTestBase):
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(patched_task.call_count, 2)
         patched_task.assert_called_with(
-            job_resp.data["id"], job_resp.data["target"], job_resp.data["creator"]
+            job_resp.data["id"],
+            job_resp.data["target"],
+            job_resp.data["creator"],
         )

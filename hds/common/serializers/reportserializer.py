@@ -81,12 +81,17 @@ class ReportSerializerBase(serializers.ModelSerializer):
             jsonschema.validate(data, schema)
         except jsonschema.ValidationError as e:
             if e.validator == "type":
-                err = {"path": e.json_path, "error": f"Must be {e.validator_value}"}
+                err = {
+                    "path": e.json_path,
+                    "error": f"Must be {e.validator_value}",
+                }
             else:
                 err = str(e.message)
             msg = f"Failed to validate: {e.validator}"
             ERROR_COUNTER.labels(
-                serializers.ValidationError.__name__, msg, self.__class__.__name__
+                serializers.ValidationError.__name__,
+                msg,
+                self.__class__.__name__,
             ).inc()
             logger.error(err, serializer=self.__class__.__name__)
             raise serializers.ValidationError(detail={"validation error": err})
@@ -124,10 +129,14 @@ class ReportSerializerBase(serializers.ModelSerializer):
                 ERROR_COUNTER.labels(
                     KeyError.__name__, "Serial number not found!", cls.__name__
                 )
-                logger.error(f"Serial number not found!", serializer=cls.__name__)
+                logger.error(
+                    f"Serial number not found!", serializer=cls.__name__
+                )
                 raise
             ERROR_COUNTER.labels(
-                KeyError.__name__, "Serial number not at top level", cls.__name__
+                KeyError.__name__,
+                "Serial number not at top level",
+                cls.__name__,
             )
         return int(sn)
 
@@ -162,7 +171,9 @@ class ReportSerializerBase(serializers.ModelSerializer):
 
     @classmethod
     def extract(cls, report_obj: ReportBase):
-        raise NotImplementedError(f"extract method not implemented for {cls.__name__}")
+        raise NotImplementedError(
+            f"extract method not implemented for {cls.__name__}"
+        )
 
     @classmethod
     def extract_report(cls, report_id, *args, **kwargs):

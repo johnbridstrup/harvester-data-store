@@ -48,7 +48,9 @@ class CreateModelViewSet(ModelViewSet):
 
     def __init__(self, **kwargs):
         self.view_permissions = merge_nested_dict(
-            self.view_permissions, self.view_permissions_update, overwrite_none=True
+            self.view_permissions,
+            self.view_permissions_update,
+            overwrite_none=True,
         )
         super().__init__(**kwargs)
 
@@ -207,7 +209,9 @@ class AdminActionMixin(ModelViewSet):
         Returns:
             a list of actions
         """
-        raise NotImplementedError("action items should be provided for this view")
+        raise NotImplementedError(
+            "action items should be provided for this view"
+        )
 
     @action(
         methods=["get"],
@@ -217,7 +221,9 @@ class AdminActionMixin(ModelViewSet):
         renderer_classes=[JSONRenderer],
     )
     def action_item_view(self, request):
-        return make_ok("successfully retrieved actions items", self.action_items())
+        return make_ok(
+            "successfully retrieved actions items", self.action_items()
+        )
 
     def run_actions(self, request) -> Response:
         """

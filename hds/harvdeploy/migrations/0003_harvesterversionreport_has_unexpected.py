@@ -9,7 +9,9 @@ logger = structlog.get_logger(__name__)
 
 
 def set_has_unexpected(apps, schema_editor):
-    HarvesterVersionReport = apps.get_model("harvdeploy", "harvesterversionreport")
+    HarvesterVersionReport = apps.get_model(
+        "harvdeploy", "harvesterversionreport"
+    )
 
     paginator = Paginator(HarvesterVersionReport.objects.all(), 1000)
     for page in range(1, paginator.num_pages + 1):
@@ -24,7 +26,10 @@ def set_has_unexpected(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("harvdeploy", "0002_alter_harvestercoderelease_unique_together_and_more"),
+        (
+            "harvdeploy",
+            "0002_alter_harvestercoderelease_unique_together_and_more",
+        ),
     ]
 
     operations = [

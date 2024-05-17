@@ -54,7 +54,9 @@ class JobResultApiTestCase(HarvJobApiTestBase):
         updated_job_resp = self.client.get(self.job_det_urls(result_data["id"]))
         updated_job_data = updated_job_resp.json()["data"]
 
-        self.assertEqual(updated_job_data["jobstatus"], Job.StatusChoices.SUCCESS)
+        self.assertEqual(
+            updated_job_data["jobstatus"], Job.StatusChoices.SUCCESS
+        )
 
         # Assert post_to_slack called correctly
         self.assertEqual(slack.call_count, 1)
@@ -142,7 +144,9 @@ class JobResultApiTestCase(HarvJobApiTestBase):
         updated_job_resp = self.client.get(self.job_det_urls(result_data["id"]))
         updated_job_data = updated_job_resp.json()["data"]
 
-        self.assertEqual(updated_job_data["jobstatus"], Job.StatusChoices.FAILERROR)
+        self.assertEqual(
+            updated_job_data["jobstatus"], Job.StatusChoices.FAILERROR
+        )
 
     def test_full_pipeline(self):
         # Testing the process a client might go through.
@@ -155,9 +159,7 @@ class JobResultApiTestCase(HarvJobApiTestBase):
         self.create_jobschema(jobtype="other-job")
 
         # View jobs for a harvester
-        harv_jobs_url = (
-            f"{self.jobs_url}?target__harv_id={self.test_objects['harvester'].harv_id}"
-        )
+        harv_jobs_url = f"{self.jobs_url}?target__harv_id={self.test_objects['harvester'].harv_id}"
         resp = self.client.get(harv_jobs_url)
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         self.assertEqual(len(resp.json()["data"]["results"]), 0)
@@ -183,7 +185,8 @@ class JobResultApiTestCase(HarvJobApiTestBase):
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         self.assertEqual(len(resp.json()["data"]["results"]), 1)
         self.assertEqual(
-            resp.json()["data"]["results"][0]["jobstatus"], Job.StatusChoices.PENDING
+            resp.json()["data"]["results"][0]["jobstatus"],
+            Job.StatusChoices.PENDING,
         )
 
         # No results yet
@@ -201,7 +204,8 @@ class JobResultApiTestCase(HarvJobApiTestBase):
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         self.assertEqual(len(resp.json()["data"]["results"]), 1)
         self.assertEqual(
-            resp.json()["data"]["results"][0]["jobstatus"], Job.StatusChoices.SUCCESS
+            resp.json()["data"]["results"][0]["jobstatus"],
+            Job.StatusChoices.SUCCESS,
         )
 
         # View results
@@ -223,7 +227,9 @@ class JobResultApiTestCase(HarvJobApiTestBase):
             if i % 2 == 0:
                 self.create_jobresult(UUID=UUID)
             else:
-                self.create_jobresult(results=self.DEFAULT_RESULT_FAIL, UUID=UUID)
+                self.create_jobresult(
+                    results=self.DEFAULT_RESULT_FAIL, UUID=UUID
+                )
         url1 = job_data["history"]
         r1 = self.client.get(url1)
         self.assertEqual(r1.status_code, status.HTTP_200_OK)

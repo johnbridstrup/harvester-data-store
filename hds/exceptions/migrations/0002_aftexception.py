@@ -27,7 +27,10 @@ class Migration(migrations.Migration):
                 ),
                 ("created", models.DateTimeField(auto_now_add=True)),
                 ("lastModified", models.DateTimeField(auto_now=True)),
-                ("service", models.TextField(blank=True, max_length=20, null=True)),
+                (
+                    "service",
+                    models.TextField(blank=True, max_length=20, null=True),
+                ),
                 ("node", models.IntegerField(blank=True, null=True)),
                 ("traceback", models.TextField(blank=True, null=True)),
                 ("timestamp", models.DateTimeField(blank=True, null=True)),

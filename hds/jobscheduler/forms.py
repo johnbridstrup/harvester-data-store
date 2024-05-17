@@ -36,7 +36,13 @@ class JobschedulerForm:
         return {
             "type": "object",
             "title": f"Schedule {self.jobtype}: version {self.version}",
-            "required": ["payload", "schedule", "targets", "jobtype", "schema_version"],
+            "required": [
+                "payload",
+                "schedule",
+                "targets",
+                "jobtype",
+                "schema_version",
+            ],
             "properties": {
                 "jobtype": {
                     "type": "string",
@@ -147,11 +153,15 @@ class JobschedulerForm:
 
 
 def create_job_scheduler_form(jobtype, schema_version):
-    schema = JobSchema.objects.get(jobtype__name=jobtype, version=schema_version)
+    schema = JobSchema.objects.get(
+        jobtype__name=jobtype, version=schema_version
+    )
     fruits = list(Fruit.objects.values_list("name", flat=True))
     locations = list(Location.objects.values_list("ranch", flat=True))
     harvesters = list(
-        Harvester.objects.filter(is_emulator=False).values_list("name", flat=True)
+        Harvester.objects.filter(is_emulator=False).values_list(
+            "name", flat=True
+        )
     )
 
     form = JobschedulerForm(

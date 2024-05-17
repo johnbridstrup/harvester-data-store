@@ -113,7 +113,9 @@ class ReleaseApiTestCase(HDSAPITestBase):
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
 
         data = resp.json()["data"]
-        self.assertEqual(data["release"]["version"], str(self.release["version"]))
+        self.assertEqual(
+            data["release"]["version"], str(self.release["version"])
+        )
 
     ## HarvesterVersionReport
 
@@ -148,7 +150,9 @@ class ReleaseApiTestCase(HDSAPITestBase):
 
     def test_create_unexpected(self):
         unexpected_versions = self.versions.copy()
-        unexpected_versions["data"]["master"]["unexpected"]["unexpected_package"] = 1.11
+        unexpected_versions["data"]["master"]["unexpected"][
+            "unexpected_package"
+        ] = 1.11
         self.create_version(unexpected_versions)
 
         obj = HarvesterVersionReport.objects.get()
@@ -180,7 +184,9 @@ class ReleaseApiTestCase(HDSAPITestBase):
         self.assertEqual(HarvesterVersionReport.objects.count(), 1)
 
         # Someone has changed a package version.
-        self.versions["data"]["robot01"]["dirty"]["reverted-package"] = "bad-version"
+        self.versions["data"]["robot01"]["dirty"][
+            "reverted-package"
+        ] = "bad-version"
         self.create_version()
         self.assertEqual(HarvesterVersionReport.objects.count(), 2)
 
@@ -334,7 +340,9 @@ class ReleaseApiTestCase(HDSAPITestBase):
             hist_data["count"], 3
         )  # The initial PATCH also introduced a history entry
         for res in hist_data["results"]:
-            self.assertEqual(res["harv_id"], self.test_objects["harvester"].harv_id)
+            self.assertEqual(
+                res["harv_id"], self.test_objects["harvester"].harv_id
+            )
 
     def test_conflicts(self):
         rel2 = self.release.copy()
@@ -403,11 +411,15 @@ class ReleaseApiTestCase(HDSAPITestBase):
         harvester.save()
         harvester.refresh_from_db()
 
-        resp = self.client.get(f"{self.release_det_url(release_obj.id)}harvesters/")
+        resp = self.client.get(
+            f"{self.release_det_url(release_obj.id)}harvesters/"
+        )
 
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         self.assertEqual(resp.data["data"]["count"], 1)
-        self.assertEqual(resp.data["data"]["results"][0]["harv_id"], harvester.harv_id)
+        self.assertEqual(
+            resp.data["data"]["results"][0]["harv_id"], harvester.harv_id
+        )
 
     def test_release_tags_endpoint(self):
         """Test release tags endpoint."""

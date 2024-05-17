@@ -68,7 +68,10 @@ class Migration(migrations.Migration):
                 ("created", models.DateTimeField(auto_now_add=True)),
                 ("lastModified", models.DateTimeField(auto_now=True)),
                 ("harv_id", models.IntegerField()),
-                ("name", models.CharField(blank=True, max_length=255, null=True)),
+                (
+                    "name",
+                    models.CharField(blank=True, max_length=255, null=True),
+                ),
                 (
                     "creator",
                     models.ForeignKey(

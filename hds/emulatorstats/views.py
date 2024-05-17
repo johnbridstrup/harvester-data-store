@@ -27,10 +27,14 @@ class EmuReportView(ReportModelViewSet):
         ).prefetch_related("tags")
 
     @action(
-        methods=["GET"], url_path="tags", detail=False, renderer_classes=[JSONRenderer]
+        methods=["GET"],
+        url_path="tags",
+        detail=False,
+        renderer_classes=[JSONRenderer],
     )
     def tags_view(self, request, pk=None):
         queryset = EmustatsReport.tags.all().values_list("name", flat=True)
         return make_ok(
-            "emulatorstats tags retrieved successfully", {"tags": list(queryset)}
+            "emulatorstats tags retrieved successfully",
+            {"tags": list(queryset)},
         )

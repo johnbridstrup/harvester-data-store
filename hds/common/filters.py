@@ -193,9 +193,13 @@ class HarvesterFilter(filters.FilterSet):
 
 
 class LinkedReportHarvesterFilter(filters.FilterSet):
-    harv_ids = ListFilter(field_type=int, field_name="report__harvester__harv_id")
+    harv_ids = ListFilter(
+        field_type=int, field_name="report__harvester__harv_id"
+    )
     fruits = ListFilter(field_name="report__harvester__fruit__name")
-    is_emulator = filters.BooleanFilter(field_name="report__harvester__is_emulator")
+    is_emulator = filters.BooleanFilter(
+        field_name="report__harvester__is_emulator"
+    )
 
     FIELDS = ["harv_ids", "fruits", "is_emulator"]
 
@@ -266,12 +270,16 @@ class CommonInfoFilterset(filters.FilterSet):
             )
             filter_dict.update({f"{name}__time__gte": start_hour})
         if end_hour:
-            end_hour = datetime.time(*DTimeFormatter.parse_time(end_hour), tzinfo=tz)
+            end_hour = datetime.time(
+                *DTimeFormatter.parse_time(end_hour), tzinfo=tz
+            )
             filter_dict.update({f"{name}__time__lte": end_hour})
         return queryset.filter(**filter_dict)
 
 
-class ReportFilterset(CommonInfoFilterset, ReportStartEndFilter, HarvesterFilter):
+class ReportFilterset(
+    CommonInfoFilterset, ReportStartEndFilter, HarvesterFilter
+):
     FIELDS_BASE = CommonInfoFilterset.FIELDS_BASE + [
         *ReportStartEndFilter.FIELDS,
         *HarvesterFilter.FIELDS,

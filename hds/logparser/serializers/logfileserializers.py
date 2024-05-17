@@ -53,7 +53,9 @@ class LogFileSerializer(serializers.ModelSerializer):
             )
         except Exception as e:
             ASYNC_ERROR_COUNTER.labels(
-                "convert_to_datetime", e.__class__.__name__, "Failed date pattern match"
+                "convert_to_datetime",
+                e.__class__.__name__,
+                "Failed date pattern match",
             ).inc()
             logger.error(f"could not match the date string {date_str}")
         return date_obj
@@ -71,9 +73,7 @@ class LogFileSerializer(serializers.ModelSerializer):
         robot = None
         harv = None
 
-        pattern = (
-            r"^(.*?)_(.*?)_(.*?)_(.*?)\.(.*)$"  # (ts)_(harvid)_(robotid)_(serv)(.ext)
-        )
+        pattern = r"^(.*?)_(.*?)_(.*?)_(.*?)\.(.*)$"  # (ts)_(harvid)_(robotid)_(serv)(.ext)
 
         matches = re.match(pattern, filename)
         if not matches:
@@ -94,7 +94,9 @@ class LogFileSerializer(serializers.ModelSerializer):
     @classmethod
     def _report_date_match_fail(cls, entry):
         ASYNC_ERROR_COUNTER.labels(
-            "extract_log_file", DateMatchError.__name__, "Failed date pattern match"
+            "extract_log_file",
+            DateMatchError.__name__,
+            "Failed date pattern match",
         ).inc()
         logger.error(f"No date match for the line {entry}")
 
@@ -102,7 +104,9 @@ class LogFileSerializer(serializers.ModelSerializer):
     def _report_line_match_fail(cls, entry):
         logger.error(f"No line match for the line {entry}")
         ASYNC_ERROR_COUNTER.labels(
-            "extract_log_file", LogDoesNotMatch.__name__, "Failed line pattern match"
+            "extract_log_file",
+            LogDoesNotMatch.__name__,
+            "Failed line pattern match",
         ).inc()
 
     @classmethod

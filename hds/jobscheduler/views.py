@@ -132,7 +132,10 @@ class ScheduledJobView(CreateModelViewSet):
                         request,
                         "scheduledjobs",
                         api_version="current",
-                        params={"jobtype": jobtype, "schema_version": schema_version},
+                        params={
+                            "jobtype": jobtype,
+                            "schema_version": schema_version,
+                        },
                     ),
                 },
             )
@@ -164,7 +167,9 @@ class ScheduledJobView(CreateModelViewSet):
                     "method": "GET",
                 }
 
-        return make_ok("Harvester Job Scheduler Interface", response_data=resp_data)
+        return make_ok(
+            "Harvester Job Scheduler Interface", response_data=resp_data
+        )
 
     @action(
         methods=["get"],
@@ -186,7 +191,9 @@ class ScheduledJobView(CreateModelViewSet):
             )
 
         serializer = self.get_serializer(qs, many=True)
-        return make_ok(f"{user.username} scheduled jobs", response_data=serializer.data)
+        return make_ok(
+            f"{user.username} scheduled jobs", response_data=serializer.data
+        )
 
 
 class PeriodicTaskView(CreateModelViewSet, AdminActionMixin):
@@ -226,7 +233,9 @@ class PeriodicTaskView(CreateModelViewSet, AdminActionMixin):
                 msg = run_tasks(periodic_tasks)
                 return make_ok(msg)
             elif action in self.action_items() and action == "delete_tasks":
-                periodic_tasks = PeriodicTask.objects.filter(pk__in=task_ids).delete()
+                periodic_tasks = PeriodicTask.objects.filter(
+                    pk__in=task_ids
+                ).delete()
                 return make_ok(f"{action} executed successfully")
         return make_error("Query params (action, ids) should not be None")
 

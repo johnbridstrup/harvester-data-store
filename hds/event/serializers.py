@@ -26,7 +26,9 @@ class TaggedUUIDSerializerBase(serializers.ModelSerializer):
         objs = []
         for rel_obj in self.related_objects():
             obj_set = getattr(instance, f"{rel_obj[0]}_set")
-            objs.extend(self._related_object_list(obj_set, rel_obj[1], rel_obj[2]))
+            objs.extend(
+                self._related_object_list(obj_set, rel_obj[1], rel_obj[2])
+            )
         data["related_objects"] = objs
 
         if self.has_related_files():
@@ -68,7 +70,9 @@ class TaggedUUIDSerializerBase(serializers.ModelSerializer):
         ]
 
     @staticmethod
-    def get_or_create_uuid_tagged_obj(creator, uuid_model, model_tag, UUID=None):
+    def get_or_create_uuid_tagged_obj(
+        creator, uuid_model, model_tag, UUID=None
+    ):
         try:
             obj = uuid_model.objects.get(UUID=UUID)
         except uuid_model.DoesNotExist:
@@ -96,7 +100,11 @@ class EventSerializer(TaggedUUIDSerializerBase):
 
     def related_objects(self):
         return [
-            ("autodiagnosticsreport", "autodiagnostics", "Autodiagnostics Report"),
+            (
+                "autodiagnosticsreport",
+                "autodiagnostics",
+                "Autodiagnostics Report",
+            ),
             ("errorreport", "errorreports", "Error Report"),
             ("gripreport", "gripreports", "Grip Report"),
             ("job", "jobs", "Job"),
@@ -118,7 +126,11 @@ class PickSessionSerializer(TaggedUUIDSerializerBase):
     def related_objects(self):
         return [
             ("errorreport", "errorreports", "Error Report"),
-            ("autodiagnosticsreport", "autodiagnostics", "Autodiagnostics Report"),
+            (
+                "autodiagnosticsreport",
+                "autodiagnostics",
+                "Autodiagnostics Report",
+            ),
             ("gripreport", "gripreports", "Grip Report"),
             ("harvesterassetreport", "harvassetreport", "Asset Report"),
         ]
@@ -188,4 +200,10 @@ class PickSessionMinimalSerializer(PickSessionSerializer):
 
     class Meta:
         model = PickSession
-        fields = ("UUID", "start_time", "session_length", "harvester", "location")
+        fields = (
+            "UUID",
+            "start_time",
+            "session_length",
+            "harvester",
+            "location",
+        )

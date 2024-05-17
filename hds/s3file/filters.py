@@ -6,7 +6,9 @@ from .models import S3File
 
 class S3FileFilter(CommonInfoFilterset):
     key = filters.CharFilter(field_name="key", lookup_expr="icontains")
-    filetype = filters.CharFilter(field_name="filetype", lookup_expr="icontains")
+    filetype = filters.CharFilter(
+        field_name="filetype", lookup_expr="icontains"
+    )
     tags = TagListFilter(field_name="event__tags__name")
     uuid = EventUUIDFilter()
 

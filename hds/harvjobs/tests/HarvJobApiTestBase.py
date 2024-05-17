@@ -33,7 +33,9 @@ class HarvJobApiTestBase(HDSAPITestBase):
             "schema": schema,
         }
 
-        resp = self.client.post(self.jobschema_url, data=jobschema, format="json")
+        resp = self.client.post(
+            self.jobschema_url, data=jobschema, format="json"
+        )
         return jobschema, resp
 
     def create_job(self, jobtype=None, version=None, job_payload=None):
@@ -63,6 +65,8 @@ class HarvJobApiTestBase(HDSAPITestBase):
             "serial_number": str(self.test_objects["harvester"].harv_id),
         }
 
-        resp = self.client.post(self.jobresults_url, data=jobresult, format="json")
+        resp = self.client.post(
+            self.jobresults_url, data=jobresult, format="json"
+        )
         self.set_user_role(RoleChoices.MANAGER)
         return jobresult, resp

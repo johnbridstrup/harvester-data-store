@@ -35,7 +35,9 @@ class AFTExceptionCodeManifestView(CreateModelViewSet):
 
     def perform_create(self, serializer):
         super().perform_create(serializer)
-        update_exception_codes.delay(serializer.data["id"], self.request.user.id)
+        update_exception_codes.delay(
+            serializer.data["id"], self.request.user.id
+        )
 
 
 class AFTExceptionCodeView(CreateModelViewSet):
@@ -86,11 +88,15 @@ class AFTExceptionView(CreateModelViewSet):
             return make_error("No codes provided. Please restrict query")
         if len(request.query_params["codes"].split(",")) > 1:
             return make_error("Only one code can be provided at this time")
-        if not all([key in request.query_params for key in ["start_time", "end_time"]]):
+        if not all(
+            [key in request.query_params for key in ["start_time", "end_time"]]
+        ):
             return make_error("Start and end dates must be provided")
         qs = self.filter_queryset(self.get_queryset())
         if qs.count() > MAX_NUM_TRACEBACKS:
-            return make_error("Too many exceptions to process. Please restrict query")
+            return make_error(
+                "Too many exceptions to process. Please restrict query"
+            )
         resp_data = create_traceback_groups(
             qs.values(
                 "id",

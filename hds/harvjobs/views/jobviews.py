@@ -43,7 +43,10 @@ class JobView(CreateModelViewSet):
             RoleChoices.MANAGER: True,
         },
     }
-    action_serializers = {"list": JobDetailSerializer, "retrieve": JobDetailSerializer}
+    action_serializers = {
+        "list": JobDetailSerializer,
+        "retrieve": JobDetailSerializer,
+    }
     schema = HDSToRepAutoSchema(
         extra_info={
             "results": {"type": "string", "nullable": "true"},
@@ -115,4 +118,6 @@ class JobView(CreateModelViewSet):
 
         serializer = JobSerializer(job)
 
-        return make_ok(f"Job {job.id} rescheduled successfully", serializer.data)
+        return make_ok(
+            f"Job {job.id} rescheduled successfully", serializer.data
+        )

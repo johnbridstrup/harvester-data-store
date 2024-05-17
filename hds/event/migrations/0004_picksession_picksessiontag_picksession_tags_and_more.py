@@ -97,6 +97,8 @@ class Migration(migrations.Migration):
         ),
         migrations.AddIndex(
             model_name="picksession",
-            index=models.Index(fields=["UUID"], name="event_picks_UUID_026793_idx"),
+            index=models.Index(
+                fields=["UUID"], name="event_picks_UUID_026793_idx"
+            ),
         ),
     ]

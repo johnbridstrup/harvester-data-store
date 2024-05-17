@@ -32,14 +32,26 @@ class Migration(migrations.Migration):
                 ("run_timestamp", models.DateTimeField()),
                 ("ball_found_result", models.BooleanField()),
                 ("result", models.BooleanField()),
-                ("template_match_result", models.BooleanField(blank=True, null=True)),
+                (
+                    "template_match_result",
+                    models.BooleanField(blank=True, null=True),
+                ),
                 ("min_vac", models.FloatField(blank=True, null=True)),
                 ("finger_open_value", models.FloatField(blank=True, null=True)),
-                ("finger_closed_value", models.FloatField(blank=True, null=True)),
+                (
+                    "finger_closed_value",
+                    models.FloatField(blank=True, null=True),
+                ),
                 ("finger_delta", models.FloatField(blank=True, null=True)),
-                ("nominal_touch_force", models.FloatField(blank=True, null=True)),
+                (
+                    "nominal_touch_force",
+                    models.FloatField(blank=True, null=True),
+                ),
                 ("max_touch_force", models.FloatField(blank=True, null=True)),
-                ("template_match_y_error", models.FloatField(blank=True, null=True)),
+                (
+                    "template_match_y_error",
+                    models.FloatField(blank=True, null=True),
+                ),
                 ("sensors", models.JSONField(blank=True, null=True)),
                 (
                     "creator",

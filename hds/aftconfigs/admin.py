@@ -6,7 +6,13 @@ from .models import ConfigReport
 
 
 class ConfigReportAdmin(admin.ModelAdmin):
-    list_display = ("reportTime", "location", "harvester", "creator", "modifiedBy")
+    list_display = (
+        "reportTime",
+        "location",
+        "harvester",
+        "creator",
+        "modifiedBy",
+    )
     ordering = ("location", "harvester", "reportTime", "creator", "modifiedBy")
     search_fields = (
         "location__ranch",
@@ -16,7 +22,11 @@ class ConfigReportAdmin(admin.ModelAdmin):
 
     def get_queryset(self, request: HttpRequest) -> QuerySet[Any]:
         qs = super().get_queryset(request)
-        return qs.prefetch_related("harvester", "location", "event",).select_related(
+        return qs.prefetch_related(
+            "harvester",
+            "location",
+            "event",
+        ).select_related(
             "creator",
             "modifiedBy",
         )

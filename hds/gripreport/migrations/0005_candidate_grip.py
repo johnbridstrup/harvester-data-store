@@ -8,7 +8,10 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("harvester", "0008_alter_fruit_created_alter_harvester_created_and_more"),
+        (
+            "harvester",
+            "0008_alter_fruit_created_alter_harvester_created_and_more",
+        ),
         ("location", "0003_alter_distributor_created_alter_location_created"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
         ("gripreport", "0004_alter_gripreport_created"),
@@ -27,7 +30,10 @@ class Migration(migrations.Migration):
                         verbose_name="ID",
                     ),
                 ),
-                ("created", models.DateTimeField(auto_now_add=True, db_index=True)),
+                (
+                    "created",
+                    models.DateTimeField(auto_now_add=True, db_index=True),
+                ),
                 ("lastModified", models.DateTimeField(auto_now=True)),
                 ("robot_id", models.IntegerField()),
                 ("score", models.FloatField()),
@@ -97,7 +103,10 @@ class Migration(migrations.Migration):
                         verbose_name="ID",
                     ),
                 ),
-                ("created", models.DateTimeField(auto_now_add=True, db_index=True)),
+                (
+                    "created",
+                    models.DateTimeField(auto_now_add=True, db_index=True),
+                ),
                 ("lastModified", models.DateTimeField(auto_now=True)),
                 ("success", models.BooleanField(db_index=True, default=False)),
                 ("robot_id", models.IntegerField()),

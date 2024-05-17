@@ -18,6 +18,8 @@ class CommonConfig(AppConfig):
         if os.environ.get("PROMETHEUS_MULTIPROC_DIR", None):
             from prometheus_client import values
 
-            values.ValueClass = values.MultiProcessValue(process_identifier=os.getpid)
+            values.ValueClass = values.MultiProcessValue(
+                process_identifier=os.getpid
+            )
 
         post_migrate.connect(populate_histories, sender=self)

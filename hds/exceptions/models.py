@@ -37,7 +37,9 @@ class AFTExceptionCode(CommonInfo):
     msg = models.TextField(max_length=255, blank=True)
     team = models.TextField(max_length=20)
     cycle = models.BooleanField()
-    operator_msg = models.CharField(max_length=255, default=DEFAULT_OPERATOR_MSG)
+    operator_msg = models.CharField(
+        max_length=255, default=DEFAULT_OPERATOR_MSG
+    )
     manifest = models.ForeignKey(
         AFTExceptionCodeManifest,
         null=True,
@@ -49,7 +51,9 @@ class AFTExceptionCode(CommonInfo):
 
 
 class AFTException(CommonInfo):
-    code = models.ForeignKey(AFTExceptionCode, on_delete=models.SET_NULL, null=True)
+    code = models.ForeignKey(
+        AFTExceptionCode, on_delete=models.SET_NULL, null=True
+    )
     service = models.TextField(max_length=20, blank=True, null=True)
     node = models.IntegerField(blank=True, null=True)
     robot = models.IntegerField(null=True, blank=True)
@@ -57,7 +61,10 @@ class AFTException(CommonInfo):
     info = models.TextField(blank=True, null=True)
     timestamp = models.DateTimeField(blank=True, null=True)
     report = models.ForeignKey(
-        ErrorReport, on_delete=models.CASCADE, null=True, related_name="exceptions"
+        ErrorReport,
+        on_delete=models.CASCADE,
+        null=True,
+        related_name="exceptions",
     )
     handled = models.BooleanField(default=False)
     primary = models.BooleanField(null=True, blank=True)

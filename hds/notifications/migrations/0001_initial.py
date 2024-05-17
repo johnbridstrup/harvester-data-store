@@ -51,7 +51,8 @@ class Migration(migrations.Migration):
                 (
                     "recipients",
                     models.ManyToManyField(
-                        related_name="user_notifications", to=settings.AUTH_USER_MODEL
+                        related_name="user_notifications",
+                        to=settings.AUTH_USER_MODEL,
                     ),
                 ),
             ],

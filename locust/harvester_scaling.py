@@ -33,7 +33,9 @@ class HarvesterUser(UserBase):
         "version": "/api/v1/harvversion/",
     }
 
-    wait_time = between(20, 120)  # Range of times between harvester arm/pick cycles
+    wait_time = between(
+        20, 120
+    )  # Range of times between harvester arm/pick cycles
     ERR_PER_HR = 1  # One error per hour of picking. Maybe generous...
     HANDLED_ERR_PERCENT = 0.3  # Rough percentage of errors that are handled
     FULL_ROW_TIME = 30 * 60  # Seconds spent picking if all goes well
@@ -188,7 +190,9 @@ class HarvesterUser(UserBase):
         self._adjust_serial_num(self.erreport)
 
     def _load_configs(self):
-        self.config = self._load_json("configs-report_002_1675256694.218969.json")
+        self.config = self._load_json(
+            "configs-report_002_1675256694.218969.json"
+        )
         self._adjust_serial_num(self.config)
 
     def _load_assets(self):

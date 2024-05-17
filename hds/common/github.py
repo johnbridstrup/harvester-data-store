@@ -18,7 +18,9 @@ class GithubClient:
         }
         headers = {"Accept": "application/json"}
         try:
-            res = requests.post(access_token_url, params=param_payload, headers=headers)
+            res = requests.post(
+                access_token_url, params=param_payload, headers=headers
+            )
             token = res.json().get("access_token")
         except Exception as e:
             logger.exception(e)

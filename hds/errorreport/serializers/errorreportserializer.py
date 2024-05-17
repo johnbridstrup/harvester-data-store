@@ -129,7 +129,9 @@ class ErrorReportSerializer(
                 except ValueError as e:
                     logger.exception(FAILED_SPLIT_MSG, key=serv)
                     ASYNC_ERROR_COUNTER.labels(
-                        "_extract_exception_data", ValueError.__name__, FAILED_SPLIT_MSG
+                        "_extract_exception_data",
+                        ValueError.__name__,
+                        FAILED_SPLIT_MSG,
                     ).inc()
                     incomplete = True
                     continue
@@ -172,7 +174,9 @@ class ErrorReportSerializer(
                 error["timestamp"] = error["timestamp"]
                 error["code"] = AFTExceptionCode.objects.get(code=error["code"])
                 exceptions.append(
-                    AFTException.objects.create(**error, creator=creator, primary=False)
+                    AFTException.objects.create(
+                        **error, creator=creator, primary=False
+                    )
                 )
 
             sorted_excs = sort_exceptions(exceptions)

@@ -34,7 +34,9 @@ def run_scheduled_job(self, sched_job_id):
         job_def = schema.payload_from_dynamic(job_def)
 
     try:
-        jsonschema.validate(job_def["payload"], schema.schema["properties"]["payload"])
+        jsonschema.validate(
+            job_def["payload"], schema.schema["properties"]["payload"]
+        )
     except jsonschema.ValidationError as e:
         sched_job.schedule_status = ScheduledJob.SchedJobStatusChoices.SCHEDFAIL
         sched_job.task.enabled = False
@@ -70,7 +72,9 @@ def run_scheduled_job(self, sched_job_id):
         if sched_job.max_runs > 0 and sched_job.num_runs >= sched_job.max_runs:
             sched_job.task.enabled = False
             sched_job.task.save()
-            sched_job.schedule_status = ScheduledJob.SchedJobStatusChoices.MAXRUNS
+            sched_job.schedule_status = (
+                ScheduledJob.SchedJobStatusChoices.MAXRUNS
+            )
         sched_job.save()
     return f"Scheduled job {sched_job_id} sent to jobserver"
 
@@ -111,7 +115,10 @@ def run_tasks(queryset):
 
     task_ids = [
         task.apply_async(
-            args=args, kwargs=kwargs, queue=queue, periodic_task_name=periodic_task_name
+            args=args,
+            kwargs=kwargs,
+            queue=queue,
+            periodic_task_name=periodic_task_name,
         )
         if queue and len(queue)
         else task.apply_async(

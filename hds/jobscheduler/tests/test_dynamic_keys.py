@@ -57,7 +57,9 @@ class DynamicKeysTestCase(TestCase):
         dyn_opts = DynamicKeys._generate_dynamic_options_prop()
         self.assertIn(DynamicKeys.DYNAMIC_SELECTION, dyn_opts)
         self.assertIn("enum", dyn_opts[DynamicKeys.DYNAMIC_SELECTION])
-        self.assertGreater(len(dyn_opts[DynamicKeys.DYNAMIC_SELECTION]["enum"]), 0)
+        self.assertGreater(
+            len(dyn_opts[DynamicKeys.DYNAMIC_SELECTION]["enum"]), 0
+        )
 
     def test_create_payload(self):
         to_update = ["requiredArg"]

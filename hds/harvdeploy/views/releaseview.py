@@ -80,8 +80,15 @@ class HarvesterCodeReleaseView(CreateModelViewSet):
         return make_ok(f"Harvesters release retrieved successfully", data)
 
     @action(
-        methods=["GET"], detail=False, url_path="tags", renderer_classes=[JSONRenderer]
+        methods=["GET"],
+        detail=False,
+        url_path="tags",
+        renderer_classes=[JSONRenderer],
     )
     def tags_view(self, request, pk=None):
-        queryset = HarvesterCodeRelease.tags.all().values_list("name", flat=True)
-        return make_ok(f"Release tags retrieved successfully", {"tags": list(queryset)})
+        queryset = HarvesterCodeRelease.tags.all().values_list(
+            "name", flat=True
+        )
+        return make_ok(
+            f"Release tags retrieved successfully", {"tags": list(queryset)}
+        )

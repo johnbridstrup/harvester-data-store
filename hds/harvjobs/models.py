@@ -70,8 +70,12 @@ class Job(EventModelMixin, CommonInfo):
         UNSENT = "Failed to send"
         CANCELED = "canceled"
 
-    schema = models.ForeignKey(JobSchema, on_delete=models.CASCADE, related_name="jobs")
-    target = models.ForeignKey(Harvester, on_delete=models.CASCADE, related_name="jobs")
+    schema = models.ForeignKey(
+        JobSchema, on_delete=models.CASCADE, related_name="jobs"
+    )
+    target = models.ForeignKey(
+        Harvester, on_delete=models.CASCADE, related_name="jobs"
+    )
     payload = models.JSONField()
     jobstatus = models.CharField(
         choices=StatusChoices.choices,
@@ -86,7 +90,11 @@ class Job(EventModelMixin, CommonInfo):
 
 class JobResults(EventModelMixin, ReportBase):
     job = models.ForeignKey(
-        Job, on_delete=models.CASCADE, related_name="results", null=True, blank=True
+        Job,
+        on_delete=models.CASCADE,
+        related_name="results",
+        null=True,
+        blank=True,
     )
 
     def __str__(self):

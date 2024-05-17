@@ -66,9 +66,18 @@ class Migration(migrations.Migration):
                 ),
                 ("created", models.DateTimeField(auto_now_add=True)),
                 ("lastModified", models.DateTimeField(auto_now=True)),
-                ("ranch", models.CharField(blank=True, max_length=255, null=True)),
-                ("country", models.CharField(blank=True, max_length=255, null=True)),
-                ("region", models.CharField(blank=True, max_length=255, null=True)),
+                (
+                    "ranch",
+                    models.CharField(blank=True, max_length=255, null=True),
+                ),
+                (
+                    "country",
+                    models.CharField(blank=True, max_length=255, null=True),
+                ),
+                (
+                    "region",
+                    models.CharField(blank=True, max_length=255, null=True),
+                ),
                 (
                     "creator",
                     models.ForeignKey(

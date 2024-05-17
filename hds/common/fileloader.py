@@ -27,7 +27,9 @@ class FileLoader:
 class S3Client(FileLoader):
     def __init__(self):
         self._bucket = os.environ.get("S3_BUCKET")
-        self._session = boto3.Session(profile_name=os.environ.get("AWS_PROFILE"))
+        self._session = boto3.Session(
+            profile_name=os.environ.get("AWS_PROFILE")
+        )
         self._client = self._session.client("s3")
         self._logger = structlog.getLogger(__name__)
 

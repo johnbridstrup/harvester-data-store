@@ -50,7 +50,9 @@ class TestPicksessionReports(S3BaseTestCase):
             ev_uuid = self._gen_uuid()
             num_retries += 1
             if num_retries > MAX_EXIST_RETRIES:
-                raise BeatboxTestError(f"Event UUID retries exceeds max: {num_retries}")
+                raise BeatboxTestError(
+                    f"Event UUID retries exceeds max: {num_retries}"
+                )
 
         num_retries = 0
         while self._ps_exists(ps_uuid):
@@ -113,10 +115,14 @@ class TestPicksessionReports(S3BaseTestCase):
         ps_id = ps_resp.json()["data"]["results"][0]["id"]
 
         del_ev_resp = self.client.delete(Endpoints.EVENTS, str(ev_id))
-        self.assertIn(del_ev_resp.status_code, [codes.accepted, codes.no_content])
+        self.assertIn(
+            del_ev_resp.status_code, [codes.accepted, codes.no_content]
+        )
 
         del_ps_resp = self.client.delete(Endpoints.PICKSESSIONS, str(ps_id))
-        self.assertIn(del_ps_resp.status_code, [codes.accepted, codes.no_content])
+        self.assertIn(
+            del_ps_resp.status_code, [codes.accepted, codes.no_content]
+        )
 
         if extrctn_errs:
             assert False, "Extraction Errors: " + ", ".join(extrctn_errs)

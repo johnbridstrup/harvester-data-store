@@ -6,7 +6,10 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("emulatorstats", "0003_alter_emustatsreport_num_bed_collisions_and_more"),
+        (
+            "emulatorstats",
+            "0003_alter_emustatsreport_num_bed_collisions_and_more",
+        ),
     ]
 
     operations = [

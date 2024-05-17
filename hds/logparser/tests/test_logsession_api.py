@@ -28,8 +28,12 @@ class LogSessionTestCase(LogBaseTestCase):
                         log_file.write(self.line_content)
 
                 zip_path = os.path.join(self.bucket_name, self.zip_filename)
-                with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as zip_file:
-                    zip_file.write(log_file_path, os.path.basename(log_file_path))
+                with zipfile.ZipFile(
+                    zip_path, "w", zipfile.ZIP_DEFLATED
+                ) as zip_file:
+                    zip_file.write(
+                        log_file_path, os.path.basename(log_file_path)
+                    )
 
             return self.zip_filename
         except Exception as e:
@@ -50,7 +54,9 @@ class LogSessionTestCase(LogBaseTestCase):
             file_content = thezip.read()
         sample_file = SimpleUploadedFile(zipname, file_content)
         res = self.client.post(
-            self.log_session_url, data={"zip_upload": sample_file}, format="multipart"
+            self.log_session_url,
+            data={"zip_upload": sample_file},
+            format="multipart",
         )
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
         logsession = LogSession.objects.get()

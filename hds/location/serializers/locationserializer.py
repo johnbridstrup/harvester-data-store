@@ -2,7 +2,10 @@
 from rest_framework import serializers
 
 from common.serializers.userserializer import UserCustomSerializer
-from .distributorserializer import DistributorSerializer, DistributorMinimalSerializer
+from .distributorserializer import (
+    DistributorSerializer,
+    DistributorMinimalSerializer,
+)
 from ..models import Location
 
 

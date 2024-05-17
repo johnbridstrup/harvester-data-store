@@ -21,7 +21,9 @@ def create_model_tag_class(model_name: str):
     attrs = {
         "__module__": "event.models",
         "Meta": TaggedItemBase.Meta,
-        "content_object": models.ForeignKey(model_name, on_delete=models.CASCADE),
+        "content_object": models.ForeignKey(
+            model_name, on_delete=models.CASCADE
+        ),
     }
     return type(f"{model_name}Tag", (TaggedItemBase,), attrs)
 

@@ -3,7 +3,10 @@ from django.db import transaction
 from django.utils import timezone
 
 from common.reports import DTimeFormatter, ReportBase
-from common.serializers.reportserializer import ExtractionError, ReportSerializerBase
+from common.serializers.reportserializer import (
+    ExtractionError,
+    ReportSerializerBase,
+)
 from common.serializers.userserializer import UserCustomSerializer
 from event.serializers import (
     PickSessionSerializerMixin,
@@ -35,9 +38,13 @@ class GripReportSerializer(PickSessionSerializerMixin, ReportSerializerBase):
     def to_internal_value(self, data):
         report = data.copy()
         pick_session_start_ts = report.get("pick_session_start_time", None)
-        pick_session_start_time = DTimeFormatter.from_timestamp(pick_session_start_ts)
+        pick_session_start_time = DTimeFormatter.from_timestamp(
+            pick_session_start_ts
+        )
         pick_session_end_ts = report.get("timestamp")
-        pick_session_end_time = DTimeFormatter.from_timestamp(pick_session_end_ts)
+        pick_session_end_time = DTimeFormatter.from_timestamp(
+            pick_session_end_ts
+        )
         data, harv_obj = self.extract_basic(report)
 
         if "request" in self.context:
@@ -49,7 +56,9 @@ class GripReportSerializer(PickSessionSerializerMixin, ReportSerializerBase):
 
         # Event
         event_uuid = self.extract_uuid(report)
-        event = self.get_or_create_event(event_uuid, creator, GripReport.__name__)
+        event = self.get_or_create_event(
+            event_uuid, creator, GripReport.__name__
+        )
         data["event"] = event.id
 
         # Pick Session
@@ -73,8 +82,12 @@ class GripReportSerializer(PickSessionSerializerMixin, ReportSerializerBase):
         if data is None:
             raise ExtractionError("No data in report")
 
-        extr_cands = not report_obj.tags.filter(name=cls.ExtractTags.CAND_DONE).exists()
-        extr_grips = not report_obj.tags.filter(name=cls.ExtractTags.GRIP_DONE).exists()
+        extr_cands = not report_obj.tags.filter(
+            name=cls.ExtractTags.CAND_DONE
+        ).exists()
+        extr_grips = not report_obj.tags.filter(
+            name=cls.ExtractTags.GRIP_DONE
+        ).exists()
 
         if extr_cands:
             cand_list = data.get("cand")
@@ -104,7 +117,9 @@ class GripReportSerializer(PickSessionSerializerMixin, ReportSerializerBase):
         try:
             with transaction.atomic():  # if the extraction fails, we roll back entirely to avoid conflicts
                 for cand_dict in cand_list:
-                    cands.append(cls._get_cand(cand_dict, harv, fruit, report_obj))
+                    cands.append(
+                        cls._get_cand(cand_dict, harv, fruit, report_obj)
+                    )
                     if (
                         len(cands) >= 100
                     ):  # 100 seems fine for a batch not sure what is optimal
@@ -147,7 +162,9 @@ class GripReportSerializer(PickSessionSerializerMixin, ReportSerializerBase):
         try:
             with transaction.atomic():
                 for grip_dict in grip_list:
-                    grips.append(cls._get_grip(grip_dict, harv, fruit, report_obj))
+                    grips.append(
+                        cls._get_grip(grip_dict, harv, fruit, report_obj)
+                    )
                     if len(grips) >= 100:
                         Grip.objects.bulk_create(grips)
                         grips = []

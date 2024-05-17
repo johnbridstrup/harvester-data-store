@@ -34,7 +34,10 @@ class Migration(migrations.Migration):
                         verbose_name="ID",
                     ),
                 ),
-                ("slack_id", models.CharField(blank=True, max_length=15, null=True)),
+                (
+                    "slack_id",
+                    models.CharField(blank=True, max_length=15, null=True),
+                ),
                 (
                     "user",
                     models.ForeignKey(

@@ -47,7 +47,12 @@ def post_to_slack(message, channel="hds-test", client=None):
 
 
 def upload_content(
-    filename, title, content, channel="hds-test", msg="ASSET MANIFEST", client=None
+    filename,
+    title,
+    content,
+    channel="hds-test",
+    msg="ASSET MANIFEST",
+    client=None,
 ):
     if TOKEN:
         if client is None:

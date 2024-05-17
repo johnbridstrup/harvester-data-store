@@ -35,7 +35,9 @@ def create_s3files(apps, schema_editor):
                     "creator": creator,
                 }
             except ValueError:
-                logger.info(f"No file associated with LogSession ID {logsession.id}")
+                logger.info(
+                    f"No file associated with LogSession ID {logsession.id}"
+                )
                 continue
 
             event_uuid = Ev.generate_uuid()

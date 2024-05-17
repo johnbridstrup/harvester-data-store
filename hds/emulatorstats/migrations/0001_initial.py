@@ -38,14 +38,26 @@ class Migration(migrations.Migration):
                 ("scene", models.CharField(max_length=127)),
                 ("branch", models.CharField(max_length=127)),
                 ("date", models.CharField(max_length=31)),
-                ("runner", models.CharField(blank=True, max_length=63, null=True)),
+                (
+                    "runner",
+                    models.CharField(blank=True, max_length=63, null=True),
+                ),
                 ("elapsed_seconds", models.FloatField()),
                 ("mm_traveled", models.FloatField()),
                 ("num_grip_attempts", models.IntegerField()),
-                ("grip_success_percentage", models.FloatField(blank=True, null=True)),
+                (
+                    "grip_success_percentage",
+                    models.FloatField(blank=True, null=True),
+                ),
                 ("num_pick_attempts", models.IntegerField()),
-                ("pick_success_percentage", models.FloatField(blank=True, null=True)),
-                ("thoroughness_percentage", models.FloatField(blank=True, null=True)),
+                (
+                    "pick_success_percentage",
+                    models.FloatField(blank=True, null=True),
+                ),
+                (
+                    "thoroughness_percentage",
+                    models.FloatField(blank=True, null=True),
+                ),
                 (
                     "detection_success_percentage",
                     models.FloatField(blank=True, null=True),
@@ -60,7 +72,10 @@ class Migration(migrations.Migration):
                 ("num_false_ripe", models.IntegerField()),
                 ("num_false_unripe", models.IntegerField()),
                 ("avg_ripeness_pick", models.FloatField(blank=True, null=True)),
-                ("avg_ripeness_no_pick", models.FloatField(blank=True, null=True)),
+                (
+                    "avg_ripeness_no_pick",
+                    models.FloatField(blank=True, null=True),
+                ),
                 ("total_targets", models.IntegerField()),
                 (
                     "creator",
@@ -73,7 +88,8 @@ class Migration(migrations.Migration):
                 (
                     "event",
                     models.ForeignKey(
-                        on_delete=django.db.models.deletion.CASCADE, to="event.event"
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="event.event",
                     ),
                 ),
                 (

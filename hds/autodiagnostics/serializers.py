@@ -3,7 +3,10 @@ from taggit.serializers import TaggitSerializer
 
 from common.models import Tags
 from common.reports import ReportBase
-from common.serializers.reportserializer import ExtractionError, ReportSerializerBase
+from common.serializers.reportserializer import (
+    ExtractionError,
+    ReportSerializerBase,
+)
 from common.serializers.userserializer import UserCustomSerializer
 from event.serializers import (
     PickSessionSerializerMixin,
@@ -54,7 +57,9 @@ class AutodiagnosticsReportSerializer(
         creator = self.get_user_from_request()
         pick_session_uuid = self.extract_uuid(report, "pick_session_uuid")
         UUID = self.extract_uuid(report)
-        event = self.get_or_create_event(UUID, creator, AutodiagnosticsReport.__name__)
+        event = self.get_or_create_event(
+            UUID, creator, AutodiagnosticsReport.__name__
+        )
         pick_session = self.get_or_create_picksession(
             pick_session_uuid, creator, AutodiagnosticsReport.__name__
         )
@@ -79,7 +84,9 @@ class AutodiagnosticsReportSerializer(
         if data is None:
             report.tags.add(Tags.INCOMPLETE.value)
             report.save()
-            raise ExtractionError(f"Autodiagnostics report {report_obj.id} has no data")
+            raise ExtractionError(
+                f"Autodiagnostics report {report_obj.id} has no data"
+            )
 
         # Retrieve or create gripper HarvesterAssetType.
         # We can do this regardless of whether we can extract the actual gripper asset
@@ -105,7 +112,9 @@ class AutodiagnosticsReportSerializer(
             report.tags.add(Tags.INCOMPLETE.value)
             report.tags.add(Tags.MISSINGVALUE.value)
             report.save()
-            raise ExtractionError(f"No robot ID in autodiag report {report_obj.id}")
+            raise ExtractionError(
+                f"No robot ID in autodiag report {report_obj.id}"
+            )
 
         # Update or create the gripper HarvesterAsset
         gripper = HarvesterAsset.update_or_create_and_get(
@@ -124,13 +133,17 @@ class AutodiagnosticsReportSerializer(
         autodiag_run["robot_id"] = robot_id
         autodiag_run["creator"] = creator
         autodiag_run["report"] = report_obj
-        autodiag_run["run_timestamp"] = cls.extract_timestamp(data, "ts", pop=True)
+        autodiag_run["run_timestamp"] = cls.extract_timestamp(
+            data, "ts", pop=True
+        )
 
         # Boolean results
         autodiag_run["result"] = data.pop(
             "passed_autodiag"
         )  # This and the following are the only guaranteed non-null
-        autodiag_run["ball_found_result"] = data.pop("passed_autodiag_ball_found")
+        autodiag_run["ball_found_result"] = data.pop(
+            "passed_autodiag_ball_found"
+        )
         autodiag_run["template_match_result"] = data.pop(
             "passed_autodiag_template_match", None
         )
@@ -138,7 +151,9 @@ class AutodiagnosticsReportSerializer(
         # Threshold values
         autodiag_run["min_vac"] = data.pop("min_vac", None)
         autodiag_run["finger_open_value"] = data.pop("finger_open_value", None)
-        autodiag_run["finger_closed_value"] = data.pop("finger_closed_value", None)
+        autodiag_run["finger_closed_value"] = data.pop(
+            "finger_closed_value", None
+        )
         autodiag_run["finger_delta"] = data.pop("delta_fing", None)
         autodiag_run["nominal_touch_force"] = data.pop("no_touch_force", None)
         autodiag_run["max_touch_force"] = data.pop("max_touch_val")

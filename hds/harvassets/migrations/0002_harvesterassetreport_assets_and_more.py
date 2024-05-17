@@ -16,7 +16,8 @@ class Migration(migrations.Migration):
             model_name="harvesterassetreport",
             name="assets",
             field=models.ManyToManyField(
-                related_name="linked_asset_reports", to="harvassets.harvesterasset"
+                related_name="linked_asset_reports",
+                to="harvassets.harvesterasset",
             ),
         ),
         migrations.AddField(

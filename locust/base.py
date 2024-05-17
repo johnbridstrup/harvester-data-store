@@ -5,7 +5,9 @@ from locust import HttpUser, events
 
 
 CUR_DIR = os.path.dirname(os.path.abspath(__file__))
-TEST_DATA_DIR = os.path.abspath(os.path.join(CUR_DIR, "../hds/common/test_data/"))
+TEST_DATA_DIR = os.path.abspath(
+    os.path.join(CUR_DIR, "../hds/common/test_data/")
+)
 DEF_TOKEN = os.environ.get(
     "LOAD_TEST_TOKEN", "435b18abedef452f64e7f4ed2e68e98ac8babf5e"
 )

@@ -19,7 +19,9 @@ class NotificationFilter(CommonInfoFilterset):
         if category == "is_recipient":
             return queryset.filter(recipients__in=[self.request.user])
 
-        logger.warn(f"Unrecognized category in NotificationFilter.", category=category)
+        logger.warn(
+            f"Unrecognized category in NotificationFilter.", category=category
+        )
         return queryset
 
     class Meta:

@@ -31,7 +31,9 @@ def create_s3files(apps, schema_editor):
                     "creator": creator,
                 }
             except ValueError:
-                logger.info(f"No file associated with LogSession ID {logvideo.id}")
+                logger.info(
+                    f"No file associated with LogSession ID {logvideo.id}"
+                )
                 continue
             event = logvideo.log_session._zip_file.file.event
             s3file = S3File.objects.create(**s3file_data, event=event)
