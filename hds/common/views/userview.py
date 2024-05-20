@@ -63,7 +63,7 @@ class LogoutAPIView(APIView):
                 token = Token.objects.filter(key=request.data["token"])
                 if token.exists():
                     token.delete()
-                    return make_ok("Logout successful", {})
+                    return make_ok("Logout successful", response_status=204)
                 else:
                     raise Exception("invalid token")
         except Exception as e:
