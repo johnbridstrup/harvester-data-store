@@ -1,0 +1,17 @@
+[
+  {
+    "model": "hdsmigrations.migrationlog",
+    "pk": 1,
+    "fields": {
+      "creator": 1,
+      "modifiedBy": null,
+      "created": "2024-05-27T18:28:52.797Z",
+      "lastModified": "2024-05-27T18:28:55.657Z",
+      "result": "success",
+      "startTime": "2024-05-27T18:28:53.595Z",
+      "endTime": "2024-05-27T18:28:55.656Z",
+      "output": "Operations to perform:\n  Apply all migrations: admin, aftconfigs, auth, authtoken, autodiagnostics, common, contenttypes, django_celery_beat, django_celery_results, emulatorstats, errorreport, event, exceptions, gripreport, harvassets, harvdeploy, harvester, harvjobs, hdsmigrations, jobscheduler, location, logparser, notifications, s3file, sessions, silk, taggit\nRunning migrations:\n  No migrations to apply.\n",
+      "githash": "\"UNKNOWN\""
+    }
+  }
+]

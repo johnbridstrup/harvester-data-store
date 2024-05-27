@@ -1,47 +1,47 @@
 [
-{
+  {
     "model": "exceptions.aftexceptioncode",
     "pk": 1,
     "fields": {
-        "creator": 1,
-        "modifiedBy": null,
-        "created": "2022-07-22T00:55:01.887Z",
-        "lastModified": "2022-07-22T00:55:01.887Z",
-        "code": 9,
-        "name": "TextException",
-        "msg": "",
-        "team": "Test team",
-        "cycle": false
+      "creator": 1,
+      "modifiedBy": null,
+      "created": "2022-07-22T00:55:01.887Z",
+      "lastModified": "2022-07-22T00:55:01.887Z",
+      "code": 9,
+      "name": "TextException",
+      "msg": "",
+      "team": "Test team",
+      "cycle": false
     }
-},
-{
+  },
+  {
     "model": "exceptions.aftexceptioncode",
     "pk": 2,
     "fields": {
-        "creator": 1,
-        "modifiedBy": null,
-        "created": "2022-07-22T16:59:37.819Z",
-        "lastModified": "2022-07-22T16:59:37.819Z",
-        "code": 0,
-        "name": "AFTBaseException",
-        "msg": "test",
-        "team": "aft",
-        "cycle": false
+      "creator": 1,
+      "modifiedBy": null,
+      "created": "2022-07-22T16:59:37.819Z",
+      "lastModified": "2022-07-22T16:59:37.819Z",
+      "code": 0,
+      "name": "AFTBaseException",
+      "msg": "test",
+      "team": "aft",
+      "cycle": false
     }
-},
-{
+  },
+  {
     "model": "exceptions.aftexceptioncode",
     "pk": 3,
     "fields": {
-        "creator": 1,
-        "modifiedBy": null,
-        "created": "2022-08-26T16:57:19.839Z",
-        "lastModified": "2022-08-26T16:57:19.839Z",
-        "code": 2,
-        "name": "ExceptionallyLongExceptionNameError",
-        "msg": "",
-        "team": "Best team",
-        "cycle": false
+      "creator": 1,
+      "modifiedBy": null,
+      "created": "2022-08-26T16:57:19.839Z",
+      "lastModified": "2022-08-26T16:57:19.839Z",
+      "code": 2,
+      "name": "ExceptionallyLongExceptionNameError",
+      "msg": "",
+      "team": "Best team",
+      "cycle": false
     }
-}
+  }
 ]

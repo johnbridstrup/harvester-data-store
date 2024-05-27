@@ -1,0 +1,107 @@
+[
+  {
+    "model": "jobscheduler.historicalscheduledjob",
+    "pk": 1,
+    "fields": {
+      "id": 1,
+      "created": "2024-05-27T16:05:55.669Z",
+      "lastModified": "2024-05-27T16:05:55.669Z",
+      "job_def": {
+        "jobtype": "test",
+        "payload": { "payload": { "targets": ["master"] } },
+        "targets": { "harvesters": ["aft-harv011"] },
+        "max_runs": 10,
+        "schedule": { "clocked": { "clocked_time": "2024-05-27T19:07" } },
+        "schema_version": "1.0"
+      },
+      "schedule_status": "pending",
+      "num_runs": 0,
+      "max_runs": 10,
+      "creator": 1,
+      "modifiedBy": null,
+      "task": null,
+      "history_date": "2024-05-27T16:05:55.674Z",
+      "history_change_reason": null,
+      "history_type": "+",
+      "history_user": 1
+    }
+  },
+  {
+    "model": "jobscheduler.historicalscheduledjob",
+    "pk": 2,
+    "fields": {
+      "id": 1,
+      "created": "2024-05-27T16:05:55.669Z",
+      "lastModified": "2024-05-27T16:05:55.750Z",
+      "job_def": {
+        "jobtype": "test",
+        "payload": { "payload": { "targets": ["master"] } },
+        "targets": { "harvesters": ["aft-harv011"] },
+        "max_runs": 10,
+        "schedule": { "clocked": { "clocked_time": "2024-05-27T19:07" } },
+        "schema_version": "1.0"
+      },
+      "schedule_status": "waiting to schedule",
+      "num_runs": 0,
+      "max_runs": 10,
+      "creator": 1,
+      "modifiedBy": null,
+      "task": 2,
+      "history_date": "2024-05-27T16:05:55.756Z",
+      "history_change_reason": null,
+      "history_type": "~",
+      "history_user": 1
+    }
+  },
+  {
+    "model": "jobscheduler.historicalscheduledjob",
+    "pk": 3,
+    "fields": {
+      "id": 1,
+      "created": "2024-05-27T16:05:55.669Z",
+      "lastModified": "2024-05-27T16:14:00.138Z",
+      "job_def": {
+        "jobtype": "test",
+        "payload": { "payload": { "targets": ["master"] } },
+        "targets": { "harvesters": ["aft-harv011"] },
+        "max_runs": 10,
+        "schedule": { "clocked": { "clocked_time": "2024-05-27T19:07" } },
+        "schema_version": "1.0"
+      },
+      "schedule_status": "scheduled",
+      "num_runs": 1,
+      "max_runs": 10,
+      "creator": 1,
+      "modifiedBy": null,
+      "task": 2,
+      "history_date": "2024-05-27T16:14:00.143Z",
+      "history_change_reason": null,
+      "history_type": "~",
+      "history_user": null
+    }
+  },
+  {
+    "model": "jobscheduler.scheduledjob",
+    "pk": 1,
+    "fields": {
+      "creator": 1,
+      "modifiedBy": null,
+      "created": "2024-05-27T16:05:55.669Z",
+      "lastModified": "2024-05-27T16:14:00.138Z",
+      "task": 2,
+      "job_def": {
+        "jobtype": "test",
+        "payload": { "payload": { "targets": ["master"] } },
+        "targets": { "harvesters": ["aft-harv011"] },
+        "max_runs": 10,
+        "schedule": { "clocked": { "clocked_time": "2024-05-27T19:07" } },
+        "schema_version": "1.0"
+      },
+      "schedule_status": "scheduled",
+      "num_runs": 1,
+      "max_runs": 10,
+      "targets": [3],
+      "jobs": [2]
+    }
+  }
+]

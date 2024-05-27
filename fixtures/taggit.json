@@ -1,34 +1,34 @@
 [
-{
+  {
     "model": "taggit.tag",
     "pk": 1,
     "fields": {
-        "name": "AutodiagnosticsReport",
-        "slug": "autodiagnosticsreport"
+      "name": "AutodiagnosticsReport",
+      "slug": "autodiagnosticsreport"
     }
-},
-{
+  },
+  {
     "model": "taggit.tag",
     "pk": 2,
     "fields": {
-        "name": "EmustatsReport",
-        "slug": "emustatsreport"
+      "name": "EmustatsReport",
+      "slug": "emustatsreport"
     }
-},
-{
+  },
+  {
     "model": "taggit.tag",
     "pk": 3,
     "fields": {
-        "name": "other-tag",
-        "slug": "other-tag"
+      "name": "other-tag",
+      "slug": "other-tag"
     }
-},
-{
+  },
+  {
     "model": "taggit.tag",
     "pk": 4,
     "fields": {
-        "name": "test",
-        "slug": "test"
+      "name": "test",
+      "slug": "test"
     }
-}
+  }
 ]

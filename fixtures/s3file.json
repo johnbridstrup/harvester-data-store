@@ -1,16 +1,111 @@
 [
-{
+  {
     "model": "s3file.s3file",
     "pk": 1,
     "fields": {
-        "creator": 1,
-        "modifiedBy": null,
-        "created": "2022-08-26T22:29:25.915Z",
-        "lastModified": "2023-01-11T18:53:24.012Z",
-        "event": 3,
-        "file": "fake",
-        "filetype": "fake",
-        "key": "fake"
+      "creator": 1,
+      "modifiedBy": null,
+      "created": "2022-08-26T22:29:25.915Z",
+      "lastModified": "2024-05-27T19:13:08.581Z",
+      "event": 3,
+      "file": "",
+      "filetype": "fake",
+      "key": "fake",
+      "deleted": false
     }
-}
+  },
+  {
+    "model": "s3file.s3file",
+    "pk": 2,
+    "fields": {
+      "creator": 1,
+      "modifiedBy": null,
+      "created": "2024-05-27T15:48:30.921Z",
+      "lastModified": "2024-05-27T15:48:31.436Z",
+      "event": 18,
+      "file": "uploads/sessclip_dev001_R3_xfEQ7i0.zip",
+      "filetype": "sessclip",
+      "key": "sessclip_dev001_R3.zip",
+      "deleted": false
+    }
+  },
+  {
+    "model": "s3file.s3file",
+    "pk": 3,
+    "fields": {
+      "creator": 1,
+      "modifiedBy": null,
+      "created": "2024-05-27T15:48:43.614Z",
+      "lastModified": "2024-05-27T15:48:43.614Z",
+      "event": 19,
+      "file": "uploads/20221101162300_001_00_left-cellcam_0_3JOl7lt.mp4",
+      "filetype": "mp4",
+      "key": "uploads/20221101162300_001_00_left-cellcam_0.mp4",
+      "deleted": false
+    }
+  },
+  {
+    "model": "s3file.s3file",
+    "pk": 4,
+    "fields": {
+      "creator": 1,
+      "modifiedBy": null,
+      "created": "2024-05-27T15:48:44.205Z",
+      "lastModified": "2024-05-27T15:48:44.205Z",
+      "event": 20,
+      "file": "uploads/20221101162300_001_00_right-cellcam_0_krnOwHY.mp4",
+      "filetype": "mp4",
+      "key": "uploads/20221101162300_001_00_right-cellcam_0.mp4",
+      "deleted": false
+    }
+  },
+  {
+    "model": "s3file.s3file",
+    "pk": 5,
+    "fields": {
+      "creator": 1,
+      "modifiedBy": null,
+      "created": "2024-05-27T19:09:26.769Z",
+      "lastModified": "2024-05-27T19:09:27.292Z",
+      "event": 21,
+      "file": "uploads/candump_bfZrqlw.zip",
+      "filetype": "sessclip",
+      "key": "candump.zip",
+      "deleted": false
+    }
+  },
+  {
+    "model": "s3file.s3file",
+    "pk": 6,
+    "fields": {
+      "creator": 1,
+      "modifiedBy": null,
+      "created": "2024-05-27T19:12:15.568Z",
+      "lastModified": "2024-05-27T19:12:15.589Z",
+      "event": 21,
+      "file": "media/uploads/aft/sessclip_h5r2_202202081050.zip",
+      "filetype": "sessclip",
+      "key": "media/uploads/aft/sessclip_h5r2_202202081050.zip",
+      "deleted": false
+    }
+  },
+  {
+    "model": "s3file.s3file",
+    "pk": 7,
+    "fields": {
+      "creator": 1,
+      "modifiedBy": null,
+      "created": "2024-05-27T19:12:51.656Z",
+      "lastModified": "2024-05-27T19:12:51.680Z",
+      "event": 21,
+      "file": "sessclip_dev001_R3.zip",
+      "filetype": "sessclip",
+      "key": "sessclip_dev001_R3.zip",
+      "deleted": false
+    }
+  },
+  { "model": "s3file.sessclip", "pk": 1, "fields": { "file": 2 } },
+  { "model": "s3file.sessclip", "pk": 2, "fields": { "file": 5 } },
+  { "model": "s3file.sessclip", "pk": 3, "fields": { "file": 6 } },
+  { "model": "s3file.sessclip", "pk": 4, "fields": { "file": 7 } }
 ]
