@@ -21,7 +21,7 @@ pipeline {
                 }
             }
         }
-        stage('Run tests') {
+        stage('Run Unit Tests') {
             when { branch 'PR-*' }
             steps {
                 catchError(stageResult: 'FAILURE') {
@@ -32,12 +32,12 @@ pipeline {
                 }
             }
         }
-        stage('Check build') {
+        stage('Check Build') {
             when { branch 'PR-*' }
             steps {
                 catchError(stageResult: 'FAILURE') {
                     script {
-                        env.totalExitCode = sh script:'./jenkins/ci.sh', returnStatus:true
+                        env.totalExitCode = sh script:'./jenkins/check_build.sh', returnStatus:true
                         sh "exit ${env.totalExitCode}"
                     }
                 }
