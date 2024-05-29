@@ -43,12 +43,25 @@ pipeline {
                 }
             }
         }
+        stage('Run Integration Test') {
+            when { branch 'PR-*' }
+            steps {
+                withCredentials([usernameColonPassword(credentialsId: 'Jenkins_API', variable: 'jenkins_auth'), sshUserPrivateKey(credentialsId: 'GitHub', keyFileVariable: 'KeyFile')]) {
+                    catchError(stageResult: 'FAILURE') {
+                        script {
+                            env.totalExitCode = sh script:"./jenkins/run_integration.sh ${keyFile}", returnStatus:true
+                            sh "exit ${env.totalExitCode}"
+                        }
+                    }
+                }
+            }
+        }
     }
     post {
         always {
             script {
                 currentBuild.result = ((env.totalExitCode).toInteger() == 0) ? 'SUCCESS' : 'FAILURE'
-                sh 'sudo docker compose -f docker-compose.base.yml down --remove-orphans'
+                sh 'sudo docker compose -f docker-compose.base.yml down -v --remove-orphans'
             }
         }
     }
