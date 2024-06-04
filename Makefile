@@ -6,6 +6,12 @@ HDS_PORT := 8085
 install-docker: ## Install docker and docker compose
 	${DIR}/scripts/install_docker.sh
 
+install-node: ## Install node and npm
+	${DIR}/scripts/install_node.sh
+
+run-newman: ## Run Integration Test with Newman
+	${DIR}/scripts/newman.sh
+
 build-dev: ## Build local server in docker compose
 	sudo docker compose up -d --build
 
@@ -28,6 +34,8 @@ load-fixtures: ## Load fixtures in local compose server
 server: build-monitor build-dev migrate-dev load-fixtures  ## Build, Migrate, Load
 
 ci: build-monitor install-docker build-backend migrate-dev load-fixtures ## Create environment for integration testing the API in CI
+
+local-ci: build-monitor install-docker build-backend migrate-dev load-fixtures install-node run-newman ## Run local CI Integration Testing
 
 clean-server: ## Tear down containers
 	sudo docker compose down -v --remove-orphans
