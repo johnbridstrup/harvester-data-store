@@ -27,7 +27,7 @@ if [ -z $PORT ]
 then
     PORT=8085
 fi
-source $HDS_ROOT/scripts/set_port.sh $PORT > /dev/null
+source $HDS_ROOT/scripts/set_port.sh $PORT
 source $HDS_ROOT/scripts/set_jobserver_addr.sh
 
 if [ -d "${HDS_ROOT}/multiproc-tmp" ]
