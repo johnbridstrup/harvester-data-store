@@ -1,5 +1,4 @@
 from rest_framework.views import APIView
-from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import AuthenticationFailed
 from django.contrib.auth.models import update_last_login, User
@@ -11,6 +10,7 @@ from common.renderers import HDSJSONRenderer
 from common.utils import make_ok
 from common.github import GithubClient
 from common.models import UserProfile
+from common.viewsets import CreateModelViewSet
 from common.serializers.userserializer import (
     UserCreateSerializer,
     UserSerializer,
@@ -82,21 +82,12 @@ class CSRFAPIView(APIView):
         return make_ok("result successful", {"result": "ok"})
 
 
-class ManageUserView(ModelViewSet):
+class ManageUserView(CreateModelViewSet):
     """manage user api viewset"""
 
-    serializer_class = UserSerializer
-    renderer_classes = (HDSJSONRenderer,)
-    permission_classes = (IsAuthenticated,)
     queryset = User.objects.all()
-
-    def get_serializer_class(self):
-        """
-        switch serializer to UserCreateSerializer for create action
-        """
-        if self.action == "create":
-            self.serializer_class = UserCreateSerializer
-        return self.serializer_class
+    serializer_class = UserSerializer
+    action_serializers = {"create": UserCreateSerializer}
 
 
 class ChangePasswordView(APIView):

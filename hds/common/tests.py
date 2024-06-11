@@ -655,6 +655,7 @@ class ManageUserTest(HDSAPITestBase):
         self.unauthorized_update_msg = (
             "Unable to authorize user for update action"
         )
+        self.perm_denied_msg = "Permission denied for user."
         return super().setUp()
 
     def test_non_superuser_cannot_create_user(self):
@@ -666,9 +667,9 @@ class ManageUserTest(HDSAPITestBase):
         self.user.is_superuser = False
         self.user.save()
         res = self.client.post(self.user_url, self.payload, format="json")
-        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
         self.assertEqual(
-            res.json()["errors"]["detail"][0], self.unauthorized_create_msg
+            res.json()["errors"]["exception"], self.perm_denied_msg
         )
 
     def test_non_superuser_cannot_update_user(self):
@@ -685,9 +686,9 @@ class ManageUserTest(HDSAPITestBase):
         url = self.user_detail_url(user.id)
         res = self.client.patch(url, self.payload, format="json")
 
-        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
         self.assertEqual(
-            res.json()["errors"]["detail"][0], self.unauthorized_update_msg
+            res.json()["errors"]["exception"], self.perm_denied_msg
         )
 
     def test_create_user_successfully(self):

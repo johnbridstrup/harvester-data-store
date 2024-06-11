@@ -78,15 +78,17 @@ class UserCreateSerializer(UserSerializer):
 
     def create(self, validated_data):
         """create and return the user"""
-        password = validated_data.pop("password", None)
-        profile = validated_data.pop("profile", None)
         request = self.context.get("request")
 
         if not request.user.is_superuser:
             msg = _("Unable to authorize user for create action")
             raise serializers.ValidationError(msg, code="authorization")
 
-        user = super().create(validated_data)
+        user_raw_data = dict(self.validated_data)
+        password = user_raw_data.pop("password", None)
+        profile = user_raw_data.pop("profile", None)
+
+        user = User.objects.create_user(**user_raw_data)
 
         if password:
             user.set_password(password)
