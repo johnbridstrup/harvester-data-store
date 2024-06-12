@@ -50,7 +50,9 @@ class GripReportView(ReportModelViewSet):
         if payload_type and payload_type == "generic/json":
             data = request.data
             data["creator"] = request.user.id
-            serializer = self.get_serializer(data=data, context={"request": request})
+            serializer = self.get_serializer(
+                data=data, context={"request": request}
+            )
             serializer.is_valid(raise_exception=True)
             rep = serializer.save()
             extract_grip_report.delay(rep.id)
