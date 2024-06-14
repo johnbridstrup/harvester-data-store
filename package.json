@@ -1,0 +1,12 @@
+{
+  "name": "hds",
+  "private": "true",
+  "version": "1.1.0",
+  "scripts": {
+    "version": "newman -v",
+    "newman": "newman run -e postman/hds.local.postman_environment.json --delay-request 1000 postman/hds.postman_collection.json"
+  },
+  "dependencies": {
+    "newman": "^6.1.3"
+  }
+}

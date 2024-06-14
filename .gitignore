@@ -161,3 +161,6 @@ multiproc-tmp
 
 # pyinstaller
 build/
+
+# node
+node_modules

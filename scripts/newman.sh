@@ -14,27 +14,20 @@ if ! command -v npm &> /dev/null; then
 fi
 node -v
 npm -v
-echo ""
 
+echo ""
 echo "Installing Newman"
-if ! npm install -g newman; then
+if ! npm install; then
     echo "Failed to install Newman"
     exit 1
 fi
-if ! command -v newman &> /dev/null; then
-    echo "Newman installation failed"
-    exit 1
-fi
-newman -v
+
 echo ""
+echo "Check Newman version"
+npm run version
 
+echo ""
 echo "Running Newman tests"
-newman run -e postman/hds.local.postman_environment.json --bail --delay-request 1000 postman/hds.postman_collection.json
-
-res1=$?
-if test "$res1" != "0"; then
-    echo "Newman runner test failed with: $res1"
-    exit 1
-fi
+npm run newman
 
 echo "Newman runner test passed successfully"
