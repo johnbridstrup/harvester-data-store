@@ -23,6 +23,10 @@ if ! npm install; then
 fi
 
 echo ""
+echo "Availing zip file for s3file event payload"
+cp hds/common/test_data/candump.zip hds/media/candump.zip
+
+echo ""
 echo "Check Newman version"
 npm run version
 
