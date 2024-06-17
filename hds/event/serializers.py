@@ -45,7 +45,8 @@ class TaggedUUIDSerializerBase(serializers.ModelSerializer):
                     "filetype": f.filetype,
                 }
                 for f in instance.s3file_set.all()
-                if f.key.endswith((".png", ".jpg", ".jpeg"))
+                if f.key is not None
+                and f.key.endswith((".png", ".jpg", ".jpeg"))
             ]
             data["related_files"] = [
                 *s3files,
