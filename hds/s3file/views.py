@@ -1,4 +1,5 @@
 import re
+import structlog
 
 from django.db.models import Prefetch
 from rest_framework.decorators import action
@@ -20,6 +21,9 @@ from .serializers import (
 )
 from .signals import sessclip_uploaded
 from .filters import S3FileFilter
+
+
+logger = structlog.get_logger(__name__)
 
 
 class S3FileView(CreateModelViewSet):
@@ -123,3 +127,12 @@ class SessClipView(S3FileView):
             sender=SessClip, event_id=event_id, tag="sessclip"
         )
         return inst
+
+    def destroy(self, request, *args, **kwargs):
+        obj = self.get_object()
+        sess = SessClip.objects.get(file=obj)
+        try:
+            sess.logsession.delete()
+        except SessClip.logsession.RelatedObjectDoesNotExist:
+            logger.info(f"Related logsession object does not exist")
+        return super().destroy(request, *args, **kwargs)
