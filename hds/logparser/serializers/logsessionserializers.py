@@ -1,11 +1,9 @@
 import re
-import zipfile
 import structlog
 import os
 import shutil
 from django.conf import settings
 from django.core.files.uploadedfile import InMemoryUploadedFile
-from django.core.files.storage import FileSystemStorage
 from rest_framework import serializers
 from taggit.serializers import TagListSerializerField, TaggitSerializer
 from common.async_metrics import ASYNC_ERROR_COUNTER
@@ -97,22 +95,11 @@ class LogSessionSerializer(TaggitSerializer, serializers.ModelSerializer):
         internal_data = {}
 
         if self.s3file_obj:
-            zip_file = self.s3file_obj.download_path
             internal_data["event"] = self.s3file_obj.event.id
             internal_data["_zip_file"] = self.s3file_obj.sessclip.id
             internal_data["creator"] = self.s3file_obj.creator.id
-
-        with zipfile.ZipFile(zip_file) as thezip:
-            internal_data["name"] = os.path.basename(thezip.filename)
-            try:
-                file = thezip.filelist[0]
-                harv, date_obj = self.extract_harvester_and_date(file)
-                internal_data["date_time"] = str(date_obj)
-                internal_data["harv"] = harv.pk if harv else None
-            except IndexError:
-                logger.error("Zip file is empty no files found")
-
-        if not self.s3file_obj:
+            internal_data["name"] = os.path.basename(self.s3file_obj.key)
+        else:
             # Get user id from request if method is POST
             # create the event & s3file obj for the logsession
             # write sessclip file to fs
@@ -128,13 +115,7 @@ class LogSessionSerializer(TaggitSerializer, serializers.ModelSerializer):
             internal_data["creator"] = creator.id
             internal_data["event"] = event.id
             internal_data["_zip_file"] = sess.id
-            os.makedirs(s3file.download_dir, exist_ok=True)
-            fs = FileSystemStorage(
-                location=s3file.download_dir,
-                file_permissions_mode=0o777,
-                directory_permissions_mode=0o777,
-            )
-            fs.save(zip_file.name, zip_file)
+            internal_data["name"] = os.path.basename(zip_file.name)
 
         return super().to_internal_value(internal_data)
 
