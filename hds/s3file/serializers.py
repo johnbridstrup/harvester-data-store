@@ -79,24 +79,6 @@ class DirectUploadSerializer(EventSerializerMixin, serializers.ModelSerializer):
         model = S3File
         fields = "__all__"
 
-    def to_internal_value(self, data):
-        try:
-            creator = self.context["request"].user
-        except KeyError:
-            creator_id = data.get("creator")
-            if not creator_id:
-                raise serializers.ValidationError(
-                    f"Cannot determine creator for {self.__class__.__name__}"
-                )
-            creator = User.objects.get(id=creator_id)
-            data["creator"] = creator_id
-
-        # This is all bad. We shouldn't need to create events for these files
-        UUID = Event.generate_uuid()
-        event = self.get_or_create_event(UUID, creator, S3File.__name__)
-        data["event"] = event.id
-        return super().to_internal_value(data)
-
     def save(self, **kwargs):
         inst = super().save(**kwargs)
         if inst.key is None:
