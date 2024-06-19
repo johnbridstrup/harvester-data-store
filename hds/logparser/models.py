@@ -12,7 +12,7 @@ TIMEZONE = "US/Pacific"
 
 
 class LogSession(CommonInfo):
-    name = models.CharField(max_length=255, unique=True)
+    name = models.CharField(max_length=255, blank=True, null=True)
     date_time = models.DateTimeField(blank=True, null=True)
     harv = models.ForeignKey(
         Harvester, on_delete=models.SET_NULL, blank=True, null=True
