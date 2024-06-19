@@ -3,7 +3,6 @@ import structlog
 import os
 import shutil
 from django.conf import settings
-from django.core.files.uploadedfile import InMemoryUploadedFile
 from rest_framework import serializers
 from taggit.serializers import TagListSerializerField, TaggitSerializer
 from common.async_metrics import ASYNC_ERROR_COUNTER
@@ -174,46 +173,27 @@ class LogSessionSerializer(TaggitSerializer, serializers.ModelSerializer):
         return harv, date_obj
 
     @staticmethod
-    def async_zip_upload(_id):
+    def async_zip_upload(zip_data, s3file_obj):
         """upload zip file to s3 bucket."""
         try:
-            log_session = LogSession.objects.get(id=_id)
-            s3file_obj = log_session._zip_file.file
-            zip_path = os.path.join(
-                log_session._zip_file.file.download_dir, log_session.name
-            )
-            file_size = os.path.getsize(zip_path)
-            with open(zip_path, "rb") as thezip:
-                in_mem_upload = InMemoryUploadedFile(
-                    thezip,
-                    field_name="file",
-                    name=log_session.name,
-                    size=file_size,
-                    content_type="application/zip",
-                    charset=None,
-                )
-                data = {
-                    "key": log_session.name,
-                    "file": in_mem_upload,
-                    "filetype": "sessclip",
-                    "creator": log_session.creator.id,
-                }
-                serializer = DirectUploadSerializer(
-                    instance=s3file_obj, data=data
-                )
-                serializer.is_valid(raise_exception=True)
-                serializer.save()
-                in_mem_upload.close()
+            data = {
+                "key": zip_data.name,
+                "file": zip_data,
+                "filetype": "sessclip",
+                "creator": s3file_obj.creator.id,
+                "event": s3file_obj.event.id,
+            }
+            serializer = DirectUploadSerializer(instance=s3file_obj, data=data)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
 
-        except LogSession.DoesNotExist:
+        except serializers.ValidationError as e:
             ASYNC_ERROR_COUNTER.labels(
                 "async_zip_upload",
-                LogSession.DoesNotExist.__name__,
-                "Logsession does not exist",
+                serializers.ValidationError.__name__,
+                "ValidationError occured during sessclip upload",
             ).inc()
-            logger.error(
-                f"log session with id {_id} does not exist", logsession_id=_id
-            )
+            logger.error(f"Upload validation error {e}")
 
     @staticmethod
     def create_logsession(s3file_obj):

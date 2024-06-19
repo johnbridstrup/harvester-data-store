@@ -3,7 +3,7 @@ from common.viewsets import CreateModelViewSet
 from common.schema import HDSToRepAutoSchema
 from hds.roles import RoleChoices
 from logparser.filters import LogSessionFilterset
-from logparser.tasks import perform_extraction, async_upload_zip_file
+from logparser.tasks import perform_extraction
 from logparser.serializers.logsessionserializers import (
     LogSessionSerializer,
     LogSessionBaseSerializer,
@@ -74,4 +74,3 @@ class LogSessionViewset(CreateModelViewSet):
         super().perform_create(serializer)
         zip_id = serializer.data["id"]
         perform_extraction.delay(zip_id)
-        async_upload_zip_file.delay(zip_id)

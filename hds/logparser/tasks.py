@@ -69,11 +69,6 @@ class CBCleanTask(Task):
 
 
 @monitored_shared_task
-def async_upload_zip_file(_id):
-    LogSessionSerializer.async_zip_upload(_id)
-
-
-@monitored_shared_task
 def extract_video_meta(vid_dict, _id):
     avi_info = vid_dict["avi"]
     meta_info = vid_dict["meta"]
