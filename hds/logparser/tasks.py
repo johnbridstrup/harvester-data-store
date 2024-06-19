@@ -1,8 +1,8 @@
 import os
 import zipfile
-from celery import chord, Task
+import structlog
+from celery import Task
 from collections import defaultdict
-from django.conf import settings
 from common.celery import monitored_shared_task
 from common.utils import build_frontend_url
 from s3file.models import S3File
@@ -13,6 +13,9 @@ from .serializers.logsessionserializers import (
     LogSessionSerializer,
     LogSession,
 )
+
+
+logger = structlog.get_logger(__name__)
 
 
 class CallbackTask(Task):
@@ -68,7 +71,6 @@ class CBCleanTask(Task):
         )
 
 
-@monitored_shared_task
 def extract_video_meta(vid_dict, _id):
     avi_info = vid_dict["avi"]
     meta_info = vid_dict["meta"]
@@ -80,14 +82,12 @@ def extract_video_meta(vid_dict, _id):
     )
 
 
-@monitored_shared_task
 def clean_dir(path_id):
     LogVideoSerializer.clean_extracts(path_id)
     LogSessionSerializer.clean_downloads(path_id)
-    return f"{path_id} Cleaned"
+    return f"path {path_id} cleaned"
 
 
-@monitored_shared_task
 def extract_logs(_id, zippath):
     with zipfile.ZipFile(zippath) as thezip:
         for file in thezip.filelist:
@@ -120,30 +120,38 @@ def extract_with_video(zippath, path_id):
     return vid_meta_pairs
 
 
+def update_harv_datetime(log_session, zippath):
+    with zipfile.ZipFile(zippath) as thezip:
+        try:
+            file = thezip.filelist[0]
+            harv, date_obj = LogSessionSerializer.extract_harvester_and_date(
+                file
+            )
+            log_session.date_time = date_obj
+            log_session.harv = harv
+            log_session.save()
+        except IndexError:
+            logger.info("Zip file is empty no files found")
+
+
 @monitored_shared_task(base=CallbackTask)
 def perform_extraction(_id, extract_video=True):
     log_session = LogSession.objects.get(id=_id)
+    log_session._zip_file.file.download()
     zippath = os.path.join(
         log_session._zip_file.file.download_dir, log_session.name
     )
-    tasks = []
-    tasks.append(extract_logs.si(_id, zippath))
+    update_harv_datetime(log_session, zippath)
+
+    extract_logs(_id, zippath)
     if extract_video:
         vid_meta_pairs = extract_with_video(
             zippath, log_session._zip_file.file.pk
         )
-        # Create video extraction task signatures
-        tasks.extend(
-            [
-                extract_video_meta.si(vid_dict, _id)
-                for vid_dict in vid_meta_pairs.values()
-            ]
-        )
+        for vid_dict in vid_meta_pairs.values():
+            extract_video_meta(vid_dict, _id)
 
-    # Create clean_dir callback signature
-    callback = clean_dir.si(log_session._zip_file.file.pk)
-    # Execute tasks -> callback as Celery chord
-    chord(tasks, callback).delay()
+    clean_dir(log_session._zip_file.file.pk)
 
 
 @monitored_shared_task(base=CBCleanTask)
