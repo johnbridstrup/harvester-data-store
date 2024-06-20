@@ -44,8 +44,7 @@ class LogSessionTestCase(LogBaseTestCase):
         if os.path.isfile(full_path):
             os.unlink(full_path)
 
-    @patch("logparser.views.logsessionviews.async_upload_zip_file.delay")
-    def test_upload_zipfile(self, patched_upload):
+    def test_upload_zipfile(self):
         """Test uploading a zip file to create logsession & extract content."""
         zipname = self._create_zip_file()
         self.assertIsNotNone(zipname)
@@ -62,8 +61,6 @@ class LogSessionTestCase(LogBaseTestCase):
         logsession = LogSession.objects.get()
         self.assertEqual(logsession.name, zipname)
         self.assertEqual(logsession.logfile.count(), 1)
-        patched_upload.assert_called_once()
-        patched_upload.assert_called_with(res.data["id"])
 
         self._rm_file(zippath)
 

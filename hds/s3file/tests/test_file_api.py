@@ -10,7 +10,8 @@ from rest_framework import status
 
 from common.tests import HDSAPITestBase
 from errorreport.models import ErrorReport
-from event.serializers import EventSerializer
+from event.serializers import EventSerializer, EventSerializerMixin
+from event.models import Event
 from ..models import S3File, SessClip
 from ..serializers import DirectUploadSerializer
 
@@ -67,6 +68,10 @@ class S3FileTestCase(HDSAPITestBase):
             )
 
     def test_upload_file_ser(self):
+        UUID = Event.generate_uuid()
+        event = EventSerializerMixin.get_or_create_event(
+            UUID, self.user, S3File.__name__
+        )
         with tempfile.NamedTemporaryFile() as tf:
             with open(tf.name, "rb") as f:
                 file = InMemoryUploadedFile(
@@ -83,6 +88,7 @@ class S3FileTestCase(HDSAPITestBase):
                     "file": file,
                     "filetype": "test",
                     "creator": self.user.id,
+                    "event": event.id,
                 }
                 full_path = os.path.join(settings.MEDIA_ROOT, "uploads", "test")
                 with remove_after(full_path):
@@ -92,6 +98,10 @@ class S3FileTestCase(HDSAPITestBase):
                     self.assertEqual(S3File.objects.count(), 1)
 
     def test_file_ser_no_key(self):
+        UUID = Event.generate_uuid()
+        event = EventSerializerMixin.get_or_create_event(
+            UUID, self.user, S3File.__name__
+        )
         with tempfile.NamedTemporaryFile() as tf:
             with open(tf.name, "rb") as f:
                 file = InMemoryUploadedFile(
@@ -106,6 +116,7 @@ class S3FileTestCase(HDSAPITestBase):
                     "file": file,
                     "filetype": "test",
                     "creator": self.user.id,
+                    "event": event.id,
                 }
                 full_path = os.path.join(settings.MEDIA_ROOT, "uploads", "test")
                 key = os.path.join("uploads", "test")
@@ -164,6 +175,10 @@ class S3FileTestCase(HDSAPITestBase):
         self.assertEqual(SessClip.objects.count(), 1)
 
     def test_delete_file(self):
+        UUID = Event.generate_uuid()
+        event = EventSerializerMixin.get_or_create_event(
+            UUID, self.user, S3File.__name__
+        )
         with tempfile.NamedTemporaryFile() as tf:
             with open(tf.name, "rb") as f:
                 file = InMemoryUploadedFile(
@@ -180,6 +195,7 @@ class S3FileTestCase(HDSAPITestBase):
                     "file": file,
                     "filetype": "test",
                     "creator": self.user.id,
+                    "event": event.id,
                 }
                 file_upload = DirectUploadSerializer(data=data)
                 file_upload.is_valid(raise_exception=True)
