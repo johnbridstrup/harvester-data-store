@@ -108,6 +108,7 @@ class LogVideoSerializer(serializers.ModelSerializer):
                     "filetype": "mp4",
                     "file": in_mem_upload,
                     "creator": log_session.creator.id,
+                    "event": log_session._zip_file.file.event.id,
                 }
                 serializer = DirectUploadSerializer(data=data)
                 serializer.is_valid(raise_exception=True)
@@ -144,7 +145,7 @@ class LogVideoSerializer(serializers.ModelSerializer):
         first = filename.split(".")[0]
         filename = f"{first}{ext}"
         try:
-            log_vid_obj = LogVideo.objects.get(file_name=filename)
+            log_vid_obj = LogVideo.objects.filter(file_name=filename).last()
             meta_content = []
             with open(filepath, "r") as file_iter:
                 for line in file_iter:

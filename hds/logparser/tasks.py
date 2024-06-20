@@ -1,4 +1,3 @@
-import os
 import zipfile
 import structlog
 from celery import Task
@@ -59,6 +58,13 @@ class CallbackTask(Task):
             f"{build_frontend_url('logfiles', args[0])}"
         )
         self._create_post_message(content, self.slack_id)
+
+    def after_return(self, status, retval, task_id, args, kwargs, einfo):
+        s3file = LogSession.objects.get(id=args[0])._zip_file.file
+        s3file.clean_download()
+        return super().after_return(
+            status, retval, task_id, args, kwargs, einfo
+        )
 
 
 class CBCleanTask(Task):
@@ -138,12 +144,12 @@ def update_harv_datetime(log_session, zippath):
 def perform_extraction(_id, extract_video=True):
     log_session = LogSession.objects.get(id=_id)
     log_session._zip_file.file.download()
-    zippath = os.path.join(
-        log_session._zip_file.file.download_dir, log_session.name
-    )
+    zippath = log_session._zip_file.file.download_path
+
     update_harv_datetime(log_session, zippath)
 
     extract_logs(_id, zippath)
+
     if extract_video:
         vid_meta_pairs = extract_with_video(
             zippath, log_session._zip_file.file.pk
@@ -157,6 +163,5 @@ def perform_extraction(_id, extract_video=True):
 @monitored_shared_task(base=CBCleanTask)
 def download_create_logsession(s3file_id):
     s3file = S3File.objects.get(id=s3file_id)
-    s3file.download()
     _id = LogSessionSerializer.create_logsession(s3file)
     perform_extraction(_id, extract_video=False)

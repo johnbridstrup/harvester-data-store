@@ -62,6 +62,18 @@ class S3Client(FileLoader):
         self._client.delete_object(Bucket=bucket, Key=key)
         self._logger.info(f"{key} deleted from S3")
 
+    def generate_presigned_url(self, key, file_type):
+        presigned_url = self._client.generate_presigned_url(
+            "put_object",
+            Params={
+                "Bucket": settings.AWS_STORAGE_BUCKET_NAME,
+                "Key": key,
+                "ContentType": file_type,
+            },
+            ExpiresIn=3600,
+        )
+        return presigned_url
+
 
 class LocalClient(FileLoader):
     def download_json_from_event(self, event):

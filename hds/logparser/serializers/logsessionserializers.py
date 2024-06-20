@@ -101,20 +101,24 @@ class LogSessionSerializer(TaggitSerializer, serializers.ModelSerializer):
         else:
             # Get user id from request if method is POST
             # create the event & s3file obj for the logsession
-            # write sessclip file to fs
+            # this should be relevant for the local upload
+            # process to work correctly
             creator = self.context.get("request").user
             UUID = Event.generate_uuid()
             event = EventSerializerMixin.get_or_create_event(
                 UUID, creator, S3File.__name__
             )
+            key = f"uploads/{zip_file.name}"
             s3file = S3File.objects.create(
-                filetype="sessclip", creator=creator, event=event
+                filetype="sessclip", creator=creator, event=event, key=key
             )
             sess = SessClip.objects.create(file=s3file)
             internal_data["creator"] = creator.id
             internal_data["event"] = event.id
             internal_data["_zip_file"] = sess.id
             internal_data["name"] = os.path.basename(zip_file.name)
+
+            self.async_zip_upload(zip_file, s3file)
 
         return super().to_internal_value(internal_data)
 
@@ -177,7 +181,7 @@ class LogSessionSerializer(TaggitSerializer, serializers.ModelSerializer):
         """upload zip file to s3 bucket."""
         try:
             data = {
-                "key": zip_data.name,
+                "key": f"uploads/{zip_data.name}",
                 "file": zip_data,
                 "filetype": "sessclip",
                 "creator": s3file_obj.creator.id,
