@@ -1,6 +1,6 @@
-from common.filters import CommonInfoFilterset
+from common.filters import CommonInfoFilterset, DTimeFilter, filters
 
-from .models import Fruit, Harvester
+from .models import Fruit, Harvester, HarvesterSwInfo
 
 
 class FruitFilterset(CommonInfoFilterset):
@@ -16,4 +16,19 @@ class HarvesterFilterset(CommonInfoFilterset):
             "harv_id",
             "fruit__name",
             "name",
+        ]
+
+
+class HarvesterSWInfoFilterset(CommonInfoFilterset):
+    start_time = DTimeFilter(field_name="deployed_ts", lookup_expr="gte")
+    end_time = DTimeFilter(field_name="deployed_ts", lookup_expr="lte")
+    harv_id = filters.CharFilter(field_name="harvester__harv_id")
+
+    class Meta:
+        model = HarvesterSwInfo
+        fields = CommonInfoFilterset.FIELDS_BASE + [
+            "githash",
+            "dirty",
+            "branchname",
+            "deployer",
         ]
