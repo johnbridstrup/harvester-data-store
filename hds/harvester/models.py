@@ -77,3 +77,15 @@ class Harvester(CommonInfo):
             asset__name=asset_type, serial_number=serial_number
         )
         return len(asset_list) >= 1
+
+
+class HarvesterSwInfo(CommonInfo):
+    githash = models.CharField(max_length=100)
+    dirty = models.BooleanField()
+    branchname = models.CharField(max_length=100)
+    deployer = models.CharField(max_length=100, blank=True, null=True)
+    deployed_ts = models.DateTimeField(blank=True, null=True)
+    harvester = models.ForeignKey(Harvester, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.deployer} deployed branch {self.branchname} with hash {self.githash}"
