@@ -340,6 +340,12 @@ class HDSTestAttributes:
             "periodictask-detail", args=[id_]
         )
 
+        # HarvesterSWInfo
+        self.harv_swinfo_url = reverse("harvesterswinfo-list")
+        self.harv_swinfo_det_url = lambda id_: reverse(
+            "harvesterswinfo-detail", args=[id_]
+        )
+
 
 class HDSAPITestBase(APITestCase, HDSTestAttributes):
     def setUp(self):

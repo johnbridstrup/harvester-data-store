@@ -2,6 +2,7 @@ from rest_framework import status
 
 from common.tests import HDSAPITestBase
 from hds.roles import RoleChoices
+from harvester.models import HarvesterSwInfo
 
 from .models import ConfigReport
 
@@ -18,6 +19,7 @@ class ConfigReportTestCase(HDSAPITestBase):
         )
         self.assertEqual(r.status_code, status.HTTP_201_CREATED)
         self.assertEqual(ConfigReport.objects.count(), 1)
+        self.assertEqual(HarvesterSwInfo.objects.count(), 1)
 
     def test_harvester_latest(self):
         self.set_user_role(RoleChoices.SQS)
