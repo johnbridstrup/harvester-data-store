@@ -18282,5 +18282,12 @@
   },
   "serial_number": "011",
   "is_emulator": false,
-  "fruit": "strawberry"
+  "fruit": "strawberry",
+  "version_info": {
+    "githash": "09878676637388",
+    "dirty": false,
+    "branchname": "software_deployed_tracking",
+    "deployer": "aft",
+    "deployed_ts": 1719416774.9336324
+  }
 }
