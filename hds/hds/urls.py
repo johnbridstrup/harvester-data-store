@@ -93,6 +93,10 @@ urlpatterns = [
     path(f"{version}/sessclip/", include("s3file.urls.sessclipurls")),
     path(f"{version}/users/", include("common.urls.userurls")),
     path(
+        f"{version}/harvesterswinfo/",
+        include("harvester.urls.harvesterswinfourls"),
+    ),
+    path(
         f"{version}/openapi",
         get_schema_view(
             title="Harvester Data Store",
