@@ -143,6 +143,7 @@ def update_harv_datetime(log_session, zippath):
 @monitored_shared_task(base=CallbackTask)
 def perform_extraction(_id, extract_video=True):
     log_session = LogSession.objects.get(id=_id)
+    log_session._zip_file.file.check_for_s3file()
     log_session._zip_file.file.download()
     zippath = log_session._zip_file.file.download_path
 

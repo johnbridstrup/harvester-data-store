@@ -8,6 +8,7 @@ from django.core.files.storage import default_storage
 
 from common.models import CommonInfo
 from common.utils import media_upload_path
+from common.fileloader import get_client
 from event.models import EventModelMixin
 
 
@@ -49,6 +50,17 @@ class S3File(EventModelMixin, CommonInfo):
     @property
     def download_path(self):
         return os.path.join(self.download_dir, os.path.basename(self.file.name))
+
+    def check_for_s3file(self):
+        if settings.USES3:
+            client = get_client()
+            # check for file using key attr
+            exists = client.check_s3_file(self.key)
+            if not exists:
+                # check for file using filefield name
+                exists = client.check_s3_file(self.file.name)
+                if not exists:
+                    raise Exception("S3File does not exist in the bucket")
 
     def download(self):
         os.makedirs(self.download_dir, exist_ok=True)

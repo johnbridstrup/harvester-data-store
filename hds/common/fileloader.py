@@ -1,5 +1,6 @@
 import json
 import os
+import time
 import structlog
 import boto3
 from botocore.exceptions import ClientError
@@ -73,6 +74,33 @@ class S3Client(FileLoader):
             ExpiresIn=3600,
         )
         return presigned_url
+
+    def head_object(self, key):
+        self._client.head_object(
+            Bucket=settings.AWS_STORAGE_BUCKET_NAME, Key=key
+        )
+
+    def check_s3_file(self, key):
+        retries = 5
+        while retries > 0:
+            try:
+                self.head_object(key)
+                return True
+            except ClientError as e:
+                if e.response["Error"]["Code"] == "404":
+                    retries -= 1
+                    if retries <= 0:
+                        self._logger.error(
+                            f"File not found after {5 - retries} retries: {key}"
+                        )
+                        return False
+                    self._logger.warning(
+                        f"File not found, retrying... ({5 - retries})"
+                    )
+                    time.sleep(5)  # Add delay between retries
+                else:
+                    self._logger.error(f"Client Error occured: {str(e)}")
+                    return False
 
 
 class LocalClient(FileLoader):
