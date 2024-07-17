@@ -68,3 +68,26 @@ class EmustatsReportTestCase(HDSAPITestBase):
 
         r1 = self.client.get(f"{self.emustats_url}?runner={runner1}")
         self.assertEqual(r1.json()["data"]["count"], 1)
+
+        # Filter by site_name should return 0
+        r2 = self.client.get(f"{self.emustats_url}?site_name=emulator_davis")
+        self.assertEqual(r2.json()["data"]["count"], 0)
+
+        # Filter by generic should return 0
+        r2 = self.client.get(
+            f"{self.emustats_url}?generic=report__data__site_name%3Demulator_davis"
+        )
+        self.assertEqual(r2.json()["data"]["count"], 0)
+
+        self.emustats_data["data"]["site_name"] = "emulator_davis"
+        self.post_emustats_report(load=False)
+
+        # Filter by site_name should return 1
+        r3 = self.client.get(f"{self.emustats_url}?site_name=emulator_davis")
+        self.assertEqual(r3.json()["data"]["count"], 1)
+
+        # Filter by generic should return 1
+        r3 = self.client.get(
+            f"{self.emustats_url}?generic=report__data__site_name%3Demulator_davis"
+        )
+        self.assertEqual(r3.json()["data"]["count"], 1)
