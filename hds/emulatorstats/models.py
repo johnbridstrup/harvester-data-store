@@ -21,6 +21,7 @@ class EmustatsReport(PickSessionModelMixin, ReportBase):
     num_pick_attempts = models.IntegerField()
     pick_success_percentage = models.FloatField(null=True, blank=True)
     thoroughness_percentage = models.FloatField(null=True, blank=True)
+    drop_apples_rate = models.FloatField(null=True, blank=True)
 
     detection_success_percentage = models.FloatField(null=True, blank=True)
     num_cand_overlaps = models.IntegerField()
