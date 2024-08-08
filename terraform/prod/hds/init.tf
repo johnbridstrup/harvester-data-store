@@ -70,6 +70,12 @@ data "aws_security_group" "jobserver_sg" {
   }
 }
 
+data "aws_security_group" "cloud_runner_sg" {
+  tags = {
+    Name = "cloud-test-runner-sg"
+  }
+}
+
 data "aws_security_group" "vm_metrics_security_group" {
   filter {
     name   = "tag:Name"
