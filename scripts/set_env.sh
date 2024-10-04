@@ -2,7 +2,7 @@
 
 # Create the .env file
 
-set -euo pipefail
+#set -euo pipefail
 
 : "${HDS_PORT:=8085}"
 : "${JOB_SERVER_ADDRESS:=http://httpbin.org/anything}"

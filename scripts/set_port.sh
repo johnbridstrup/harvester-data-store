@@ -1,7 +1,7 @@
 #!/bin/bash
 # Set the port used by HDS
 
-set -euo pipefail
+#set -euo pipefail
 
 : "${HDS_ROOT:=$PWD}"
 
