@@ -96,6 +96,7 @@ urlpatterns = [
         f"{version}/harvesterswinfo/",
         include("harvester.urls.harvesterswinfourls"),
     ),
+    path(f"{version}/chatbot/", include("chatbot.urls")),
     path(
         f"{version}/openapi",
         get_schema_view(

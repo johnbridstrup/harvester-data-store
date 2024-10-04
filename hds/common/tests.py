@@ -347,6 +347,10 @@ class HDSTestAttributes:
             "harvesterswinfo-detail", args=[id_]
         )
 
+        # Chatbot
+        self.chatbot_url = reverse("chatbot-list")
+        self.chatbot_det_url = lambda id_: reverse("chatbot-detail", args=[id_])
+
 
 class HDSAPITestBase(APITestCase, HDSTestAttributes):
     def setUp(self):
@@ -622,6 +626,15 @@ class S3EventTest(HDSAPITestBase):
         record = s3_event.get_record()
         assert record.bucket == "test-bucket"
         assert record.key == "test_key"
+
+    def test_harvester_id(self):
+        harv_id = 123
+        event = self.create_s3event(
+            key=f"prefix/hv-{harv_id:03d}/test_key", tag_uuid=True
+        )[0]
+        s3_event = S3EventObject(event)
+        record = s3_event.get_record()
+        assert record.harv_id == harv_id
 
 
 class OpenApiTest(HDSAPITestBase):

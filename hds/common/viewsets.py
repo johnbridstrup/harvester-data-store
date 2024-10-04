@@ -24,6 +24,7 @@ class CreateModelViewSet(ModelViewSet):
     view_permissions = {
         "create": {
             "admin": True,  # Must whitelist permission below admin for creating
+            RoleChoices.SQS: True,
         },
         "list": {
             RoleChoices.SUPPORT: True,
