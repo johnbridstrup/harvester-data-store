@@ -22,6 +22,9 @@ class FileLoader:
     def download_json_from_event(self, event):
         pass
 
+    def download_raw_from_event(self, event):
+        pass
+
     def delete_file(self, key, bucket=None):
         pass
 
@@ -51,13 +54,18 @@ class S3Client(FileLoader):
             return False
         return True
 
-    def download_json_from_event(self, event):
+    def _get_object_content(self, event):
         s3_event = S3EventObject(event)
         record = s3_event.get_record()
         response = self._client.get_object(Bucket=record.bucket, Key=record.key)
-        file_content = response["Body"].read().decode("utf-8")
-        json_data = json.loads(file_content)
-        return json_data
+        return response["Body"].read()
+
+    def download_raw_from_event(self, event):
+        return self._get_object_content(event)
+
+    def download_json_from_event(self, event):
+        file_content = self._get_object_content(event).decode("utf-8")
+        return json.loads(file_content)
 
     def delete_file(self, event):
         s3_event = S3EventObject(event)
@@ -106,6 +114,15 @@ class S3Client(FileLoader):
 
 
 class LocalClient(FileLoader):
+    def download_raw_from_event(self, event):
+        event_body = self._load_body(event)
+        s3_info = event_body["Records"][0].get("s3")
+        if s3_info is None:
+            raise ClientError("No S3 info in event")
+        key = s3_info["object"]["key"]
+        with open(key, "rb") as file_content:
+            return file_content.read()
+
     def download_json_from_event(self, event):
         event_body = self._load_body(event)
         s3_info = event_body["Records"][0].get("s3")
