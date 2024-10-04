@@ -71,6 +71,7 @@ LOCAL_APPS = [
     "admin_utils",
     "aftconfigs",
     "autodiagnostics",
+    "chatbot",
     "common",
     "location",
     "hdsmigrations",
