@@ -21,6 +21,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework.test import APITestCase
 from rest_framework.test import APIClient
 
+from common.S3Event import S3EventObject
 from common.viewsets import CreateModelViewSet, ReportModelViewSet
 from common.models import UserProfile
 from common.serializers.userserializer import UserSerializer
@@ -612,6 +613,15 @@ class HDSAPITestBase(APITestCase, HDSTestAttributes):
     def tearDown(self):
         shutil.rmtree(settings.MEDIA_ROOT)
         return super().tearDown()
+
+
+class S3EventTest(HDSAPITestBase):
+    def test_s3_event(self):
+        event = self.create_s3event(key="test_key", tag_uuid=True)[0]
+        s3_event = S3EventObject(event)
+        record = s3_event.get_record()
+        assert record.bucket == "test-bucket"
+        assert record.key == "test_key"
 
 
 class OpenApiTest(HDSAPITestBase):

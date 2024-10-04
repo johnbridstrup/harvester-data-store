@@ -5,6 +5,7 @@ import structlog
 import boto3
 from botocore.exceptions import ClientError
 from django.conf import settings
+from .S3Event import S3EventObject
 
 
 def get_client():
@@ -51,17 +52,18 @@ class S3Client(FileLoader):
         return True
 
     def download_json_from_event(self, event):
-        key, bucket = self._get_key_bucket(event)
-
-        response = self._client.get_object(Bucket=bucket, Key=key)
+        s3_event = S3EventObject(event)
+        record = s3_event.get_record()
+        response = self._client.get_object(Bucket=record.bucket, Key=record.key)
         file_content = response["Body"].read().decode("utf-8")
         json_data = json.loads(file_content)
         return json_data
 
     def delete_file(self, event):
-        key, bucket = self._get_key_bucket(event)
-        self._client.delete_object(Bucket=bucket, Key=key)
-        self._logger.info(f"{key} deleted from S3")
+        s3_event = S3EventObject(event)
+        record = s3_event.get_record()
+        self._client.delete_object(Bucket=record.bucket, Key=record.key)
+        self._logger.info(f"{record.key} deleted from S3")
 
     def generate_presigned_url(self, key, file_type):
         presigned_url = self._client.generate_presigned_url(

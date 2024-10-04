@@ -1,11 +1,11 @@
 # import serializers
-import json
 from django.contrib.auth.models import User
 from rest_framework import serializers
 
 from event.models import Event
 from event.serializers import EventSerializerMixin, EventSerializer
 from common.serializers.userserializer import UserCustomSerializer
+from common.S3Event import S3EventObject
 from .models import S3File
 
 
@@ -23,9 +23,9 @@ class S3FileSerializer(EventSerializerMixin, serializers.ModelSerializer):
 
     @classmethod
     def get_key(cls, event):
-        event = json.loads(event["Body"])
-        event = event["Records"][0]["s3"]
-        key = event["object"]["key"]
+        s3_event = S3EventObject(event)
+        record = s3_event.get_record()
+        key = record.key
         return key
 
     def to_internal_value(self, data):
