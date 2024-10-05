@@ -2,6 +2,7 @@ import copy
 import json
 import logging
 import os
+import piexif
 import random
 import string
 import unittest
@@ -10,6 +11,8 @@ import shutil
 from collections import defaultdict
 from contextlib import contextmanager
 from pprint import pprint
+from PIL import Image
+from PIL.PngImagePlugin import PngInfo
 from time import time
 from unittest.mock import MagicMock
 
@@ -77,8 +80,49 @@ class HDSTestAttributes:
 
     def _write_report(self, relpath, data):
         fpath = os.path.join(self.BASE_PATH, relpath)
+        os.makedirs(os.path.dirname(fpath), exist_ok=True)
         with open(fpath, "w") as f:
             json.dump(data, f, indent=4)
+        return fpath
+
+    def _create_test_image(self, relpath, metadata=None):
+        fpath = os.path.join(self.BASE_PATH, relpath)
+        os.makedirs(os.path.dirname(fpath), exist_ok=True)
+        img = Image.new("RGB", (100, 100), (255, 255, 255))
+
+        if metadata:
+            if fpath.lower().endswith(".png"):
+                # For PNG files, use PngInfo
+                meta = PngInfo()
+                for key, value in metadata.items():
+                    meta.add_text(key, str(value))
+                img.save(fpath, "PNG", pnginfo=meta)
+            else:
+                # For JPEG files, use EXIF
+                exif_dict = {
+                    "0th": {},
+                    "Exif": {},
+                    "GPS": {},
+                    "1st": {},
+                    "thumbnail": None,
+                }
+                exif_dict["0th"][piexif.ImageIFD.ImageDescription] = json.dumps(
+                    metadata
+                ).encode("utf-8")
+                exif_bytes = piexif.dump(exif_dict)
+                img.save(fpath, "JPEG", exif=exif_bytes)
+        else:
+            # Save the image without metadata
+            img.save(fpath)
+
+        return fpath
+
+    def _delete_file(self, relpath):
+        fpath = os.path.join(self.BASE_PATH, relpath)
+        try:
+            os.remove(fpath)
+        except FileNotFoundError:
+            pass
 
     def load_error_report(self):
         self.data = self._load_report("report.json")
@@ -544,9 +588,13 @@ class HDSAPITestBase(APITestCase, HDSTestAttributes):
             ]
         }
 
-        return {"Body": json.dumps(event)}, *S3FileSerializer.get_filetype_uuid(
-            full_key
-        )
+        try:
+            filetype, UUID = S3FileSerializer.get_filetype_uuid(full_key)
+        except:
+            filetype = None
+            UUID = None
+
+        return {"Body": json.dumps(event)}, filetype, UUID
 
     def create_s3file(self, key, endpoint, has_uuid=False):
         self.s3event, self.filetype, self.uuid = self.create_s3event(
