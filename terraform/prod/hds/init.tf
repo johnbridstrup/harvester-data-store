@@ -104,10 +104,15 @@ locals {
   grip_queue_name            = "hds-gripreport-queue"
   asset_queue_name           = "hds-asset-queue"
   emustats_queue_name        = "hds-emustats-queue"
+  chatbot_events_queue_name  = "hds-chatbot-events-queue"
 }
 
 data "aws_s3_bucket" "data-lake" {
   bucket = local.bucket
+}
+
+data "aws_sqs_queue" "chatbot_events_queue" {
+  name = local.chatbot_events_queue_name
 }
 
 data "aws_sqs_queue" "errorreport_queue" {
@@ -167,6 +172,7 @@ data "aws_iam_policy_document" "poll_queues" {
       data.aws_sqs_queue.grip_queue.arn,
       data.aws_sqs_queue.asset_queue.arn,
       data.aws_sqs_queue.emustats_queue.arn,
+      data.aws_sqs_queue.chatbot_events_queue.arn,
     ]
     effect = "Allow"
   }

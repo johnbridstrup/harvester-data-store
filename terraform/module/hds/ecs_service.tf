@@ -17,6 +17,7 @@ locals {
     { "name" : "BROKER_URL", "value" : var.redis_broker_url },
     { "name" : "SLACK_TOKEN", "value" : var.slack_token },
     { "name" : "FRONTEND_URL", "value" : var.frontend_url },
+    { "name" : "CHATBOT_EVENTS_QUEUE_URL", "value" : var.chatbot_events_queue_url },
     { "name" : "ERRORREPORTS_QUEUE_URL", "value" : var.errorreport_queue_url },
     { "name" : "AUTODIAGNOSTICS_QUEUE_URL", "value" : var.autodiagnostics_queue_url },
     { "name" : "S3FILES_QUEUE_URL", "value" : var.s3files_queue_url },

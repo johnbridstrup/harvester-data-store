@@ -1,4 +1,9 @@
 # SQS queue definitions
+chatbot_events:
+  queue: !ENV ${CHATBOT_EVENTS_QUEUE_URL}
+  destination: !ENV http://localhost:${HDS_PORT}/api/v1/chatbot/
+  s3-event-payload: false
+  s3-delete: true
 error_reports:
   queue: !ENV ${ERRORREPORTS_QUEUE_URL}
   destination: !ENV http://localhost:${HDS_PORT}/api/v1/errorreports/

@@ -278,6 +278,11 @@ variable "git_hash" {
 
 # SQS QUEUES
 
+variable "chatbot_events_queue_url" {
+  description = "URL for chatbot events queue"
+  type        = string
+}
+
 variable "errorreport_queue_url" {
   description = "URL for error report queue"
   type        = string
