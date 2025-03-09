@@ -1,6 +1,6 @@
 # Harveseter Data Store
 
-The central hub for all AFT Harvester data.
+A REST API for robotic harvester data. This was a work project I've been given permission to host personally.
 
 ### Primary Uses
 - Ingesting complex data from harvesters (Anything more than simple prometheus metrics).
